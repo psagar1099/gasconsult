@@ -2,17 +2,15 @@ from flask import Flask, request, render_template_string
 from Bio import Entrez
 import openai
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 app = Flask(__name__)
 
-# ←←← YOUR REAL EMAIL (required for NCBI) ←←←
-Entrez.email = "psagar1099@gmail.com"  # ← CHANGE TO YOURS
+# ←←← YOUR REAL CREDENTIALS (already correct) ←←←
+Entrez.email = "psagar1099@gmail.com"
+Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
 
-# ←←← YOUR NCBI API KEY (unlimited searches) ←←←
-Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"  # ← CHANGE TO YOURS
-
-# OpenAI setup (v1.0+ client)
+# OpenAI setup
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 HTML = """
@@ -49,7 +47,7 @@ HTML = """
         </div>
         
         <form method="post">
-            <textarea name="query" placeholder="e.g., Best evidence for TXA in spine surgery?" required></textarea>
+            <textarea name="query" placeholder="e.g., TXA in spine surgery, blood loss scoliosis, propofol peds" required></textarea>
             <center><input type="submit" value="Get Evidence"></center>
         </form>
 
@@ -80,86 +78,81 @@ HTML = """
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        query = request.form["query"]
-        
-        # Date filter: last 10 years
-        end_date = datetime.now().strftime("%Y/%m/%d")
-        start_date = (datetime.now() - timedelta(days=365*10)).strftime("%Y/%m/%d")
-        
-                # ←←← THIS IS THE ONLY VERSION THAT WORKS RELIABLY ←←←
+        query = request.form["query"].strip()
+
+        # Smart expansion of common terms
+        q = query.lower()
+        q = q.replace("txa", '"tranexamic acid" OR TXA')
+        q = q.replace("blood loss", "blood loss OR hemorrhage OR transfusion')
+        q = q.replace("spine surgery", "spine surgery OR spinal fusion OR scoliosis')
+        q = q.replace("pediatric", "pediatric OR children OR peds')
+        q = q.replace("airway", "airway OR intubation OR laryngoscopy')
+        q = q.replace("ponv", "PONV OR "postoperative nausea"')
+
+        # Universal high-evidence search (last 10+ years)
         search_term = (
-            f'anesthesiology[MeSH Terms] AND "{query}" AND '
+            f'({q}) AND '
             f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-            f'"Cochrane Database Syst Rev"[ta]) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+            f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+            f'("2015/01/01"[PDAT] : "3000"[PDAT])'
         )
-        handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
+
+        # Try pure anesthesiology first
+        handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
         result = Entrez.read(handle)
         ids = result["IdList"]
-        
+
+        # Fallback: drop MeSH but keep high evidence
         if not ids:
-            # Fallback — still anesthesiology-specific, last 10 years
-            search_term = f'anesthesiology[MeSH Terms] AND "{query}" AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
             result = Entrez.read(handle)
             ids = result["IdList"]
-        
+
         if not ids:
-            # Fallback to general anesthesiology
-            search_term = f'anesthesiology[MeSH Terms] AND ({query}) AND ("{start_date}"[Date - Publication] : "{end_date}"[Date - Publication])'
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
-            result = Entrez.read(handle)
-            ids = result["IdList"]
-            
-            if not ids:
-                return render_template_string(HTML, answer="<p>No relevant anesthesiology papers found. Try 'propofol sedation'.</p>", num_papers=0, refs=[])
-        
-        # Fetch details
-        handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+            return render_template_string(HTML, answer="<p>No high-quality recent evidence found. Try rephrasing (e.g., 'TXA scoliosis', 'blood loss spine').</p>", num_papers=0, refs=[])
+
+        # Fetch papers
+        handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
         papers = Entrez.read(handle)["PubmedArticle"]
-        
+
         refs = []
         context = ""
-        for p in papers[:10]:
+        for p in papers[:12]:
             try:
                 art = p["MedlineCitation"]["Article"]
                 title = art.get("ArticleTitle", "No title")
-                abstract_parts = art.get("Abstract", {}).get("AbstractText", [])
-                abstract = " ".join(str(t) for t in abstract_parts) if abstract_parts else ""
-                authors = ", ".join([a.get("LastName", "") + " " + (a.get("ForeName", "")[:1] + "." if a.get("ForeName") else "") for a in art.get("AuthorList", [])[:5]])
-                journal = art["Journal"].get("Title", "Unknown Journal")
-                pub_date = art["Journal"]["JournalIssue"]["PubDate"]
-                year = pub_date.get("Year", "N/A")
+                abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:5]])
+                journal = art["Journal"].get("Title", "Unknown")
+                year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                 pmid = p["MedlineCitation"]["PMID"]
-                
+
                 refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
                 context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
-            except Exception as e:
+            except:
                 continue
-        
+
         num_papers = len(refs)
-        
-        # GPT prompt
-        prompt = f"""You are an expert anesthesiologist. Answer: '{query}' 
-        STRICTLY using ONLY the references. Cite by title or PMID. If limited evidence, say so.
-        
-        References:
-        {context}
-        
-        Answer:"""
-        
-        # OpenAI v1.0+ call (official syntax)
+
+        prompt = f"""You are an expert anesthesiologist. Answer: '{query}'
+STRICTLY using ONLY the references below. Cite by title or PMID. Be concise.
+
+References:
+{context}
+
+Answer:"""
+
         try:
-            response_obj = openai_client.chat.completions.create(
+            response = openai_client.chat.completions.create(
                 model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1
-            )
-            response = response_obj.choices[0].message.content
+            ).choices[0].message.content
         except Exception as e:
-            response = f"AI error: {str(e)}. Check OpenAI key."
-        
+            response = f"AI error: {str(e)}"
+
         return render_template_string(HTML, answer=response, refs=refs, num_papers=num_papers)
-    
+
     return render_template_string(HTML)
 
 if __name__ == "__main__":
