@@ -17,27 +17,32 @@ HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gasconsult.ai — Evidence. Instantly.</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; margin:0; padding:20px; }
-        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 40px; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        h1 { font-size: 3rem; text-align: center; color: #10b981; margin:0 0 10px 0; }
-        p.tagline { text-align: center; font-size: 1.2rem; color: #94a3b8; margin-bottom: 40px; }
-        textarea { width: 100%; height: 120px; padding: 16px; border-radius: 12px; border: none; font-size: 1.1rem; margin-bottom: 16px; }
-        input[type="submit"] { background: #10b981; color: white; padding: 14px 32px; border: none; border-radius: 12px; font-size: 1.1rem; cursor: pointer; }
-        input[type="submit"]:hover { background: #059669; }
-        .response { margin-top: 40px; background: #334155; padding: 24px; border-radius: 12px; line-height: 1.7; }
-        .references { margin-top: 40px; }
-        .ref { background: #1e293b; padding: 16px; border-radius: 12px; margin-bottom: 16px; }
-        a { color: #10b981; }
-        footer { text-align: center; margin-top: 60px; color: #64748b; font-size: 0.9rem; }
+        body { font-family: 'Inter', sans-serif; background: #0f172a; color: #e2e8f0; margin:0; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { height: 90px; margin-bottom: 12px; filter: drop-shadow(0 0 20px rgba(16,185,129,0.4)); }
+        h1 { font-size: 3rem; color: #10b981; margin:0; }
+        .tagline { font-size: 1.3rem; color: #94a3b8; margin: 16px 0 40px; }
+        textarea { width: 100%; height: 130px; padding: 18px; border-radius: 16px; border: none; font-size: 1.1rem; background:#1e293b; color:white; }
+        input[type="submit"] { background: #10b981; color: white; padding: 16px 40px; border: none; border-radius: 16px; font-size: 1.2rem; cursor: pointer; transition:0.2s; }
+        input[type="submit"]:hover { background: #059669; transform: translateY(-2px); }
+        .response, .references { margin-top: 40px; background: #1e293b; padding: 28px; border-radius: 16px; }
+        .ref { background: #0f172a; padding: 20px; border-radius: 12px; margin-bottom: 16px; }
+        footer { text-align: center; margin-top: 80px; color: #64748b; font-size: 0.9rem; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>gasconsult.ai</h1>
-        <p class="tagline">Evidence-based anesthesiology answers • Powered by GPT + PubMed • No hallucinations</p>
-        
+        <div class="header">
+            <img src="/static/logo.png" alt="gasconsult.ai" class="logo">
+            <h1>gasconsult.ai</h1>
+            <p class="tagline">Evidence-based anesthesiology answers • No hallucinations</p>
+        </div>
+
         <form method="post">
             <textarea name="query" placeholder="e.g., Best evidence for TXA in spine surgery?" required></textarea>
             <center><input type="submit" value="Get Evidence"></center>
