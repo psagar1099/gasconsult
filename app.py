@@ -6,13 +6,14 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# ←←← CHANGE THIS TO YOUR REAL EMAIL ←←← (required for NCBI)
-Entrez.email = "psagar1099@gmail.com"  # ← CHANGE THIS
+# ←←← YOUR REAL EMAIL (required for NCBI) ←←←
+Entrez.email = "psagar1099@gmail.com"  # ← CHANGE TO YOURS
 
-# Optional: Add your NCBI API key here for unlimited queries (get free at account.ncbi.nlm.nih.gov)
-# Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
+# ←←← YOUR NCBI API KEY (unlimited searches) ←←←
+Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"  # ← CHANGE TO YOURS
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# OpenAI setup (v1.0+ client)
+openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 HTML = """
 <!DOCTYPE html>
@@ -81,39 +82,34 @@ def index():
     if request.method == "POST":
         query = request.form["query"]
         
-        # Calculate date filter: last 10 years
+        # Date filter: last 10 years
         end_date = datetime.now().strftime("%Y/%m/%d")
         start_date = (datetime.now() - timedelta(days=365*10)).strftime("%Y/%m/%d")
         
-        # Broader high-evidence filter (proven for anesthesiology SRs)
+        # High-evidence filter
         high_evidence_filter = """
-        ("Systematic Review"[Publication Type:NoExp] OR "Meta-Analysis"[Publication Type:NoExp] OR 
-        "Randomized Controlled Trial"[Publication Type:NoExp] OR "Cochrane Database Syst Rev"[Journal] OR 
-        systematic[TI] OR scoping[TI] OR meta-analysis[TI])
+        ("Systematic Review"[Publication Type] OR "Meta-Analysis"[Publication Type] OR 
+        "Randomized Controlled Trial"[Publication Type] OR "Cochrane Database Syst Rev"[Journal] OR 
+        systematic[Title/Abstract] OR meta-analysis[Title/Abstract])
         """
         
-        # First, try high-evidence search
+        # Try high-evidence first
         search_term = f'anesthesiology[MeSH Terms] AND ({query}) AND {high_evidence_filter} AND ("{start_date}"[Date - Publication] : "{end_date}"[Date - Publication])'
-        print(f"Debug search term: {search_term}")  # Visible in Render logs
-        
         handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
         result = Entrez.read(handle)
         ids = result["IdList"]
-        print(f"High-evidence IDs found: {len(ids)}")  # Debug
         
         if not ids:
-            # Fallback to general anesthesiology papers
+            # Fallback to general anesthesiology
             search_term = f'anesthesiology[MeSH Terms] AND ({query}) AND ("{start_date}"[Date - Publication] : "{end_date}"[Date - Publication])'
-            print(f"Fallback search term: {search_term}")
             handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
             result = Entrez.read(handle)
             ids = result["IdList"]
-            print(f"Fallback IDs found: {len(ids)}")
             
             if not ids:
-                return render_template_string(HTML, answer="<p>No relevant anesthesiology papers found. Try a different query (e.g., 'propofol sedation'). Debug: Check Render logs for search terms.</p>", num_papers=0, refs=[])
+                return render_template_string(HTML, answer="<p>No relevant anesthesiology papers found. Try 'propofol sedation'.</p>", num_papers=0, refs=[])
         
-        # Fetch paper details
+        # Fetch details
         handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
         papers = Entrez.read(handle)["PubmedArticle"]
         
@@ -134,24 +130,22 @@ def index():
                 refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
                 context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
             except Exception as e:
-                print(f"Error parsing paper: {e}")
                 continue
         
         num_papers = len(refs)
         
-        # GPT prompt (strict evidence-only)
-        prompt = f"""You are an expert anesthesiologist. Answer the question: '{query}' 
-        STRICTLY using ONLY the provided references. Cite by title or PMID in parentheses. 
-        If evidence is limited, say so clearly. Keep it concise and evidence-based.
+        # GPT prompt
+        prompt = f"""You are an expert anesthesiologist. Answer: '{query}' 
+        STRICTLY using ONLY the references. Cite by title or PMID. If limited evidence, say so.
         
         References:
         {context}
         
         Answer:"""
-
-         try:
-            client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-            response_obj = client.chat.completions.create(
+        
+        # OpenAI v1.0+ call (official syntax)
+        try:
+            response_obj = openai_client.chat.completions.create(
                 model="gpt-4o",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1
