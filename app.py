@@ -149,16 +149,16 @@ def index():
         
         Answer:"""
         
-        try:
-    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-    response_obj = client.chat.completions.create(
-        model="gpt-4o",  # Or gpt-5 if available
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.1
-    )
-    response = response_obj.choices[0].message.content
-except Exception as e:
-    response = f"AI error: {str(e)}. Check OpenAI key."
+                try:
+            client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+            response_obj = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1
+            )
+            response = response_obj.choices[0].message.content
+        except Exception as e:
+            response = f"AI error: {str(e)}. Check OpenAI key."
         
         return render_template_string(HTML, answer=response, refs=refs, num_papers=num_papers)
     
