@@ -1,0 +1,4 @@
+Flask==3.0.3
+biopython==1.83
+openai==1.47.0
+gunicorn==22.0.0
