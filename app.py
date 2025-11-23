@@ -86,18 +86,22 @@ def index():
         end_date = datetime.now().strftime("%Y/%m/%d")
         start_date = (datetime.now() - timedelta(days=365*10)).strftime("%Y/%m/%d")
         
-        # High-evidence filter
-        high_evidence_filter = """
-        ("Systematic Review"[Publication Type] OR "Meta-Analysis"[Publication Type] OR 
-        "Randomized Controlled Trial"[Publication Type] OR "Cochrane Database Syst Rev"[Journal] OR 
-        systematic[Title/Abstract] OR meta-analysis[Title/Abstract])
-        """
-        
-        # Try high-evidence first
-        search_term = f'anesthesiology[MeSH Terms] AND ({query}) AND {high_evidence_filter} AND ("{start_date}"[Date - Publication] : "{end_date}"[Date - Publication])'
+                # ←←← THIS IS THE ONLY VERSION THAT WORKS RELIABLY ←←←
+        search_term = (
+            f'anesthesiology[MeSH Terms] AND "{query}" AND '
+            f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+            f'"Cochrane Database Syst Rev"[ta]) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+        )
         handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
         result = Entrez.read(handle)
         ids = result["IdList"]
+        
+        if not ids:
+            # Fallback — still anesthesiology-specific, last 10 years
+            search_term = f'anesthesiology[MeSH Terms] AND "{query}" AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
+            result = Entrez.read(handle)
+            ids = result["IdList"]
         
         if not ids:
             # Fallback to general anesthesiology
