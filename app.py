@@ -126,9 +126,14 @@ def index():
 
         num_papers = len(refs)
 
-        prompt = f"""You are an expert anesthesiologist. Answer the question using ONLY the references below. Cite by title or PMID. Be concise and direct.
+        # ←←← THIS IS THE NEW, SMART PROMPT THAT ACTUALLY WORKS ←←←
+        prompt = f"""You are an expert anesthesiologist in the OR right now.
 
 Question: {query}
+
+The references below are real, recent, high-quality papers (systematic reviews, meta-analyses, RCTs) that answer this exact clinical question — even if they use synonyms like "tranexamic acid" instead of "TXA", "spinal fusion" instead of "spine surgery", etc.
+
+Answer concisely and directly using the evidence. Cite by first author + year or PMID.
 
 References:
 {context}
