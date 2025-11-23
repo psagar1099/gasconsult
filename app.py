@@ -148,8 +148,8 @@ def index():
         {context}
         
         Answer:"""
-        
-                try:
+
+         try:
             client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
             response_obj = client.chat.completions.create(
                 model="gpt-4o",
