@@ -2,15 +2,12 @@ from flask import Flask, request, render_template_string
 from Bio import Entrez
 import openai
 import os
-from datetime import datetime
 
 app = Flask(__name__)
 
-# ←←← YOUR REAL CREDENTIALS (already correct) ←←←
 Entrez.email = "psagar1099@gmail.com"
 Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
 
-# OpenAI setup
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 HTML = """
@@ -80,16 +77,13 @@ def index():
     if request.method == "POST":
         query = request.form["query"].strip()
 
-        # Smart expansion of common terms
         q = query.lower()
         q = q.replace("txa", '"tranexamic acid" OR TXA')
-        q = q.replace("blood loss", "blood loss OR hemorrhage OR transfusion')
-        q = q.replace("spine surgery", "spine surgery OR spinal fusion OR scoliosis')
-        q = q.replace("pediatric", "pediatric OR children OR peds')
-        q = q.replace("airway", "airway OR intubation OR laryngoscopy')
-        q = q.replace("ponv", "PONV OR "postoperative nausea"')
+        q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
+        q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
+        q = q.replace("pediatric", 'pediatric OR children OR peds')
+        q = q.replace("ponv", 'PONV OR "postoperative nausea"')
 
-        # Universal high-evidence search (last 10+ years)
         search_term = (
             f'({q}) AND '
             f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
@@ -97,21 +91,19 @@ def index():
             f'("2015/01/01"[PDAT] : "3000"[PDAT])'
         )
 
-        # Try pure anesthesiology first
+        # Try anesthesiology first
         handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
         result = Entrez.read(handle)
         ids = result["IdList"]
 
-        # Fallback: drop MeSH but keep high evidence
         if not ids:
             handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
             result = Entrez.read(handle)
             ids = result["IdList"]
 
         if not ids:
-            return render_template_string(HTML, answer="<p>No high-quality recent evidence found. Try rephrasing (e.g., 'TXA scoliosis', 'blood loss spine').</p>", num_papers=0, refs=[])
+            return render_template_string(HTML, answer="<p>No high-quality recent evidence found. Try rephrasing.</p>", num_papers=0, refs=[])
 
-        # Fetch papers
         handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
         papers = Entrez.read(handle)["PubmedArticle"]
 
@@ -134,8 +126,9 @@ def index():
 
         num_papers = len(refs)
 
-        prompt = f"""You are an expert anesthesiologist. Answer: '{query}'
-STRICTLY using ONLY the references below. Cite by title or PMID. Be concise.
+        prompt = f"""You are an expert anesthesiologist. Answer the question using ONLY the references below. Cite by title or PMID. Be concise and direct.
+
+Question: {query}
 
 References:
 {context}
