@@ -1,10 +1,12 @@
-from flask import Flask, request, render_template_string
+from flask import Flask, request, render_template_string, session, redirect, url_for
 from Bio import Entrez
 import openai
 import os
 import re
+import secrets
 
 app = Flask(__name__)
+app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 Entrez.email = "psagar1099@gmail.com"
 Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
@@ -331,155 +333,211 @@ HTML = """
             line-height: 1.5;
         }
 
-        /* Search Section */
-        .search-container {
-            max-width: 880px;
-            margin: 0 auto 80px;
+        /* Chat Container */
+        .chat-container {
+            max-width: 980px;
+            margin: 0 auto 40px;
             padding: 0 40px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 500px);
+            min-height: 400px;
         }
 
-        .search-box {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
-
-        .search-box:hover {
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 120px;
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
             padding: 20px;
-            font-size: 1.1rem;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 60px 40px;
+            color: #6e6e73;
+        }
+
+        .welcome-message h3 {
+            font-size: 2rem;
+            color: #1d1d1f;
+            margin-bottom: 20px;
+        }
+
+        .welcome-message ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 30px auto;
+            list-style: none;
+            padding: 0;
+        }
+
+        .welcome-message li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        .welcome-message li:last-child {
+            border-bottom: none;
+        }
+
+        /* Chat Messages */
+        .message {
+            margin-bottom: 24px;
+            display: flex;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 16px 20px;
+            border-radius: 18px;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: #0071e3;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.assistant .message-content {
+            background: #f5f5f7;
+            color: #1d1d1f;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-text {
+            margin-bottom: 8px;
+        }
+
+        .message-text h3 {
+            font-size: 1.3rem;
+            margin-top: 16px;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+
+        .message-text ul, .message-text ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .message-text p {
+            margin-bottom: 12px;
+        }
+
+        .message-refs {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e5e7;
+            font-size: 0.95rem;
+        }
+
+        .message-refs strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+
+        .ref-item {
+            padding: 6px 0;
+        }
+
+        .ref-item a {
+            color: #0071e3;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .ref-item a:hover {
+            text-decoration: underline;
+        }
+
+        .message-meta {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: #6e6e73;
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .chat-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1.05rem;
             font-family: inherit;
             border: 2px solid #e5e5e7;
             border-radius: 12px;
-            resize: vertical;
+            resize: none;
             transition: all 0.2s ease;
             background: #fafafa;
             color: #1d1d1f;
         }
 
-        textarea:focus {
+        .chat-form textarea:focus {
             outline: none;
             border-color: #0071e3;
             background: white;
             box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
 
-        textarea::placeholder {
+        .chat-form textarea::placeholder {
             color: #86868b;
         }
 
-        .button-wrapper {
-            margin-top: 24px;
-            text-align: center;
+        .chat-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            justify-content: flex-end;
         }
 
-        input[type="submit"] {
-            background: #0071e3;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 500;
-            padding: 16px 48px;
-            border: none;
+        .send-btn, .clear-btn {
+            padding: 12px 32px;
             border-radius: 980px;
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            letter-spacing: -0.2px;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        input[type="submit"]:hover {
+        .send-btn {
+            background: #0071e3;
+            color: white;
+            border: none;
+        }
+
+        .send-btn:hover {
             background: #0077ed;
             transform: scale(1.02);
-            box-shadow: 0 4px 20px rgba(0, 113, 227, 0.3);
         }
 
-        input[type="submit"]:active {
-            transform: scale(0.98);
-        }
-
-        /* Results Section */
-        .results-container {
-            max-width: 980px;
-            margin: 0 auto 80px;
-            padding: 0 40px;
-        }
-
-        .response {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
-        }
-
-        .response p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            color: #1d1d1f;
-            margin-bottom: 16px;
-        }
-
-        .references {
-            background: white;
-            border-radius: 20px;
-            padding: 50px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .ref {
-            padding: 28px;
+        .clear-btn {
             background: #f5f5f7;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 4px solid #0071e3;
-            transition: all 0.2s ease;
-        }
-
-        .ref:hover {
-            background: #e8e8ed;
-            transform: translateX(4px);
-        }
-
-        .ref strong {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 600;
             color: #1d1d1f;
-            margin-bottom: 12px;
-            line-height: 1.5;
+            border: 2px solid #e5e5e7;
         }
 
-        .ref-meta {
-            color: #6e6e73;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        .ref a {
-            color: #0071e3;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .ref a:hover {
-            color: #0077ed;
-            text-decoration: underline;
+        .clear-btn:hover {
+            background: #e8e8ed;
         }
 
         /* Footer */
@@ -491,17 +549,6 @@ HTML = """
             border-top: 1px solid #d2d2d7;
             color: #86868b;
             font-size: 0.9rem;
-        }
-
-        .debug {
-            display: inline-block;
-            background: #f5f5f7;
-            color: #6e6e73;
-            padding: 8px 16px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            margin-top: 20px;
-            font-weight: 500;
         }
 
         /* Responsive Design */
@@ -518,22 +565,32 @@ HTML = """
                 margin: 40px auto 40px;
             }
 
-            .search-box,
-            .response,
-            .references {
-                padding: 30px;
+            .message-content {
+                max-width: 90%;
+            }
+
+            .chat-container {
+                padding: 0 20px;
+                height: calc(100vh - 400px);
             }
 
             nav .container,
             .hero,
-            .search-container,
-            .results-container,
             footer {
                 padding-left: 20px;
                 padding-right: 20px;
             }
         }
     </style>
+    <script>
+        // Auto-scroll to bottom of chat on page load
+        window.onload = function() {
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        };
+    </script>
 </head>
 <body>
     <nav>
@@ -546,43 +603,63 @@ HTML = """
 
     <div class="hero">
         <h1>Evidence-Based<br>Anesthesiology Answers</h1>
-        <p class="subtitle">Get instant access to peer-reviewed research with AI-powered synthesis. No hallucinations, just evidence.</p>
+        <p class="subtitle">Chat with an AI consultant backed by peer-reviewed research. No hallucinations, just evidence.</p>
     </div>
 
-    <div class="search-container">
-        <div class="search-box">
-            <form method="post">
-                <textarea name="query" placeholder="Ask questions or calculate... e.g., 'TXA in spine surgery' or 'calculate MABL for patient with 5000 mL blood volume, 42 Hct, 30 Hct'" required></textarea>
-                <div class="button-wrapper">
-                    <input type="submit" value="Get Evidence">
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            {% if messages %}
+                {% for msg in messages %}
+                    <div class="message {{ msg.role }}">
+                        <div class="message-content">
+                            {% if msg.role == 'user' %}
+                                <div class="message-text">{{ msg.content }}</div>
+                            {% else %}
+                                <div class="message-text">{{ msg.content|safe }}</div>
+                                {% if msg.references %}
+                                <div class="message-refs">
+                                    <strong>References:</strong>
+                                    {% for ref in msg.references %}
+                                    <div class="ref-item">
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                                            {{ ref.title }} ({{ ref.year }})
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if msg.num_papers > 0 %}
+                                <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="welcome-message">
+                    <h3>👋 Welcome to gasconsult.ai</h3>
+                    <p>Ask me anything about anesthesiology, or use my medical calculators:</p>
+                    <ul>
+                        <li><strong>Evidence questions:</strong> "TXA in spine surgery", "propofol vs etomidate in peds"</li>
+                        <li><strong>Calculations:</strong> "MABL", "IBW", "BSA", "maintenance fluids", "QTc"</li>
+                    </ul>
+                    <p>I'll remember our conversation, so feel free to ask follow-up questions!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="chat-input-container">
+            <form method="post" action="/" class="chat-form">
+                <textarea name="query" id="chatInput" placeholder="Ask a question or request a calculation..." required rows="2"></textarea>
+                <div class="chat-buttons">
+                    <button type="submit" class="send-btn">Send</button>
+                    {% if messages %}
+                    <a href="/clear" class="clear-btn">Clear Chat</a>
+                    {% endif %}
                 </div>
             </form>
         </div>
     </div>
-
-    {% if answer %}
-    <div class="results-container">
-        <div class="response">
-            <h2>Answer</h2>
-            {{ answer|safe }}
-            <div class="debug">📊 Fetched {{ num_papers }} papers from PubMed</div>
-        </div>
-
-        <div class="references">
-            <h2>References</h2>
-            {% for ref in refs %}
-            <div class="ref">
-                <strong>{{ ref.title }}</strong>
-                <div class="ref-meta">
-                    {{ ref.authors }}<br>
-                    {{ ref.journal }} • {{ ref.year }}
-                </div>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">View on PubMed →</a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
 
     <footer>
         <p>Not medical advice • For educational use only<br>
@@ -594,13 +671,28 @@ HTML = """
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    # Initialize conversation history in session
+    if 'messages' not in session:
+        session['messages'] = []
+
     if request.method == "POST":
         raw_query = request.form["query"].strip()
+
+        # Add user message to conversation
+        session['messages'].append({"role": "user", "content": raw_query})
 
         # Check if this is a calculation request first
         calc_result = detect_and_calculate(raw_query)
         if calc_result:
-            return render_template_string(HTML, answer=calc_result, refs=[], num_papers=0)
+            # Add calculation result to conversation
+            session['messages'].append({
+                "role": "assistant",
+                "content": calc_result,
+                "references": [],
+                "num_papers": 0
+            })
+            session.modified = True
+            return redirect(url_for('index'))
 
         query = clean_query(raw_query)  # Strip conversational filler
 
@@ -654,7 +746,15 @@ def index():
             ids = result["IdList"]
 
         if not ids:
-            return render_template_string(HTML, answer="<p>No relevant evidence found. Try rephrasing your question or using different medical terms.</p>", num_papers=0, refs=[])
+            error_msg = "<p>No relevant evidence found. Try rephrasing your question or using different medical terms.</p>"
+            session['messages'].append({
+                "role": "assistant",
+                "content": error_msg,
+                "references": [],
+                "num_papers": 0
+            })
+            session.modified = True
+            return redirect(url_for('index'))
 
         handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
         papers = Entrez.read(handle)["PubmedArticle"]
@@ -678,17 +778,28 @@ def index():
 
         num_papers = len(refs)
 
-        # ←←← THIS IS THE NEW, SMART PROMPT THAT ACTUALLY WORKS ←←←
-        prompt = f"""You are an expert anesthesiologist in the OR right now.
+        # Build conversation context for GPT (last 5 exchanges to keep context manageable)
+        conversation_context = ""
+        recent_messages = session['messages'][-10:]  # Last 5 user + 5 assistant messages
+        for msg in recent_messages:
+            if msg['role'] == 'user':
+                conversation_context += f"User: {msg['content']}\n"
+            else:
+                conversation_context += f"Assistant: {msg['content']}\n"
 
-Question: {raw_query}
+        prompt = f"""You are an expert anesthesiologist providing evidence-based consultations.
 
-The references below are real, recent, high-quality papers (systematic reviews, meta-analyses, RCTs) that answer this exact clinical question — even if they use synonyms like "tranexamic acid" instead of "TXA", "spinal fusion" instead of "spine surgery", etc.
+Previous conversation:
+{conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
 
-Answer concisely and directly using the evidence. Cite by first author + year or PMID.
+Current question: {raw_query}
+
+The references below are real, recent, high-quality papers (systematic reviews, meta-analyses, RCTs) that answer this clinical question:
 
 References:
 {context}
+
+Answer concisely and directly using the evidence. If the question references previous conversation, use that context. Cite by first author + year or PMID.
 
 Answer:"""
 
@@ -701,9 +812,24 @@ Answer:"""
         except Exception as e:
             response = f"AI error: {str(e)}"
 
-        return render_template_string(HTML, answer=response, refs=refs, num_papers=num_papers)
+        # Add assistant response to conversation
+        session['messages'].append({
+            "role": "assistant",
+            "content": response,
+            "references": refs,
+            "num_papers": num_papers
+        })
+        session.modified = True
 
-    return render_template_string(HTML)
+        return redirect(url_for('index'))
+
+    return render_template_string(HTML, messages=session.get('messages', []))
+
+@app.route("/clear")
+def clear():
+    """Clear conversation history"""
+    session.pop('messages', None)
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     app.run(debug=True)
