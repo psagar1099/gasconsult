@@ -41,6 +41,147 @@ def clean_query(query):
 
     return q if q else query  # Return original if cleaning removed everything
 
+def detect_and_calculate(query):
+    """Detect calculation requests and perform medical calculations."""
+    q = query.lower()
+
+    # Extract all numbers from the query
+    numbers = re.findall(r'\d+\.?\d*', query)
+
+    # Maximum Allowable Blood Loss (MABL)
+    if any(term in q for term in ['mabl', 'maximum allowable blood loss', 'max blood loss']):
+        if len(numbers) >= 3:
+            try:
+                ebv = float(numbers[0])  # Estimated blood volume (mL)
+                hi = float(numbers[1])   # Initial Hct/Hgb
+                hf = float(numbers[2])   # Final Hct/Hgb
+                mabl = ebv * (hi - hf) / hi
+                return f"""
+                <h3>Maximum Allowable Blood Loss (MABL) Calculation</h3>
+                <p><strong>Formula:</strong> MABL = EBV × (Hi - Hf) / Hi</p>
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>Estimated Blood Volume (EBV): {ebv:.0f} mL</li>
+                    <li>Initial Hematocrit/Hemoglobin: {hi:.1f}</li>
+                    <li>Final (acceptable) Hematocrit/Hemoglobin: {hf:.1f}</li>
+                </ul>
+                <p><strong>Result: MABL = {mabl:.0f} mL</strong></p>
+                <p><em>Note: This is an estimate. Clinical judgment and patient condition should guide transfusion decisions.</em></p>
+                """
+            except:
+                pass
+
+    # Ideal Body Weight (IBW)
+    if any(term in q for term in ['ibw', 'ideal body weight', 'ideal weight']):
+        if len(numbers) >= 1:
+            try:
+                height_cm = float(numbers[0])
+                is_male = any(word in q for word in ['male', 'man', 'm,'])
+                is_female = any(word in q for word in ['female', 'woman', 'f,'])
+
+                if is_male:
+                    ibw = 50 + 0.91 * (height_cm - 152.4)
+                    sex = "Male"
+                elif is_female:
+                    ibw = 45.5 + 0.91 * (height_cm - 152.4)
+                    sex = "Female"
+                else:
+                    ibw_m = 50 + 0.91 * (height_cm - 152.4)
+                    ibw_f = 45.5 + 0.91 * (height_cm - 152.4)
+                    return f"""
+                    <h3>Ideal Body Weight (IBW) Calculation</h3>
+                    <p><strong>Height:</strong> {height_cm:.1f} cm</p>
+                    <p><strong>Results:</strong></p>
+                    <ul>
+                        <li>Male IBW: {ibw_m:.1f} kg</li>
+                        <li>Female IBW: {ibw_f:.1f} kg</li>
+                    </ul>
+                    <p><em>Specify sex (male/female) for specific result.</em></p>
+                    """
+
+                return f"""
+                <h3>Ideal Body Weight (IBW) Calculation</h3>
+                <p><strong>Formula ({sex}):</strong> {sex} formula using Devine equation</p>
+                <p><strong>Height:</strong> {height_cm:.1f} cm</p>
+                <p><strong>Result: IBW = {ibw:.1f} kg</strong></p>
+                """
+            except:
+                pass
+
+    # Body Surface Area (BSA)
+    if any(term in q for term in ['bsa', 'body surface area', 'surface area']):
+        if len(numbers) >= 2:
+            try:
+                weight = float(numbers[0])
+                height = float(numbers[1])
+                # Mosteller formula
+                bsa = ((weight * height) / 3600) ** 0.5
+                return f"""
+                <h3>Body Surface Area (BSA) Calculation</h3>
+                <p><strong>Formula:</strong> Mosteller formula: √((weight × height) / 3600)</p>
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>Weight: {weight:.1f} kg</li>
+                    <li>Height: {height:.1f} cm</li>
+                </ul>
+                <p><strong>Result: BSA = {bsa:.2f} m²</strong></p>
+                """
+            except:
+                pass
+
+    # Maintenance Fluids (4-2-1 rule)
+    if any(term in q for term in ['maintenance fluid', 'fluid requirement', '4-2-1', 'hourly fluid']):
+        if len(numbers) >= 1:
+            try:
+                weight = float(numbers[0])
+                if weight <= 10:
+                    rate = weight * 4
+                elif weight <= 20:
+                    rate = 40 + (weight - 10) * 2
+                else:
+                    rate = 60 + (weight - 20) * 1
+
+                return f"""
+                <h3>Maintenance Fluid Requirement (4-2-1 Rule)</h3>
+                <p><strong>Weight:</strong> {weight:.1f} kg</p>
+                <p><strong>Calculation:</strong></p>
+                <ul>
+                    <li>First 10 kg: 4 mL/kg/hr</li>
+                    <li>Second 10 kg: 2 mL/kg/hr</li>
+                    <li>Each kg above 20: 1 mL/kg/hr</li>
+                </ul>
+                <p><strong>Result: {rate:.0f} mL/hr</strong></p>
+                <p><strong>Daily requirement: {rate * 24:.0f} mL/day</strong></p>
+                """
+            except:
+                pass
+
+    # QTc (Corrected QT interval)
+    if any(term in q for term in ['qtc', 'corrected qt', 'qt interval']):
+        if len(numbers) >= 2:
+            try:
+                qt = float(numbers[0])
+                rr = float(numbers[1])
+                # Bazett's formula
+                qtc = qt / (rr ** 0.5)
+                interpretation = "Normal" if qtc < 450 else "Prolonged (>450ms - risk of arrhythmia)"
+
+                return f"""
+                <h3>QTc (Corrected QT Interval) Calculation</h3>
+                <p><strong>Formula:</strong> Bazett's formula: QTc = QT / √RR</p>
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>QT interval: {qt:.0f} ms</li>
+                    <li>RR interval: {rr:.0f} ms</li>
+                </ul>
+                <p><strong>Result: QTc = {qtc:.0f} ms</strong></p>
+                <p><strong>Interpretation:</strong> {interpretation}</p>
+                """
+            except:
+                pass
+
+    return None  # No calculation detected
+
 HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -348,7 +489,7 @@ HTML = """
     <div class="search-container">
         <div class="search-box">
             <form method="post">
-                <textarea name="query" placeholder="Ask anything about anesthesiology... e.g., Tell me about TXA in spine surgery" required></textarea>
+                <textarea name="query" placeholder="Ask questions or calculate... e.g., 'TXA in spine surgery' or 'calculate MABL for patient with 5000 mL blood volume, 42 Hct, 30 Hct'" required></textarea>
                 <div class="button-wrapper">
                     <input type="submit" value="Get Evidence">
                 </div>
@@ -392,6 +533,12 @@ HTML = """
 def index():
     if request.method == "POST":
         raw_query = request.form["query"].strip()
+
+        # Check if this is a calculation request first
+        calc_result = detect_and_calculate(raw_query)
+        if calc_result:
+            return render_template_string(HTML, answer=calc_result, refs=[], num_papers=0)
+
         query = clean_query(raw_query)  # Strip conversational filler
 
         # Expand synonyms and medical abbreviations
