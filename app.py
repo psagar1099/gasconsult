@@ -257,9 +257,8 @@ HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2">
-    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico?v=2">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=2">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
     <style>
         * {
             margin: 0;
@@ -475,8 +474,8 @@ HTML = """
 
         .message-content {
             max-width: 85%;
-            padding: 20px 24px;
-            border-radius: 12px;
+            padding: 18px 24px;
+            border-radius: 24px;
             font-size: 1rem;
             line-height: 1.7;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -575,15 +574,16 @@ HTML = """
 
         .chat-form textarea {
             width: 100%;
-            padding: 18px 120px 18px 20px;
+            padding: 16px 110px 16px 20px;
             font-size: 1rem;
             font-family: inherit;
             border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            border-radius: 24px;
             resize: none;
             transition: all 0.2s ease;
             background: #ffffff;
             color: #0A3D62;
+            min-height: 56px;
         }
 
         .chat-form textarea:focus {
@@ -598,13 +598,14 @@ HTML = """
 
         .send-btn {
             position: absolute;
-            right: 8px;
-            bottom: 8px;
-            background: #0A3D62;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #FF6B35;
             color: white;
             border: none;
-            padding: 12px 28px;
-            border-radius: 8px;
+            padding: 11px 24px;
+            border-radius: 20px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
@@ -612,13 +613,58 @@ HTML = """
         }
 
         .send-btn:hover {
-            background: #083049;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
+            background: #ff5722;
+            transform: translateY(-50%) scale(1.02);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .send-btn:active {
-            transform: translateY(0);
+            transform: translateY(-50%) scale(0.98);
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            display: none;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .loading-container.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .loading-dots {
+            display: inline-flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .loading-dots span {
+            width: 12px;
+            height: 12px;
+            background: #FF6B35;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
         }
 
         /* Responsive Design */
@@ -652,9 +698,18 @@ HTML = """
             }
 
             .send-btn {
-                position: static;
+                position: relative;
+                transform: none;
                 width: 100%;
                 margin-top: 10px;
+            }
+
+            .send-btn:hover {
+                transform: translateY(-1px);
+            }
+
+            .send-btn:active {
+                transform: translateY(0);
             }
 
             .chat-form textarea {
@@ -674,6 +729,23 @@ HTML = """
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
         };
+
+        // Show loading animation when form submits
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.querySelector('.chat-form');
+            const loadingContainer = document.getElementById('loadingIndicator');
+
+            if (chatForm) {
+                chatForm.addEventListener('submit', function(e) {
+                    const textarea = chatForm.querySelector('textarea');
+                    if (textarea.value.trim()) {
+                        if (loadingContainer) {
+                            loadingContainer.classList.add('active');
+                        }
+                    }
+                });
+            }
+        });
     </script>
 </head>
 <body>
@@ -743,6 +815,15 @@ HTML = """
                         </div>
                     </div>
                 {% endfor %}
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-container">
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
         {% endif %}
@@ -895,26 +976,36 @@ def index():
                 content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
                 conversation_context += f"Assistant: {content_text[:200]}...\n"
 
-        prompt = f"""You are an expert anesthesiologist AI assistant. You provide evidence-based answers and can also perform medical calculations conversationally.
+        # Create numbered reference list for citation
+        ref_list = ""
+        for i, ref in enumerate(refs, 1):
+            ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+        prompt = f"""You are a friendly, conversational expert anesthesiologist AI assistant. Respond naturally as if you're talking to a colleague - be human, relatable, and conversational while maintaining professionalism.
 
 Previous conversation:
 {conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
 
 Current question: {raw_query}
 
-I found the following research papers that may be relevant:
+Available research papers (use ONLY numbered citations like [1], [2], etc.):
+{ref_list}
 
+Paper details for context:
 {context}
 
-Your task:
-1. If the user is asking a follow-up question related to previous conversation, reference that context naturally
-2. Answer conversationally and concisely using the evidence provided
-3. Cite sources by first author + year or PMID
-4. If the user asked a calculation question but the papers aren't relevant, explain you couldn't find specific evidence but can help with the calculation if they provide values
+Instructions:
+1. Be conversational and natural - use phrases like "I'd say...", "Interesting question...", "From what I see...", etc.
+2. If the user asks follow-ups like "are you sure?" or challenges your response, acknowledge their concern naturally and elaborate
+3. Use ONLY numbered citations [1], [2], [3] etc. matching the reference list above - DO NOT cite by author names in the text
+4. Don't be overly formal - write as if you're having a conversation with a colleague
+5. Be personable and human - vary your responses, acknowledge uncertainty when appropriate
+6. If asked for clarification or confirmation, respond thoughtfully and naturally
 
-Respond naturally as if having a conversation with a colleague.
+Example good response style:
+"Based on the evidence, it looks like TXA can reduce blood loss in spine surgery [1][2]. The effect seems most pronounced in multilevel fusions [3]. That said, the optimal dosing still varies a bit between studies."
 
-Answer:"""
+Respond in a natural, conversational way:"""
 
         try:
             response = openai_client.chat.completions.create(
