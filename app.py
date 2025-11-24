@@ -356,24 +356,17 @@ HTML = """
         }
 
         .welcome-screen .hero-logo {
-            font-size: 4.5rem;
-            margin-bottom: 20px;
+            font-size: 5rem;
+            margin-bottom: 24px;
             color: #FF6B35;
         }
 
-        .welcome-screen h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #0A3D62;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
         .welcome-screen .tagline {
-            font-size: 1.3rem;
-            color: #666;
+            font-size: 2rem;
+            color: #0A3D62;
             margin-bottom: 50px;
-            font-weight: 400;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .welcome-screen .feature-grid {
@@ -574,7 +567,7 @@ HTML = """
 
         .chat-form textarea {
             width: 100%;
-            padding: 16px 110px 16px 20px;
+            padding: 12px 100px 12px 20px;
             font-size: 1rem;
             font-family: inherit;
             border: 2px solid #e0e0e0;
@@ -583,7 +576,8 @@ HTML = """
             transition: all 0.2s ease;
             background: #ffffff;
             color: #0A3D62;
-            min-height: 56px;
+            height: 48px;
+            line-height: 1.5;
         }
 
         .chat-form textarea:focus {
@@ -598,14 +592,14 @@ HTML = """
 
         .send-btn {
             position: absolute;
-            right: 6px;
+            right: 5px;
             top: 50%;
             transform: translateY(-50%);
             background: #FF6B35;
             color: white;
             border: none;
-            padding: 11px 24px;
-            border-radius: 20px;
+            padding: 9px 22px;
+            border-radius: 18px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
@@ -669,12 +663,12 @@ HTML = """
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .welcome-screen h1 {
-                font-size: 2.2rem;
+            .welcome-screen .hero-logo {
+                font-size: 4rem;
             }
 
             .welcome-screen .tagline {
-                font-size: 1.1rem;
+                font-size: 1.5rem;
             }
 
             .welcome-screen .feature-grid {
@@ -767,8 +761,7 @@ HTML = """
         <!-- Welcome Screen -->
         <div class="welcome-screen">
             <div class="hero-logo">⚕</div>
-            <h1>gasconsult.ai</h1>
-            <p class="tagline">Strictly Evidence-Based Anesthesiology Consults</p>
+            <p class="tagline">Strictly Evidence-Based Anesthesiology</p>
 
             <div class="feature-grid">
                 <div class="feature-card">
@@ -802,7 +795,7 @@ HTML = """
                                     {% for ref in msg.references %}
                                     <div class="ref-item">
                                         <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                                            {{ ref.title }} ({{ ref.year }})
+                                            [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
                                         </a>
                                     </div>
                                     {% endfor %}
@@ -981,7 +974,7 @@ def index():
         for i, ref in enumerate(refs, 1):
             ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
 
-        prompt = f"""You are a friendly, conversational expert anesthesiologist AI assistant. Respond naturally as if you're talking to a colleague - be human, relatable, and conversational while maintaining professionalism.
+        prompt = f"""You are a clinical expert anesthesiologist AI assistant designed for real-time decision support. Your responses must be immediately actionable and clinically complete.
 
 Previous conversation:
 {conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
@@ -994,18 +987,27 @@ Available research papers (use ONLY numbered citations like [1], [2], etc.):
 Paper details for context:
 {context}
 
-Instructions:
-1. Be conversational and natural - use phrases like "I'd say...", "Interesting question...", "From what I see...", etc.
-2. If the user asks follow-ups like "are you sure?" or challenges your response, acknowledge their concern naturally and elaborate
-3. Use ONLY numbered citations [1], [2], [3] etc. matching the reference list above - DO NOT cite by author names in the text
-4. Don't be overly formal - write as if you're having a conversation with a colleague
-5. Be personable and human - vary your responses, acknowledge uncertainty when appropriate
-6. If asked for clarification or confirmation, respond thoughtfully and naturally
+CRITICAL INSTRUCTIONS:
+1. **Be maximally informative**: Include specific dosages (mg/kg, total doses, infusion rates), contraindications, side effects, patient risk factors, procedural steps, and monitoring parameters whenever relevant
+2. **Emergency-ready responses**: If asked about acute situations (bronchospasm, hypotension, anaphylaxis, etc.), provide step-by-step management protocols with specific drugs and doses
+3. **Never defer to external literature**: NEVER say "you might want to look into more literature" or "consider consulting guidelines" - extract ALL relevant information from the provided papers and present it
+4. **Use numbered citations [1], [2], [3]**: Match the reference list exactly - NO author names in text
+5. **Include clinical context**: Mention patient populations studied, contraindications, relative vs absolute benefits, NNT/NNH when available
+6. **Be conversational but complete**: Natural tone like talking to a colleague, but don't sacrifice clinical detail for brevity
+7. **Risk stratification**: When relevant, discuss patient-specific risk factors, ASA classification implications, comorbidity considerations
 
-Example good response style:
-"Based on the evidence, it looks like TXA can reduce blood loss in spine surgery [1][2]. The effect seems most pronounced in multilevel fusions [3]. That said, the optimal dosing still varies a bit between studies."
+Example response for "What should I do for bronchospasm?":
+"For acute bronchospasm, here's the step-by-step approach [1][2]:
 
-Respond in a natural, conversational way:"""
+1. **Immediate**: Deepen anesthesia (propofol 0.5-1 mg/kg bolus, or increase volatile to 2+ MAC) [1]
+2. **Bronchodilators**: Albuterol 4-8 puffs via ETT or 2.5mg nebulized [2], plus ipratropium if severe [2]
+3. **Steroids**: Methylprednisolone 1-2 mg/kg IV or hydrocortisone 100mg IV [1]
+4. **Epinephrine**: If refractory - start with 10-20mcg IV boluses, titrate to effect. Consider infusion 0.01-0.05 mcg/kg/min [2][3]
+5. **Ketamine**: 0.5-1 mg/kg if resistant to above [3]
+
+Risk factors to assess: asthma history, recent URI, smoking, COPD [1]. Ensure adequate depth before any airway manipulation [2]."
+
+Respond with maximum clinical utility:"""
 
         try:
             response = openai_client.chat.completions.create(
