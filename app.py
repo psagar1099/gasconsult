@@ -2,6 +2,7 @@ from flask import Flask, request, render_template_string
 from Bio import Entrez
 import openai
 import os
+import re
 
 app = Flask(__name__)
 
@@ -9,6 +10,35 @@ Entrez.email = "psagar1099@gmail.com"
 Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+def clean_query(query):
+    """Strip conversational filler from user queries to extract the core medical topic."""
+    q = query.lower().strip()
+
+    # Remove common conversational phrases
+    filler_phrases = [
+        r"^(can you |could you |please |pls )",
+        r"^(tell me about |tell me |explain |describe )",
+        r"^(what is |what's |what are |whats )",
+        r"^(what do you know about |what does the evidence say about )",
+        r"^(what's the evidence for |what is the evidence for |evidence for )",
+        r"^(i want to know about |i'd like to know about |i need to know about )",
+        r"^(give me info on |give me information on |info on )",
+        r"^(how does |how do |how is |how are )",
+        r"^(why does |why do |why is |why are )",
+        r"^(search for |look up |find |show me )",
+        r"^(help me understand |help me with )",
+    ]
+
+    # Apply each pattern repeatedly until no more matches
+    for pattern in filler_phrases:
+        q = re.sub(pattern, "", q, flags=re.IGNORECASE)
+
+    # Remove trailing question marks and extra whitespace
+    q = re.sub(r"\?+$", "", q).strip()
+    q = re.sub(r"\s+", " ", q)
+
+    return q if q else query  # Return original if cleaning removed everything
 
 HTML = """
 <!DOCTYPE html>
@@ -75,7 +105,8 @@ HTML = """
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        query = request.form["query"].strip()
+        raw_query = request.form["query"].strip()
+        query = clean_query(raw_query)  # Strip conversational filler
 
         q = query.lower()
         q = q.replace("txa", '"tranexamic acid" OR TXA')
@@ -129,7 +160,7 @@ def index():
         # ←←← THIS IS THE NEW, SMART PROMPT THAT ACTUALLY WORKS ←←←
         prompt = f"""You are an expert anesthesiologist in the OR right now.
 
-Question: {query}
+Question: {raw_query}
 
 The references below are real, recent, high-quality papers (systematic reviews, meta-analyses, RCTs) that answer this exact clinical question — even if they use synonyms like "tranexamic acid" instead of "TXA", "spinal fusion" instead of "spine surgery", etc.
 
