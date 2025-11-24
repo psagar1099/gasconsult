@@ -43,9 +43,13 @@ def clean_query(query):
 
     return q if q else query  # Return original if cleaning removed everything
 
-def detect_and_calculate(query):
+def detect_and_calculate(query, context_hint=None):
     """Detect calculation requests and perform medical calculations."""
     q = query.lower()
+
+    # If context_hint provided, include it in detection
+    if context_hint:
+        q = context_hint + " " + q
 
     # Extract all numbers from the query
     numbers = re.findall(r'\d+\.?\d*', query)
@@ -253,9 +257,9 @@ HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
-    <link rel="apple-touch-icon" href="/static/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico?v=2">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=2">
     <style>
         * {
             margin: 0;
@@ -308,78 +312,51 @@ HTML = """
             font-size: 1.8rem;
         }
 
-        /* Hero Section */
+        /* Hero Section - Compact */
         .hero {
-            max-width: 980px;
-            margin: 80px auto 60px;
-            padding: 0 40px;
+            max-width: 100%;
+            margin: 0;
+            padding: 30px 40px 20px;
             text-align: center;
+            background: white;
+            border-bottom: 1px solid #e5e5e7;
         }
 
         h1 {
-            font-size: 4rem;
-            font-weight: 700;
-            letter-spacing: -1.5px;
-            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin: 0;
             color: #1d1d1f;
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            color: #6e6e73;
-            font-weight: 400;
-            margin-bottom: 50px;
-            line-height: 1.5;
+            display: none;
         }
 
-        /* Chat Container */
+        /* Chat Container - Full Page */
         .chat-container {
-            max-width: 980px;
-            margin: 0 auto 40px;
-            padding: 0 40px;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 500px);
-            min-height: 400px;
+            height: calc(100vh - 200px);
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 20px;
-            background: white;
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            background: #fafafa;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .welcome-message {
-            text-align: center;
-            padding: 60px 40px;
-            color: #6e6e73;
-        }
-
-        .welcome-message h3 {
-            font-size: 2rem;
-            color: #1d1d1f;
-            margin-bottom: 20px;
-        }
-
-        .welcome-message ul {
-            text-align: left;
-            max-width: 600px;
-            margin: 30px auto;
-            list-style: none;
-            padding: 0;
-        }
-
-        .welcome-message li {
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e5e7;
-        }
-
-        .welcome-message li:last-child {
-            border-bottom: none;
+            display: none;
         }
 
         /* Chat Messages */
@@ -472,9 +449,11 @@ HTML = """
         /* Chat Input */
         .chat-input-container {
             background: white;
-            padding: 20px;
-            border-radius: 0 0 20px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 20px 40px;
+            border-top: 1px solid #e5e5e7;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .chat-form textarea {
@@ -542,43 +521,29 @@ HTML = """
 
         /* Footer */
         footer {
-            max-width: 980px;
-            margin: 80px auto 40px;
-            padding: 40px 40px 0;
-            text-align: center;
-            border-top: 1px solid #d2d2d7;
-            color: #86868b;
-            font-size: 0.9rem;
+            display: none;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.5rem;
-            }
-
-            .subtitle {
-                font-size: 1.2rem;
-            }
-
-            .hero {
-                margin: 40px auto 40px;
+                font-size: 1.5rem;
             }
 
             .message-content {
                 max-width: 90%;
             }
 
-            .chat-container {
-                padding: 0 20px;
-                height: calc(100vh - 400px);
+            .chat-messages {
+                padding: 20px;
             }
 
-            nav .container,
-            .hero,
-            footer {
-                padding-left: 20px;
-                padding-right: 20px;
+            .chat-input-container {
+                padding: 15px 20px;
+            }
+
+            nav .container {
+                padding: 0 20px;
             }
         }
     </style>
@@ -602,50 +567,37 @@ HTML = """
     </nav>
 
     <div class="hero">
-        <h1>Evidence-Based<br>Anesthesiology Answers</h1>
-        <p class="subtitle">Chat with an AI consultant backed by peer-reviewed research. No hallucinations, just evidence.</p>
+        <h1>gasconsult.ai</h1>
     </div>
 
     <div class="chat-container">
         <div class="chat-messages" id="chatMessages">
-            {% if messages %}
-                {% for msg in messages %}
-                    <div class="message {{ msg.role }}">
-                        <div class="message-content">
-                            {% if msg.role == 'user' %}
-                                <div class="message-text">{{ msg.content }}</div>
-                            {% else %}
-                                <div class="message-text">{{ msg.content|safe }}</div>
-                                {% if msg.references %}
-                                <div class="message-refs">
-                                    <strong>References:</strong>
-                                    {% for ref in msg.references %}
-                                    <div class="ref-item">
-                                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                                            {{ ref.title }} ({{ ref.year }})
-                                        </a>
-                                    </div>
-                                    {% endfor %}
+            {% for msg in messages %}
+                <div class="message {{ msg.role }}">
+                    <div class="message-content">
+                        {% if msg.role == 'user' %}
+                            <div class="message-text">{{ msg.content }}</div>
+                        {% else %}
+                            <div class="message-text">{{ msg.content|safe }}</div>
+                            {% if msg.references %}
+                            <div class="message-refs">
+                                <strong>References:</strong>
+                                {% for ref in msg.references %}
+                                <div class="ref-item">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                                        {{ ref.title }} ({{ ref.year }})
+                                    </a>
                                 </div>
-                                {% endif %}
-                                {% if msg.num_papers > 0 %}
-                                <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
-                                {% endif %}
+                                {% endfor %}
+                            </div>
                             {% endif %}
-                        </div>
+                            {% if msg.num_papers > 0 %}
+                            <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
+                            {% endif %}
+                        {% endif %}
                     </div>
-                {% endfor %}
-            {% else %}
-                <div class="welcome-message">
-                    <h3>👋 Welcome to gasconsult.ai</h3>
-                    <p>Ask me anything about anesthesiology, or use my medical calculators:</p>
-                    <ul>
-                        <li><strong>Evidence questions:</strong> "TXA in spine surgery", "propofol vs etomidate in peds"</li>
-                        <li><strong>Calculations:</strong> "MABL", "IBW", "BSA", "maintenance fluids", "QTc"</li>
-                    </ul>
-                    <p>I'll remember our conversation, so feel free to ask follow-up questions!</p>
                 </div>
-            {% endif %}
+            {% endfor %}
         </div>
 
         <div class="chat-input-container">
@@ -681,8 +633,24 @@ def index():
         # Add user message to conversation
         session['messages'].append({"role": "user", "content": raw_query})
 
-        # Check if this is a calculation request first
-        calc_result = detect_and_calculate(raw_query)
+        # Check if this is a calculation request
+        # Look at previous messages for context
+        context_hint = None
+        if len(session['messages']) >= 3:
+            # Check last few messages for calculator keywords
+            last_msgs = session['messages'][-4:]
+            for msg in last_msgs:
+                content = msg.get('content', '').lower()
+                if any(term in content for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid', 'ideal body weight', 'body surface']):
+                    # Extract the calculator type
+                    for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid']:
+                        if term in content:
+                            context_hint = term
+                            break
+                    break
+
+        calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
+
         if calc_result:
             # Add calculation result to conversation
             session['messages'].append({
@@ -778,28 +746,35 @@ def index():
 
         num_papers = len(refs)
 
-        # Build conversation context for GPT (last 5 exchanges to keep context manageable)
+        # Build conversation context for GPT (last 10 messages)
         conversation_context = ""
-        recent_messages = session['messages'][-10:]  # Last 5 user + 5 assistant messages
+        recent_messages = session['messages'][-10:]
         for msg in recent_messages:
             if msg['role'] == 'user':
                 conversation_context += f"User: {msg['content']}\n"
             else:
-                conversation_context += f"Assistant: {msg['content']}\n"
+                # Strip HTML for cleaner context
+                content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                conversation_context += f"Assistant: {content_text[:200]}...\n"
 
-        prompt = f"""You are an expert anesthesiologist providing evidence-based consultations.
+        prompt = f"""You are an expert anesthesiologist AI assistant. You provide evidence-based answers and can also perform medical calculations conversationally.
 
 Previous conversation:
 {conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
 
 Current question: {raw_query}
 
-The references below are real, recent, high-quality papers (systematic reviews, meta-analyses, RCTs) that answer this clinical question:
+I found the following research papers that may be relevant:
 
-References:
 {context}
 
-Answer concisely and directly using the evidence. If the question references previous conversation, use that context. Cite by first author + year or PMID.
+Your task:
+1. If the user is asking a follow-up question related to previous conversation, reference that context naturally
+2. Answer conversationally and concisely using the evidence provided
+3. Cite sources by first author + year or PMID
+4. If the user asked a calculation question but the papers aren't relevant, explain you couldn't find specific evidence but can help with the calculation if they provide values
+
+Respond naturally as if having a conversation with a colleague.
 
 Answer:"""
 
