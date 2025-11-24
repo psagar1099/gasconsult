@@ -28,6 +28,7 @@ def clean_query(query):
         r"^(why does |why do |why is |why are )",
         r"^(search for |look up |find |show me )",
         r"^(help me understand |help me with )",
+        r"(indications to use |indications for |indication for |when to use )",
     ]
 
     # Apply each pattern repeatedly until no more matches
@@ -398,7 +399,9 @@ def index():
         q = q.replace(" versus ", " OR ")
         q = q.replace(" vs ", " OR ")
         q = q.replace(" vs. ", " OR ")
+        q = q.replace(" over ", " OR ")
         q = q.replace(" compared to ", " OR ")
+        q = q.replace(" compared with ", " OR ")
         q = q.replace("txa", '"tranexamic acid" OR TXA')
         q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
         q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
