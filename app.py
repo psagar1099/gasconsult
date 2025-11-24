@@ -46,213 +46,342 @@ HTML = """
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>gasconsult.ai — Evidence. Instantly.</title>
+    <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
     <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        * {
             margin: 0;
-            padding: 40px 20px;
-            min-height: 100vh;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container {
-            max-width: 950px;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', Arial, sans-serif;
+            background: #fafafa;
+            color: #1d1d1f;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .container {
+            max-width: 1200px;
             margin: 0 auto;
-            background: #ffffff;
-            padding: 60px 50px;
-            border-radius: 24px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 2px solid #f1f5f9;
-        }
-        .logo {
-            height: 80px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.3));
-        }
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0071e3 0%, #00c3ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin: 0 0 12px 0;
             letter-spacing: -0.5px;
         }
-        .tagline {
-            font-size: 1.25rem;
-            color: #64748b;
-            font-weight: 500;
-            margin: 0;
+
+        .logo-symbol {
+            display: inline-block;
+            margin-right: 8px;
+            font-size: 1.8rem;
         }
-        form {
+
+        /* Hero Section */
+        .hero {
+            max-width: 980px;
+            margin: 80px auto 60px;
+            padding: 0 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -1.5px;
             margin-bottom: 20px;
+            color: #1d1d1f;
+            line-height: 1.1;
         }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #6e6e73;
+            font-weight: 400;
+            margin-bottom: 50px;
+            line-height: 1.5;
+        }
+
+        /* Search Section */
+        .search-container {
+            max-width: 880px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover {
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
         textarea {
             width: 100%;
-            height: 140px;
-            padding: 20px 24px;
-            border-radius: 16px;
-            border: 2px solid #e2e8f0;
-            background: #ffffff;
-            color: #1e293b;
+            min-height: 120px;
+            padding: 20px;
             font-size: 1.1rem;
             font-family: inherit;
+            border: 2px solid #e5e5e7;
+            border-radius: 12px;
             resize: vertical;
             transition: all 0.2s ease;
-            font-weight: 500;
+            background: #fafafa;
+            color: #1d1d1f;
         }
+
         textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: #0071e3;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
+
         textarea::placeholder {
-            color: #94a3b8;
-            font-weight: 400;
+            color: #86868b;
         }
+
         .button-wrapper {
-            text-align: center;
             margin-top: 24px;
+            text-align: center;
         }
+
         input[type="submit"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0071e3;
             color: white;
-            padding: 18px 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 16px 48px;
             border: none;
-            border-radius: 12px;
-            font-size: 1.15rem;
-            font-weight: 600;
+            border-radius: 980px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            letter-spacing: 0.3px;
+            letter-spacing: -0.2px;
         }
+
         input[type="submit"]:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+            background: #0077ed;
+            transform: scale(1.02);
+            box-shadow: 0 4px 20px rgba(0, 113, 227, 0.3);
         }
+
         input[type="submit"]:active {
-            transform: translateY(0);
+            transform: scale(0.98);
         }
-        h2 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin: 0 0 20px 0;
-            padding-bottom: 12px;
-            border-bottom: 3px solid #667eea;
+
+        /* Results Section */
+        .results-container {
+            max-width: 980px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
         }
+
         .response {
-            margin-top: 50px;
-            background: #f8fafc;
-            padding: 35px;
-            border-radius: 16px;
-            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
         .response p {
-            color: #334155;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             line-height: 1.8;
-            font-weight: 400;
+            color: #1d1d1f;
+            margin-bottom: 16px;
         }
+
         .references {
-            margin-top: 40px;
-            background: #ffffff;
-            padding: 35px;
-            border-radius: 16px;
-            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
+
         .ref {
-            background: #f8fafc;
-            padding: 24px;
+            padding: 28px;
+            background: #f5f5f7;
             border-radius: 12px;
-            margin-bottom: 18px;
-            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-left: 4px solid #0071e3;
             transition: all 0.2s ease;
         }
+
         .ref:hover {
-            background: #f1f5f9;
+            background: #e8e8ed;
             transform: translateX(4px);
         }
+
         .ref strong {
-            color: #1e293b;
-            font-size: 1.05rem;
-            font-weight: 600;
-            line-height: 1.5;
             display: block;
-            margin-bottom: 8px;
-        }
-        .ref a {
-            color: #667eea;
-            text-decoration: none;
+            font-size: 1.1rem;
             font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .ref-meta {
+            color: #6e6e73;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .ref a {
+            color: #0071e3;
+            text-decoration: none;
+            font-weight: 500;
             transition: color 0.2s ease;
         }
+
         .ref a:hover {
-            color: #764ba2;
+            color: #0077ed;
             text-decoration: underline;
         }
+
+        /* Footer */
         footer {
+            max-width: 980px;
+            margin: 80px auto 40px;
+            padding: 40px 40px 0;
             text-align: center;
-            margin-top: 60px;
-            padding-top: 30px;
-            color: #94a3b8;
-            font-size: 0.95rem;
-            border-top: 2px solid #f1f5f9;
+            border-top: 1px solid #d2d2d7;
+            color: #86868b;
+            font-size: 0.9rem;
+        }
+
+        .debug {
+            display: inline-block;
+            background: #f5f5f7;
+            color: #6e6e73;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            margin-top: 20px;
             font-weight: 500;
         }
-        .debug {
-            color: #667eea;
-            font-size: 0.9rem;
-            margin-top: 16px;
-            font-weight: 600;
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero {
+                margin: 40px auto 40px;
+            }
+
+            .search-box,
+            .response,
+            .references {
+                padding: 30px;
+            }
+
+            nav .container,
+            .hero,
+            .search-container,
+            .results-container,
+            footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="/static/logo.png" alt="gasconsult.ai" class="logo">
-            <h1>gasconsult.ai</h1>
-            <p class="tagline">Evidence-based anesthesiology answers • No hallucinations</p>
-        </div>
-        
-        <form method="post">
-            <textarea name="query" placeholder="e.g., Tell me about TXA in spine surgery, propofol in pediatrics, PONV prevention" required></textarea>
-            <div class="button-wrapper">
-                <input type="submit" value="Get Evidence">
+    <nav>
+        <div class="container">
+            <div class="logo-text">
+                <span class="logo-symbol">⚕</span>gasconsult.ai
             </div>
-        </form>
+        </div>
+    </nav>
 
-        {% if answer %}
+    <div class="hero">
+        <h1>Evidence-Based<br>Anesthesiology Answers</h1>
+        <p class="subtitle">Get instant access to peer-reviewed research with AI-powered synthesis. No hallucinations, just evidence.</p>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <form method="post">
+                <textarea name="query" placeholder="Ask anything about anesthesiology... e.g., Tell me about TXA in spine surgery" required></textarea>
+                <div class="button-wrapper">
+                    <input type="submit" value="Get Evidence">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if answer %}
+    <div class="results-container">
         <div class="response">
             <h2>Answer</h2>
             {{ answer|safe }}
-            <div class="debug">Debug: Fetched {{ num_papers }} papers</div>
+            <div class="debug">📊 Fetched {{ num_papers }} papers from PubMed</div>
         </div>
+
         <div class="references">
             <h2>References</h2>
             {% for ref in refs %}
             <div class="ref">
-                <strong>{{ ref.title }}</strong><br>
-                {{ ref.authors }} • {{ ref.journal }} ({{ ref.year }})<br>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">PubMed →</a>
+                <strong>{{ ref.title }}</strong>
+                <div class="ref-meta">
+                    {{ ref.authors }}<br>
+                    {{ ref.journal }} • {{ ref.year }}
+                </div>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">View on PubMed →</a>
             </div>
             {% endfor %}
         </div>
-        {% endif %}
-        
-        <footer>Not medical advice • For educational use only • © 2025 gasconsult.ai</footer>
     </div>
+    {% endif %}
+
+    <footer>
+        <p>Not medical advice • For educational use only<br>
+        © 2025 gasconsult.ai</p>
+    </footer>
 </body>
 </html>
 """
