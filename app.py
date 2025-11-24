@@ -28,6 +28,7 @@ def clean_query(query):
         r"^(why does |why do |why is |why are )",
         r"^(search for |look up |find |show me )",
         r"^(help me understand |help me with )",
+        r"(indications to use |indications for |indication for |when to use )",
     ]
 
     # Apply each pattern repeatedly until no more matches
@@ -393,12 +394,22 @@ def index():
         raw_query = request.form["query"].strip()
         query = clean_query(raw_query)  # Strip conversational filler
 
+        # Expand synonyms and medical abbreviations
         q = query.lower()
+        q = q.replace(" versus ", " OR ")
+        q = q.replace(" vs ", " OR ")
+        q = q.replace(" vs. ", " OR ")
+        q = q.replace(" over ", " OR ")
+        q = q.replace(" compared to ", " OR ")
+        q = q.replace(" compared with ", " OR ")
         q = q.replace("txa", '"tranexamic acid" OR TXA')
         q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
         q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
+        q = q.replace("peds", 'pediatric OR children OR peds')
         q = q.replace("pediatric", 'pediatric OR children OR peds')
         q = q.replace("ponv", 'PONV OR "postoperative nausea"')
+        q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
+        q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
 
         search_term = (
             f'({q}) AND '
@@ -407,18 +418,33 @@ def index():
             f'("2015/01/01"[PDAT] : "3000"[PDAT])'
         )
 
-        # Try anesthesiology first
+        # Try anesthesiology-specific high-quality evidence first
         handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
         result = Entrez.read(handle)
         ids = result["IdList"]
 
+        # Fallback 1: Try without anesthesiology restriction
         if not ids:
             handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
             result = Entrez.read(handle)
             ids = result["IdList"]
 
+        # Fallback 2: Drop publication type restrictions, keep recent papers
         if not ids:
-            return render_template_string(HTML, answer="<p>No high-quality recent evidence found. Try rephrasing.</p>", num_papers=0, refs=[])
+            broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+            handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+
+        # Fallback 3: Even broader - any recent paper in anesthesiology
+        if not ids:
+            broadest_search = f'({q}) AND anesthesiology AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
+            handle = Entrez.esearch(db="pubmed", term=broadest_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+
+        if not ids:
+            return render_template_string(HTML, answer="<p>No relevant evidence found. Try rephrasing your question or using different medical terms.</p>", num_papers=0, refs=[])
 
         handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
         papers = Entrez.read(handle)["PubmedArticle"]
