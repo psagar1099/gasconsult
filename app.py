@@ -70,6 +70,19 @@ def detect_and_calculate(query):
                 """
             except:
                 pass
+        else:
+            # Not enough numbers provided
+            return f"""
+            <h3>Maximum Allowable Blood Loss (MABL) Calculator</h3>
+            <p>To calculate MABL, I need three values:</p>
+            <ol>
+                <li><strong>Estimated Blood Volume (EBV)</strong> in mL</li>
+                <li><strong>Initial Hematocrit/Hemoglobin</strong> (e.g., 42 for Hct or 14 for Hgb)</li>
+                <li><strong>Final/Acceptable Hematocrit/Hemoglobin</strong> (e.g., 30 for Hct or 10 for Hgb)</li>
+            </ol>
+            <p><strong>Example query:</strong> "Calculate MABL for 5000 mL blood volume, 42 initial Hct, 30 final Hct"</p>
+            <p><em>You provided {len(numbers)} number(s). Please provide all three values.</em></p>
+            """
 
     # Ideal Body Weight (IBW)
     if any(term in q for term in ['ibw', 'ideal body weight', 'ideal weight']):
@@ -96,7 +109,7 @@ def detect_and_calculate(query):
                         <li>Male IBW: {ibw_m:.1f} kg</li>
                         <li>Female IBW: {ibw_f:.1f} kg</li>
                     </ul>
-                    <p><em>Specify sex (male/female) for specific result.</em></p>
+                    <p><em>Tip: Specify sex (male/female) for a more specific result.</em></p>
                     """
 
                 return f"""
@@ -107,6 +120,20 @@ def detect_and_calculate(query):
                 """
             except:
                 pass
+        else:
+            return f"""
+            <h3>Ideal Body Weight (IBW) Calculator</h3>
+            <p>To calculate IBW, I need:</p>
+            <ol>
+                <li><strong>Height</strong> in cm</li>
+                <li><strong>Sex</strong> (male or female) - optional, will show both if not specified</li>
+            </ol>
+            <p><strong>Example queries:</strong></p>
+            <ul>
+                <li>"Calculate IBW for 175 cm male"</li>
+                <li>"Ideal body weight 165 cm female"</li>
+            </ul>
+            """
 
     # Body Surface Area (BSA)
     if any(term in q for term in ['bsa', 'body surface area', 'surface area']):
@@ -128,6 +155,17 @@ def detect_and_calculate(query):
                 """
             except:
                 pass
+        else:
+            return f"""
+            <h3>Body Surface Area (BSA) Calculator</h3>
+            <p>To calculate BSA, I need two values:</p>
+            <ol>
+                <li><strong>Weight</strong> in kg</li>
+                <li><strong>Height</strong> in cm</li>
+            </ol>
+            <p><strong>Example query:</strong> "Calculate BSA for 70 kg and 175 cm"</p>
+            <p><em>You provided {len(numbers)} number(s). Please provide both weight and height.</em></p>
+            """
 
     # Maintenance Fluids (4-2-1 rule)
     if any(term in q for term in ['maintenance fluid', 'fluid requirement', '4-2-1', 'hourly fluid']):
@@ -155,6 +193,19 @@ def detect_and_calculate(query):
                 """
             except:
                 pass
+        else:
+            return f"""
+            <h3>Maintenance Fluid Requirement Calculator</h3>
+            <p>To calculate maintenance fluids using the 4-2-1 rule, I need:</p>
+            <ol>
+                <li><strong>Patient weight</strong> in kg</li>
+            </ol>
+            <p><strong>Example queries:</strong></p>
+            <ul>
+                <li>"Maintenance fluids for 25 kg"</li>
+                <li>"Calculate hourly fluid requirement for 70 kg patient"</li>
+            </ul>
+            """
 
     # QTc (Corrected QT interval)
     if any(term in q for term in ['qtc', 'corrected qt', 'qt interval']):
@@ -179,6 +230,17 @@ def detect_and_calculate(query):
                 """
             except:
                 pass
+        else:
+            return f"""
+            <h3>QTc (Corrected QT Interval) Calculator</h3>
+            <p>To calculate QTc using Bazett's formula, I need:</p>
+            <ol>
+                <li><strong>QT interval</strong> in milliseconds</li>
+                <li><strong>RR interval</strong> in milliseconds</li>
+            </ol>
+            <p><strong>Example query:</strong> "Calculate QTc for QT 400 and RR 800"</p>
+            <p><em>You provided {len(numbers)} number(s). Please provide both QT and RR intervals.</em></p>
+            """
 
     return None  # No calculation detected
 
@@ -189,8 +251,9 @@ HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
-    <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
-    <link rel="alternate icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" href="/static/favicon.svg">
     <style>
         * {
             margin: 0;
