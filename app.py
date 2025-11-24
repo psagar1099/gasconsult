@@ -269,31 +269,28 @@ HTML = """
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
-            color: #1d1d1f;
+            background: #ffffff;
+            color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            overflow: hidden;
         }
 
         /* Navigation */
         nav {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: saturate(180%) blur(20px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 16px 0;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 18px 0;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         nav .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 40px;
             display: flex;
@@ -302,25 +299,22 @@ HTML = """
         }
 
         .logo-text {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #0A3D62;
             letter-spacing: -0.5px;
-            transition: transform 0.2s ease;
+            transition: opacity 0.2s ease;
         }
 
         .logo-text:hover {
-            transform: scale(1.02);
+            opacity: 0.8;
         }
 
         .logo-symbol {
             display: inline-block;
-            margin-right: 8px;
+            margin-right: 10px;
             font-size: 1.6rem;
-            filter: grayscale(0);
+            color: #FF6B35;
         }
 
         .nav-actions {
@@ -330,32 +324,31 @@ HTML = """
         }
 
         .new-chat-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #FF6B35;
             color: white;
             padding: 10px 24px;
-            border-radius: 24px;
+            border-radius: 10px;
             font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
         }
 
         .new-chat-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            background: #ff5722;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         /* Welcome Screen */
         .welcome-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 80px 40px 40px;
+            padding: 100px 40px 60px;
             text-align: center;
-            animation: fadeIn 0.6s ease;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s ease;
         }
 
         @keyframes fadeIn {
@@ -364,82 +357,82 @@ HTML = """
         }
 
         .welcome-screen .hero-logo {
-            font-size: 4rem;
-            margin-bottom: 24px;
-            filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: #FF6B35;
         }
 
         .welcome-screen h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
-            color: white;
-            margin-bottom: 20px;
+            color: #0A3D62;
+            margin-bottom: 16px;
             letter-spacing: -1px;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
 
         .welcome-screen .tagline {
-            font-size: 1.4rem;
-            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3rem;
+            color: #666;
             margin-bottom: 50px;
-            font-weight: 500;
-            max-width: 600px;
+            font-weight: 400;
         }
 
         .welcome-screen .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            max-width: 900px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
             margin-bottom: 40px;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 24px;
+            background: #E8F4FD;
+            border-radius: 12px;
+            padding: 32px 28px;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .feature-card:hover {
-            background: rgba(255, 255, 255, 0.25);
             transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
         .feature-card h3 {
-            color: white;
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            font-weight: 600;
+            color: #0A3D62;
+            font-size: 1.15rem;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .feature-card p {
-            color: rgba(255, 255, 255, 0.9);
+            color: #555;
             font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        /* Chat Container - Full Page */
-        .chat-container {
+        /* Main Content Area */
+        .main-content {
+            padding-top: 72px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            padding-top: 64px;
-            max-width: 1000px;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            max-width: 900px;
             margin: 0 auto;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 20px;
         }
 
         .chat-messages {
             flex: 1;
             overflow-y: auto;
-            padding: 40px 40px 20px;
+            padding: 30px 20px;
             scroll-behavior: smooth;
         }
 
@@ -448,21 +441,21 @@ HTML = """
         }
 
         .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
+            background: #f5f5f5;
         }
 
         .chat-messages::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
+            background: #ddd;
             border-radius: 10px;
         }
 
         .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
+            background: #bbb;
         }
 
         /* Chat Messages */
         .message {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
             display: flex;
             animation: slideIn 0.3s ease;
         }
@@ -481,36 +474,35 @@ HTML = """
         }
 
         .message-content {
-            max-width: 80%;
-            padding: 18px 22px;
-            border-radius: 20px;
-            font-size: 1.05rem;
+            max-width: 85%;
+            padding: 20px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
             line-height: 1.7;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: all 0.2s ease;
         }
 
         .message-content:hover {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0A3D62;
             color: white;
-            border-bottom-right-radius: 6px;
         }
 
         .message.assistant .message-content {
-            background: white;
-            color: #1d1d1f;
-            border-bottom-left-radius: 6px;
+            background: #E8F4FD;
+            color: #0A3D62;
+            border: 1px solid #d0e8f7;
         }
 
         .message-text h3 {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             margin-top: 16px;
             margin-bottom: 12px;
-            color: #1d1d1f;
+            color: #0A3D62;
             font-weight: 700;
         }
 
@@ -524,16 +516,16 @@ HTML = """
         }
 
         .message-refs {
-            margin-top: 16px;
+            margin-top: 20px;
             padding-top: 16px;
-            border-top: 2px solid #f0f0f0;
-            font-size: 0.95rem;
+            border-top: 2px solid rgba(10, 61, 98, 0.15);
+            font-size: 0.92rem;
         }
 
         .message-refs strong {
             display: block;
             margin-bottom: 12px;
-            color: #667eea;
+            color: #FF6B35;
             font-weight: 700;
         }
 
@@ -547,89 +539,92 @@ HTML = """
         }
 
         .ref-item a {
-            color: #667eea;
+            color: #0A3D62;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
         .ref-item a:hover {
-            color: #764ba2;
+            color: #FF6B35;
             text-decoration: underline;
         }
 
         .message-meta {
             margin-top: 12px;
             font-size: 0.85rem;
-            color: #888;
+            color: #0A3D62;
+            opacity: 0.7;
             font-weight: 600;
         }
 
         /* Chat Input */
         .chat-input-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 20px 40px 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            background: #ffffff;
+            padding: 20px;
+            border-top: 1px solid #f0f0f0;
+            position: sticky;
+            bottom: 0;
         }
 
         .chat-form {
             position: relative;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .chat-form textarea {
             width: 100%;
-            padding: 18px 60px 18px 20px;
-            font-size: 1.05rem;
+            padding: 18px 120px 18px 20px;
+            font-size: 1rem;
             font-family: inherit;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            border-radius: 24px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             resize: none;
-            transition: all 0.3s ease;
-            background: white;
-            color: #1d1d1f;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            background: #ffffff;
+            color: #0A3D62;
         }
 
         .chat-form textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
         }
 
         .chat-form textarea::placeholder {
-            color: #aaa;
+            color: #999;
         }
 
         .send-btn {
             position: absolute;
             right: 8px;
             bottom: 8px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #0A3D62;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 18px;
+            padding: 12px 28px;
+            border-radius: 8px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
         }
 
         .send-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: #083049;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(10, 61, 98, 0.3);
         }
 
         .send-btn:active {
-            transform: scale(0.98);
+            transform: translateY(0);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .welcome-screen h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
             .welcome-screen .tagline {
@@ -641,15 +636,15 @@ HTML = """
             }
 
             .message-content {
-                max-width: 90%;
+                max-width: 92%;
             }
 
             .chat-messages {
-                padding: 20px;
+                padding: 20px 10px;
             }
 
             .chat-input-container {
-                padding: 15px 20px 20px;
+                padding: 15px;
             }
 
             nav .container {
@@ -659,17 +654,16 @@ HTML = """
             .send-btn {
                 position: static;
                 width: 100%;
-                margin-top: 12px;
+                margin-top: 10px;
             }
 
             .chat-form textarea {
                 padding: 16px 20px;
             }
-        }
 
-        /* Hide elements when chatting */
-        .chatting .welcome-screen {
-            display: none;
+            .logo-text {
+                font-size: 1.2rem;
+            }
         }
     </style>
     <script>
@@ -682,7 +676,7 @@ HTML = """
         };
     </script>
 </head>
-<body class="{% if messages %}chatting{% endif %}">
+<body>
     <nav>
         <div class="container">
             <div class="logo-text">
@@ -696,60 +690,64 @@ HTML = """
         </div>
     </nav>
 
-    {% if not messages %}
-    <!-- Welcome Screen -->
-    <div class="welcome-screen">
-        <div class="hero-logo">⚕</div>
-        <h1>gasconsult.ai</h1>
-        <p class="tagline">Strictly Evidence-Based Anesthesiology Consults</p>
+    <div class="main-content">
+        {% if not messages %}
+        <!-- Welcome Screen -->
+        <div class="welcome-screen">
+            <div class="hero-logo">⚕</div>
+            <h1>gasconsult.ai</h1>
+            <p class="tagline">Strictly Evidence-Based Anesthesiology Consults</p>
 
-        <div class="feature-grid">
-            <div class="feature-card">
-                <h3>📚 PubMed-Backed</h3>
-                <p>Every answer sourced from peer-reviewed research</p>
-            </div>
-            <div class="feature-card">
-                <h3>🧮 Medical Calculators</h3>
-                <p>MABL, IBW, BSA, QTc, and more</p>
-            </div>
-            <div class="feature-card">
-                <h3>💬 Conversational</h3>
-                <p>Ask follow-ups, refine your questions naturally</p>
-            </div>
-        </div>
-    </div>
-    {% endif %}
-
-    <div class="chat-container">
-        <div class="chat-messages" id="chatMessages">
-            {% for msg in messages %}
-                <div class="message {{ msg.role }}">
-                    <div class="message-content">
-                        {% if msg.role == 'user' %}
-                            <div class="message-text">{{ msg.content }}</div>
-                        {% else %}
-                            <div class="message-text">{{ msg.content|safe }}</div>
-                            {% if msg.references %}
-                            <div class="message-refs">
-                                <strong>References:</strong>
-                                {% for ref in msg.references %}
-                                <div class="ref-item">
-                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                                        {{ ref.title }} ({{ ref.year }})
-                                    </a>
-                                </div>
-                                {% endfor %}
-                            </div>
-                            {% endif %}
-                            {% if msg.num_papers > 0 %}
-                            <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📚 PubMed-Backed</h3>
+                    <p>Every answer sourced from peer-reviewed research and clinical guidelines</p>
                 </div>
-            {% endfor %}
+                <div class="feature-card">
+                    <h3>🧮 Medical Calculators</h3>
+                    <p>MABL, IBW, BSA, QTc, maintenance fluids, and more</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💬 Conversational AI</h3>
+                    <p>Ask follow-ups, refine your questions, and explore topics naturally</p>
+                </div>
+            </div>
         </div>
+        {% else %}
+        <!-- Chat Container -->
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                {% for msg in messages %}
+                    <div class="message {{ msg.role }}">
+                        <div class="message-content">
+                            {% if msg.role == 'user' %}
+                                <div class="message-text">{{ msg.content }}</div>
+                            {% else %}
+                                <div class="message-text">{{ msg.content|safe }}</div>
+                                {% if msg.references %}
+                                <div class="message-refs">
+                                    <strong>References:</strong>
+                                    {% for ref in msg.references %}
+                                    <div class="ref-item">
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                                            {{ ref.title }} ({{ ref.year }})
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if msg.num_papers > 0 %}
+                                <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
 
+        <!-- Chat Input - Always Visible -->
         <div class="chat-input-container">
             <form method="post" action="/" class="chat-form">
                 <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
