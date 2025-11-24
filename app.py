@@ -326,7 +326,7 @@ HTML = """
             background: #FF6B35;
             color: white;
             padding: 10px 24px;
-            border-radius: 10px;
+            border-radius: 20px;
             font-size: 0.95rem;
             font-weight: 600;
             text-decoration: none;
@@ -567,7 +567,7 @@ HTML = """
 
         .chat-form textarea {
             width: 100%;
-            padding: 12px 100px 12px 20px;
+            padding: 15px 100px 15px 20px;
             font-size: 1rem;
             font-family: inherit;
             border: 2px solid #e0e0e0;
@@ -576,8 +576,8 @@ HTML = """
             transition: all 0.2s ease;
             background: #ffffff;
             color: #0A3D62;
-            height: 48px;
-            line-height: 1.5;
+            height: 52px;
+            line-height: 1.3;
         }
 
         .chat-form textarea:focus {
@@ -592,18 +592,22 @@ HTML = """
 
         .send-btn {
             position: absolute;
-            right: 5px;
+            right: 6px;
             top: 50%;
             transform: translateY(-50%);
             background: #FF6B35;
             color: white;
             border: none;
-            padding: 9px 22px;
-            border-radius: 18px;
+            padding: 10px 24px;
+            border-radius: 20px;
             font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .send-btn:hover {
@@ -696,6 +700,7 @@ HTML = """
                 transform: none;
                 width: 100%;
                 margin-top: 10px;
+                height: auto;
             }
 
             .send-btn:hover {
@@ -707,7 +712,8 @@ HTML = """
             }
 
             .chat-form textarea {
-                padding: 16px 20px;
+                padding: 14px 20px;
+                height: 50px;
             }
 
             .logo-text {
@@ -995,19 +1001,38 @@ CRITICAL INSTRUCTIONS:
 5. **Include clinical context**: Mention patient populations studied, contraindications, relative vs absolute benefits, NNT/NNH when available
 6. **Be conversational but complete**: Natural tone like talking to a colleague, but don't sacrifice clinical detail for brevity
 7. **Risk stratification**: When relevant, discuss patient-specific risk factors, ASA classification implications, comorbidity considerations
+8. **HTML FORMATTING REQUIRED**: Use HTML tags for formatting:
+   - Use <h3>Section Header</h3> for major sections
+   - Use <strong>bold text</strong> for emphasis
+   - Use <br><br> for paragraph breaks (double line breaks between sections)
+   - Use <ul><li>item</li></ul> for bullet lists
+   - Use <p>paragraph text</p> for paragraphs
+   - Keep it well-structured and easy to scan
 
 Example response for "What should I do for bronchospasm?":
-"For acute bronchospasm, here's the step-by-step approach [1][2]:
+"<h3>Acute Bronchospasm Management</h3>
 
-1. **Immediate**: Deepen anesthesia (propofol 0.5-1 mg/kg bolus, or increase volatile to 2+ MAC) [1]
-2. **Bronchodilators**: Albuterol 4-8 puffs via ETT or 2.5mg nebulized [2], plus ipratropium if severe [2]
-3. **Steroids**: Methylprednisolone 1-2 mg/kg IV or hydrocortisone 100mg IV [1]
-4. **Epinephrine**: If refractory - start with 10-20mcg IV boluses, titrate to effect. Consider infusion 0.01-0.05 mcg/kg/min [2][3]
-5. **Ketamine**: 0.5-1 mg/kg if resistant to above [3]
+<p>Here's the step-by-step approach [1][2]:</p>
 
-Risk factors to assess: asthma history, recent URI, smoking, COPD [1]. Ensure adequate depth before any airway manipulation [2]."
+<p><strong>1. Immediate Actions:</strong><br>
+Deepen anesthesia with propofol 0.5-1 mg/kg bolus, or increase volatile to 2+ MAC [1]</p>
 
-Respond with maximum clinical utility:"""
+<p><strong>2. Bronchodilators:</strong><br>
+Albuterol 4-8 puffs via ETT or 2.5mg nebulized [2]. Add ipratropium if severe [2]</p>
+
+<p><strong>3. Steroids:</strong><br>
+Methylprednisolone 1-2 mg/kg IV or hydrocortisone 100mg IV [1]</p>
+
+<p><strong>4. Epinephrine:</strong><br>
+If refractory - start with 10-20mcg IV boluses, titrate to effect. Consider infusion 0.01-0.05 mcg/kg/min [2][3]</p>
+
+<p><strong>5. Ketamine:</strong><br>
+0.5-1 mg/kg if resistant to above [3]</p>
+
+<h3>Risk Factors</h3>
+<p>Assess for: asthma history, recent URI, smoking, COPD [1]. Ensure adequate depth before any airway manipulation [2]</p>"
+
+Respond with maximum clinical utility using HTML formatting:"""
 
         try:
             response = openai_client.chat.completions.create(
