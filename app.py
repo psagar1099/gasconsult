@@ -250,6 +250,512 @@ def detect_and_calculate(query, context_hint=None):
 
     return None  # No calculation detected
 
+PREOP_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pre-Op Assessment — gasconsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #0A3D62;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navigation */
+        nav {
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 18px 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0A3D62;
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+        .logo-symbol {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 1.6rem;
+            color: #FF6B35;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #0A3D62;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #E8F4FD;
+        }
+
+        /* Main Content */
+        .preop-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 100px 20px 60px;
+        }
+
+        .preop-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .preop-header h1 {
+            font-size: 2.5rem;
+            color: #0A3D62;
+            margin-bottom: 12px;
+        }
+
+        .preop-header p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: #E8F4FD;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .form-section h2 {
+            color: #0A3D62;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0A3D62;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            padding: 12px;
+            border: 2px solid #d0e8f7;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: white;
+            color: #0A3D62;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .submit-btn {
+            background: #FF6B35;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 24px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background: #ff5722;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Summary Display */
+        .summary-container {
+            background: #E8F4FD;
+            border-radius: 12px;
+            padding: 32px;
+            margin-top: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .summary-container h2 {
+            color: #0A3D62;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+        }
+
+        .summary-content {
+            color: #0A3D62;
+            line-height: 1.8;
+        }
+
+        .summary-content h3 {
+            color: #FF6B35;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .summary-content strong {
+            color: #0A3D62;
+        }
+
+        .ref-item {
+            padding: 8px 0;
+            transition: padding-left 0.2s ease;
+        }
+
+        .ref-item:hover {
+            padding-left: 6px;
+        }
+
+        .ref-item a {
+            color: #0A3D62;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .ref-item a:hover {
+            color: #FF6B35;
+            text-decoration: underline;
+        }
+
+        .auto-calc {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            border: 2px solid #d0e8f7;
+        }
+
+        .auto-calc strong {
+            color: #FF6B35;
+        }
+    </style>
+    <script>
+        // Auto-calculate BMI and IBW
+        function calculateMetrics() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const sex = document.querySelector('input[name="sex"]:checked')?.value;
+
+            let results = '';
+
+            if (weight && height) {
+                // BMI
+                const bmi = (weight / ((height / 100) ** 2)).toFixed(1);
+                results += `<strong>BMI:</strong> ${bmi} kg/m²<br>`;
+
+                // IBW
+                if (sex === 'male') {
+                    const ibw = (50 + 0.91 * (height - 152.4)).toFixed(1);
+                    results += `<strong>IBW (Male):</strong> ${ibw} kg`;
+                } else if (sex === 'female') {
+                    const ibw = (45.5 + 0.91 * (height - 152.4)).toFixed(1);
+                    results += `<strong>IBW (Female):</strong> ${ibw} kg`;
+                }
+            }
+
+            document.getElementById('autoCalc').innerHTML = results || 'Enter weight, height, and sex';
+        }
+    </script>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-text">
+                <span class="logo-symbol">⚕</span>gasconsult.ai
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Chat</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="preop-container">
+        <div class="preop-header">
+            <h1>Pre-Operative Assessment</h1>
+            <p>Evidence-based risk stratification and recommendations</p>
+        </div>
+
+        {% if not summary %}
+        <form method="post" action="/preop">
+            <!-- Demographics -->
+            <div class="form-section">
+                <h2>1. Patient Demographics</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" step="0.1" required onchange="calculateMetrics()">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" step="0.1" required onchange="calculateMetrics()">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Sex</label>
+                        <div style="display: flex; gap: 20px; margin-top: 8px;">
+                            <div class="checkbox-item">
+                                <input type="radio" id="male" name="sex" value="male" onchange="calculateMetrics()" required>
+                                <label for="male">Male</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="female" name="sex" value="female" onchange="calculateMetrics()" required>
+                                <label for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="auto-calc" id="autoCalc">
+                    Enter weight, height, and sex to calculate BMI and IBW
+                </div>
+            </div>
+
+            <!-- Comorbidities -->
+            <div class="form-section">
+                <h2>2. Comorbidities</h2>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
+                        <label for="dm">Diabetes Mellitus</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
+                        <label for="htn">Hypertension</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cad" name="comorbidities" value="Coronary Artery Disease">
+                        <label for="cad">CAD</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
+                        <label for="chf">Heart Failure</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="copd" name="comorbidities" value="COPD">
+                        <label for="copd">COPD</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
+                        <label for="asthma">Asthma</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="osa" name="comorbidities" value="Obstructive Sleep Apnea">
+                        <label for="osa">OSA</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ckd" name="comorbidities" value="Chronic Kidney Disease">
+                        <label for="ckd">CKD</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="stroke" name="comorbidities" value="Prior Stroke">
+                        <label for="stroke">Prior Stroke</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
+                        <label for="afib">Atrial Fibrillation</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medications -->
+            <div class="form-section">
+                <h2>3. Current Medications</h2>
+                <div class="form-group">
+                    <label for="medications">List all medications (include anticoagulants, antiplatelets, insulin, etc.)</label>
+                    <textarea id="medications" name="medications" placeholder="e.g., Aspirin 81mg daily, Metoprolol 50mg BID, Apixaban 5mg BID..."></textarea>
+                </div>
+            </div>
+
+            <!-- Labs -->
+            <div class="form-section">
+                <h2>4. Laboratory Values</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hgb">Hemoglobin (g/dL)</label>
+                        <input type="number" id="hgb" name="hgb" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="plt">Platelets (×10³/μL)</label>
+                        <input type="number" id="plt" name="plt">
+                    </div>
+                    <div class="form-group">
+                        <label for="cr">Creatinine (mg/dL)</label>
+                        <input type="number" id="cr" name="cr" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="inr">INR</label>
+                        <input type="number" id="inr" name="inr" step="0.1">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Procedure -->
+            <div class="form-section">
+                <h2>5. Surgical Procedure</h2>
+                <div class="form-group">
+                    <label for="procedure">Procedure Type</label>
+                    <input type="text" id="procedure" name="procedure" placeholder="e.g., Total Knee Arthroplasty, CABG, Laparoscopic Cholecystectomy..." required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="surgery_risk">Surgery Risk Category</label>
+                        <select id="surgery_risk" name="surgery_risk" required>
+                            <option value="">Select...</option>
+                            <option value="Low">Low Risk (&lt;1% cardiac risk)</option>
+                            <option value="Intermediate">Intermediate Risk (1-5% cardiac risk)</option>
+                            <option value="High">High Risk (&gt;5% cardiac risk)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="form-section">
+                <h2>6. Additional Information</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="npo">NPO Status</label>
+                        <input type="text" id="npo" name="npo" placeholder="e.g., NPO since midnight, last PO intake 6 hours ago...">
+                    </div>
+                    <div class="form-group">
+                        <label for="allergies">Allergies</label>
+                        <input type="text" id="allergies" name="allergies" placeholder="e.g., PCN (rash), Morphine (nausea), NKDA...">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Evidence-Based Assessment</button>
+        </form>
+        {% else %}
+        <div class="summary-container">
+            <h2>Pre-Operative Assessment Summary</h2>
+            <div class="summary-content">
+                {{ summary|safe }}
+            </div>
+            {% if references %}
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(10, 61, 98, 0.15);">
+                <h3 style="color: #FF6B35; margin-bottom: 16px;">References:</h3>
+                {% for ref in references %}
+                <div class="ref-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                        [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">New Assessment</a>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+"""
+
 HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -320,6 +826,20 @@ HTML = """
             display: flex;
             gap: 12px;
             align-items: center;
+        }
+
+        .nav-link {
+            color: #0A3D62;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #E8F4FD;
         }
 
         .new-chat-btn {
@@ -598,16 +1118,17 @@ HTML = """
             background: #FF6B35;
             color: white;
             border: none;
-            padding: 10px 24px;
-            border-radius: 20px;
-            font-size: 0.95rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
-            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0;
         }
 
         .send-btn:hover {
@@ -698,17 +1219,19 @@ HTML = """
             .send-btn {
                 position: relative;
                 transform: none;
-                width: 100%;
+                width: 48px;
+                height: 48px;
                 margin-top: 10px;
-                height: auto;
+                margin-left: auto;
+                display: flex;
             }
 
             .send-btn:hover {
-                transform: translateY(-1px);
+                transform: scale(1.05);
             }
 
             .send-btn:active {
-                transform: translateY(0);
+                transform: scale(0.95);
             }
 
             .chat-form textarea {
@@ -755,6 +1278,8 @@ HTML = """
                 <span class="logo-symbol">⚕</span>gasconsult.ai
             </div>
             <div class="nav-actions">
+                <a href="/" class="nav-link">Chat</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
                 {% if messages %}
                 <a href="/clear" class="new-chat-btn">+ New Chat</a>
                 {% endif %}
@@ -831,7 +1356,7 @@ HTML = """
         <div class="chat-input-container">
             <form method="post" action="/" class="chat-form">
                 <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
-                <button type="submit" class="send-btn">Send</button>
+                <button type="submit" class="send-btn">↑</button>
             </form>
         </div>
     </div>
@@ -1061,6 +1586,197 @@ def clear():
     """Clear conversation history"""
     session.pop('messages', None)
     return redirect(url_for('index'))
+
+@app.route("/preop", methods=["GET", "POST"])
+def preop_assessment():
+    """Pre-operative assessment with evidence-based risk stratification"""
+    if request.method == "GET":
+        return render_template_string(PREOP_HTML, summary=None, references=None)
+
+    # Collect form data
+    age = int(request.form.get("age", 0))
+    weight = float(request.form.get("weight", 0))
+    height = float(request.form.get("height", 0))
+    sex = request.form.get("sex", "")
+    comorbidities = request.form.getlist("comorbidities")
+    medications = request.form.get("medications", "")
+    hgb = request.form.get("hgb", "")
+    plt = request.form.get("plt", "")
+    cr = request.form.get("cr", "")
+    inr = request.form.get("inr", "")
+    procedure = request.form.get("procedure", "")
+    surgery_risk = request.form.get("surgery_risk", "")
+    npo = request.form.get("npo", "")
+    allergies = request.form.get("allergies", "")
+
+    # Calculate BMI and IBW
+    bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else None
+    if sex == 'male':
+        ibw = round(50 + 0.91 * (height - 152.4), 1)
+    else:
+        ibw = round(45.5 + 0.91 * (height - 152.4), 1)
+
+    # Build targeted PubMed searches based on patient risk factors
+    search_queries = []
+
+    # Anticoagulation management
+    if any(drug in medications.lower() for drug in ['apixaban', 'rivaroxaban', 'warfarin', 'dabigatran', 'edoxaban', 'eliquis', 'xarelto', 'coumadin']):
+        search_queries.append(f"perioperative anticoagulation management {procedure}")
+
+    # Antiplatelet management
+    if any(drug in medications.lower() for drug in ['aspirin', 'plavix', 'clopidogrel', 'ticagrelor', 'brilinta']):
+        search_queries.append(f"perioperative antiplatelet management {procedure}")
+
+    # Obesity + OSA
+    if bmi and bmi >= 30 and "Obstructive Sleep Apnea" in comorbidities:
+        search_queries.append("obese patient OSA perioperative anesthesia management")
+
+    # Diabetes management
+    if "Diabetes Mellitus" in comorbidities:
+        search_queries.append(f"perioperative diabetes insulin management {procedure}")
+
+    # Cardiac risk
+    if any(c in comorbidities for c in ["Coronary Artery Disease", "Heart Failure", "Prior Stroke"]):
+        search_queries.append(f"perioperative cardiac risk {procedure} guidelines")
+
+    # CKD
+    if "Chronic Kidney Disease" in comorbidities:
+        search_queries.append(f"chronic kidney disease perioperative management {procedure}")
+
+    # General perioperative guidelines for procedure
+    search_queries.append(f"{procedure} anesthesia perioperative management guidelines")
+
+    # Search PubMed for all queries and collect papers
+    all_refs = []
+    all_context = ""
+
+    for query in search_queries[:3]:  # Limit to 3 searches to avoid overwhelming
+        try:
+            q_expanded = query.replace(" ", " AND ")
+            search_term = (
+                f'({q_expanded}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
+                f'"randomized controlled trial"[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            )
+
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance", api_key=Entrez.api_key)
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+
+            if ids:
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
+                papers = Entrez.read(handle)["PubmedArticle"]
+
+                for p in papers:
+                    try:
+                        art = p["MedlineCitation"]["Article"]
+                        title = art.get("ArticleTitle", "No title")
+                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                        authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                        journal = art["Journal"].get("Title", "Unknown")
+                        year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
+                        pmid = p["MedlineCitation"]["PMID"]
+
+                        all_refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                        all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                    except:
+                        continue
+        except:
+            continue
+
+    # Remove duplicate references by PMID
+    seen_pmids = set()
+    unique_refs = []
+    for ref in all_refs:
+        if ref['pmid'] not in seen_pmids:
+            seen_pmids.add(ref['pmid'])
+            unique_refs.append(ref)
+
+    # Create numbered reference list for GPT
+    ref_list = ""
+    for i, ref in enumerate(unique_refs, 1):
+        ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+    # Build patient summary for GPT
+    patient_data = f"""
+Patient Demographics:
+- Age: {age} years
+- Weight: {weight} kg
+- Height: {height} cm
+- Sex: {sex}
+- BMI: {bmi} kg/m²
+- IBW: {ibw} kg
+
+Comorbidities: {', '.join(comorbidities) if comorbidities else 'None reported'}
+
+Medications: {medications if medications else 'None reported'}
+
+Laboratory Values:
+- Hemoglobin: {hgb} g/dL
+- Platelets: {plt} ×10³/μL
+- Creatinine: {cr} mg/dL
+- INR: {inr}
+
+Procedure: {procedure}
+Surgery Risk Category: {surgery_risk}
+
+NPO Status: {npo if npo else 'Not specified'}
+Allergies: {allergies if allergies else 'NKDA'}
+"""
+
+    # Generate GPT summary
+    prompt = f"""You are an expert anesthesiologist performing a comprehensive pre-operative assessment. Based on the patient data and evidence from recent literature, provide a detailed evidence-based assessment.
+
+Patient Information:
+{patient_data}
+
+Available Evidence (use numbered citations [1], [2], etc.):
+{ref_list}
+
+Paper Details:
+{all_context}
+
+Generate a comprehensive pre-operative assessment including:
+
+1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification based on comorbidities and functional status
+
+2. **Cardiac Risk Stratification**: Calculate RCRI score if applicable (high-risk surgery + cardiac disease). Discuss perioperative cardiac risk.
+
+3. **Perioperative Recommendations**:
+   - Medication management (which to continue, hold, or adjust with specific timing)
+   - Airway considerations (OSA, obesity, difficult airway predictors)
+   - Hemodynamic management strategies
+   - VTE prophylaxis recommendations
+   - Glycemic control if diabetic
+   - Renal protection if CKD
+
+4. **Anesthetic Considerations**:
+   - Preferred anesthetic technique with rationale
+   - Drug selection and dosing adjustments
+   - Monitoring requirements (standard vs advanced)
+   - Postoperative disposition (PACU vs ICU)
+
+5. **Evidence-Based Citations**: Use [1], [2], [3] format referencing the papers provided above
+
+Use HTML formatting:
+- <h3>Section Headers</h3>
+- <p>Paragraphs</p>
+- <strong>Bold for emphasis</strong>
+- <br><br> for spacing
+
+Provide maximum clinical utility with specific, actionable recommendations backed by evidence."""
+
+    try:
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1
+        ).choices[0].message.content
+    except Exception as e:
+        response = f"<p>Error generating assessment: {str(e)}</p>"
+
+    return render_template_string(PREOP_HTML, summary=response, references=unique_refs)
 
 if __name__ == "__main__":
     app.run(debug=True)
