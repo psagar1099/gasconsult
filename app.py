@@ -936,7 +936,7 @@ PREOP_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
         <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
@@ -1849,6 +1849,305 @@ HTML = """
 </html>
 """
 
+TERMS_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - gasconsult.ai</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #0066CC;
+            --text: #1F2937;
+            --text-secondary: #4B5563;
+            --text-muted: #6B7280;
+            --background: #FAFBFC;
+            --border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            animation: pageFadeIn 0.3s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 18px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .last-updated {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--secondary);
+            margin-top: 40px;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .notice-box {
+            background: rgba(255, 107, 53, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .notice-box h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 40px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+            margin-top: 80px;
+            background: white;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-text">⚕ gasconsult.ai</a>
+            <a href="/" class="nav-link">Ask</a>
+            <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last Updated: November 25, 2025</p>
+
+        <div class="notice-box">
+            <h3>⚠️ Critical Notice</h3>
+            <p><strong>gasconsult.ai is NOT a substitute for professional medical judgment.</strong> This tool is strictly for informational and educational purposes only and must be used exclusively by qualified healthcare professionals as a clinical decision support aid.</p>
+        </div>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing or using gasconsult.ai ("the Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use this Service.</p>
+
+        <h2>2. Medical Disclaimer</h2>
+        <h3>2.1 Not Medical Advice</h3>
+        <p>The information provided by gasconsult.ai is for <strong>informational and educational purposes only</strong>. It is not intended to be, and should not be interpreted as:</p>
+        <ul>
+            <li>Medical advice, diagnosis, or treatment recommendations</li>
+            <li>A substitute for professional medical judgment or clinical expertise</li>
+            <li>A replacement for consultation with qualified healthcare professionals</li>
+            <li>Definitive clinical guidance for patient care decisions</li>
+        </ul>
+
+        <h3>2.2 Professional Use Only</h3>
+        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, anesthesiologists, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
+
+        <h3>2.3 Clinical Decision Support</h3>
+        <p>gasconsult.ai serves solely as a <strong>clinical decision support tool</strong> to assist qualified healthcare providers. All treatment decisions must be made by licensed healthcare professionals based on:</p>
+        <ul>
+            <li>Comprehensive patient assessment and clinical evaluation</li>
+            <li>Individual patient circumstances, comorbidities, and risk factors</li>
+            <li>Current evidence-based medical practice and institutional protocols</li>
+            <li>Professional medical judgment and clinical expertise</li>
+        </ul>
+
+        <h2>3. No Warranty or Guarantee</h2>
+        <h3>3.1 Information Accuracy</h3>
+        <p>While gasconsult.ai strives to provide evidence-based information sourced from peer-reviewed medical literature (PubMed), we make <strong>NO WARRANTIES OR GUARANTEES</strong> regarding:</p>
+        <ul>
+            <li>The accuracy, completeness, or currentness of any information provided</li>
+            <li>The suitability of information for any particular patient or clinical situation</li>
+            <li>The reliability of AI-generated content or literature interpretations</li>
+            <li>The absence of errors, omissions, or inaccuracies in responses</li>
+        </ul>
+
+        <h3>3.2 Service Availability</h3>
+        <p>The Service is provided "AS IS" and "AS AVAILABLE" without any warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+
+        <h2>4. Limitation of Liability</h2>
+        <h3>4.1 No Liability for Medical Outcomes</h3>
+        <p>To the fullest extent permitted by law, gasconsult.ai, its developers, operators, and affiliates shall NOT BE LIABLE for any:</p>
+        <ul>
+            <li>Patient injuries, adverse outcomes, or complications arising from use of this Service</li>
+            <li>Clinical decisions made based on information provided by the Service</li>
+            <li>Errors, omissions, or inaccuracies in AI-generated content or literature citations</li>
+            <li>Damages arising from reliance on the Service for medical decision-making</li>
+            <li>Direct, indirect, incidental, consequential, or punitive damages of any kind</li>
+        </ul>
+
+        <h3>4.2 User Responsibility</h3>
+        <p>Users of this Service assume <strong>FULL RESPONSIBILITY</strong> for:</p>
+        <ul>
+            <li>Verifying all information through primary sources and current medical literature</li>
+            <li>Exercising independent professional judgment in all clinical decisions</li>
+            <li>Complying with institutional policies, protocols, and standard of care requirements</li>
+            <li>Obtaining informed consent and following applicable medical regulations</li>
+        </ul>
+
+        <h2>5. User Obligations</h2>
+        <h3>5.1 Professional Qualifications</h3>
+        <p>By using this Service, you represent and warrant that you are:</p>
+        <ul>
+            <li>A licensed healthcare professional authorized to practice medicine</li>
+            <li>Qualified to interpret medical information and make clinical decisions</li>
+            <li>Using the Service solely for professional educational purposes</li>
+            <li>Capable of independently verifying all medical information</li>
+        </ul>
+
+        <h3>5.2 Prohibited Uses</h3>
+        <p>You agree NOT to use this Service for:</p>
+        <ul>
+            <li>Patient self-diagnosis, self-treatment, or medical decision-making by non-professionals</li>
+            <li>Emergency medical situations requiring immediate clinical intervention</li>
+            <li>Situations where delays in obtaining professional medical care could cause harm</li>
+            <li>Any unlawful, fraudulent, or unauthorized purposes</li>
+        </ul>
+
+        <h2>6. Third-Party Content</h2>
+        <p>The Service aggregates information from third-party sources, including PubMed and medical literature databases. We are not responsible for the accuracy, reliability, or content of third-party sources. Citations and references should be independently verified through original publications.</p>
+
+        <h2>7. Privacy and Data</h2>
+        <p>Your use of the Service is subject to our Privacy Policy. We do not store patient health information (PHI) or individually identifiable medical data. Users must not input protected health information into the Service.</p>
+
+        <h2>8. Modifications to Terms</h2>
+        <p>We reserve the right to modify these Terms of Service at any time. Continued use of the Service following any changes constitutes acceptance of modified terms. Users are responsible for regularly reviewing these terms.</p>
+
+        <h2>9. Indemnification</h2>
+        <p>You agree to indemnify, defend, and hold harmless gasconsult.ai and its operators from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:</p>
+        <ul>
+            <li>Your use or misuse of the Service</li>
+            <li>Clinical decisions made based on information from the Service</li>
+            <li>Violation of these Terms of Service</li>
+            <li>Violation of any applicable laws or regulations</li>
+        </ul>
+
+        <h2>10. Governing Law and Jurisdiction</h2>
+        <p>These Terms shall be governed by and construed in accordance with the laws of the United States. Any disputes arising from these Terms or use of the Service shall be subject to the exclusive jurisdiction of the courts in the United States.</p>
+
+        <h2>11. Emergency Medical Situations</h2>
+        <div class="notice-box">
+            <h3>⚠️ Emergency Disclaimer</h3>
+            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
+        </div>
+
+        <h2>12. Contact Information</h2>
+        <p>For questions regarding these Terms of Service, please contact us at: <strong>support@gasconsult.ai</strong></p>
+
+        <p style="margin-top: 40px; font-weight: 600;">By using gasconsult.ai, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
+        <p><a href="/terms">Terms of Service</a></p>
+    </footer>
+
+</body>
+</html>
+"""
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     # Initialize conversation history in session
@@ -1857,7 +2156,14 @@ def index():
 
     if request.method == "POST":
         try:
-            raw_query = request.form["query"].strip()
+            # Safely get query from form data
+            raw_query = request.form.get("query", "").strip()
+
+            # If query is empty, redirect to GET
+            if not raw_query:
+                print(f"[DEBUG] Empty query received, redirecting to GET")
+                return redirect(url_for('index'))
+
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
             print(f"[DEBUG] Raw query: '{raw_query}'")
             print(f"[DEBUG] Session has {len(session['messages'])} messages before")
@@ -2150,6 +2456,11 @@ def clear():
     """Clear conversation history"""
     session.pop('messages', None)
     return redirect(url_for('index'))
+
+@app.route("/terms")
+def terms():
+    """Terms of Service page"""
+    return render_template_string(TERMS_HTML)
 
 @app.route("/preop", methods=["GET", "POST"])
 def preop_assessment():
