@@ -385,26 +385,29 @@ PREOP_HTML = """
 
         .preop-header h1 {
             font-size: 2.5rem;
-            color: #0A3D62;
+            color: #0066CC;
             margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .preop-header p {
             font-size: 1.1rem;
-            color: #666;
+            color: #4B5563;
         }
 
         /* Form Sections */
         .form-section {
-            background: #E8F4FD;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
             padding: 28px;
             margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 12px rgba(0, 102, 204, 0.08);
+            border: 1px solid rgba(0, 102, 204, 0.12);
         }
 
         .form-section h2 {
-            color: #0A3D62;
+            color: #0066CC;
             font-size: 1.4rem;
             margin-bottom: 20px;
             font-weight: 700;
@@ -425,7 +428,7 @@ PREOP_HTML = """
         label {
             font-size: 0.9rem;
             font-weight: 600;
-            color: #0A3D62;
+            color: #0066CC;
             margin-bottom: 6px;
         }
 
@@ -434,12 +437,12 @@ PREOP_HTML = """
         textarea,
         select {
             padding: 12px;
-            border: 2px solid #d0e8f7;
-            border-radius: 8px;
+            border: 2px solid rgba(0, 102, 204, 0.2);
+            border-radius: 10px;
             font-size: 1rem;
             font-family: inherit;
-            background: white;
-            color: #0A3D62;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1F2937;
             transition: all 0.2s ease;
         }
 
@@ -447,8 +450,9 @@ PREOP_HTML = """
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: #FF6B35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: #0066CC;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            background: white;
         }
 
         textarea {
@@ -482,10 +486,10 @@ PREOP_HTML = """
         }
 
         .submit-btn {
-            background: #FF6B35;
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
             color: white;
             padding: 14px 32px;
-            border-radius: 24px;
+            border-radius: 12px;
             font-size: 1.05rem;
             font-weight: 600;
             border: none;
@@ -493,43 +497,48 @@ PREOP_HTML = """
             transition: all 0.2s ease;
             width: 100%;
             margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
         }
 
         .submit-btn:hover {
-            background: #ff5722;
+            background: linear-gradient(135deg, #0052A3 0%, #003D7A 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.35);
         }
 
         /* Summary Display */
         .summary-container {
-            background: #E8F4FD;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
             padding: 32px;
             margin-top: 40px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
+            border: 1px solid rgba(0, 102, 204, 0.15);
         }
 
         .summary-container h2 {
-            color: #0A3D62;
+            color: #0066CC;
             font-size: 1.8rem;
             margin-bottom: 24px;
+            font-weight: 700;
         }
 
         .summary-content {
-            color: #0A3D62;
+            color: #1F2937;
             line-height: 1.8;
         }
 
         .summary-content h3 {
-            color: #FF6B35;
+            color: #0066CC;
             font-size: 1.3rem;
             margin-top: 20px;
             margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .summary-content strong {
-            color: #0A3D62;
+            color: #0052A3;
         }
 
         .ref-item {
@@ -542,27 +551,28 @@ PREOP_HTML = """
         }
 
         .ref-item a {
-            color: #0A3D62;
+            color: #0066CC;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
         .ref-item a:hover {
-            color: #FF6B35;
+            color: #0052A3;
             text-decoration: underline;
         }
 
         .auto-calc {
-            background: white;
+            background: rgba(0, 102, 204, 0.05);
+            backdrop-filter: blur(10px);
             padding: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-top: 12px;
-            border: 2px solid #d0e8f7;
+            border: 2px solid rgba(0, 102, 204, 0.15);
         }
 
         .auto-calc strong {
-            color: #FF6B35;
+            color: #0066CC;
         }
 
         /* Footer */
@@ -1183,35 +1193,39 @@ HTML = """
         }
 
         .message-content {
-            max-width: 85%;
-            padding: 18px 24px;
-            border-radius: 24px;
-            font-size: 1rem;
-            line-height: 1.7;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
             transition: all 0.2s ease;
         }
 
         .message-content:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
         .message.user .message-content {
-            background: #0A3D62;
+            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
             color: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
         }
 
         .message.assistant .message-content {
-            background: #E8F4FD;
-            color: #0A3D62;
-            border: 1px solid #d0e8f7;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            color: #1F2937;
+            border: 1px solid rgba(0, 102, 204, 0.1);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
         }
 
         .message-text h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             margin-top: 16px;
             margin-bottom: 12px;
-            color: #0A3D62;
+            color: #0066CC;
             font-weight: 700;
         }
 
@@ -1227,14 +1241,14 @@ HTML = """
         .message-refs {
             margin-top: 20px;
             padding-top: 16px;
-            border-top: 2px solid rgba(10, 61, 98, 0.15);
+            border-top: 2px solid rgba(0, 102, 204, 0.15);
             font-size: 0.92rem;
         }
 
         .message-refs strong {
             display: block;
             margin-bottom: 12px;
-            color: #FF6B35;
+            color: #0066CC;
             font-weight: 700;
         }
 
@@ -1248,22 +1262,22 @@ HTML = """
         }
 
         .ref-item a {
-            color: #0A3D62;
+            color: #0066CC;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }
 
         .ref-item a:hover {
-            color: #FF6B35;
+            color: #0052A3;
             text-decoration: underline;
         }
 
         .message-meta {
             margin-top: 12px;
             font-size: 0.85rem;
-            color: #0A3D62;
-            opacity: 0.7;
+            color: #4B5563;
+            opacity: 0.8;
             font-weight: 600;
         }
 
@@ -1691,17 +1705,18 @@ def index():
 
         query = clean_query(raw_query)  # Strip conversational filler
 
-        # IMPROVED FOLLOW-UP HANDLING: Detect and enrich short follow-up questions
-        is_followup = len(session['messages']) > 2 and len(query.split()) <= 5
+        # IMPROVED FOLLOW-UP HANDLING: Detect follow-up questions
+        # A follow-up is any question after the first exchange
+        is_followup = len(session['messages']) >= 3  # At least one prior Q&A pair exists
         enriched_query = query
 
-        if is_followup and len(session['messages']) >= 2:
-            # Get context from previous user question
+        if is_followup:
+            # Get context from previous user questions
             prev_user_msgs = [msg['content'] for msg in session['messages'][-6:] if msg['role'] == 'user']
             if len(prev_user_msgs) >= 2:
-                # Combine previous context with current query
+                # Combine previous context with current query for better search
                 previous_topic = prev_user_msgs[-2]
-                # Extract key medical terms from previous question
+                # Extract key medical terms from previous question (words > 3 chars)
                 medical_context = ' '.join([word for word in previous_topic.split() if len(word) > 3])
                 enriched_query = f"{query} {medical_context}"
 
