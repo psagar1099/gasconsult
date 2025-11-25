@@ -1245,33 +1245,106 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 80px 40px 60px;
+            padding: 80px 40px 40px;
             margin: 0 auto;
             max-width: 1100px;
             text-align: center;
+            position: relative;
+        }
+
+        /* Hero background gradient */
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(ellipse at 50% 0%, #DBEAFE 0%, transparent 60%);
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .hero-headline {
-            font-size: 3.5rem;
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 56px;
             font-weight: 700;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 50%, #3B82F6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 24px;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero-headline-blue {
+            color: #2563EB;
+        }
+
+        .hero-headline-dark {
+            color: #0F172A;
         }
 
         .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: 48px;
+            font-size: 18px;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 32px;
             font-weight: 400;
             line-height: 1.6;
+        }
+
+        /* Outline CTA Button */
+        .preop-cta-outline {
+            display: inline-block;
+            padding: 16px 32px;
+            background: transparent;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            color: #0F172A;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 32px;
+        }
+
+        .preop-cta-outline:hover {
+            background: #F8FAFC;
+            border-color: #CBD5E1;
+            transform: translateY(-1px);
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 48px;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .trust-badge svg {
+            flex-shrink: 0;
+        }
+
+        /* Homepage Chat Section */
+        .homepage-chat-section {
             max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+
+        .homepage-input {
+            margin-bottom: 80px;
         }
 
         .preop-cta {
@@ -1313,8 +1386,8 @@ HTML = """
 
         .feature-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-            border-color: rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+            border-color: #2563EB;
         }
 
         .feature-icon {
@@ -1329,18 +1402,18 @@ HTML = """
         }
 
         .feature-icon.violet {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.15) 100%);
-            border: 2px solid rgba(139, 92, 246, 0.2);
+            background: #EDE9FE;
+            border: none;
         }
 
         .feature-icon.blue {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
-            border: 2px solid rgba(37, 99, 235, 0.2);
+            background: #DBEAFE;
+            border: none;
         }
 
         .feature-icon.green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.15) 100%);
-            border: 2px solid rgba(16, 185, 129, 0.2);
+            background: #D1FAE5;
+            border: none;
         }
 
         .feature-icon svg {
@@ -2025,11 +2098,46 @@ HTML = """
         <!-- Welcome Screen -->
         <div class="welcome-screen">
             <!-- Hero Section -->
-            <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
+            <h1 class="hero-headline">
+                <span class="hero-headline-blue">Evidence-Based</span><br>
+                <span class="hero-headline-dark">Anesthesiology Consultation</span>
+            </h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
-            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
 
-            <!-- Features Section -->
+            <!-- CTA Button -->
+            <a href="/preop" class="preop-cta-outline">Pre-Operative Assessment →</a>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="9" stroke="#10B981" stroke-width="2"/>
+                        <path d="M6 10l2.5 2.5L14 7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>PubMed sourced</span>
+                </div>
+                <div class="trust-badge">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <circle cx="10" cy="10" r="9" stroke="#10B981" stroke-width="2"/>
+                        <path d="M6 10l2.5 2.5L14 7" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Verifiable citations</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Chat Input - Always Visible on Homepage -->
+        {% if not messages %}
+        <div class="homepage-chat-section">
+            <div class="chat-input-container homepage-input">
+                <form method="post" action="/chat" class="chat-form">
+                    <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
+                    <button type="submit" class="send-btn">↑</button>
+                </form>
+            </div>
+
+            <!-- Features Section (below chat) -->
             <div class="features-section">
                 <div class="feature-grid">
                     <div class="feature-card">
@@ -2122,13 +2230,15 @@ HTML = """
         </div>
     </div>
 
-    <!-- Chat Input - Always Visible -->
+    <!-- Chat Input - Visible on Chat Page -->
+    {% if messages %}
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
     </div>
+    {% endif %}
 
     <footer>
         <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
@@ -2159,18 +2269,17 @@ HTML = """
                     return;
                 }
 
-                // Check if we're on the homepage (no messages present)
+                // Always prevent default and use streaming
+                e.preventDefault();
+
+                // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // If on homepage, let form submit naturally to /chat (opens new page)
-                if (isHomepage) {
-                    // Don't prevent default - let it POST to /chat normally
-                    return;
+                // Hide welcome screen if on homepage
+                if (isHomepage && welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
                 }
-
-                // We're on /chat page - prevent default and use streaming
-                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
