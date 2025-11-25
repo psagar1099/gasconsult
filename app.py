@@ -21,16 +21,17 @@ def clean_query(query):
     filler_phrases = [
         r"^(can you |could you |please |pls )",
         r"^(tell me about |tell me |explain |describe )",
-        r"^(what is |what's |what are |whats )",
+        r"^(what is |what's |what are |whats |what about )",
         r"^(what do you know about |what does the evidence say about )",
         r"^(what's the evidence for |what is the evidence for |evidence for )",
         r"^(i want to know about |i'd like to know about |i need to know about )",
         r"^(give me info on |give me information on |info on )",
-        r"^(how does |how do |how is |how are )",
+        r"^(how does |how do |how is |how are |how about )",
         r"^(why does |why do |why is |why are )",
         r"^(search for |look up |find |show me )",
         r"^(help me understand |help me with )",
         r"(indications to use |indications for |indication for |when to use )",
+        r"(instead|as well|also|too)$",
     ]
 
     # Apply each pattern repeatedly until no more matches
@@ -1708,20 +1709,9 @@ def index():
         # IMPROVED FOLLOW-UP HANDLING: Detect follow-up questions
         # A follow-up is any question after the first exchange
         is_followup = len(session['messages']) >= 3  # At least one prior Q&A pair exists
-        enriched_query = query
-
-        if is_followup:
-            # Get context from previous user questions
-            prev_user_msgs = [msg['content'] for msg in session['messages'][-6:] if msg['role'] == 'user']
-            if len(prev_user_msgs) >= 2:
-                # Combine previous context with current query for better search
-                previous_topic = prev_user_msgs[-2]
-                # Extract key medical terms from previous question (words > 3 chars)
-                medical_context = ' '.join([word for word in previous_topic.split() if len(word) > 3])
-                enriched_query = f"{query} {medical_context}"
 
         # Expand synonyms and medical abbreviations
-        q = enriched_query.lower()
+        q = query.lower()
         q = q.replace(" versus ", " OR ")
         q = q.replace(" vs ", " OR ")
         q = q.replace(" vs. ", " OR ")
@@ -1741,15 +1731,12 @@ def index():
         q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
         q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
 
-        # Use broader search for follow-up questions
+        # Use broader search for follow-up questions - more likely to find results
         if is_followup:
-            search_term = (
-                f'({q}) AND '
-                f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-                f'"Cochrane Database Syst Rev"[ta] OR guideline[pt] OR "clinical trial"[pt]) AND '
-                f'("2010/01/01"[PDAT] : "3000"[PDAT])'
-            )
+            # For follow-ups, be very broad - include clinical trials and go back to 2005
+            search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
         else:
+            # For initial questions, use high-quality evidence filters
             search_term = (
                 f'({q}) AND '
                 f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
@@ -1757,85 +1744,94 @@ def index():
                 f'("2015/01/01"[PDAT] : "3000"[PDAT])'
             )
 
-        # Try anesthesiology-specific high-quality evidence first
-        handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
-        result = Entrez.read(handle)
-        ids = result["IdList"]
+        # Try anesthesiology-specific search first
+        try:
+            handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+        except Exception as e:
+            ids = []
 
         # Fallback 1: Try without anesthesiology restriction
         if not ids:
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
-            result = Entrez.read(handle)
-            ids = result["IdList"]
+            try:
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
+                result = Entrez.read(handle)
+                ids = result["IdList"]
+            except:
+                ids = []
 
-        # Fallback 2: Drop publication type restrictions, keep recent papers
+        # Fallback 2: For initial queries, drop publication type restrictions
+        if not ids and not is_followup:
+            try:
+                broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+                handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
+                result = Entrez.read(handle)
+                ids = result["IdList"]
+            except:
+                ids = []
+
+        # If no papers found, handle gracefully
         if not ids:
-            broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
-            handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
-            result = Entrez.read(handle)
-            ids = result["IdList"]
+            if is_followup:
+                # For follow-ups with no new papers, use GPT with conversation context only
+                conversation_context = ""
+                recent_messages = session['messages'][-8:]  # Last 4 Q&A pairs
+                for msg in recent_messages:
+                    if msg['role'] == 'user':
+                        conversation_context += f"User: {msg['content']}\n"
+                    else:
+                        content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                        conversation_context += f"Assistant: {content_text[:400]}\n"
 
-        # Fallback 3: Even broader - any recent paper in anesthesiology
-        if not ids:
-            broadest_search = f'({q}) AND anesthesiology AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
-            handle = Entrez.esearch(db="pubmed", term=broadest_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
-            result = Entrez.read(handle)
-            ids = result["IdList"]
-
-        # If no papers found, still allow GPT to answer using conversation context for follow-ups
-        if not ids and is_followup:
-            # For follow-ups with no new papers, use GPT with conversation context only
-            conversation_context = ""
-            recent_messages = session['messages'][-10:]
-            for msg in recent_messages:
-                if msg['role'] == 'user':
-                    conversation_context += f"User: {msg['content']}\n"
-                else:
-                    content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
-                    conversation_context += f"Assistant: {content_text[:300]}...\n"
-
-            prompt = f"""You are a clinical expert anesthesiologist AI assistant. Based on the conversation context below, answer the follow-up question using your clinical knowledge and the information already discussed.
+                prompt = f"""You are a clinical expert anesthesiologist AI assistant. The user is asking a follow-up question based on the conversation below.
 
 Previous conversation:
 {conversation_context}
 
 Current follow-up question: {raw_query}
 
-Provide a comprehensive answer that:
-1. Relates to the previous discussion
-2. Includes specific clinical information (dosages, indications, contraindications)
-3. Uses HTML formatting (<h3>, <p>, <strong>, <ul><li>)
-4. Note that you're drawing from general clinical knowledge since no new specific papers were found for this follow-up
+Provide a comprehensive, evidence-based answer that:
+1. Builds naturally on the previous discussion
+2. Includes specific clinical details (dosages, indications, contraindications, side effects)
+3. Uses HTML formatting (<h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists)
+4. Is conversational but clinically complete
+5. Notes that this draws from general anesthesiology knowledge and the previous discussion
 
-Answer naturally as if continuing the conversation with a colleague:"""
+Answer as if you're a colleague continuing the conversation:"""
 
-            try:
-                response = openai_client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.2
-                ).choices[0].message.content
-            except Exception as e:
-                response = f"<p>Error generating response: {str(e)}</p>"
+                try:
+                    response = openai_client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=[{"role": "user", "content": prompt}],
+                        temperature=0.2
+                    ).choices[0].message.content
 
-            session['messages'].append({
-                "role": "assistant",
-                "content": response,
-                "references": [],
-                "num_papers": 0
-            })
-            session.modified = True
-            return redirect(url_for('index'))
-        elif not ids:
-            error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
-            session['messages'].append({
-                "role": "assistant",
-                "content": error_msg,
-                "references": [],
-                "num_papers": 0
-            })
-            session.modified = True
-            return redirect(url_for('index'))
+                    if not response or len(response.strip()) < 10:
+                        response = "<p>I apologize, but I'm having trouble generating a response. Could you rephrase your question?</p>"
+
+                except Exception as e:
+                    response = f"<p>Error: Unable to generate response. Please try rephrasing your question.</p>"
+
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": response,
+                    "references": [],
+                    "num_papers": 0
+                })
+                session.modified = True
+                return redirect(url_for('index'))
+            else:
+                # For initial queries with no results
+                error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": error_msg,
+                    "references": [],
+                    "num_papers": 0
+                })
+                session.modified = True
+                return redirect(url_for('index'))
 
         handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
         papers = Entrez.read(handle)["PubmedArticle"]
