@@ -273,20 +273,28 @@ PREOP_HTML = """
     <title>Pre-Op Assessment — gasconsult.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <style>
         :root {
-            --primary: #F97316;
-            --primary-dark: #EA580C;
-            --secondary: #3B82F6;
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #3B82F6;
+            --secondary: #1E293B;
+            --secondary-light: #334155;
+            --accent-success: #10B981;
+            --accent-violet: #8B5CF6;
+            --accent-red: #EF4444;
+            --accent-amber: #FBBF24;
             --text-primary: #111827;
             --text-secondary: #4B5563;
             --text-muted: #9CA3AF;
             --background: #FFFFFF;
             --background-secondary: #F9FAFB;
             --border: #E5E7EB;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(37, 99, 235, 0.1);
         }
 
         * {
@@ -325,31 +333,49 @@ PREOP_HTML = """
             justify-content: space-between;
         }
 
-        .logo-text {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            transition: transform 0.2s ease;
+        .logo-container {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        .logo-text:hover {
-            transform: scale(1.02);
+        .logo-container:hover {
+            transform: translateY(-1px);
         }
 
-        .logo-svg {
-            width: 32px;
-            height: 32px;
+        .logo-ecg {
+            width: 90px;
+            height: 22px;
             flex-shrink: 0;
+        }
+
+        .logo-ecg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-wordmark {
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #111111;
+        }
+
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
         }
 
         .nav-actions {
@@ -371,15 +397,15 @@ PREOP_HTML = """
         }
 
         .nav-link:hover {
-            background: #FFF5F0;
-            color: #FF6B35;
+            background: rgba(37, 99, 235, 0.06);
+            color: var(--primary);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #FFF5F0;
-            color: #FF6B35;
+            background: rgba(37, 99, 235, 0.06);
+            color: var(--primary);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
@@ -498,7 +524,7 @@ PREOP_HTML = """
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 14px 32px;
             border-radius: 12px;
@@ -513,9 +539,9 @@ PREOP_HTML = """
         }
 
         .submit-btn:hover {
-            background: linear-gradient(135deg, #0052A3 0%, #003D7A 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1E40AF 100%);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.35);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
         }
 
         /* Summary Display */
@@ -762,29 +788,39 @@ PREOP_HTML = """
 <body>
     <nav>
         <div class="container">
-            <a href="/" class="logo-text">
-                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
-                  <defs>
-                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#0066CC"/>
-                      <stop offset="100%" stop-color="#004499"/>
-                    </linearGradient>
-                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#E0E0E0"/>
-                      <stop offset="30%" stop-color="#FFFFFF"/>
-                      <stop offset="70%" stop-color="#FFFFFF"/>
-                      <stop offset="100%" stop-color="#C0C0C0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
-                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
-                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
-                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
-                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
-                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
-                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
-                </svg>
-                <span>gasconsult.ai</span>
+            <a href="/" class="logo-container">
+                <div class="logo-ecg">
+                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
+                              stroke="url(#ecgGradient)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
+                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
@@ -992,7 +1028,7 @@ PREOP_HTML = """
             </div>
             {% if references %}
             <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(10, 61, 98, 0.15);">
-                <h3 style="color: #FF6B35; margin-bottom: 16px;">References:</h3>
+                <h3 style="color: var(--primary); margin-bottom: 16px;">References:</h3>
                 {% for ref in references %}
                 <div class="ref-item">
                     <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
@@ -1051,20 +1087,28 @@ HTML = """
     <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <style>
         :root {
-            --primary: #F97316;
-            --primary-dark: #EA580C;
-            --secondary: #3B82F6;
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+            --primary-light: #3B82F6;
+            --secondary: #1E293B;
+            --secondary-light: #334155;
+            --accent-success: #10B981;
+            --accent-violet: #8B5CF6;
+            --accent-red: #EF4444;
+            --accent-amber: #FBBF24;
             --text-primary: #111827;
             --text-secondary: #4B5563;
             --text-muted: #9CA3AF;
             --background: #FFFFFF;
             --background-secondary: #F9FAFB;
             --border: #E5E7EB;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(37, 99, 235, 0.1);
         }
 
         * {
@@ -1103,31 +1147,49 @@ HTML = """
             justify-content: space-between;
         }
 
-        .logo-text {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-            transition: transform 0.2s ease;
+        .logo-container {
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        .logo-text:hover {
-            transform: scale(1.02);
+        .logo-container:hover {
+            transform: translateY(-1px);
         }
 
-        .logo-svg {
-            width: 32px;
-            height: 32px;
+        .logo-ecg {
+            width: 90px;
+            height: 22px;
             flex-shrink: 0;
+        }
+
+        .logo-ecg svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-wordmark {
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #111111;
+        }
+
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
         }
 
         .nav-actions {
@@ -1149,20 +1211,20 @@ HTML = """
         }
 
         .nav-link:hover {
-            background: #FFF5F0;
-            color: #FF6B35;
+            background: rgba(37, 99, 235, 0.06);
+            color: var(--primary);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #FFF5F0;
-            color: #FF6B35;
+            background: rgba(37, 99, 235, 0.06);
+            color: var(--primary);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .new-chat-btn {
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             padding: 10px 24px;
             border-radius: 8px;
@@ -1172,13 +1234,13 @@ HTML = """
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
-            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
         }
 
         .new-chat-btn:hover {
-            background: linear-gradient(135deg, #ff5722 0%, #EA580C 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1E40AF 100%);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.35);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
         }
 
         /* Welcome Screen */
@@ -1216,14 +1278,14 @@ HTML = """
             display: inline-block;
             margin-bottom: 60px;
             padding: 14px 32px;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             text-decoration: none;
             border-radius: 10px;
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(255, 107, 53, 0.25);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
         }
 
         .preop-cta:hover {
@@ -1239,13 +1301,13 @@ HTML = """
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.6);
+            background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border-radius: 16px;
             padding: 32px 24px;
             transition: all 0.3s ease;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 107, 53, 0.1);
+            border: 1px solid var(--glass-border);
             text-align: center;
         }
 
@@ -1266,14 +1328,19 @@ HTML = """
             position: relative;
         }
 
-        .feature-icon.orange {
-            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(249, 115, 22, 0.15) 100%);
-            border: 2px solid rgba(255, 107, 53, 0.2);
+        .feature-icon.violet {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.15) 100%);
+            border: 2px solid rgba(139, 92, 246, 0.2);
         }
 
         .feature-icon.blue {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
-            border: 2px solid rgba(59, 130, 246, 0.2);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
+            border: 2px solid rgba(37, 99, 235, 0.2);
+        }
+
+        .feature-icon.green {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.15) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.2);
         }
 
         .feature-icon svg {
@@ -1371,7 +1438,7 @@ HTML = """
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, #0066CC 0%, #0052A3 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
@@ -1575,7 +1642,7 @@ HTML = """
             position: absolute;
             right: 8px;
             top: 6px;
-            background: #FF6B35;
+            background: var(--primary);
             color: white;
             border: none;
             width: 40px;
@@ -1909,29 +1976,39 @@ HTML = """
 <body>
     <nav>
         <div class="container">
-            <a href="/" class="logo-text">
-                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
-                  <defs>
-                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#0066CC"/>
-                      <stop offset="100%" stop-color="#004499"/>
-                    </linearGradient>
-                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#E0E0E0"/>
-                      <stop offset="30%" stop-color="#FFFFFF"/>
-                      <stop offset="70%" stop-color="#FFFFFF"/>
-                      <stop offset="100%" stop-color="#C0C0C0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
-                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
-                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
-                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
-                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
-                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
-                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
-                </svg>
-                <span>gasconsult.ai</span>
+            <a href="/" class="logo-container">
+                <div class="logo-ecg">
+                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
+                              stroke="url(#ecgGradient)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
+                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link active">Ask</a>
@@ -1956,8 +2033,8 @@ HTML = """
             <div class="features-section">
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <div class="feature-icon orange">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="feature-icon violet">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
@@ -1967,7 +2044,7 @@ HTML = """
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon blue">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect x="4" y="2" width="16" height="20" rx="2"></rect>
                                 <line x1="8" y1="6" x2="16" y2="6"></line>
                                 <line x1="8" y1="10" x2="16" y2="10"></line>
@@ -1979,8 +2056,8 @@ HTML = """
                         <p>Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon orange">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="feature-icon green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                                 <line x1="9" y1="10" x2="15" y2="10"></line>
                                 <line x1="12" y1="7" x2="12" y2="13"></line>
@@ -2073,13 +2150,27 @@ HTML = """
         const form = document.querySelector('.chat-form');
         if (form) {
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
                 const submitBtn = form.querySelector('.send-btn');
                 const textarea = form.querySelector('textarea');
                 const query = textarea.value.trim();
 
-                if (!query) return;
+                if (!query) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Check if we're on the homepage (no messages present)
+                const welcomeScreen = document.querySelector('.welcome-screen');
+                const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
+
+                // If on homepage, let form submit naturally to /chat (opens new page)
+                if (isHomepage) {
+                    // Don't prevent default - let it POST to /chat normally
+                    return;
+                }
+
+                // We're on /chat page - prevent default and use streaming
+                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -2280,7 +2371,8 @@ TERMS_HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - gasconsult.ai</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2510,29 +2602,39 @@ TERMS_HTML = """
 
     <nav>
         <div class="container">
-            <a href="/" class="logo-text">
-                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
-                  <defs>
-                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#0066CC"/>
-                      <stop offset="100%" stop-color="#004499"/>
-                    </linearGradient>
-                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#E0E0E0"/>
-                      <stop offset="30%" stop-color="#FFFFFF"/>
-                      <stop offset="70%" stop-color="#FFFFFF"/>
-                      <stop offset="100%" stop-color="#C0C0C0"/>
-                    </linearGradient>
-                  </defs>
-                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
-                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
-                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
-                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
-                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
-                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
-                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
-                </svg>
-                <span>gasconsult.ai</span>
+            <a href="/" class="logo-container">
+                <div class="logo-ecg">
+                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
+                              stroke="url(#ecgGradient)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
+                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
+                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
@@ -2753,7 +2855,7 @@ def chat():
             # If query is empty, redirect to GET
             if not raw_query:
                 print(f"[DEBUG] Empty query received, redirecting to GET")
-                return redirect(url_for('index'))
+                return redirect(url_for('chat'))
 
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
             print(f"[DEBUG] Raw query: '{raw_query}'")
@@ -2789,7 +2891,7 @@ def chat():
                 })
                 session.modified = True
                 print(f"[DEBUG] Redirecting after calculation")
-                return redirect(url_for('index'))
+                return redirect(url_for('chat'))
 
             query = clean_query(raw_query)
             print(f"[DEBUG] Cleaned query: '{query}'")
@@ -2918,7 +3020,7 @@ Answer as if you're a colleague continuing the conversation:"""
                     })
                     session.modified = True
                     print(f"[DEBUG] Error message added, redirecting")
-                    return redirect(url_for('index'))
+                    return redirect(url_for('chat'))
 
             print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
             handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
@@ -3029,7 +3131,7 @@ Respond with maximum clinical utility:"""
                 "num_papers": 0
             })
             session.modified = True
-            return redirect(url_for('index'))
+            return redirect(url_for('chat'))
 
     return render_template_string(HTML, messages=session.get('messages', []))
 
