@@ -1798,10 +1798,12 @@ HTML = """
                 </div>
             </div>
         </div>
-        {% else %}
-        <!-- Chat Container -->
-        <div class="chat-container">
+        {% endif %}
+
+        <!-- Chat Container - Always present for streaming -->
+        <div class="chat-container" {% if not messages %}style="display: none;"{% endif %}>
             <div class="chat-messages" id="chatMessages">
+                {% if messages %}
                 {% for msg in messages %}
                     <div class="message {{ msg.role }}">
                         <div class="message-content">
@@ -1828,6 +1830,7 @@ HTML = """
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
 
             <!-- Loading Indicator -->
@@ -1839,7 +1842,6 @@ HTML = """
                 </div>
             </div>
         </div>
-        {% endif %}
 
         <!-- Chat Input - Always Visible -->
         <div class="chat-input-container">
@@ -1884,16 +1886,34 @@ HTML = """
                 textarea.disabled = true;
                 submitBtn.style.opacity = '0.6';
 
+                // Hide welcome screen and show chat container
+                const welcomeScreen = document.querySelector('.welcome-screen');
+                const chatContainer = document.querySelector('.chat-container');
+                if (welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
+                }
+                if (chatContainer) {
+                    chatContainer.style.display = 'block';
+                }
+
                 // Add user message to UI
-                const messagesContainer = document.querySelector('.messages-container') || document.querySelector('.chat-container');
+                const messagesContainer = document.getElementById('chatMessages');
+                if (!messagesContainer) {
+                    console.error('[ERROR] Chat messages container not found');
+                    submitBtn.disabled = false;
+                    textarea.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    return;
+                }
+
                 const userMsg = document.createElement('div');
-                userMsg.className = 'message user-message';
-                userMsg.innerHTML = `<div class="message-content"><p>${escapeHtml(query)}</p></div>`;
+                userMsg.className = 'message user';
+                userMsg.innerHTML = `<div class="message-content"><div class="message-text">${escapeHtml(query)}</div></div>`;
                 messagesContainer.appendChild(userMsg);
 
                 // Add loading indicator
                 const loadingMsg = document.createElement('div');
-                loadingMsg.className = 'message assistant-message';
+                loadingMsg.className = 'message assistant';
                 loadingMsg.id = 'streaming-response';
                 loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching medical literature...</p></div>`;
                 messagesContainer.appendChild(loadingMsg);
