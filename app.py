@@ -1760,11 +1760,11 @@ def index():
 
             print(f"[DEBUG] Search term: '{search_term[:100]}...'")
 
-            # Try anesthesiology-specific search first
+            # Try anesthesiology-specific search first (reduced to 10 papers for speed)
             ids = []
             try:
                 print(f"[DEBUG] Searching PubMed (anesthesiology)...")
-                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
+                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance", api_key=Entrez.api_key)
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
                 print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
@@ -1772,29 +1772,16 @@ def index():
                 print(f"[ERROR] PubMed search failed (anesthesiology): {e}")
                 ids = []
 
-            # Fallback 1: Try without anesthesiology restriction
-            if not ids:
+            # Fallback: Try without anesthesiology restriction (skip for follow-ups to save time)
+            if not ids and not is_followup:
                 try:
                     print(f"[DEBUG] Searching PubMed (general)...")
-                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
+                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance", api_key=Entrez.api_key)
                     result = Entrez.read(handle)
                     ids = result.get("IdList", [])
                     print(f"[DEBUG] Found {len(ids)} papers (general)")
                 except Exception as e:
                     print(f"[ERROR] PubMed search failed (general): {e}")
-                    ids = []
-
-            # Fallback 2: For initial queries, drop publication type restrictions
-            if not ids and not is_followup:
-                try:
-                    print(f"[DEBUG] Searching PubMed (broader)...")
-                    broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
-                    handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
-                    result = Entrez.read(handle)
-                    ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers (broader)")
-                except Exception as e:
-                    print(f"[ERROR] PubMed search failed (broader): {e}")
                     ids = []
 
             # If no papers found, handle gracefully
@@ -1873,12 +1860,15 @@ Answer as if you're a colleague continuing the conversation:"""
 
             refs = []
             context = ""
-            for p in papers[:12]:
+            # Process only 8 papers for faster GPT processing
+            for p in papers[:8]:
                 try:
                     art = p["MedlineCitation"]["Article"]
                     title = art.get("ArticleTitle", "No title")
+                    # Truncate abstracts to 600 chars for faster GPT processing
                     abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                    authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:5]])
+                    abstract = abstract[:600] + "..." if len(abstract) > 600 else abstract
+                    authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
                     journal = art["Journal"].get("Title", "Unknown")
                     year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                     pmid = p["MedlineCitation"]["PMID"]
@@ -1891,76 +1881,51 @@ Answer as if you're a colleague continuing the conversation:"""
             num_papers = len(refs)
             print(f"[DEBUG] Processed {num_papers} paper references")
 
-            # Build conversation context for GPT (last 10 messages)
+            # Build conversation context for GPT (last 6 messages for speed)
             conversation_context = ""
-            recent_messages = session['messages'][-10:]
+            recent_messages = session['messages'][-6:]
             for msg in recent_messages:
                 if msg['role'] == 'user':
                     conversation_context += f"User: {msg['content']}\n"
                 else:
-                    # Strip HTML for cleaner context
+                    # Strip HTML and truncate for cleaner, smaller context
                     content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
-                    conversation_context += f"Assistant: {content_text[:200]}...\n"
+                    conversation_context += f"Assistant: {content_text[:150]}...\n"
 
             # Create numbered reference list for citation
             ref_list = ""
             for i, ref in enumerate(refs, 1):
                 ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
 
-            prompt = f"""You are a clinical expert anesthesiologist AI assistant designed for real-time decision support. Your responses must be immediately actionable and clinically complete.
+            prompt = f"""You are a clinical anesthesiologist AI providing evidence-based answers with citations.
 
 Previous conversation:
-{conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
+{conversation_context if len(session['messages']) > 1 else "New conversation."}
 
 Current question: {raw_query}
-{'NOTE: This is a FOLLOW-UP question - reference the previous discussion naturally and build on it.' if is_followup else ''}
+{'This is a FOLLOW-UP - build on the previous discussion.' if is_followup else ''}
 
-Available research papers (use ONLY numbered citations like [1], [2], etc.):
+Research papers (cite as [1], [2], etc.):
 {ref_list}
 
-Paper details for context:
+Paper details:
 {context}
 
-CRITICAL INSTRUCTIONS:
-1. **Be maximally informative**: Include specific dosages (mg/kg, total doses, infusion rates), contraindications, side effects, patient risk factors, procedural steps, and monitoring parameters whenever relevant
-2. **Emergency-ready responses**: If asked about acute situations (bronchospasm, hypotension, anaphylaxis, etc.), provide step-by-step management protocols with specific drugs and doses
-3. **Never defer to external literature**: NEVER say "you might want to look into more literature" or "consider consulting guidelines" - extract ALL relevant information from the provided papers and present it
-4. **Use numbered citations [1], [2], [3]**: Match the reference list exactly - NO author names in text
-5. **Include clinical context**: Mention patient populations studied, contraindications, relative vs absolute benefits, NNT/NNH when available
-6. **Be conversational but complete**: Natural tone like talking to a colleague, but don't sacrifice clinical detail for brevity
-7. **Risk stratification**: When relevant, discuss patient-specific risk factors, ASA classification implications, comorbidity considerations
-8. **HTML FORMATTING REQUIRED**: Use HTML tags for formatting:
-   - Use <h3>Section Header</h3> for major sections
-   - Use <strong>bold text</strong> for emphasis
-   - Use <br><br> for paragraph breaks (double line breaks between sections)
-   - Use <ul><li>item</li></ul> for bullet lists
-   - Use <p>paragraph text</p> for paragraphs
-   - Keep it well-structured and easy to scan
+INSTRUCTIONS:
+1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
+2. For acute situations, provide step-by-step protocols with drugs and doses
+3. Use numbered citations [1], [2] - NO author names in text
+4. Be conversational but clinically complete - like talking to a colleague
+5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 
-Example response for "What should I do for bronchospasm?":
+Example:
 "<h3>Acute Bronchospasm Management</h3>
+<p><strong>Immediate Actions:</strong><br>
+Deepen anesthesia with propofol 0.5-1 mg/kg or increase volatile to 2+ MAC [1]</p>
+<p><strong>Bronchodilators:</strong><br>
+Albuterol 4-8 puffs via ETT [2]</p>"
 
-<p>Here's the step-by-step approach [1][2]:</p>
-
-<p><strong>1. Immediate Actions:</strong><br>
-Deepen anesthesia with propofol 0.5-1 mg/kg bolus, or increase volatile to 2+ MAC [1]</p>
-
-<p><strong>2. Bronchodilators:</strong><br>
-Albuterol 4-8 puffs via ETT or 2.5mg nebulized [2]. Add ipratropium if severe [2]</p>
-
-<p><strong>3. Steroids:</strong><br>
-Methylprednisolone 1-2 mg/kg IV or hydrocortisone 100mg IV [1]</p>
-
-<p><strong>4. Epinephrine:</strong><br>
-If refractory - start with 10-20mcg IV boluses, titrate to effect. Consider infusion 0.01-0.05 mcg/kg/min [2][3]</p>
-
-<p><strong>5. Ketamine:</strong><br>
-0.5-1 mg/kg if resistant to above [3]</p>
-
-<h3>Risk Factors</h3>
-<p>Assess for: asthma history, recent URI, smoking, COPD [1]. Ensure adequate depth before any airway manipulation [2]</p>"
-
-Respond with maximum clinical utility using HTML formatting:"""
+Respond with maximum clinical utility:"""
 
             print(f"[DEBUG] Calling GPT with {num_papers} papers...")
             try:
