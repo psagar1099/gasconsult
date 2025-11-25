@@ -2156,7 +2156,14 @@ def index():
 
     if request.method == "POST":
         try:
-            raw_query = request.form["query"].strip()
+            # Safely get query from form data
+            raw_query = request.form.get("query", "").strip()
+
+            # If query is empty, redirect to GET
+            if not raw_query:
+                print(f"[DEBUG] Empty query received, redirecting to GET")
+                return redirect(url_for('index'))
+
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
             print(f"[DEBUG] Raw query: '{raw_query}'")
             print(f"[DEBUG] Session has {len(session['messages'])} messages before")
