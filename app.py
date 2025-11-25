@@ -257,9 +257,24 @@ PREOP_HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pre-Op Assessment — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
     <style>
+        :root {
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --secondary: #3B82F6;
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --background: #FFFFFF;
+            --background-secondary: #F9FAFB;
+            --border: #E5E7EB;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -267,8 +282,8 @@ PREOP_HTML = """
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
@@ -277,9 +292,9 @@ PREOP_HTML = """
 
         /* Navigation */
         nav {
-            background: #FAFBFC;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-            padding: 20px 40px;
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 18px 40px;
             position: sticky;
             top: 0;
             left: 0;
@@ -306,7 +321,7 @@ PREOP_HTML = """
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
         }
 
@@ -315,7 +330,7 @@ PREOP_HTML = """
         }
 
         .logo-symbol {
-            font-size: 28px;
+            font-size: 32px;
             color: #FF6B6B;
         }
 
@@ -331,22 +346,23 @@ PREOP_HTML = """
             font-size: 15px;
             font-weight: 500;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             transition: all 0.2s ease;
             background: transparent;
             cursor: pointer;
         }
 
         .nav-link:hover {
-            background: #FFFFFF;
-            color: #1F2937;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: #F3F4F6;
+            color: #374151;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #FFFFFF;
-            color: #1F2937;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: #EFF6FF;
+            color: #3B82F6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         /* Main Content */
@@ -811,9 +827,24 @@ HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>gasconsult.ai — Evidence-Based Anesthesiology</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
     <style>
+        :root {
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --secondary: #3B82F6;
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --background: #FFFFFF;
+            --background-secondary: #F9FAFB;
+            --border: #E5E7EB;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -821,8 +852,8 @@ HTML = """
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--background);
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
@@ -831,9 +862,9 @@ HTML = """
 
         /* Navigation */
         nav {
-            background: #FAFBFC;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-            padding: 20px 40px;
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 18px 40px;
             position: sticky;
             top: 0;
             left: 0;
@@ -860,7 +891,7 @@ HTML = """
             text-decoration: none;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             cursor: pointer;
         }
 
@@ -869,7 +900,7 @@ HTML = """
         }
 
         .logo-symbol {
-            font-size: 28px;
+            font-size: 32px;
             color: #FF6B6B;
         }
 
@@ -885,22 +916,23 @@ HTML = """
             font-size: 15px;
             font-weight: 500;
             padding: 10px 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             transition: all 0.2s ease;
             background: transparent;
             cursor: pointer;
         }
 
         .nav-link:hover {
-            background: #FFFFFF;
-            color: #1F2937;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: #F3F4F6;
+            color: #374151;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #FFFFFF;
-            color: #1F2937;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background: #EFF6FF;
+            color: #3B82F6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .new-chat-btn {
@@ -924,10 +956,8 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 100px 40px 60px;
-            text-align: center;
-            max-width: 1000px;
-            margin: 0 auto;
+            padding: 0;
+            margin: 0;
             animation: fadeIn 0.5s ease;
         }
 
@@ -936,50 +966,103 @@ HTML = """
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 120px 40px 80px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
         .welcome-screen .hero-logo {
             font-size: 5rem;
             margin-bottom: 24px;
-            color: #FF6B35;
+            color: white;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
         .welcome-screen .tagline {
-            font-size: 2rem;
-            color: #0A3D62;
-            margin-bottom: 50px;
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 20px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: -1px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Features Section */
+        .features-section {
+            background: var(--background-secondary);
+            padding: 100px 40px;
         }
 
         .welcome-screen .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .feature-card {
-            background: #E8F4FD;
-            border-radius: 12px;
-            padding: 32px 28px;
+            background: white;
+            border-radius: 10px;
+            padding: 40px 32px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: left;
         }
 
         .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
         }
 
         .feature-card h3 {
-            color: #0A3D62;
-            font-size: 1.15rem;
-            margin-bottom: 12px;
-            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            font-weight: 600;
         }
 
         .feature-card p {
-            color: #555;
-            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
             line-height: 1.6;
         }
 
@@ -1189,6 +1272,7 @@ HTML = """
             align-items: center;
             justify-content: center;
             padding: 0;
+            line-height: 1;
         }
 
         .send-btn:hover {
@@ -1248,16 +1332,33 @@ HTML = """
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 24px 60px;
+            }
+
             .welcome-screen .hero-logo {
                 font-size: 4rem;
             }
 
             .welcome-screen .tagline {
-                font-size: 1.5rem;
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .features-section {
+                padding: 60px 24px;
             }
 
             .welcome-screen .feature-grid {
                 grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .feature-card {
+                padding: 32px 24px;
             }
 
             .message-content {
@@ -1352,21 +1453,33 @@ HTML = """
         {% if not messages %}
         <!-- Welcome Screen -->
         <div class="welcome-screen">
-            <div class="hero-logo">⚕</div>
-            <p class="tagline">Strictly Evidence-Based Anesthesiology</p>
+            <!-- Hero Section -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-logo">⚕</div>
+                    <h1 class="tagline">Strictly Evidence-Based Anesthesiology</h1>
+                    <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research and GPT-4o. No hallucinations. Just evidence.</p>
+                </div>
+            </div>
 
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h3>📚 PubMed-Backed</h3>
-                    <p>Every answer sourced from peer-reviewed research and clinical guidelines</p>
-                </div>
-                <div class="feature-card">
-                    <h3>🧮 Medical Calculators</h3>
-                    <p>MABL, IBW, BSA, QTc, maintenance fluids, and more</p>
-                </div>
-                <div class="feature-card">
-                    <h3>💬 Conversational AI</h3>
-                    <p>Ask follow-ups, refine your questions, and explore topics naturally</p>
+            <!-- Features Section -->
+            <div class="features-section">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">📚</span>
+                        <h3>PubMed-Backed Answers</h3>
+                        <p>Every answer sourced from peer-reviewed research, systematic reviews, and clinical guidelines—with full citations you can verify.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🧮</span>
+                        <h3>Medical Calculators</h3>
+                        <p>Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💬</span>
+                        <h3>Conversational AI</h3>
+                        <p>Ask follow-up questions, refine your queries, and explore topics naturally—like talking to a colleague who knows the literature.</p>
+                    </div>
                 </div>
             </div>
         </div>
