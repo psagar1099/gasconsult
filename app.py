@@ -2067,7 +2067,7 @@ TERMS_HTML = """
             margin: 0 auto;
             display: flex;
             align-items: center;
-            gap: 30px;
+            justify-content: space-between;
         }
 
         .logo-text {
@@ -2078,6 +2078,23 @@ TERMS_HTML = """
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-symbol {
+            font-size: 32px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         .nav-link {
@@ -2178,9 +2195,14 @@ TERMS_HTML = """
 
     <nav>
         <div class="container">
-            <a href="/" class="logo-text">⚕ gasconsult.ai</a>
-            <a href="/" class="nav-link">Ask</a>
-            <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+            <a href="/" class="logo-text">
+                <span class="logo-symbol">⚕</span>
+                <span>gasconsult.ai</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Ask</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+            </div>
         </div>
     </nav>
 
