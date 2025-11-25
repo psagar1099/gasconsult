@@ -274,8 +274,8 @@ PREOP_HTML = """
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=4">
     <style>
         :root {
             --primary: #F97316;
@@ -1052,8 +1052,8 @@ HTML = """
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=3">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=3">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=4">
     <style>
         :root {
             --primary: #F97316;
@@ -2073,13 +2073,27 @@ HTML = """
         const form = document.querySelector('.chat-form');
         if (form) {
             form.addEventListener('submit', function(e) {
-                e.preventDefault();
-
                 const submitBtn = form.querySelector('.send-btn');
                 const textarea = form.querySelector('textarea');
                 const query = textarea.value.trim();
 
-                if (!query) return;
+                if (!query) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Check if we're on the homepage (no messages present)
+                const welcomeScreen = document.querySelector('.welcome-screen');
+                const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
+
+                // If on homepage, let form submit naturally to /chat (opens new page)
+                if (isHomepage) {
+                    // Don't prevent default - let it POST to /chat normally
+                    return;
+                }
+
+                // We're on /chat page - prevent default and use streaming
+                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -2280,7 +2294,8 @@ TERMS_HTML = """
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service - gasconsult.ai</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=4">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=4">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2753,7 +2768,7 @@ def chat():
             # If query is empty, redirect to GET
             if not raw_query:
                 print(f"[DEBUG] Empty query received, redirecting to GET")
-                return redirect(url_for('index'))
+                return redirect(url_for('chat'))
 
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
             print(f"[DEBUG] Raw query: '{raw_query}'")
@@ -2789,7 +2804,7 @@ def chat():
                 })
                 session.modified = True
                 print(f"[DEBUG] Redirecting after calculation")
-                return redirect(url_for('index'))
+                return redirect(url_for('chat'))
 
             query = clean_query(raw_query)
             print(f"[DEBUG] Cleaned query: '{query}'")
@@ -2918,7 +2933,7 @@ Answer as if you're a colleague continuing the conversation:"""
                     })
                     session.modified = True
                     print(f"[DEBUG] Error message added, redirecting")
-                    return redirect(url_for('index'))
+                    return redirect(url_for('chat'))
 
             print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
             handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
@@ -3029,7 +3044,7 @@ Respond with maximum clinical utility:"""
                 "num_papers": 0
             })
             session.modified = True
-            return redirect(url_for('index'))
+            return redirect(url_for('chat'))
 
     return render_template_string(HTML, messages=session.get('messages', []))
 
