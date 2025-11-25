@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string, session, redirect, url_for
+from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify
 from flask_session import Session
 from Bio import Entrez
 import openai
@@ -6,6 +6,8 @@ import os
 import re
 import secrets
 import tempfile
+import uuid
+import json
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
@@ -1374,6 +1376,53 @@ HTML = """
             font-weight: 600;
         }
 
+        /* Loading indicator styling */
+        .loading-indicator {
+            color: #0066CC;
+            font-weight: 500;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* References styling for streamed content */
+        .references {
+            margin-top: 24px;
+            padding-top: 18px;
+            border-top: 2px solid rgba(0, 102, 204, 0.15);
+        }
+
+        .references h4 {
+            color: #0066CC;
+            font-weight: 700;
+            margin-bottom: 14px;
+            font-size: 1.05rem;
+        }
+
+        .references ol {
+            margin-left: 20px;
+        }
+
+        .references li {
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .references a {
+            color: #0066CC;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .references a:hover {
+            color: #0052A3;
+            text-decoration: underline;
+        }
+
         /* Chat Input */
         .chat-input-container {
             background: #ffffff;
@@ -1802,7 +1851,7 @@ HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
         <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
@@ -1818,21 +1867,136 @@ HTML = """
             }
         });
 
-        // Enhanced form submission with smooth transitions
+        // Streaming form submission
         const form = document.querySelector('.chat-form');
         if (form) {
             form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
                 const submitBtn = form.querySelector('.send-btn');
                 const textarea = form.querySelector('textarea');
+                const query = textarea.value.trim();
 
-                // Disable to prevent double submission
+                if (!query) return;
+
+                // Disable inputs
                 submitBtn.disabled = true;
                 textarea.disabled = true;
-
-                // Add subtle visual feedback
                 submitBtn.style.opacity = '0.6';
-                submitBtn.style.transform = 'scale(0.95)';
+
+                // Add user message to UI
+                const messagesContainer = document.querySelector('.messages-container') || document.querySelector('.chat-container');
+                const userMsg = document.createElement('div');
+                userMsg.className = 'message user-message';
+                userMsg.innerHTML = `<div class="message-content"><p>${escapeHtml(query)}</p></div>`;
+                messagesContainer.appendChild(userMsg);
+
+                // Add loading indicator
+                const loadingMsg = document.createElement('div');
+                loadingMsg.className = 'message assistant-message';
+                loadingMsg.id = 'streaming-response';
+                loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching medical literature...</p></div>`;
+                messagesContainer.appendChild(loadingMsg);
+                loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+                // Clear textarea
+                textarea.value = '';
+                textarea.style.height = '52px';
+
+                // Make POST request to initiate streaming
+                const formData = new FormData();
+                formData.append('query', query);
+
+                fetch('/', {
+                    method: 'POST',
+                    credentials: 'same-origin',  // Important for session cookies
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ready') {
+                        // Update loading indicator
+                        const loadingIndicator = document.querySelector('.loading-indicator');
+                        if (loadingIndicator) {
+                            loadingIndicator.textContent = '✨ Generating response...';
+                        }
+
+                        // Connect to streaming endpoint
+                        const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
+                        const responseDiv = document.getElementById('streaming-response').querySelector('.message-content');
+                        let responseContent = '';
+
+                        eventSource.addEventListener('message', function(e) {
+                            const event = JSON.parse(e.data);
+
+                            if (event.type === 'connected') {
+                                console.log('[STREAM] Connected');
+                            } else if (event.type === 'content') {
+                                // Remove loading indicator on first content
+                                if (responseContent === '') {
+                                    responseDiv.innerHTML = '';
+                                }
+                                responseContent += event.data;
+                                responseDiv.innerHTML = responseContent;
+                                // Auto-scroll
+                                responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                            } else if (event.type === 'references') {
+                                // Add references
+                                if (event.num_papers > 0) {
+                                    let refsHtml = `<div class="references"><h4>📚 References (${event.num_papers} papers)</h4><ol>`;
+                                    event.data.forEach(ref => {
+                                        refsHtml += `<li><strong>${ref.title}</strong><br>${ref.authors} - ${ref.journal} (${ref.year})<br>PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">${ref.pmid}</a></li>`;
+                                    });
+                                    refsHtml += '</ol></div>';
+                                    responseDiv.innerHTML += refsHtml;
+                                }
+                            } else if (event.type === 'done') {
+                                console.log('[STREAM] Complete');
+                                eventSource.close();
+                                // Re-enable form
+                                submitBtn.disabled = false;
+                                textarea.disabled = false;
+                                submitBtn.style.opacity = '1';
+                                textarea.focus();
+                                // Reload page to update session state
+                                setTimeout(() => window.location.reload(), 500);
+                            } else if (event.type === 'error') {
+                                console.error('[STREAM] Error:', event.message);
+                                responseDiv.innerHTML = `<p><strong>Error:</strong> ${event.message}</p>`;
+                                eventSource.close();
+                                submitBtn.disabled = false;
+                                textarea.disabled = false;
+                                submitBtn.style.opacity = '1';
+                            }
+                        });
+
+                        eventSource.onerror = function(err) {
+                            console.error('[STREAM] Connection error:', err);
+                            eventSource.close();
+                            submitBtn.disabled = false;
+                            textarea.disabled = false;
+                            submitBtn.style.opacity = '1';
+                        };
+                    }
+                })
+                .catch(error => {
+                    console.error('[POST] Error:', error);
+                    const loadingMsg = document.getElementById('streaming-response');
+                    if (loadingMsg) {
+                        loadingMsg.querySelector('.message-content').innerHTML = '<p><strong>Error:</strong> Failed to start query. Please try again.</p>';
+                    }
+                    submitBtn.disabled = false;
+                    textarea.disabled = false;
+                    submitBtn.style.opacity = '1';
+                });
             });
+        }
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // Auto-resize textarea smoothly
@@ -1903,7 +2067,7 @@ TERMS_HTML = """
             margin: 0 auto;
             display: flex;
             align-items: center;
-            gap: 30px;
+            justify-content: space-between;
         }
 
         .logo-text {
@@ -1914,6 +2078,23 @@ TERMS_HTML = """
             -webkit-text-fill-color: transparent;
             background-clip: text;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-symbol {
+            font-size: 32px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
         }
 
         .nav-link {
@@ -2014,9 +2195,14 @@ TERMS_HTML = """
 
     <nav>
         <div class="container">
-            <a href="/" class="logo-text">⚕ gasconsult.ai</a>
-            <a href="/" class="nav-link">Ask</a>
-            <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+            <a href="/" class="logo-text">
+                <span class="logo-symbol">⚕</span>
+                <span>gasconsult.ai</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Ask</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+            </div>
         </div>
     </nav>
 
@@ -2147,6 +2333,70 @@ TERMS_HTML = """
 </body>
 </html>
 """
+
+@app.route("/stream")
+def stream():
+    """Server-Sent Events endpoint for streaming GPT responses"""
+    request_id = request.args.get('request_id')
+
+    if not request_id or f'stream_data_{request_id}' not in session:
+        return Response("error: Invalid request\n\n", mimetype='text/event-stream')
+
+    # Get prepared data from session
+    stream_data = session[f'stream_data_{request_id}']
+    prompt = stream_data['prompt']
+    refs = stream_data['refs']
+    num_papers = stream_data['num_papers']
+    raw_query = stream_data['raw_query']
+
+    def generate():
+        try:
+            # Send initial event to confirm connection
+            yield f"data: {json.dumps({'type': 'connected'})}\n\n"
+
+            # Use temperature 0.2 for follow-ups without papers, 0.1 for evidence-based responses
+            temperature = 0.2 if num_papers == 0 else 0.1
+
+            # Stream GPT response
+            stream_response = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature,
+                stream=True
+            )
+
+            full_response = ""
+            for chunk in stream_response:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    full_response += content
+                    # Send content chunk
+                    yield f"data: {json.dumps({'type': 'content', 'data': content})}\n\n"
+
+            # Save complete response to session
+            session['messages'].append({
+                "role": "assistant",
+                "content": full_response,
+                "references": refs,
+                "num_papers": num_papers
+            })
+            session.modified = True
+
+            # Send references
+            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers})}\n\n"
+
+            # Send completion event
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+            # Clean up stream data from session
+            session.pop(f'stream_data_{request_id}', None)
+            session.modified = True
+
+        except Exception as e:
+            print(f"[ERROR] Streaming failed: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -2296,32 +2546,26 @@ Provide a comprehensive, evidence-based answer that:
 
 Answer as if you're a colleague continuing the conversation:"""
 
-                    try:
-                        print(f"[DEBUG] Calling GPT for follow-up...")
-                        response = openai_client.chat.completions.create(
-                            model="gpt-4o",
-                            messages=[{"role": "user", "content": prompt}],
-                            temperature=0.2
-                        ).choices[0].message.content
+                    print(f"[DEBUG] Preparing streaming for follow-up...")
 
-                        if not response or len(response.strip()) < 10:
-                            response = "<p>I apologize, but I'm having trouble generating a response. Could you rephrase your question?</p>"
+                    # Generate unique request ID for this streaming session
+                    request_id = str(uuid.uuid4())
 
-                        print(f"[DEBUG] GPT response generated ({len(response)} chars)")
-
-                    except Exception as e:
-                        print(f"[ERROR] GPT failed: {e}")
-                        response = f"<p>Error: Unable to generate response. Please try rephrasing your question.</p>"
-
-                    session['messages'].append({
-                        "role": "assistant",
-                        "content": response,
-                        "references": [],
-                        "num_papers": 0
-                    })
+                    # Store data in session for streaming endpoint
+                    session[f'stream_data_{request_id}'] = {
+                        'prompt': prompt,
+                        'refs': [],
+                        'num_papers': 0,
+                        'raw_query': raw_query
+                    }
                     session.modified = True
-                    print(f"[DEBUG] Follow-up response added, redirecting")
-                    return redirect(url_for('index'))
+
+                    print(f"[DEBUG] Stream data prepared for follow-up, returning request_id: {request_id}")
+                    return jsonify({
+                        'status': 'ready',
+                        'request_id': request_id,
+                        'raw_query': raw_query
+                    })
                 else:
                     print(f"[DEBUG] No results for initial query")
                     error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
@@ -2409,29 +2653,26 @@ Albuterol 4-8 puffs via ETT [2]</p>"
 
 Respond with maximum clinical utility:"""
 
-            print(f"[DEBUG] Calling GPT with {num_papers} papers...")
-            try:
-                response = openai_client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=0.1
-                ).choices[0].message.content
-                print(f"[DEBUG] GPT response generated ({len(response)} chars)")
-            except Exception as e:
-                print(f"[ERROR] GPT failed: {e}")
-                response = f"<p>AI error: {str(e)}</p>"
+            print(f"[DEBUG] Preparing streaming with {num_papers} papers...")
 
-            # Add assistant response to conversation
-            session['messages'].append({
-                "role": "assistant",
-                "content": response,
-                "references": refs,
-                "num_papers": num_papers
-            })
+            # Generate unique request ID for this streaming session
+            request_id = str(uuid.uuid4())
+
+            # Store data in session for streaming endpoint
+            session[f'stream_data_{request_id}'] = {
+                'prompt': prompt,
+                'refs': refs,
+                'num_papers': num_papers,
+                'raw_query': raw_query
+            }
             session.modified = True
-            print(f"[DEBUG] Response added to session, total messages: {len(session['messages'])}")
-            print(f"[DEBUG] Redirecting...")
-            return redirect(url_for('index'))
+
+            print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
+            return jsonify({
+                'status': 'ready',
+                'request_id': request_id,
+                'raw_query': raw_query
+            })
 
         except Exception as e:
             # Catch all unhandled errors
