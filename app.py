@@ -992,7 +992,6 @@ PREOP_HTML = """
 
     <footer>
         <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
-        <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
     <script>
@@ -1914,7 +1913,10 @@ HTML = """
             <!-- Hero Section -->
             <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
-            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
+                <a href="/chat" class="preop-cta" style="background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);">Start Chat →</a>
+                <a href="/preop" class="preop-cta">Pre-Op Assessment →</a>
+            </div>
 
             <!-- Features Section -->
             <div class="features-section">
@@ -2007,19 +2009,18 @@ HTML = """
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Chat Input - Always Visible -->
-        <div class="chat-input-container">
-            <form method="post" action="/" class="chat-form">
-                <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
-                <button type="submit" class="send-btn">↑</button>
-            </form>
-        </div>
+    <!-- Chat Input - Only on chat page -->
+    <div class="chat-input-container" style="{% if not messages %}display: none;{% endif %}">
+        <form method="post" action="/chat" class="chat-form">
+            <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
+            <button type="submit" class="send-btn">↑</button>
+        </form>
     </div>
 
     <footer>
         <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
-        <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
     <script>
@@ -2051,12 +2052,8 @@ HTML = """
                 textarea.disabled = true;
                 submitBtn.style.opacity = '0.6';
 
-                // Hide welcome screen and show chat container
-                const welcomeScreen = document.querySelector('.welcome-screen');
+                // Show chat container
                 const chatContainer = document.querySelector('.chat-container');
-                if (welcomeScreen) {
-                    welcomeScreen.style.display = 'none';
-                }
                 if (chatContainer) {
                     chatContainer.style.display = 'block';
                 }
@@ -2092,7 +2089,7 @@ HTML = """
                 const formData = new FormData();
                 formData.append('query', query);
 
-                fetch('/', {
+                fetch('/chat', {
                     method: 'POST',
                     credentials: 'same-origin',  // Important for session cookies
                     body: formData
@@ -2157,8 +2154,7 @@ HTML = """
                                 textarea.disabled = false;
                                 submitBtn.style.opacity = '1';
                                 textarea.focus();
-                                // Reload page to update session state
-                                setTimeout(() => window.location.reload(), 500);
+                                // Session already updated on server, no reload needed
                             } else if (event.type === 'error') {
                                 console.error('[STREAM] Error:', event.message);
                                 responseDiv.innerHTML = `<p><strong>Error:</strong> ${event.message}</p>`;
@@ -2684,8 +2680,14 @@ def stream():
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def index():
+    """Homepage - welcome screen only"""
+    return render_template_string(HTML, messages=[])
+
+@app.route("/chat", methods=["GET", "POST"])
+def chat():
+    """Chat interface with conversation history"""
     # Initialize conversation history in session
     if 'messages' not in session:
         session['messages'] = []
@@ -2980,9 +2982,9 @@ Respond with maximum clinical utility:"""
 
 @app.route("/clear")
 def clear():
-    """Clear conversation history"""
+    """Clear conversation history and start new chat"""
     session.pop('messages', None)
-    return redirect(url_for('index'))
+    return redirect(url_for('chat'))
 
 @app.route("/terms")
 def terms():
