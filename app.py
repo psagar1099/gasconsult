@@ -1,12 +1,21 @@
 from flask import Flask, request, render_template_string, session, redirect, url_for
+from flask_session import Session
 from Bio import Entrez
 import openai
 import os
 import re
 import secrets
+import tempfile
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
+
+# Configure server-side sessions (stores sessions in filesystem instead of cookies)
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+Session(app)
 
 Entrez.email = "psagar1099@gmail.com"
 Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
