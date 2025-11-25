@@ -346,12 +346,10 @@ PREOP_HTML = """
             transform: scale(1.02);
         }
 
-        .logo-symbol {
-            font-size: 32px;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
         }
 
         .nav-actions {
@@ -689,8 +687,9 @@ PREOP_HTML = """
                 font-size: 1.2rem;
             }
 
-            .logo-symbol {
-                font-size: 26px;
+            .logo-svg {
+                width: 28px;
+                height: 28px;
             }
 
             .nav-actions {
@@ -764,7 +763,27 @@ PREOP_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-text">
-                <span class="logo-symbol">⚕</span>
+                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                  <defs>
+                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#0066CC"/>
+                      <stop offset="100%" stop-color="#004499"/>
+                    </linearGradient>
+                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#E0E0E0"/>
+                      <stop offset="30%" stop-color="#FFFFFF"/>
+                      <stop offset="70%" stop-color="#FFFFFF"/>
+                      <stop offset="100%" stop-color="#C0C0C0"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
+                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
+                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
+                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
+                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
+                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
+                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
+                </svg>
                 <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
@@ -1105,12 +1124,10 @@ HTML = """
             transform: scale(1.02);
         }
 
-        .logo-symbol {
-            font-size: 32px;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
         }
 
         .nav-actions {
@@ -1893,7 +1910,27 @@ HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-text">
-                <span class="logo-symbol">⚕</span>
+                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                  <defs>
+                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#0066CC"/>
+                      <stop offset="100%" stop-color="#004499"/>
+                    </linearGradient>
+                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#E0E0E0"/>
+                      <stop offset="30%" stop-color="#FFFFFF"/>
+                      <stop offset="70%" stop-color="#FFFFFF"/>
+                      <stop offset="100%" stop-color="#C0C0C0"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
+                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
+                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
+                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
+                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
+                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
+                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
+                </svg>
                 <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
@@ -1913,10 +1950,7 @@ HTML = """
             <!-- Hero Section -->
             <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
-            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
-                <a href="/chat" class="preop-cta" style="background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);">Start Chat →</a>
-                <a href="/preop" class="preop-cta">Pre-Op Assessment →</a>
-            </div>
+            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
 
             <!-- Features Section -->
             <div class="features-section">
@@ -2011,8 +2045,8 @@ HTML = """
         </div>
     </div>
 
-    <!-- Chat Input - Only on chat page -->
-    <div class="chat-input-container" style="{% if not messages %}display: none;{% endif %}">
+    <!-- Chat Input - Always Visible -->
+    <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
@@ -2309,12 +2343,10 @@ TERMS_HTML = """
             gap: 8px;
         }
 
-        .logo-symbol {
-            font-size: 32px;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
         }
 
         .nav-actions {
@@ -2437,8 +2469,9 @@ TERMS_HTML = """
                 font-size: 1.2rem;
             }
 
-            .logo-symbol {
-                font-size: 26px;
+            .logo-svg {
+                width: 28px;
+                height: 28px;
             }
 
             .nav-actions {
@@ -2478,7 +2511,27 @@ TERMS_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-text">
-                <span class="logo-symbol">⚕</span>
+                <svg class="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="32" height="32">
+                  <defs>
+                    <linearGradient id="corpBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#0066CC"/>
+                      <stop offset="100%" stop-color="#004499"/>
+                    </linearGradient>
+                    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#E0E0E0"/>
+                      <stop offset="30%" stop-color="#FFFFFF"/>
+                      <stop offset="70%" stop-color="#FFFFFF"/>
+                      <stop offset="100%" stop-color="#C0C0C0"/>
+                    </linearGradient>
+                  </defs>
+                  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#corpBlue)"/>
+                  <rect x="24" y="9" width="16" height="4" rx="2" fill="url(#steel)"/>
+                  <rect x="29" y="13" width="6" height="8" fill="url(#steel)"/>
+                  <rect x="23" y="20" width="18" height="26" rx="3" fill="url(#steel)"/>
+                  <rect x="26" y="30" width="12" height="13" rx="1" fill="#FF9500"/>
+                  <rect x="30" y="46" width="4" height="4" fill="#E0E0E0"/>
+                  <path d="M30 50 L30 56 L32 60 L34 56 L34 50 Z" fill="#C0C0C0"/>
+                </svg>
                 <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
