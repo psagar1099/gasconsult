@@ -1691,8 +1691,22 @@ def index():
 
         query = clean_query(raw_query)  # Strip conversational filler
 
+        # IMPROVED FOLLOW-UP HANDLING: Detect and enrich short follow-up questions
+        is_followup = len(session['messages']) > 2 and len(query.split()) <= 5
+        enriched_query = query
+
+        if is_followup and len(session['messages']) >= 2:
+            # Get context from previous user question
+            prev_user_msgs = [msg['content'] for msg in session['messages'][-6:] if msg['role'] == 'user']
+            if len(prev_user_msgs) >= 2:
+                # Combine previous context with current query
+                previous_topic = prev_user_msgs[-2]
+                # Extract key medical terms from previous question
+                medical_context = ' '.join([word for word in previous_topic.split() if len(word) > 3])
+                enriched_query = f"{query} {medical_context}"
+
         # Expand synonyms and medical abbreviations
-        q = query.lower()
+        q = enriched_query.lower()
         q = q.replace(" versus ", " OR ")
         q = q.replace(" vs ", " OR ")
         q = q.replace(" vs. ", " OR ")
@@ -1707,13 +1721,26 @@ def index():
         q = q.replace("ponv", 'PONV OR "postoperative nausea"')
         q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
         q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
+        q = q.replace("barbiturates", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+        q = q.replace("barbs", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+        q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
+        q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
 
-        search_term = (
-            f'({q}) AND '
-            f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-            f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-            f'("2015/01/01"[PDAT] : "3000"[PDAT])'
-        )
+        # Use broader search for follow-up questions
+        if is_followup:
+            search_term = (
+                f'({q}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                f'"Cochrane Database Syst Rev"[ta] OR guideline[pt] OR "clinical trial"[pt]) AND '
+                f'("2010/01/01"[PDAT] : "3000"[PDAT])'
+            )
+        else:
+            search_term = (
+                f'({q}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            )
 
         # Try anesthesiology-specific high-quality evidence first
         handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
@@ -1740,8 +1767,52 @@ def index():
             result = Entrez.read(handle)
             ids = result["IdList"]
 
-        if not ids:
-            error_msg = "<p>No relevant evidence found. Try rephrasing your question or using different medical terms.</p>"
+        # If no papers found, still allow GPT to answer using conversation context for follow-ups
+        if not ids and is_followup:
+            # For follow-ups with no new papers, use GPT with conversation context only
+            conversation_context = ""
+            recent_messages = session['messages'][-10:]
+            for msg in recent_messages:
+                if msg['role'] == 'user':
+                    conversation_context += f"User: {msg['content']}\n"
+                else:
+                    content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                    conversation_context += f"Assistant: {content_text[:300]}...\n"
+
+            prompt = f"""You are a clinical expert anesthesiologist AI assistant. Based on the conversation context below, answer the follow-up question using your clinical knowledge and the information already discussed.
+
+Previous conversation:
+{conversation_context}
+
+Current follow-up question: {raw_query}
+
+Provide a comprehensive answer that:
+1. Relates to the previous discussion
+2. Includes specific clinical information (dosages, indications, contraindications)
+3. Uses HTML formatting (<h3>, <p>, <strong>, <ul><li>)
+4. Note that you're drawing from general clinical knowledge since no new specific papers were found for this follow-up
+
+Answer naturally as if continuing the conversation with a colleague:"""
+
+            try:
+                response = openai_client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.2
+                ).choices[0].message.content
+            except Exception as e:
+                response = f"<p>Error generating response: {str(e)}</p>"
+
+            session['messages'].append({
+                "role": "assistant",
+                "content": response,
+                "references": [],
+                "num_papers": 0
+            })
+            session.modified = True
+            return redirect(url_for('index'))
+        elif not ids:
+            error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
             session['messages'].append({
                 "role": "assistant",
                 "content": error_msg,
@@ -1795,6 +1866,7 @@ Previous conversation:
 {conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
 
 Current question: {raw_query}
+{'NOTE: This is a FOLLOW-UP question - reference the previous discussion naturally and build on it.' if is_followup else ''}
 
 Available research papers (use ONLY numbered citations like [1], [2], etc.):
 {ref_list}
