@@ -1671,122 +1671,138 @@ def index():
         session['messages'] = []
 
     if request.method == "POST":
-        raw_query = request.form["query"].strip()
-
-        # Add user message to conversation
-        session['messages'].append({"role": "user", "content": raw_query})
-        session.modified = True
-
-        # Check if this is a calculation request
-        # Look at previous messages for context
-        context_hint = None
-        if len(session['messages']) >= 3:
-            # Check last few messages for calculator keywords
-            last_msgs = session['messages'][-4:]
-            for msg in last_msgs:
-                content = msg.get('content', '').lower()
-                if any(term in content for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid', 'ideal body weight', 'body surface']):
-                    # Extract the calculator type
-                    for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid']:
-                        if term in content:
-                            context_hint = term
-                            break
-                    break
-
-        calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
-
-        if calc_result:
-            # Add calculation result to conversation
-            session['messages'].append({
-                "role": "assistant",
-                "content": calc_result,
-                "references": [],
-                "num_papers": 0
-            })
-            session.modified = True
-            return redirect(url_for('index'))
-
-        query = clean_query(raw_query)  # Strip conversational filler
-
-        # IMPROVED FOLLOW-UP HANDLING: Detect follow-up questions
-        # A follow-up is any question after the first exchange
-        is_followup = len(session['messages']) >= 3  # At least one prior Q&A pair exists
-
-        # Expand synonyms and medical abbreviations
-        q = query.lower()
-        q = q.replace(" versus ", " OR ")
-        q = q.replace(" vs ", " OR ")
-        q = q.replace(" vs. ", " OR ")
-        q = q.replace(" over ", " OR ")
-        q = q.replace(" compared to ", " OR ")
-        q = q.replace(" compared with ", " OR ")
-        q = q.replace("txa", '"tranexamic acid" OR TXA')
-        q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
-        q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
-        q = q.replace("peds", 'pediatric OR children OR peds')
-        q = q.replace("pediatric", 'pediatric OR children OR peds')
-        q = q.replace("ponv", 'PONV OR "postoperative nausea"')
-        q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
-        q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
-        q = q.replace("barbiturates", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
-        q = q.replace("barbs", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
-        q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
-        q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
-
-        # Use broader search for follow-up questions - more likely to find results
-        if is_followup:
-            # For follow-ups, be very broad - include clinical trials and go back to 2005
-            search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
-        else:
-            # For initial questions, use high-quality evidence filters
-            search_term = (
-                f'({q}) AND '
-                f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-                f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
-            )
-
-        # Try anesthesiology-specific search first
         try:
-            handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
-            result = Entrez.read(handle)
-            ids = result["IdList"]
-        except Exception as e:
-            ids = []
+            raw_query = request.form["query"].strip()
+            print(f"\n[DEBUG] ===== NEW REQUEST =====")
+            print(f"[DEBUG] Raw query: '{raw_query}'")
+            print(f"[DEBUG] Session has {len(session['messages'])} messages before")
 
-        # Fallback 1: Try without anesthesiology restriction
-        if not ids:
-            try:
-                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
-                result = Entrez.read(handle)
-                ids = result["IdList"]
-            except:
-                ids = []
+            # Add user message to conversation
+            session['messages'].append({"role": "user", "content": raw_query})
+            session.modified = True
+            print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
 
-        # Fallback 2: For initial queries, drop publication type restrictions
-        if not ids and not is_followup:
-            try:
-                broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
-                handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
-                result = Entrez.read(handle)
-                ids = result["IdList"]
-            except:
-                ids = []
+            # Check if this is a calculation request
+            context_hint = None
+            if len(session['messages']) >= 3:
+                last_msgs = session['messages'][-4:]
+                for msg in last_msgs:
+                    content = msg.get('content', '').lower()
+                    if any(term in content for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid', 'ideal body weight', 'body surface']):
+                        for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid']:
+                            if term in content:
+                                context_hint = term
+                                break
+                        break
 
-        # If no papers found, handle gracefully
-        if not ids:
+            calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
+
+            if calc_result:
+                print(f"[DEBUG] Calculator result generated")
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": calc_result,
+                    "references": [],
+                    "num_papers": 0
+                })
+                session.modified = True
+                print(f"[DEBUG] Redirecting after calculation")
+                return redirect(url_for('index'))
+
+            query = clean_query(raw_query)
+            print(f"[DEBUG] Cleaned query: '{query}'")
+
+            is_followup = len(session['messages']) >= 3
+            print(f"[DEBUG] Is follow-up: {is_followup}")
+
+            # Expand synonyms and medical abbreviations
+            q = query.lower()
+            q = q.replace(" versus ", " OR ")
+            q = q.replace(" vs ", " OR ")
+            q = q.replace(" vs. ", " OR ")
+            q = q.replace(" over ", " OR ")
+            q = q.replace(" compared to ", " OR ")
+            q = q.replace(" compared with ", " OR ")
+            q = q.replace("txa", '"tranexamic acid" OR TXA')
+            q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
+            q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
+            q = q.replace("peds", 'pediatric OR children OR peds')
+            q = q.replace("pediatric", 'pediatric OR children OR peds')
+            q = q.replace("ponv", 'PONV OR "postoperative nausea"')
+            q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
+            q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
+            q = q.replace("barbiturates", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+            q = q.replace("barbs", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+            q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
+            q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
+
+            print(f"[DEBUG] Expanded query: '{q}'")
+
+            # Use broader search for follow-up questions
             if is_followup:
-                # For follow-ups with no new papers, use GPT with conversation context only
-                conversation_context = ""
-                recent_messages = session['messages'][-8:]  # Last 4 Q&A pairs
-                for msg in recent_messages:
-                    if msg['role'] == 'user':
-                        conversation_context += f"User: {msg['content']}\n"
-                    else:
-                        content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
-                        conversation_context += f"Assistant: {content_text[:400]}\n"
+                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
+            else:
+                search_term = (
+                    f'({q}) AND '
+                    f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                    f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                )
 
-                prompt = f"""You are a clinical expert anesthesiologist AI assistant. The user is asking a follow-up question based on the conversation below.
+            print(f"[DEBUG] Search term: '{search_term[:100]}...'")
+
+            # Try anesthesiology-specific search first
+            ids = []
+            try:
+                print(f"[DEBUG] Searching PubMed (anesthesiology)...")
+                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=15, sort="relevance", api_key=Entrez.api_key)
+                result = Entrez.read(handle)
+                ids = result.get("IdList", [])
+                print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
+            except Exception as e:
+                print(f"[ERROR] PubMed search failed (anesthesiology): {e}")
+                ids = []
+
+            # Fallback 1: Try without anesthesiology restriction
+            if not ids:
+                try:
+                    print(f"[DEBUG] Searching PubMed (general)...")
+                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=15, sort="relevance", api_key=Entrez.api_key)
+                    result = Entrez.read(handle)
+                    ids = result.get("IdList", [])
+                    print(f"[DEBUG] Found {len(ids)} papers (general)")
+                except Exception as e:
+                    print(f"[ERROR] PubMed search failed (general): {e}")
+                    ids = []
+
+            # Fallback 2: For initial queries, drop publication type restrictions
+            if not ids and not is_followup:
+                try:
+                    print(f"[DEBUG] Searching PubMed (broader)...")
+                    broader_search = f'({q}) AND ("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    handle = Entrez.esearch(db="pubmed", term=broader_search, retmax=15, sort="relevance", api_key=Entrez.api_key)
+                    result = Entrez.read(handle)
+                    ids = result.get("IdList", [])
+                    print(f"[DEBUG] Found {len(ids)} papers (broader)")
+                except Exception as e:
+                    print(f"[ERROR] PubMed search failed (broader): {e}")
+                    ids = []
+
+            # If no papers found, handle gracefully
+            if not ids:
+                print(f"[DEBUG] No papers found")
+                if is_followup:
+                    print(f"[DEBUG] Generating follow-up response without papers")
+                    conversation_context = ""
+                    recent_messages = session['messages'][-8:]
+                    for msg in recent_messages:
+                        if msg['role'] == 'user':
+                            conversation_context += f"User: {msg['content']}\n"
+                        else:
+                            content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                            conversation_context += f"Assistant: {content_text[:400]}\n"
+
+                    prompt = f"""You are a clinical expert anesthesiologist AI assistant. The user is asking a follow-up question based on the conversation below.
 
 Previous conversation:
 {conversation_context}
@@ -1802,78 +1818,87 @@ Provide a comprehensive, evidence-based answer that:
 
 Answer as if you're a colleague continuing the conversation:"""
 
+                    try:
+                        print(f"[DEBUG] Calling GPT for follow-up...")
+                        response = openai_client.chat.completions.create(
+                            model="gpt-4o",
+                            messages=[{"role": "user", "content": prompt}],
+                            temperature=0.2
+                        ).choices[0].message.content
+
+                        if not response or len(response.strip()) < 10:
+                            response = "<p>I apologize, but I'm having trouble generating a response. Could you rephrase your question?</p>"
+
+                        print(f"[DEBUG] GPT response generated ({len(response)} chars)")
+
+                    except Exception as e:
+                        print(f"[ERROR] GPT failed: {e}")
+                        response = f"<p>Error: Unable to generate response. Please try rephrasing your question.</p>"
+
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": response,
+                        "references": [],
+                        "num_papers": 0
+                    })
+                    session.modified = True
+                    print(f"[DEBUG] Follow-up response added, redirecting")
+                    return redirect(url_for('index'))
+                else:
+                    print(f"[DEBUG] No results for initial query")
+                    error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": error_msg,
+                        "references": [],
+                        "num_papers": 0
+                    })
+                    session.modified = True
+                    print(f"[DEBUG] Error message added, redirecting")
+                    return redirect(url_for('index'))
+
+            print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
+            handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
+            papers = Entrez.read(handle)["PubmedArticle"]
+            print(f"[DEBUG] Papers fetched successfully")
+
+            refs = []
+            context = ""
+            for p in papers[:12]:
                 try:
-                    response = openai_client.chat.completions.create(
-                        model="gpt-4o",
-                        messages=[{"role": "user", "content": prompt}],
-                        temperature=0.2
-                    ).choices[0].message.content
+                    art = p["MedlineCitation"]["Article"]
+                    title = art.get("ArticleTitle", "No title")
+                    abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                    authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:5]])
+                    journal = art["Journal"].get("Title", "Unknown")
+                    year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
+                    pmid = p["MedlineCitation"]["PMID"]
 
-                    if not response or len(response.strip()) < 10:
-                        response = "<p>I apologize, but I'm having trouble generating a response. Could you rephrase your question?</p>"
+                    refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                    context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                except:
+                    continue
 
-                except Exception as e:
-                    response = f"<p>Error: Unable to generate response. Please try rephrasing your question.</p>"
+            num_papers = len(refs)
+            print(f"[DEBUG] Processed {num_papers} paper references")
 
-                session['messages'].append({
-                    "role": "assistant",
-                    "content": response,
-                    "references": [],
-                    "num_papers": 0
-                })
-                session.modified = True
-                return redirect(url_for('index'))
-            else:
-                # For initial queries with no results
-                error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
-                session['messages'].append({
-                    "role": "assistant",
-                    "content": error_msg,
-                    "references": [],
-                    "num_papers": 0
-                })
-                session.modified = True
-                return redirect(url_for('index'))
+            # Build conversation context for GPT (last 10 messages)
+            conversation_context = ""
+            recent_messages = session['messages'][-10:]
+            for msg in recent_messages:
+                if msg['role'] == 'user':
+                    conversation_context += f"User: {msg['content']}\n"
+                else:
+                    # Strip HTML for cleaner context
+                    content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                    conversation_context += f"Assistant: {content_text[:200]}...\n"
 
-        handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
-        papers = Entrez.read(handle)["PubmedArticle"]
+            # Create numbered reference list for citation
+            ref_list = ""
+            for i, ref in enumerate(refs, 1):
+                ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
 
-        refs = []
-        context = ""
-        for p in papers[:12]:
-            try:
-                art = p["MedlineCitation"]["Article"]
-                title = art.get("ArticleTitle", "No title")
-                abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:5]])
-                journal = art["Journal"].get("Title", "Unknown")
-                year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
-                pmid = p["MedlineCitation"]["PMID"]
-
-                refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
-                context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
-            except:
-                continue
-
-        num_papers = len(refs)
-
-        # Build conversation context for GPT (last 10 messages)
-        conversation_context = ""
-        recent_messages = session['messages'][-10:]
-        for msg in recent_messages:
-            if msg['role'] == 'user':
-                conversation_context += f"User: {msg['content']}\n"
-            else:
-                # Strip HTML for cleaner context
-                content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
-                conversation_context += f"Assistant: {content_text[:200]}...\n"
-
-        # Create numbered reference list for citation
-        ref_list = ""
-        for i, ref in enumerate(refs, 1):
-            ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
-
-        prompt = f"""You are a clinical expert anesthesiologist AI assistant designed for real-time decision support. Your responses must be immediately actionable and clinically complete.
+            prompt = f"""You are a clinical expert anesthesiologist AI assistant designed for real-time decision support. Your responses must be immediately actionable and clinically complete.
 
 Previous conversation:
 {conversation_context if len(session['messages']) > 1 else "This is the start of the conversation."}
@@ -1928,25 +1953,45 @@ If refractory - start with 10-20mcg IV boluses, titrate to effect. Consider infu
 
 Respond with maximum clinical utility using HTML formatting:"""
 
-        try:
-            response = openai_client.chat.completions.create(
-                model="gpt-4o",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.1
-            ).choices[0].message.content
+            print(f"[DEBUG] Calling GPT with {num_papers} papers...")
+            try:
+                response = openai_client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.1
+                ).choices[0].message.content
+                print(f"[DEBUG] GPT response generated ({len(response)} chars)")
+            except Exception as e:
+                print(f"[ERROR] GPT failed: {e}")
+                response = f"<p>AI error: {str(e)}</p>"
+
+            # Add assistant response to conversation
+            session['messages'].append({
+                "role": "assistant",
+                "content": response,
+                "references": refs,
+                "num_papers": num_papers
+            })
+            session.modified = True
+            print(f"[DEBUG] Response added to session, total messages: {len(session['messages'])}")
+            print(f"[DEBUG] Redirecting...")
+            return redirect(url_for('index'))
+
         except Exception as e:
-            response = f"AI error: {str(e)}"
+            # Catch all unhandled errors
+            print(f"\n[ERROR] ===== UNHANDLED EXCEPTION =====")
+            print(f"[ERROR] {type(e).__name__}: {e}")
+            import traceback
+            traceback.print_exc()
 
-        # Add assistant response to conversation
-        session['messages'].append({
-            "role": "assistant",
-            "content": response,
-            "references": refs,
-            "num_papers": num_papers
-        })
-        session.modified = True
-
-        return redirect(url_for('index'))
+            session['messages'].append({
+                "role": "assistant",
+                "content": f"<p><strong>Error:</strong> {str(e)}</p><p>Please try rephrasing your question or start a new conversation.</p>",
+                "references": [],
+                "num_papers": 0
+            })
+            session.modified = True
+            return redirect(url_for('index'))
 
     return render_template_string(HTML, messages=session.get('messages', []))
 
