@@ -1314,6 +1314,44 @@ HTML = """
             color: #1F2937;
             border: 1px solid rgba(0, 102, 204, 0.1);
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        /* Copy button */
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            color: #4B5563;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: white;
+            border-color: #0066CC;
+            color: #0066CC;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+        }
+
+        .copy-btn.copied {
+            color: #10B981;
+            border-color: #10B981;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
         }
 
         .message-text h3 {
@@ -1810,6 +1848,13 @@ HTML = """
                             {% if msg.role == 'user' %}
                                 <div class="message-text">{{ msg.content }}</div>
                             {% else %}
+                                <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span class="copy-text">Copy</span>
+                                </button>
                                 <div class="message-text">{{ msg.content|safe }}</div>
                                 {% if msg.references %}
                                 <div class="message-refs">
@@ -1952,12 +1997,26 @@ HTML = """
                             if (event.type === 'connected') {
                                 console.log('[STREAM] Connected');
                             } else if (event.type === 'content') {
-                                // Remove loading indicator on first content
+                                // Remove loading indicator and add copy button on first content
                                 if (responseContent === '') {
-                                    responseDiv.innerHTML = '';
+                                    responseDiv.innerHTML = `
+                                        <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
+                                        <div class="message-text"></div>
+                                    `;
                                 }
                                 responseContent += event.data;
-                                responseDiv.innerHTML = responseContent;
+                                const messageText = responseDiv.querySelector('.message-text');
+                                if (messageText) {
+                                    messageText.innerHTML = responseContent;
+                                } else {
+                                    responseDiv.innerHTML = responseContent;
+                                }
                                 // Auto-scroll
                                 responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             } else if (event.type === 'references') {
@@ -2025,6 +2084,37 @@ HTML = """
             textarea.addEventListener('input', function() {
                 this.style.height = '52px';
                 this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(button) {
+            const messageContent = button.parentElement;
+            const messageText = messageContent.querySelector('.message-text');
+
+            // Extract text content without HTML tags
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = messageText.innerHTML;
+            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(textContent.trim()).then(() => {
+                // Update button to show success
+                const originalText = button.querySelector('.copy-text').textContent;
+                button.querySelector('.copy-text').textContent = 'Copied!';
+                button.classList.add('copied');
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    button.querySelector('.copy-text').textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.querySelector('.copy-text').textContent = 'Failed';
+                setTimeout(() => {
+                    button.querySelector('.copy-text').textContent = 'Copy';
+                }, 2000);
             });
         }
     </script>
@@ -2121,11 +2211,22 @@ TERMS_HTML = """
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
+            background: #FFF5F0;
             color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: #FFF5F0;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .content {
