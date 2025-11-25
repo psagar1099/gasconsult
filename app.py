@@ -558,6 +558,25 @@ PREOP_HTML = """
         .auto-calc strong {
             color: #FF6B35;
         }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px 30px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -595,8 +614,8 @@ PREOP_HTML = """
                 <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Chat</a>
-                <a href="/preop" class="nav-link active">Pre-Op</a>
+                <a href="/" class="nav-link">Ask</a>
+                <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
             </div>
         </div>
     </nav>
@@ -816,6 +835,11 @@ PREOP_HTML = """
         </div>
         {% endif %}
     </div>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. For educational purposes only.</p>
+    </footer>
+
 </body>
 </html>
 """
@@ -956,120 +980,81 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 0;
-            margin: 0;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 120px 40px 80px;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><path d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/></g></g></svg>');
-            opacity: 0.3;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 900px;
+            padding: 40px 40px 30px;
             margin: 0 auto;
-        }
-
-        .welcome-screen .hero-logo {
-            font-size: 5rem;
-            margin-bottom: 24px;
-            color: white;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+            max-width: 900px;
+            text-align: center;
         }
 
         .welcome-screen .tagline {
-            font-size: 3.5rem;
-            color: white;
-            margin-bottom: 20px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.5rem;
+            color: var(--text-secondary);
             margin-bottom: 40px;
-            line-height: 1.6;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Features Section */
-        .features-section {
-            background: var(--background-secondary);
-            padding: 100px 40px;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+            line-height: 1.4;
         }
 
         .welcome-screen .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            max-width: 1200px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
             margin: 0 auto;
         }
 
         .feature-card {
             background: white;
-            border-radius: 10px;
-            padding: 40px 32px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            text-align: left;
+            border-radius: 12px;
+            padding: 28px 20px;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            text-align: center;
         }
 
         .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            display: block;
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .feature-icon.orange {
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            color: white;
+        }
+
+        .feature-icon.blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: white;
         }
 
         .feature-card h3 {
             color: var(--text-primary);
-            font-size: 1.5rem;
-            margin-bottom: 16px;
+            font-size: 1rem;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
         .feature-card p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.6;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
         }
 
         /* Main Content Area */
         .main-content {
             padding-top: 72px;
-            min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
@@ -1237,6 +1222,7 @@ HTML = """
             border: 2px solid #e0e0e0;
             border-radius: 24px;
             resize: none;
+            overflow: hidden;
             transition: all 0.2s ease;
             background: #ffffff;
             color: #0A3D62;
@@ -1257,7 +1243,8 @@ HTML = """
         .send-btn {
             position: absolute;
             right: 6px;
-            top: 6px;
+            top: 50%;
+            transform: translateY(-50%);
             background: #FF6B35;
             color: white;
             border: none;
@@ -1277,12 +1264,12 @@ HTML = """
 
         .send-btn:hover {
             background: #ff5722;
-            transform: scale(1.05);
+            transform: translateY(-50%) scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .send-btn:active {
-            transform: scale(0.95);
+            transform: translateY(-50%) scale(0.95);
         }
 
         /* Loading Animation */
@@ -1328,6 +1315,25 @@ HTML = """
                 transform: scale(1.2);
                 opacity: 1;
             }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px 30px;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
         /* Responsive Design */
@@ -1440,8 +1446,8 @@ HTML = """
                 <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Chat</a>
-                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/" class="nav-link active">Ask</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 {% if messages %}
                 <a href="/clear" class="new-chat-btn">+ New Chat</a>
                 {% endif %}
@@ -1466,17 +1472,17 @@ HTML = """
             <div class="features-section">
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <span class="feature-icon">📚</span>
+                        <div class="feature-icon orange">📖</div>
                         <h3>PubMed-Backed Answers</h3>
                         <p>Every answer sourced from peer-reviewed research, systematic reviews, and clinical guidelines—with full citations you can verify.</p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">🧮</span>
+                        <div class="feature-icon blue">⚡</div>
                         <h3>Medical Calculators</h3>
                         <p>Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
                     </div>
                     <div class="feature-card">
-                        <span class="feature-icon">💬</span>
+                        <div class="feature-icon orange">💬</div>
                         <h3>Conversational AI</h3>
                         <p>Ask follow-up questions, refine your queries, and explore topics naturally—like talking to a colleague who knows the literature.</p>
                     </div>
@@ -1534,6 +1540,11 @@ HTML = """
             </form>
         </div>
     </div>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. For educational purposes only.</p>
+    </footer>
+
 </body>
 </html>
 """
