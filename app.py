@@ -678,6 +678,59 @@ PREOP_HTML = """
                 opacity: 1;
             }
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .logo-symbol {
+                font-size: 26px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .preop-container {
+                padding: 80px 20px 40px;
+            }
+
+            .preop-header h1 {
+                font-size: 2rem;
+            }
+
+            .preop-header p {
+                font-size: 1rem;
+            }
+
+            .preop-form {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .summary-container {
+                padding: 30px 20px;
+            }
+
+            .summary-container h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -1314,6 +1367,44 @@ HTML = """
             color: #1F2937;
             border: 1px solid rgba(0, 102, 204, 0.1);
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        /* Copy button */
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 102, 204, 0.2);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            color: #4B5563;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 500;
+        }
+
+        .copy-btn:hover {
+            background: white;
+            border-color: #0066CC;
+            color: #0066CC;
+            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+        }
+
+        .copy-btn.copied {
+            color: #10B981;
+            border-color: #10B981;
+        }
+
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
         }
 
         .message-text h3 {
@@ -1703,6 +1794,73 @@ HTML = """
             .logo-text {
                 font-size: 1.2rem;
             }
+
+            /* Navigation mobile adjustments */
+            nav {
+                padding: 14px 20px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .new-chat-btn {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            /* Hero headline mobile */
+            .hero-headline {
+                font-size: 2rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .preop-cta {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+
+            /* Copy button mobile adjustments */
+            .copy-btn {
+                top: 8px;
+                right: 8px;
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+
+            .copy-btn svg {
+                width: 12px;
+                height: 12px;
+            }
+
+            /* Message styling mobile */
+            .message-text {
+                font-size: 0.95rem;
+            }
+
+            .message-text h3 {
+                font-size: 1.05rem;
+            }
+
+            /* Loading indicator */
+            .loading-indicator {
+                font-size: 0.9rem;
+            }
+
+            /* References mobile */
+            .message-refs,
+            .references {
+                font-size: 0.85rem;
+            }
+
+            .message-meta {
+                font-size: 0.8rem;
+            }
         }
     </style>
     <script>
@@ -1798,16 +1956,25 @@ HTML = """
                 </div>
             </div>
         </div>
-        {% else %}
-        <!-- Chat Container -->
-        <div class="chat-container">
+        {% endif %}
+
+        <!-- Chat Container - Always present for streaming -->
+        <div class="chat-container" {% if not messages %}style="display: none;"{% endif %}>
             <div class="chat-messages" id="chatMessages">
+                {% if messages %}
                 {% for msg in messages %}
                     <div class="message {{ msg.role }}">
                         <div class="message-content">
                             {% if msg.role == 'user' %}
                                 <div class="message-text">{{ msg.content }}</div>
                             {% else %}
+                                <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span class="copy-text">Copy</span>
+                                </button>
                                 <div class="message-text">{{ msg.content|safe }}</div>
                                 {% if msg.references %}
                                 <div class="message-refs">
@@ -1828,6 +1995,7 @@ HTML = """
                         </div>
                     </div>
                 {% endfor %}
+                {% endif %}
             </div>
 
             <!-- Loading Indicator -->
@@ -1839,7 +2007,6 @@ HTML = """
                 </div>
             </div>
         </div>
-        {% endif %}
 
         <!-- Chat Input - Always Visible -->
         <div class="chat-input-container">
@@ -1884,16 +2051,34 @@ HTML = """
                 textarea.disabled = true;
                 submitBtn.style.opacity = '0.6';
 
+                // Hide welcome screen and show chat container
+                const welcomeScreen = document.querySelector('.welcome-screen');
+                const chatContainer = document.querySelector('.chat-container');
+                if (welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
+                }
+                if (chatContainer) {
+                    chatContainer.style.display = 'block';
+                }
+
                 // Add user message to UI
-                const messagesContainer = document.querySelector('.messages-container') || document.querySelector('.chat-container');
+                const messagesContainer = document.getElementById('chatMessages');
+                if (!messagesContainer) {
+                    console.error('[ERROR] Chat messages container not found');
+                    submitBtn.disabled = false;
+                    textarea.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    return;
+                }
+
                 const userMsg = document.createElement('div');
-                userMsg.className = 'message user-message';
-                userMsg.innerHTML = `<div class="message-content"><p>${escapeHtml(query)}</p></div>`;
+                userMsg.className = 'message user';
+                userMsg.innerHTML = `<div class="message-content"><div class="message-text">${escapeHtml(query)}</div></div>`;
                 messagesContainer.appendChild(userMsg);
 
                 // Add loading indicator
                 const loadingMsg = document.createElement('div');
-                loadingMsg.className = 'message assistant-message';
+                loadingMsg.className = 'message assistant';
                 loadingMsg.id = 'streaming-response';
                 loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching medical literature...</p></div>`;
                 messagesContainer.appendChild(loadingMsg);
@@ -1932,12 +2117,26 @@ HTML = """
                             if (event.type === 'connected') {
                                 console.log('[STREAM] Connected');
                             } else if (event.type === 'content') {
-                                // Remove loading indicator on first content
+                                // Remove loading indicator and add copy button on first content
                                 if (responseContent === '') {
-                                    responseDiv.innerHTML = '';
+                                    responseDiv.innerHTML = `
+                                        <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
+                                        <div class="message-text"></div>
+                                    `;
                                 }
                                 responseContent += event.data;
-                                responseDiv.innerHTML = responseContent;
+                                const messageText = responseDiv.querySelector('.message-text');
+                                if (messageText) {
+                                    messageText.innerHTML = responseContent;
+                                } else {
+                                    responseDiv.innerHTML = responseContent;
+                                }
                                 // Auto-scroll
                                 responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             } else if (event.type === 'references') {
@@ -2005,6 +2204,37 @@ HTML = """
             textarea.addEventListener('input', function() {
                 this.style.height = '52px';
                 this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(button) {
+            const messageContent = button.parentElement;
+            const messageText = messageContent.querySelector('.message-text');
+
+            // Extract text content without HTML tags
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = messageText.innerHTML;
+            const textContent = tempDiv.textContent || tempDiv.innerText || '';
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(textContent.trim()).then(() => {
+                // Update button to show success
+                const originalText = button.querySelector('.copy-text').textContent;
+                button.querySelector('.copy-text').textContent = 'Copied!';
+                button.classList.add('copied');
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    button.querySelector('.copy-text').textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.querySelector('.copy-text').textContent = 'Failed';
+                setTimeout(() => {
+                    button.querySelector('.copy-text').textContent = 'Copy';
+                }, 2000);
             });
         }
     </script>
@@ -2101,11 +2331,22 @@ TERMS_HTML = """
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
+            background: #FFF5F0;
             color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background: #FFF5F0;
+            color: var(--primary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
         .content {
@@ -2188,6 +2429,51 @@ TERMS_HTML = """
 
         footer a:hover {
             text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .logo-symbol {
+                font-size: 26px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .content {
+                padding: 0 20px;
+                margin: 40px auto;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            footer {
+                padding: 40px 20px;
+            }
         }
     </style>
 </head>
