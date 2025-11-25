@@ -315,7 +315,10 @@ PREOP_HTML = """
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-size: 24px;
             font-weight: 600;
-            color: #1F2937;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -0.5px;
             transition: transform 0.2s ease;
             text-decoration: none;
@@ -331,7 +334,10 @@ PREOP_HTML = """
 
         .logo-symbol {
             font-size: 32px;
-            color: #FF6B6B;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-actions {
@@ -353,15 +359,15 @@ PREOP_HTML = """
         }
 
         .nav-link:hover {
-            background: #F3F4F6;
-            color: #374151;
+            background: #FFF5F0;
+            color: #FF6B35;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #EFF6FF;
-            color: #3B82F6;
+            background: #FFF5F0;
+            color: #FF6B35;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
@@ -562,16 +568,31 @@ PREOP_HTML = """
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px 20px 30px;
+            padding: 50px 40px 40px;
             color: var(--text-muted);
             font-size: 0.875rem;
             border-top: 1px solid var(--border);
-            margin-top: 60px;
+            margin-top: 80px;
+            background: #FAFBFC;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        footer .disclaimer {
+            max-width: 800px;
+            margin: 16px auto 0;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            line-height: 1.7;
         }
 
         footer a {
             color: var(--primary);
             text-decoration: none;
+            font-weight: 500;
         }
 
         footer a:hover {
@@ -837,7 +858,8 @@ PREOP_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. For educational purposes only.</p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
+        <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
 </body>
@@ -909,7 +931,10 @@ HTML = """
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-size: 24px;
             font-weight: 600;
-            color: #1F2937;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -0.5px;
             transition: transform 0.2s ease;
             text-decoration: none;
@@ -925,7 +950,10 @@ HTML = """
 
         .logo-symbol {
             font-size: 32px;
-            color: #FF6B6B;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nav-actions {
@@ -947,15 +975,15 @@ HTML = """
         }
 
         .nav-link:hover {
-            background: #F3F4F6;
-            color: #374151;
+            background: #FFF5F0;
+            color: #FF6B35;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transform: translateY(-1px);
         }
 
         .nav-link.active {
-            background: #EFF6FF;
-            color: #3B82F6;
+            background: #FFF5F0;
+            color: #FF6B35;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
         }
 
@@ -980,19 +1008,52 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 40px 40px 30px;
+            padding: 80px 40px 60px;
             margin: 0 auto;
-            max-width: 900px;
+            max-width: 1100px;
             text-align: center;
         }
 
-        .welcome-screen .tagline {
-            font-size: 1.5rem;
+        .hero-headline {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 50%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
             color: var(--text-secondary);
-            margin-bottom: 40px;
+            margin-bottom: 48px;
             font-weight: 400;
-            letter-spacing: -0.2px;
-            line-height: 1.4;
+            line-height: 1.6;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .preop-cta {
+            display: inline-block;
+            margin-bottom: 60px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(255, 107, 53, 0.25);
+        }
+
+        .preop-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
         }
 
         .welcome-screen .feature-grid {
@@ -1003,53 +1064,59 @@ HTML = """
         }
 
         .feature-card {
-            background: white;
-            border-radius: 12px;
-            padding: 28px 20px;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 32px 24px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 107, 53, 0.1);
             text-align: center;
         }
 
         .feature-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            border-color: rgba(255, 107, 53, 0.3);
         }
 
         .feature-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 16px;
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
-            font-size: 1.5rem;
-            font-weight: 600;
+            border-radius: 14px;
+            position: relative;
         }
 
         .feature-icon.orange {
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(249, 115, 22, 0.15) 100%);
+            border: 2px solid rgba(255, 107, 53, 0.2);
         }
 
         .feature-icon.blue {
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            color: white;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .feature-icon svg {
+            width: 28px;
+            height: 28px;
         }
 
         .feature-card h3 {
             color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
         .feature-card p {
-            color: var(--text-muted);
-            font-size: 0.875rem;
-            line-height: 1.5;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
         /* Main Content Area */
@@ -1216,7 +1283,7 @@ HTML = """
 
         .chat-form textarea {
             width: 100%;
-            padding: 15px 100px 15px 20px;
+            padding: 14px 56px 14px 20px;
             font-size: 1rem;
             font-family: inherit;
             border: 2px solid #e0e0e0;
@@ -1227,7 +1294,7 @@ HTML = """
             background: #ffffff;
             color: #0A3D62;
             height: 52px;
-            line-height: 1.3;
+            line-height: 1.5;
         }
 
         .chat-form textarea:focus {
@@ -1242,9 +1309,8 @@ HTML = """
 
         .send-btn {
             position: absolute;
-            right: 6px;
-            top: 50%;
-            transform: translateY(-50%);
+            right: 8px;
+            top: 6px;
             background: #FF6B35;
             color: white;
             border: none;
@@ -1264,12 +1330,12 @@ HTML = """
 
         .send-btn:hover {
             background: #ff5722;
-            transform: translateY(-50%) scale(1.05);
+            transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .send-btn:active {
-            transform: translateY(-50%) scale(0.95);
+            transform: scale(0.95);
         }
 
         /* Loading Animation */
@@ -1320,16 +1386,31 @@ HTML = """
         /* Footer */
         footer {
             text-align: center;
-            padding: 40px 20px 30px;
+            padding: 50px 40px 40px;
             color: var(--text-muted);
             font-size: 0.875rem;
             border-top: 1px solid var(--border);
-            margin-top: 60px;
+            margin-top: 80px;
+            background: #FAFBFC;
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        footer .disclaimer {
+            max-width: 800px;
+            margin: 16px auto 0;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            line-height: 1.7;
         }
 
         footer a {
             color: var(--primary);
             text-decoration: none;
+            font-weight: 500;
         }
 
         footer a:hover {
@@ -1460,29 +1541,44 @@ HTML = """
         <!-- Welcome Screen -->
         <div class="welcome-screen">
             <!-- Hero Section -->
-            <div class="hero-section">
-                <div class="hero-content">
-                    <div class="hero-logo">⚕</div>
-                    <h1 class="tagline">Strictly Evidence-Based Anesthesiology</h1>
-                    <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research and GPT-4o. No hallucinations. Just evidence.</p>
-                </div>
-            </div>
+            <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
+            <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
+            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
 
             <!-- Features Section -->
             <div class="features-section">
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <div class="feature-icon orange">📖</div>
+                        <div class="feature-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                        </div>
                         <h3>PubMed-Backed Answers</h3>
                         <p>Every answer sourced from peer-reviewed research, systematic reviews, and clinical guidelines—with full citations you can verify.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon blue">⚡</div>
+                        <div class="feature-icon blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                                <line x1="8" y1="6" x2="16" y2="6"></line>
+                                <line x1="8" y1="10" x2="16" y2="10"></line>
+                                <line x1="8" y1="14" x2="12" y2="14"></line>
+                                <line x1="8" y1="18" x2="12" y2="18"></line>
+                            </svg>
+                        </div>
                         <h3>Medical Calculators</h3>
                         <p>Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon orange">💬</div>
+                        <div class="feature-icon orange">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                <line x1="9" y1="10" x2="15" y2="10"></line>
+                                <line x1="12" y1="7" x2="12" y2="13"></line>
+                            </svg>
+                        </div>
                         <h3>Conversational AI</h3>
                         <p>Ask follow-up questions, refine your queries, and explore topics naturally—like talking to a colleague who knows the literature.</p>
                     </div>
@@ -1542,7 +1638,8 @@ HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. For educational purposes only.</p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
+        <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
 
 </body>
