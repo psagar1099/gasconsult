@@ -620,6 +620,62 @@ PREOP_HTML = """
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Smooth Transitions & Animations */
+        * {
+            scroll-behavior: smooth;
+        }
+
+        .form-section {
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .submit-btn,
+        input,
+        textarea,
+        select {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .summary-container {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Page fade-in */
+        body {
+            animation: pageFadeIn 0.3s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -883,6 +939,31 @@ PREOP_HTML = """
         <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
         <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
+
+    <script>
+        // Smooth form transitions
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', function() {
+                const submitBtn = form.querySelector('.submit-btn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.7';
+                    submitBtn.textContent = 'Processing...';
+                }
+            });
+        }
+
+        // Smooth scroll to summary if it exists
+        window.addEventListener('load', function() {
+            const summary = document.querySelector('.summary-container');
+            if (summary) {
+                setTimeout(() => {
+                    summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 200);
+            }
+        });
+    </script>
 
 </body>
 </html>
@@ -1444,6 +1525,62 @@ HTML = """
             text-decoration: underline;
         }
 
+        /* Smooth Transitions & Animations */
+        * {
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            animation: messageSlideIn 0.4s ease-out;
+        }
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .nav-link,
+        .new-chat-btn,
+        .preop-cta,
+        .submit-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Page fade-in */
+        body {
+            animation: pageFadeIn 0.3s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Input focus animations */
+        input:focus,
+        textarea:focus,
+        select:focus {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-section {
@@ -1668,6 +1805,45 @@ HTML = """
         <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
         <p class="disclaimer">For informational and educational purposes only. This tool is not intended to replace professional medical judgment and should only be used by qualified healthcare providers as a clinical decision support aid. All treatment decisions should be made in consultation with appropriate medical professionals.</p>
     </footer>
+
+    <script>
+        // Smooth scroll to latest message on page load
+        window.addEventListener('load', function() {
+            const messages = document.querySelectorAll('.message');
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                setTimeout(() => {
+                    lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                }, 100);
+            }
+        });
+
+        // Enhanced form submission with smooth transitions
+        const form = document.querySelector('.chat-form');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = form.querySelector('.send-btn');
+                const textarea = form.querySelector('textarea');
+
+                // Disable to prevent double submission
+                submitBtn.disabled = true;
+                textarea.disabled = true;
+
+                // Add subtle visual feedback
+                submitBtn.style.opacity = '0.6';
+                submitBtn.style.transform = 'scale(0.95)';
+            });
+        }
+
+        // Auto-resize textarea smoothly
+        const textarea = document.getElementById('chatInput');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = '52px';
+                this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+            });
+        }
+    </script>
 
 </body>
 </html>
