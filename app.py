@@ -277,39 +277,46 @@ PREOP_HTML = """
 
         /* Navigation */
         nav {
-            background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 18px 0;
-            position: fixed;
+            background: #FAFBFC;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            padding: 20px 40px;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #f0f0f0;
+            z-index: 100;
+            border-bottom: 1px solid #E5E7EB;
         }
 
         nav .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0A3D62;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1F2937;
             letter-spacing: -0.5px;
+            transition: transform 0.2s ease;
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .logo-text:hover {
+            transform: scale(1.02);
         }
 
         .logo-symbol {
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 1.6rem;
-            color: #FF6B35;
+            font-size: 28px;
+            color: #FF6B6B;
         }
 
         .nav-actions {
@@ -319,17 +326,27 @@ PREOP_HTML = """
         }
 
         .nav-link {
-            color: #0A3D62;
+            color: #64748B;
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 8px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px 20px;
             border-radius: 8px;
             transition: all 0.2s ease;
+            background: transparent;
+            cursor: pointer;
         }
 
         .nav-link:hover {
-            background: #E8F4FD;
+            background: #FFFFFF;
+            color: #1F2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link.active {
+            background: #FFFFFF;
+            color: #1F2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         /* Main Content */
@@ -558,11 +575,12 @@ PREOP_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-text">
-                <span class="logo-symbol">⚕</span>gasconsult.ai
+                <span class="logo-symbol">⚕</span>
+                <span>gasconsult.ai</span>
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link">Chat</a>
-                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/preop" class="nav-link active">Pre-Op</a>
             </div>
         </div>
     </nav>
@@ -656,6 +674,36 @@ PREOP_HTML = """
                         <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
                         <label for="afib">Atrial Fibrillation</label>
                     </div>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label for="other_comorbidities">Other Comorbidities (if not listed above)</label>
+                    <textarea id="other_comorbidities" name="other_comorbidities" placeholder="e.g., GERD, Hypothyroidism, Chronic Pain..." rows="2"></textarea>
+                </div>
+            </div>
+
+            <!-- Functional Status -->
+            <div class="form-section">
+                <h2>2b. Functional Status</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mets">Metabolic Equivalents (METs)</label>
+                        <select id="mets" name="mets" required>
+                            <option value="">Select...</option>
+                            <option value="Unknown">Unknown / Not documented</option>
+                            <option value="<4 METs">&lt;4 METs (Cannot climb 2 flights of stairs or walk 2 blocks)</option>
+                            <option value="4-10 METs">4-10 METs (Can climb 2 flights of stairs)</option>
+                            <option value=">10 METs">&gt;10 METs (Very active, can run or do strenuous sports)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Anesthesia History -->
+            <div class="form-section">
+                <h2>2c. Previous Anesthesia History</h2>
+                <div class="form-group">
+                    <label for="previous_anesthesia">Previous Anesthetics & Complications</label>
+                    <textarea id="previous_anesthesia" name="previous_anesthesia" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
                 </div>
             </div>
 
@@ -783,43 +831,46 @@ HTML = """
 
         /* Navigation */
         nav {
-            background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 18px 0;
-            position: fixed;
+            background: #FAFBFC;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+            padding: 20px 40px;
+            position: sticky;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #f0f0f0;
+            z-index: 100;
+            border-bottom: 1px solid #E5E7EB;
         }
 
         nav .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0A3D62;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #1F2937;
             letter-spacing: -0.5px;
-            transition: opacity 0.2s ease;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
         }
 
         .logo-text:hover {
-            opacity: 0.8;
+            transform: scale(1.02);
         }
 
         .logo-symbol {
-            display: inline-block;
-            margin-right: 10px;
-            font-size: 1.6rem;
-            color: #FF6B35;
+            font-size: 28px;
+            color: #FF6B6B;
         }
 
         .nav-actions {
@@ -829,26 +880,36 @@ HTML = """
         }
 
         .nav-link {
-            color: #0A3D62;
+            color: #64748B;
             text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 600;
-            padding: 8px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 10px 20px;
             border-radius: 8px;
             transition: all 0.2s ease;
+            background: transparent;
+            cursor: pointer;
         }
 
         .nav-link:hover {
-            background: #E8F4FD;
+            background: #FFFFFF;
+            color: #1F2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link.active {
+            background: #FFFFFF;
+            color: #1F2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .new-chat-btn {
-            background: #FF6B35;
+            background: #FF6B6B;
             color: white;
             padding: 10px 24px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
             text-decoration: none;
             transition: all 0.2s ease;
             border: none;
@@ -856,9 +917,9 @@ HTML = """
         }
 
         .new-chat-btn:hover {
-            background: #ff5722;
+            background: #F56565;
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
         }
 
         /* Welcome Screen */
@@ -1113,8 +1174,7 @@ HTML = """
         .send-btn {
             position: absolute;
             right: 6px;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 6px;
             background: #FF6B35;
             color: white;
             border: none;
@@ -1133,12 +1193,12 @@ HTML = """
 
         .send-btn:hover {
             background: #ff5722;
-            transform: translateY(-50%) scale(1.02);
+            transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         .send-btn:active {
-            transform: translateY(-50%) scale(0.98);
+            transform: scale(0.95);
         }
 
         /* Loading Animation */
@@ -1274,11 +1334,12 @@ HTML = """
 <body>
     <nav>
         <div class="container">
-            <div class="logo-text">
-                <span class="logo-symbol">⚕</span>gasconsult.ai
-            </div>
+            <a href="/" class="logo-text">
+                <span class="logo-symbol">⚕</span>
+                <span>gasconsult.ai</span>
+            </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Chat</a>
+                <a href="/" class="nav-link active">Chat</a>
                 <a href="/preop" class="nav-link">Pre-Op</a>
                 {% if messages %}
                 <a href="/clear" class="new-chat-btn">+ New Chat</a>
@@ -1599,6 +1660,9 @@ def preop_assessment():
     height = float(request.form.get("height", 0))
     sex = request.form.get("sex", "")
     comorbidities = request.form.getlist("comorbidities")
+    other_comorbidities = request.form.get("other_comorbidities", "")
+    mets = request.form.get("mets", "")
+    previous_anesthesia = request.form.get("previous_anesthesia", "")
     medications = request.form.get("medications", "")
     hgb = request.form.get("hgb", "")
     plt = request.form.get("plt", "")
@@ -1699,6 +1763,10 @@ def preop_assessment():
         ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
 
     # Build patient summary for GPT
+    all_comorbidities = ', '.join(comorbidities) if comorbidities else 'None'
+    if other_comorbidities:
+        all_comorbidities += f"; {other_comorbidities}"
+
     patient_data = f"""
 Patient Demographics:
 - Age: {age} years
@@ -1708,7 +1776,12 @@ Patient Demographics:
 - BMI: {bmi} kg/m²
 - IBW: {ibw} kg
 
-Comorbidities: {', '.join(comorbidities) if comorbidities else 'None reported'}
+Comorbidities: {all_comorbidities}
+
+Functional Status:
+- METs: {mets}
+
+Previous Anesthesia History: {previous_anesthesia if previous_anesthesia else 'None reported'}
 
 Medications: {medications if medications else 'None reported'}
 
@@ -1739,23 +1812,28 @@ Paper Details:
 
 Generate a comprehensive pre-operative assessment including:
 
-1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification based on comorbidities and functional status
+1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification based on comorbidities and functional status (METs)
 
-2. **Cardiac Risk Stratification**: Calculate RCRI score if applicable (high-risk surgery + cardiac disease). Discuss perioperative cardiac risk.
+2. **Cardiac Risk Stratification**:
+   - Calculate RCRI score if applicable (high-risk surgery + cardiac disease)
+   - Reference ACS NSQIP Surgical Risk Calculator considerations for this patient's specific risk profile (age, comorbidities, functional status, procedure type)
+   - Discuss perioperative cardiac risk with specific percentages when possible
 
 3. **Perioperative Recommendations**:
    - Medication management (which to continue, hold, or adjust with specific timing)
-   - Airway considerations (OSA, obesity, difficult airway predictors)
+   - Airway considerations (OSA, obesity, difficult airway predictors, previous anesthesia complications)
    - Hemodynamic management strategies
    - VTE prophylaxis recommendations
    - Glycemic control if diabetic
    - Renal protection if CKD
+   - Special considerations based on previous anesthesia history
 
 4. **Anesthetic Considerations**:
    - Preferred anesthetic technique with rationale
    - Drug selection and dosing adjustments
    - Monitoring requirements (standard vs advanced)
    - Postoperative disposition (PACU vs ICU)
+   - Risk mitigation strategies
 
 5. **Evidence-Based Citations**: Use [1], [2], [3] format referencing the papers provided above
 
@@ -1765,7 +1843,7 @@ Use HTML formatting:
 - <strong>Bold for emphasis</strong>
 - <br><br> for spacing
 
-Provide maximum clinical utility with specific, actionable recommendations backed by evidence."""
+Provide maximum clinical utility with specific, actionable recommendations backed by evidence. When discussing risk, reference the ACS NSQIP risk calculator framework and provide estimated risk percentages for major complications when relevant based on the patient's profile."""
 
     try:
         response = openai_client.chat.completions.create(
