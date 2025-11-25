@@ -988,7 +988,7 @@ HTML = """
         }
 
         .new-chat-btn {
-            background: #FF6B6B;
+            background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);
             color: white;
             padding: 10px 24px;
             border-radius: 8px;
@@ -998,12 +998,13 @@ HTML = """
             transition: all 0.2s ease;
             border: none;
             cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
         }
 
         .new-chat-btn:hover {
-            background: #F56565;
+            background: linear-gradient(135deg, #ff5722 0%, #EA580C 100%);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.35);
         }
 
         /* Welcome Screen */
@@ -1657,6 +1658,7 @@ def index():
 
         # Add user message to conversation
         session['messages'].append({"role": "user", "content": raw_query})
+        session.modified = True
 
         # Check if this is a calculation request
         # Look at previous messages for context
