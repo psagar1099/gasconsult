@@ -678,6 +678,59 @@ PREOP_HTML = """
                 opacity: 1;
             }
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .logo-symbol {
+                font-size: 26px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .preop-container {
+                padding: 80px 20px 40px;
+            }
+
+            .preop-header h1 {
+                font-size: 2rem;
+            }
+
+            .preop-header p {
+                font-size: 1rem;
+            }
+
+            .preop-form {
+                padding: 30px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .summary-container {
+                padding: 30px 20px;
+            }
+
+            .summary-container h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -1741,6 +1794,73 @@ HTML = """
             .logo-text {
                 font-size: 1.2rem;
             }
+
+            /* Navigation mobile adjustments */
+            nav {
+                padding: 14px 20px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .new-chat-btn {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            /* Hero headline mobile */
+            .hero-headline {
+                font-size: 2rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .preop-cta {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+
+            /* Copy button mobile adjustments */
+            .copy-btn {
+                top: 8px;
+                right: 8px;
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+
+            .copy-btn svg {
+                width: 12px;
+                height: 12px;
+            }
+
+            /* Message styling mobile */
+            .message-text {
+                font-size: 0.95rem;
+            }
+
+            .message-text h3 {
+                font-size: 1.05rem;
+            }
+
+            /* Loading indicator */
+            .loading-indicator {
+                font-size: 0.9rem;
+            }
+
+            /* References mobile */
+            .message-refs,
+            .references {
+                font-size: 0.85rem;
+            }
+
+            .message-meta {
+                font-size: 0.8rem;
+            }
         }
     </style>
     <script>
@@ -2309,6 +2429,51 @@ TERMS_HTML = """
 
         footer a:hover {
             text-decoration: underline;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .logo-symbol {
+                font-size: 26px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
+            }
+
+            .content {
+                padding: 0 20px;
+                margin: 40px auto;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            footer {
+                padding: 40px 20px;
+            }
         }
     </style>
 </head>
