@@ -1904,10 +1904,13 @@ HTML = """
                 textarea.style.height = '52px';
 
                 // Make POST request to initiate streaming
+                const formData = new FormData();
+                formData.append('query', query);
+
                 fetch('/', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `query=${encodeURIComponent(query)}`
+                    credentials: 'same-origin',  // Important for session cookies
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
