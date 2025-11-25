@@ -1913,10 +1913,7 @@ HTML = """
             <!-- Hero Section -->
             <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
-            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 32px;">
-                <a href="/chat" class="preop-cta" style="background: linear-gradient(135deg, #FF6B35 0%, #F97316 100%);">Start Chat →</a>
-                <a href="/preop" class="preop-cta">Pre-Op Assessment →</a>
-            </div>
+            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
 
             <!-- Features Section -->
             <div class="features-section">
@@ -2011,8 +2008,8 @@ HTML = """
         </div>
     </div>
 
-    <!-- Chat Input - Only on chat page -->
-    <div class="chat-input-container" style="{% if not messages %}display: none;{% endif %}">
+    <!-- Chat Input - Always Visible -->
+    <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
