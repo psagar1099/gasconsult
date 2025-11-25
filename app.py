@@ -17,6 +17,9 @@ def clean_query(query):
     """Strip conversational filler from user queries to extract the core medical topic."""
     q = query.lower().strip()
 
+    # Remove trailing question marks FIRST so other patterns can match
+    q = re.sub(r"[?!.]+$", "", q).strip()
+
     # Remove common conversational phrases
     filler_phrases = [
         r"^(can you |could you |please |pls )",
@@ -31,16 +34,15 @@ def clean_query(query):
         r"^(search for |look up |find |show me )",
         r"^(help me understand |help me with )",
         r"(indications to use |indications for |indication for |when to use )",
-        r"(instead|as well|also|too)$",
+        r"\s+(instead|as well|also|too)\s*$",  # Match with whitespace
     ]
 
     # Apply each pattern repeatedly until no more matches
     for pattern in filler_phrases:
-        q = re.sub(pattern, "", q, flags=re.IGNORECASE)
+        q = re.sub(pattern, "", q, flags=re.IGNORECASE).strip()
 
-    # Remove trailing question marks and extra whitespace
-    q = re.sub(r"\?+$", "", q).strip()
-    q = re.sub(r"\s+", " ", q)
+    # Remove extra whitespace
+    q = re.sub(r"\s+", " ", q).strip()
 
     return q if q else query  # Return original if cleaning removed everything
 
