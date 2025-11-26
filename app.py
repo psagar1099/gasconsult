@@ -467,32 +467,32 @@ PREOP_HTML = """
 
         .preop-header h1 {
             font-size: 2.5rem;
-            color: #0066CC;
+            color: var(--primary-blue);
             margin-bottom: 12px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .preop-header p {
             font-size: 1.1rem;
-            color: #4B5563;
+            color: var(--text-secondary);
         }
 
         /* Form Sections */
         .form-section {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
+            background: white;
             border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(0, 102, 204, 0.08);
-            border: 1px solid rgba(0, 102, 204, 0.12);
+            padding: 24px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
+            overflow: hidden;
         }
 
         .form-section h2 {
-            color: #0066CC;
-            font-size: 1.4rem;
+            color: var(--primary-blue);
+            font-size: 1.3rem;
             margin-bottom: 20px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .form-row {
@@ -508,33 +508,33 @@ PREOP_HTML = """
         }
 
         label {
-            font-size: 0.9rem;
+            font-size: 11px;
             font-weight: 600;
-            color: #0066CC;
-            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
         }
 
         input[type="text"],
         input[type="number"],
         textarea,
         select {
-            padding: 12px;
-            border: 2px solid rgba(0, 102, 204, 0.2);
-            border-radius: 10px;
+            padding: 12px 14px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
             font-size: 1rem;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.9);
-            color: #1F2937;
-            transition: all 0.2s ease;
+            background: white;
+            color: var(--text-primary);
+            transition: border-color 0.2s ease;
         }
 
         input:focus,
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: #0066CC;
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
-            background: white;
+            border-color: var(--primary-blue);
         }
 
         textarea {
@@ -565,6 +565,10 @@ PREOP_HTML = """
             margin: 0;
             cursor: pointer;
             font-weight: 500;
+            text-transform: none;
+            letter-spacing: normal;
+            font-size: 0.9rem;
+            color: var(--text-primary);
         }
 
         .submit-btn {
@@ -590,20 +594,19 @@ PREOP_HTML = """
 
         /* Summary Display */
         .summary-container {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
+            background: white;
             border-radius: 16px;
             padding: 32px;
-            margin-top: 40px;
-            box-shadow: 0 4px 16px rgba(0, 102, 204, 0.1);
-            border: 1px solid rgba(0, 102, 204, 0.15);
+            margin-top: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border: 1px solid var(--border);
         }
 
         .summary-container h2 {
-            color: #0066CC;
+            color: var(--primary-blue);
             font-size: 1.8rem;
             margin-bottom: 24px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .summary-content {
@@ -612,11 +615,11 @@ PREOP_HTML = """
         }
 
         .summary-content h3 {
-            color: #0066CC;
+            color: var(--primary-blue);
             font-size: 1.3rem;
             margin-top: 20px;
             margin-bottom: 12px;
-            font-weight: 700;
+            font-weight: 600;
         }
 
         .summary-content strong {
@@ -645,16 +648,18 @@ PREOP_HTML = """
         }
 
         .auto-calc {
-            background: rgba(0, 102, 204, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 12px;
-            border-radius: 10px;
+            background: var(--bg-secondary);
+            padding: 12px 14px;
+            border-radius: 12px;
             margin-top: 12px;
-            border: 2px solid rgba(0, 102, 204, 0.15);
+            border: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
         .auto-calc strong {
-            color: #0066CC;
+            color: var(--primary-blue);
+            font-weight: 600;
         }
 
         /* Footer */
@@ -1933,8 +1938,8 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.4rem;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -3427,13 +3432,17 @@ QUICK_DOSE_HTML = """
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* Header */
         header {
-            background: white;
-            border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 16px 40px;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -4017,8 +4026,12 @@ QUICK_DOSE_HTML = """
 
         /* Responsive */
         @media (max-width: 768px) {
+            header {
+                padding: 14px 20px;
+            }
+
             .header-container {
-                padding: 8px 16px;
+                padding: 0;
             }
 
             .logo-text {
@@ -4034,10 +4047,18 @@ QUICK_DOSE_HTML = """
                 font-size: 0.85rem;
             }
 
+            main {
+                padding: 24px 16px;
+            }
+
+            .weight-section {
+                padding: 20px 16px;
+            }
+
             .dose-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
-                padding: 0 16px;
+                padding: 0;
             }
 
             .protocol-grid {
@@ -4082,6 +4103,15 @@ QUICK_DOSE_HTML = """
 
             .search-container input {
                 font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+
+            .weight-input-wrapper {
+                width: 140px;
+            }
+
+            #weightInput {
+                font-size: 24px;
+                padding: 12px 40px 12px 14px;
             }
         }
 
