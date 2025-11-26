@@ -1594,14 +1594,22 @@ HTML = """
         }
 
         .homepage-input .chat-form {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .homepage-input .chat-form:hover {
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.16), 0 6px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
         }
 
         .homepage-input .chat-form textarea {
