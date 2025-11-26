@@ -802,6 +802,48 @@ PREOP_HTML = """
             .summary-container h2 {
                 font-size: 1.5rem;
             }
+
+            /* PHI Warning mobile adjustments */
+            .phi-warning {
+                padding: 12px 16px;
+            }
+
+            .phi-warning-content {
+                gap: 10px;
+            }
+
+            .phi-warning-icon {
+                font-size: 1.2rem;
+            }
+
+            .phi-warning-text p {
+                font-size: 12px;
+            }
+
+            /* Form input mobile adjustments */
+            .form-section {
+                padding: 20px;
+            }
+
+            .form-section h2 {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+
+            input[type="number"],
+            input[type="text"],
+            select,
+            textarea {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+
+            .submit-btn {
+                font-size: 0.95rem;
+                padding: 14px 32px;
+            }
         }
     </style>
     <script>
@@ -2154,6 +2196,64 @@ HTML = """
 
             .message-meta {
                 font-size: 0.8rem;
+            }
+
+            /* PHI Warning mobile adjustments */
+            .phi-warning {
+                padding: 12px 16px;
+            }
+
+            .phi-warning-content {
+                gap: 10px;
+            }
+
+            .phi-warning-icon {
+                font-size: 1.2rem;
+            }
+
+            .phi-warning-text p {
+                font-size: 12px;
+            }
+
+            /* Homepage chat input mobile */
+            .homepage-input {
+                padding: 0 20px;
+                margin-bottom: 60px !important;
+            }
+
+            .chat-form {
+                padding: 6px;
+                gap: 8px;
+            }
+
+            .chat-form textarea {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            /* Homepage hero mobile */
+            .hero-subtitle {
+                font-size: 0.95rem;
+                padding: 0 10px;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .preop-cta-outline {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+
+            /* Message user/assistant badges mobile */
+            .message.user .message-content {
+                max-width: 85%;
+            }
+
+            .message.assistant .message-content {
+                max-width: 100%;
             }
         }
     </style>
@@ -3797,6 +3897,75 @@ QUICK_DOSE_HTML = """
         }
 
         /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 8px 16px;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 6px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .dose-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
+
+            .protocol-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dose-card {
+                padding: 16px;
+            }
+
+            .dose-drug {
+                font-size: 1rem;
+            }
+
+            .dose-value {
+                font-size: 0.9rem;
+            }
+
+            .dose-notes {
+                font-size: 0.8rem;
+            }
+
+            .protocol-card {
+                padding: 20px;
+            }
+
+            .protocol-name {
+                font-size: 1.1rem;
+            }
+
+            .protocol-steps li {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .search-container input {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+        }
+
         @media (max-width: 640px) {
             .header-container {
                 justify-content: center;
@@ -3804,14 +3973,6 @@ QUICK_DOSE_HTML = """
 
             .nav-links {
                 display: none;
-            }
-
-            .dose-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .protocol-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
