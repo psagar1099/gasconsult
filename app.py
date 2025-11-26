@@ -469,19 +469,27 @@ PREOP_HTML = """
 
         .preop-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 48px;
         }
 
         .preop-header h1 {
-            font-size: 2.5rem;
-            color: var(--primary-blue);
-            margin-bottom: 12px;
-            font-weight: 600;
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
         }
 
         .preop-header p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: -0.2px;
         }
 
         /* Form Sections */
@@ -866,8 +874,13 @@ PREOP_HTML = """
                 padding: 80px 20px 40px;
             }
 
+            .preop-header {
+                margin-bottom: 32px;
+            }
+
             .preop-header h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
+                letter-spacing: -1px;
             }
 
             .preop-header p {
@@ -1581,14 +1594,22 @@ HTML = """
         }
 
         .homepage-input .chat-form {
-            background: var(--bg-primary);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .homepage-input .chat-form:hover {
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.16), 0 6px 20px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
         }
 
         .homepage-input .chat-form textarea {
@@ -2386,9 +2407,17 @@ HTML = """
         // PWA Install Prompt (Mobile Only)
         let deferredPrompt;
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
 
-        if (isMobile) {
+        console.log('Mobile detected:', isMobile);
+        console.log('iOS detected:', isIOS);
+        console.log('Already installed:', isStandalone);
+
+        if (isMobile && !isStandalone) {
+            // For Android/Chrome - use beforeinstallprompt event
             window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('beforeinstallprompt event fired');
                 e.preventDefault();
                 deferredPrompt = e;
 
@@ -2447,14 +2476,68 @@ HTML = """
                     installBanner.style.display = 'none';
                     deferredPrompt.prompt();
                     const { outcome } = await deferredPrompt.userChoice;
+                    console.log('User choice:', outcome);
                     deferredPrompt = null;
                 });
 
                 // Close button click
                 document.getElementById('pwaCloseBtn').addEventListener('click', () => {
                     installBanner.style.display = 'none';
+                    localStorage.setItem('pwaPromptDismissed', 'true');
                 });
             });
+
+            // For iOS - show manual instructions after a delay
+            if (isIOS) {
+                const dismissed = localStorage.getItem('iosPwaPromptDismissed');
+                if (!dismissed) {
+                    setTimeout(() => {
+                        console.log('Showing iOS PWA banner');
+                        const iosBanner = document.createElement('div');
+                        iosBanner.id = 'iosPwaInstallBanner';
+                        iosBanner.style.cssText = `
+                            position: fixed;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+                            color: white;
+                            padding: 16px 20px;
+                            box-shadow: 0 -4px 12px rgba(37, 99, 235, 0.2);
+                            z-index: 9999;
+                            animation: slideUp 0.3s ease;
+                        `;
+
+                        iosBanner.innerHTML = `
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 600; font-size: 14px; margin-bottom: 6px;">Install gasconsult.ai</div>
+                                    <div style="font-size: 12px; opacity: 0.9; line-height: 1.4;">
+                                        Tap <svg width="16" height="16" style="display: inline; vertical-align: middle; margin: 0 2px;" fill="white" viewBox="0 0 24 24"><path d="M16.59 9H15V4c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v5H7.41c-.89 0-1.34 1.08-.71 1.71l4.59 4.59c.39.39 1.02.39 1.41 0l4.59-4.59c.63-.63.19-1.71-.7-1.71zM5 19c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H6c-.55 0-1 .45-1 1z"/></svg> then "Add to Home Screen"
+                                    </div>
+                                </div>
+                                <button id="iosCloseBtn" style="
+                                    background: transparent;
+                                    color: white;
+                                    border: none;
+                                    padding: 8px;
+                                    font-size: 20px;
+                                    cursor: pointer;
+                                    flex-shrink: 0;
+                                    line-height: 1;
+                                ">&times;</button>
+                            </div>
+                        `;
+
+                        document.body.appendChild(iosBanner);
+
+                        document.getElementById('iosCloseBtn').addEventListener('click', () => {
+                            iosBanner.style.display = 'none';
+                            localStorage.setItem('iosPwaPromptDismissed', 'true');
+                        });
+                    }, 3000); // Show after 3 seconds
+                }
+            }
 
             // Add slideUp animation
             const style = document.createElement('style');
@@ -2683,7 +2766,7 @@ HTML = """
     {% endif %}
 
     <footer>
-        <p>&copy; 2025 GasConsult.ai — Evidence-based anesthesiology consultation | <a href="/terms" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
     <script>
@@ -3445,8 +3528,7 @@ TERMS_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
-        <p><a href="/terms">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
 </body>
@@ -4209,11 +4291,32 @@ QUICK_DOSE_HTML = """
 
         @media (max-width: 640px) {
             .header-container {
-                justify-content: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .header-left {
+                order: 1;
             }
 
             .nav-links {
-                display: none;
+                order: 2;
+                width: 100%;
+                justify-content: center;
+                margin-top: 12px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .logo-svg {
+                height: 24px;
             }
         }
     </style>
@@ -4787,7 +4890,7 @@ QUICK_DOSE_HTML = """
         </div>
 
         <footer>
-            &copy; 2025 gasconsult.ai &mdash; <a href="/terms">Terms of Service</a>
+            <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
         </footer>
     </main>
 
