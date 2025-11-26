@@ -317,11 +317,18 @@ PREOP_HTML = """
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--background);
+            background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 50%, #F8FAFC 100%);
+            background-attachment: fixed;
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            animation: pageFadeIn 0.4s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Navigation */
@@ -479,20 +486,41 @@ PREOP_HTML = """
 
         /* Form Sections */
         .form-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
+            opacity: 0.8;
+        }
+
+        .form-section:hover {
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
         }
 
         .form-section h2 {
             color: var(--primary-blue);
-            font-size: 1.3rem;
-            margin-bottom: 20px;
+            font-size: 1.35rem;
+            margin-bottom: 24px;
             font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .form-row {
@@ -520,14 +548,22 @@ PREOP_HTML = """
         input[type="number"],
         textarea,
         select {
-            padding: 12px 14px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 14px 16px;
+            border: 2px solid rgba(226, 232, 240, 0.6);
+            border-radius: 14px;
             font-size: 1rem;
             font-family: inherit;
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             color: var(--text-primary);
-            transition: border-color 0.2s ease;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        input:hover,
+        textarea:hover,
+        select:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+            background: white;
         }
 
         input:focus,
@@ -535,6 +571,9 @@ PREOP_HTML = """
         select:focus {
             outline: none;
             border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15), 0 0 0 4px rgba(37, 99, 235, 0.08);
+            transform: translateY(-1px);
         }
 
         textarea {
@@ -594,19 +633,49 @@ PREOP_HTML = """
 
         /* Summary Display */
         .summary-container {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            margin-top: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 24px;
+            padding: 40px;
+            margin-top: 32px;
+            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .summary-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg,
+                var(--primary-blue) 0%,
+                var(--vasopressor-violet) 50%,
+                var(--anticholinergic-green) 100%);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .summary-container h2 {
             color: var(--primary-blue);
-            font-size: 1.8rem;
-            margin-bottom: 24px;
+            font-size: 2rem;
+            margin-bottom: 28px;
             font-weight: 600;
+            letter-spacing: -0.5px;
         }
 
         .summary-content {
@@ -648,13 +717,22 @@ PREOP_HTML = """
         }
 
         .auto-calc {
-            background: var(--bg-secondary);
-            padding: 12px 14px;
-            border-radius: 12px;
-            margin-top: 12px;
-            border: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 16px 18px;
+            border-radius: 14px;
+            margin-top: 16px;
+            border: 1px solid rgba(37, 99, 235, 0.15);
             font-size: 14px;
             color: var(--text-secondary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.06);
+            transition: all 0.2s ease;
+        }
+
+        .auto-calc:hover {
+            border-color: rgba(37, 99, 235, 0.25);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.1);
         }
 
         .auto-calc strong {
@@ -1231,11 +1309,18 @@ HTML = """
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--background);
+            background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 50%, #F8FAFC 100%);
+            background-attachment: fixed;
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            animation: pageFadeIn 0.4s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Navigation */
@@ -3467,21 +3552,28 @@ QUICK_DOSE_HTML = """
         .logo-link {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
             text-decoration: none;
+            transition: transform 0.2s ease;
+        }
+
+        .logo-link:hover {
+            transform: translateY(-1px);
         }
 
         .logo-svg {
-            width: 50px;
-            height: 24px;
+            height: 28px;
+            width: auto;
             flex-shrink: 0;
         }
 
         .logo-text {
             font-family: 'Sora', sans-serif;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 600;
             line-height: 1;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
         }
 
         .logo-gas {
@@ -3489,11 +3581,11 @@ QUICK_DOSE_HTML = """
         }
 
         .logo-consult {
-            color: #0F172A;
+            color: #111111;
         }
 
         .logo-ai {
-            color: #94A3B8;
+            color: #6B7280;
             font-weight: 400;
         }
 
