@@ -315,20 +315,80 @@ PREOP_HTML = """
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 50%, #F8FAFC 100%);
-            background-attachment: fixed;
+            background: #F8FAFC;
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            animation: pageFadeIn 0.4s ease-in;
+            animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes pageFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
         }
 
         /* Navigation */
@@ -504,7 +564,28 @@ PREOP_HTML = """
             border: 1px solid rgba(255, 255, 255, 0.8);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        }
+
+        .form-section:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .form-section:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .form-section:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .form-section:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .form-section:nth-child(5) {
+            animation-delay: 0.5s;
         }
 
         .form-section::before {
@@ -519,8 +600,9 @@ PREOP_HTML = """
         }
 
         .form-section:hover {
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+            border-color: rgba(37, 99, 235, 0.3);
         }
 
         .form-section h2 {
@@ -627,16 +709,40 @@ PREOP_HTML = """
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
             margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .submit-btn:hover {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #1E40AF 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0) scale(0.98);
         }
 
         /* Summary Display */
@@ -1320,20 +1426,80 @@ HTML = """
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 50%, #F8FAFC 100%);
-            background-attachment: fixed;
+            background: #F8FAFC;
             color: #0A3D62;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            animation: pageFadeIn 0.4s ease-in;
+            animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         @keyframes pageFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
         }
 
         /* Navigation */
@@ -1492,6 +1658,7 @@ HTML = """
             max-width: 900px;
             text-align: center;
             position: relative;
+            animation: scaleIn 0.7s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
         }
 
         /* Hero background gradient - extends behind navbar */
@@ -1535,6 +1702,16 @@ HTML = """
             line-height: 1.65;
         }
 
+        /* CTA Buttons Container */
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+
         /* Outline CTA Button */
         .preop-cta-outline {
             display: inline-flex;
@@ -1542,19 +1719,43 @@ HTML = """
             gap: 8px;
             padding: 16px 32px;
             background: transparent;
-            border: 1px solid var(--border);
+            border: 2px solid var(--primary-blue);
             border-radius: 12px;
-            color: var(--text-primary);
+            color: var(--primary-blue);
             font-weight: 600;
             font-size: 16px;
             text-decoration: none;
-            transition: all 0.2s ease;
-            margin-bottom: 48px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
         }
 
         .preop-cta-outline:hover {
-            background: var(--bg-secondary);
-            border-color: var(--text-muted);
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Filled CTA Button */
+        .quickdose-cta-filled {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--vasopressor-violet) 0%, #7C3AED 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+        }
+
+        .quickdose-cta-filled:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
         }
 
         /* Trust Badges */
@@ -1597,19 +1798,25 @@ HTML = """
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: none;
+            border: 2px solid transparent;
             border-radius: 16px;
             padding: 8px;
             box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .homepage-input .chat-form:hover {
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.16), 0 6px 20px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.18), 0 6px 20px rgba(0, 0, 0, 0.08);
             transform: translateY(-2px);
+        }
+
+        .homepage-input .chat-form:focus-within {
+            border-color: var(--primary-blue);
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.25), 0 6px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-3px);
         }
 
         .homepage-input .chat-form textarea {
@@ -1637,8 +1844,16 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: white;
+            border: none;
+            cursor: pointer;
             transition: all 0.2s ease;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .homepage-input .send-btn:hover {
@@ -1685,14 +1900,48 @@ HTML = """
             background: var(--bg-primary);
             border-radius: 16px;
             padding: 32px;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid var(--border);
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.03), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover::before {
+            left: 100%;
+        }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.3s;
         }
 
         .feature-card:hover {
             border-color: var(--primary-blue);
-            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.08);
-            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+            transform: translateY(-6px);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .feature-title {
@@ -1717,20 +1966,22 @@ HTML = """
             align-items: center;
             justify-content: center;
             border-radius: 12px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .feature-icon.violet {
-            background: #EDE9FE;
+            background: linear-gradient(135deg, #EDE9FE 0%, #DDD6FE 100%);
             border: none;
         }
 
         .feature-icon.blue {
-            background: #DBEAFE;
+            background: linear-gradient(135deg, #DBEAFE 0%, #BFDBFE 100%);
             border: none;
         }
 
         .feature-icon.green {
-            background: #D1FAE5;
+            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
             border: none;
         }
 
@@ -1799,12 +2050,7 @@ HTML = """
         .message {
             margin-bottom: 28px;
             display: flex;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .message.user {
@@ -2044,8 +2290,8 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.4rem;
-            font-weight: 800;
+            font-size: 1.6rem;
+            font-weight: 900;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -2622,14 +2868,24 @@ HTML = """
             </h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
 
-            <!-- CTA Button -->
-            <a href="/preop" class="preop-cta-outline">
-                Pre-Operative Assessment Tool
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-            </a>
+            <!-- CTA Buttons -->
+            <div class="cta-buttons">
+                <a href="/preop" class="preop-cta-outline">
+                    Pre-Operative Assessment Tool
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </a>
+                <a href="/quick-dose" class="quickdose-cta-filled">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    Quick Dose Calculator
+                </a>
+            </div>
 
             <!-- Trust Badges -->
             <div class="trust-badges">
