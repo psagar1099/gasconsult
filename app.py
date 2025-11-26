@@ -1338,16 +1338,17 @@ HTML = """
 
         .homepage-input .chat-form textarea {
             flex: 1;
-            padding: 16px 20px;
-            font-size: 16px;
+            padding: 12px 16px;
+            font-size: 15px;
             border: none;
             outline: none;
             background: transparent;
             color: var(--text-primary);
             resize: none;
-            height: auto;
+            height: 44px;
             min-height: unset;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.4;
         }
 
         .homepage-input .chat-form textarea::placeholder {
@@ -1357,10 +1358,11 @@ HTML = """
         .homepage-input .send-btn {
             position: static;
             background: var(--primary-blue);
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .homepage-input .send-btn:hover {
@@ -1395,7 +1397,7 @@ HTML = """
 
         .welcome-screen .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             max-width: 1100px;
             margin: 0 auto;
@@ -1945,6 +1947,10 @@ HTML = """
                 padding: 60px 24px;
             }
 
+            .welcome-screen .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
             .feature-card {
                 padding: 32px 24px;
             }
@@ -2303,18 +2309,17 @@ HTML = """
                     return;
                 }
 
+                // Always prevent default and use streaming
+                e.preventDefault();
+
                 // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // If on homepage, allow natural form submission to navigate to /chat
-                if (isHomepage) {
-                    // Don't prevent default - let it POST to /chat naturally
-                    return;
+                // Hide welcome screen if on homepage
+                if (isHomepage && welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
                 }
-
-                // On chat page - prevent default and use streaming
-                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
