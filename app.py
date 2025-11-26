@@ -1669,9 +1669,8 @@ HTML = """
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            height: 600px;
-            background: radial-gradient(ellipse at 50% 0%, var(--primary-blue-light) 0%, transparent 70%);
-            opacity: 0.5;
+            height: 700px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.15) 0%, transparent 65%);
             z-index: -1;
             pointer-events: none;
         }
@@ -1798,7 +1797,7 @@ HTML = """
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 2px solid transparent;
+            border: none;
             border-radius: 16px;
             padding: 8px;
             box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
@@ -1814,8 +1813,7 @@ HTML = """
         }
 
         .homepage-input .chat-form:focus-within {
-            border-color: var(--primary-blue);
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.25), 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 16px 56px rgba(37, 99, 235, 0.25), 0 8px 24px rgba(0, 0, 0, 0.12);
             transform: translateY(-3px);
         }
 
@@ -1883,8 +1881,10 @@ HTML = """
         /* Features Section */
         .features-section {
             padding: 80px 0 0 0;
-            background: var(--bg-secondary);
+            background: #F8FAFC;
             margin: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .feature-grid {
@@ -2009,6 +2009,7 @@ HTML = """
             display: flex;
             flex-direction: column;
             position: relative;
+            background: linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%);
         }
 
         /* Chat Container */
