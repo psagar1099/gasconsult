@@ -353,14 +353,9 @@ PREOP_HTML = """
         }
 
         .logo-ecg {
-            width: 90px;
-            height: 22px;
+            height: 28px;
+            width: auto;
             flex-shrink: 0;
-        }
-
-        .logo-ecg svg {
-            width: 100%;
-            height: 100%;
         }
 
         .logo-wordmark {
@@ -788,35 +783,24 @@ PREOP_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-container">
-                <div class="logo-ecg">
-                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2563EB"/>
-                                <stop offset="20%" stop-color="#EF4444"/>
-                                <stop offset="40%" stop-color="#FBBF24"/>
-                                <stop offset="60%" stop-color="#8B5CF6"/>
-                                <stop offset="80%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#6B7280"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
-                              stroke="url(#ecgGradient)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              fill="none"/>
-                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
-                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
-                </div>
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
                 <div class="logo-wordmark">
                     <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                 </div>
@@ -1166,14 +1150,9 @@ HTML = """
         }
 
         .logo-ecg {
-            width: 90px;
-            height: 22px;
+            height: 28px;
+            width: auto;
             flex-shrink: 0;
-        }
-
-        .logo-ecg svg {
-            width: 100%;
-            height: 100%;
         }
 
         .logo-wordmark {
@@ -2111,35 +2090,24 @@ HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-container">
-                <div class="logo-ecg">
-                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2563EB"/>
-                                <stop offset="20%" stop-color="#EF4444"/>
-                                <stop offset="40%" stop-color="#FBBF24"/>
-                                <stop offset="60%" stop-color="#8B5CF6"/>
-                                <stop offset="80%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#6B7280"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
-                              stroke="url(#ecgGradient)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              fill="none"/>
-                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
-                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
-                </div>
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
                 <div class="logo-wordmark">
                     <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                 </div>
@@ -2333,17 +2301,18 @@ HTML = """
                     return;
                 }
 
-                // Always prevent default and use streaming
-                e.preventDefault();
-
                 // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // Hide welcome screen if on homepage
-                if (isHomepage && welcomeScreen) {
-                    welcomeScreen.style.display = 'none';
+                // If on homepage, allow natural form submission to navigate to /chat
+                if (isHomepage) {
+                    // Don't prevent default - let it POST to /chat naturally
+                    return;
                 }
+
+                // On chat page - prevent default and use streaming
+                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -2776,35 +2745,24 @@ TERMS_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-container">
-                <div class="logo-ecg">
-                    <svg viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="ecgGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2563EB"/>
-                                <stop offset="20%" stop-color="#EF4444"/>
-                                <stop offset="40%" stop-color="#FBBF24"/>
-                                <stop offset="60%" stop-color="#8B5CF6"/>
-                                <stop offset="80%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#6B7280"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M0 15 L12 15 L16 15 L20 13 L24 17 L28 7 L32 26 L36 11 L40 15 L52 15 L56 15 L60 13 L64 17 L68 5 L72 24 L76 13 L80 15 L92 15 L96 14 L100 16 L104 9 L108 21 L112 15 L120 15"
-                              stroke="url(#ecgGradient)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              fill="none"/>
-                        <circle cx="28" cy="7" r="2" fill="#EF4444" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="68" cy="5" r="2" fill="#8B5CF6" opacity="0.8">
-                            <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="104" cy="9" r="2" fill="#10B981" opacity="0.8">
-                            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
-                        </circle>
-                    </svg>
-                </div>
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
                 <div class="logo-wordmark">
                     <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                 </div>
