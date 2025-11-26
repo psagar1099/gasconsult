@@ -810,6 +810,7 @@ PREOP_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -1395,7 +1396,7 @@ HTML = """
             background: var(--bg-secondary);
         }
 
-        .welcome-screen .feature-grid {
+        .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
@@ -1947,7 +1948,7 @@ HTML = """
                 padding: 60px 24px;
             }
 
-            .welcome-screen .feature-grid {
+            .feature-grid {
                 grid-template-columns: 1fr;
             }
 
@@ -2121,7 +2122,8 @@ HTML = """
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
-                <a href="/preop" class="nav-link">Pre-Operative Assessment</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -2656,12 +2658,13 @@ TERMS_HTML = """
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 18px 40px;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            padding: 16px 40px;
             position: sticky;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         nav .container {
@@ -2695,19 +2698,20 @@ TERMS_HTML = """
             font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-size: 20px;
             font-weight: 600;
-            line-height: 1;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
         }
 
         .logo-gas {
-            color: #0F172A;
+            color: #2563EB;
         }
 
         .logo-consult {
-            color: #475569;
-            font-weight: 400;
+            color: #111111;
         }
 
         .logo-ai {
+            font-weight: 400;
             color: #6B7280;
         }
 
@@ -2720,23 +2724,13 @@ TERMS_HTML = """
         .nav-link {
             color: var(--text-secondary);
             text-decoration: none;
+            font-size: 14px;
             font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease;
         }
 
         .nav-link:hover {
-            background: var(--bg-secondary);
-            color: var(--primary-blue);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: var(--bg-secondary);
-            color: var(--primary-blue);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            color: var(--text-primary);
         }
 
         .content {
@@ -2898,6 +2892,7 @@ TERMS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -4679,9 +4674,16 @@ Respond with maximum clinical utility:"""
 
             # If this is the first message (from homepage), set pending flag and redirect
             if is_first_message:
+                # Add placeholder assistant message for auto-start JavaScript to populate
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": "",  # Will be populated by streaming
+                    "references": [],
+                    "num_papers": 0
+                })
                 session['pending_stream'] = request_id
                 session.modified = True
-                print(f"[DEBUG] First message - redirecting to /chat page")
+                print(f"[DEBUG] First message - added placeholder assistant message, redirecting to /chat page")
                 return redirect(url_for('chat'))
 
             # For follow-up messages, return JSON for streaming
