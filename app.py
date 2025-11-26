@@ -2766,7 +2766,7 @@ HTML = """
     {% endif %}
 
     <footer>
-        <p>&copy; 2025 GasConsult.ai — Evidence-based anesthesiology consultation | <a href="/terms" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
     <script>
@@ -3528,8 +3528,7 @@ TERMS_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved.</p>
-        <p><a href="/terms">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
 </body>
@@ -4891,7 +4890,7 @@ QUICK_DOSE_HTML = """
         </div>
 
         <footer>
-            &copy; 2025 gasconsult.ai &mdash; <a href="/terms">Terms of Service</a>
+            <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
         </footer>
     </main>
 
