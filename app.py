@@ -1396,7 +1396,7 @@ HTML = """
             background: var(--bg-secondary);
         }
 
-        .welcome-screen .feature-grid {
+        .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 24px;
@@ -1948,7 +1948,7 @@ HTML = """
                 padding: 60px 24px;
             }
 
-            .welcome-screen .feature-grid {
+            .feature-grid {
                 grid-template-columns: 1fr;
             }
 
