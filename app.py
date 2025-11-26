@@ -321,14 +321,16 @@ PREOP_HTML = """
 
         /* Navigation */
         nav {
-            background: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 16px 40px;
             position: sticky;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         nav .container {
@@ -1118,14 +1120,16 @@ HTML = """
 
         /* Navigation */
         nav {
-            background: var(--bg-primary);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 16px 40px;
             position: sticky;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         nav .container {
@@ -1216,35 +1220,35 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 100px 40px 80px;
+            padding: 80px 40px 60px;
             margin: 0 auto;
-            max-width: 800px;
+            max-width: 900px;
             text-align: center;
             position: relative;
         }
 
-        /* Hero background gradient */
-        .welcome-screen::before {
+        /* Hero background gradient - extends behind navbar */
+        .main-content::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: -72px;
             left: 50%;
             transform: translateX(-50%);
-            width: 150%;
-            height: 100%;
-            background: radial-gradient(ellipse at 50% 0%, var(--primary-blue-light) 0%, transparent 60%);
-            opacity: 0.4;
+            width: 100%;
+            height: 600px;
+            background: radial-gradient(ellipse at 50% 0%, var(--primary-blue-light) 0%, transparent 70%);
+            opacity: 0.5;
             z-index: -1;
             pointer-events: none;
         }
 
         .hero-headline {
             font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            font-size: 56px;
+            font-size: 48px;
             font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+            margin-bottom: 20px;
         }
 
         .hero-headline-blue {
@@ -1256,12 +1260,12 @@ HTML = """
         }
 
         .hero-subtitle {
-            font-size: 18px;
+            font-size: 17px;
             color: #475569;
-            max-width: 600px;
-            margin: 0 auto 32px;
+            max-width: 640px;
+            margin: 0 auto 36px;
             font-weight: 400;
-            line-height: 1.6;
+            line-height: 1.65;
         }
 
         /* Outline CTA Button */
@@ -1470,9 +1474,10 @@ HTML = """
 
         /* Main Content Area */
         .main-content {
-            padding-top: 72px;
+            padding-top: 0;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         /* Chat Container */
@@ -1921,20 +1926,19 @@ HTML = """
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .hero-section {
-                padding: 80px 24px 60px;
+            .welcome-screen {
+                padding: 60px 24px 40px;
             }
 
-            .welcome-screen .hero-logo {
-                font-size: 4rem;
-            }
-
-            .welcome-screen .tagline {
-                font-size: 2rem;
+            .hero-headline {
+                font-size: 36px;
+                letter-spacing: -1px;
+                margin-bottom: 16px;
             }
 
             .hero-subtitle {
-                font-size: 1.1rem;
+                font-size: 16px;
+                line-height: 1.6;
             }
 
             .features-section {
@@ -2568,10 +2572,15 @@ TERMS_HTML = """
         }
 
         nav {
-            background: white;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             padding: 18px 40px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         nav .container {
