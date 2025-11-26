@@ -1,0 +1,55 @@
+{
+  "name": "gasconsult.ai - Evidence-Based Anesthesiology",
+  "short_name": "gasconsult.ai",
+  "description": "Evidence-based anesthesiology consultation powered by PubMed research. Get instant, citation-backed clinical answers.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2563EB",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["medical", "education", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Ask Question",
+      "short_name": "Ask",
+      "description": "Ask an anesthesiology question",
+      "url": "/",
+      "icons": [{ "src": "/static/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Pre-Op Assessment",
+      "short_name": "Pre-Op",
+      "description": "Pre-operative risk assessment",
+      "url": "/preop",
+      "icons": [{ "src": "/static/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Quick Dose",
+      "short_name": "Dose",
+      "description": "Quick drug dosing reference",
+      "url": "/quick-dose",
+      "icons": [{ "src": "/static/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}

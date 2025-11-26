@@ -276,6 +276,11 @@ PREOP_HTML = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <style>
         :root {
             /* Primary Brand Colors */
@@ -408,6 +413,44 @@ PREOP_HTML = """
         .nav-link.active {
             color: var(--primary-blue);
             font-weight: 600;
+        }
+
+        /* PHI Warning Banner */
+        .phi-warning {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin: 0;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        }
+
+        .phi-warning-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phi-warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .phi-warning-text {
+            flex: 1;
+        }
+
+        .phi-warning-text strong {
+            color: #92400E;
+            font-weight: 600;
+        }
+
+        .phi-warning-text p {
+            color: #78350F;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
         }
 
         /* Main Content */
@@ -764,6 +807,48 @@ PREOP_HTML = """
             .summary-container h2 {
                 font-size: 1.5rem;
             }
+
+            /* PHI Warning mobile adjustments */
+            .phi-warning {
+                padding: 12px 16px;
+            }
+
+            .phi-warning-content {
+                gap: 10px;
+            }
+
+            .phi-warning-icon {
+                font-size: 1.2rem;
+            }
+
+            .phi-warning-text p {
+                font-size: 12px;
+            }
+
+            /* Form input mobile adjustments */
+            .form-section {
+                padding: 20px;
+            }
+
+            .form-section h2 {
+                font-size: 1.1rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+
+            input[type="number"],
+            input[type="text"],
+            select,
+            textarea {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+
+            .submit-btn {
+                font-size: 0.95rem;
+                padding: 14px 32px;
+            }
         }
     </style>
     <script>
@@ -827,6 +912,17 @@ PREOP_HTML = """
             </div>
         </div>
     </nav>
+
+    <!-- PHI Warning Banner -->
+    <div class="phi-warning">
+        <div class="phi-warning-content">
+            <div class="phi-warning-icon">⚠️</div>
+            <div class="phi-warning-text">
+                <strong>Privacy Notice:</strong>
+                <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
+            </div>
+        </div>
+    </div>
 
     <div class="preop-container">
         <div class="preop-header">
@@ -1089,6 +1185,11 @@ HTML = """
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <style>
         :root {
             /* Primary Brand Colors */
@@ -1221,6 +1322,44 @@ HTML = """
         .nav-link.active {
             color: var(--primary-blue);
             font-weight: 600;
+        }
+
+        /* PHI Warning Banner */
+        .phi-warning {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin: 0;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        }
+
+        .phi-warning-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phi-warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .phi-warning-text {
+            flex: 1;
+        }
+
+        .phi-warning-text strong {
+            color: #92400E;
+            font-weight: 600;
+        }
+
+        .phi-warning-text p {
+            color: #78350F;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
         }
 
         .new-chat-btn {
@@ -1827,39 +1966,6 @@ HTML = """
             animation: fadeIn 0.3s ease;
         }
 
-        .loading-dots {
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .loading-dots span {
-            width: 12px;
-            height: 12px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .loading-dots span:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-
-        .loading-dots span:nth-child(2) {
-            animation-delay: -0.16s;
-        }
-
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-        }
-
         /* Footer */
         footer {
             text-align: center;
@@ -2101,6 +2207,64 @@ HTML = """
             .message-meta {
                 font-size: 0.8rem;
             }
+
+            /* PHI Warning mobile adjustments */
+            .phi-warning {
+                padding: 12px 16px;
+            }
+
+            .phi-warning-content {
+                gap: 10px;
+            }
+
+            .phi-warning-icon {
+                font-size: 1.2rem;
+            }
+
+            .phi-warning-text p {
+                font-size: 12px;
+            }
+
+            /* Homepage chat input mobile */
+            .homepage-input {
+                padding: 0 20px;
+                margin-bottom: 60px !important;
+            }
+
+            .chat-form {
+                padding: 6px;
+                gap: 8px;
+            }
+
+            .chat-form textarea {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            /* Homepage hero mobile */
+            .hero-subtitle {
+                font-size: 0.95rem;
+                padding: 0 10px;
+            }
+
+            .trust-badges {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .preop-cta-outline {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+            }
+
+            /* Message user/assistant badges mobile */
+            .message.user .message-content {
+                max-width: 85%;
+            }
+
+            .message.assistant .message-content {
+                max-width: 100%;
+            }
         }
     </style>
     <script>
@@ -2128,6 +2292,103 @@ HTML = """
                 });
             }
         });
+
+        // PWA Install Prompt (Mobile Only)
+        let deferredPrompt;
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+
+                // Create install banner
+                const installBanner = document.createElement('div');
+                installBanner.id = 'pwaInstallBanner';
+                installBanner.style.cssText = `
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+                    color: white;
+                    padding: 16px 20px;
+                    box-shadow: 0 -4px 12px rgba(37, 99, 235, 0.2);
+                    z-index: 9999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 12px;
+                    animation: slideUp 0.3s ease;
+                `;
+
+                installBanner.innerHTML = `
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">Add to Home Screen</div>
+                        <div style="font-size: 12px; opacity: 0.9;">Install gasconsult.ai for quick access</div>
+                    </div>
+                    <button id="pwaInstallBtn" style="
+                        background: white;
+                        color: #2563EB;
+                        border: none;
+                        padding: 10px 20px;
+                        border-radius: 8px;
+                        font-weight: 600;
+                        font-size: 14px;
+                        cursor: pointer;
+                        flex-shrink: 0;
+                    ">Install</button>
+                    <button id="pwaCloseBtn" style="
+                        background: transparent;
+                        color: white;
+                        border: none;
+                        padding: 8px;
+                        font-size: 20px;
+                        cursor: pointer;
+                        flex-shrink: 0;
+                        line-height: 1;
+                    ">&times;</button>
+                `;
+
+                document.body.appendChild(installBanner);
+
+                // Install button click
+                document.getElementById('pwaInstallBtn').addEventListener('click', async () => {
+                    installBanner.style.display = 'none';
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                });
+
+                // Close button click
+                document.getElementById('pwaCloseBtn').addEventListener('click', () => {
+                    installBanner.style.display = 'none';
+                });
+            });
+
+            // Add slideUp animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideUp {
+                    from { transform: translateY(100%); }
+                    to { transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Register Service Worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
 </head>
 <body>
@@ -2163,6 +2424,19 @@ HTML = """
             </div>
         </div>
     </nav>
+
+    <!-- PHI Warning Banner (Chat page only) -->
+    {% if messages %}
+    <div class="phi-warning">
+        <div class="phi-warning-content">
+            <div class="phi-warning-icon">⚠️</div>
+            <div class="phi-warning-text">
+                <strong>Privacy Notice:</strong>
+                <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="main-content">
         {% if not messages %}
@@ -2647,6 +2921,11 @@ TERMS_HTML = """
     <title>Terms of Service - gasconsult.ai</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -2979,7 +3258,7 @@ TERMS_HTML = """
         </ul>
 
         <h3>2.2 Professional Use Only</h3>
-        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, anesthesiologists, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
+        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
 
         <h3>2.3 Clinical Decision Support</h3>
         <p>gasconsult.ai serves solely as a <strong>clinical decision support tool</strong> to assist qualified healthcare providers. All treatment decisions must be made by licensed healthcare professionals based on:</p>
@@ -3037,7 +3316,7 @@ TERMS_HTML = """
         <p>You agree NOT to use this Service for:</p>
         <ul>
             <li>Patient self-diagnosis, self-treatment, or medical decision-making by non-professionals</li>
-            <li>Emergency medical situations requiring immediate clinical intervention</li>
+            <li>Emergency medical situations requiring immediate clinical intervention without healthcare professional oversight and judgement</li>
             <li>Situations where delays in obtaining professional medical care could cause harm</li>
             <li>Any unlawful, fraudulent, or unauthorized purposes</li>
         </ul>
@@ -3066,7 +3345,7 @@ TERMS_HTML = """
         <h2>11. Emergency Medical Situations</h2>
         <div class="notice-box">
             <h3>⚠️ Emergency Disclaimer</h3>
-            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
+            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES WITHOUT HEALTHCARE PROFESSIONAL OVERSIGHT.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
         </div>
 
         <h2>12. Contact Information</h2>
@@ -3093,6 +3372,13 @@ QUICK_DOSE_HTML = """
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <style>
         :root {
             /* Primary Brand */
@@ -3730,6 +4016,75 @@ QUICK_DOSE_HTML = """
         }
 
         /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 8px 16px;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 6px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .dose-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 0 16px;
+            }
+
+            .protocol-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dose-card {
+                padding: 16px;
+            }
+
+            .dose-drug {
+                font-size: 1rem;
+            }
+
+            .dose-value {
+                font-size: 0.9rem;
+            }
+
+            .dose-notes {
+                font-size: 0.8rem;
+            }
+
+            .protocol-card {
+                padding: 20px;
+            }
+
+            .protocol-name {
+                font-size: 1.1rem;
+            }
+
+            .protocol-steps li {
+                font-size: 0.9rem;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+            }
+
+            .search-container input {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+        }
+
         @media (max-width: 640px) {
             .header-container {
                 justify-content: center;
@@ -3738,16 +4093,22 @@ QUICK_DOSE_HTML = """
             .nav-links {
                 display: none;
             }
-
-            .dose-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .protocol-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
+    <script>
+        // Register Service Worker for offline functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/static/sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
 </head>
 <body>
     <header>
