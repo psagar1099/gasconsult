@@ -811,6 +811,7 @@ PREOP_HTML = """
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/terms" class="nav-link">Terms</a>
             </div>
         </div>
     </nav>
@@ -2124,6 +2125,7 @@ HTML = """
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/terms" class="nav-link">Terms</a>
             </div>
         </div>
     </nav>
@@ -2893,6 +2895,7 @@ TERMS_HTML = """
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/terms" class="nav-link active">Terms</a>
             </div>
         </div>
     </nav>
@@ -3154,6 +3157,28 @@ QUICK_DOSE_HTML = """
             font-size: 14px;
             font-weight: 600;
             color: var(--text-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
         }
 
         .crisis-btn {
@@ -3647,6 +3672,10 @@ QUICK_DOSE_HTML = """
                 justify-content: center;
             }
 
+            .nav-links {
+                display: none;
+            }
+
             .dose-grid {
                 grid-template-columns: 1fr;
             }
@@ -3684,8 +3713,12 @@ QUICK_DOSE_HTML = """
                         <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                     </span>
                 </a>
-                <div class="divider"></div>
-                <h1 class="page-title">Quick Dose Reference</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Ask</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                <a href="/terms" class="nav-link">Terms</a>
             </div>
             <button class="crisis-btn" onclick="toggleCrisis()">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
