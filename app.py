@@ -278,23 +278,30 @@ PREOP_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <style>
         :root {
+            /* Primary Brand Colors */
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+
+            /* Anesthesia Color Palette (for logo & accents) */
+            --opioid-blue: #2563EB;
+            --nmb-red: #EF4444;
+            --induction-yellow: #FBBF24;
+            --vasopressor-violet: #8B5CF6;
+            --anticholinergic-green: #10B981;
+            --local-gray: #6B7280;
+
+            /* Neutral Palette */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+
+            /* Legacy aliases for compatibility */
             --primary: #2563EB;
             --primary-dark: #1D4ED8;
-            --primary-light: #3B82F6;
-            --secondary: #1E293B;
-            --secondary-light: #334155;
-            --accent-success: #10B981;
-            --accent-violet: #8B5CF6;
-            --accent-red: #EF4444;
-            --accent-amber: #FBBF24;
-            --text-primary: #111827;
-            --text-secondary: #4B5563;
-            --text-muted: #9CA3AF;
-            --background: #FFFFFF;
-            --background-secondary: #F9FAFB;
-            --border: #E5E7EB;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(37, 99, 235, 0.1);
         }
 
         * {
@@ -314,15 +321,14 @@ PREOP_HTML = """
 
         /* Navigation */
         nav {
-            background: #FFFFFF;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 18px 40px;
+            background: var(--bg-primary);
+            padding: 16px 40px;
             position: sticky;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid var(--border);
         }
 
         nav .container {
@@ -385,28 +391,15 @@ PREOP_HTML = """
         }
 
         .nav-link {
-            color: #64748B;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-            background: transparent;
-            cursor: pointer;
+            transition: color 0.2s ease;
         }
 
         .nav-link:hover {
-            background: rgba(37, 99, 235, 0.06);
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: rgba(37, 99, 235, 0.06);
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            color: var(--text-primary);
         }
 
         /* Main Content */
@@ -616,12 +609,18 @@ PREOP_HTML = """
         /* Footer */
         footer {
             text-align: center;
-            padding: 50px 40px 40px;
-            color: var(--text-muted);
-            font-size: 0.875rem;
+            padding: 40px;
             border-top: 1px solid var(--border);
-            margin-top: 80px;
-            background: #FAFBFC;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
         }
 
         footer p {
@@ -1092,23 +1091,30 @@ HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <style>
         :root {
+            /* Primary Brand Colors */
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+
+            /* Anesthesia Color Palette (for logo & accents) */
+            --opioid-blue: #2563EB;
+            --nmb-red: #EF4444;
+            --induction-yellow: #FBBF24;
+            --vasopressor-violet: #8B5CF6;
+            --anticholinergic-green: #10B981;
+            --local-gray: #6B7280;
+
+            /* Neutral Palette */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+
+            /* Legacy aliases for compatibility */
             --primary: #2563EB;
             --primary-dark: #1D4ED8;
-            --primary-light: #3B82F6;
-            --secondary: #1E293B;
-            --secondary-light: #334155;
-            --accent-success: #10B981;
-            --accent-violet: #8B5CF6;
-            --accent-red: #EF4444;
-            --accent-amber: #FBBF24;
-            --text-primary: #111827;
-            --text-secondary: #4B5563;
-            --text-muted: #9CA3AF;
-            --background: #FFFFFF;
-            --background-secondary: #F9FAFB;
-            --border: #E5E7EB;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(37, 99, 235, 0.1);
         }
 
         * {
@@ -1128,15 +1134,14 @@ HTML = """
 
         /* Navigation */
         nav {
-            background: #FFFFFF;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            padding: 18px 40px;
+            background: var(--bg-primary);
+            padding: 16px 40px;
             position: sticky;
             top: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            border-bottom: 1px solid #E5E7EB;
+            border-bottom: 1px solid var(--border);
         }
 
         nav .container {
@@ -1199,28 +1204,15 @@ HTML = """
         }
 
         .nav-link {
-            color: #64748B;
+            color: var(--text-secondary);
             text-decoration: none;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
-            padding: 10px 20px;
-            border-radius: 10px;
-            transition: all 0.2s ease;
-            background: transparent;
-            cursor: pointer;
+            transition: color 0.2s ease;
         }
 
         .nav-link:hover {
-            background: rgba(37, 99, 235, 0.06);
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-            transform: translateY(-1px);
-        }
-
-        .nav-link.active {
-            background: rgba(37, 99, 235, 0.06);
-            color: var(--primary);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            color: var(--text-primary);
         }
 
         .new-chat-btn {
@@ -1245,33 +1237,152 @@ HTML = """
 
         /* Welcome Screen */
         .welcome-screen {
-            padding: 80px 40px 60px;
+            padding: 100px 40px 80px;
             margin: 0 auto;
-            max-width: 1100px;
+            max-width: 800px;
             text-align: center;
+            position: relative;
+        }
+
+        /* Hero background gradient */
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150%;
+            height: 100%;
+            background: radial-gradient(ellipse at 50% 0%, var(--primary-blue-light) 0%, transparent 60%);
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .hero-headline {
-            font-size: 3.5rem;
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 56px;
             font-weight: 700;
-            background: linear-gradient(135deg, #FF6B35 0%, #F97316 50%, #3B82F6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 24px;
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
             line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .hero-headline-blue {
+            color: #2563EB;
+        }
+
+        .hero-headline-dark {
+            color: #0F172A;
         }
 
         .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            margin-bottom: 48px;
+            font-size: 18px;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 32px;
             font-weight: 400;
             line-height: 1.6;
+        }
+
+        /* Outline CTA Button */
+        .preop-cta-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 48px;
+        }
+
+        .preop-cta-outline:hover {
+            background: var(--bg-secondary);
+            border-color: var(--text-muted);
+        }
+
+        /* Trust Badges */
+        .trust-badges {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 48px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .trust-badge svg {
+            flex-shrink: 0;
+            color: var(--anticholinergic-green);
+        }
+
+        /* Homepage Chat Section */
+        .homepage-chat-section {
+            padding: 0 40px 80px;
+            margin-top: -40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .homepage-input {
+            margin: 0 auto 80px;
             max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        }
+
+        .homepage-input .chat-form {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .homepage-input .chat-form textarea {
+            flex: 1;
+            padding: 16px 20px;
+            font-size: 16px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text-primary);
+            resize: none;
+            height: auto;
+            min-height: unset;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .homepage-input .chat-form textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .homepage-input .send-btn {
+            position: static;
+            background: var(--primary-blue);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .homepage-input .send-btn:hover {
+            background: var(--primary-blue-dark);
+            transform: scale(1.05);
         }
 
         .preop-cta {
@@ -1293,59 +1404,76 @@ HTML = """
             box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
         }
 
+        /* Features Section */
+        .features-section {
+            padding: 80px 40px;
+            background: var(--bg-secondary);
+        }
+
         .welcome-screen .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 24px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .feature-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
+            background: var(--bg-primary);
             border-radius: 16px;
-            padding: 32px 24px;
+            padding: 32px;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid var(--glass-border);
-            text-align: center;
+            border: 1px solid var(--border);
         }
 
         .feature-card:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.08);
             transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-            border-color: rgba(255, 107, 53, 0.3);
+        }
+
+        .feature-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
         }
 
         .feature-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 20px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 14px;
-            position: relative;
+            border-radius: 12px;
         }
 
         .feature-icon.violet {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.15) 100%);
-            border: 2px solid rgba(139, 92, 246, 0.2);
+            background: #EDE9FE;
+            border: none;
         }
 
         .feature-icon.blue {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.15) 100%);
-            border: 2px solid rgba(37, 99, 235, 0.2);
+            background: #DBEAFE;
+            border: none;
         }
 
         .feature-icon.green {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.15) 100%);
-            border: 2px solid rgba(16, 185, 129, 0.2);
+            background: #D1FAE5;
+            border: none;
         }
 
         .feature-icon svg {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
         }
 
         .feature-card h3 {
@@ -1717,12 +1845,18 @@ HTML = """
         /* Footer */
         footer {
             text-align: center;
-            padding: 50px 40px 40px;
-            color: var(--text-muted);
-            font-size: 0.875rem;
+            padding: 40px;
             border-top: 1px solid var(--border);
-            margin-top: 80px;
-            background: #FAFBFC;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
         }
 
         footer p {
@@ -2011,11 +2145,7 @@ HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Ask</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                {% if messages %}
-                <a href="/clear" class="new-chat-btn">+ New Chat</a>
-                {% endif %}
+                <a href="/preop" class="nav-link">Pre-Operative Assessment</a>
             </div>
         </div>
     </nav>
@@ -2025,46 +2155,88 @@ HTML = """
         <!-- Welcome Screen -->
         <div class="welcome-screen">
             <!-- Hero Section -->
-            <h1 class="hero-headline">Evidence-Based Anesthesiology Consultation</h1>
+            <h1 class="hero-headline">
+                <span class="hero-headline-blue">Evidence-Based</span><br>
+                <span class="hero-headline-dark">Anesthesiology Consultation</span>
+            </h1>
             <p class="hero-subtitle">Get instant, citation-backed clinical answers powered by PubMed research. Real evidence. Real citations. Zero hallucinations.</p>
-            <a href="/preop" class="preop-cta">Pre-Operative Assessment Tool →</a>
 
-            <!-- Features Section -->
+            <!-- CTA Button -->
+            <a href="/preop" class="preop-cta-outline">
+                Pre-Operative Assessment Tool
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>PubMed sourced</span>
+                </div>
+                <div class="trust-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>Verifiable citations</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Chat Input - Always Visible on Homepage -->
+        {% if not messages %}
+        <div class="homepage-chat-section">
+            <div class="chat-input-container homepage-input">
+                <form method="post" action="/chat" class="chat-form">
+                    <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
+                    <button type="submit" class="send-btn">↑</button>
+                </form>
+            </div>
+
+            <!-- Features Section (below chat) -->
             <div class="features-section">
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <div class="feature-icon violet">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <div class="feature-icon blue">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
                         </div>
-                        <h3>PubMed-Backed Answers</h3>
-                        <p>Every answer sourced from peer-reviewed research, systematic reviews, and clinical guidelines—with full citations you can verify.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon blue">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
-                                <line x1="8" y1="6" x2="16" y2="6"></line>
-                                <line x1="8" y1="10" x2="16" y2="10"></line>
-                                <line x1="8" y1="14" x2="12" y2="14"></line>
-                                <line x1="8" y1="18" x2="12" y2="18"></line>
-                            </svg>
-                        </div>
-                        <h3>Medical Calculators</h3>
-                        <p>Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
+                        <h3 class="feature-title">PubMed-Backed Answers</h3>
+                        <p class="feature-description">Every answer sourced from peer-reviewed research, systematic reviews, and clinical guidelines — with full citations you can verify.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon green">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                                <line x1="9" y1="10" x2="15" y2="10"></line>
-                                <line x1="12" y1="7" x2="12" y2="13"></line>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                                <rect x="9" y="9" width="6" height="6"></rect>
+                                <line x1="9" y1="1" x2="9" y2="4"></line>
+                                <line x1="15" y1="1" x2="15" y2="4"></line>
+                                <line x1="9" y1="20" x2="9" y2="23"></line>
+                                <line x1="15" y1="20" x2="15" y2="23"></line>
+                                <line x1="20" y1="9" x2="23" y2="9"></line>
+                                <line x1="20" y1="14" x2="23" y2="14"></line>
+                                <line x1="1" y1="9" x2="4" y2="9"></line>
+                                <line x1="1" y1="14" x2="4" y2="14"></line>
                             </svg>
                         </div>
-                        <h3>Conversational AI</h3>
-                        <p>Ask follow-up questions, refine your queries, and explore topics naturally—like talking to a colleague who knows the literature.</p>
+                        <h3 class="feature-title">Medical Calculators</h3>
+                        <p class="feature-description">Built-in calculators for MABL, IBW, BSA, QTc, maintenance fluids, and more. Just type your values and get instant results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon violet">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="feature-title">Conversational AI</h3>
+                        <p class="feature-description">Ask follow-up questions, refine your queries, and explore topics naturally — like talking to a colleague who knows the literature.</p>
                     </div>
                 </div>
             </div>
@@ -2122,16 +2294,18 @@ HTML = """
         </div>
     </div>
 
-    <!-- Chat Input - Always Visible -->
+    <!-- Chat Input - Visible on Chat Page -->
+    {% if messages %}
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
     </div>
+    {% endif %}
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 GasConsult.ai — Evidence-based anesthesiology consultation | <a href="/terms" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
     <script>
@@ -2159,18 +2333,17 @@ HTML = """
                     return;
                 }
 
-                // Check if we're on the homepage (no messages present)
+                // Always prevent default and use streaming
+                e.preventDefault();
+
+                // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // If on homepage, let form submit naturally to /chat (opens new page)
-                if (isHomepage) {
-                    // Don't prevent default - let it POST to /chat normally
-                    return;
+                // Hide welcome screen if on homepage
+                if (isHomepage && welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
                 }
-
-                // We're on /chat page - prevent default and use streaming
-                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
