@@ -410,6 +410,44 @@ PREOP_HTML = """
             font-weight: 600;
         }
 
+        /* PHI Warning Banner */
+        .phi-warning {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin: 0;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        }
+
+        .phi-warning-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phi-warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .phi-warning-text {
+            flex: 1;
+        }
+
+        .phi-warning-text strong {
+            color: #92400E;
+            font-weight: 600;
+        }
+
+        .phi-warning-text p {
+            color: #78350F;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+        }
+
         /* Main Content */
         .preop-container {
             max-width: 900px;
@@ -828,6 +866,17 @@ PREOP_HTML = """
         </div>
     </nav>
 
+    <!-- PHI Warning Banner -->
+    <div class="phi-warning">
+        <div class="phi-warning-content">
+            <div class="phi-warning-icon">⚠️</div>
+            <div class="phi-warning-text">
+                <strong>Privacy Notice:</strong>
+                <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
+            </div>
+        </div>
+    </div>
+
     <div class="preop-container">
         <div class="preop-header">
             <h1>Pre-Operative Assessment</h1>
@@ -1221,6 +1270,44 @@ HTML = """
         .nav-link.active {
             color: var(--primary-blue);
             font-weight: 600;
+        }
+
+        /* PHI Warning Banner */
+        .phi-warning {
+            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+            border-left: 4px solid #F59E0B;
+            padding: 16px 20px;
+            margin: 0;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        }
+
+        .phi-warning-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phi-warning-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .phi-warning-text {
+            flex: 1;
+        }
+
+        .phi-warning-text strong {
+            color: #92400E;
+            font-weight: 600;
+        }
+
+        .phi-warning-text p {
+            color: #78350F;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
         }
 
         .new-chat-btn {
@@ -1827,39 +1914,6 @@ HTML = """
             animation: fadeIn 0.3s ease;
         }
 
-        .loading-dots {
-            display: inline-flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .loading-dots span {
-            width: 12px;
-            height: 12px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-
-        .loading-dots span:nth-child(1) {
-            animation-delay: -0.32s;
-        }
-
-        .loading-dots span:nth-child(2) {
-            animation-delay: -0.16s;
-        }
-
-        @keyframes bounce {
-            0%, 80%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            40% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-        }
-
         /* Footer */
         footer {
             text-align: center;
@@ -2163,6 +2217,19 @@ HTML = """
             </div>
         </div>
     </nav>
+
+    <!-- PHI Warning Banner (Chat page only) -->
+    {% if messages %}
+    <div class="phi-warning">
+        <div class="phi-warning-content">
+            <div class="phi-warning-icon">⚠️</div>
+            <div class="phi-warning-text">
+                <strong>Privacy Notice:</strong>
+                <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="main-content">
         {% if not messages %}
@@ -2979,7 +3046,7 @@ TERMS_HTML = """
         </ul>
 
         <h3>2.2 Professional Use Only</h3>
-        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, anesthesiologists, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
+        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
 
         <h3>2.3 Clinical Decision Support</h3>
         <p>gasconsult.ai serves solely as a <strong>clinical decision support tool</strong> to assist qualified healthcare providers. All treatment decisions must be made by licensed healthcare professionals based on:</p>
@@ -3037,7 +3104,7 @@ TERMS_HTML = """
         <p>You agree NOT to use this Service for:</p>
         <ul>
             <li>Patient self-diagnosis, self-treatment, or medical decision-making by non-professionals</li>
-            <li>Emergency medical situations requiring immediate clinical intervention</li>
+            <li>Emergency medical situations requiring immediate clinical intervention without healthcare professional oversight and judgement</li>
             <li>Situations where delays in obtaining professional medical care could cause harm</li>
             <li>Any unlawful, fraudulent, or unauthorized purposes</li>
         </ul>
@@ -3066,7 +3133,7 @@ TERMS_HTML = """
         <h2>11. Emergency Medical Situations</h2>
         <div class="notice-box">
             <h3>⚠️ Emergency Disclaimer</h3>
-            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
+            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES WITHOUT HEALTHCARE PROFESSIONAL OVERSIGHT.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
         </div>
 
         <h2>12. Contact Information</h2>
