@@ -2345,9 +2345,11 @@ HTML = """
                     return;
                 }
 
-                // Check if we're on the homepage (welcome screen visible)
+                // Check if we're on the homepage (welcome screen visible and no chat messages)
                 const welcomeScreen = document.querySelector('.welcome-screen');
-                const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
+                const chatMessages = document.getElementById('chatMessages');
+                const hasMessages = chatMessages && chatMessages.children.length > 0;
+                const isHomepage = welcomeScreen && !hasMessages;
 
                 // If on homepage, navigate to /chat page with query
                 if (isHomepage) {
@@ -2448,14 +2450,22 @@ HTML = """
                                 // Auto-scroll
                                 responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
                             } else if (event.type === 'references') {
-                                // Add references
-                                if (event.num_papers > 0) {
-                                    let refsHtml = `<div class="references"><h4>📚 References (${event.num_papers} papers)</h4><ol>`;
-                                    event.data.forEach(ref => {
-                                        refsHtml += `<li><strong>${ref.title}</strong><br>${ref.authors} - ${ref.journal} (${ref.year})<br>PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">${ref.pmid}</a></li>`;
+                                // Add references and metadata
+                                const refs = event.data;
+                                if (refs && refs.length > 0) {
+                                    let refsHtml = '<div class="message-refs"><strong>References:</strong>';
+                                    refs.forEach((ref, i) => {
+                                        refsHtml += `<div class="ref-item">
+                                            <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
+                                                [${i+1}] ${ref.title} (${ref.year})
+                                            </a>
+                                        </div>`;
                                     });
-                                    refsHtml += '</ol></div>';
-                                    responseDiv.innerHTML += refsHtml;
+                                    refsHtml += '</div>';
+                                    if (event.num_papers > 0) {
+                                        refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`;
+                                    }
+                                    responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
                                 }
                             } else if (event.type === 'done') {
                                 console.log('[STREAM] Complete');
@@ -2584,6 +2594,7 @@ HTML = """
                         responseDiv.querySelector('.message-text').innerHTML = responseContent;
                         lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
                     } else if (event.type === 'references') {
+                        // Add references and metadata
                         const refs = event.data;
                         if (refs && refs.length > 0) {
                             let refsHtml = '<div class="message-refs"><strong>References:</strong>';
@@ -2595,12 +2606,10 @@ HTML = """
                                 </div>`;
                             });
                             refsHtml += '</div>';
+                            if (event.num_papers > 0) {
+                                refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`;
+                            }
                             responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
-                        }
-                    } else if (event.type === 'metadata') {
-                        if (event.num_papers > 0) {
-                            responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend',
-                                `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`);
                         }
                     } else if (event.type === 'done') {
                         console.log('[STREAM] Completed');
