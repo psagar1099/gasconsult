@@ -1752,45 +1752,47 @@ HTML = """
             position: relative;
             max-width: 900px;
             margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 8px;
         }
 
         .chat-form textarea {
-            width: 100%;
-            padding: 14px 56px 14px 20px;
-            font-size: 1rem;
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 15px;
             font-family: inherit;
-            border: 2px solid #e0e0e0;
-            border-radius: 24px;
+            border: none;
             resize: none;
             overflow: hidden;
             transition: all 0.2s ease;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            color: #0A3D62;
-            min-height: 52px;
+            background: transparent;
+            color: var(--text-primary);
+            height: 44px;
+            min-height: unset;
             max-height: 200px;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .chat-form textarea:focus {
             outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .chat-form textarea::placeholder {
-            color: #999;
+            color: var(--text-muted);
         }
 
         .send-btn {
-            position: absolute;
-            right: 8px;
-            top: 6px;
-            background: var(--primary);
+            position: static;
+            background: var(--primary-blue);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             font-size: 1.2rem;
             font-weight: 600;
@@ -1801,12 +1803,12 @@ HTML = """
             justify-content: center;
             padding: 0;
             line-height: 1;
+            flex-shrink: 0;
         }
 
         .send-btn:hover {
             background: var(--primary-blue-dark);
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .send-btn:active {
@@ -2332,18 +2334,19 @@ HTML = """
             }
         });
 
-        // Streaming form submission
-        const form = document.querySelector('.chat-form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                const submitBtn = form.querySelector('.send-btn');
-                const textarea = form.querySelector('textarea');
-                const query = textarea.value.trim();
+        // Streaming form submission - must run after DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('.chat-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const submitBtn = form.querySelector('.send-btn');
+                    const textarea = form.querySelector('textarea');
+                    const query = textarea.value.trim();
 
-                if (!query) {
-                    e.preventDefault();
-                    return;
-                }
+                    if (!query) {
+                        e.preventDefault();
+                        return;
+                    }
 
                 // Check if we're on the homepage (welcome screen visible and no chat messages)
                 const welcomeScreen = document.querySelector('.welcome-screen');
@@ -2506,7 +2509,8 @@ HTML = """
                     submitBtn.style.opacity = '1';
                 });
             });
-        }
+            }
+        });
 
         // Helper function to escape HTML
         function escapeHtml(text) {
