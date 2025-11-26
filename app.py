@@ -607,9 +607,11 @@ PREOP_HTML = """
         footer {
             text-align: center;
             padding: 40px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
             color: var(--text-muted);
             font-size: 13px;
+            margin: 0;
         }
 
         footer a {
@@ -1392,8 +1394,9 @@ HTML = """
 
         /* Features Section */
         .features-section {
-            padding: 80px 40px;
+            padding: 80px 0 0 0;
             background: var(--bg-secondary);
+            margin: 0;
         }
 
         .feature-grid {
@@ -1402,6 +1405,7 @@ HTML = """
             gap: 24px;
             max-width: 1100px;
             margin: 0 auto;
+            padding: 0 40px 80px 40px;
         }
 
         .feature-card {
@@ -1835,9 +1839,11 @@ HTML = """
         footer {
             text-align: center;
             padding: 40px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
             color: var(--text-muted);
             font-size: 13px;
+            margin: 0;
         }
 
         footer a {
@@ -1945,11 +1951,12 @@ HTML = """
             }
 
             .features-section {
-                padding: 60px 24px;
+                padding: 60px 0 0 0;
             }
 
             .feature-grid {
                 grid-template-columns: 1fr;
+                padding: 0 24px 60px 24px;
             }
 
             .feature-card {
@@ -2641,11 +2648,12 @@ TERMS_HTML = """
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: #0A3D62;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
             animation: pageFadeIn 0.3s ease-in;
         }
 
@@ -3156,6 +3164,28 @@ QUICK_DOSE_HTML = """
             color: var(--text-secondary);
         }
 
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+        }
+
         .crisis-btn {
             background: var(--crisis-red);
             color: white;
@@ -3647,6 +3677,10 @@ QUICK_DOSE_HTML = """
                 justify-content: center;
             }
 
+            .nav-links {
+                display: none;
+            }
+
             .dose-grid {
                 grid-template-columns: 1fr;
             }
@@ -3684,8 +3718,11 @@ QUICK_DOSE_HTML = """
                         <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                     </span>
                 </a>
-                <div class="divider"></div>
-                <h1 class="page-title">Quick Dose Reference</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Ask</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link active">Quick Dose</a>
             </div>
             <button class="crisis-btn" onclick="toggleCrisis()">
                 <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
