@@ -392,11 +392,22 @@ PREOP_HTML = """
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
         }
 
         /* Main Content */
@@ -1194,11 +1205,22 @@ HTML = """
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
         }
 
         .new-chat-btn {
@@ -1317,7 +1339,7 @@ HTML = """
 
         /* Homepage Chat Section */
         .homepage-chat-section {
-            padding: 0 40px 80px;
+            padding: 0;
             margin-top: -40px;
             position: relative;
             z-index: 10;
@@ -1326,6 +1348,7 @@ HTML = """
         .homepage-input {
             margin: 0 auto 80px;
             max-width: 700px;
+            padding: 0 40px;
         }
 
         .homepage-input .chat-form {
@@ -1950,6 +1973,10 @@ HTML = """
                 line-height: 1.6;
             }
 
+            .homepage-input {
+                padding: 0 24px;
+            }
+
             .features-section {
                 padding: 60px 0 0 0;
             }
@@ -2128,7 +2155,7 @@ HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link active">Ask</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -2734,11 +2761,22 @@ TERMS_HTML = """
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
         }
 
         .content {
@@ -3175,15 +3213,22 @@ QUICK_DOSE_HTML = """
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s ease;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
             color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .nav-link.active {
             color: var(--primary-blue);
+            font-weight: 600;
         }
 
         .crisis-btn {
