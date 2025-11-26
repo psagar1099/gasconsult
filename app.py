@@ -2546,11 +2546,11 @@ HTML = """
                                 </button>
                                 <div class="message-text"></div>`;
                         }
-                        responseContent += event.content;
+                        responseContent += event.data;
                         responseDiv.querySelector('.message-text').innerHTML = responseContent;
                         lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
                     } else if (event.type === 'references') {
-                        const refs = event.references;
+                        const refs = event.data;
                         if (refs && refs.length > 0) {
                             let refsHtml = '<div class="message-refs"><strong>References:</strong>';
                             refs.forEach((ref, i) => {
@@ -2572,8 +2572,8 @@ HTML = """
                         console.log('[STREAM] Completed');
                         eventSource.close();
                     } else if (event.type === 'error') {
-                        console.error('[STREAM] Error:', event.error);
-                        responseDiv.innerHTML = `<p style="color: #EF4444;">${event.error}</p>`;
+                        console.error('[STREAM] Error:', event.message);
+                        responseDiv.innerHTML = `<p style="color: #EF4444;">${event.message}</p>`;
                         eventSource.close();
                     }
                 });
