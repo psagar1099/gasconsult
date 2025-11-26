@@ -2309,17 +2309,18 @@ HTML = """
                     return;
                 }
 
-                // Always prevent default and use streaming
-                e.preventDefault();
-
                 // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // Hide welcome screen if on homepage
-                if (isHomepage && welcomeScreen) {
-                    welcomeScreen.style.display = 'none';
+                // If on homepage, navigate to /chat page with query
+                if (isHomepage) {
+                    // Let the form submit naturally - it will POST to /chat and redirect
+                    return;
                 }
+
+                // On chat page - prevent default and use streaming
+                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -2507,6 +2508,81 @@ HTML = """
                 }, 2000);
             });
         }
+
+        // Check for pending stream from homepage redirect
+        {% if pending_stream %}
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('[AUTO-START] Pending stream detected, starting streaming...');
+            const requestId = '{{ pending_stream }}';
+
+            // Add loading indicator to last message
+            const messages = document.querySelectorAll('.message.assistant');
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                lastMessage.querySelector('.message-content').innerHTML = '<p class="loading-indicator">🔍 Searching medical literature...</p>';
+
+                // Start streaming
+                const eventSource = new EventSource(`/stream?request_id=${requestId}`);
+                const responseDiv = lastMessage.querySelector('.message-content');
+                let responseContent = '';
+
+                eventSource.addEventListener('message', function(e) {
+                    const event = JSON.parse(e.data);
+
+                    if (event.type === 'connected') {
+                        console.log('[STREAM] Connected');
+                    } else if (event.type === 'content') {
+                        // Remove loading indicator and add copy button on first content
+                        if (responseContent === '') {
+                            responseDiv.innerHTML = `
+                                <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span class="copy-text">Copy</span>
+                                </button>
+                                <div class="message-text"></div>`;
+                        }
+                        responseContent += event.content;
+                        responseDiv.querySelector('.message-text').innerHTML = responseContent;
+                        lastMessage.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    } else if (event.type === 'references') {
+                        const refs = event.references;
+                        if (refs && refs.length > 0) {
+                            let refsHtml = '<div class="message-refs"><strong>References:</strong>';
+                            refs.forEach((ref, i) => {
+                                refsHtml += `<div class="ref-item">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
+                                        [${i+1}] ${ref.title} (${ref.year})
+                                    </a>
+                                </div>`;
+                            });
+                            refsHtml += '</div>';
+                            responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
+                        }
+                    } else if (event.type === 'metadata') {
+                        if (event.num_papers > 0) {
+                            responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend',
+                                `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`);
+                        }
+                    } else if (event.type === 'done') {
+                        console.log('[STREAM] Completed');
+                        eventSource.close();
+                    } else if (event.type === 'error') {
+                        console.error('[STREAM] Error:', event.error);
+                        responseDiv.innerHTML = `<p style="color: #EF4444;">${event.error}</p>`;
+                        eventSource.close();
+                    }
+                });
+
+                eventSource.onerror = function(e) {
+                    console.error('[STREAM] Connection error:', e);
+                    eventSource.close();
+                };
+            }
+        });
+        {% endif %}
     </script>
 
 </body>
@@ -4347,6 +4423,9 @@ def chat():
             print(f"[DEBUG] Raw query: '{raw_query}'")
             print(f"[DEBUG] Session has {len(session['messages'])} messages before")
 
+            # Check if this is the first message (from homepage)
+            is_first_message = len(session['messages']) == 0
+
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
             session.modified = True
@@ -4597,6 +4676,15 @@ Respond with maximum clinical utility:"""
             session.modified = True
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
+
+            # If this is the first message (from homepage), set pending flag and redirect
+            if is_first_message:
+                session['pending_stream'] = request_id
+                session.modified = True
+                print(f"[DEBUG] First message - redirecting to /chat page")
+                return redirect(url_for('chat'))
+
+            # For follow-up messages, return JSON for streaming
             return jsonify({
                 'status': 'ready',
                 'request_id': request_id,
@@ -4619,7 +4707,9 @@ Respond with maximum clinical utility:"""
             session.modified = True
             return redirect(url_for('chat'))
 
-    return render_template_string(HTML, messages=session.get('messages', []))
+    # Check for pending stream (from homepage redirect)
+    pending_stream = session.pop('pending_stream', None)
+    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream)
 
 @app.route("/clear")
 def clear():
