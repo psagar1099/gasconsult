@@ -4490,6 +4490,8 @@ def stream():
 @app.route("/")
 def index():
     """Homepage - welcome screen only"""
+    # Clear any existing conversation when returning to homepage
+    session.pop('messages', None)
     return render_template_string(HTML, messages=[])
 
 @app.route("/chat", methods=["GET", "POST"])
