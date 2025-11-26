@@ -1338,16 +1338,17 @@ HTML = """
 
         .homepage-input .chat-form textarea {
             flex: 1;
-            padding: 16px 20px;
-            font-size: 16px;
+            padding: 12px 16px;
+            font-size: 15px;
             border: none;
             outline: none;
             background: transparent;
             color: var(--text-primary);
             resize: none;
-            height: auto;
+            height: 44px;
             min-height: unset;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.4;
         }
 
         .homepage-input .chat-form textarea::placeholder {
@@ -1357,10 +1358,11 @@ HTML = """
         .homepage-input .send-btn {
             position: static;
             background: var(--primary-blue);
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .homepage-input .send-btn:hover {
@@ -1395,7 +1397,7 @@ HTML = """
 
         .welcome-screen .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 24px;
             max-width: 1100px;
             margin: 0 auto;
@@ -1945,6 +1947,10 @@ HTML = """
                 padding: 60px 24px;
             }
 
+            .welcome-screen .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
             .feature-card {
                 padding: 32px 24px;
             }
@@ -2303,18 +2309,17 @@ HTML = """
                     return;
                 }
 
+                // Always prevent default and use streaming
+                e.preventDefault();
+
                 // Check if we're on the homepage (welcome screen visible)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const isHomepage = welcomeScreen && welcomeScreen.style.display !== 'none';
 
-                // If on homepage, allow natural form submission to navigate to /chat
-                if (isHomepage) {
-                    // Don't prevent default - let it POST to /chat naturally
-                    return;
+                // Hide welcome screen if on homepage
+                if (isHomepage && welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
                 }
-
-                // On chat page - prevent default and use streaming
-                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -2948,6 +2953,1309 @@ TERMS_HTML = """
 </body>
 </html>
 """
+QUICK_DOSE_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quick Dose Reference — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Primary Brand */
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+
+            /* Anesthesia Color Palette */
+            --opioid-blue: #2563EB;
+            --opioid-blue-light: #DBEAFE;
+            --nmb-red: #EF4444;
+            --nmb-red-light: #FEE2E2;
+            --induction-yellow: #F59E0B;
+            --induction-yellow-light: #FEF3C7;
+            --tranq-orange: #F97316;
+            --tranq-orange-light: #FFEDD5;
+            --vasopressor-violet: #8B5CF6;
+            --vasopressor-violet-light: #EDE9FE;
+            --anticholinergic-green: #10B981;
+            --anticholinergic-green-light: #D1FAE5;
+            --local-gray: #6B7280;
+            --local-gray-light: #F3F4F6;
+
+            /* Neutral Palette */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+
+            /* Crisis */
+            --crisis-red: #DC2626;
+            --crisis-red-light: #FEF2F2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo-svg {
+            width: 50px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #0F172A;
+        }
+
+        .logo-ai {
+            color: #94A3B8;
+            font-weight: 400;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .crisis-btn {
+            background: var(--crisis-red);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            animation: subtle-pulse 2s infinite;
+        }
+
+        .crisis-btn:hover {
+            background: #B91C1C;
+            transform: scale(1.02);
+        }
+
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0); }
+        }
+
+        /* Main Content */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Weight Input Section */
+        .weight-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .weight-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .weight-input-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .weight-input-wrapper {
+            position: relative;
+            width: 160px;
+        }
+
+        #weightInput {
+            width: 100%;
+            padding: 14px 45px 14px 18px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 600;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        #weightInput:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .weight-unit {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .conversion-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .conversion-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .quick-weights {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .quick-weight-btn {
+            padding: 8px 14px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-weight-btn:hover {
+            background: var(--primary-blue-light);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .quick-weight-btn.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+        }
+
+        /* Drug Category */
+        .drug-category {
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        .category-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .category-header:hover {
+            background: var(--bg-secondary);
+        }
+
+        .color-indicator {
+            width: 5px;
+            height: 40px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .category-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .chevron {
+            width: 20px;
+            height: 20px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+
+        .drug-category.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            display: none;
+            padding: 0 20px 20px;
+        }
+
+        .drug-category.open .category-content {
+            display: block;
+        }
+
+        /* Drug Card */
+        .drug-card {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+        }
+
+        .drug-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .drug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .drug-name-section h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .drug-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .concentration-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            background: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        .dose-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .dose-item {
+            background: white;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .dose-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .dose-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .dose-unit {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .dose-range {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .clinical-pearl {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            background: var(--induction-yellow-light);
+            border-radius: 10px;
+            border-left: 3px solid var(--induction-yellow);
+        }
+
+        .pearl-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--induction-yellow);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pearl-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Color Legend */
+        .color-legend {
+            margin-top: 32px;
+            padding: 20px 24px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .legend-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .legend-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+        }
+
+        .legend-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .disclaimer {
+            max-width: 700px;
+            margin: 0 auto 16px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            font-size: 11px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 32px 24px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        /* Crisis Modal */
+        .crisis-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+        }
+
+        .crisis-overlay.show {
+            display: flex;
+        }
+
+        .crisis-modal {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        }
+
+        .crisis-modal-header {
+            background: var(--crisis-red);
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .crisis-modal-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .crisis-close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .crisis-close-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .crisis-modal-content {
+            padding: 24px;
+            overflow-y: auto;
+            max-height: calc(85vh - 80px);
+        }
+
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .protocol-btn {
+            background: var(--crisis-red-light);
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 20px 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .protocol-btn:hover {
+            border-color: var(--crisis-red);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220,38,38,0.15);
+        }
+
+        .protocol-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--crisis-red);
+            margin-bottom: 4px;
+        }
+
+        .protocol-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .header-container {
+                justify-content: center;
+            }
+
+            .dose-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .protocol-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <a href="/" class="logo-link">
+                    <svg class="logo-svg" viewBox="0 0 50 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M2 12 L8 12 L11 10 L14 14 L17 4 L20 20 L23 9 L26 12 L34 12"
+                              stroke="url(#ecgGrad)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
+                    </svg>
+                    <span class="logo-text">
+                        <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                    </span>
+                </a>
+                <div class="divider"></div>
+                <h1 class="page-title">Quick Dose Reference</h1>
+            </div>
+            <button class="crisis-btn" onclick="toggleCrisis()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Crisis Mode
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Weight Input Section -->
+        <div class="weight-section">
+            <div class="weight-label">Patient Weight</div>
+            <div class="weight-input-row">
+                <div class="weight-input-wrapper">
+                    <input type="number" id="weightInput" value="70" min="1" max="300" oninput="updateDoses()">
+                    <span class="weight-unit">kg</span>
+                </div>
+                <span class="conversion-text">= <span class="conversion-value" id="lbsConversion">154</span> lbs</span>
+            </div>
+            <div class="quick-weights">
+                <button class="quick-weight-btn" onclick="setWeight(50)">50 kg</button>
+                <button class="quick-weight-btn active" onclick="setWeight(70)">70 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(80)">80 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(100)">100 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(120)">120 kg</button>
+            </div>
+        </div>
+
+        <!-- INDUCTION AGENTS (Yellow) -->
+        <div class="drug-category open">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #F59E0B;"></div>
+                <div class="category-info">
+                    <div class="category-title">Induction Agents</div>
+                    <div class="category-subtitle">Propofol, Etomidate, Ketamine</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Propofol -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Propofol</h3>
+                            <div class="drug-subtitle">Diprivan</div>
+                        </div>
+                        <div class="concentration-badge">10 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value"><span data-calc="1.5">105</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1.5 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="2">140</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">High</div>
+                            <div class="dose-value"><span data-calc="2.5">175</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">2.5 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Reduce dose 30-50% in elderly, hypovolemic, or cardiac patients. Causes hypotension via vasodilation.</div>
+                    </div>
+                </div>
+
+                <!-- Etomidate -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Etomidate</h3>
+                            <div class="drug-subtitle">Amidate</div>
+                        </div>
+                        <div class="concentration-badge">2 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value"><span data-calc="0.2">14</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="0.3">21</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.3 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">High</div>
+                            <div class="dose-value"><span data-calc="0.4">28</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.4 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Hemodynamically stable — preferred for cardiac/trauma. Avoid repeated doses (adrenal suppression). May cause myoclonus.</div>
+                    </div>
+                </div>
+
+                <!-- Ketamine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Ketamine</h3>
+                            <div class="drug-subtitle">Ketalar</div>
+                        </div>
+                        <div class="concentration-badge">50/100 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value"><span data-calc="1">70</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="1.5">105</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1.5 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">High</div>
+                            <div class="dose-value"><span data-calc="2">140</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">2 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Maintains airway reflexes & BP. Great for asthma, hypovolemia. Avoid in CAD, elevated ICP (relative). Expect emergence reactions.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OPIOIDS (Blue) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #2563EB;"></div>
+                <div class="category-info">
+                    <div class="category-title">Opioids</div>
+                    <div class="category-subtitle">Fentanyl</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Fentanyl -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Fentanyl</h3>
+                            <div class="drug-subtitle">Sublimaze</div>
+                        </div>
+                        <div class="concentration-badge">50 mcg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value"><span data-calc="1">70</span> <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">0.5–1 mcg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="2">140</span> <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">1–2 mcg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">High</div>
+                            <div class="dose-value"><span data-calc="3">210</span> <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">2–3 mcg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Onset 2-3 min IV, duration 30-60 min. Blunts laryngoscopy response at 3-5 mcg/kg. Watch for chest wall rigidity at high doses.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEUROMUSCULAR BLOCKERS (Red) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #EF4444;"></div>
+                <div class="category-info">
+                    <div class="category-title">Neuromuscular Blockers</div>
+                    <div class="category-subtitle">Succinylcholine, Rocuronium</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Succinylcholine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Succinylcholine</h3>
+                            <div class="drug-subtitle">Anectine</div>
+                        </div>
+                        <div class="concentration-badge">20 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">RSI Dose</div>
+                            <div class="dose-value"><span data-calc="1.5">105</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1–1.5 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Laryngospasm</div>
+                            <div class="dose-value"><span data-calc="0.2">14</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.1–0.2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">IM</div>
+                            <div class="dose-value"><span data-calc="4">280</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">4 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Contraindicated: burns >24h, crush injury, denervation, hyperkalemia risk. MH trigger. Duration 5-10 min.</div>
+                    </div>
+                </div>
+
+                <!-- Rocuronium -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Rocuronium</h3>
+                            <div class="drug-subtitle">Zemuron</div>
+                        </div>
+                        <div class="concentration-badge">10 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Intubating</div>
+                            <div class="dose-value"><span data-calc="0.6">42</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.6 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">RSI Dose</div>
+                            <div class="dose-value"><span data-calc="1.2">84</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1.2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance</div>
+                            <div class="dose-value"><span data-calc="0.1">7</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.1 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Onset 60-90s (standard), 45-60s (RSI dose). Duration 30-45 min. Reversible with sugammadex 16 mg/kg for immediate reversal.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VASOPRESSORS & INOTROPES (Violet) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #8B5CF6;"></div>
+                <div class="category-info">
+                    <div class="category-title">Vasopressors & Inotropes</div>
+                    <div class="category-subtitle">Phenylephrine, Ephedrine (Fixed doses)</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Phenylephrine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Phenylephrine</h3>
+                            <div class="drug-subtitle">Neo-Synephrine</div>
+                        </div>
+                        <div class="concentration-badge">100 mcg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Bolus</div>
+                            <div class="dose-value">100 <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">50–200 mcg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Infusion</div>
+                            <div class="dose-value">50 <span class="dose-unit">mcg/min</span></div>
+                            <div class="dose-range">10–200 mcg/min</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">OB Bolus</div>
+                            <div class="dose-value">100 <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">q1-2 min PRN</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Pure α1-agonist — ↑SVR, reflex bradycardia. First-line for spinal hypotension. Avoid if already bradycardic — use ephedrine instead.</div>
+                    </div>
+                </div>
+
+                <!-- Ephedrine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Ephedrine</h3>
+                            <div class="drug-subtitle">—</div>
+                        </div>
+                        <div class="concentration-badge">5 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Bolus</div>
+                            <div class="dose-value">5–10 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">q3-5 min PRN</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Max Total</div>
+                            <div class="dose-value">50 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">tachyphylaxis</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">IM Dose</div>
+                            <div class="dose-value">25–50 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">if no IV access</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Mixed α/β agonist — ↑HR, ↑BP. Preferred over phenylephrine if bradycardic. Indirect mechanism = tachyphylaxis with repeated dosing.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVERSAL & ANTICHOLINERGICS (Green) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #10B981;"></div>
+                <div class="category-info">
+                    <div class="category-title">Reversal & Anticholinergics</div>
+                    <div class="category-subtitle">Sugammadex</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Sugammadex -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Sugammadex</h3>
+                            <div class="drug-subtitle">Bridion</div>
+                        </div>
+                        <div class="concentration-badge">100 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Moderate</div>
+                            <div class="dose-value"><span data-calc="2">140</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Deep Block</div>
+                            <div class="dose-value"><span data-calc="4">280</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">4 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Immediate</div>
+                            <div class="dose-value"><span data-calc="16">1120</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">16 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Encapsulates rocuronium/vecuronium. 16 mg/kg for 'can't intubate, can't oxygenate' after RSI with roc. May reduce efficacy of hormonal contraceptives.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOCAL ANESTHETICS (Gray) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #6B7280;"></div>
+                <div class="category-info">
+                    <div class="category-title">Local Anesthetics</div>
+                    <div class="category-subtitle">Lidocaine</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Lidocaine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Lidocaine</h3>
+                            <div class="drug-subtitle">Xylocaine</div>
+                        </div>
+                        <div class="concentration-badge">1% = 10 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Plain Max</div>
+                            <div class="dose-value"><span data-calc="4.5">315</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">4.5 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">+ Epi Max</div>
+                            <div class="dose-value"><span data-calc="7">490</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">7 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">IV Bolus</div>
+                            <div class="dose-value"><span data-calc="1.5">105</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">1.5 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">IV lidocaine blunts airway reflexes at intubation/extubation. LAST symptoms: tinnitus, perioral numbness, seizures, arrhythmias.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Legend -->
+        <div class="color-legend">
+            <div class="legend-title">Anesthesia Syringe Color Reference</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #2563EB;"></div>
+                    <span class="legend-label">Opioids</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #EF4444;"></div>
+                    <span class="legend-label">Neuromuscular Blockers</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #F59E0B;"></div>
+                    <span class="legend-label">Induction Agents</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #F97316;"></div>
+                    <span class="legend-label">Tranquilizers</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #8B5CF6;"></div>
+                    <span class="legend-label">Vasopressors</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #10B981;"></div>
+                    <span class="legend-label">Anticholinergics</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-swatch" style="background: #6B7280;"></div>
+                    <span class="legend-label">Local Anesthetics</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
+        </div>
+
+        <footer>
+            &copy; 2025 gasconsult.ai &mdash; <a href="/terms">Terms of Service</a>
+        </footer>
+    </main>
+
+    <!-- Crisis Modal -->
+    <div class="crisis-overlay" id="crisisOverlay" onclick="closeCrisisOnOverlay(event)">
+        <div class="crisis-modal" onclick="event.stopPropagation()">
+            <div class="crisis-modal-header">
+                <div class="crisis-modal-title">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Crisis Protocols
+                </div>
+                <button class="crisis-close-btn" onclick="toggleCrisis()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="crisis-modal-content">
+                <div class="protocol-grid">
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Malignant Hyperthermia</div>
+                        <div class="protocol-desc">Dantrolene 2.5 mg/kg, call MH hotline</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">LAST (Lipid Rescue)</div>
+                        <div class="protocol-desc">20% Intralipid bolus + infusion</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Anaphylaxis</div>
+                        <div class="protocol-desc">Epinephrine, fluids, steroids</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Cardiac Arrest</div>
+                        <div class="protocol-desc">ACLS algorithms & doses</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Bronchospasm</div>
+                        <div class="protocol-desc">Albuterol, epinephrine, deepening</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Laryngospasm</div>
+                        <div class="protocol-desc">Jaw thrust, CPAP, succinylcholine</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">High Spinal</div>
+                        <div class="protocol-desc">Airway, pressors, sedation</div>
+                    </button>
+                    <button class="protocol-btn">
+                        <div class="protocol-title">Air Embolism</div>
+                        <div class="protocol-desc">Flood field, Durant, aspirate</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Weight conversion and dose calculation
+        function updateDoses() {
+            const kg = parseFloat(document.getElementById('weightInput').value) || 70;
+
+            // Update lbs conversion
+            document.getElementById('lbsConversion').textContent = Math.round(kg * 2.205);
+
+            // Update all weight-based doses
+            document.querySelectorAll('[data-calc]').forEach(element => {
+                const multiplier = parseFloat(element.getAttribute('data-calc'));
+                const dose = Math.round(kg * multiplier);
+                element.textContent = dose;
+            });
+        }
+
+        // Quick weight buttons
+        function setWeight(kg) {
+            document.getElementById('weightInput').value = kg;
+            updateDoses();
+
+            // Update active state on buttons
+            document.querySelectorAll('.quick-weight-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(kg.toString())) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Category accordion toggle
+        function toggleCategory(header) {
+            const category = header.parentElement;
+            category.classList.toggle('open');
+        }
+
+        // Crisis modal
+        function toggleCrisis() {
+            document.getElementById('crisisOverlay').classList.toggle('show');
+        }
+
+        // Close modal when clicking overlay (not modal content)
+        function closeCrisisOnOverlay(event) {
+            if (event.target.id === 'crisisOverlay') {
+                toggleCrisis();
+            }
+        }
+
+        // Initialize with default weight
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDoses();
+        });
+    </script>
+</body>
+</html>
+"""
 
 @app.route("/stream")
 def stream():
@@ -3324,6 +4632,11 @@ def terms():
     """Terms of Service page"""
     return render_template_string(TERMS_HTML)
 
+
+@app.route("/quick-dose")
+def quick_dose():
+    """Quick Dose Reference - Weight-based drug dosing calculator"""
+    return render_template_string(QUICK_DOSE_HTML)
 @app.route("/preop", methods=["GET", "POST"])
 def preop_assessment():
     """Pre-operative assessment with evidence-based risk stratification"""
