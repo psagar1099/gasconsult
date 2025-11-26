@@ -810,6 +810,7 @@ PREOP_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -2121,7 +2122,8 @@ HTML = """
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
-                <a href="/preop" class="nav-link">Pre-Operative Assessment</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -2898,6 +2900,7 @@ TERMS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Ask</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
         </div>
     </nav>
@@ -4679,9 +4682,16 @@ Respond with maximum clinical utility:"""
 
             # If this is the first message (from homepage), set pending flag and redirect
             if is_first_message:
+                # Add placeholder assistant message for auto-start JavaScript to populate
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": "",  # Will be populated by streaming
+                    "references": [],
+                    "num_papers": 0
+                })
                 session['pending_stream'] = request_id
                 session.modified = True
-                print(f"[DEBUG] First message - redirecting to /chat page")
+                print(f"[DEBUG] First message - added placeholder assistant message, redirecting to /chat page")
                 return redirect(url_for('chat'))
 
             # For follow-up messages, return JSON for streaming
