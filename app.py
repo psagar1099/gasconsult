@@ -615,6 +615,14 @@ PREOP_HTML = """
             font-size: 13px;
         }
 
+        footer a {
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
         footer p {
             margin-bottom: 8px;
             line-height: 1.6;
@@ -1843,6 +1851,14 @@ HTML = """
             font-size: 13px;
         }
 
+        footer a {
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
         footer p {
             margin-bottom: 8px;
             line-height: 1.6;
@@ -2289,7 +2305,7 @@ HTML = """
     {% endif %}
 
     <footer>
-        <p>&copy; 2025 GasConsult.ai — Evidence-based anesthesiology consultation</p>
+        <p>&copy; 2025 GasConsult.ai — Evidence-based anesthesiology consultation | <a href="/terms" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></p>
     </footer>
 
     <script>
