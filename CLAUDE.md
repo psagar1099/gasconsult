@@ -19,19 +19,26 @@
 | AI/LLM | OpenAI (GPT-4o) | 1.53.0 |
 | Production Server | Gunicorn | 22.0.0 |
 | HTTP Client | httpx | 0.27.2 |
+| Security | bleach, Flask-WTF, Flask-Limiter | 6.1.0, 1.2.1, 3.5.0 |
+| Configuration | python-dotenv | 1.0.0 |
 | Language | Python 3.x | - |
 
 ## Directory Structure
 
 ```
 gasconsult/
-├── app.py              # Main Flask application (single-file architecture)
-├── requirements.txt    # Python dependencies
-├── README.md           # Project description
-├── CLAUDE.md           # This file - AI assistant guide
+├── app.py                  # Main Flask application (~7400 lines)
+├── requirements.txt        # Python dependencies
+├── .env.example           # Environment variable template
+├── README.md              # Project description
+├── CLAUDE.md              # This file - AI assistant guide
+├── CHANGELOG.md           # Version history and changes
+├── DEPLOYMENT_GUIDE.md    # Production deployment instructions
 └── static/
-    ├── favicon.ico     # Browser favicon
-    └── logo.png        # Site logo
+    ├── favicon.svg        # Browser favicon
+    ├── logo.png           # Site logo
+    ├── manifest.json      # PWA manifest
+    └── sw.js             # Service worker
 ```
 
 ## Architecture
@@ -82,8 +89,15 @@ Automatically expands common clinical abbreviations:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `OPENAI_API_KEY` | Yes | OpenAI API key for GPT-4o access |
+| `ENTREZ_EMAIL` | Yes | Email for NCBI Entrez API |
+| `ENTREZ_API_KEY` | Recommended | NCBI API key (increases rate limit) |
+| `FLASK_SECRET_KEY` | Recommended | Secret key for session management |
+| `FLASK_ENV` | Optional | `development` or `production` (default: production) |
+| `LOG_LEVEL` | Optional | Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL |
+| `LOG_FILE` | Optional | Path to log file (empty = stdout only) |
+| `RATE_LIMIT` | Optional | Rate limit (default: "60 per minute") |
 
-**Note:** Entrez credentials are currently hardcoded in `app.py` (lines 8-9). Consider moving to environment variables for production.
+**Setup:** Copy `.env.example` to `.env` and fill in your values.
 
 ## Development Commands
 
@@ -150,12 +164,37 @@ except Exception as e:
 4. **Preserve two-tier search strategy** - Ensures relevant results
 5. **Keep low temperature (0.1)** - Essential for factual medical content
 
-### Security Notes
+### Security Features (Production-Ready ✓)
 
-- API keys should be moved to environment variables
-- Entrez email/API key are currently hardcoded (lines 8-9)
-- OpenAI key properly loaded from environment
-- User input is processed but not sanitized for display (potential XSS via `|safe` filter)
+- ✅ **All credentials in environment variables** - No hardcoded secrets
+- ✅ **Input sanitization** - XSS protection using bleach library
+- ✅ **CSRF protection** - All POST requests protected
+- ✅ **Rate limiting** - 60 requests/minute per IP (configurable)
+- ✅ **Server-side sessions** - No sensitive data in cookies
+- ✅ **Comprehensive logging** - Request tracking and error monitoring
+- ✅ **Health check endpoint** - `/health` for monitoring
+- ✅ **HTTPS recommended** - Use reverse proxy with SSL
+
+### Security Architecture
+
+1. **Input Validation Layer**
+   - `sanitize_user_query()` - Strips all HTML from user input
+   - `sanitize_input()` - Allows safe HTML tags for GPT responses
+   - Applied to all form inputs (chat, preop, hypotension)
+
+2. **Rate Limiting**
+   - Flask-Limiter with in-memory storage
+   - Per-IP address tracking
+   - Configurable limits via environment
+
+3. **CSRF Protection**
+   - Flask-WTF automatic token validation
+   - Exempt endpoints: `/health`, `/api/status`
+
+4. **Session Security**
+   - Server-side filesystem storage
+   - Signed sessions
+   - Temporary conversation history only
 
 ### Testing Queries
 
@@ -165,13 +204,34 @@ Good test queries for the application:
 - "propofol peds"
 - "PONV prevention"
 
-### Potential Improvements
+### Application Routes
 
-- Move Entrez credentials to environment variables
-- Add input sanitization before rendering
-- Implement caching for repeated queries
-- Add logging for debugging
-- Consider rate limiting
+| Route | Method | Description |
+|-------|--------|-------------|
+| `/` | GET | Homepage with search interface |
+| `/chat` | GET/POST | Conversational AI chat interface |
+| `/stream` | GET | Server-sent events for streaming responses |
+| `/clear` | GET | Clear chat session |
+| `/terms` | GET | Terms of Service |
+| `/privacy` | GET | Privacy Policy |
+| `/quick-dose` | GET | Drug dosing calculator |
+| `/preop` | GET/POST | Pre-operative assessment tool |
+| `/hypotension` | GET/POST | Intraoperative hypotension predictor |
+| `/health` | GET | Health check endpoint (monitoring) |
+| `/api/status` | GET | API status and endpoints list |
+
+### Future Improvements
+
+- ✅ ~~Move Entrez credentials to environment variables~~ (Completed)
+- ✅ ~~Add input sanitization before rendering~~ (Completed)
+- ✅ ~~Add logging for debugging~~ (Completed)
+- ✅ ~~Consider rate limiting~~ (Completed)
+- ⬜ Implement caching for repeated PubMed queries (Redis)
+- ⬜ Add automated testing suite
+- ⬜ Set up CI/CD pipeline
+- ⬜ Enhanced medical disclaimers with acknowledgment
+- ⬜ User accounts and saved queries (optional)
+- ⬜ Mobile app (optional)
 
 ## Git Workflow
 
