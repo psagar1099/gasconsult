@@ -4439,8 +4439,7 @@ QUICK_DOSE_HTML = """
             background: #FFFFFF;
             color: var(--text-muted);
             font-size: 13px;
-            margin: 40px -24px -32px -24px;
-            width: calc(100% + 48px);
+            margin: 0;
         }
 
         footer a {
@@ -5247,10 +5246,11 @@ QUICK_DOSE_HTML = """
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
-        <footer>
-            <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
-        </footer>
     </main>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+    </footer>
 
     <!-- Crisis Modal -->
     <div class="crisis-overlay" id="crisisOverlay" onclick="closeCrisisOnOverlay(event)">
