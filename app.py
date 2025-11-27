@@ -6020,12 +6020,23 @@ HYPOTENSION_HTML = """
         <div class="header-container">
             <div class="header-left">
                 <a href="/" class="logo-link">
-                    <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" rx="8" fill="#2563EB"/>
-                        <path d="M8 20V12H12C14.2091 12 16 13.7909 16 16C16 18.2091 14.2091 20 12 20H8ZM10 18H12C13.1046 18 14 17.1046 14 16C14 14.8954 13.1046 14 12 14H10V18Z" fill="white"/>
-                        <circle cx="20" cy="12" r="2" fill="white"/>
-                        <path d="M20 15V24" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M18 22L20 24L22 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg class="logo-svg" viewBox="0 0 50 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M2 12 L8 12 L11 10 L14 14 L17 4 L20 20 L23 9 L26 12 L34 12"
+                              stroke="url(#ecgGrad)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
                     </svg>
                     <span class="logo-text">
                         <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
