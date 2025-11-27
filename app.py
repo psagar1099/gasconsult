@@ -3666,7 +3666,7 @@ TERMS_HTML = """
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Primary Brand Colors */
@@ -3874,27 +3874,42 @@ TERMS_HTML = """
 
         footer {
             text-align: center;
-            padding: 50px 40px;
+            padding: 40px;
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
             color: var(--text-muted);
-            font-size: 0.875rem;
-            border-top: 1px solid var(--border);
-            margin-top: 80px;
-            background: white;
+            font-size: 13px;
+            margin: 0;
         }
 
         footer a {
             color: var(--primary);
             text-decoration: none;
+            transition: color 0.2s ease;
         }
 
         footer a:hover {
-            text-decoration: underline;
+            color: var(--text-primary);
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            line-height: 1.6;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             nav {
                 padding: 14px 20px;
+            }
+
+            nav .container {
+                flex-wrap: nowrap;
+            }
+
+            .logo-container {
+                flex-shrink: 1;
+                min-width: 0;
             }
 
             .logo-text {
@@ -3907,12 +3922,14 @@ TERMS_HTML = """
             }
 
             .nav-actions {
-                gap: 8px;
+                gap: 6px;
+                flex-wrap: nowrap;
+                flex-shrink: 0;
             }
 
             .nav-link {
-                padding: 8px 14px;
-                font-size: 0.9rem;
+                padding: 6px 12px;
+                font-size: 0.85rem;
             }
 
             .content {
@@ -4111,8 +4128,16 @@ PRIVACY_POLICY_HTML = """
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #2563EB;
+            --primary-blue: #2563EB;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -4126,38 +4151,92 @@ PRIVACY_POLICY_HTML = """
         nav {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 16px 40px;
-            border-bottom: 1px solid #E2E8F0;
             position: sticky;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         nav .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .logo-link {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
             text-decoration: none;
-            font-size: 18px;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-1px);
+        }
+
+        .logo-ecg {
+            height: 28px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .logo-wordmark {
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 20px;
             font-weight: 600;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+
+        .logo-gas {
             color: #2563EB;
         }
 
-        .nav-links a {
-            margin-left: 24px;
-            text-decoration: none;
-            color: #475569;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
+        .logo-consult {
+            color: #111111;
         }
 
-        .nav-links a:hover { color: #2563EB; }
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
 
         .container {
             max-width: 900px;
@@ -4227,23 +4306,120 @@ PRIVACY_POLICY_HTML = """
         }
 
         footer {
-            background: #FFFFFF;
-            border-top: 1px solid #E2E8F0;
-            padding: 32px 24px;
             text-align: center;
-            color: #64748B;
-            font-size: 14px;
+            padding: 40px;
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
+        }
+
+        footer p {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            nav {
+                padding: 14px 20px;
+            }
+
+            nav .container {
+                flex-wrap: nowrap;
+            }
+
+            .logo-container {
+                flex-shrink: 1;
+                min-width: 0;
+            }
+
+            .logo-wordmark {
+                font-size: 18px;
+            }
+
+            .logo-ecg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .nav-actions {
+                gap: 6px;
+                flex-wrap: nowrap;
+                flex-shrink: 0;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            h2 {
+                font-size: 20px;
+                margin-top: 36px;
+            }
+
+            h3 {
+                font-size: 16px;
+                margin-top: 24px;
+            }
+
+            footer {
+                padding: 32px 20px;
+            }
         }
     </style>
 </head>
 <body>
     <nav>
         <div class="container">
-            <a href="/" class="logo-link">gasconsult.ai</a>
-            <div class="nav-links">
-                <a href="/chat">Ask</a>
-                <a href="/terms">Terms</a>
-                <a href="/privacy">Privacy</a>
+            <a href="/" class="logo-container">
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
