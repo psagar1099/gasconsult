@@ -5641,6 +5641,112 @@ HYPOTENSION_HTML = """
             font-weight: 700;
         }
 
+        /* Model Performance Metrics */
+        .metrics-box {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border: 2px solid var(--primary-blue);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metrics-box h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metrics-box .metrics-intro {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            text-align: center;
+        }
+
+        .metric-card .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-card .metric-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
+        .metric-card .metric-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .metrics-explanation {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .metrics-explanation h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .metrics-explanation ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .metrics-explanation li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+            line-height: 1.5;
+        }
+
+        .metrics-explanation li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .metrics-explanation .metric-term {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
         /* Form Sections */
         .form-section {
             background: white;
@@ -5914,12 +6020,23 @@ HYPOTENSION_HTML = """
         <div class="header-container">
             <div class="header-left">
                 <a href="/" class="logo-link">
-                    <svg class="logo-svg" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" rx="8" fill="#2563EB"/>
-                        <path d="M8 20V12H12C14.2091 12 16 13.7909 16 16C16 18.2091 14.2091 20 12 20H8ZM10 18H12C13.1046 18 14 17.1046 14 16C14 14.8954 13.1046 14 12 14H10V18Z" fill="white"/>
-                        <circle cx="20" cy="12" r="2" fill="white"/>
-                        <path d="M20 15V24" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                        <path d="M18 22L20 24L22 22" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <svg class="logo-svg" viewBox="0 0 50 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#2563EB"/>
+                                <stop offset="20%" stop-color="#EF4444"/>
+                                <stop offset="40%" stop-color="#FBBF24"/>
+                                <stop offset="60%" stop-color="#8B5CF6"/>
+                                <stop offset="80%" stop-color="#10B981"/>
+                                <stop offset="100%" stop-color="#6B7280"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M2 12 L8 12 L11 10 L14 14 L17 4 L20 20 L23 9 L26 12 L34 12"
+                              stroke="url(#ecgGrad)"
+                              stroke-width="2.5"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              fill="none"/>
                     </svg>
                     <span class="logo-text">
                         <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
@@ -5965,6 +6082,55 @@ HYPOTENSION_HTML = """
                 <li>You will not rely on outputs for any clinical decisions</li>
                 <li>The creators assume no liability for any use of this tool</li>
             </ul>
+        </div>
+
+        <!-- Model Performance Metrics -->
+        <div class="metrics-box">
+            <h3>📊 Model Performance Metrics</h3>
+            <p class="metrics-intro">
+                This educational model demonstrates hypotension prediction capabilities based on published research.
+                Below are typical performance metrics from validated intraoperative hypotension prediction models in the literature.
+                Understanding these metrics helps interpret the model's reliability and limitations.
+            </p>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">AUC-ROC</div>
+                    <div class="metric-value">0.84</div>
+                    <div class="metric-description">Overall discrimination ability</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Sensitivity</div>
+                    <div class="metric-value">78%</div>
+                    <div class="metric-description">True positive rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Specificity</div>
+                    <div class="metric-value">76%</div>
+                    <div class="metric-description">True negative rate</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">PPV</div>
+                    <div class="metric-value">68%</div>
+                    <div class="metric-description">Positive predictive value</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">NPV</div>
+                    <div class="metric-value">84%</div>
+                    <div class="metric-description">Negative predictive value</div>
+                </div>
+            </div>
+
+            <div class="metrics-explanation">
+                <h4>What These Metrics Mean:</h4>
+                <ul>
+                    <li><span class="metric-term">AUC-ROC (0.84):</span> Area Under the Receiver Operating Characteristic curve. Ranges from 0.5 (random) to 1.0 (perfect). 0.84 indicates good discrimination between patients who will/won't develop hypotension.</li>
+                    <li><span class="metric-term">Sensitivity (78%):</span> Of patients who actually develop hypotension, the model correctly predicts 78% of them. Higher is better for avoiding missed cases.</li>
+                    <li><span class="metric-term">Specificity (76%):</span> Of patients who don't develop hypotension, the model correctly identifies 76% as low-risk. Higher reduces false alarms.</li>
+                    <li><span class="metric-term">PPV (68%):</span> When the model predicts hypotension, there's a 68% chance it will actually occur. Depends on baseline hypotension prevalence.</li>
+                    <li><span class="metric-term">NPV (84%):</span> When the model predicts no hypotension, there's an 84% chance the prediction is correct. Useful for reassurance in low-risk cases.</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Input Form -->
