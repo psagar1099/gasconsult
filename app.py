@@ -1153,7 +1153,7 @@ PREOP_HTML = """
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Sex</label>
+                        <label>Sex Assigned at Birth</label>
                         <div style="display: flex; gap: 20px; margin-top: 8px;">
                             <div class="checkbox-item">
                                 <input type="radio" id="male" name="sex" value="male" onchange="calculateMetrics()" required>
@@ -5793,7 +5793,7 @@ Patient Demographics:
 - Age: {age} years
 - Weight: {weight} kg
 - Height: {height} cm
-- Sex: {sex}
+- Sex Assigned at Birth: {sex}
 - BMI: {bmi} kg/m²
 - IBW: {ibw} kg
 
