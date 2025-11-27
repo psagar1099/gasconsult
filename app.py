@@ -4035,6 +4035,13 @@ QUICK_DOSE_HTML = """
             color: var(--text-secondary);
         }
 
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .nav-links {
             display: flex;
             gap: 12px;
@@ -4439,8 +4446,7 @@ QUICK_DOSE_HTML = """
             background: #FFFFFF;
             color: var(--text-muted);
             font-size: 13px;
-            margin: 40px -24px -32px -24px;
-            width: calc(100% + 48px);
+            margin: 0;
         }
 
         footer a {
@@ -4721,19 +4727,21 @@ QUICK_DOSE_HTML = """
                     </span>
                 </a>
             </div>
+            <div class="header-center">
+                <button class="crisis-btn" onclick="toggleCrisis()">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Crisis Mode
+                </button>
+            </div>
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
             </div>
-            <button class="crisis-btn" onclick="toggleCrisis()">
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                    <line x1="12" y1="9" x2="12" y2="13"></line>
-                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                </svg>
-                Crisis Mode
-            </button>
         </div>
     </header>
 
@@ -5247,10 +5255,11 @@ QUICK_DOSE_HTML = """
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
-        <footer>
-            <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
-        </footer>
     </main>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+    </footer>
 
     <!-- Crisis Modal -->
     <div class="crisis-overlay" id="crisisOverlay" onclick="closeCrisisOnOverlay(event)">
