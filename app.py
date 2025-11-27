@@ -1108,7 +1108,7 @@ PREOP_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -2838,7 +2838,7 @@ HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Ask</a>
+                <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -3658,7 +3658,7 @@ TERMS_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -4621,7 +4621,7 @@ QUICK_DOSE_HTML = """
                 </a>
             </div>
             <div class="nav-links">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
             </div>
