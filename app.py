@@ -7067,7 +7067,7 @@ def chat():
             ids = []
             try:
                 print(f"[DEBUG] Searching PubMed (anesthesiology)...")
-                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance", api_key=Entrez.api_key)
+                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
                 print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
@@ -7079,7 +7079,7 @@ def chat():
             if not ids and not is_followup:
                 try:
                     print(f"[DEBUG] Searching PubMed (general)...")
-                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance", api_key=Entrez.api_key)
+                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
                     result = Entrez.read(handle)
                     ids = result.get("IdList", [])
                     print(f"[DEBUG] Found {len(ids)} papers (general)")
@@ -7151,7 +7151,7 @@ Answer as if you're a colleague continuing the conversation:"""
                     return redirect(url_for('chat'))
 
             print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
-            handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
+            handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
             papers = Entrez.read(handle)["PubmedArticle"]
             print(f"[DEBUG] Papers fetched successfully")
 
@@ -7398,12 +7398,12 @@ def preop_assessment():
                 f'("2015/01/01"[PDAT] : "3000"[PDAT])'
             )
 
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance", api_key=Entrez.api_key)
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
             result = Entrez.read(handle)
             ids = result["IdList"]
 
             if ids:
-                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml", api_key=Entrez.api_key)
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
                 papers = Entrez.read(handle)["PubmedArticle"]
 
                 for p in papers:
