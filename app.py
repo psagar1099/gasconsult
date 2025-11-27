@@ -534,15 +534,15 @@ PREOP_HTML = """
 
         .preop-header h1 {
             font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 16px;
             font-weight: 700;
-            letter-spacing: -1.5px;
-            line-height: 1.1;
+            letter-spacing: -1px;
+            line-height: 1.2;
         }
 
         .preop-header p {
