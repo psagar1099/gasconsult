@@ -534,15 +534,15 @@ PREOP_HTML = """
 
         .preop-header h1 {
             font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             background: linear-gradient(135deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 16px;
             font-weight: 700;
-            letter-spacing: -1.5px;
-            line-height: 1.1;
+            letter-spacing: -1px;
+            line-height: 1.2;
         }
 
         .preop-header p {
@@ -1108,7 +1108,7 @@ PREOP_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -1153,7 +1153,7 @@ PREOP_HTML = """
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Sex</label>
+                        <label>Sex Assigned at Birth</label>
                         <div style="display: flex; gap: 20px; margin-top: 8px;">
                             <div class="checkbox-item">
                                 <input type="radio" id="male" name="sex" value="male" onchange="calculateMetrics()" required>
@@ -1259,7 +1259,7 @@ PREOP_HTML = """
 
             <!-- Labs -->
             <div class="form-section">
-                <h2>4. Laboratory Values</h2>
+                <h2>4. Laboratory Values & Cardiac Assessment</h2>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="hgb">Hemoglobin (g/dL)</label>
@@ -1276,6 +1276,16 @@ PREOP_HTML = """
                     <div class="form-group">
                         <label for="inr">INR</label>
                         <input type="number" id="inr" name="inr" step="0.1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ef">Ejection Fraction (%)</label>
+                        <input type="text" id="ef" name="ef" placeholder="e.g., 55-60% or None">
+                    </div>
+                    <div class="form-group">
+                        <label for="ekg">EKG Findings</label>
+                        <input type="text" id="ekg" name="ekg" placeholder="e.g., NSR, Afib, or None">
                     </div>
                 </div>
             </div>
@@ -1669,9 +1679,8 @@ HTML = """
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            height: 600px;
-            background: radial-gradient(ellipse at 50% 0%, var(--primary-blue-light) 0%, transparent 70%);
-            opacity: 0.5;
+            height: 700px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.15) 0%, transparent 65%);
             z-index: -1;
             pointer-events: none;
         }
@@ -1712,50 +1721,98 @@ HTML = """
             flex-wrap: wrap;
         }
 
-        /* Outline CTA Button */
+        /* Pre-Op CTA Button */
         .preop-cta-outline {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: transparent;
-            border: 2px solid var(--primary-blue);
-            border-radius: 12px;
-            color: var(--primary-blue);
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
             font-weight: 600;
             font-size: 16px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preop-cta-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .preop-cta-outline:hover::before {
+            left: 100%;
         }
 
         .preop-cta-outline:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
         }
 
-        /* Filled CTA Button */
+        .preop-cta-outline svg {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .preop-cta-outline:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Quick Dose CTA Button */
         .quickdose-cta-filled {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--vasopressor-violet) 0%, #7C3AED 100%);
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-weight: 600;
             font-size: 16px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quickdose-cta-filled::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .quickdose-cta-filled:hover::before {
+            left: 100%;
         }
 
         .quickdose-cta-filled:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        .quickdose-cta-filled svg {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quickdose-cta-filled:hover svg {
+            transform: scale(1.1);
         }
 
         /* Trust Badges */
@@ -1798,7 +1855,7 @@ HTML = """
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 2px solid transparent;
+            border: none;
             border-radius: 16px;
             padding: 8px;
             box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
@@ -1814,8 +1871,7 @@ HTML = """
         }
 
         .homepage-input .chat-form:focus-within {
-            border-color: var(--primary-blue);
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.25), 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 16px 56px rgba(37, 99, 235, 0.25), 0 8px 24px rgba(0, 0, 0, 0.12);
             transform: translateY(-3px);
         }
 
@@ -1844,7 +1900,7 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.6rem;
+            font-size: 1.75rem;
             font-weight: 900;
             color: white;
             border: none;
@@ -1854,6 +1910,8 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0 0 2px 0;
+            -webkit-text-stroke: 0.5px white;
         }
 
         .homepage-input .send-btn:hover {
@@ -1883,8 +1941,10 @@ HTML = """
         /* Features Section */
         .features-section {
             padding: 80px 0 0 0;
-            background: var(--bg-secondary);
+            background: #F8FAFC;
             margin: 0;
+            position: relative;
+            z-index: 1;
         }
 
         .feature-grid {
@@ -2009,6 +2069,7 @@ HTML = """
             display: flex;
             flex-direction: column;
             position: relative;
+            background: linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%);
         }
 
         /* Chat Container */
@@ -2290,16 +2351,17 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.6rem;
+            font-size: 1.75rem;
             font-weight: 900;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            padding: 0 0 2px 0;
             line-height: 1;
             flex-shrink: 0;
+            -webkit-text-stroke: 0.5px white;
         }
 
         .send-btn:hover {
@@ -2837,7 +2899,7 @@ HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Ask</a>
+                <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -3657,7 +3719,7 @@ TERMS_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
             </div>
@@ -4620,7 +4682,7 @@ QUICK_DOSE_HTML = """
                 </a>
             </div>
             <div class="nav-links">
-                <a href="/" class="nav-link">Ask</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
             </div>
@@ -5688,6 +5750,8 @@ def preop_assessment():
     plt = request.form.get("plt", "")
     cr = request.form.get("cr", "")
     inr = request.form.get("inr", "")
+    ef = request.form.get("ef", "")
+    ekg = request.form.get("ekg", "")
     procedure = request.form.get("procedure", "")
     surgery_risk = request.form.get("surgery_risk", "")
     npo = request.form.get("npo", "")
@@ -5722,6 +5786,25 @@ def preop_assessment():
     # Cardiac risk
     if any(c in comorbidities for c in ["Coronary Artery Disease", "Heart Failure", "Prior Stroke"]):
         search_queries.append(f"perioperative cardiac risk {procedure} guidelines")
+
+    # Reduced ejection fraction
+    if ef:
+        ef_lower = ef.lower()
+        try:
+            # Try to extract numeric value from EF
+            ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', ef.split('-')[0])))
+            if ef_numeric < 40:
+                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+        except:
+            # Check for descriptive terms
+            if any(term in ef_lower for term in ['reduced', 'low', 'decreased', 'hfref']):
+                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+
+    # Atrial fibrillation from EKG
+    if ekg:
+        ekg_lower = ekg.lower()
+        if any(term in ekg_lower for term in ['afib', 'a-fib', 'atrial fib', 'atrial fibrillation']):
+            search_queries.append(f"atrial fibrillation perioperative management {procedure}")
 
     # CKD
     if "Chronic Kidney Disease" in comorbidities:
@@ -5792,7 +5875,7 @@ Patient Demographics:
 - Age: {age} years
 - Weight: {weight} kg
 - Height: {height} cm
-- Sex: {sex}
+- Sex Assigned at Birth: {sex}
 - BMI: {bmi} kg/m²
 - IBW: {ibw} kg
 
@@ -5810,6 +5893,10 @@ Laboratory Values:
 - Platelets: {plt} ×10³/μL
 - Creatinine: {cr} mg/dL
 - INR: {inr}
+
+Cardiac Assessment:
+- Ejection Fraction: {ef if ef else 'Not available'}
+- EKG: {ekg if ekg else 'Not available'}
 
 Procedure: {procedure}
 Surgery Risk Category: {surgery_risk}
