@@ -1259,7 +1259,7 @@ PREOP_HTML = """
 
             <!-- Labs -->
             <div class="form-section">
-                <h2>4. Laboratory Values</h2>
+                <h2>4. Laboratory Values & Cardiac Assessment</h2>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="hgb">Hemoglobin (g/dL)</label>
@@ -1276,6 +1276,16 @@ PREOP_HTML = """
                     <div class="form-group">
                         <label for="inr">INR</label>
                         <input type="number" id="inr" name="inr" step="0.1">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ef">Ejection Fraction (%)</label>
+                        <input type="text" id="ef" name="ef" placeholder="e.g., 55-60% or None">
+                    </div>
+                    <div class="form-group">
+                        <label for="ekg">EKG Findings</label>
+                        <input type="text" id="ekg" name="ekg" placeholder="e.g., NSR, Afib, or None">
                     </div>
                 </div>
             </div>
@@ -5689,6 +5699,8 @@ def preop_assessment():
     plt = request.form.get("plt", "")
     cr = request.form.get("cr", "")
     inr = request.form.get("inr", "")
+    ef = request.form.get("ef", "")
+    ekg = request.form.get("ekg", "")
     procedure = request.form.get("procedure", "")
     surgery_risk = request.form.get("surgery_risk", "")
     npo = request.form.get("npo", "")
@@ -5723,6 +5735,25 @@ def preop_assessment():
     # Cardiac risk
     if any(c in comorbidities for c in ["Coronary Artery Disease", "Heart Failure", "Prior Stroke"]):
         search_queries.append(f"perioperative cardiac risk {procedure} guidelines")
+
+    # Reduced ejection fraction
+    if ef:
+        ef_lower = ef.lower()
+        try:
+            # Try to extract numeric value from EF
+            ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', ef.split('-')[0])))
+            if ef_numeric < 40:
+                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+        except:
+            # Check for descriptive terms
+            if any(term in ef_lower for term in ['reduced', 'low', 'decreased', 'hfref']):
+                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+
+    # Atrial fibrillation from EKG
+    if ekg:
+        ekg_lower = ekg.lower()
+        if any(term in ekg_lower for term in ['afib', 'a-fib', 'atrial fib', 'atrial fibrillation']):
+            search_queries.append(f"atrial fibrillation perioperative management {procedure}")
 
     # CKD
     if "Chronic Kidney Disease" in comorbidities:
@@ -5811,6 +5842,10 @@ Laboratory Values:
 - Platelets: {plt} ×10³/μL
 - Creatinine: {cr} mg/dL
 - INR: {inr}
+
+Cardiac Assessment:
+- Ejection Fraction: {ef if ef else 'Not available'}
+- EKG: {ekg if ekg else 'Not available'}
 
 Procedure: {procedure}
 Surgery Risk Category: {surgery_risk}
