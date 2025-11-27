@@ -1852,42 +1852,36 @@ HTML = """
         }
 
         .homepage-input .chat-form {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: none;
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
+            background: transparent;
+            border: none !important;
+            padding: 0;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .homepage-input .chat-form:hover {
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.18), 0 6px 20px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .homepage-input .chat-form:focus-within {
-            box-shadow: 0 16px 56px rgba(37, 99, 235, 0.25), 0 8px 24px rgba(0, 0, 0, 0.12);
-            transform: translateY(-3px);
+            outline: none;
         }
 
         .homepage-input .chat-form textarea {
             flex: 1;
-            padding: 12px 16px;
+            padding: 14px 20px;
             font-size: 15px;
             border: none;
             outline: none;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.95);
             color: var(--text-primary);
             resize: none;
-            height: 44px;
+            height: 48px;
             min-height: unset;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.4;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .homepage-input .chat-form textarea:focus {
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
+            transform: translateY(-1px);
         }
 
         .homepage-input .chat-form textarea::placeholder {
@@ -1910,7 +1904,7 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 2px 0;
+            padding: 0 0 3px 0;
             -webkit-text-stroke: 0.5px white;
         }
 
@@ -2358,7 +2352,7 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 2px 0;
+            padding: 0 0 3px 0;
             line-height: 1;
             flex-shrink: 0;
             -webkit-text-stroke: 0.5px white;
@@ -4401,14 +4395,20 @@ QUICK_DOSE_HTML = """
 
         footer {
             text-align: center;
-            padding: 32px 24px;
-            font-size: 12px;
+            padding: 40px;
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
             color: var(--text-muted);
+            font-size: 13px;
+            margin: 0;
         }
 
         footer a {
-            color: var(--primary-blue);
-            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
         }
 
         /* Crisis Modal */
