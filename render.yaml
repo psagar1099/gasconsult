@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: gasconsult-ai
+    runtime: python
+    region: oregon  # Choose your preferred region
+    plan: free  # Change to starter/standard for production
+    branch: main  # Change to your deployment branch if different
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 4 --timeout 120 --access-logfile - --error-logfile -
+    healthCheckPath: /health
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_SECRET_KEY
+        generateValue: true  # Render will auto-generate a secure secret
+      - key: LOG_LEVEL
+        value: INFO
+      - key: RATE_LIMIT
+        value: 60 per minute
+      - key: OPENAI_API_KEY
+        sync: false  # Must be manually set in Render dashboard
+      - key: ENTREZ_EMAIL
+        sync: false  # Must be manually set in Render dashboard
+      - key: ENTREZ_API_KEY
+        sync: false  # Must be manually set in Render dashboard
