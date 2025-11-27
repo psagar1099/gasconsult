@@ -1849,6 +1849,9 @@ HTML = """
             margin: 0 auto 80px;
             max-width: 700px;
             padding: 0 40px;
+            background: transparent !important;
+            border: none !important;
+            position: static !important;
         }
 
         .homepage-input .chat-form {
@@ -3869,6 +3872,8 @@ QUICK_DOSE_HTML = """
             --primary-blue: #2563EB;
             --primary-blue-dark: #1D4ED8;
             --primary-blue-light: #DBEAFE;
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
 
             /* Anesthesia Color Palette */
             --opioid-blue: #2563EB;
