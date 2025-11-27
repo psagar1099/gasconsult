@@ -4238,10 +4238,10 @@ PRIVACY_POLICY_HTML = """
             font-weight: 600;
         }
 
-        .container {
+        .content {
             max-width: 900px;
-            margin: 0 auto;
-            padding: 60px 24px;
+            margin: 60px auto;
+            padding: 0 40px;
         }
 
         h1 {
@@ -4365,8 +4365,9 @@ PRIVACY_POLICY_HTML = """
                 font-size: 0.85rem;
             }
 
-            .container {
-                padding: 40px 20px;
+            .content {
+                padding: 0 20px;
+                margin: 40px auto;
             }
 
             h1 {
@@ -4424,7 +4425,7 @@ PRIVACY_POLICY_HTML = """
         </div>
     </nav>
 
-    <div class="container">
+    <div class="content">
         <h1>Privacy Policy</h1>
         <p class="last-updated">Last Updated: November 27, 2025</p>
 
