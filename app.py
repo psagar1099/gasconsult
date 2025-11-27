@@ -7052,13 +7052,13 @@ def chat():
 
             # Use broader search for follow-up questions
             if is_followup:
-                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
+                search_term = f'({q}) AND (2005:3000[pdat])'
             else:
                 search_term = (
                     f'({q}) AND '
                     f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                     f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    f'(2015:3000[pdat])'
                 )
 
             print(f"[DEBUG] Search term: '{search_term[:100]}...'")
@@ -7395,7 +7395,7 @@ def preop_assessment():
                 f'({q_expanded}) AND '
                 f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
                 f'"randomized controlled trial"[pt]) AND '
-                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                f'(2015:3000[pdat])'
             )
 
             handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
