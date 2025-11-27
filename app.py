@@ -1855,36 +1855,64 @@ HTML = """
         }
 
         .homepage-input .chat-form {
-            background: transparent;
-            border: none !important;
-            padding: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
+            padding: 6px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             outline: none;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .homepage-input .chat-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.05), transparent);
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .homepage-input .chat-form:hover::before {
+            left: 100%;
+        }
+
+        .homepage-input .chat-form:hover {
+            border-color: rgba(37, 99, 235, 0.2);
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .homepage-input .chat-form:focus-within {
+            border-color: var(--primary-blue);
+            box-shadow: 0 16px 56px rgba(37, 99, 235, 0.18), 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
         }
 
         .homepage-input .chat-form textarea {
             flex: 1;
-            padding: 14px 20px;
+            padding: 12px 16px;
             font-size: 15px;
             border: none;
             outline: none;
-            background: rgba(255, 255, 255, 0.95);
+            background: transparent;
             color: var(--text-primary);
             resize: none;
-            height: 48px;
+            height: 44px;
             min-height: unset;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             line-height: 1.4;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s ease;
-        }
-
-        .homepage-input .chat-form textarea:focus {
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.2);
-            transform: translateY(-1px);
+            position: relative;
+            z-index: 1;
         }
 
         .homepage-input .chat-form textarea::placeholder {
@@ -1892,8 +1920,9 @@ HTML = """
         }
 
         .homepage-input .send-btn {
-            position: static;
-            background: var(--primary-blue);
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -1902,18 +1931,23 @@ HTML = """
             color: white;
             border: none;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 0 0 3px 0;
             -webkit-text-stroke: 0.5px white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .homepage-input .send-btn:hover {
-            background: var(--primary-blue-dark);
-            transform: scale(1.05);
+            transform: scale(1.08) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .homepage-input .send-btn:active {
+            transform: scale(0.95);
         }
 
         .preop-cta {
@@ -4405,7 +4439,8 @@ QUICK_DOSE_HTML = """
             background: #FFFFFF;
             color: var(--text-muted);
             font-size: 13px;
-            margin: 0;
+            margin: 40px -24px -32px -24px;
+            width: calc(100% + 48px);
         }
 
         footer a {
