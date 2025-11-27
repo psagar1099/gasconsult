@@ -2474,6 +2474,91 @@ HTML = """
             50% { opacity: 0.5; }
         }
 
+        /* Evidence Quality Badge */
+        .evidence-quality-badge {
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border-left: 4px solid #0EA5E9;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.1);
+        }
+
+        .confidence-level {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .confidence-level.high {
+            color: #047857;
+        }
+
+        .confidence-level.high strong {
+            color: #065F46;
+        }
+
+        .confidence-level.moderate {
+            color: #D97706;
+        }
+
+        .confidence-level.moderate strong {
+            color: #B45309;
+        }
+
+        .confidence-level.low {
+            color: #DC2626;
+        }
+
+        .confidence-level.low strong {
+            color: #B91C1C;
+        }
+
+        .evidence-details {
+            font-size: 0.875rem;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* Suggested Prompts */
+        .suggested-prompts {
+            max-width: 900px;
+            margin: 24px auto;
+            padding: 0 20px;
+        }
+
+        .suggested-prompts h4 {
+            font-size: 0.9rem;
+            color: #64748B;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .prompt-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .prompt-btn {
+            background: white;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .prompt-btn:hover {
+            border-color: #2563EB;
+            color: #2563EB;
+            background: #F0F9FF;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
         /* References styling for streamed content */
         .references {
             margin-top: 24px;
@@ -3215,6 +3300,18 @@ HTML = """
         <!-- Chat Input - Always Visible on Homepage -->
         {% if not messages %}
         <div class="homepage-chat-section">
+            <!-- Suggested Prompts -->
+            <div class="suggested-prompts">
+                <h4>💡 Try asking:</h4>
+                <div class="prompt-buttons">
+                    <button class="prompt-btn" onclick="fillQuery('TXA in cardiac surgery')">TXA in cardiac surgery</button>
+                    <button class="prompt-btn" onclick="fillQuery('propofol vs etomidate for induction')">Propofol vs Etomidate</button>
+                    <button class="prompt-btn" onclick="fillQuery('PONV prevention strategies')">PONV prevention</button>
+                    <button class="prompt-btn" onclick="fillQuery('sugammadex reversal dosing')">Sugammadex dosing</button>
+                    <button class="prompt-btn" onclick="fillQuery('difficult airway management')">Difficult airway</button>
+                </div>
+            </div>
+
             <div class="chat-input-container homepage-input">
                 <form method="post" action="/chat" class="chat-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -3335,6 +3432,18 @@ HTML = """
     </footer>
 
     <script>
+        // Fill query from suggested prompt
+        function fillQuery(text) {
+            const textarea = document.getElementById('chatInput');
+            if (textarea) {
+                textarea.value = text;
+                textarea.focus();
+                // Auto-expand textarea if needed
+                textarea.style.height = '52px';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+
         // Smooth scroll to latest message on page load
         window.addEventListener('load', function() {
             const messages = document.querySelectorAll('.message');
@@ -3401,11 +3510,11 @@ HTML = """
                 userMsg.innerHTML = `<div class="message-content"><div class="message-text">${escapeHtml(query)}</div></div>`;
                 messagesContainer.appendChild(userMsg);
 
-                // Add loading indicator
+                // Add loading indicator with progress steps
                 const loadingMsg = document.createElement('div');
                 loadingMsg.className = 'message assistant';
                 loadingMsg.id = 'streaming-response';
-                loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching medical literature...</p></div>`;
+                loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching PubMed database...</p></div>`;
                 messagesContainer.appendChild(loadingMsg);
                 loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
@@ -3425,10 +3534,10 @@ HTML = """
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === 'ready') {
-                        // Update loading indicator
+                        // Update loading indicator with progress
                         const loadingIndicator = document.querySelector('.loading-indicator');
                         if (loadingIndicator) {
-                            loadingIndicator.textContent = '✨ Generating response...';
+                            loadingIndicator.innerHTML = '📚 Found papers<br>🤖 Analyzing evidence...';
                         }
 
                         // Connect to streaming endpoint
@@ -7391,9 +7500,27 @@ INSTRUCTIONS:
 3. Use numbered citations [1], [2] - NO author names in text
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
+6. START your response with a confidence badge using this exact HTML format:
+   <div class="evidence-quality-badge">
+   <div class="confidence-level [high/moderate/low]">
+   <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
+   </div>
+   <div class="evidence-details">
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+   </div>
+   </div>
 
-Example:
-"<h3>Acute Bronchospasm Management</h3>
+Example response format:
+"<div class="evidence-quality-badge">
+<div class="confidence-level high">
+<strong>Evidence Quality:</strong> High Confidence
+</div>
+<div class="evidence-details">
+📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
+</div>
+</div>
+
+<h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
 Deepen anesthesia with propofol 0.5-1 mg/kg or increase volatile to 2+ MAC [1]</p>
 <p><strong>Bronchodilators:</strong><br>
