@@ -1311,6 +1311,7 @@ PREOP_HTML = """
 
         {% if not summary %}
         <form method="post" action="/preop">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <!-- Demographics -->
             <div class="form-section">
                 <h2>1. Patient Demographics</h2>
@@ -3216,6 +3217,7 @@ HTML = """
         <div class="homepage-chat-section">
             <div class="chat-input-container homepage-input">
                 <form method="post" action="/chat" class="chat-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
                     <button type="submit" class="send-btn">↑</button>
                 </form>
@@ -3321,6 +3323,7 @@ HTML = """
     {% if messages %}
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
@@ -6712,6 +6715,7 @@ HYPOTENSION_HTML = """
 
         <!-- Input Form -->
         <form method="POST" action="/hypotension">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="form-section">
                 <h2>Patient Demographics</h2>
                 <div class="form-grid">
