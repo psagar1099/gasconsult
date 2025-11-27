@@ -1,5 +1,8 @@
 from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify
 from flask_session import Session
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from flask_wtf.csrf import CSRFProtect
 from Bio import Entrez
 import openai
 import os
@@ -8,6 +11,11 @@ import secrets
 import tempfile
 import uuid
 import json
+import bleach
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
@@ -19,10 +27,143 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_USE_SIGNER'] = True
 Session(app)
 
-Entrez.email = "psagar1099@gmail.com"
-Entrez.api_key = "f239ceccf2b12431846e6c03ffe29691ac08"
+# Initialize CSRF protection
+csrf = CSRFProtect(app)
+
+# Initialize rate limiter
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=[os.getenv("RATE_LIMIT", "60 per minute")],
+    storage_uri="memory://"
+)
+
+Entrez.email = os.getenv("ENTREZ_EMAIL", "your-email@example.com")
+Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# ====== Security Functions ======
+
+def sanitize_input(text, strip_tags=False):
+    """
+    Sanitize user input to prevent XSS attacks.
+
+    Args:
+        text: Input text to sanitize
+        strip_tags: If True, strip all HTML tags. If False, allow safe HTML tags.
+
+    Returns:
+        Sanitized text safe for display
+    """
+    if not text:
+        return ""
+
+    if strip_tags:
+        # Strip all HTML tags for plain text input
+        return bleach.clean(text, tags=[], strip=True)
+    else:
+        # Allow safe HTML tags (for GPT-generated content)
+        allowed_tags = [
+            'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li', 'a', 'blockquote', 'code', 'pre', 'hr', 'div', 'span',
+            'table', 'thead', 'tbody', 'tr', 'th', 'td', 'sup', 'sub'
+        ]
+        allowed_attributes = {
+            'a': ['href', 'title', 'target', 'rel'],
+            'div': ['class', 'style'],
+            'span': ['class', 'style'],
+            'p': ['class', 'style'],
+            'td': ['colspan', 'rowspan'],
+            'th': ['colspan', 'rowspan']
+        }
+        allowed_protocols = ['http', 'https', 'mailto']
+
+        return bleach.clean(
+            text,
+            tags=allowed_tags,
+            attributes=allowed_attributes,
+            protocols=allowed_protocols,
+            strip=True
+        )
+
+def sanitize_user_query(query):
+    """Sanitize user query input - strip all HTML tags."""
+    return sanitize_input(query, strip_tags=True)
+
+# ====== Logging Configuration ======
+
+import logging
+from logging.handlers import RotatingFileHandler
+import sys
+
+def setup_logging():
+    """Configure comprehensive logging for the application"""
+    log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+    log_file = os.getenv("LOG_FILE", "")
+
+    # Create logger
+    logger = logging.getLogger("gasconsult")
+    logger.setLevel(getattr(logging, log_level, logging.INFO))
+
+    # Create formatter
+    formatter = logging.Formatter(
+        '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+
+    # Console handler (always enabled)
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    # File handler (optional)
+    if log_file:
+        file_handler = RotatingFileHandler(
+            log_file,
+            maxBytes=10485760,  # 10MB
+            backupCount=5
+        )
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+
+    # Configure Flask app logger
+    app.logger.handlers = logger.handlers
+    app.logger.setLevel(logger.level)
+
+    return logger
+
+# Initialize logging
+logger = setup_logging()
+
+# Log startup information
+logger.info("=" * 60)
+logger.info("GasConsult.ai Application Starting")
+logger.info(f"Environment: {os.getenv('FLASK_ENV', 'production')}")
+logger.info(f"Log Level: {os.getenv('LOG_LEVEL', 'INFO')}")
+logger.info(f"Rate Limit: {os.getenv('RATE_LIMIT', '60 per minute')}")
+logger.info("=" * 60)
+
+# Request logging middleware
+@app.before_request
+def log_request():
+    """Log incoming requests"""
+    logger.info(f"{request.method} {request.path} from {request.remote_addr}")
+
+@app.after_request
+def log_response(response):
+    """Log outgoing responses"""
+    logger.info(f"{request.method} {request.path} - Status: {response.status_code}")
+    return response
+
+@app.errorhandler(Exception)
+def log_exception(e):
+    """Log unhandled exceptions"""
+    logger.error(f"Unhandled exception: {str(e)}", exc_info=True)
+    return jsonify({
+        "error": "An internal error occurred. Please try again later.",
+        "status": "error"
+    }), 500
 
 def clean_query(query):
     """Strip conversational filler from user queries to extract the core medical topic."""
@@ -3956,6 +4097,313 @@ TERMS_HTML = """
 </body>
 </html>
 """
+
+PRIVACY_POLICY_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - gasconsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            border-bottom: 1px solid #E2E8F0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2563EB;
+        }
+
+        .nav-links a {
+            margin-left: 24px;
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: #2563EB; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0F172A;
+            margin-bottom: 12px;
+        }
+
+        .last-updated {
+            color: #64748B;
+            font-size: 14px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0F172A;
+            margin-top: 48px;
+            margin-bottom: 16px;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E293B;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #475569;
+        }
+
+        ul, ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+            color: #475569;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        strong {
+            color: #0F172A;
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 20px;
+            margin: 24px 0;
+            border-radius: 4px;
+        }
+
+        .highlight-box strong {
+            color: #92400E;
+        }
+
+        footer {
+            background: #FFFFFF;
+            border-top: 1px solid #E2E8F0;
+            padding: 32px 24px;
+            text-align: center;
+            color: #64748B;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-link">gasconsult.ai</a>
+            <div class="nav-links">
+                <a href="/chat">Ask</a>
+                <a href="/terms">Terms</a>
+                <a href="/privacy">Privacy</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last Updated: November 27, 2025</p>
+
+        <div class="highlight-box">
+            <strong>TL;DR:</strong> We take your privacy seriously. We don't sell your data. We don't store personal health information.
+            Your medical queries are processed to provide answers and are not used to identify you.
+        </div>
+
+        <h2>1. Introduction</h2>
+        <p>
+            Welcome to gasconsult.ai ("we," "our," or "us"). This Privacy Policy explains how we collect, use,
+            disclose, and safeguard your information when you use our web application.
+        </p>
+        <p>
+            <strong>Please read this privacy policy carefully.</strong> If you do not agree with the terms of this
+            privacy policy, please do not access the application.
+        </p>
+
+        <h2>2. Information We Collect</h2>
+
+        <h3>2.1 Information You Provide</h3>
+        <p>We collect information that you voluntarily provide when using our service:</p>
+        <ul>
+            <li><strong>Medical Queries:</strong> Questions you submit about anesthesiology topics</li>
+            <li><strong>Form Data:</strong> Information entered in pre-operative assessments or clinical calculators</li>
+            <li><strong>Session Data:</strong> Temporary conversation history during your active session</li>
+        </ul>
+
+        <h3>2.2 Automatically Collected Information</h3>
+        <p>We automatically collect certain information when you use our service:</p>
+        <ul>
+            <li><strong>Usage Data:</strong> Pages visited, features used, timestamps</li>
+            <li><strong>Technical Data:</strong> IP address, browser type, device information</li>
+            <li><strong>Log Data:</strong> Error logs and performance metrics for service improvement</li>
+        </ul>
+
+        <h3>2.3 Third-Party Services</h3>
+        <p>We use the following third-party services that may collect information:</p>
+        <ul>
+            <li><strong>OpenAI (GPT-4):</strong> Processes your queries to generate responses</li>
+            <li><strong>NCBI PubMed:</strong> Searches medical literature based on your queries</li>
+        </ul>
+
+        <h2>3. How We Use Your Information</h2>
+        <p>We use the collected information for the following purposes:</p>
+        <ul>
+            <li><strong>Service Delivery:</strong> To provide evidence-based anesthesiology answers</li>
+            <li><strong>Improvement:</strong> To analyze usage patterns and improve our service</li>
+            <li><strong>Security:</strong> To detect, prevent, and address technical issues</li>
+            <li><strong>Communication:</strong> To respond to your inquiries and provide support</li>
+            <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
+        </ul>
+
+        <h2>4. Data Retention</h2>
+        <ul>
+            <li><strong>Session Data:</strong> Conversation history is stored temporarily during your session and cleared when you close your browser or clear your session</li>
+            <li><strong>Log Data:</strong> System logs are retained for 90 days for debugging and security purposes</li>
+            <li><strong>No Long-Term Storage:</strong> We do not store your medical queries or personal health information long-term</li>
+        </ul>
+
+        <h2>5. Data Security</h2>
+        <p>
+            We implement industry-standard security measures to protect your information:
+        </p>
+        <ul>
+            <li>HTTPS encryption for all data transmission</li>
+            <li>Server-side session storage (not in cookies)</li>
+            <li>Input sanitization to prevent malicious attacks</li>
+            <li>Rate limiting to prevent abuse</li>
+            <li>Regular security updates and monitoring</li>
+        </ul>
+        <p>
+            <strong>However, no method of transmission over the internet is 100% secure.</strong> While we strive
+            to protect your information, we cannot guarantee absolute security.
+        </p>
+
+        <h2>6. Your Privacy Rights</h2>
+        <p>Depending on your location, you may have the following rights:</p>
+        <ul>
+            <li><strong>Access:</strong> Request a copy of the information we have about you</li>
+            <li><strong>Correction:</strong> Request correction of inaccurate information</li>
+            <li><strong>Deletion:</strong> Request deletion of your information</li>
+            <li><strong>Objection:</strong> Object to our processing of your information</li>
+            <li><strong>Data Portability:</strong> Request transfer of your data to another service</li>
+        </ul>
+        <p>
+            To exercise these rights, please contact us at: <strong>privacy@gasconsult.ai</strong>
+        </p>
+
+        <h2>7. Protected Health Information (PHI)</h2>
+        <div class="highlight-box">
+            <strong>IMPORTANT:</strong> gasconsult.ai is an educational tool only.
+            <strong>Do not enter any personally identifiable patient information (PHI)</strong> such as:
+            <ul style="margin-top: 12px;">
+                <li>Patient names, dates of birth, medical record numbers</li>
+                <li>Specific case details that could identify individuals</li>
+                <li>Protected health information under HIPAA regulations</li>
+            </ul>
+            <p style="margin-top: 12px; margin-bottom: 0;">
+                Use only hypothetical scenarios and generalized clinical questions.
+            </p>
+        </div>
+
+        <h2>8. Children's Privacy</h2>
+        <p>
+            Our service is not intended for children under 18 years of age. We do not knowingly collect
+            personal information from children. If you believe we have collected information from a child,
+            please contact us immediately.
+        </p>
+
+        <h2>9. International Users</h2>
+        <p>
+            Our service is hosted in the United States. If you access our service from outside the US,
+            your information may be transferred to, stored, and processed in the US where our servers are located.
+            Data protection laws in the US may differ from those in your country.
+        </p>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>
+            We may update this Privacy Policy from time to time. We will notify you of any changes by
+            posting the new policy on this page and updating the "Last Updated" date.
+        </p>
+        <p>
+            <strong>Continued use of our service after changes constitutes acceptance of the updated policy.</strong>
+        </p>
+
+        <h2>11. Contact Us</h2>
+        <p>
+            If you have questions or concerns about this Privacy Policy, please contact us at:
+        </p>
+        <ul>
+            <li><strong>Email:</strong> privacy@gasconsult.ai</li>
+            <li><strong>Website:</strong> gasconsult.ai</li>
+        </ul>
+
+        <h2>12. Compliance</h2>
+        <p>
+            We are committed to complying with applicable data protection laws, including:
+        </p>
+        <ul>
+            <li>General Data Protection Regulation (GDPR) for EU users</li>
+            <li>California Consumer Privacy Act (CCPA) for California residents</li>
+            <li>Health Insurance Portability and Accountability Act (HIPAA) - Note: We are not a covered entity
+                but follow privacy best practices</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai • Educational Use Only • Not Medical Advice</p>
+        <p style="margin-top: 8px;">
+            <a href="/terms" style="color: #64748B; text-decoration: none;">Terms of Service</a> •
+            <a href="/privacy" style="color: #64748B; text-decoration: none;">Privacy Policy</a>
+        </p>
+    </footer>
+</body>
+</html>
+"""
+
 QUICK_DOSE_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -6521,8 +6969,9 @@ def chat():
 
     if request.method == "POST":
         try:
-            # Safely get query from form data
+            # Safely get query from form data and sanitize it
             raw_query = request.form.get("query", "").strip()
+            raw_query = sanitize_user_query(raw_query)
 
             # If query is empty, redirect to GET
             if not raw_query:
@@ -6839,6 +7288,10 @@ def terms():
     """Terms of Service page"""
     return render_template_string(TERMS_HTML)
 
+@app.route("/privacy")
+def privacy():
+    """Privacy Policy page"""
+    return render_template_string(PRIVACY_POLICY_HTML)
 
 @app.route("/quick-dose")
 def quick_dose():
@@ -6850,26 +7303,26 @@ def preop_assessment():
     if request.method == "GET":
         return render_template_string(PREOP_HTML, summary=None, references=None)
 
-    # Collect form data
+    # Collect and sanitize form data
     age = int(request.form.get("age", 0))
     weight = float(request.form.get("weight", 0))
     height = float(request.form.get("height", 0))
-    sex = request.form.get("sex", "")
+    sex = sanitize_user_query(request.form.get("sex", ""))
     comorbidities = request.form.getlist("comorbidities")
-    other_comorbidities = request.form.get("other_comorbidities", "")
-    mets = request.form.get("mets", "")
-    previous_anesthesia = request.form.get("previous_anesthesia", "")
-    medications = request.form.get("medications", "")
-    hgb = request.form.get("hgb", "")
-    plt = request.form.get("plt", "")
-    cr = request.form.get("cr", "")
-    inr = request.form.get("inr", "")
-    ef = request.form.get("ef", "")
-    ekg = request.form.get("ekg", "")
-    procedure = request.form.get("procedure", "")
-    surgery_risk = request.form.get("surgery_risk", "")
-    npo = request.form.get("npo", "")
-    allergies = request.form.get("allergies", "")
+    other_comorbidities = sanitize_user_query(request.form.get("other_comorbidities", ""))
+    mets = sanitize_user_query(request.form.get("mets", ""))
+    previous_anesthesia = sanitize_user_query(request.form.get("previous_anesthesia", ""))
+    medications = sanitize_user_query(request.form.get("medications", ""))
+    hgb = sanitize_user_query(request.form.get("hgb", ""))
+    plt = sanitize_user_query(request.form.get("plt", ""))
+    cr = sanitize_user_query(request.form.get("cr", ""))
+    inr = sanitize_user_query(request.form.get("inr", ""))
+    ef = sanitize_user_query(request.form.get("ef", ""))
+    ekg = sanitize_user_query(request.form.get("ekg", ""))
+    procedure = sanitize_user_query(request.form.get("procedure", ""))
+    surgery_risk = sanitize_user_query(request.form.get("surgery_risk", ""))
+    npo = sanitize_user_query(request.form.get("npo", ""))
+    allergies = sanitize_user_query(request.form.get("allergies", ""))
 
     # Calculate BMI and IBW
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else None
@@ -7083,9 +7536,9 @@ def hypotension_predictor():
     if request.method == "GET":
         return render_template_string(HYPOTENSION_HTML, prediction=None)
 
-    # Collect form data
+    # Collect and sanitize form data
     age = int(request.form.get("age", 0))
-    sex = request.form.get("sex", "")
+    sex = sanitize_user_query(request.form.get("sex", ""))
     weight = float(request.form.get("weight", 0))
     height = float(request.form.get("height", 0))
     asa = int(request.form.get("asa", 1))
@@ -7095,10 +7548,10 @@ def hypotension_predictor():
     map_5min = int(request.form.get("map_5min", 0))
     map_10min = int(request.form.get("map_10min", 0))
     surgery_duration = int(request.form.get("surgery_duration", 0))
-    vasopressor = request.form.get("vasopressor", "none")
-    surgery_type = request.form.get("surgery_type", "")
-    induction_agent = request.form.get("induction_agent", "")
-    emergency = request.form.get("emergency", "no")
+    vasopressor = sanitize_user_query(request.form.get("vasopressor", "none"))
+    surgery_type = sanitize_user_query(request.form.get("surgery_type", ""))
+    induction_agent = sanitize_user_query(request.form.get("induction_agent", ""))
+    emergency = sanitize_user_query(request.form.get("emergency", "no"))
 
     # Calculate BMI
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else 0
@@ -7316,6 +7769,47 @@ def hypotension_predictor():
     }
 
     return render_template_string(HYPOTENSION_HTML, prediction=prediction)
+
+@app.route("/health")
+@csrf.exempt  # Health checks don't need CSRF protection
+def health_check():
+    """Health check endpoint for deployment monitoring"""
+    import sys
+    health_status = {
+        "status": "healthy",
+        "service": "gasconsult.ai",
+        "version": "1.0.0",
+        "python_version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
+        "checks": {
+            "openai": bool(os.getenv("OPENAI_API_KEY")),
+            "entrez_email": bool(os.getenv("ENTREZ_EMAIL")),
+            "entrez_api_key": bool(os.getenv("ENTREZ_API_KEY")),
+            "secret_key": bool(app.secret_key)
+        }
+    }
+
+    # Check if any critical service is missing
+    if not all(health_status["checks"].values()):
+        health_status["status"] = "degraded"
+        return jsonify(health_status), 503
+
+    return jsonify(health_status), 200
+
+@app.route("/api/status")
+@csrf.exempt  # Status endpoint doesn't need CSRF protection
+def api_status():
+    """API status endpoint with basic metrics"""
+    return jsonify({
+        "status": "operational",
+        "endpoints": {
+            "chat": "/chat",
+            "preop": "/preop",
+            "hypotension": "/hypotension",
+            "quick_dose": "/quick-dose",
+            "health": "/health"
+        },
+        "rate_limit": os.getenv("RATE_LIMIT", "60 per minute")
+    }), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
