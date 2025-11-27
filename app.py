@@ -327,6 +327,8 @@ PREOP_HTML = """
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            width: 100%;
         }
 
         @keyframes pageFadeIn {
@@ -411,6 +413,8 @@ PREOP_HTML = """
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .logo-container {
@@ -1052,6 +1056,37 @@ PREOP_HTML = """
                 padding: 14px 32px;
             }
         }
+
+        @media (max-width: 640px) {
+            nav .container {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .logo-container {
+                order: 1;
+            }
+
+            .nav-actions {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+                margin-top: 8px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .logo-wordmark {
+                font-size: 1rem;
+            }
+
+            .logo-ecg {
+                height: 24px;
+            }
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -1111,6 +1146,7 @@ PREOP_HTML = """
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
@@ -1448,6 +1484,8 @@ HTML = """
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            width: 100%;
         }
 
         @keyframes pageFadeIn {
@@ -1532,6 +1570,8 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .logo-container {
@@ -2716,6 +2756,37 @@ HTML = """
                 max-width: 100%;
             }
         }
+
+        @media (max-width: 640px) {
+            nav .container {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .logo-container {
+                order: 1;
+            }
+
+            .nav-actions {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+                margin-top: 8px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .logo-wordmark {
+                font-size: 1rem;
+            }
+
+            .logo-ecg {
+                height: 24px;
+            }
+        }
     </style>
     <script>
         // Auto-scroll to bottom of chat on page load
@@ -2933,6 +3004,7 @@ HTML = """
                 <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
@@ -3753,6 +3825,7 @@ TERMS_HTML = """
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
@@ -4741,6 +4814,7 @@ QUICK_DOSE_HTML = """
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </header>
@@ -5426,6 +5500,8 @@ HYPOTENSION_HTML = """
             color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         header {
@@ -5446,6 +5522,7 @@ HYPOTENSION_HTML = """
             align-items: center;
             justify-content: space-between;
             gap: 24px;
+            flex-wrap: wrap;
         }
 
         .header-left {
@@ -5996,9 +6073,22 @@ HYPOTENSION_HTML = """
         }
 
         @media (max-width: 768px) {
+            header {
+                padding: 14px 20px;
+            }
+
             .header-container {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .nav-links {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 14px;
+                font-size: 0.9rem;
             }
 
             .page-header h1 {
@@ -6011,6 +6101,45 @@ HYPOTENSION_HTML = """
 
             .risk-gauges {
                 grid-template-columns: 1fr;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            input, select {
+                font-size: 16px !important; /* Prevents iOS zoom on focus */
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-container {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .header-left {
+                order: 1;
+            }
+
+            .nav-links {
+                order: 2;
+                width: 100%;
+                justify-content: center;
+                margin-top: 12px;
+            }
+
+            .nav-link {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+
+            .logo-text {
+                font-size: 1rem;
+            }
+
+            .logo-svg {
+                height: 24px;
             }
         }
     </style>
