@@ -1721,50 +1721,98 @@ HTML = """
             flex-wrap: wrap;
         }
 
-        /* Outline CTA Button */
+        /* Pre-Op CTA Button */
         .preop-cta-outline {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: transparent;
-            border: 2px solid var(--primary-blue);
-            border-radius: 12px;
-            color: var(--primary-blue);
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            border: none;
+            border-radius: 14px;
+            color: white;
             font-weight: 600;
             font-size: 16px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preop-cta-outline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .preop-cta-outline:hover::before {
+            left: 100%;
         }
 
         .preop-cta-outline:hover {
-            background: var(--primary-blue);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
         }
 
-        /* Filled CTA Button */
+        .preop-cta-outline svg {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .preop-cta-outline:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* Quick Dose CTA Button */
         .quickdose-cta-filled {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--vasopressor-violet) 0%, #7C3AED 100%);
+            gap: 10px;
+            padding: 16px 36px;
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             color: white;
             font-weight: 600;
             font-size: 16px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quickdose-cta-filled::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .quickdose-cta-filled:hover::before {
+            left: 100%;
         }
 
         .quickdose-cta-filled:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        .quickdose-cta-filled svg {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quickdose-cta-filled:hover svg {
+            transform: scale(1.1);
         }
 
         /* Trust Badges */
@@ -1852,7 +1900,7 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.6rem;
+            font-size: 1.75rem;
             font-weight: 900;
             color: white;
             border: none;
@@ -1862,6 +1910,8 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0 0 2px 0;
+            -webkit-text-stroke: 0.5px white;
         }
 
         .homepage-input .send-btn:hover {
@@ -2301,16 +2351,17 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.6rem;
+            font-size: 1.75rem;
             font-weight: 900;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
+            padding: 0 0 2px 0;
             line-height: 1;
             flex-shrink: 0;
+            -webkit-text-stroke: 0.5px white;
         }
 
         .send-btn:hover {
