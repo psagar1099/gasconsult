@@ -1531,7 +1531,7 @@ PREOP_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 
     <script>
@@ -3331,7 +3331,7 @@ HTML = """
     {% endif %}
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 
     <script>
@@ -4094,7 +4094,7 @@ TERMS_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 
 </body>
@@ -5783,7 +5783,7 @@ QUICK_DOSE_HTML = """
     </main>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 
     <!-- Crisis Modal -->
@@ -6886,7 +6886,7 @@ HYPOTENSION_HTML = """
     </main>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms">Terms of Service</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
         <p style="margin-top: 8px; font-weight: 600; color: #DC2626;">Educational Tool Only | Not for Clinical Use | No Medical Advice</p>
     </footer>
 </body>
@@ -7052,13 +7052,13 @@ def chat():
 
             # Use broader search for follow-up questions
             if is_followup:
-                search_term = f'({q}) AND (2005:3000[pdat])'
+                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
             else:
                 search_term = (
                     f'({q}) AND '
                     f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                     f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                    f'(2015:3000[pdat])'
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
                 )
 
             print(f"[DEBUG] Search term: '{search_term[:100]}...'")
@@ -7395,7 +7395,7 @@ def preop_assessment():
                 f'({q_expanded}) AND '
                 f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
                 f'"randomized controlled trial"[pt]) AND '
-                f'(2015:3000[pdat])'
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
             )
 
             handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
