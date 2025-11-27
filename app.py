@@ -1852,10 +1852,10 @@ HTML = """
         }
 
         .homepage-input .chat-form {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: none;
+            border: none !important;
             border-radius: 16px;
             padding: 8px;
             box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.04);
@@ -1863,6 +1863,7 @@ HTML = """
             align-items: center;
             gap: 12px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
         }
 
         .homepage-input .chat-form:hover {
@@ -1910,7 +1911,7 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 2px 0;
+            padding: 0 0 3px 0;
             -webkit-text-stroke: 0.5px white;
         }
 
@@ -2358,7 +2359,7 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 2px 0;
+            padding: 0 0 3px 0;
             line-height: 1;
             flex-shrink: 0;
             -webkit-text-stroke: 0.5px white;
@@ -4401,14 +4402,20 @@ QUICK_DOSE_HTML = """
 
         footer {
             text-align: center;
-            padding: 32px 24px;
-            font-size: 12px;
+            padding: 40px;
+            border-top: 1px solid #E2E8F0;
+            background: #FFFFFF;
             color: var(--text-muted);
+            font-size: 13px;
+            margin: 0;
         }
 
         footer a {
-            color: var(--primary-blue);
-            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-primary);
         }
 
         /* Crisis Modal */
