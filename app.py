@@ -7056,8 +7056,8 @@ def chat():
             else:
                 search_term = (
                     f'({q}) AND '
-                    f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-                    f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                    f'(systematic review[pt] OR meta-analysis[pt] OR randomized controlled trial[pt] OR '
+                    f'Cochrane Database Syst Rev[ta] OR guideline[pt]) AND '
                     f'2015:3000[pdat]'
                 )
 
@@ -7394,7 +7394,7 @@ def preop_assessment():
             search_term = (
                 f'({q_expanded}) AND '
                 f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
-                f'"randomized controlled trial"[pt]) AND '
+                f'randomized controlled trial[pt]) AND '
                 f'2015:3000[pdat]'
             )
 
