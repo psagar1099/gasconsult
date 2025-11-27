@@ -7052,13 +7052,13 @@ def chat():
 
             # Use broader search for follow-up questions
             if is_followup:
-                search_term = f'({q}) AND 2005:3000[pdat]'
+                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
             else:
                 search_term = (
                     f'({q}) AND '
-                    f'(systematic review[pt] OR meta-analysis[pt] OR randomized controlled trial[pt] OR '
-                    f'Cochrane Database Syst Rev[ta] OR guideline[pt]) AND '
-                    f'2015:3000[pdat]'
+                    f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                    f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
                 )
 
             print(f"[DEBUG] Search term: '{search_term[:100]}...'")
@@ -7067,7 +7067,7 @@ def chat():
             ids = []
             try:
                 print(f"[DEBUG] Searching PubMed (anesthesiology)...")
-                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10)
+                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
                 print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
@@ -7079,7 +7079,7 @@ def chat():
             if not ids and not is_followup:
                 try:
                     print(f"[DEBUG] Searching PubMed (general)...")
-                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10)
+                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
                     result = Entrez.read(handle)
                     ids = result.get("IdList", [])
                     print(f"[DEBUG] Found {len(ids)} papers (general)")
@@ -7394,11 +7394,11 @@ def preop_assessment():
             search_term = (
                 f'({q_expanded}) AND '
                 f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
-                f'randomized controlled trial[pt]) AND '
-                f'2015:3000[pdat]'
+                f'"randomized controlled trial"[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
             )
 
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5)
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
             result = Entrez.read(handle)
             ids = result["IdList"]
 
