@@ -8961,7 +8961,213 @@ CALCULATORS_HTML = """
         }
 
         /* AI Chat Modal */
-        /* Unused AI modal CSS removed - now redirects to /chat page */
+        .ai-chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ai-chat-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ai-chat-container {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            animation: slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUpModal {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ai-chat-header h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .close-modal-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .close-modal-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+            max-height: 50vh;
+        }
+
+        .ai-message {
+            background: var(--bg-secondary);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-size: 14px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .ai-message strong {
+            color: var(--text-primary);
+        }
+
+        .ai-chat-input-area {
+            padding: 20px 28px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: 0 0 24px 24px;
+        }
+
+        .ai-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 44px;
+            max-height: 120px;
+            transition: all 0.2s ease;
+        }
+
+        .ai-chat-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .send-ai-message-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            white-space: nowrap;
+        }
+
+        .send-ai-message-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .send-ai-message-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .ai-loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--primary-blue-light);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            color: var(--primary-blue-dark);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .ai-loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .ai-loading-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: loadingDot 1.4s infinite ease-in-out;
+        }
+
+        .ai-loading-dots span:nth-child(1) { animation-delay: 0s; }
+        .ai-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingDot {
+            0%, 60%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
 
         /* Responsive */
         @media (max-width: 968px) {
@@ -9873,6 +10079,30 @@ CALCULATORS_HTML = """
         </div>
     </div>
 
+    <!-- AI Chat Modal -->
+    <div class="ai-chat-modal" id="aiChatModal">
+        <div class="ai-chat-container">
+            <div class="ai-chat-header">
+                <h3>Ask AI About Your Results</h3>
+                <button class="close-modal-btn" onclick="closeAIChat()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+            <div class="ai-chat-input-area">
+                <div class="ai-input-container">
+                    <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
+                    <textarea class="ai-chat-input" id="aiChatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
+                    <button class="send-ai-message-btn" onclick="sendAIMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Store calculation results
         let calculationResults = {};
@@ -10726,30 +10956,177 @@ CALCULATORS_HTML = """
             openAIChat(message);
         }
 
-        // AI Chat - Redirect to /chat page instead of using modal
-        function openAIChat(message) {
-            // Create a form and submit it to /chat
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/chat';
+        // AI Chat Modal Functions
+        async function openAIChat(initialMessage) {
+            const modal = document.getElementById('aiChatModal');
+            const messagesDiv = document.getElementById('aiChatMessages');
 
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrf_token';
-            csrfInput.value = document.getElementById('csrf_token').value;
+            // Clear previous messages
+            messagesDiv.innerHTML = '';
 
-            const queryInput = document.createElement('input');
-            queryInput.type = 'hidden';
-            queryInput.name = 'query';
-            queryInput.value = message;
+            // Show modal
+            modal.classList.add('active');
 
-            form.appendChild(csrfInput);
-            form.appendChild(queryInput);
-            document.body.appendChild(form);
-            form.submit();
+            // Send initial message
+            if (initialMessage) {
+                addMessageToModal(initialMessage, 'user');
+                await fetchAIResponseForModal(initialMessage);
+            }
         }
 
-        // Unused modal functions removed - now redirects to /chat page
+        function closeAIChat() {
+            document.getElementById('aiChatModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('aiChatModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAIChat();
+            }
+        });
+
+        // Send message on Enter key
+        document.getElementById('aiChatInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAIMessage();
+            }
+        });
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessageToModal(message, 'user');
+            input.value = '';
+
+            // Fetch AI response
+            fetchAIResponseForModal(message);
+        }
+
+        function addMessageToModal(message, type) {
+            const messagesDiv = document.getElementById('aiChatMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'ai-message';
+
+            if (type === 'user') {
+                messageEl.style.background = 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)';
+                messageEl.style.borderLeft = '3px solid var(--primary-blue)';
+                messageEl.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
+            } else if (type === 'loading') {
+                messageEl.className = 'ai-loading';
+                messageEl.innerHTML = `
+                    Thinking...
+                    <div class="ai-loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                messageEl.id = 'loadingMessage';
+            } else {
+                messageEl.innerHTML = `<strong>AI:</strong> ${message}`;
+            }
+
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            return messageEl;
+        }
+
+        async function fetchAIResponseForModal(userMessage) {
+            // Show loading indicator
+            addMessageToModal('', 'loading');
+
+            try {
+                // Send to /chat to prepare streaming
+                const csrfToken = document.getElementById('csrf_token').value;
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'  // Signal this is AJAX
+                    },
+                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}&modal=1`,
+                    redirect: 'manual'  // Don't follow redirects
+                });
+
+                // Handle response - it might be JSON with request_id
+                const data = await response.json();
+
+                if (data.request_id) {
+                    // Start streaming with EventSource
+                    const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
+                    let fullResponse = '';
+                    let refs = [];
+
+                    eventSource.addEventListener('message', function(e) {
+                        const event = JSON.parse(e.data);
+
+                        if (event.type === 'content') {
+                            // Remove loading on first content
+                            const loadingMsg = document.getElementById('loadingMessage');
+                            if (loadingMsg && fullResponse === '') {
+                                loadingMsg.remove();
+                                addMessageToModal('', 'ai');  // Add empty AI message
+                            }
+
+                            fullResponse += event.content;
+                            const messages = document.querySelectorAll('.ai-message');
+                            const lastMsg = messages[messages.length - 1];
+                            lastMsg.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                        } else if (event.type === 'references') {
+                            refs = event.references;
+                        } else if (event.type === 'done') {
+                            eventSource.close();
+
+                            // Add references if any
+                            if (refs && refs.length > 0) {
+                                const messages = document.querySelectorAll('.ai-message');
+                                const lastMsg = messages[messages.length - 1];
+                                let refsHTML = '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"><strong>References:</strong><div>';
+                                refs.forEach((ref, index) => {
+                                    refsHTML += `<div style="margin: 8px 0; font-size: 13px;"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank" style="color: var(--primary-blue);">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
+                                });
+                                refsHTML += '</div></div>';
+                                lastMsg.innerHTML += refsHTML;
+                            }
+                        } else if (event.type === 'error') {
+                            console.error('Stream error:', event.message);
+                            const loadingMsg = document.getElementById('loadingMessage');
+                            if (loadingMsg) loadingMsg.remove();
+                            addMessageToModal(`Error: ${event.message}`, 'ai');
+                            eventSource.close();
+                        }
+                    });
+
+                    eventSource.addEventListener('error', function() {
+                        console.error('EventSource connection error');
+                        const loadingMsg = document.getElementById('loadingMessage');
+                        if (loadingMsg) loadingMsg.remove();
+                        addMessageToModal('Connection error. Please try again.', 'ai');
+                        eventSource.close();
+                    });
+                } else {
+                    throw new Error('No request_id received');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                const loadingMsg = document.getElementById('loadingMessage');
+                if (loadingMsg) loadingMsg.remove();
+                addMessageToModal('Sorry, there was an error. Please try again.', 'ai');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
     </script>
 </body>
 </html>
@@ -12185,6 +12562,17 @@ Respond with maximum clinical utility:"""
             session.modified = True
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
+
+            # Check if this is an AJAX request from the calculator modal
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+            # If AJAX request (from modal), always return JSON
+            if is_ajax:
+                return jsonify({
+                    'status': 'ready',
+                    'request_id': request_id,
+                    'raw_query': raw_query
+                })
 
             # If this is the first message (from homepage), set pending flag and redirect
             if is_first_message:
