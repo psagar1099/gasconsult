@@ -43,6 +43,13 @@ Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+# ====== Data Storage ======
+# Simple in-memory storage for bookmarks and shared links
+# In production, replace with database (Redis, PostgreSQL, etc.)
+BOOKMARKS_STORAGE = {}  # {user_session_id: [{id, query, answer, references, timestamp}]}
+SHARED_LINKS_STORAGE = {}  # {share_id: {query, answer, references, timestamp, expires}}
+from datetime import datetime, timedelta
+
 # ====== Security Functions ======
 
 def sanitize_input(text, strip_tags=False):
@@ -1867,6 +1874,146 @@ PREOP_HTML = """
 </body>
 </html>
 """
+
+# ====== Premium Feature Functions ======
+
+def format_citation_vancouver(ref, index):
+    """Format a single reference in Vancouver style"""
+    authors = ref.get('authors', 'Unknown')
+    title = ref.get('title', 'Unknown title')
+    journal = ref.get('journal', 'Unknown journal')
+    year = ref.get('year', 'Unknown')
+    pmid = ref.get('pmid', '')
+
+    # Truncate authors if too long
+    if len(authors) > 100:
+        authors = authors[:97] + '...'
+
+    return f"{index}. {authors}. {title}. {journal}. {year}. PMID: {pmid}"
+
+def generate_bibtex(references):
+    """Generate BibTeX format for citation managers"""
+    bibtex_entries = []
+
+    for i, ref in enumerate(references, 1):
+        authors = ref.get('authors', 'Unknown').replace(' and ', ' and ')
+        title = ref.get('title', 'Unknown title')
+        journal = ref.get('journal', 'Unknown journal')
+        year = ref.get('year', 'Unknown')
+        pmid = ref.get('pmid', '')
+
+        entry = f"""@article{{ref{i},
+  author = {{{authors}}},
+  title = {{{title}}},
+  journal = {{{journal}}},
+  year = {{{year}}},
+  note = {{PMID: {pmid}}}
+}}"""
+        bibtex_entries.append(entry)
+
+    return '\n\n'.join(bibtex_entries)
+
+def generate_ris(references):
+    """Generate RIS format for citation managers (Zotero, Mendeley, EndNote)"""
+    ris_entries = []
+
+    for ref in references:
+        authors = ref.get('authors', 'Unknown')
+        title = ref.get('title', 'Unknown title')
+        journal = ref.get('journal', 'Unknown journal')
+        year = ref.get('year', 'Unknown')
+        pmid = ref.get('pmid', '')
+
+        # Split authors
+        author_list = authors.split(', ')
+        author_lines = '\n'.join([f"AU  - {author}" for author in author_list[:5]])  # First 5 authors
+
+        entry = f"""TY  - JOUR
+{author_lines}
+TI  - {title}
+JO  - {journal}
+PY  - {year}
+N1  - PMID: {pmid}
+ER  - """
+        ris_entries.append(entry)
+
+    return '\n\n'.join(ris_entries)
+
+def get_evidence_strength(num_papers, references):
+    """Analyze evidence strength and return classification"""
+    if not num_papers or num_papers == 0:
+        return {
+            'level': 'Low',
+            'color': '#EF4444',
+            'description': 'Limited evidence available',
+            'score': 1
+        }
+
+    # Analyze study types
+    high_quality_count = 0
+    meta_analysis_count = 0
+    rct_count = 0
+    review_count = 0
+
+    for ref in references:
+        title = ref.get('title', '').lower()
+        journal = ref.get('journal', '').lower()
+
+        if 'meta-analysis' in title or 'meta-analysis' in journal:
+            meta_analysis_count += 1
+            high_quality_count += 3
+        elif 'randomized' in title or 'rct' in title:
+            rct_count += 1
+            high_quality_count += 2
+        elif 'systematic review' in title or 'cochrane' in journal:
+            review_count += 1
+            high_quality_count += 2
+        elif 'review' in title:
+            review_count += 1
+            high_quality_count += 1
+
+    # Calculate strength score
+    strength_score = (num_papers * 0.5) + high_quality_count
+
+    if strength_score >= 10 or meta_analysis_count >= 2:
+        return {
+            'level': 'High',
+            'color': '#10B981',
+            'description': f'{num_papers} papers including {meta_analysis_count} meta-analyses, {rct_count} RCTs',
+            'score': 3,
+            'breakdown': {
+                'meta_analyses': meta_analysis_count,
+                'rcts': rct_count,
+                'reviews': review_count,
+                'total': num_papers
+            }
+        }
+    elif strength_score >= 5 or num_papers >= 5:
+        return {
+            'level': 'Moderate',
+            'color': '#FBBF24',
+            'description': f'{num_papers} papers including {rct_count} RCTs, {review_count} reviews',
+            'score': 2,
+            'breakdown': {
+                'meta_analyses': meta_analysis_count,
+                'rcts': rct_count,
+                'reviews': review_count,
+                'total': num_papers
+            }
+        }
+    else:
+        return {
+            'level': 'Low',
+            'color': '#EF4444',
+            'description': f'Limited evidence ({num_papers} papers)',
+            'score': 1,
+            'breakdown': {
+                'meta_analyses': meta_analysis_count,
+                'rcts': rct_count,
+                'reviews': review_count,
+                'total': num_papers
+            }
+        }
 
 HTML = """
 <!DOCTYPE html>
@@ -4560,6 +4707,299 @@ CHAT_HTML = """
             border-color: var(--primary-blue);
         }
 
+        /* ====== Premium Feature Styles ====== */
+
+        /* Message Actions Toolbar */
+        .message-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .action-btn.active {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Evidence Strength Visualizer */
+        .evidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .evidence-badge.high {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1.5px solid #10B981;
+            color: #047857;
+        }
+
+        .evidence-badge.moderate {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1.5px solid #FBBF24;
+            color: #B45309;
+        }
+
+        .evidence-badge.low {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1.5px solid #EF4444;
+            color: #B91C1C;
+        }
+
+        .evidence-breakdown {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .study-type-badge {
+            background: var(--bg-secondary);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+
+        /* Follow-up Suggestions */
+        .followup-section {
+            margin-top: 20px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.04) 0%, rgba(139, 92, 246, 0.04) 100%);
+            border-radius: 12px;
+            border: 1.5px solid rgba(37, 99, 235, 0.1);
+        }
+
+        .followup-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .followup-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .followup-btn {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 16px;
+            text-align: left;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+        }
+
+        .followup-btn:hover {
+            background: var(--primary-blue-light);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue-dark);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+        }
+
+        /* Voice Input Button */
+        .voice-btn {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .voice-btn:hover {
+            border-color: var(--primary-blue);
+            background: var(--primary-blue-light);
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .voice-btn.listening {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border-color: #EF4444;
+            animation: pulse 1.5s infinite;
+        }
+
+        .voice-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-secondary);
+        }
+
+        .voice-btn.listening svg {
+            stroke: white;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
+            }
+        }
+
+        /* Share Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .share-link-container {
+            display: flex;
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .share-link-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-secondary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--primary-blue-dark);
+        }
+
+        .modal-btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1.5px solid var(--border);
+        }
+
+        .modal-btn-secondary:hover {
+            background: var(--bg-secondary);
+        }
+
         /* Chat Input */
         .chat-input-container {
             position: sticky;
@@ -4758,6 +5198,12 @@ CHAT_HTML = """
             </a>
             <div class="nav-actions">
                 <a href="/" class="nav-link active">Home</a>
+                <a href="/library" class="nav-link" title="View saved responses">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+                    </svg>
+                    Library
+                </a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
@@ -4803,14 +5249,41 @@ CHAT_HTML = """
                             {% if msg.role == 'user' %}
                                 <div class="message-text">{{ msg.content }}</div>
                             {% else %}
-                                <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                <button class="copy-btn" onclick="smartCopy(this, {{ loop.index0 }})" title="Smart copy with citations">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                     </svg>
                                     <span class="copy-text">Copy</span>
                                 </button>
+
+                                <!-- Evidence Strength Visualizer -->
+                                {% if msg.num_papers and msg.num_papers > 0 %}
+                                <div class="evidence-badge {{ msg.get('evidence_strength', {}).get('level', 'low').lower() }}" data-message-index="{{ loop.index0 }}">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>{{ msg.get('evidence_strength', {}).get('level', 'Moderate') }} Evidence</span>
+                                </div>
+                                {% if msg.get('evidence_strength', {}).get('breakdown') %}
+                                <div class="evidence-breakdown">
+                                    {% set bd = msg.evidence_strength.breakdown %}
+                                    {% if bd.meta_analyses > 0 %}
+                                    <span class="study-type-badge">{{ bd.meta_analyses }} Meta-analyses</span>
+                                    {% endif %}
+                                    {% if bd.rcts > 0 %}
+                                    <span class="study-type-badge">{{ bd.rcts }} RCTs</span>
+                                    {% endif %}
+                                    {% if bd.reviews > 0 %}
+                                    <span class="study-type-badge">{{ bd.reviews }} Reviews</span>
+                                    {% endif %}
+                                    <span class="study-type-badge">{{ bd.total }} Total Papers</span>
+                                </div>
+                                {% endif %}
+                                {% endif %}
+
                                 <div class="message-text">{{ msg.content|safe }}</div>
+
                                 {% if msg.references %}
                                 <div class="message-refs">
                                     <strong>References:</strong>
@@ -4823,9 +5296,56 @@ CHAT_HTML = """
                                     {% endfor %}
                                 </div>
                                 {% endif %}
-                                {% if msg.num_papers > 0 %}
-                                <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
-                                {% endif %}
+
+                                <!-- Premium Action Buttons -->
+                                <div class="message-actions">
+                                    <button class="action-btn" onclick="toggleBookmark(this, {{ loop.index0 }})" title="Bookmark this response">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+                                        </svg>
+                                        <span>Save</span>
+                                    </button>
+
+                                    <button class="action-btn" onclick="shareResponse({{ loop.index0 }})" title="Share this response">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="18" cy="5" r="3"></circle>
+                                            <circle cx="6" cy="12" r="3"></circle>
+                                            <circle cx="18" cy="19" r="3"></circle>
+                                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                        </svg>
+                                        <span>Share</span>
+                                    </button>
+
+                                    {% if msg.references %}
+                                    <button class="action-btn" onclick="exportCitations({{ loop.index0 }}, 'bibtex')" title="Export to BibTeX">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                                        </svg>
+                                        <span>Export .bib</span>
+                                    </button>
+
+                                    <button class="action-btn" onclick="exportCitations({{ loop.index0 }}, 'ris')" title="Export to RIS (Zotero/Mendeley)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                                        </svg>
+                                        <span>Export .ris</span>
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Smart Follow-up Suggestions -->
+                                <div class="followup-section" id="followup-{{ loop.index0 }}" style="display: none;">
+                                    <div class="followup-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                        Ask next:
+                                    </div>
+                                    <div class="followup-questions" id="followup-questions-{{ loop.index0 }}">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
@@ -4848,9 +5368,38 @@ CHAT_HTML = """
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <!-- Voice Input Button -->
+            <button type="button" class="voice-btn" id="voiceBtn" title="Voice input" onclick="toggleVoiceInput()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 1a3 3 0 003 3v8a3 3 0 01-6 0V4a3 3 0 013-3z"></path>
+                    <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path>
+                </svg>
+            </button>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
+    </div>
+
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-title">Share Response</div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">Anyone with this link can view this response. Link expires in 30 days.</p>
+            <div class="share-link-container">
+                <input type="text" class="share-link-input" id="shareLinkInput" readonly />
+                <button class="action-btn" onclick="copyShareLink()" style="flex-shrink: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    </svg>
+                    Copy
+                </button>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-secondary" onclick="closeShareModal()">Close</button>
+                <button class="modal-btn modal-btn-primary" onclick="openShareLink()">Open Link</button>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -4981,7 +5530,603 @@ CHAT_HTML = """
             }
         });
         {% endif %}
+
+        // ====== Premium Features JavaScript ======
+
+        // Smart Copy with Citations
+        function smartCopy(button, messageIndex) {
+            const messageContent = button.parentElement;
+            const messageText = messageContent.querySelector('.message-text');
+            const messageRefs = messageContent.querySelector('.message-refs');
+            const evidenceBadge = messageContent.querySelector('.evidence-badge');
+
+            let textToCopy = '=== gasconsult.ai Response ===\n\n';
+            textToCopy += messageText.innerText + '\n\n';
+
+            if (messageRefs) {
+                const refs = messageRefs.querySelectorAll('.ref-item');
+                if (refs.length > 0) {
+                    textToCopy += '=== References ===\n';
+                    refs.forEach((ref, i) => {
+                        textToCopy += ref.innerText + '\n';
+                    });
+                    textToCopy += '\n';
+                }
+            }
+
+            if (evidenceBadge) {
+                textToCopy += `Evidence Quality: ${evidenceBadge.innerText}\n`;
+            }
+
+            textToCopy += `\nAccessed: ${new Date().toLocaleDateString()}\nSource: ${window.location.origin}`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyText = button.querySelector('.copy-text');
+                const originalText = copyText.textContent;
+                copyText.textContent = 'Copied!';
+                button.style.borderColor = '#10B981';
+                button.style.color = '#10B981';
+                setTimeout(() => {
+                    copyText.textContent = originalText;
+                    button.style.borderColor = '';
+                    button.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Bookmark Toggle
+        async function toggleBookmark(button, messageIndex) {
+            const isBookmarked = button.classList.contains('active');
+            const bookmarkId = button.dataset.bookmarkId;
+
+            try {
+                const response = await fetch('/bookmark', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({
+                        message_index: messageIndex,
+                        action: isBookmarked ? 'remove' : 'add',
+                        bookmark_id: bookmarkId
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    if (data.action === 'added') {
+                        button.classList.add('active');
+                        button.dataset.bookmarkId = data.bookmark_id;
+                        button.querySelector('span').textContent = 'Saved';
+                    } else {
+                        button.classList.remove('active');
+                        delete button.dataset.bookmarkId;
+                        button.querySelector('span').textContent = 'Save';
+                    }
+                }
+            } catch (err) {
+                console.error('Bookmark error:', err);
+            }
+        }
+
+        // Share Response
+        let currentShareUrl = '';
+        async function shareResponse(messageIndex) {
+            try {
+                const response = await fetch('/share', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({ message_index: messageIndex })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentShareUrl = data.share_url;
+                    document.getElementById('shareLinkInput').value = currentShareUrl;
+                    document.getElementById('shareModal').classList.add('active');
+                }
+            } catch (err) {
+                console.error('Share error:', err);
+            }
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.remove('active');
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById('shareLinkInput');
+            navigator.clipboard.writeText(input.value).then(() => {
+                const copyBtn = event.target.closest('button');
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg> Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalHTML;
+                }, 2000);
+            });
+        }
+
+        function openShareLink() {
+            if (currentShareUrl) {
+                window.open(currentShareUrl, '_blank');
+            }
+        }
+
+        // Close modal on outside click
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('shareModal');
+            if (e.target === modal) {
+                closeShareModal();
+            }
+        });
+
+        // Export Citations
+        async function exportCitations(messageIndex, format) {
+            try {
+                const response = await fetch(`/export-citations/${format}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({ message_index: messageIndex })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `gasconsult_citations.${format === 'bibtex' ? 'bib' : 'ris'}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }
+            } catch (err) {
+                console.error('Export error:', err);
+            }
+        }
+
+        // Voice Input
+        let recognition = null;
+        let isListening = false;
+
+        function toggleVoiceInput() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert('Voice input is not supported in your browser. Try Chrome or Edge.');
+                return;
+            }
+
+            if (!recognition) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'en-US';
+
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    const textarea = document.getElementById('chatInput');
+                    textarea.value = transcript;
+                    textarea.style.height = '44px';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                    stopVoiceInput();
+                };
+
+                recognition.onerror = function(event) {
+                    console.error('Speech recognition error:', event.error);
+                    stopVoiceInput();
+                };
+
+                recognition.onend = function() {
+                    stopVoiceInput();
+                };
+            }
+
+            if (isListening) {
+                stopVoiceInput();
+            } else {
+                startVoiceInput();
+            }
+        }
+
+        function startVoiceInput() {
+            recognition.start();
+            isListening = true;
+            document.getElementById('voiceBtn').classList.add('listening');
+        }
+
+        function stopVoiceInput() {
+            if (recognition && isListening) {
+                recognition.stop();
+            }
+            isListening = false;
+            document.getElementById('voiceBtn').classList.remove('listening');
+        }
+
+        // Auto-load follow-up suggestions on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load follow-ups for the last assistant message
+            const messages = document.querySelectorAll('.message.assistant');
+            if (messages.length > 0) {
+                const lastMessageIndex = messages.length - 1;
+                loadFollowupSuggestions(lastMessageIndex);
+            }
+        });
+
+        // Load Follow-up Suggestions
+        async function loadFollowupSuggestions(messageIndex) {
+            try {
+                const response = await fetch('/generate-followups', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+                    },
+                    body: JSON.stringify({ message_index: messageIndex })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.followups) {
+                    const section = document.getElementById(`followup-${messageIndex}`);
+                    const questionsContainer = document.getElementById(`followup-questions-${messageIndex}`);
+
+                    if (section && questionsContainer) {
+                        questionsContainer.innerHTML = '';
+                        data.followups.forEach(question => {
+                            const btn = document.createElement('button');
+                            btn.className = 'followup-btn';
+                            btn.textContent = question;
+                            btn.onclick = function() {
+                                fillQuery(question);
+                                document.getElementById('chatInput').focus();
+                            };
+                            questionsContainer.appendChild(btn);
+                        });
+                        section.style.display = 'block';
+                    }
+                }
+            } catch (err) {
+                console.error('Followup generation error:', err);
+            }
+        }
     </script>
+</body>
+</html>
+"""
+
+LIBRARY_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Library — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.6);
+            color: var(--primary-blue);
+        }
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 40px;
+            color: var(--text-muted);
+        }
+        .bookmark-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1.5px solid var(--border);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+        .bookmark-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+        .bookmark-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+        .bookmark-query {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .bookmark-date {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .remove-btn {
+            background: transparent;
+            border: 1.5px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .remove-btn:hover {
+            background: #FEE2E2;
+            border-color: #EF4444;
+            color: #EF4444;
+        }
+        .bookmark-answer {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        .bookmark-refs {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-text">gasconsult.ai</a>
+            <a href="/chat" class="nav-link">← Back to Chat</a>
+        </div>
+    </nav>
+
+    <main>
+        <h1>📚 My Library</h1>
+
+        {% if not bookmarks %}
+        <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 16px;">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+            </svg>
+            <p>No saved responses yet. Bookmark responses in chat to build your library.</p>
+        </div>
+        {% else %}
+            {% for bookmark in bookmarks %}
+            <div class="bookmark-card">
+                <div class="bookmark-header">
+                    <div>
+                        <div class="bookmark-query">{{ bookmark.query }}</div>
+                        <div class="bookmark-date">Saved {{ bookmark.timestamp[:10] }}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeBookmark('{{ bookmark.id }}')">Remove</button>
+                </div>
+                <div class="bookmark-answer">{{ bookmark.answer|safe|truncate(300) }}</div>
+                {% if bookmark.num_papers > 0 %}
+                <div class="bookmark-refs">📊 {{ bookmark.num_papers }} references</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% endif %}
+    </main>
+
+    <script>
+        async function removeBookmark(id) {
+            // Implementation for removing bookmarks
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
+"""
+
+SHARED_RESPONSE_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Shared Response — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+        .try-btn {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+        }
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+        .response-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            border: 1.5px solid var(--border);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+        .query {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--border);
+        }
+        .answer {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .refs {
+            font-size: 13px;
+            color: var(--text-muted);
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        .refs a {
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+        .refs a:hover {
+            text-decoration: underline;
+        }
+        .footer-note {
+            text-align: center;
+            padding: 32px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-text">gasconsult.ai</a>
+            <a href="/chat" class="try-btn">Try it yourself</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="response-card">
+            <div class="query">{{ data.query }}</div>
+            <div class="answer">{{ data.answer|safe }}</div>
+
+            {% if data.references %}
+            <div class="refs">
+                <strong>References:</strong><br>
+                {% for ref in data.references %}
+                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                    [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
+                </a><br>
+                {% endfor %}
+                <br>
+                📊 {{ data.num_papers }} papers from PubMed
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer-note">
+            This response was shared from gasconsult.ai • Shared {{ data.timestamp[:10] }}
+        </div>
+    </main>
 </body>
 </html>
 """
@@ -11178,12 +12323,16 @@ def stream():
                     # Send content chunk
                     yield f"data: {json.dumps({'type': 'content', 'data': content})}\n\n"
 
+            # Calculate evidence strength
+            evidence_strength = get_evidence_strength(num_papers, refs)
+
             # Save complete response to session
             session['messages'].append({
                 "role": "assistant",
                 "content": full_response,
                 "references": refs,
-                "num_papers": num_papers
+                "num_papers": num_papers,
+                "evidence_strength": evidence_strength
             })
             session.modified = True
 
@@ -12122,10 +13271,209 @@ def api_status():
             "preop": "/preop",
             "hypotension": "/hypotension",
             "quick_dose": "/quick-dose",
-            "health": "/health"
+            "health": "/health",
+            "library": "/library",
+            "share": "/share"
         },
         "rate_limit": os.getenv("RATE_LIMIT", "60 per minute")
     }), 200
+
+# ====== Premium Features Routes ======
+
+@app.route("/bookmark", methods=["POST"])
+def bookmark_response():
+    """Add or remove a bookmark"""
+    try:
+        data = request.get_json()
+        message_index = data.get('message_index')
+        action = data.get('action', 'add')  # 'add' or 'remove'
+
+        # Get user session ID
+        user_id = session.get('user_id')
+        if not user_id:
+            user_id = str(uuid.uuid4())
+            session['user_id'] = user_id
+            session.modified = True
+
+        if user_id not in BOOKMARKS_STORAGE:
+            BOOKMARKS_STORAGE[user_id] = []
+
+        messages = session.get('messages', [])
+
+        if message_index < 0 or message_index >= len(messages):
+            return jsonify({'error': 'Invalid message index'}), 400
+
+        # Get the query (previous user message) and response (assistant message)
+        query = messages[message_index - 1]['content'] if message_index > 0 else 'Direct query'
+        response_msg = messages[message_index]
+
+        if action == 'add':
+            bookmark = {
+                'id': str(uuid.uuid4()),
+                'query': query,
+                'answer': response_msg['content'],
+                'references': response_msg.get('references', []),
+                'num_papers': response_msg.get('num_papers', 0),
+                'timestamp': datetime.now().isoformat(),
+                'message_index': message_index
+            }
+            BOOKMARKS_STORAGE[user_id].append(bookmark)
+            return jsonify({'success': True, 'action': 'added', 'bookmark_id': bookmark['id']})
+        elif action == 'remove':
+            bookmark_id = data.get('bookmark_id')
+            BOOKMARKS_STORAGE[user_id] = [b for b in BOOKMARKS_STORAGE[user_id] if b['id'] != bookmark_id]
+            return jsonify({'success': True, 'action': 'removed'})
+
+    except Exception as e:
+        logger.error(f"Bookmark error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route("/library")
+def library():
+    """View all bookmarked responses"""
+    user_id = session.get('user_id')
+    bookmarks = BOOKMARKS_STORAGE.get(user_id, []) if user_id else []
+
+    # Sort by timestamp (newest first)
+    bookmarks = sorted(bookmarks, key=lambda x: x['timestamp'], reverse=True)
+
+    return render_template_string(LIBRARY_HTML, bookmarks=bookmarks)
+
+@app.route("/share", methods=["POST"])
+def create_share_link():
+    """Create a shareable link for a response"""
+    try:
+        data = request.get_json()
+        message_index = data.get('message_index')
+
+        messages = session.get('messages', [])
+
+        if message_index < 0 or message_index >= len(messages):
+            return jsonify({'error': 'Invalid message index'}), 400
+
+        query = messages[message_index - 1]['content'] if message_index > 0 else 'Direct query'
+        response_msg = messages[message_index]
+
+        # Generate unique share ID
+        share_id = str(uuid.uuid4())[:8]
+
+        # Store shared response (expires in 30 days)
+        SHARED_LINKS_STORAGE[share_id] = {
+            'query': query,
+            'answer': response_msg['content'],
+            'references': response_msg.get('references', []),
+            'num_papers': response_msg.get('num_papers', 0),
+            'timestamp': datetime.now().isoformat(),
+            'expires': (datetime.now() + timedelta(days=30)).isoformat()
+        }
+
+        share_url = f"{request.host_url}r/{share_id}"
+        return jsonify({'success': True, 'share_url': share_url, 'share_id': share_id})
+
+    except Exception as e:
+        logger.error(f"Share link error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route("/r/<share_id>")
+@csrf.exempt
+def view_shared_response(share_id):
+    """View a shared response"""
+    shared_data = SHARED_LINKS_STORAGE.get(share_id)
+
+    if not shared_data:
+        return "Shared link not found or expired", 404
+
+    # Check if expired
+    expires = datetime.fromisoformat(shared_data['expires'])
+    if datetime.now() > expires:
+        del SHARED_LINKS_STORAGE[share_id]
+        return "Shared link has expired", 410
+
+    return render_template_string(SHARED_RESPONSE_HTML, data=shared_data, share_id=share_id)
+
+@app.route("/export-citations/<format_type>", methods=["POST"])
+def export_citations(format_type):
+    """Export citations in BibTeX or RIS format"""
+    try:
+        data = request.get_json()
+        message_index = data.get('message_index')
+
+        messages = session.get('messages', [])
+
+        if message_index < 0 or message_index >= len(messages):
+            return jsonify({'error': 'Invalid message index'}), 400
+
+        response_msg = messages[message_index]
+        references = response_msg.get('references', [])
+
+        if not references:
+            return jsonify({'error': 'No references to export'}), 400
+
+        if format_type == 'bibtex':
+            content = generate_bibtex(references)
+            filename = 'gasconsult_citations.bib'
+            mimetype = 'application/x-bibtex'
+        elif format_type == 'ris':
+            content = generate_ris(references)
+            filename = 'gasconsult_citations.ris'
+            mimetype = 'application/x-research-info-systems'
+        else:
+            return jsonify({'error': 'Invalid format'}), 400
+
+        from flask import make_response
+        response = make_response(content)
+        response.headers['Content-Type'] = mimetype
+        response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+        return response
+
+    except Exception as e:
+        logger.error(f"Export error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route("/generate-followups", methods=["POST"])
+def generate_followup_questions():
+    """Generate smart follow-up questions based on the current conversation"""
+    try:
+        data = request.get_json()
+        message_index = data.get('message_index')
+
+        messages = session.get('messages', [])
+
+        if message_index < 0 or message_index >= len(messages):
+            return jsonify({'error': 'Invalid message index'}), 400
+
+        query = messages[message_index - 1]['content'] if message_index > 0 else ''
+        response = messages[message_index]['content']
+
+        # Use GPT to generate contextual follow-up questions
+        prompt = f"""Based on this clinical question and answer, generate 3 smart follow-up questions that a clinician might want to ask next.
+
+Question: {query}
+
+Answer: {response[:500]}...
+
+Generate exactly 3 concise follow-up questions (one per line, no numbering) that explore:
+1. A related contraindication or safety concern
+2. A comparison with an alternative approach
+3. A practical implementation detail or dosing question
+
+Keep each question under 60 characters."""
+
+        completion = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=200
+        )
+
+        followups_text = completion.choices[0].message.content.strip()
+        followups = [q.strip() for q in followups_text.split('\n') if q.strip() and not q.strip()[0].isdigit()][:3]
+
+        return jsonify({'success': True, 'followups': followups})
+
+    except Exception as e:
+        logger.error(f"Generate followups error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
