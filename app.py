@@ -2,7 +2,7 @@ from flask import Flask, request, render_template_string, session, redirect, url
 from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from Bio import Entrez
 import openai
 import os
@@ -27,13 +27,15 @@ app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
-app.config['SESSION_COOKIE_SECURE'] = True  # Use HTTPS
 app.config['SESSION_COOKIE_HTTPONLY'] = True
+# Only require HTTPS cookies if explicitly enabled (Render uses reverse proxy)
+app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production' and os.getenv('FORCE_HTTPS', 'false').lower() == 'true'
 Session(app)
 
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
 app.config['WTF_CSRF_TIME_LIMIT'] = None  # Don't expire CSRF tokens
+app.config['WTF_CSRF_SSL_STRICT'] = False  # Allow CSRF on HTTP (behind reverse proxy)
 
 # Initialize rate limiter
 limiter = Limiter(
@@ -167,6 +169,13 @@ def log_response(response):
     """Log outgoing responses"""
     logger.info(f"{request.method} {request.path} - Status: {response.status_code}")
     return response
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    """Handle CSRF token errors with helpful message"""
+    logger.warning(f"CSRF error: {str(e)}")
+    # Redirect to homepage to regenerate session/CSRF token
+    return redirect(url_for('index'))
 
 @app.errorhandler(Exception)
 def log_exception(e):
@@ -12223,6 +12232,9 @@ def index():
     """Homepage - welcome screen only"""
     # Clear any existing conversation when returning to homepage
     session.pop('messages', None)
+    # Explicitly initialize session to ensure CSRF token is generated
+    if 'initialized' not in session:
+        session['initialized'] = True
     session.modified = True  # Ensure session is saved
     return render_template_string(HTML, messages=[])
 
