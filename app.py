@@ -4189,7 +4189,9 @@ HTML = """
         }
 
         // Check for pending stream from homepage redirect
+        console.log('[AUTO-START] Checking for pending stream...');
         {% if pending_stream %}
+        console.log('[AUTO-START] pending_stream value: {{ pending_stream }}');
         document.addEventListener('DOMContentLoaded', function() {
             console.log('[AUTO-START] Pending stream detected, starting streaming...');
             const requestId = '{{ pending_stream }}';
@@ -4201,11 +4203,25 @@ HTML = """
                 lastMessage.querySelector('.message-content').innerHTML = '<p class="loading-indicator">🔍 Searching medical literature...</p>';
 
                 // Start streaming
+                console.log('[AUTO-START] Creating EventSource with requestId:', requestId);
                 const eventSource = new EventSource(`/stream?request_id=${requestId}`);
                 const responseDiv = lastMessage.querySelector('.message-content');
                 let responseContent = '';
 
+                eventSource.addEventListener('open', function(e) {
+                    console.log('[STREAM] Connection opened');
+                });
+
+                eventSource.addEventListener('error', function(e) {
+                    console.error('[STREAM] Error occurred:', e);
+                    console.error('[STREAM] ReadyState:', eventSource.readyState);
+                    if (eventSource.readyState === EventSource.CLOSED) {
+                        console.error('[STREAM] Connection closed');
+                    }
+                });
+
                 eventSource.addEventListener('message', function(e) {
+                    console.log('[STREAM] Message received:', e.data);
                     const event = JSON.parse(e.data);
 
                     if (event.type === 'connected') {
@@ -12267,9 +12283,19 @@ HYPOTENSION_HTML = """
 def stream():
     """Server-Sent Events endpoint for streaming GPT responses"""
     request_id = request.args.get('request_id')
+    print(f"[DEBUG] /stream endpoint called with request_id: {request_id}")
 
-    if not request_id or f'stream_data_{request_id}' not in session:
-        return Response("error: Invalid request\n\n", mimetype='text/event-stream')
+    if not request_id:
+        print(f"[DEBUG] /stream - No request_id provided")
+        return Response("error: Invalid request - no request_id\n\n", mimetype='text/event-stream')
+
+    stream_key = f'stream_data_{request_id}'
+    if stream_key not in session:
+        print(f"[DEBUG] /stream - Stream key '{stream_key}' not found in session")
+        print(f"[DEBUG] /stream - Available session keys: {list(session.keys())}")
+        return Response("error: Invalid request - stream data not found\n\n", mimetype='text/event-stream')
+
+    print(f"[DEBUG] /stream - Stream data found, proceeding...")
 
     # Get prepared data from session
     stream_data = session[f'stream_data_{request_id}']
@@ -12735,6 +12761,8 @@ Respond with maximum clinical utility:"""
 
     # Check for pending stream (from homepage redirect)
     pending_stream = session.pop('pending_stream', None)
+    print(f"[DEBUG] GET /chat - pending_stream = {pending_stream}")
+    print(f"[DEBUG] GET /chat - num messages = {len(session.get('messages', []))}")
     return render_template_string(CHAT_HTML, messages=session.get('messages', []), pending_stream=pending_stream)
 
 @app.route("/clear")
