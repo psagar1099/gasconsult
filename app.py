@@ -23,12 +23,17 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 # Configure server-side sessions (stores sessions in filesystem instead of cookies)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
 app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = True  # Use HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
 Session(app)
 
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
+app.config['WTF_CSRF_TIME_LIMIT'] = None  # Don't expire CSRF tokens
 
 # Initialize rate limiter
 limiter = Limiter(
@@ -4189,11 +4194,8 @@ HTML = """
         }
 
         // Check for pending stream from homepage redirect
-        console.log('[AUTO-START] Checking for pending stream...');
         {% if pending_stream %}
-        console.log('[AUTO-START] pending_stream value: {{ pending_stream }}');
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('[AUTO-START] Pending stream detected, starting streaming...');
             const requestId = '{{ pending_stream }}';
 
             // Add loading indicator to last message
@@ -4203,29 +4205,22 @@ HTML = """
                 lastMessage.querySelector('.message-content').innerHTML = '<p class="loading-indicator">🔍 Searching medical literature...</p>';
 
                 // Start streaming
-                console.log('[AUTO-START] Creating EventSource with requestId:', requestId);
                 const eventSource = new EventSource(`/stream?request_id=${requestId}`);
                 const responseDiv = lastMessage.querySelector('.message-content');
                 let responseContent = '';
 
-                eventSource.addEventListener('open', function(e) {
-                    console.log('[STREAM] Connection opened');
-                });
-
                 eventSource.addEventListener('error', function(e) {
-                    console.error('[STREAM] Error occurred:', e);
-                    console.error('[STREAM] ReadyState:', eventSource.readyState);
+                    console.error('Streaming error:', e);
                     if (eventSource.readyState === EventSource.CLOSED) {
-                        console.error('[STREAM] Connection closed');
+                        responseDiv.innerHTML = '<p style="color: #EF4444;">Connection error. Please refresh and try again.</p>';
                     }
                 });
 
                 eventSource.addEventListener('message', function(e) {
-                    console.log('[STREAM] Message received:', e.data);
                     const event = JSON.parse(e.data);
 
                     if (event.type === 'connected') {
-                        console.log('[STREAM] Connected');
+                        // Connection established
                     } else if (event.type === 'content') {
                         // Remove loading indicator and add copy button on first content
                         if (responseContent === '') {
@@ -4261,19 +4256,13 @@ HTML = """
                             responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
                         }
                     } else if (event.type === 'done') {
-                        console.log('[STREAM] Completed');
                         eventSource.close();
                     } else if (event.type === 'error') {
-                        console.error('[STREAM] Error:', event.message);
+                        console.error('Stream error:', event.message);
                         responseDiv.innerHTML = `<p style="color: #EF4444;">${event.message}</p>`;
                         eventSource.close();
                     }
                 });
-
-                eventSource.onerror = function(e) {
-                    console.error('[STREAM] Connection error:', e);
-                    eventSource.close();
-                };
             }
         });
         {% endif %}
@@ -4870,55 +4859,7 @@ CHAT_HTML = """
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
         }
 
-        /* Voice Input Button */
-        .voice-btn {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-
-        .voice-btn:hover {
-            border-color: var(--primary-blue);
-            background: var(--primary-blue-light);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .voice-btn.listening {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            border-color: #EF4444;
-            animation: pulse 1.5s infinite;
-        }
-
-        .voice-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text-secondary);
-        }
-
-        .voice-btn.listening svg {
-            stroke: white;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
-            }
-        }
+        /* Voice input removed - not cross-browser compatible */
 
         /* Share Modal */
         .modal-overlay {
@@ -5213,13 +5154,7 @@ CHAT_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Home</a>
-                <a href="/library" class="nav-link" title="View saved responses">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
-                    </svg>
-                    Library
-                </a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
@@ -5384,13 +5319,6 @@ CHAT_HTML = """
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <!-- Voice Input Button -->
-            <button type="button" class="voice-btn" id="voiceBtn" title="Voice input" onclick="toggleVoiceInput()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 1a3 3 0 003 3v8a3 3 0 01-6 0V4a3 3 0 013-3z"></path>
-                    <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path>
-                </svg>
-            </button>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
@@ -5656,61 +5584,7 @@ CHAT_HTML = """
             }
         }
 
-        // Voice Input
-        let recognition = null;
-        let isListening = false;
-
-        function toggleVoiceInput() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert('Voice input is not supported in your browser. Try Chrome or Edge.');
-                return;
-            }
-
-            if (!recognition) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    const textarea = document.getElementById('chatInput');
-                    textarea.value = transcript;
-                    textarea.style.height = '44px';
-                    textarea.style.height = textarea.scrollHeight + 'px';
-                    stopVoiceInput();
-                };
-
-                recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    stopVoiceInput();
-                };
-
-                recognition.onend = function() {
-                    stopVoiceInput();
-                };
-            }
-
-            if (isListening) {
-                stopVoiceInput();
-            } else {
-                startVoiceInput();
-            }
-        }
-
-        function startVoiceInput() {
-            recognition.start();
-            isListening = true;
-            document.getElementById('voiceBtn').classList.add('listening');
-        }
-
-        function stopVoiceInput() {
-            if (recognition && isListening) {
-                recognition.stop();
-            }
-            isListening = false;
-            document.getElementById('voiceBtn').classList.remove('listening');
-        }
+        // Voice input removed - not cross-browser compatible
 
         // Auto-load follow-up suggestions on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -10217,7 +10091,7 @@ CALCULATORS_HTML = """
                 </button>
             </div>
             <div class="ai-chat-messages" id="aiChatMessages">
-                <!-- Messages will be added here -->
+                <!-- Messages will be added here dynamically -->
             </div>
             <div class="ai-chat-input-area">
                 <div class="ai-input-container">
@@ -11078,27 +10952,25 @@ CALCULATORS_HTML = """
                     break;
             }
 
-            // Open modal and send initial message
+            // Redirect to chat page with the message
             openAIChat(message);
         }
 
         // AI Chat Modal Functions
-        function openAIChat(initialMessage) {
+        async function openAIChat(initialMessage) {
             const modal = document.getElementById('aiChatModal');
             const messagesDiv = document.getElementById('aiChatMessages');
-            const inputField = document.getElementById('aiChatInput');
 
             // Clear previous messages
             messagesDiv.innerHTML = '';
-            inputField.value = '';
-            currentChatContext = initialMessage;
 
             // Show modal
             modal.classList.add('active');
 
             // Send initial message
             if (initialMessage) {
-                fetchAIResponse(initialMessage);
+                addMessageToModal(initialMessage, 'user');
+                await fetchAIResponseForModal(initialMessage);
             }
         }
 
@@ -11127,15 +10999,15 @@ CALCULATORS_HTML = """
 
             if (!message) return;
 
-            // Add user message to chat
-            addMessageToChat(message, 'user');
+            // Add user message
+            addMessageToModal(message, 'user');
             input.value = '';
 
             // Fetch AI response
-            fetchAIResponse(message);
+            fetchAIResponseForModal(message);
         }
 
-        function addMessageToChat(message, type) {
+        function addMessageToModal(message, type) {
             const messagesDiv = document.getElementById('aiChatMessages');
             const messageEl = document.createElement('div');
             messageEl.className = 'ai-message';
@@ -11165,58 +11037,88 @@ CALCULATORS_HTML = """
             return messageEl;
         }
 
-        async function fetchAIResponse(userMessage) {
+        async function fetchAIResponseForModal(userMessage) {
             // Show loading indicator
-            addMessageToChat('', 'loading');
+            addMessageToModal('', 'loading');
 
             try {
-                // Get CSRF token
+                // Send to /chat to prepare streaming
                 const csrfToken = document.getElementById('csrf_token').value;
-
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'  // Signal this is AJAX
                     },
-                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}`
+                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}&modal=1`,
+                    redirect: 'manual'  // Don't follow redirects
                 });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                // Handle response - it might be JSON with request_id
+                const data = await response.json();
 
-                // Get the full page HTML response
-                const html = await response.text();
+                if (data.request_id) {
+                    // Start streaming with EventSource
+                    const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
+                    let fullResponse = '';
+                    let refs = [];
 
-                // Parse the HTML to extract the last AI message
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const assistantMessages = doc.querySelectorAll('.message.assistant');
+                    eventSource.addEventListener('message', function(e) {
+                        const event = JSON.parse(e.data);
 
-                if (assistantMessages.length > 0) {
-                    const lastMessage = assistantMessages[assistantMessages.length - 1];
-                    const messageText = lastMessage.querySelector('.message-text');
+                        if (event.type === 'content') {
+                            // Remove loading on first content
+                            const loadingMsg = document.getElementById('loadingMessage');
+                            if (loadingMsg && fullResponse === '') {
+                                loadingMsg.remove();
+                                addMessageToModal('', 'ai');  // Add empty AI message
+                            }
 
-                    if (messageText) {
-                        // Remove loading message
+                            fullResponse += event.content;
+                            const messages = document.querySelectorAll('.ai-message');
+                            const lastMsg = messages[messages.length - 1];
+                            lastMsg.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                        } else if (event.type === 'references') {
+                            refs = event.references;
+                        } else if (event.type === 'done') {
+                            eventSource.close();
+
+                            // Add references if any
+                            if (refs && refs.length > 0) {
+                                const messages = document.querySelectorAll('.ai-message');
+                                const lastMsg = messages[messages.length - 1];
+                                let refsHTML = '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"><strong>References:</strong><div>';
+                                refs.forEach((ref, index) => {
+                                    refsHTML += `<div style="margin: 8px 0; font-size: 13px;"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank" style="color: var(--primary-blue);">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
+                                });
+                                refsHTML += '</div></div>';
+                                lastMsg.innerHTML += refsHTML;
+                            }
+                        } else if (event.type === 'error') {
+                            console.error('Stream error:', event.message);
+                            const loadingMsg = document.getElementById('loadingMessage');
+                            if (loadingMsg) loadingMsg.remove();
+                            addMessageToModal(`Error: ${event.message}`, 'ai');
+                            eventSource.close();
+                        }
+                    });
+
+                    eventSource.addEventListener('error', function() {
+                        console.error('EventSource connection error');
                         const loadingMsg = document.getElementById('loadingMessage');
                         if (loadingMsg) loadingMsg.remove();
-
-                        // Add AI response
-                        addMessageToChat(messageText.innerHTML, 'ai');
-                    } else {
-                        throw new Error('Could not extract AI response');
-                    }
+                        addMessageToModal('Connection error. Please try again.', 'ai');
+                        eventSource.close();
+                    });
                 } else {
-                    throw new Error('No response found');
+                    throw new Error('No request_id received');
                 }
 
             } catch (error) {
-                console.error('Error fetching AI response:', error);
+                console.error('Error:', error);
                 const loadingMsg = document.getElementById('loadingMessage');
                 if (loadingMsg) loadingMsg.remove();
-
-                addMessageToChat('Sorry, there was an error getting a response. Please try again or visit the <a href="/chat" style="color: var(--primary-blue); text-decoration: underline;">chat page</a>.', 'ai');
+                addMessageToModal('Sorry, there was an error. Please try again.', 'ai');
             }
         }
 
@@ -12227,19 +12129,13 @@ HYPOTENSION_HTML = """
 def stream():
     """Server-Sent Events endpoint for streaming GPT responses"""
     request_id = request.args.get('request_id')
-    print(f"[DEBUG] /stream endpoint called with request_id: {request_id}")
 
     if not request_id:
-        print(f"[DEBUG] /stream - No request_id provided")
         return Response("error: Invalid request - no request_id\n\n", mimetype='text/event-stream')
 
     stream_key = f'stream_data_{request_id}'
     if stream_key not in session:
-        print(f"[DEBUG] /stream - Stream key '{stream_key}' not found in session")
-        print(f"[DEBUG] /stream - Available session keys: {list(session.keys())}")
         return Response("error: Invalid request - stream data not found\n\n", mimetype='text/event-stream')
-
-    print(f"[DEBUG] /stream - Stream data found, proceeding...")
 
     # Get prepared data from session
     stream_data = session[f'stream_data_{request_id}']
@@ -12327,6 +12223,7 @@ def index():
     """Homepage - welcome screen only"""
     # Clear any existing conversation when returning to homepage
     session.pop('messages', None)
+    session.modified = True  # Ensure session is saved
     return render_template_string(HTML, messages=[])
 
 @app.route("/chat", methods=["GET", "POST"])
@@ -12666,26 +12563,29 @@ Respond with maximum clinical utility:"""
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
 
-            # If this is the first message (from homepage), set pending flag and redirect
-            if is_first_message:
-                # Add placeholder assistant message for auto-start JavaScript to populate
-                session['messages'].append({
-                    "role": "assistant",
-                    "content": "",  # Will be populated by streaming
-                    "references": [],
-                    "num_papers": 0
-                })
-                session['pending_stream'] = request_id
-                session.modified = True
-                print(f"[DEBUG] First message - added placeholder assistant message, redirecting to /chat page")
-                return redirect(url_for('chat'))
+            # Check if this is an AJAX request from the calculator modal
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
 
-            # For follow-up messages, return JSON for streaming
-            return jsonify({
-                'status': 'ready',
-                'request_id': request_id,
-                'raw_query': raw_query
+            # If AJAX request (from modal), always return JSON
+            if is_ajax:
+                return jsonify({
+                    'status': 'ready',
+                    'request_id': request_id,
+                    'raw_query': raw_query
+                })
+
+            # For regular form submissions (not AJAX), always redirect to chat page
+            # Add placeholder assistant message for auto-start JavaScript to populate
+            session['messages'].append({
+                "role": "assistant",
+                "content": "",  # Will be populated by streaming
+                "references": [],
+                "num_papers": 0
             })
+            session['pending_stream'] = request_id
+            session.modified = True
+            print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+            return redirect(url_for('chat'))
 
         except Exception as e:
             # Catch all unhandled errors
