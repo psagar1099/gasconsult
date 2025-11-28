@@ -7545,7 +7545,7 @@ CALCULATORS_HTML = """
         }
 
         nav .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -7574,17 +7574,25 @@ CALCULATORS_HTML = """
         }
 
         .logo-wordmark {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-size: 20px;
             font-weight: 600;
-            line-height: 1;
             letter-spacing: -0.5px;
             white-space: nowrap;
         }
 
-        .logo-gas { color: #2563EB; }
-        .logo-consult { color: #111111; }
-        .logo-ai { color: #6B7280; font-weight: 400; }
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #111111;
+        }
+
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
+        }
 
         .nav-actions {
             display: flex;
@@ -7617,7 +7625,7 @@ CALCULATORS_HTML = """
 
         /* Main Layout */
         .main-container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 48px 24px;
             display: flex;
