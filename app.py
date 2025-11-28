@@ -3704,6 +3704,27 @@ HTML = """
             }
         }
 
+        // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('chatInput');
+            if (textarea) {
+                textarea.addEventListener('keydown', function(e) {
+                    // Check for Ctrl+Enter (Windows/Linux) or Cmd+Enter (Mac)
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault(); // Prevent default newline behavior
+
+                        // Find the form and submit it
+                        const form = textarea.closest('form');
+                        if (form) {
+                            console.log('[KEYBOARD] Ctrl+Enter detected - submitting form');
+                            form.requestSubmit(); // Use requestSubmit() to trigger validation and submit event
+                        }
+                    }
+                });
+                console.log('[KEYBOARD] Keyboard shortcuts initialized (Ctrl+Enter or Cmd+Enter to submit)');
+            }
+        });
+
         // Smooth scroll to latest message on page load
         window.addEventListener('load', function() {
             const messages = document.querySelectorAll('.message');

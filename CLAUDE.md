@@ -27,7 +27,7 @@
 
 ```
 gasconsult/
-├── app.py                  # Main Flask application (~7400 lines)
+├── app.py                  # Main Flask application (~8450 lines)
 ├── requirements.txt        # Python dependencies
 ├── .env.example           # Environment variable template
 ├── README.md              # Project description
@@ -75,14 +75,88 @@ The app uses a two-tier search approach:
 2. Falls back to general search if no results found
 3. Filters for high-quality evidence types only (since 2015)
 
-### Synonym Expansion (lines 80-85)
+### Backend Intelligence Features (Added 2025-11-28)
 
-Automatically expands common clinical abbreviations:
-- `txa` → `"tranexamic acid" OR TXA`
-- `blood loss` → `"blood loss" OR hemorrhage OR transfusion`
-- `spine surgery` → `"spine surgery" OR "spinal fusion" OR scoliosis`
-- `pediatric` → `pediatric OR children OR peds`
-- `ponv` → `PONV OR "postoperative nausea"`
+The chat function includes 8 sophisticated query processing features that make it understand clinical questions better:
+
+#### 1. **Expanded Medical Abbreviation Dictionary**
+Automatically recognizes and expands 40+ medical abbreviations:
+- **Drugs:** `roc` → rocuronium, `vec` → vecuronium, `sux` → succinylcholine, `dex` → dexmedetomidine, `neo` → phenylephrine, `epi` → epinephrine, `remi` → remifentanil, `versed` → midazolam
+- **Procedures:** `RSI` → rapid sequence induction, `CABG` → coronary artery bypass, `TAVR` → transcatheter aortic valve
+- **Complications:** `LAST` → local anesthetic systemic toxicity, `PRIS` → propofol infusion syndrome, `MH` → malignant hyperthermia
+- **Regional:** `nerve block`, `epidural`, `spinal` → comprehensive neuraxial terms
+- **Original terms:** `txa`, `ponv`, `peds`, `propofol`, `etomidate`, `ketamine`, `blood loss`, `spine surgery`
+
+#### 2. **Pronoun & Reference Resolution**
+Intelligently resolves pronouns and vague references in follow-up questions:
+- "What about in pediatrics?" → Carries forward previous drug/topic
+- "What are the contraindications for it?" → Replaces "it" with actual entity from context
+- "How about in renal failure?" → Continues previous topic with new modifier
+- Extracts medical entities from last 6 messages for context
+
+#### 3. **Question Type Detection**
+Classifies questions and customizes search strategy:
+- **Dosing** → Prioritizes guidelines and review articles (e.g., "What's the dose of propofol?")
+- **Safety** → Includes adverse effects and contraindication studies (e.g., "Is ketamine safe in...?")
+- **Comparison** → Targets head-to-head trials (e.g., "Propofol vs etomidate")
+- **Mechanism** → Focuses on review articles (e.g., "How does dexmedetomidine work?")
+- **Management** → Searches for protocols and guidelines (e.g., "Difficult airway algorithm")
+
+#### 4. **Negation Handling**
+Detects contraindication/avoidance questions and modifies search:
+- Detects keywords: "avoid", "not", "contraindication", "when to stop", "shouldn't use"
+- Adds search filters: `contraindications[sh]`, `adverse effects[sh]`, `safety[ti]`
+- Updates GPT prompt to focus on safety concerns and inappropriate use cases
+- Example: "When NOT to use succinylcholine?" → Gets malignant hyperthermia, hyperkalemia risks
+
+#### 5. **Dynamic Temperature Adjustment**
+Adjusts GPT-4o temperature based on question criticality:
+- **Dosing questions:** 0.05 (ultra-precise - dosing must be exact)
+- **Safety questions:** 0.1 (factual accuracy critical)
+- **Mechanism questions:** 0.15 (can be more explanatory)
+- **Comparison/Management:** 0.1 (balanced)
+- **General/No papers:** 0.2 (conversational)
+
+#### 6. **Multi-Part Question Detection**
+Identifies questions with multiple parts and ensures comprehensive answers:
+- Detects patterns: "and what", "and how", multiple "?"
+- Signals GPT to address each part thoroughly
+- Example: "What's the dose of propofol and what are the side effects?" → Both parts answered
+
+#### 7. **Smart Context Carryover**
+Builds intelligent conversation context instead of just recent messages:
+- Analyzes current query for key terms
+- Finds earlier messages (beyond last 6) that share 2+ terms with current query
+- Includes up to 2 relevant earlier Q&A pairs + last 6 messages
+- Maintains continuity in long conversations across different topics
+
+#### 8. **Conversation Topic Tracking**
+Remembers the main topic of conversation:
+- Extracts main topic from first message (keyword-based)
+- Stores in session for potential query enhancement
+- Available for expanding vague follow-up queries
+
+### UX Features
+
+#### Keyboard Shortcuts
+- **Ctrl+Enter** (Windows/Linux) or **Cmd+Enter** (Mac) to submit queries
+- Works on both homepage and chat interface
+- Prevents accidental newlines while typing
+
+#### Evidence Quality Badges
+- Shows confidence level (High/Moderate/Low) based on paper quantity and types
+- Displays number of papers, study types, and date range
+- Color-coded: Green (high), Orange (moderate), Red (low)
+- Transparent about evidence strength
+
+#### Suggested Prompts
+- Homepage shows 5 clickable example queries
+- Auto-fills textarea when clicked
+- Helps new users understand what to ask
+
+### Synonym Expansion (Legacy - Integrated into Abbreviation Dictionary)
+
+The original synonym expansion is now part of the comprehensive medical abbreviation dictionary (see Backend Intelligence Features #1 above).
 
 ## Environment Variables
 
