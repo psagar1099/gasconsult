@@ -254,22 +254,53 @@ def resolve_references(query, conversation_history):
     # Get last 2-3 user+assistant turns
     recent_messages = conversation_history[-6:] if len(conversation_history) >= 6 else conversation_history
 
-    # Extract key medical terms from recent conversation (drugs, procedures, conditions)
+    # Extract key medical terms from recent conversation (drugs, procedures, conditions, broad concepts)
     medical_entities = []
     for msg in recent_messages:
         content = msg.get('content', '').lower()
-        # Find drug names, procedures, conditions
+
+        # Find broader concepts first (multi-word phrases)
+        broad_concepts = re.findall(
+            r'\b(difficult airway management|difficult airway|airway management|'
+            r'fiberoptic intubation|awake fiberoptic intubation|awake intubation|'
+            r'rapid sequence induction|rapid sequence intubation|'
+            r'neuraxial anesthesia|regional anesthesia|general anesthesia|'
+            r'cardiac surgery|neurosurgery|spine surgery|orthopedic surgery|'
+            r'video laryngoscopy|direct laryngoscopy|'
+            r'spinal anesthesia|epidural anesthesia|combined spinal epidural|'
+            r'peripheral nerve block|nerve block technique|'
+            r'ultrasound guided block|landmark technique|'
+            r'postoperative pain management|acute pain management|chronic pain|'
+            r'preoperative optimization|preoperative assessment|'
+            r'hemodynamic management|fluid management|blood management|'
+            r'neuromuscular blockade|neuromuscular monitoring|'
+            r'depth of anesthesia monitoring|bispectral index|'
+            r'postoperative nausea|nausea prophylaxis|antiemetic strategy|'
+            r'enhanced recovery|eras protocol|fast track surgery|'
+            r'transfusion management|blood conservation|cell saver|'
+            r'malignant hyperthermia crisis|local anesthetic toxicity crisis|'
+            r'obstetric anesthesia|pediatric anesthesia|geriatric anesthesia|'
+            r'liver transplant|kidney transplant|cardiac transplant|'
+            r'one lung ventilation|lung isolation|double lumen tube|'
+            r'airway exchange catheter|bougie|glidescope)\b',
+            content
+        )
+        medical_entities.extend(broad_concepts)
+
+        # Find single-word drugs, procedures, conditions
         entities = re.findall(
             r'\b(propofol|etomidate|ketamine|fentanyl|remifentanil|sufentanil|alfentanil|'
             r'rocuronium|vecuronium|succinylcholine|cisatracurium|'
             r'sevoflurane|desflurane|isoflurane|'
-            r'midazolam|dexmedetomidine|'
+            r'midazolam|dexmedetomidine|precedex|'
             r'phenylephrine|ephedrine|epinephrine|norepinephrine|vasopressin|'
             r'tranexamic acid|txa|aminocaproic acid|'
-            r'intubation|extubation|induction|emergence|nerve block|epidural|spinal|'
-            r'rsi|rapid sequence|awake fiberoptic|'
+            r'intubation|extubation|induction|emergence|'
+            r'epidural|spinal|neuraxial|'
             r'ponv|hypotension|hypertension|bronchospasm|laryngospasm|'
-            r'malignant hyperthermia|local anesthetic toxicity|last)\b',
+            r'sugammadex|neostigmine|glycopyrrolate|atropine|'
+            r'ondansetron|metoclopramide|dexamethasone|'
+            r'naloxone|flumazenil|dantrolene|intralipid)\b',
             content
         )
         medical_entities.extend(entities)
@@ -284,13 +315,16 @@ def resolve_references(query, conversation_history):
     unique_entities.reverse()
 
     # Replace vague references if we have context
-    if unique_entities and any(word in q for word in ['it', 'this', 'that', 'the drug', 'the medication', 'the technique']):
+    if unique_entities and any(word in q for word in ['it', 'this', 'that', 'the drug', 'the medication', 'the technique', 'the procedure', 'the approach']):
         most_recent = unique_entities[-1]  # Last mentioned entity
         q = re.sub(r'\bit\b', most_recent, q)
         q = re.sub(r'\bthis\b', most_recent, q)
         q = re.sub(r'\bthat\b', most_recent, q)
         q = q.replace('the drug', most_recent)
         q = q.replace('the medication', most_recent)
+        q = q.replace('the technique', most_recent)
+        q = q.replace('the procedure', most_recent)
+        q = q.replace('the approach', most_recent)
         print(f"[DEBUG] Resolved reference: '{query}' → '{q}'")
 
     # Handle "what about..." questions
@@ -307,6 +341,16 @@ def resolve_references(query, conversation_history):
         main_topic = unique_entities[-1]
         q = f'{main_topic} {modifier}'
         print(f"[DEBUG] Expanded 'how about': '{query}' → '{q}'")
+
+    # Handle "can you" or "can I" questions that might be follow-ups
+    if unique_entities and (q.startswith('can you') or q.startswith('can i') or q.startswith('should i') or q.startswith('should you')):
+        # Check if the query contains specific techniques that should be added to context
+        has_specific_technique = any(term in q for term in ['fiberoptic', 'video', 'laryngoscopy', 'intubate', 'block', 'epidural', 'spinal'])
+        if has_specific_technique:
+            # Prepend the context topic
+            main_topic = unique_entities[-1]
+            q = f'{main_topic} {q}'
+            print(f"[DEBUG] Added context to technique question: '{query}' → '{q}'")
 
     return q if q != query.lower() else query
 
@@ -1785,7 +1829,7 @@ PREOP_HTML = """
             {% endif %}
         </div>
         <div style="text-align: center; margin-top: 30px;">
-            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">New Assessment</a>
+            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">Clear & New Assessment</a>
         </div>
         {% endif %}
     </div>
@@ -2103,6 +2147,24 @@ HTML = """
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
         }
 
+        .clear-chat-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1.5px solid var(--border);
+        }
+
+        .clear-chat-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            color: #EF4444;
+            border-color: #EF4444;
+        }
+
         /* Welcome Screen */
         .welcome-screen {
             padding: 80px 40px 60px;
@@ -2148,7 +2210,7 @@ HTML = """
             font-size: 17px;
             color: #475569;
             max-width: 640px;
-            margin: 0 auto 36px;
+            margin: 0 auto 24px;
             font-weight: 400;
             line-height: 1.65;
         }
@@ -2782,7 +2844,7 @@ HTML = """
         /* Suggested Prompts */
         .suggested-prompts {
             max-width: 900px;
-            margin: 24px auto;
+            margin: 8px auto 16px;
             padding: 0 20px;
         }
 
@@ -3492,6 +3554,9 @@ HTML = """
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                {% if messages %}
+                <a href="/clear" class="clear-chat-btn">Clear Chat</a>
+                {% endif %}
             </div>
         </div>
     </nav>
