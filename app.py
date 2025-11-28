@@ -12954,12 +12954,30 @@ Answer as if you're a colleague continuing the conversation:"""
                     }
                     session.modified = True
 
-                    print(f"[DEBUG] Stream data prepared for follow-up, returning request_id: {request_id}")
-                    return jsonify({
-                        'status': 'ready',
-                        'request_id': request_id,
-                        'raw_query': raw_query
+                    print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
+
+                    # Check if this is an AJAX request from the calculator modal
+                    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+                    # If AJAX request (from modal), return JSON
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'ready',
+                            'request_id': request_id,
+                            'raw_query': raw_query
+                        })
+
+                    # For regular form submissions, redirect with pending_stream
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": "",  # Will be populated by streaming
+                        "references": [],
+                        "num_papers": 0
                     })
+                    session['pending_stream'] = request_id
+                    session.modified = True
+                    print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+                    return redirect(url_for('chat'))
                 else:
                     print(f"[DEBUG] No results for initial query")
                     error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
