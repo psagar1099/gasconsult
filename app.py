@@ -5489,63 +5489,7 @@ CHAT_HTML = """
             }
         });
 
-        // Auto-start streaming if pending
-        {% if pending_stream %}
-        window.addEventListener('load', function() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            if (loadingIndicator) {
-                loadingIndicator.classList.add('active');
-            }
-
-            const messages = document.querySelectorAll('.message.assistant');
-            if (messages.length > 0) {
-                const lastMessage = messages[messages.length - 1];
-                const messageText = lastMessage.querySelector('.message-text');
-
-                const eventSource = new EventSource('/stream?request_id={{ pending_stream }}');
-                let fullResponse = '';
-
-                eventSource.onmessage = function(event) {
-                    const data = JSON.parse(event.data);
-
-                    if (data.done) {
-                        eventSource.close();
-                        loadingIndicator.classList.remove('active');
-                        if (data.references && data.references.length > 0) {
-                            let refsHTML = '<div class="message-refs"><strong>References:</strong>';
-                            data.references.forEach((ref, index) => {
-                                refsHTML += `<div class="ref-item"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
-                            });
-                            refsHTML += '</div>';
-
-                            if (data.num_papers > 0) {
-                                refsHTML += `<div class="message-meta">📊 ${data.num_papers} papers from PubMed</div>`;
-                            }
-
-                            messageText.insertAdjacentHTML('afterend', refsHTML);
-                        }
-                    } else if (data.content) {
-                        fullResponse += data.content;
-                        messageText.innerHTML = fullResponse;
-                        const chatMessages = document.getElementById('chatMessages');
-                        if (chatMessages) {
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                        }
-                    } else if (data.error) {
-                        eventSource.close();
-                        loadingIndicator.classList.remove('active');
-                        messageText.innerHTML = `<p style="color: #EF4444;"><strong>Error:</strong> ${data.error}</p>`;
-                    }
-                };
-
-                eventSource.onerror = function() {
-                    eventSource.close();
-                    loadingIndicator.classList.remove('active');
-                    messageText.innerHTML = '<p style="color: #EF4444;"><strong>Error:</strong> Connection lost. Please try again.</p>';
-                };
-            }
-        });
-        {% endif %}
+        // Auto-start streaming handled by DOMContentLoaded event listener above (removed duplicate implementation)
 
         // ====== Premium Features JavaScript ======
 
