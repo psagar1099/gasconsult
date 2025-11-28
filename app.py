@@ -5615,7 +5615,7 @@ CHAT_HTML = """
 
         // Auto-start streaming if there's a pending stream
         {% if pending_stream %}
-        document.addEventListener('DOMContentLoaded', function() {
+        (function() {
             const requestId = '{{ pending_stream }}';
 
             // Show loading indicator
@@ -5797,7 +5797,7 @@ CHAT_HTML = """
                     }
                 });
             }
-        });
+        })();
         {% endif %}
 
         // ====== Premium Features JavaScript ======
