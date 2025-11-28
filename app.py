@@ -6560,33 +6560,119 @@ CALCULATORS_HTML = """
     <title>Clinical Calculators — gasconsult.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
     <style>
+        :root {
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+            --success-green: #10B981;
+            --success-green-light: #D1FAE5;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            background: #0a0a0a;
-            color: #f5f5f5;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
+        @keyframes pageFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -1000px 0;
+            }
+            100% {
+                background-position: 1000px 0;
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            }
+            50% {
+                box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+            }
         }
 
         /* Navigation */
         nav {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             padding: 16px 40px;
             position: sticky;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
@@ -6607,11 +6693,17 @@ CALCULATORS_HTML = """
             align-items: center;
             gap: 12px;
             cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-1px);
         }
 
         .logo-ecg {
             height: 28px;
             width: auto;
+            flex-shrink: 0;
         }
 
         .logo-wordmark {
@@ -6620,6 +6712,7 @@ CALCULATORS_HTML = """
             font-weight: 600;
             line-height: 1;
             letter-spacing: -0.5px;
+            white-space: nowrap;
         }
 
         .logo-gas { color: #2563EB; }
@@ -6628,24 +6721,30 @@ CALCULATORS_HTML = """
 
         .nav-actions {
             display: flex;
-            gap: 24px;
+            gap: 12px;
             align-items: center;
         }
 
         .nav-link {
+            color: var(--text-secondary);
             text-decoration: none;
-            color: #475569;
             font-size: 14px;
             font-weight: 500;
-            transition: color 0.2s;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
         .nav-link:hover {
-            color: #2563EB;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
 
         .nav-link.active {
-            color: #2563EB;
+            color: var(--primary-blue);
             font-weight: 600;
         }
 
@@ -6653,9 +6752,23 @@ CALCULATORS_HTML = """
         .main-container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 40px 20px;
+            padding: 48px 24px;
             display: flex;
             gap: 32px;
+            position: relative;
+        }
+
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 500px;
+            background: radial-gradient(ellipse at 50% 0%, rgba(37, 99, 235, 0.08) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* Sidebar */
@@ -6665,15 +6778,20 @@ CALCULATORS_HTML = """
             position: sticky;
             top: 100px;
             height: fit-content;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
         }
 
         .sidebar-header {
             font-family: 'Sora', sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: #f5f5f5;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 20px;
-            padding: 0 12px;
+            padding: 0 4px;
+            letter-spacing: -0.5px;
         }
 
         .calculator-list {
@@ -6682,61 +6800,85 @@ CALCULATORS_HTML = """
 
         .calculator-item {
             margin-bottom: 8px;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
+
+        .calculator-item:nth-child(1) { animation-delay: 0.3s; }
+        .calculator-item:nth-child(2) { animation-delay: 0.35s; }
+        .calculator-item:nth-child(3) { animation-delay: 0.4s; }
+        .calculator-item:nth-child(4) { animation-delay: 0.45s; }
+        .calculator-item:nth-child(5) { animation-delay: 0.5s; }
+        .calculator-item:nth-child(6) { animation-delay: 0.55s; }
+        .calculator-item:nth-child(7) { animation-delay: 0.6s; }
 
         .calculator-btn {
             width: 100%;
             text-align: left;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #94a3b8;
+            padding: 14px 18px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
         .calculator-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(37, 99, 235, 0.3);
-            color: #e2e8f0;
+            background: var(--primary-blue-light);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue-dark);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
         }
 
         .calculator-btn.active {
-            background: rgba(37, 99, 235, 0.15);
-            border-color: #2563EB;
-            color: #60a5fa;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            border-color: var(--primary-blue-dark);
+            color: white;
             font-weight: 600;
+            transform: translateX(4px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
         }
 
         /* Main Content Area */
         .content-area {
             flex: 1;
             min-width: 0;
+            animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
         }
 
         .calculator-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 32px;
-            backdrop-filter: blur(12px);
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .calculator-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(37, 99, 235, 0.1);
+            transform: translateY(-2px);
         }
 
         .calculator-title {
             font-family: 'Sora', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
-            color: #f5f5f5;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
             margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .calculator-description {
-            color: #94a3b8;
-            font-size: 14px;
+            color: var(--text-secondary);
+            font-size: 15px;
             margin-bottom: 32px;
+            line-height: 1.6;
         }
 
         /* Form Styling */
@@ -6753,57 +6895,87 @@ CALCULATORS_HTML = """
 
         label {
             display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #cbd5e1;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
             margin-bottom: 8px;
+            letter-spacing: -0.2px;
         }
 
         input, select {
             width: 100%;
             padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #f5f5f5;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+        }
+
+        input:hover, select:hover {
+            border-color: var(--primary-blue);
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #2563EB;
-            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         input::placeholder {
-            color: #64748b;
+            color: var(--text-muted);
         }
 
         .calculate-btn {
-            padding: 12px 32px;
-            background: #2563EB;
+            padding: 14px 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .calculate-btn:hover::before {
+            left: 100%;
         }
 
         .calculate-btn:hover {
-            background: #1d4ed8;
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0) scale(0.98);
         }
 
         .result-box {
             margin-top: 32px;
-            padding: 24px;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid rgba(37, 99, 235, 0.3);
-            border-radius: 8px;
+            padding: 28px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 2px solid var(--primary-blue-light);
+            border-radius: 16px;
             display: none;
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .result-box.visible {
@@ -6811,43 +6983,56 @@ CALCULATORS_HTML = """
         }
 
         .result-label {
-            font-size: 14px;
-            color: #94a3b8;
-            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .result-value {
-            font-size: 28px;
+            font-family: 'Sora', sans-serif;
+            font-size: 36px;
             font-weight: 700;
-            color: #60a5fa;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 16px;
+            letter-spacing: -1px;
         }
 
         .result-interpretation {
             font-size: 14px;
-            color: #cbd5e1;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
         }
 
         .send-to-ai-btn {
             padding: 12px 24px;
-            background: #10b981;
+            background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
         }
 
         .send-to-ai-btn:hover {
-            background: #059669;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+        }
+
+        .send-to-ai-btn:active {
+            transform: translateY(0);
         }
 
         .calculator-section {
@@ -6856,12 +7041,223 @@ CALCULATORS_HTML = """
 
         .calculator-section.active {
             display: block;
+            animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* AI Chat Modal */
+        .ai-chat-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ai-chat-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .ai-chat-container {
+            background: white;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+            animation: slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUpModal {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .ai-chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .ai-chat-header h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .close-modal-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .close-modal-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 28px;
+            max-height: 50vh;
+        }
+
+        .ai-message {
+            background: var(--bg-secondary);
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-size: 14px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .ai-message strong {
+            color: var(--text-primary);
+        }
+
+        .ai-chat-input-area {
+            padding: 20px 28px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-secondary);
+            border-radius: 0 0 24px 24px;
+        }
+
+        .ai-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 44px;
+            max-height: 120px;
+            transition: all 0.2s ease;
+        }
+
+        .ai-chat-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .send-ai-message-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            white-space: nowrap;
+        }
+
+        .send-ai-message-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .send-ai-message-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .ai-loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--primary-blue-light);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            color: var(--primary-blue-dark);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .ai-loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .ai-loading-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: loadingDot 1.4s infinite ease-in-out;
+        }
+
+        .ai-loading-dots span:nth-child(1) { animation-delay: 0s; }
+        .ai-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .ai-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingDot {
+            0%, 60%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
         }
 
         /* Responsive */
         @media (max-width: 968px) {
             .main-container {
                 flex-direction: column;
+                padding: 32px 20px;
             }
 
             .sidebar {
@@ -6874,6 +7270,15 @@ CALCULATORS_HTML = """
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 12px;
             }
+
+            .calculator-btn.active,
+            .calculator-btn:hover {
+                transform: none;
+            }
+
+            .ai-chat-container {
+                max-height: 90vh;
+            }
         }
 
         @media (max-width: 640px) {
@@ -6881,16 +7286,44 @@ CALCULATORS_HTML = """
                 padding: 12px 20px;
             }
 
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
             .main-container {
-                padding: 20px 16px;
+                padding: 24px 16px;
             }
 
             .calculator-card {
-                padding: 20px;
+                padding: 24px;
+                border-radius: 16px;
+            }
+
+            .calculator-title {
+                font-size: 24px;
             }
 
             .form-row {
                 grid-template-columns: 1fr;
+            }
+
+            .result-value {
+                font-size: 32px;
+            }
+
+            .ai-chat-container {
+                border-radius: 20px;
+            }
+
+            .ai-chat-header,
+            .ai-chat-messages,
+            .ai-chat-input-area {
+                padding: 20px;
             }
         }
     </style>
@@ -7181,14 +7614,14 @@ CALCULATORS_HTML = """
                     <h1 class="calculator-title">ASA Physical Status Classification</h1>
                     <p class="calculator-description">Reference guide for ASA physical status classification system.</p>
 
-                    <div style="color: #cbd5e1; line-height: 1.8;">
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA I:</strong> Normal healthy patient (no organic, physiologic, or psychiatric disturbance)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA II:</strong> Patient with mild systemic disease (well-controlled HTN, DM, obesity, smoking)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA III:</strong> Patient with severe systemic disease (poorly controlled HTN/DM, COPD, morbid obesity, active hepatitis, CAD, MI >3mo ago)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA IV:</strong> Patient with severe systemic disease that is a constant threat to life (recent MI <3mo, CVA, ongoing cardiac ischemia, severe valve dysfunction, sepsis, ESRD)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA V:</strong> Moribund patient not expected to survive without operation (ruptured AAA, massive trauma, intracranial bleed with mass effect)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA VI:</strong> Brain-dead patient for organ donation</p>
-                        <p style="margin-top: 24px; font-style: italic; color: #94a3b8;">Add "E" suffix for emergency surgery (e.g., ASA 3E)</p>
+                    <div style="color: var(--text-secondary); line-height: 1.8;">
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA I:</strong> Normal healthy patient (no organic, physiologic, or psychiatric disturbance)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA II:</strong> Patient with mild systemic disease (well-controlled HTN, DM, obesity, smoking)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA III:</strong> Patient with severe systemic disease (poorly controlled HTN/DM, COPD, morbid obesity, active hepatitis, CAD, MI >3mo ago)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA IV:</strong> Patient with severe systemic disease that is a constant threat to life (recent MI <3mo, CVA, ongoing cardiac ischemia, severe valve dysfunction, sepsis, ESRD)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA V:</strong> Moribund patient not expected to survive without operation (ruptured AAA, massive trauma, intracranial bleed with mass effect)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA VI:</strong> Brain-dead patient for organ donation</p>
+                        <p style="margin-top: 24px; font-style: italic; color: var(--text-muted);">Add "E" suffix for emergency surgery (e.g., ASA 3E)</p>
                     </div>
 
                     <div id="asa-result" class="result-box visible" style="margin-top: 32px;">
@@ -7201,9 +7634,33 @@ CALCULATORS_HTML = """
         </div>
     </div>
 
+    <!-- AI Chat Modal -->
+    <div class="ai-chat-modal" id="aiChatModal">
+        <div class="ai-chat-container">
+            <div class="ai-chat-header">
+                <h3>Ask AI About Your Results</h3>
+                <button class="close-modal-btn" onclick="closeAIChat()">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <!-- Messages will be added here -->
+            </div>
+            <div class="ai-chat-input-area">
+                <div class="ai-input-container">
+                    <textarea class="ai-chat-input" id="aiChatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
+                    <button class="send-ai-message-btn" onclick="sendAIMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Store calculation results
         let calculationResults = {};
+        let currentChatContext = '';
 
         // Calculator switching
         document.querySelectorAll('.calculator-btn').forEach(btn => {
@@ -7452,7 +7909,7 @@ CALCULATORS_HTML = """
             document.getElementById('ponv-result').classList.add('visible');
         }
 
-        // Send to AI function
+        // Send to AI function - Now opens modal instead of redirecting
         function sendToAI(calcType) {
             const result = calculationResults[calcType];
             if (!result && calcType !== 'asa') {
@@ -7486,9 +7943,149 @@ CALCULATORS_HTML = """
                     break;
             }
 
-            // Store in session storage and redirect to chat
-            sessionStorage.setItem('prefillMessage', message);
-            window.location.href = '/chat';
+            // Open modal and send initial message
+            openAIChat(message);
+        }
+
+        // AI Chat Modal Functions
+        function openAIChat(initialMessage) {
+            const modal = document.getElementById('aiChatModal');
+            const messagesDiv = document.getElementById('aiChatMessages');
+            const inputField = document.getElementById('aiChatInput');
+
+            // Clear previous messages
+            messagesDiv.innerHTML = '';
+            inputField.value = '';
+            currentChatContext = initialMessage;
+
+            // Show modal
+            modal.classList.add('active');
+
+            // Send initial message
+            if (initialMessage) {
+                fetchAIResponse(initialMessage);
+            }
+        }
+
+        function closeAIChat() {
+            document.getElementById('aiChatModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('aiChatModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAIChat();
+            }
+        });
+
+        // Send message on Enter key
+        document.getElementById('aiChatInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAIMessage();
+            }
+        });
+
+        function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message to chat
+            addMessageToChat(message, 'user');
+            input.value = '';
+
+            // Fetch AI response
+            fetchAIResponse(message);
+        }
+
+        function addMessageToChat(message, type) {
+            const messagesDiv = document.getElementById('aiChatMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'ai-message';
+
+            if (type === 'user') {
+                messageEl.style.background = 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)';
+                messageEl.style.borderLeft = '3px solid var(--primary-blue)';
+                messageEl.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
+            } else if (type === 'loading') {
+                messageEl.className = 'ai-loading';
+                messageEl.innerHTML = `
+                    Thinking...
+                    <div class="ai-loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                messageEl.id = 'loadingMessage';
+            } else {
+                messageEl.innerHTML = `<strong>AI:</strong> ${message}`;
+            }
+
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            return messageEl;
+        }
+
+        async function fetchAIResponse(userMessage) {
+            // Show loading indicator
+            addMessageToChat('', 'loading');
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `query=${encodeURIComponent(userMessage)}`
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // Get the full page HTML response
+                const html = await response.text();
+
+                // Parse the HTML to extract the last AI message
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const messageBoxes = doc.querySelectorAll('.message-box');
+
+                if (messageBoxes.length > 0) {
+                    const lastMessage = messageBoxes[messageBoxes.length - 1];
+                    const responseText = lastMessage.querySelector('.response-text');
+
+                    if (responseText) {
+                        // Remove loading message
+                        const loadingMsg = document.getElementById('loadingMessage');
+                        if (loadingMsg) loadingMsg.remove();
+
+                        // Add AI response
+                        addMessageToChat(responseText.innerHTML, 'ai');
+                    } else {
+                        throw new Error('Could not extract AI response');
+                    }
+                } else {
+                    throw new Error('No response found');
+                }
+
+            } catch (error) {
+                console.error('Error fetching AI response:', error);
+                const loadingMsg = document.getElementById('loadingMessage');
+                if (loadingMsg) loadingMsg.remove();
+
+                addMessageToChat('Sorry, there was an error getting a response. Please try again or visit the <a href="/chat" style="color: var(--primary-blue); text-decoration: underline;">chat page</a>.', 'ai');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
     </script>
 </body>
