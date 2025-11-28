@@ -4870,55 +4870,7 @@ CHAT_HTML = """
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
         }
 
-        /* Voice Input Button */
-        .voice-btn {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            flex-shrink: 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        }
-
-        .voice-btn:hover {
-            border-color: var(--primary-blue);
-            background: var(--primary-blue-light);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-        }
-
-        .voice-btn.listening {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            border-color: #EF4444;
-            animation: pulse 1.5s infinite;
-        }
-
-        .voice-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: var(--text-secondary);
-        }
-
-        .voice-btn.listening svg {
-            stroke: white;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 0 12px rgba(239, 68, 68, 0);
-            }
-        }
+        /* Voice input removed - not cross-browser compatible */
 
         /* Share Modal */
         .modal-overlay {
@@ -5213,13 +5165,7 @@ CHAT_HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Home</a>
-                <a href="/library" class="nav-link" title="View saved responses">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 4px;">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
-                    </svg>
-                    Library
-                </a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
@@ -5384,13 +5330,6 @@ CHAT_HTML = """
     <div class="chat-input-container">
         <form method="post" action="/chat" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <!-- Voice Input Button -->
-            <button type="button" class="voice-btn" id="voiceBtn" title="Voice input" onclick="toggleVoiceInput()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 1a3 3 0 003 3v8a3 3 0 01-6 0V4a3 3 0 013-3z"></path>
-                    <path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"></path>
-                </svg>
-            </button>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
         </form>
@@ -5656,61 +5595,7 @@ CHAT_HTML = """
             }
         }
 
-        // Voice Input
-        let recognition = null;
-        let isListening = false;
-
-        function toggleVoiceInput() {
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert('Voice input is not supported in your browser. Try Chrome or Edge.');
-                return;
-            }
-
-            if (!recognition) {
-                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = 'en-US';
-
-                recognition.onresult = function(event) {
-                    const transcript = event.results[0][0].transcript;
-                    const textarea = document.getElementById('chatInput');
-                    textarea.value = transcript;
-                    textarea.style.height = '44px';
-                    textarea.style.height = textarea.scrollHeight + 'px';
-                    stopVoiceInput();
-                };
-
-                recognition.onerror = function(event) {
-                    console.error('Speech recognition error:', event.error);
-                    stopVoiceInput();
-                };
-
-                recognition.onend = function() {
-                    stopVoiceInput();
-                };
-            }
-
-            if (isListening) {
-                stopVoiceInput();
-            } else {
-                startVoiceInput();
-            }
-        }
-
-        function startVoiceInput() {
-            recognition.start();
-            isListening = true;
-            document.getElementById('voiceBtn').classList.add('listening');
-        }
-
-        function stopVoiceInput() {
-            if (recognition && isListening) {
-                recognition.stop();
-            }
-            isListening = false;
-            document.getElementById('voiceBtn').classList.remove('listening');
-        }
+        // Voice input removed - not cross-browser compatible
 
         // Auto-load follow-up suggestions on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -11078,28 +10963,31 @@ CALCULATORS_HTML = """
                     break;
             }
 
-            // Open modal and send initial message
+            // Redirect to chat page with the message
             openAIChat(message);
         }
 
-        // AI Chat Modal Functions
-        function openAIChat(initialMessage) {
-            const modal = document.getElementById('aiChatModal');
-            const messagesDiv = document.getElementById('aiChatMessages');
-            const inputField = document.getElementById('aiChatInput');
+        // AI Chat - Redirect to /chat page instead of using modal
+        function openAIChat(message) {
+            // Create a form and submit it to /chat
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/chat';
 
-            // Clear previous messages
-            messagesDiv.innerHTML = '';
-            inputField.value = '';
-            currentChatContext = initialMessage;
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrf_token';
+            csrfInput.value = document.getElementById('csrf_token').value;
 
-            // Show modal
-            modal.classList.add('active');
+            const queryInput = document.createElement('input');
+            queryInput.type = 'hidden';
+            queryInput.name = 'query';
+            queryInput.value = message;
 
-            // Send initial message
-            if (initialMessage) {
-                fetchAIResponse(initialMessage);
-            }
+            form.appendChild(csrfInput);
+            form.appendChild(queryInput);
+            document.body.appendChild(form);
+            form.submit();
         }
 
         function closeAIChat() {
