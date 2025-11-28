@@ -5558,21 +5558,20 @@ CHAT_HTML = """
             if (chatMessages) {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-        });
 
-        // Show loading indicator when form submits
-        const chatForm = document.querySelector('.chat-form');
-        if (chatForm) {
-            chatForm.addEventListener('submit', function() {
-                const loadingIndicator = document.getElementById('loadingIndicator');
-                if (loadingIndicator) {
-                    loadingIndicator.classList.add('active');
-                }
-            });
-        }
+            // Show loading indicator when form submits
+            const chatForm = document.querySelector('.chat-form');
+            if (chatForm) {
+                chatForm.addEventListener('submit', function() {
+                    const loadingIndicator = document.getElementById('loadingIndicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('active');
+                    }
+                });
+            }
 
-        // Auto-start streaming if there's a pending stream
-        {% if pending_stream %}
+            // Auto-start streaming if there's a pending stream
+            {% if pending_stream %}
         (function() {
             const requestId = '{{ pending_stream }}';
 
@@ -5755,8 +5754,9 @@ CHAT_HTML = """
                     }
                 });
             }
-        })();
-        {% endif %}
+            })();
+            {% endif %}
+        }); // End DOMContentLoaded
 
         // ====== Premium Features JavaScript ======
 
