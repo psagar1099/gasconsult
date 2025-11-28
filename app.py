@@ -1590,7 +1590,7 @@ PREOP_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -3553,7 +3553,7 @@ HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 {% if messages %}
@@ -4120,6 +4120,872 @@ HTML = """
 </html>
 """
 
+CHAT_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
+    <style>
+        :root {
+            /* Primary Brand Colors */
+            --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --primary-blue-light: #DBEAFE;
+
+            /* Anesthesia Color Palette */
+            --opioid-blue: #2563EB;
+            --nmb-red: #EF4444;
+            --induction-yellow: #FBBF24;
+            --vasopressor-violet: #8B5CF6;
+            --anticholinergic-green: #10B981;
+            --local-gray: #6B7280;
+
+            /* Neutral Palette */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
+
+            /* Legacy aliases */
+            --primary: #2563EB;
+            --primary-dark: #1D4ED8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #F8FAFC;
+            color: #0A3D62;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-container {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .logo-container:hover {
+            transform: translateY(-1px);
+        }
+
+        .logo-ecg {
+            height: 28px;
+            width: auto;
+            flex-shrink: 0;
+        }
+
+        .logo-wordmark {
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #111111;
+        }
+
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .nav-link.active {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .new-chat-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+        }
+
+        .new-chat-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #1E40AF 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+        }
+
+        .clear-chat-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1.5px solid var(--border);
+        }
+
+        .clear-chat-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            color: #EF4444;
+            border-color: #EF4444;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Empty State */
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 40px;
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .empty-state-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .empty-state-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--primary-blue);
+        }
+
+        .empty-state h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+
+        /* Suggested Prompts */
+        .suggested-prompts {
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .suggested-prompts h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .prompt-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .prompt-btn {
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .prompt-btn:hover {
+            background: var(--primary-blue-light);
+            border-color: var(--primary-blue);
+            color: var(--primary-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+            border: 1.5px solid rgba(37, 99, 235, 0.15);
+            padding: 16px 20px;
+            border-radius: 16px;
+            max-width: 80%;
+            margin-left: auto;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
+        }
+
+        .message.assistant .message-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid var(--border);
+            padding: 20px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            position: relative;
+        }
+
+        .message-text {
+            color: var(--text-primary);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .message-refs {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .message-refs strong {
+            color: var(--text-primary);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .ref-item {
+            margin: 6px 0;
+        }
+
+        .ref-item a {
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .ref-item a:hover {
+            color: var(--primary-blue-dark);
+            text-decoration: underline;
+        }
+
+        .message-meta {
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: white;
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            position: sticky;
+            bottom: 0;
+            background: rgba(248, 250, 252, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 20px;
+            border-top: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .chat-form {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 2px solid rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 12px rgba(0, 0, 0, 0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .chat-form:hover {
+            border-color: rgba(37, 99, 235, 0.2);
+            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+
+        .chat-form:focus-within {
+            border-color: var(--primary-blue);
+            box-shadow: 0 16px 56px rgba(37, 99, 235, 0.18), 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .chat-form textarea {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text-primary);
+            resize: none;
+            min-height: 44px;
+            max-height: 200px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.4;
+        }
+
+        .chat-form textarea::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0 3px 0;
+            -webkit-text-stroke: 0.5px white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: scale(1.08) rotate(5deg);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Loading Indicator */
+        .loading-container {
+            display: none;
+            padding: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-container.active {
+            display: flex;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .loading-dots span {
+            width: 12px;
+            height: 12px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            animation: loadingDot 1.4s infinite ease-in-out;
+        }
+
+        .loading-dots span:nth-child(1) { animation-delay: 0s; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingDot {
+            0%, 60%, 100% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            30% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        footer {
+            background: white;
+            padding: 32px 20px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 12px 20px;
+            }
+
+            .nav-actions {
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .main-content {
+                padding: 12px;
+            }
+
+            .empty-state {
+                padding: 60px 20px;
+            }
+
+            .message.user .message-content {
+                max-width: 90%;
+            }
+
+            .chat-input-container {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-container">
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                {% if messages %}
+                <a href="/clear" class="clear-chat-btn">Clear Chat</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        {% if not messages %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <div class="empty-state-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </div>
+            <h2>Start a New Conversation</h2>
+            <p>Ask any clinical question and get evidence-based answers backed by PubMed literature</p>
+
+            <div class="suggested-prompts">
+                <h4>💡 Try asking:</h4>
+                <div class="prompt-buttons">
+                    <button class="prompt-btn" onclick="fillQuery('TXA in cardiac surgery')">TXA in cardiac surgery</button>
+                    <button class="prompt-btn" onclick="fillQuery('propofol vs etomidate for induction')">Propofol vs Etomidate</button>
+                    <button class="prompt-btn" onclick="fillQuery('PONV prevention strategies')">PONV prevention</button>
+                    <button class="prompt-btn" onclick="fillQuery('sugammadex reversal dosing')">Sugammadex dosing</button>
+                    <button class="prompt-btn" onclick="fillQuery('difficult airway management')">Difficult airway</button>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Chat Messages -->
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                {% for msg in messages %}
+                    <div class="message {{ msg.role }}">
+                        <div class="message-content">
+                            {% if msg.role == 'user' %}
+                                <div class="message-text">{{ msg.content }}</div>
+                            {% else %}
+                                <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span class="copy-text">Copy</span>
+                                </button>
+                                <div class="message-text">{{ msg.content|safe }}</div>
+                                {% if msg.references %}
+                                <div class="message-refs">
+                                    <strong>References:</strong>
+                                    {% for ref in msg.references %}
+                                    <div class="ref-item">
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                                            [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
+                                        </a>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if msg.num_papers > 0 %}
+                                <div class="message-meta">📊 {{ msg.num_papers }} papers from PubMed</div>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-container">
+                <div class="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Chat Input - Always Visible -->
+    <div class="chat-input-container">
+        <form method="post" action="/chat" class="chat-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
+            <button type="submit" class="send-btn">↑</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        // Fill query from suggested prompt
+        function fillQuery(text) {
+            const textarea = document.getElementById('chatInput');
+            if (textarea) {
+                textarea.value = text;
+                textarea.focus();
+                textarea.style.height = '52px';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(button) {
+            const messageContent = button.parentElement;
+            const messageText = messageContent.querySelector('.message-text');
+            const textToCopy = messageText.innerText;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyText = button.querySelector('.copy-text');
+                const originalText = copyText.textContent;
+                copyText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyText.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+
+        // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('chatInput');
+            if (textarea) {
+                // Auto-expand textarea
+                textarea.addEventListener('input', function() {
+                    this.style.height = '44px';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+
+                // Keyboard shortcut
+                textarea.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        const form = textarea.closest('form');
+                        if (form) {
+                            form.submit();
+                        }
+                    }
+                });
+            }
+
+            // Auto-scroll to bottom of chat
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+
+        // Show loading indicator when form submits
+        document.querySelector('.chat-form').addEventListener('submit', function() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('active');
+            }
+        });
+
+        // Auto-start streaming if pending
+        {% if pending_stream %}
+        window.addEventListener('load', function() {
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('active');
+            }
+
+            const messages = document.querySelectorAll('.message.assistant');
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                const messageText = lastMessage.querySelector('.message-text');
+
+                const eventSource = new EventSource('/stream?request_id={{ pending_stream }}');
+                let fullResponse = '';
+
+                eventSource.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+
+                    if (data.done) {
+                        eventSource.close();
+                        loadingIndicator.classList.remove('active');
+                        if (data.references && data.references.length > 0) {
+                            let refsHTML = '<div class="message-refs"><strong>References:</strong>';
+                            data.references.forEach((ref, index) => {
+                                refsHTML += `<div class="ref-item"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
+                            });
+                            refsHTML += '</div>';
+
+                            if (data.num_papers > 0) {
+                                refsHTML += `<div class="message-meta">📊 ${data.num_papers} papers from PubMed</div>`;
+                            }
+
+                            messageText.insertAdjacentHTML('afterend', refsHTML);
+                        }
+                    } else if (data.content) {
+                        fullResponse += data.content;
+                        messageText.innerHTML = fullResponse;
+                        const chatMessages = document.getElementById('chatMessages');
+                        if (chatMessages) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    } else if (data.error) {
+                        eventSource.close();
+                        loadingIndicator.classList.remove('active');
+                        messageText.innerHTML = `<p style="color: #EF4444;"><strong>Error:</strong> ${data.error}</p>`;
+                    }
+                };
+
+                eventSource.onerror = function() {
+                    eventSource.close();
+                    loadingIndicator.classList.remove('active');
+                    messageText.innerHTML = '<p style="color: #EF4444;"><strong>Error:</strong> Connection lost. Please try again.</p>';
+                };
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
+"""
+
 TERMS_HTML = """
 <!DOCTYPE html>
 <html lang="en">
@@ -4455,7 +5321,7 @@ TERMS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -4890,7 +5756,7 @@ PRIVACY_POLICY_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -5913,7 +6779,7 @@ QUICK_DOSE_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -6597,6 +7463,7 @@ CALCULATORS_HTML = """
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
             animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-x: hidden;
         }
@@ -6912,6 +7779,8 @@ CALCULATORS_HTML = """
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: all 0.2s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         input:hover, select:hover {
@@ -7012,7 +7881,7 @@ CALCULATORS_HTML = """
 
         .send-to-ai-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -7023,12 +7892,12 @@ CALCULATORS_HTML = """
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
         }
 
         .send-to-ai-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
         }
 
         .send-to-ai-btn:active {
@@ -7333,11 +8202,13 @@ CALCULATORS_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#6B7280"/>
-                            <stop offset="20%" stop-color="#2563EB"/>
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
                             <stop offset="80%" stop-color="#10B981"/>
                             <stop offset="100%" stop-color="#6B7280"/>
                         </linearGradient>
@@ -7356,7 +8227,7 @@ CALCULATORS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link active">Calculators</a>
+                <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -8053,19 +8924,19 @@ CALCULATORS_HTML = """
                 // Parse the HTML to extract the last AI message
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const messageBoxes = doc.querySelectorAll('.message-box');
+                const assistantMessages = doc.querySelectorAll('.message.assistant');
 
-                if (messageBoxes.length > 0) {
-                    const lastMessage = messageBoxes[messageBoxes.length - 1];
-                    const responseText = lastMessage.querySelector('.response-text');
+                if (assistantMessages.length > 0) {
+                    const lastMessage = assistantMessages[assistantMessages.length - 1];
+                    const messageText = lastMessage.querySelector('.message-text');
 
-                    if (responseText) {
+                    if (messageText) {
                         // Remove loading message
                         const loadingMsg = document.getElementById('loadingMessage');
                         if (loadingMsg) loadingMsg.remove();
 
                         // Add AI response
-                        addMessageToChat(responseText.innerHTML, 'ai');
+                        addMessageToChat(messageText.innerHTML, 'ai');
                     } else {
                         throw new Error('Could not extract AI response');
                     }
@@ -8817,7 +9688,7 @@ HYPOTENSION_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link active">IOH Predictor</a>
             </div>
@@ -9553,7 +10424,7 @@ Respond with maximum clinical utility:"""
 
     # Check for pending stream (from homepage redirect)
     pending_stream = session.pop('pending_stream', None)
-    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream)
+    return render_template_string(CHAT_HTML, messages=session.get('messages', []), pending_stream=pending_stream)
 
 @app.route("/clear")
 def clear():
