@@ -4076,6 +4076,9 @@ HTML = """
                 fetch('/chat', {
                     method: 'POST',
                     credentials: 'same-origin',  // Important for session cookies
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'  // Tell server this is AJAX
+                    },
                     body: formData
                 })
                 .then(response => response.json())
