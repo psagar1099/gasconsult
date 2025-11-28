@@ -12574,26 +12574,18 @@ Respond with maximum clinical utility:"""
                     'raw_query': raw_query
                 })
 
-            # If this is the first message (from homepage), set pending flag and redirect
-            if is_first_message:
-                # Add placeholder assistant message for auto-start JavaScript to populate
-                session['messages'].append({
-                    "role": "assistant",
-                    "content": "",  # Will be populated by streaming
-                    "references": [],
-                    "num_papers": 0
-                })
-                session['pending_stream'] = request_id
-                session.modified = True
-                print(f"[DEBUG] First message - added placeholder assistant message, redirecting to /chat page")
-                return redirect(url_for('chat'))
-
-            # For follow-up messages, return JSON for streaming
-            return jsonify({
-                'status': 'ready',
-                'request_id': request_id,
-                'raw_query': raw_query
+            # For regular form submissions (not AJAX), always redirect to chat page
+            # Add placeholder assistant message for auto-start JavaScript to populate
+            session['messages'].append({
+                "role": "assistant",
+                "content": "",  # Will be populated by streaming
+                "references": [],
+                "num_papers": 0
             })
+            session['pending_stream'] = request_id
+            session.modified = True
+            print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+            return redirect(url_for('chat'))
 
         except Exception as e:
             # Catch all unhandled errors
