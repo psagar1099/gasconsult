@@ -23,12 +23,17 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 # Configure server-side sessions (stores sessions in filesystem instead of cookies)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
-app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
 app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE'] = True  # Use HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
 Session(app)
 
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
+app.config['WTF_CSRF_TIME_LIMIT'] = None  # Don't expire CSRF tokens
 
 # Initialize rate limiter
 limiter = Limiter(
@@ -12215,6 +12220,7 @@ def index():
     """Homepage - welcome screen only"""
     # Clear any existing conversation when returning to homepage
     session.pop('messages', None)
+    session.modified = True  # Ensure session is saved
     return render_template_string(HTML, messages=[])
 
 @app.route("/chat", methods=["GET", "POST"])
