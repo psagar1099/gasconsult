@@ -3,6 +3,7 @@ from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect, CSRFError
+from werkzeug.exceptions import HTTPException, NotFound
 from Bio import Entrez
 import openai
 import os
@@ -177,9 +178,31 @@ def handle_csrf_error(e):
     # Redirect to homepage to regenerate session/CSRF token
     return redirect(url_for('index'))
 
+@app.errorhandler(404)
+def handle_not_found(e):
+    """Handle 404 errors - log at WARNING level to avoid log noise from scanners"""
+    logger.warning(f"404 Not Found: {request.method} {request.path} from {get_remote_address()}")
+    return jsonify({
+        "error": "The requested resource was not found.",
+        "status": "not_found"
+    }), 404
+
+@app.errorhandler(HTTPException)
+def handle_http_exception(e):
+    """Handle other HTTP exceptions (400, 403, 405, etc.) without logging as errors"""
+    logger.info(f"HTTP {e.code}: {request.method} {request.path}")
+    return jsonify({
+        "error": e.description,
+        "status": "http_error"
+    }), e.code
+
 @app.errorhandler(Exception)
 def log_exception(e):
-    """Log unhandled exceptions"""
+    """Log unhandled non-HTTP exceptions only"""
+    # Don't catch HTTPException here - it's handled above
+    if isinstance(e, HTTPException):
+        raise e
+
     logger.error(f"Unhandled exception: {str(e)}", exc_info=True)
     return jsonify({
         "error": "An internal error occurred. Please try again later.",
