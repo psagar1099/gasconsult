@@ -254,22 +254,53 @@ def resolve_references(query, conversation_history):
     # Get last 2-3 user+assistant turns
     recent_messages = conversation_history[-6:] if len(conversation_history) >= 6 else conversation_history
 
-    # Extract key medical terms from recent conversation (drugs, procedures, conditions)
+    # Extract key medical terms from recent conversation (drugs, procedures, conditions, broad concepts)
     medical_entities = []
     for msg in recent_messages:
         content = msg.get('content', '').lower()
-        # Find drug names, procedures, conditions
+
+        # Find broader concepts first (multi-word phrases)
+        broad_concepts = re.findall(
+            r'\b(difficult airway management|difficult airway|airway management|'
+            r'fiberoptic intubation|awake fiberoptic intubation|awake intubation|'
+            r'rapid sequence induction|rapid sequence intubation|'
+            r'neuraxial anesthesia|regional anesthesia|general anesthesia|'
+            r'cardiac surgery|neurosurgery|spine surgery|orthopedic surgery|'
+            r'video laryngoscopy|direct laryngoscopy|'
+            r'spinal anesthesia|epidural anesthesia|combined spinal epidural|'
+            r'peripheral nerve block|nerve block technique|'
+            r'ultrasound guided block|landmark technique|'
+            r'postoperative pain management|acute pain management|chronic pain|'
+            r'preoperative optimization|preoperative assessment|'
+            r'hemodynamic management|fluid management|blood management|'
+            r'neuromuscular blockade|neuromuscular monitoring|'
+            r'depth of anesthesia monitoring|bispectral index|'
+            r'postoperative nausea|nausea prophylaxis|antiemetic strategy|'
+            r'enhanced recovery|eras protocol|fast track surgery|'
+            r'transfusion management|blood conservation|cell saver|'
+            r'malignant hyperthermia crisis|local anesthetic toxicity crisis|'
+            r'obstetric anesthesia|pediatric anesthesia|geriatric anesthesia|'
+            r'liver transplant|kidney transplant|cardiac transplant|'
+            r'one lung ventilation|lung isolation|double lumen tube|'
+            r'airway exchange catheter|bougie|glidescope)\b',
+            content
+        )
+        medical_entities.extend(broad_concepts)
+
+        # Find single-word drugs, procedures, conditions
         entities = re.findall(
             r'\b(propofol|etomidate|ketamine|fentanyl|remifentanil|sufentanil|alfentanil|'
             r'rocuronium|vecuronium|succinylcholine|cisatracurium|'
             r'sevoflurane|desflurane|isoflurane|'
-            r'midazolam|dexmedetomidine|'
+            r'midazolam|dexmedetomidine|precedex|'
             r'phenylephrine|ephedrine|epinephrine|norepinephrine|vasopressin|'
             r'tranexamic acid|txa|aminocaproic acid|'
-            r'intubation|extubation|induction|emergence|nerve block|epidural|spinal|'
-            r'rsi|rapid sequence|awake fiberoptic|'
+            r'intubation|extubation|induction|emergence|'
+            r'epidural|spinal|neuraxial|'
             r'ponv|hypotension|hypertension|bronchospasm|laryngospasm|'
-            r'malignant hyperthermia|local anesthetic toxicity|last)\b',
+            r'sugammadex|neostigmine|glycopyrrolate|atropine|'
+            r'ondansetron|metoclopramide|dexamethasone|'
+            r'naloxone|flumazenil|dantrolene|intralipid)\b',
             content
         )
         medical_entities.extend(entities)
@@ -284,13 +315,16 @@ def resolve_references(query, conversation_history):
     unique_entities.reverse()
 
     # Replace vague references if we have context
-    if unique_entities and any(word in q for word in ['it', 'this', 'that', 'the drug', 'the medication', 'the technique']):
+    if unique_entities and any(word in q for word in ['it', 'this', 'that', 'the drug', 'the medication', 'the technique', 'the procedure', 'the approach']):
         most_recent = unique_entities[-1]  # Last mentioned entity
         q = re.sub(r'\bit\b', most_recent, q)
         q = re.sub(r'\bthis\b', most_recent, q)
         q = re.sub(r'\bthat\b', most_recent, q)
         q = q.replace('the drug', most_recent)
         q = q.replace('the medication', most_recent)
+        q = q.replace('the technique', most_recent)
+        q = q.replace('the procedure', most_recent)
+        q = q.replace('the approach', most_recent)
         print(f"[DEBUG] Resolved reference: '{query}' → '{q}'")
 
     # Handle "what about..." questions
@@ -307,6 +341,16 @@ def resolve_references(query, conversation_history):
         main_topic = unique_entities[-1]
         q = f'{main_topic} {modifier}'
         print(f"[DEBUG] Expanded 'how about': '{query}' → '{q}'")
+
+    # Handle "can you" or "can I" questions that might be follow-ups
+    if unique_entities and (q.startswith('can you') or q.startswith('can i') or q.startswith('should i') or q.startswith('should you')):
+        # Check if the query contains specific techniques that should be added to context
+        has_specific_technique = any(term in q for term in ['fiberoptic', 'video', 'laryngoscopy', 'intubate', 'block', 'epidural', 'spinal'])
+        if has_specific_technique:
+            # Prepend the context topic
+            main_topic = unique_entities[-1]
+            q = f'{main_topic} {q}'
+            print(f"[DEBUG] Added context to technique question: '{query}' → '{q}'")
 
     return q if q != query.lower() else query
 
@@ -1546,6 +1590,7 @@ PREOP_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -1785,7 +1830,7 @@ PREOP_HTML = """
             {% endif %}
         </div>
         <div style="text-align: center; margin-top: 30px;">
-            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">New Assessment</a>
+            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">Clear & New Assessment</a>
         </div>
         {% endif %}
     </div>
@@ -2103,6 +2148,24 @@ HTML = """
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
         }
 
+        .clear-chat-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1.5px solid var(--border);
+        }
+
+        .clear-chat-btn:hover {
+            background: rgba(239, 68, 68, 0.05);
+            color: #EF4444;
+            border-color: #EF4444;
+        }
+
         /* Welcome Screen */
         .welcome-screen {
             padding: 80px 40px 60px;
@@ -2148,7 +2211,7 @@ HTML = """
             font-size: 17px;
             color: #475569;
             max-width: 640px;
-            margin: 0 auto 36px;
+            margin: 0 auto 24px;
             font-weight: 400;
             line-height: 1.65;
         }
@@ -2782,7 +2845,7 @@ HTML = """
         /* Suggested Prompts */
         .suggested-prompts {
             max-width: 900px;
-            margin: 24px auto;
+            margin: 8px auto 16px;
             padding: 0 20px;
         }
 
@@ -3490,8 +3553,12 @@ HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                {% if messages %}
+                <a href="/clear" class="clear-chat-btn">Clear Chat</a>
+                {% endif %}
             </div>
         </div>
     </nav>
@@ -3708,6 +3775,19 @@ HTML = """
         document.addEventListener('DOMContentLoaded', function() {
             const textarea = document.getElementById('chatInput');
             if (textarea) {
+                // Check for prefill message from calculators
+                const prefillMessage = sessionStorage.getItem('prefillMessage');
+                if (prefillMessage) {
+                    textarea.value = prefillMessage;
+                    textarea.focus();
+                    // Auto-expand textarea if needed
+                    textarea.style.height = '52px';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                    // Clear the stored message
+                    sessionStorage.removeItem('prefillMessage');
+                    console.log('[PREFILL] Populated textarea with calculator message');
+                }
+
                 textarea.addEventListener('keydown', function(e) {
                     // Check for Ctrl+Enter (Windows/Linux) or Cmd+Enter (Mac)
                     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -4375,6 +4455,7 @@ TERMS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -4809,6 +4890,7 @@ PRIVACY_POLICY_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -5831,6 +5913,7 @@ QUICK_DOSE_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -6463,6 +6546,950 @@ QUICK_DOSE_HTML = """
         document.addEventListener('DOMContentLoaded', () => {
             updateDoses();
         });
+    </script>
+</body>
+</html>
+"""
+
+CALCULATORS_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clinical Calculators — gasconsult.ai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #0a0a0a;
+            color: #f5f5f5;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 16px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        nav .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo-container {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo-ecg {
+            height: 28px;
+            width: auto;
+        }
+
+        .logo-wordmark {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-gas { color: #2563EB; }
+        .logo-consult { color: #111111; }
+        .logo-ai { color: #6B7280; font-weight: 400; }
+
+        .nav-actions {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #475569;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #2563EB;
+        }
+
+        .nav-link.active {
+            color: #2563EB;
+            font-weight: 600;
+        }
+
+        /* Main Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            display: flex;
+            gap: 32px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-header {
+            font-family: 'Sora', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            padding: 0 12px;
+        }
+
+        .calculator-list {
+            list-style: none;
+        }
+
+        .calculator-item {
+            margin-bottom: 8px;
+        }
+
+        .calculator-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calculator-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(37, 99, 235, 0.3);
+            color: #e2e8f0;
+        }
+
+        .calculator-btn.active {
+            background: rgba(37, 99, 235, 0.15);
+            border-color: #2563EB;
+            color: #60a5fa;
+            font-weight: 600;
+        }
+
+        /* Main Content Area */
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .calculator-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 32px;
+            backdrop-filter: blur(12px);
+        }
+
+        .calculator-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 8px;
+        }
+
+        .calculator-description {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 32px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2563EB;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        .calculate-btn {
+            padding: 12px 32px;
+            background: #2563EB;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .calculate-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .result-box {
+            margin-top: 32px;
+            padding: 24px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result-box.visible {
+            display: block;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 16px;
+        }
+
+        .result-interpretation {
+            font-size: 14px;
+            color: #cbd5e1;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .send-to-ai-btn {
+            padding: 12px 24px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .send-to-ai-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .calculator-section {
+            display: none;
+        }
+
+        .calculator-section.active {
+            display: block;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .calculator-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav {
+                padding: 12px 20px;
+            }
+
+            .main-container {
+                padding: 20px 16px;
+            }
+
+            .calculator-card {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="/" class="logo-container">
+                <svg class="logo-ecg" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#6B7280"/>
+                            <stop offset="20%" stop-color="#2563EB"/>
+                            <stop offset="80%" stop-color="#10B981"/>
+                            <stop offset="100%" stop-color="#6B7280"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
+                          stroke="url(#ecgGrad)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          fill="none"/>
+                </svg>
+                <div class="logo-wordmark">
+                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+                </div>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link active">Calculators</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2 class="sidebar-header">Clinical Calculators</h2>
+            <ul class="calculator-list">
+                <li class="calculator-item">
+                    <button class="calculator-btn active" data-calc="ibw">Ideal Body Weight (IBW)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="mabl">Maximum Allowable Blood Loss</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="bsa">Body Surface Area (BSA)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="qtc">QTc Interval (Bazett)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="fluids">Maintenance Fluids (4-2-1)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="ponv">PONV Risk (Apfel Score)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="asa">ASA Physical Status</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- IBW Calculator -->
+            <div id="calc-ibw" class="calculator-section active">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Ideal Body Weight (IBW)</h1>
+                    <p class="calculator-description">Calculate ideal body weight using the Devine formula. Used for weight-based drug dosing and ventilator settings.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ibw-height">Height (cm)</label>
+                            <input type="number" id="ibw-height" placeholder="170" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="ibw-sex">Biological Sex</label>
+                            <select id="ibw-sex">
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateIBW()">Calculate</button>
+
+                    <div id="ibw-result" class="result-box">
+                        <div class="result-label">Ideal Body Weight</div>
+                        <div class="result-value" id="ibw-value">-</div>
+                        <div class="result-interpretation" id="ibw-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('ibw')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MABL Calculator -->
+            <div id="calc-mabl" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Maximum Allowable Blood Loss (MABL)</h1>
+                    <p class="calculator-description">Estimate maximum allowable blood loss before transfusion is indicated based on starting and target hematocrit.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mabl-weight">Weight (kg)</label>
+                            <input type="number" id="mabl-weight" placeholder="70" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="mabl-height">Height (cm)</label>
+                            <input type="number" id="mabl-height" placeholder="170" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="mabl-sex">Biological Sex</label>
+                            <select id="mabl-sex">
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mabl-initial-hct">Initial Hematocrit (%)</label>
+                            <input type="number" id="mabl-initial-hct" placeholder="45" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="mabl-target-hct">Target Hematocrit (%)</label>
+                            <input type="number" id="mabl-target-hct" placeholder="25" step="0.1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateMABL()">Calculate</button>
+
+                    <div id="mabl-result" class="result-box">
+                        <div class="result-label">Maximum Allowable Blood Loss</div>
+                        <div class="result-value" id="mabl-value">-</div>
+                        <div class="result-interpretation" id="mabl-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('mabl')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BSA Calculator -->
+            <div id="calc-bsa" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Body Surface Area (BSA)</h1>
+                    <p class="calculator-description">Calculate BSA using the Mosteller formula. Used for chemotherapy dosing and cardiac output calculation.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bsa-weight">Weight (kg)</label>
+                            <input type="number" id="bsa-weight" placeholder="70" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="bsa-height">Height (cm)</label>
+                            <input type="number" id="bsa-height" placeholder="170" step="0.1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateBSA()">Calculate</button>
+
+                    <div id="bsa-result" class="result-box">
+                        <div class="result-label">Body Surface Area</div>
+                        <div class="result-value" id="bsa-value">-</div>
+                        <div class="result-interpretation" id="bsa-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('bsa')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QTc Calculator -->
+            <div id="calc-qtc" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">QTc Interval (Bazett Formula)</h1>
+                    <p class="calculator-description">Calculate heart rate-corrected QT interval. Prolonged QTc increases risk of torsades de pointes.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="qtc-qt">QT Interval (ms)</label>
+                            <input type="number" id="qtc-qt" placeholder="400" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="qtc-rr">RR Interval (ms)</label>
+                            <input type="number" id="qtc-rr" placeholder="800" step="1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateQTc()">Calculate</button>
+
+                    <div id="qtc-result" class="result-box">
+                        <div class="result-label">Corrected QT Interval</div>
+                        <div class="result-value" id="qtc-value">-</div>
+                        <div class="result-interpretation" id="qtc-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('qtc')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fluids Calculator -->
+            <div id="calc-fluids" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Maintenance Fluids (4-2-1 Rule)</h1>
+                    <p class="calculator-description">Calculate hourly maintenance fluid rate using the Holliday-Segar method.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fluids-weight">Weight (kg)</label>
+                            <input type="number" id="fluids-weight" placeholder="70" step="0.1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateFluids()">Calculate</button>
+
+                    <div id="fluids-result" class="result-box">
+                        <div class="result-label">Maintenance Fluid Rate</div>
+                        <div class="result-value" id="fluids-value">-</div>
+                        <div class="result-interpretation" id="fluids-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('fluids')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PONV Calculator -->
+            <div id="calc-ponv" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">PONV Risk (Apfel Score)</h1>
+                    <p class="calculator-description">Predict risk of postoperative nausea and vomiting based on 4 independent risk factors.</p>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="ponv-female" style="width: auto; display: inline-block; margin-right: 8px;">
+                            Female sex
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="ponv-nonsmoker" style="width: auto; display: inline-block; margin-right: 8px;">
+                            Non-smoker
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="ponv-history" style="width: auto; display: inline-block; margin-right: 8px;">
+                            History of PONV or motion sickness
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="ponv-opioids" style="width: auto; display: inline-block; margin-right: 8px;">
+                            Postoperative opioids expected
+                        </label>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculatePONV()">Calculate</button>
+
+                    <div id="ponv-result" class="result-box">
+                        <div class="result-label">PONV Risk</div>
+                        <div class="result-value" id="ponv-value">-</div>
+                        <div class="result-interpretation" id="ponv-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('ponv')">
+                            <span>💬</span> Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ASA Helper -->
+            <div id="calc-asa" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">ASA Physical Status Classification</h1>
+                    <p class="calculator-description">Reference guide for ASA physical status classification system.</p>
+
+                    <div style="color: #cbd5e1; line-height: 1.8;">
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA I:</strong> Normal healthy patient (no organic, physiologic, or psychiatric disturbance)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA II:</strong> Patient with mild systemic disease (well-controlled HTN, DM, obesity, smoking)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA III:</strong> Patient with severe systemic disease (poorly controlled HTN/DM, COPD, morbid obesity, active hepatitis, CAD, MI >3mo ago)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA IV:</strong> Patient with severe systemic disease that is a constant threat to life (recent MI <3mo, CVA, ongoing cardiac ischemia, severe valve dysfunction, sepsis, ESRD)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA V:</strong> Moribund patient not expected to survive without operation (ruptured AAA, massive trauma, intracranial bleed with mass effect)</p>
+                        <p style="margin-bottom: 16px;"><strong style="color: #60a5fa;">ASA VI:</strong> Brain-dead patient for organ donation</p>
+                        <p style="margin-top: 24px; font-style: italic; color: #94a3b8;">Add "E" suffix for emergency surgery (e.g., ASA 3E)</p>
+                    </div>
+
+                    <div id="asa-result" class="result-box visible" style="margin-top: 32px;">
+                        <button class="send-to-ai-btn" onclick="sendToAI('asa')">
+                            <span>💬</span> Ask AI about ASA Classification
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store calculation results
+        let calculationResults = {};
+
+        // Calculator switching
+        document.querySelectorAll('.calculator-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const calcType = this.dataset.calc;
+
+                // Update sidebar
+                document.querySelectorAll('.calculator-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                // Update content
+                document.querySelectorAll('.calculator-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(`calc-${calcType}`).classList.add('active');
+            });
+        });
+
+        // IBW Calculator
+        function calculateIBW() {
+            const height = parseFloat(document.getElementById('ibw-height').value);
+            const sex = document.getElementById('ibw-sex').value;
+
+            if (!height || !sex) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            let ibw;
+            if (sex === 'male') {
+                ibw = 50 + 0.91 * (height - 152.4);
+            } else {
+                ibw = 45.5 + 0.91 * (height - 152.4);
+            }
+
+            ibw = Math.round(ibw * 10) / 10;
+
+            calculationResults.ibw = {
+                value: ibw,
+                height: height,
+                sex: sex
+            };
+
+            document.getElementById('ibw-value').textContent = `${ibw} kg`;
+            document.getElementById('ibw-interpretation').innerHTML =
+                `Based on Devine formula for ${sex} patient with height ${height} cm. Used for dosing propofol, succinylcholine, and tidal volume calculations (6-8 mL/kg IBW).`;
+            document.getElementById('ibw-result').classList.add('visible');
+        }
+
+        // MABL Calculator
+        function calculateMABL() {
+            const weight = parseFloat(document.getElementById('mabl-weight').value);
+            const height = parseFloat(document.getElementById('mabl-height').value);
+            const sex = document.getElementById('mabl-sex').value;
+            const initialHct = parseFloat(document.getElementById('mabl-initial-hct').value);
+            const targetHct = parseFloat(document.getElementById('mabl-target-hct').value);
+
+            if (!weight || !height || !sex || !initialHct || !targetHct) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Calculate blood volume
+            let bloodVolume;
+            if (sex === 'male') {
+                bloodVolume = weight * 75; // mL
+            } else {
+                bloodVolume = weight * 65; // mL
+            }
+
+            // MABL = Blood Volume × (Initial Hct - Target Hct) / Initial Hct
+            const mabl = bloodVolume * (initialHct - targetHct) / initialHct;
+
+            calculationResults.mabl = {
+                value: Math.round(mabl),
+                weight: weight,
+                height: height,
+                sex: sex,
+                initialHct: initialHct,
+                targetHct: targetHct,
+                bloodVolume: Math.round(bloodVolume)
+            };
+
+            document.getElementById('mabl-value').textContent = `${Math.round(mabl)} mL`;
+            document.getElementById('mabl-interpretation').innerHTML =
+                `Estimated blood volume: ${Math.round(bloodVolume)} mL (${sex === 'male' ? '75' : '65'} mL/kg).<br>
+                This represents the maximum blood loss before transfusion should be considered, assuming no ongoing bleeding and adequate crystalloid resuscitation.`;
+            document.getElementById('mabl-result').classList.add('visible');
+        }
+
+        // BSA Calculator
+        function calculateBSA() {
+            const weight = parseFloat(document.getElementById('bsa-weight').value);
+            const height = parseFloat(document.getElementById('bsa-height').value);
+
+            if (!weight || !height) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Mosteller formula
+            const bsa = Math.sqrt((weight * height) / 3600);
+
+            calculationResults.bsa = {
+                value: bsa.toFixed(2),
+                weight: weight,
+                height: height
+            };
+
+            document.getElementById('bsa-value').textContent = `${bsa.toFixed(2)} m²`;
+            document.getElementById('bsa-interpretation').innerHTML =
+                `Calculated using Mosteller formula. Normal adult BSA is approximately 1.7 m². Used for chemotherapy dosing and cardiac index calculations (CI = CO / BSA).`;
+            document.getElementById('bsa-result').classList.add('visible');
+        }
+
+        // QTc Calculator
+        function calculateQTc() {
+            const qt = parseFloat(document.getElementById('qtc-qt').value);
+            const rr = parseFloat(document.getElementById('qtc-rr').value);
+
+            if (!qt || !rr) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Bazett formula: QTc = QT / sqrt(RR in seconds)
+            const rrSeconds = rr / 1000;
+            const qtc = qt / Math.sqrt(rrSeconds);
+
+            let interpretation = '';
+            let risk = '';
+            if (qtc > 500) {
+                interpretation = '⚠️ <strong>Severely prolonged</strong> (>500 ms) - HIGH RISK for torsades de pointes. Avoid QT-prolonging drugs.';
+                risk = 'severe';
+            } else if (qtc > 470) {
+                interpretation = '⚠️ <strong>Prolonged</strong> (>470 ms females, >450 ms males) - Increased risk for torsades. Use caution with QT-prolonging drugs.';
+                risk = 'moderate';
+            } else if (qtc >= 440) {
+                interpretation = '⚠️ <strong>Borderline prolonged</strong> (440-470 ms) - Monitor closely if using QT-prolonging medications.';
+                risk = 'mild';
+            } else {
+                interpretation = '✓ <strong>Normal</strong> (<440 ms) - Standard perioperative management.';
+                risk = 'normal';
+            }
+
+            calculationResults.qtc = {
+                value: Math.round(qtc),
+                qt: qt,
+                rr: rr,
+                hr: Math.round(60000 / rr),
+                risk: risk
+            };
+
+            document.getElementById('qtc-value').textContent = `${Math.round(qtc)} ms`;
+            document.getElementById('qtc-interpretation').innerHTML = interpretation;
+            document.getElementById('qtc-result').classList.add('visible');
+        }
+
+        // Fluids Calculator
+        function calculateFluids() {
+            const weight = parseFloat(document.getElementById('fluids-weight').value);
+
+            if (!weight) {
+                alert('Please enter weight');
+                return;
+            }
+
+            // 4-2-1 rule
+            let rate = 0;
+            if (weight <= 10) {
+                rate = weight * 4;
+            } else if (weight <= 20) {
+                rate = 40 + (weight - 10) * 2;
+            } else {
+                rate = 60 + (weight - 20) * 1;
+            }
+
+            calculationResults.fluids = {
+                value: Math.round(rate),
+                weight: weight,
+                daily: Math.round(rate * 24)
+            };
+
+            document.getElementById('fluids-value').textContent = `${Math.round(rate)} mL/hr`;
+            document.getElementById('fluids-interpretation').innerHTML =
+                `Based on 4-2-1 rule (Holliday-Segar):<br>
+                • First 10 kg: 4 mL/kg/hr<br>
+                • Second 10 kg: 2 mL/kg/hr<br>
+                • Each additional kg: 1 mL/kg/hr<br>
+                <strong>Daily total: ${Math.round(rate * 24)} mL/day</strong>`;
+            document.getElementById('fluids-result').classList.add('visible');
+        }
+
+        // PONV Calculator
+        function calculatePONV() {
+            const female = document.getElementById('ponv-female').checked;
+            const nonsmoker = document.getElementById('ponv-nonsmoker').checked;
+            const history = document.getElementById('ponv-history').checked;
+            const opioids = document.getElementById('ponv-opioids').checked;
+
+            const score = (female ? 1 : 0) + (nonsmoker ? 1 : 0) + (history ? 1 : 0) + (opioids ? 1 : 0);
+
+            let risk, percentage, recommendations;
+            switch(score) {
+                case 0:
+                    risk = 'Very Low';
+                    percentage = '10%';
+                    recommendations = 'Standard anesthetic care. Prophylaxis generally not indicated.';
+                    break;
+                case 1:
+                    risk = 'Low';
+                    percentage = '20%';
+                    recommendations = 'Consider single antiemetic (ondansetron 4 mg or dexamethasone 4-8 mg).';
+                    break;
+                case 2:
+                    risk = 'Moderate';
+                    percentage = '40%';
+                    recommendations = 'Use 2 antiemetics from different classes. Consider TIVA instead of volatile agents.';
+                    break;
+                case 3:
+                    risk = 'High';
+                    percentage = '60%';
+                    recommendations = '3+ antiemetics recommended. Strong consideration for TIVA. Minimize opioids, use multimodal analgesia.';
+                    break;
+                case 4:
+                    risk = 'Very High';
+                    percentage = '80%';
+                    recommendations = 'Maximum prophylaxis: 3-4 antiemetics, TIVA, opioid-sparing techniques, consider regional anesthesia.';
+                    break;
+            }
+
+            calculationResults.ponv = {
+                score: score,
+                risk: risk,
+                percentage: percentage,
+                factors: {
+                    female: female,
+                    nonsmoker: nonsmoker,
+                    history: history,
+                    opioids: opioids
+                }
+            };
+
+            document.getElementById('ponv-value').textContent = `${score}/4 - ${risk} Risk (${percentage})`;
+            document.getElementById('ponv-interpretation').innerHTML = `<strong>Recommendations:</strong><br>${recommendations}`;
+            document.getElementById('ponv-result').classList.add('visible');
+        }
+
+        // Send to AI function
+        function sendToAI(calcType) {
+            const result = calculationResults[calcType];
+            if (!result && calcType !== 'asa') {
+                alert('Please calculate first');
+                return;
+            }
+
+            let message = '';
+
+            switch(calcType) {
+                case 'ibw':
+                    message = `Patient: ${result.sex}, ${result.height} cm tall. IBW = ${result.value} kg. What should I consider for anesthetic drug dosing?`;
+                    break;
+                case 'mabl':
+                    message = `Patient: ${result.weight} kg ${result.sex}, height ${result.height} cm. Initial Hct ${result.initialHct}%, target Hct ${result.targetHct}%. Estimated blood volume ${result.bloodVolume} mL, MABL = ${result.value} mL. What's my transfusion strategy for this case?`;
+                    break;
+                case 'bsa':
+                    message = `Patient: ${result.weight} kg, ${result.height} cm. BSA = ${result.value} m². How does this affect my anesthetic management?`;
+                    break;
+                case 'qtc':
+                    message = `Patient has QTc = ${result.value} ms (QT ${result.qt} ms, HR ${result.hr} bpm). Risk level: ${result.risk}. What anesthetic drugs should I avoid or use with caution?`;
+                    break;
+                case 'fluids':
+                    message = `Patient weighs ${result.weight} kg. Calculated maintenance fluids = ${result.value} mL/hr (${result.daily} mL/day). What should I know about perioperative fluid management?`;
+                    break;
+                case 'ponv':
+                    message = `Patient has Apfel score ${result.score}/4 (${result.risk} PONV risk, ~${result.percentage} incidence). Risk factors: ${result.factors.female ? 'female, ' : ''}${result.factors.nonsmoker ? 'non-smoker, ' : ''}${result.factors.history ? 'PONV/motion sickness history, ' : ''}${result.factors.opioids ? 'postop opioids expected' : ''}. What's my best prophylaxis strategy?`;
+                    break;
+                case 'asa':
+                    message = `Can you explain the ASA Physical Status Classification system and how it affects perioperative risk?`;
+                    break;
+            }
+
+            // Store in session storage and redirect to chat
+            sessionStorage.setItem('prefillMessage', message);
+            window.location.href = '/chat';
+        }
     </script>
 </body>
 </html>
@@ -7193,6 +8220,7 @@ HYPOTENSION_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link active">IOH Predictor</a>
             </div>
@@ -7945,6 +8973,11 @@ def terms():
 def privacy():
     """Privacy Policy page"""
     return render_template_string(PRIVACY_POLICY_HTML)
+
+@app.route("/calculators")
+def calculators():
+    """Clinical Calculators Hub - IBW, MABL, BSA, QTc, Fluids, PONV, ASA"""
+    return render_template_string(CALCULATORS_HTML)
 
 @app.route("/quick-dose")
 def quick_dose():
