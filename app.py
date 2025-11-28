@@ -4194,11 +4194,8 @@ HTML = """
         }
 
         // Check for pending stream from homepage redirect
-        console.log('[AUTO-START] Checking for pending stream...');
         {% if pending_stream %}
-        console.log('[AUTO-START] pending_stream value: {{ pending_stream }}');
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('[AUTO-START] Pending stream detected, starting streaming...');
             const requestId = '{{ pending_stream }}';
 
             // Add loading indicator to last message
@@ -4208,29 +4205,22 @@ HTML = """
                 lastMessage.querySelector('.message-content').innerHTML = '<p class="loading-indicator">🔍 Searching medical literature...</p>';
 
                 // Start streaming
-                console.log('[AUTO-START] Creating EventSource with requestId:', requestId);
                 const eventSource = new EventSource(`/stream?request_id=${requestId}`);
                 const responseDiv = lastMessage.querySelector('.message-content');
                 let responseContent = '';
 
-                eventSource.addEventListener('open', function(e) {
-                    console.log('[STREAM] Connection opened');
-                });
-
                 eventSource.addEventListener('error', function(e) {
-                    console.error('[STREAM] Error occurred:', e);
-                    console.error('[STREAM] ReadyState:', eventSource.readyState);
+                    console.error('Streaming error:', e);
                     if (eventSource.readyState === EventSource.CLOSED) {
-                        console.error('[STREAM] Connection closed');
+                        responseDiv.innerHTML = '<p style="color: #EF4444;">Connection error. Please refresh and try again.</p>';
                     }
                 });
 
                 eventSource.addEventListener('message', function(e) {
-                    console.log('[STREAM] Message received:', e.data);
                     const event = JSON.parse(e.data);
 
                     if (event.type === 'connected') {
-                        console.log('[STREAM] Connected');
+                        // Connection established
                     } else if (event.type === 'content') {
                         // Remove loading indicator and add copy button on first content
                         if (responseContent === '') {
@@ -4266,19 +4256,13 @@ HTML = """
                             responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
                         }
                     } else if (event.type === 'done') {
-                        console.log('[STREAM] Completed');
                         eventSource.close();
                     } else if (event.type === 'error') {
-                        console.error('[STREAM] Error:', event.message);
+                        console.error('Stream error:', event.message);
                         responseDiv.innerHTML = `<p style="color: #EF4444;">${event.message}</p>`;
                         eventSource.close();
                     }
                 });
-
-                eventSource.onerror = function(e) {
-                    console.error('[STREAM] Connection error:', e);
-                    eventSource.close();
-                };
             }
         });
         {% endif %}
@@ -8977,213 +8961,7 @@ CALCULATORS_HTML = """
         }
 
         /* AI Chat Modal */
-        .ai-chat-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .ai-chat-modal.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .ai-chat-container {
-            background: white;
-            border-radius: 24px;
-            width: 100%;
-            max-width: 700px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
-            animation: slideUpModal 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideUpModal {
-            from {
-                opacity: 0;
-                transform: translateY(40px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .ai-chat-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 24px 28px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .ai-chat-header h3 {
-            font-family: 'Sora', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.5px;
-        }
-
-        .close-modal-btn {
-            background: var(--bg-secondary);
-            border: none;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-            transition: all 0.2s ease;
-        }
-
-        .close-modal-btn:hover {
-            background: var(--border);
-            color: var(--text-primary);
-            transform: rotate(90deg);
-        }
-
-        .ai-chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 28px;
-            max-height: 50vh;
-        }
-
-        .ai-message {
-            background: var(--bg-secondary);
-            padding: 16px 20px;
-            border-radius: 16px;
-            margin-bottom: 12px;
-            line-height: 1.6;
-            color: var(--text-secondary);
-            font-size: 14px;
-            animation: slideUp 0.3s ease;
-        }
-
-        .ai-message strong {
-            color: var(--text-primary);
-        }
-
-        .ai-chat-input-area {
-            padding: 20px 28px;
-            border-top: 1px solid var(--border);
-            background: var(--bg-secondary);
-            border-radius: 0 0 24px 24px;
-        }
-
-        .ai-input-container {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-        }
-
-        .ai-chat-input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            resize: vertical;
-            min-height: 44px;
-            max-height: 120px;
-            transition: all 0.2s ease;
-        }
-
-        .ai-chat-input:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .send-ai-message-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-            white-space: nowrap;
-        }
-
-        .send-ai-message-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
-        }
-
-        .send-ai-message-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .ai-loading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 16px 20px;
-            background: var(--primary-blue-light);
-            border-radius: 16px;
-            margin-bottom: 12px;
-            color: var(--primary-blue-dark);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .ai-loading-dots {
-            display: flex;
-            gap: 4px;
-        }
-
-        .ai-loading-dots span {
-            width: 6px;
-            height: 6px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-            animation: loadingDot 1.4s infinite ease-in-out;
-        }
-
-        .ai-loading-dots span:nth-child(1) { animation-delay: 0s; }
-        .ai-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .ai-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes loadingDot {
-            0%, 60%, 100% {
-                transform: scale(0.8);
-                opacity: 0.5;
-            }
-            30% {
-                transform: scale(1.2);
-                opacity: 1;
-            }
-        }
+        /* Unused AI modal CSS removed - now redirects to /chat page */
 
         /* Responsive */
         @media (max-width: 968px) {
@@ -10095,30 +9873,6 @@ CALCULATORS_HTML = """
         </div>
     </div>
 
-    <!-- AI Chat Modal -->
-    <div class="ai-chat-modal" id="aiChatModal">
-        <div class="ai-chat-container">
-            <div class="ai-chat-header">
-                <h3>Ask AI About Your Results</h3>
-                <button class="close-modal-btn" onclick="closeAIChat()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="ai-chat-messages" id="aiChatMessages">
-                <!-- Messages will be added here -->
-            </div>
-            <div class="ai-chat-input-area">
-                <div class="ai-input-container">
-                    <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
-                    <textarea class="ai-chat-input" id="aiChatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
-                    <button class="send-ai-message-btn" onclick="sendAIMessage()">Send</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         // Store calculation results
         let calculationResults = {};
@@ -10995,129 +10749,7 @@ CALCULATORS_HTML = """
             form.submit();
         }
 
-        function closeAIChat() {
-            document.getElementById('aiChatModal').classList.remove('active');
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('aiChatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAIChat();
-            }
-        });
-
-        // Send message on Enter key
-        document.getElementById('aiChatInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendAIMessage();
-            }
-        });
-
-        function sendAIMessage() {
-            const input = document.getElementById('aiChatInput');
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            // Add user message to chat
-            addMessageToChat(message, 'user');
-            input.value = '';
-
-            // Fetch AI response
-            fetchAIResponse(message);
-        }
-
-        function addMessageToChat(message, type) {
-            const messagesDiv = document.getElementById('aiChatMessages');
-            const messageEl = document.createElement('div');
-            messageEl.className = 'ai-message';
-
-            if (type === 'user') {
-                messageEl.style.background = 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)';
-                messageEl.style.borderLeft = '3px solid var(--primary-blue)';
-                messageEl.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
-            } else if (type === 'loading') {
-                messageEl.className = 'ai-loading';
-                messageEl.innerHTML = `
-                    Thinking...
-                    <div class="ai-loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                `;
-                messageEl.id = 'loadingMessage';
-            } else {
-                messageEl.innerHTML = `<strong>AI:</strong> ${message}`;
-            }
-
-            messagesDiv.appendChild(messageEl);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            return messageEl;
-        }
-
-        async function fetchAIResponse(userMessage) {
-            // Show loading indicator
-            addMessageToChat('', 'loading');
-
-            try {
-                // Get CSRF token
-                const csrfToken = document.getElementById('csrf_token').value;
-
-                const response = await fetch('/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}`
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                // Get the full page HTML response
-                const html = await response.text();
-
-                // Parse the HTML to extract the last AI message
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const assistantMessages = doc.querySelectorAll('.message.assistant');
-
-                if (assistantMessages.length > 0) {
-                    const lastMessage = assistantMessages[assistantMessages.length - 1];
-                    const messageText = lastMessage.querySelector('.message-text');
-
-                    if (messageText) {
-                        // Remove loading message
-                        const loadingMsg = document.getElementById('loadingMessage');
-                        if (loadingMsg) loadingMsg.remove();
-
-                        // Add AI response
-                        addMessageToChat(messageText.innerHTML, 'ai');
-                    } else {
-                        throw new Error('Could not extract AI response');
-                    }
-                } else {
-                    throw new Error('No response found');
-                }
-
-            } catch (error) {
-                console.error('Error fetching AI response:', error);
-                const loadingMsg = document.getElementById('loadingMessage');
-                if (loadingMsg) loadingMsg.remove();
-
-                addMessageToChat('Sorry, there was an error getting a response. Please try again or visit the <a href="/chat" style="color: var(--primary-blue); text-decoration: underline;">chat page</a>.', 'ai');
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        // Unused modal functions removed - now redirects to /chat page
     </script>
 </body>
 </html>
@@ -12120,19 +11752,13 @@ HYPOTENSION_HTML = """
 def stream():
     """Server-Sent Events endpoint for streaming GPT responses"""
     request_id = request.args.get('request_id')
-    print(f"[DEBUG] /stream endpoint called with request_id: {request_id}")
 
     if not request_id:
-        print(f"[DEBUG] /stream - No request_id provided")
         return Response("error: Invalid request - no request_id\n\n", mimetype='text/event-stream')
 
     stream_key = f'stream_data_{request_id}'
     if stream_key not in session:
-        print(f"[DEBUG] /stream - Stream key '{stream_key}' not found in session")
-        print(f"[DEBUG] /stream - Available session keys: {list(session.keys())}")
         return Response("error: Invalid request - stream data not found\n\n", mimetype='text/event-stream')
-
-    print(f"[DEBUG] /stream - Stream data found, proceeding...")
 
     # Get prepared data from session
     stream_data = session[f'stream_data_{request_id}']
