@@ -198,6 +198,266 @@ def clean_query(query):
 
     return q if q else query  # Return original if cleaning removed everything
 
+def detect_question_type(query):
+    """Identify what kind of clinical question this is to customize search and response"""
+    q = query.lower()
+
+    # Dosing questions - need guidelines more than RCTs
+    if any(word in q for word in ['dose', 'dosing', 'how much', 'mg/kg', 'mcg/kg', 'ml/kg', 'dosage', 'loading dose', 'maintenance dose']):
+        return 'dosing'
+
+    # Safety/complications - need case reports too
+    if any(word in q for word in ['safe', 'risk', 'complication', 'side effect', 'adverse', 'contraindication', 'warning', 'precaution', 'toxicity']):
+        return 'safety'
+
+    # Comparison questions - need head-to-head trials
+    if any(word in q for word in [' or ', ' vs ', 'versus', 'compared', 'better', 'prefer', 'which', 'choice between']):
+        return 'comparison'
+
+    # Mechanism questions - need reviews
+    if any(word in q for word in ['how does', 'mechanism', 'why does', 'works by', 'action of', 'pharmacology']):
+        return 'mechanism'
+
+    # Management/protocol questions - need guidelines
+    if any(word in q for word in ['management', 'protocol', 'algorithm', 'approach', 'treat', 'handle', 'manage', 'strategy']):
+        return 'management'
+
+    return 'general'
+
+def handle_negations(query):
+    """Detect and properly handle negative/contraindication questions"""
+    q = query.lower()
+
+    is_negative = any(word in q for word in [
+        'not ', 'avoid', 'never', 'contraindication', 'when to stop',
+        'should not', 'shouldn\'t', 'don\'t use', 'do not use', 'when not to'
+    ])
+
+    if is_negative:
+        # Add contraindication terms to search
+        search_modifier = ' AND (contraindications[sh] OR adverse effects[sh] OR safety[ti])'
+
+        # Update GPT prompt to focus on negatives
+        prompt_modifier = "\n\nIMPORTANT: The user is asking about CONTRAINDICATIONS, AVOIDING, or WHEN NOT TO USE something. Focus your answer on safety concerns, contraindications, and situations where this is inappropriate or dangerous."
+
+        return search_modifier, prompt_modifier
+
+    return '', ''
+
+def resolve_references(query, conversation_history):
+    """Replace pronouns/vague references with actual terms from context"""
+    if not conversation_history or len(conversation_history) < 2:
+        return query
+
+    q = query.lower()
+
+    # Get last 2-3 user+assistant turns
+    recent_messages = conversation_history[-6:] if len(conversation_history) >= 6 else conversation_history
+
+    # Extract key medical terms from recent conversation (drugs, procedures, conditions)
+    medical_entities = []
+    for msg in recent_messages:
+        content = msg.get('content', '').lower()
+        # Find drug names, procedures, conditions
+        entities = re.findall(
+            r'\b(propofol|etomidate|ketamine|fentanyl|remifentanil|sufentanil|alfentanil|'
+            r'rocuronium|vecuronium|succinylcholine|cisatracurium|'
+            r'sevoflurane|desflurane|isoflurane|'
+            r'midazolam|dexmedetomidine|'
+            r'phenylephrine|ephedrine|epinephrine|norepinephrine|vasopressin|'
+            r'tranexamic acid|txa|aminocaproic acid|'
+            r'intubation|extubation|induction|emergence|nerve block|epidural|spinal|'
+            r'rsi|rapid sequence|awake fiberoptic|'
+            r'ponv|hypotension|hypertension|bronchospasm|laryngospasm|'
+            r'malignant hyperthermia|local anesthetic toxicity|last)\b',
+            content
+        )
+        medical_entities.extend(entities)
+
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_entities = []
+    for entity in reversed(medical_entities):  # Reverse to get most recent first
+        if entity not in seen:
+            unique_entities.append(entity)
+            seen.add(entity)
+    unique_entities.reverse()
+
+    # Replace vague references if we have context
+    if unique_entities and any(word in q for word in ['it', 'this', 'that', 'the drug', 'the medication', 'the technique']):
+        most_recent = unique_entities[-1]  # Last mentioned entity
+        q = re.sub(r'\bit\b', most_recent, q)
+        q = re.sub(r'\bthis\b', most_recent, q)
+        q = re.sub(r'\bthat\b', most_recent, q)
+        q = q.replace('the drug', most_recent)
+        q = q.replace('the medication', most_recent)
+        print(f"[DEBUG] Resolved reference: '{query}' → '{q}'")
+
+    # Handle "what about..." questions
+    if q.startswith('what about') and unique_entities:
+        # Extract the modifier (e.g., "pediatrics", "elderly", "renal failure")
+        modifier = q.replace('what about', '').strip().rstrip('?').strip()
+        main_topic = unique_entities[-1]
+        q = f'{main_topic} in {modifier}'
+        print(f"[DEBUG] Expanded 'what about': '{query}' → '{q}'")
+
+    # Handle "how about..." questions similarly
+    if q.startswith('how about') and unique_entities:
+        modifier = q.replace('how about', '').strip().rstrip('?').strip()
+        main_topic = unique_entities[-1]
+        q = f'{main_topic} {modifier}'
+        print(f"[DEBUG] Expanded 'how about': '{query}' → '{q}'")
+
+    return q if q != query.lower() else query
+
+def detect_multipart(query):
+    """Detect if user is asking multiple questions"""
+    # Look for "and" connecting questions
+    patterns = [
+        r'(.*?)\s+and\s+(what|how|when|why|is|are|does|should|can)',
+        r'(.*?)\s*\?\s*(what|how|when|why)',  # Multiple question marks
+        r'(.*?)\s+(also|additionally)\s+(what|how|when|why)',
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, query, re.IGNORECASE)
+        if match:
+            return True
+
+    return False
+
+def build_smart_context(messages, current_query):
+    """Build context that includes relevant history, not just recent"""
+    if not messages or len(messages) == 0:
+        return "New conversation."
+
+    context = ""
+
+    # Always include last 2 turns (most recent) - up to 6 messages
+    recent = messages[-6:] if len(messages) >= 6 else messages
+
+    # Also search for turns that mention same entities as current query (if conversation is longer)
+    query_terms = set(re.findall(r'\b\w{4,}\b', current_query.lower()))
+    relevant_earlier = []
+
+    if len(messages) > 6:
+        for i in range(0, len(messages) - 6, 2):  # Skip the recent ones we already have
+            if i < len(messages):
+                user_msg = messages[i].get('content', '').lower()
+                terms = set(re.findall(r'\b\w{4,}\b', user_msg))
+                overlap = len(query_terms & terms)
+                if overlap >= 2:  # At least 2 shared terms
+                    # Include Q&A pair
+                    pair = messages[i:min(i+2, len(messages))]
+                    relevant_earlier.append(pair)
+
+    # Build context: relevant earlier + recent
+    for pair in relevant_earlier[-2:]:  # Max 2 earlier relevant turns
+        for msg in pair:
+            role = "User" if msg['role'] == 'user' else "Assistant"
+            content = re.sub('<[^<]+?>', '', msg.get('content', ''))
+            context += f"{role}: {content[:200]}...\n"
+
+    for msg in recent:
+        role = "User" if msg['role'] == 'user' else "Assistant"
+        content = re.sub('<[^<]+?>', '', msg.get('content', ''))
+        max_len = 300 if msg['role'] == 'user' else 150
+        if len(content) > max_len:
+            context += f"{role}: {content[:max_len]}...\n"
+        else:
+            context += f"{role}: {content}\n"
+
+    return context
+
+def expand_medical_abbreviations(query):
+    """Comprehensive medical abbreviation and synonym expansion"""
+    q = query.lower()
+
+    # Comparison operators
+    q = q.replace(" versus ", " OR ")
+    q = q.replace(" vs ", " OR ")
+    q = q.replace(" vs. ", " OR ")
+    q = q.replace(" over ", " OR ")
+    q = q.replace(" compared to ", " OR ")
+    q = q.replace(" compared with ", " OR ")
+
+    # Common abbreviations and drugs - ORIGINAL ONES
+    q = q.replace("txa", '"tranexamic acid" OR TXA')
+    q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
+    q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
+    q = q.replace("peds", 'pediatric OR children OR peds')
+    q = q.replace("pediatric", 'pediatric OR children OR peds')
+    q = q.replace("ponv", 'PONV OR "postoperative nausea"')
+    q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
+    q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
+    q = q.replace("barbiturates", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+    q = q.replace("barbs", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
+    q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
+    q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
+
+    # NEW ADDITIONS - Neuromuscular blockers
+    q = q.replace(" roc ", ' ("rocuronium"[MeSH Terms] OR rocuronium OR "neuromuscular blockade") ')
+    q = q.replace(" vec ", ' ("vecuronium"[MeSH Terms] OR vecuronium) ')
+    q = q.replace(" sux ", ' ("succinylcholine"[MeSH Terms] OR succinylcholine OR "muscle relaxant") ')
+    q = q.replace("cisatracurium", '"cisatracurium"[MeSH Terms] OR cisatracurium OR nimbex')
+    q = q.replace("rocuronium", '"rocuronium"[MeSH Terms] OR rocuronium')
+    q = q.replace("vecuronium", '"vecuronium"[MeSH Terms] OR vecuronium')
+    q = q.replace("succinylcholine", '"succinylcholine"[MeSH Terms] OR succinylcholine OR suxamethonium')
+
+    # Opioids
+    q = q.replace("fentanyl", '"fentanyl"[MeSH Terms] OR fentanyl OR opioid')
+    q = q.replace(" remi ", ' ("remifentanil"[MeSH Terms] OR remifentanil) ')
+    q = q.replace("remifentanil", '"remifentanil"[MeSH Terms] OR remifentanil')
+    q = q.replace("sufentanil", '"sufentanil"[MeSH Terms] OR sufentanil')
+    q = q.replace("alfentanil", '"alfentanil"[MeSH Terms] OR alfentanil')
+    q = q.replace("morphine", '"morphine"[MeSH Terms] OR morphine')
+    q = q.replace("hydromorphone", '"hydromorphone"[MeSH Terms] OR hydromorphone OR dilaudid')
+
+    # Benzodiazepines and sedatives
+    q = q.replace(" dex ", ' ("dexmedetomidine"[MeSH Terms] OR dexmedetomidine OR precedex) ')
+    q = q.replace("dexmedetomidine", '"dexmedetomidine"[MeSH Terms] OR dexmedetomidine OR precedex')
+    q = q.replace("versed", '"midazolam"[MeSH Terms] OR midazolam OR versed')
+    q = q.replace("midazolam", '"midazolam"[MeSH Terms] OR midazolam OR versed')
+
+    # Vasopressors and inotropes
+    q = q.replace(" neo ", ' ("phenylephrine"[MeSH Terms] OR phenylephrine OR neosynephrine) ')
+    q = q.replace("phenylephrine", '"phenylephrine"[MeSH Terms] OR phenylephrine OR neosynephrine')
+    q = q.replace(" epi ", ' ("epinephrine"[MeSH Terms] OR epinephrine OR adrenaline) ')
+    q = q.replace("epinephrine", '"epinephrine"[MeSH Terms] OR epinephrine OR adrenaline')
+    q = q.replace("ephedrine", '"ephedrine"[MeSH Terms] OR ephedrine')
+    q = q.replace("norepinephrine", '"norepinephrine"[MeSH Terms] OR norepinephrine OR levophed')
+    q = q.replace("vasopressin", '"vasopressin"[MeSH Terms] OR vasopressin OR pitressin')
+
+    # Common procedures
+    q = q.replace(" rsi ", ' ("rapid sequence induction" OR RSI OR "rapid sequence intubation" OR "airway management") ')
+    q = q.replace("rapid sequence", '"rapid sequence induction" OR RSI OR "rapid sequence intubation"')
+    q = q.replace("awake intubation", '"awake intubation" OR "fiberoptic intubation" OR "difficult airway"')
+    q = q.replace("awake fiberoptic", '"awake intubation" OR "fiberoptic intubation" OR "difficult airway"')
+    q = q.replace(" cabg ", ' ("coronary artery bypass" OR CABG OR "cardiac surgery") ')
+    q = q.replace("coronary artery bypass", '"coronary artery bypass" OR CABG OR "cardiac surgery"')
+    q = q.replace(" tavr ", ' ("transcatheter aortic valve" OR TAVR OR "structural heart") ')
+    q = q.replace("transcatheter aortic", '"transcatheter aortic valve" OR TAVR')
+
+    # Common complications
+    q = q.replace(" last ", ' ("local anesthetic systemic toxicity" OR LAST OR "lipid emulsion" OR "intralipid") ')
+    q = q.replace("local anesthetic toxicity", '"local anesthetic systemic toxicity" OR LAST OR "lipid emulsion"')
+    q = q.replace(" pris ", ' ("propofol infusion syndrome" OR PRIS) ')
+    q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
+    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH')
+    q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH) ')
+
+    # Common scenarios
+    q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
+    q = q.replace("difficult airway", '"difficult airway"[MeSH Terms] OR "airway management" OR intubation OR "difficult intubation"')
+    q = q.replace("anticipated difficult", '"difficult airway"[MeSH Terms] OR "airway management" OR "awake intubation"')
+
+    # Regional anesthesia
+    q = q.replace("nerve block", '"nerve block"[MeSH Terms] OR "regional anesthesia" OR "peripheral nerve block"')
+    q = q.replace("epidural", '"epidural"[MeSH Terms] OR "epidural anesthesia" OR "neuraxial"')
+    q = q.replace("spinal", '"spinal anesthesia"[MeSH Terms] OR "subarachnoid" OR "neuraxial"')
+
+    return q
+
 def detect_and_calculate(query, context_hint=None):
     """Detect calculation requests and perform medical calculations."""
     q = query.lower()
@@ -7199,8 +7459,29 @@ def stream():
             # Send initial event to confirm connection
             yield f"data: {json.dumps({'type': 'connected'})}\n\n"
 
-            # Use temperature 0.2 for follow-ups without papers, 0.1 for evidence-based responses
-            temperature = 0.2 if num_papers == 0 else 0.1
+            # Dynamic temperature based on question type and evidence availability
+            question_type = stream_data.get('question_type', 'general')
+
+            if num_papers == 0:
+                # No papers - use higher temperature for general knowledge
+                temperature = 0.2
+            elif question_type == 'dosing':
+                # Dosing questions need very precise answers
+                temperature = 0.05
+            elif question_type == 'safety':
+                # Safety questions need factual accuracy
+                temperature = 0.1
+            elif question_type == 'mechanism':
+                # Mechanism explanations can be slightly more fluid
+                temperature = 0.15
+            elif question_type == 'comparison':
+                # Comparisons need balanced precision
+                temperature = 0.1
+            else:
+                # Default (general, management)
+                temperature = 0.1
+
+            print(f"[DEBUG] Using temperature {temperature} for question type '{question_type}'")
 
             # Stream GPT response
             stream_response = openai_client.chat.completions.create(
@@ -7257,6 +7538,10 @@ def chat():
     if 'messages' not in session:
         session['messages'] = []
 
+    # Initialize conversation topic tracking
+    if 'conversation_topic' not in session:
+        session['conversation_topic'] = None
+
     if request.method == "POST":
         try:
             # Safely get query from form data and sanitize it
@@ -7274,6 +7559,18 @@ def chat():
 
             # Check if this is the first message (from homepage)
             is_first_message = len(session['messages']) == 0
+
+            # Set conversation topic on first message (for context in future vague queries)
+            if is_first_message and not session['conversation_topic']:
+                # Extract main topic from first query (simple keyword extraction)
+                topic_words = []
+                for word in raw_query.lower().split():
+                    # Keep medical terms (4+ chars, not common words)
+                    if len(word) >= 4 and word not in ['what', 'about', 'when', 'where', 'which', 'that', 'this', 'with', 'from', 'have', 'been', 'does', 'should', 'would', 'could']:
+                        topic_words.append(word)
+                if topic_words:
+                    session['conversation_topic'] = ' '.join(topic_words[:3])  # First 3 meaningful words
+                    print(f"[DEBUG] Conversation topic set: {session['conversation_topic']}")
 
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
@@ -7313,41 +7610,72 @@ def chat():
             is_followup = len(session['messages']) >= 3
             print(f"[DEBUG] Is follow-up: {is_followup}")
 
-            # Expand synonyms and medical abbreviations
-            q = query.lower()
-            q = q.replace(" versus ", " OR ")
-            q = q.replace(" vs ", " OR ")
-            q = q.replace(" vs. ", " OR ")
-            q = q.replace(" over ", " OR ")
-            q = q.replace(" compared to ", " OR ")
-            q = q.replace(" compared with ", " OR ")
-            q = q.replace("txa", '"tranexamic acid" OR TXA')
-            q = q.replace("blood loss", '"blood loss" OR hemorrhage OR transfusion')
-            q = q.replace("spine surgery", '"spine surgery" OR "spinal fusion" OR scoliosis')
-            q = q.replace("peds", 'pediatric OR children OR peds')
-            q = q.replace("pediatric", 'pediatric OR children OR peds')
-            q = q.replace("ponv", 'PONV OR "postoperative nausea"')
-            q = q.replace("propofol", '"propofol"[MeSH Terms] OR propofol')
-            q = q.replace("etomidate", '"etomidate"[MeSH Terms] OR etomidate')
-            q = q.replace("barbiturates", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
-            q = q.replace("barbs", '"barbiturates"[MeSH Terms] OR barbiturates OR thiopental')
-            q = q.replace("ketamine", '"ketamine"[MeSH Terms] OR ketamine')
-            q = q.replace("induction", '"anesthesia induction" OR induction OR "induction agent"')
+            # Resolve pronouns and references using conversation context
+            query = resolve_references(query, session['messages'][:-1])  # Exclude the just-added user message
+            print(f"[DEBUG] After reference resolution: '{query}'")
+
+            # Detect question type for customized search and temperature
+            question_type = detect_question_type(query)
+            print(f"[DEBUG] Question type: {question_type}")
+
+            # Detect if this is a multi-part question
+            is_multipart = detect_multipart(query)
+            if is_multipart:
+                print(f"[DEBUG] Multi-part question detected")
+
+            # Handle negations (contraindications, when NOT to use, etc.)
+            negation_search_modifier, negation_prompt_modifier = handle_negations(query)
+            if negation_search_modifier:
+                print(f"[DEBUG] Negation detected - will modify search and prompt")
+
+            # Expand medical abbreviations and synonyms
+            q = expand_medical_abbreviations(query)
 
             print(f"[DEBUG] Expanded query: '{q}'")
 
-            # Use broader search for follow-up questions
+            # Customize search based on question type
             if is_followup:
+                # Broader search for follow-ups
                 search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
             else:
-                search_term = (
-                    f'({q}) AND '
-                    f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
-                    f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
-                )
+                # Customize search filters based on question type
+                if question_type == 'dosing':
+                    # Prioritize guidelines and reviews for dosing questions
+                    search_term = (
+                        f'({q}) AND '
+                        f'(guideline[pt] OR "practice guideline"[pt] OR review[pt] OR meta-analysis[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                elif question_type == 'safety':
+                    # Include adverse effects and safety studies
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'guideline[pt] OR "adverse effects"[sh] OR safety[ti]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                elif question_type == 'comparison':
+                    # Prioritize comparative studies
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'"comparative study"[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                else:
+                    # Default search (general, mechanism, management)
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
 
-            print(f"[DEBUG] Search term: '{search_term[:100]}...'")
+            # Add negation modifier if detected
+            if negation_search_modifier:
+                search_term += negation_search_modifier
+
+            print(f"[DEBUG] Search term: '{search_term[:150]}...'")
 
             # Try anesthesiology-specific search first (reduced to 10 papers for speed)
             ids = []
@@ -7464,16 +7792,9 @@ Answer as if you're a colleague continuing the conversation:"""
             num_papers = len(refs)
             print(f"[DEBUG] Processed {num_papers} paper references")
 
-            # Build conversation context for GPT (last 6 messages for speed)
-            conversation_context = ""
-            recent_messages = session['messages'][-6:]
-            for msg in recent_messages:
-                if msg['role'] == 'user':
-                    conversation_context += f"User: {msg['content']}\n"
-                else:
-                    # Strip HTML and truncate for cleaner, smaller context
-                    content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
-                    conversation_context += f"Assistant: {content_text[:150]}...\n"
+            # Build smart conversation context (includes relevant earlier messages + recent)
+            conversation_context = build_smart_context(session['messages'][:-1], raw_query)  # Exclude just-added user message
+            print(f"[DEBUG] Smart context built ({len(conversation_context)} chars)")
 
             # Create numbered reference list for citation
             ref_list = ""
@@ -7487,6 +7808,8 @@ Previous conversation:
 
 Current question: {raw_query}
 {'This is a FOLLOW-UP - build on the previous discussion.' if is_followup else ''}
+{negation_prompt_modifier if negation_prompt_modifier else ''}
+{'NOTE: This question has multiple parts - address each thoroughly.' if is_multipart else ''}
 
 Research papers (cite as [1], [2], etc.):
 {ref_list}
@@ -7538,7 +7861,8 @@ Respond with maximum clinical utility:"""
                 'prompt': prompt,
                 'refs': refs,
                 'num_papers': num_papers,
-                'raw_query': raw_query
+                'raw_query': raw_query,
+                'question_type': question_type  # Store for temperature adjustment
             }
             session.modified = True
 
