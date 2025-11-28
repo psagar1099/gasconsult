@@ -4966,6 +4966,135 @@ CHAT_HTML = """
             background: var(--bg-secondary);
         }
 
+        /* Article Preview Modal */
+        .article-modal-content {
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-secondary);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--border);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .article-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .article-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 16px 0;
+            padding-right: 40px;
+            line-height: 1.4;
+        }
+
+        .article-meta {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .meta-row {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .meta-row strong {
+            color: var(--text-primary);
+            margin-right: 8px;
+        }
+
+        .article-abstract {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+            background: var(--bg-secondary);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .article-abstract mark {
+            background: linear-gradient(120deg, rgba(255, 223, 0, 0.4) 0%, rgba(255, 223, 0, 0.7) 100%);
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        .article-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .action-btn-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        .action-btn-link svg {
+            flex-shrink: 0;
+        }
+
         /* Chat Input */
         .chat-input-container {
             position: sticky;
@@ -5333,6 +5462,64 @@ CHAT_HTML = """
         </form>
     </div>
 
+    <!-- Article Preview Modal -->
+    <div class="modal-overlay" id="articleModal">
+        <div class="modal-content article-modal-content">
+            <button class="modal-close" onclick="closeArticleModal()">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 5L5 15M5 5L15 15" stroke-linecap="round"/>
+                </svg>
+            </button>
+
+            <div id="articleModalLoading" class="article-loading" style="display: none;">
+                <div class="loading-spinner"></div>
+                <p>Loading article...</p>
+            </div>
+
+            <div id="articleModalContent" style="display: none;">
+                <h2 id="articleTitle" class="article-title"></h2>
+
+                <div class="article-meta">
+                    <div class="meta-row">
+                        <strong>Authors:</strong> <span id="articleAuthors"></span>
+                    </div>
+                    <div class="meta-row">
+                        <strong>Journal:</strong> <span id="articleJournal"></span>
+                    </div>
+                    <div class="meta-row">
+                        <strong>Year:</strong> <span id="articleYear"></span>
+                    </div>
+                    <div class="meta-row" id="articleDoiRow" style="display: none;">
+                        <strong>DOI:</strong> <span id="articleDoi"></span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 24px; margin-bottom: 12px; font-size: 16px; color: var(--primary-blue);">Abstract</h3>
+                <div id="articleAbstract" class="article-abstract"></div>
+
+                <div class="article-actions">
+                    <a id="pubmedLink" href="#" target="_blank" class="action-btn-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"></path>
+                        </svg>
+                        View on PubMed
+                    </a>
+                    <a id="pmcLink" href="#" target="_blank" class="action-btn-link" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
+                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
+                        </svg>
+                        View Full Text (PMC)
+                    </a>
+                </div>
+            </div>
+
+            <div id="articleModalError" style="display: none; text-align: center; padding: 40px; color: #EF4444;">
+                <p>Failed to load article. Please try again.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Share Modal -->
     <div class="modal-overlay" id="shareModal">
         <div class="modal-content">
@@ -5594,6 +5781,136 @@ CHAT_HTML = """
         }
 
         // Voice input removed - not cross-browser compatible
+
+        // Article Preview Modal Functions
+        let currentQuery = ''; // Store current user query for highlighting
+
+        function openArticleModal(pmid) {
+            const modal = document.getElementById('articleModal');
+            const loading = document.getElementById('articleModalLoading');
+            const content = document.getElementById('articleModalContent');
+            const error = document.getElementById('articleModalError');
+
+            // Show modal with loading state
+            modal.classList.add('active');
+            loading.style.display = 'block';
+            content.style.display = 'none';
+            error.style.display = 'none';
+
+            // Fetch article data
+            fetch(`/article/${pmid}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to fetch article');
+                    return response.json();
+                })
+                .then(data => {
+                    // Populate modal with article data
+                    document.getElementById('articleTitle').textContent = data.title;
+                    document.getElementById('articleAuthors').textContent = data.authors;
+                    document.getElementById('articleJournal').textContent = `${data.journal}${data.volume ? ` ${data.volume}` : ''}${data.issue ? `(${data.issue})` : ''}${data.pages ? `: ${data.pages}` : ''}, ${data.year}`;
+                    document.getElementById('articleYear').textContent = data.year;
+
+                    // DOI
+                    if (data.doi) {
+                        document.getElementById('articleDoi').textContent = data.doi;
+                        document.getElementById('articleDoiRow').style.display = 'block';
+                    } else {
+                        document.getElementById('articleDoiRow').style.display = 'none';
+                    }
+
+                    // Abstract with highlighting
+                    const abstractDiv = document.getElementById('articleAbstract');
+                    abstractDiv.innerHTML = highlightKeywords(data.abstract, currentQuery);
+
+                    // PubMed link
+                    document.getElementById('pubmedLink').href = data.pubmed_url;
+
+                    // PMC link (if available)
+                    const pmcLink = document.getElementById('pmcLink');
+                    if (data.pmc_url) {
+                        pmcLink.href = data.pmc_url;
+                        pmcLink.style.display = 'inline-flex';
+                    } else {
+                        pmcLink.style.display = 'none';
+                    }
+
+                    // Show content, hide loading
+                    loading.style.display = 'none';
+                    content.style.display = 'block';
+
+                    // Scroll to first highlight if exists
+                    setTimeout(() => {
+                        const firstHighlight = abstractDiv.querySelector('mark');
+                        if (firstHighlight) {
+                            firstHighlight.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }, 100);
+                })
+                .catch(err => {
+                    console.error('Error fetching article:', err);
+                    loading.style.display = 'none';
+                    error.style.display = 'block';
+                });
+        }
+
+        function closeArticleModal() {
+            document.getElementById('articleModal').classList.remove('active');
+        }
+
+        function highlightKeywords(text, query) {
+            if (!query || !text) return escapeHtml(text);
+
+            // Extract key medical terms from query (remove common words)
+            const stopWords = ['the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'what', 'how', 'when', 'where', 'why', 'vs', 'versus'];
+            const queryWords = query.toLowerCase()
+                .split(/\s+/)
+                .filter(word => word.length > 3 && !stopWords.includes(word));
+
+            // Escape HTML first
+            let highlightedText = escapeHtml(text);
+
+            // Highlight each keyword (case-insensitive)
+            queryWords.forEach(word => {
+                const regex = new RegExp(`\\b(${word}\\w*)`, 'gi');
+                highlightedText = highlightedText.replace(regex, '<mark>$1</mark>');
+            });
+
+            return highlightedText;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('articleModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeArticleModal();
+            }
+        });
+
+        // Make reference links clickable
+        document.addEventListener('DOMContentLoaded', function() {
+            // Store the current query for highlighting
+            const messages = document.querySelectorAll('.message.user');
+            if (messages.length > 0) {
+                currentQuery = messages[messages.length - 1].textContent.trim();
+            }
+
+            // Make all reference links clickable
+            document.querySelectorAll('.ref-item a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const url = this.href;
+                    const pmid = url.match(/(\d+)\/?$/)?.[1];
+                    if (pmid) {
+                        openArticleModal(pmid);
+                    }
+                });
+            });
+        });
 
         // Auto-load follow-up suggestions on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -12620,6 +12937,103 @@ Respond with maximum clinical utility:"""
     print(f"[DEBUG] GET /chat - pending_stream = {pending_stream}")
     print(f"[DEBUG] GET /chat - num messages = {len(session.get('messages', []))}")
     return render_template_string(CHAT_HTML, messages=session.get('messages', []), pending_stream=pending_stream)
+
+@app.route("/article/<pmid>")
+@csrf.exempt  # Public API endpoint, no CSRF needed
+def get_article_preview(pmid):
+    """Fetch full article details from PubMed for preview modal"""
+    try:
+        # Validate PMID is numeric
+        if not pmid.isdigit():
+            return jsonify({"error": "Invalid PMID"}), 400
+
+        # Fetch article from PubMed
+        handle = Entrez.efetch(db="pubmed", id=pmid, retmode="xml")
+        papers = Entrez.read(handle)["PubmedArticle"]
+
+        if not papers:
+            return jsonify({"error": "Article not found"}), 404
+
+        paper = papers[0]
+        art = paper["MedlineCitation"]["Article"]
+
+        # Extract full article data
+        title = art.get("ArticleTitle", "No title")
+
+        # Full abstract (not truncated)
+        abstract_parts = art.get("Abstract", {}).get("AbstractText", [])
+        if abstract_parts:
+            # Handle structured abstracts
+            abstract = ""
+            for part in abstract_parts:
+                if hasattr(part, 'attributes') and 'Label' in part.attributes:
+                    abstract += f"**{part.attributes['Label']}:** {str(part)}\n\n"
+                else:
+                    abstract += str(part) + "\n\n"
+            abstract = abstract.strip()
+        else:
+            abstract = "No abstract available."
+
+        # All authors (not truncated to 3)
+        author_list = art.get("AuthorList", [])
+        authors = []
+        for author in author_list[:10]:  # Limit to first 10 authors
+            last = author.get("LastName", "")
+            first = author.get("ForeName", "")
+            if last:
+                authors.append(f"{last}, {first}" if first else last)
+        authors_str = "; ".join(authors)
+        if len(author_list) > 10:
+            authors_str += f" (and {len(author_list) - 10} more)"
+
+        # Journal info
+        journal = art["Journal"].get("Title", "Unknown")
+        pub_date = art["Journal"]["JournalIssue"]["PubDate"]
+        year = pub_date.get("Year", pub_date.get("MedlineDate", "N/A"))
+
+        # Volume/Issue/Pages
+        volume = art["Journal"]["JournalIssue"].get("Volume", "")
+        issue = art["Journal"]["JournalIssue"].get("Issue", "")
+        pages = art.get("Pagination", {}).get("MedlinePgn", "")
+
+        # DOI if available
+        doi = None
+        for id_obj in art.get("ELocationID", []):
+            if id_obj.attributes.get("EIdType") == "doi":
+                doi = str(id_obj)
+                break
+
+        # Check for PMC ID (indicates full text available)
+        pmc_id = None
+        try:
+            link_handle = Entrez.elink(dbfrom="pubmed", db="pmc", id=pmid)
+            link_result = Entrez.read(link_handle)
+            if link_result[0]["LinkSetDb"]:
+                pmc_links = link_result[0]["LinkSetDb"][0]["Link"]
+                if pmc_links:
+                    pmc_id = pmc_links[0]["Id"]
+        except:
+            pass  # PMC link not available
+
+        return jsonify({
+            "pmid": pmid,
+            "title": title,
+            "abstract": abstract,
+            "authors": authors_str,
+            "journal": journal,
+            "year": year,
+            "volume": volume,
+            "issue": issue,
+            "pages": pages,
+            "doi": doi,
+            "pmc_id": pmc_id,
+            "pubmed_url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+            "pmc_url": f"https://www.ncbi.nlm.nih.gov/pmc/articles/PMC{pmc_id}/" if pmc_id else None
+        })
+
+    except Exception as e:
+        logger.error(f"Error fetching article {pmid}: {str(e)}")
+        return jsonify({"error": "Failed to fetch article"}), 500
 
 @app.route("/clear")
 def clear():
