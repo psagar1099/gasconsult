@@ -744,6 +744,7 @@ PREOP_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -2043,6 +2044,7 @@ HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -4295,6 +4297,7 @@ CHAT_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -5615,7 +5618,7 @@ CHAT_HTML = """
 
         // Auto-start streaming if there's a pending stream
         {% if pending_stream %}
-        document.addEventListener('DOMContentLoaded', function() {
+        (function() {
             const requestId = '{{ pending_stream }}';
 
             // Show loading indicator
@@ -5797,7 +5800,7 @@ CHAT_HTML = """
                     }
                 });
             }
-        });
+        })();
         {% endif %}
 
         // ====== Premium Features JavaScript ======
@@ -6487,6 +6490,7 @@ TERMS_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -7426,6 +7430,7 @@ QUICK_DOSE_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -11657,6 +11662,7 @@ HYPOTENSION_HTML = """
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
@@ -12713,8 +12719,8 @@ def stream():
             })
             session.modified = True
 
-            # Send references
-            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers})}\n\n"
+            # Send references with evidence strength
+            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength})}\n\n"
 
             # Send completion event
             yield f"data: {json.dumps({'type': 'done'})}\n\n"
@@ -12954,12 +12960,30 @@ Answer as if you're a colleague continuing the conversation:"""
                     }
                     session.modified = True
 
-                    print(f"[DEBUG] Stream data prepared for follow-up, returning request_id: {request_id}")
-                    return jsonify({
-                        'status': 'ready',
-                        'request_id': request_id,
-                        'raw_query': raw_query
+                    print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
+
+                    # Check if this is an AJAX request from the calculator modal
+                    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+                    # If AJAX request (from modal), return JSON
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'ready',
+                            'request_id': request_id,
+                            'raw_query': raw_query
+                        })
+
+                    # For regular form submissions, redirect with pending_stream
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": "",  # Will be populated by streaming
+                        "references": [],
+                        "num_papers": 0
                     })
+                    session['pending_stream'] = request_id
+                    session.modified = True
+                    print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+                    return redirect(url_for('chat'))
                 else:
                     print(f"[DEBUG] No results for initial query")
                     error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
