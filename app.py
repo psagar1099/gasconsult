@@ -5613,7 +5613,192 @@ CHAT_HTML = """
             }
         });
 
-        // Auto-start streaming handled by DOMContentLoaded event listener above (removed duplicate implementation)
+        // Auto-start streaming if there's a pending stream
+        {% if pending_stream %}
+        document.addEventListener('DOMContentLoaded', function() {
+            const requestId = '{{ pending_stream }}';
+
+            // Show loading indicator
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('active');
+            }
+
+            // Find the last assistant message
+            const messages = document.querySelectorAll('.message.assistant');
+            if (messages.length > 0) {
+                const lastMessage = messages[messages.length - 1];
+                const messageContent = lastMessage.querySelector('.message-content');
+
+                // Clear existing content and show loading
+                messageContent.innerHTML = '<div class="message-text"><p class="loading-indicator">🔍 Searching medical literature...</p></div>';
+
+                // Start streaming
+                const eventSource = new EventSource(`/stream?request_id=${requestId}`);
+                let responseContent = '';
+                let numPapers = 0;
+                let evidenceStrength = null;
+
+                eventSource.addEventListener('error', function(e) {
+                    console.error('Streaming error:', e);
+                    if (loadingIndicator) loadingIndicator.classList.remove('active');
+                    if (eventSource.readyState === EventSource.CLOSED) {
+                        messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">Connection error. Please refresh and try again.</p></div>';
+                    }
+                });
+
+                eventSource.addEventListener('message', function(e) {
+                    const event = JSON.parse(e.data);
+
+                    if (event.type === 'connected') {
+                        console.log('Streaming connected');
+                    } else if (event.type === 'content') {
+                        // On first content, set up the message structure
+                        if (responseContent === '') {
+                            messageContent.innerHTML = `
+                                <button class="copy-btn" onclick="smartCopy(this, ${messages.length - 1})" title="Smart copy with citations">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                    <span class="copy-text">Copy</span>
+                                </button>
+                                <div class="message-text"></div>`;
+                        }
+                        responseContent += event.data;
+                        messageContent.querySelector('.message-text').innerHTML = responseContent;
+
+                        // Scroll to bottom
+                        const chatMessages = document.getElementById('chatMessages');
+                        if (chatMessages) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
+                    } else if (event.type === 'references') {
+                        // Hide loading indicator
+                        if (loadingIndicator) loadingIndicator.classList.remove('active');
+
+                        // Add references
+                        const refs = event.data;
+                        numPapers = event.num_papers || 0;
+                        evidenceStrength = event.evidence_strength || {};
+
+                        // Add evidence badge if we have papers
+                        if (numPapers > 0) {
+                            const evidenceLevel = evidenceStrength.level || 'Moderate';
+                            const evidenceLevelClass = evidenceLevel.toLowerCase();
+                            let evidenceBadgeHtml = `
+                                <div class="evidence-badge ${evidenceLevelClass}" data-message-index="${messages.length - 1}">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span>${evidenceLevel} Evidence</span>
+                                </div>`;
+
+                            // Add evidence breakdown if available
+                            if (evidenceStrength.breakdown) {
+                                const bd = evidenceStrength.breakdown;
+                                evidenceBadgeHtml += '<div class="evidence-breakdown">';
+                                if (bd.meta_analyses > 0) evidenceBadgeHtml += `<span class="study-type-badge">${bd.meta_analyses} Meta-analyses</span>`;
+                                if (bd.rcts > 0) evidenceBadgeHtml += `<span class="study-type-badge">${bd.rcts} RCTs</span>`;
+                                if (bd.reviews > 0) evidenceBadgeHtml += `<span class="study-type-badge">${bd.reviews} Reviews</span>`;
+                                evidenceBadgeHtml += `<span class="study-type-badge">${bd.total} Total Papers</span>`;
+                                evidenceBadgeHtml += '</div>';
+                            }
+
+                            // Insert evidence badge before message text
+                            const copyBtn = messageContent.querySelector('.copy-btn');
+                            copyBtn.insertAdjacentHTML('afterend', evidenceBadgeHtml);
+                        }
+
+                        if (refs && refs.length > 0) {
+                            let refsHtml = '<div class="message-refs"><strong>References:</strong>';
+                            refs.forEach((ref, i) => {
+                                refsHtml += `<div class="ref-item">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
+                                        [${i+1}] ${ref.title} (${ref.year})
+                                    </a>
+                                </div>`;
+                            });
+                            refsHtml += '</div>';
+
+                            // Add premium action buttons
+                            refsHtml += `
+                                <div class="message-actions">
+                                    <button class="action-btn" onclick="toggleBookmark(this, ${messages.length - 1})" title="Bookmark this response">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+                                        </svg>
+                                        <span>Save</span>
+                                    </button>
+                                    <button class="action-btn" onclick="shareResponse(${messages.length - 1})" title="Share this response">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="18" cy="5" r="3"></circle>
+                                            <circle cx="6" cy="12" r="3"></circle>
+                                            <circle cx="18" cy="19" r="3"></circle>
+                                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                        </svg>
+                                        <span>Share</span>
+                                    </button>
+                                    <button class="action-btn" onclick="exportCitations(${messages.length - 1}, 'bibtex')" title="Export to BibTeX">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                                        </svg>
+                                        <span>Export .bib</span>
+                                    </button>
+                                    <button class="action-btn" onclick="exportCitations(${messages.length - 1}, 'ris')" title="Export to RIS (Zotero/Mendeley)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
+                                        </svg>
+                                        <span>Export .ris</span>
+                                    </button>
+                                </div>`;
+
+                            // Add follow-up section
+                            refsHtml += `
+                                <div class="followup-section" id="followup-${messages.length - 1}" style="display: none;">
+                                    <div class="followup-title">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                        </svg>
+                                        Ask next:
+                                    </div>
+                                    <div class="followup-questions" id="followup-questions-${messages.length - 1}">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>`;
+
+                            messageContent.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
+
+                            // Make reference links clickable
+                            messageContent.querySelectorAll('.ref-item a').forEach(link => {
+                                link.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    const url = this.href;
+                                    const pmid = url.match(/(\d+)\/?$/)?.[1];
+                                    if (pmid) {
+                                        openArticleModal(pmid);
+                                    }
+                                });
+                            });
+
+                            // Load follow-up suggestions
+                            loadFollowupSuggestions(messages.length - 1);
+                        }
+                    } else if (event.type === 'done') {
+                        if (loadingIndicator) loadingIndicator.classList.remove('active');
+                        eventSource.close();
+                        console.log('Streaming completed');
+                    } else if (event.type === 'error') {
+                        if (loadingIndicator) loadingIndicator.classList.remove('active');
+                        console.error('Stream error:', event.message);
+                        messageContent.innerHTML = `<div class="message-text"><p style="color: #EF4444;">${event.message}</p></div>`;
+                        eventSource.close();
+                    }
+                });
+            }
+        });
+        {% endif %}
 
         // ====== Premium Features JavaScript ======
 
