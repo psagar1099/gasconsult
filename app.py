@@ -5558,12 +5558,15 @@ CHAT_HTML = """
         });
 
         // Show loading indicator when form submits
-        document.querySelector('.chat-form').addEventListener('submit', function() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            if (loadingIndicator) {
-                loadingIndicator.classList.add('active');
-            }
-        });
+        const chatForm = document.querySelector('.chat-form');
+        if (chatForm) {
+            chatForm.addEventListener('submit', function() {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                if (loadingIndicator) {
+                    loadingIndicator.classList.add('active');
+                }
+            });
+        }
 
         // Auto-start streaming if there's a pending stream
         {% if pending_stream %}
