@@ -1590,7 +1590,7 @@ PREOP_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -3553,7 +3553,7 @@ HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 {% if messages %}
@@ -4455,7 +4455,7 @@ TERMS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -4890,7 +4890,7 @@ PRIVACY_POLICY_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -5913,7 +5913,7 @@ QUICK_DOSE_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -6597,6 +6597,7 @@ CALCULATORS_HTML = """
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
             animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-x: hidden;
         }
@@ -6912,6 +6913,8 @@ CALCULATORS_HTML = """
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: all 0.2s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         input:hover, select:hover {
@@ -7012,7 +7015,7 @@ CALCULATORS_HTML = """
 
         .send-to-ai-btn {
             padding: 12px 24px;
-            background: linear-gradient(135deg, var(--success-green) 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -7023,12 +7026,12 @@ CALCULATORS_HTML = """
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
         }
 
         .send-to-ai-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
         }
 
         .send-to-ai-btn:active {
@@ -7333,11 +7336,13 @@ CALCULATORS_HTML = """
     <nav>
         <div class="container">
             <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 44 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#6B7280"/>
-                            <stop offset="20%" stop-color="#2563EB"/>
+                            <stop offset="0%" stop-color="#2563EB"/>
+                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="40%" stop-color="#FBBF24"/>
+                            <stop offset="60%" stop-color="#8B5CF6"/>
                             <stop offset="80%" stop-color="#10B981"/>
                             <stop offset="100%" stop-color="#6B7280"/>
                         </linearGradient>
@@ -7356,7 +7361,7 @@ CALCULATORS_HTML = """
             <div class="nav-actions">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link active">Calculators</a>
+                <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
@@ -8053,19 +8058,19 @@ CALCULATORS_HTML = """
                 // Parse the HTML to extract the last AI message
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
-                const messageBoxes = doc.querySelectorAll('.message-box');
+                const assistantMessages = doc.querySelectorAll('.message.assistant');
 
-                if (messageBoxes.length > 0) {
-                    const lastMessage = messageBoxes[messageBoxes.length - 1];
-                    const responseText = lastMessage.querySelector('.response-text');
+                if (assistantMessages.length > 0) {
+                    const lastMessage = assistantMessages[assistantMessages.length - 1];
+                    const messageText = lastMessage.querySelector('.message-text');
 
-                    if (responseText) {
+                    if (messageText) {
                         // Remove loading message
                         const loadingMsg = document.getElementById('loadingMessage');
                         if (loadingMsg) loadingMsg.remove();
 
                         // Add AI response
-                        addMessageToChat(responseText.innerHTML, 'ai');
+                        addMessageToChat(messageText.innerHTML, 'ai');
                     } else {
                         throw new Error('Could not extract AI response');
                     }
@@ -8817,7 +8822,7 @@ HYPOTENSION_HTML = """
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link active">IOH Predictor</a>
             </div>
