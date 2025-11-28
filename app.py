@@ -7545,7 +7545,7 @@ CALCULATORS_HTML = """
         }
 
         nav .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -7574,17 +7574,25 @@ CALCULATORS_HTML = """
         }
 
         .logo-wordmark {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
             font-size: 20px;
             font-weight: 600;
-            line-height: 1;
             letter-spacing: -0.5px;
             white-space: nowrap;
         }
 
-        .logo-gas { color: #2563EB; }
-        .logo-consult { color: #111111; }
-        .logo-ai { color: #6B7280; font-weight: 400; }
+        .logo-gas {
+            color: #2563EB;
+        }
+
+        .logo-consult {
+            color: #111111;
+        }
+
+        .logo-ai {
+            font-weight: 400;
+            color: #6B7280;
+        }
 
         .nav-actions {
             display: flex;
@@ -7617,7 +7625,7 @@ CALCULATORS_HTML = """
 
         /* Main Layout */
         .main-container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 48px 24px;
             display: flex;
@@ -7640,25 +7648,32 @@ CALCULATORS_HTML = """
 
         /* Sidebar */
         .sidebar {
-            width: 280px;
+            width: 290px;
             flex-shrink: 0;
             position: sticky;
             top: 100px;
             height: fit-content;
             animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.3));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 28px 20px;
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
         }
 
         .sidebar-header {
             font-family: 'Sora', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, #8B5CF6 100%);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #6366f1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             padding: 0 4px;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.3px;
         }
 
         .calculator-list {
@@ -7677,38 +7692,72 @@ CALCULATORS_HTML = """
         .calculator-item:nth-child(5) { animation-delay: 0.5s; }
         .calculator-item:nth-child(6) { animation-delay: 0.55s; }
         .calculator-item:nth-child(7) { animation-delay: 0.6s; }
+        .calculator-item:nth-child(8) { animation-delay: 0.65s; }
+        .calculator-item:nth-child(9) { animation-delay: 0.7s; }
+        .calculator-item:nth-child(10) { animation-delay: 0.75s; }
+        .calculator-item:nth-child(11) { animation-delay: 0.8s; }
+        .calculator-item:nth-child(12) { animation-delay: 0.85s; }
+        .calculator-item:nth-child(13) { animation-delay: 0.9s; }
+        .calculator-item:nth-child(14) { animation-delay: 0.95s; }
+        .calculator-item:nth-child(15) { animation-delay: 1s; }
+        .calculator-item:nth-child(16) { animation-delay: 1.05s; }
+        .calculator-item:nth-child(17) { animation-delay: 1.1s; }
 
         .calculator-btn {
             width: 100%;
             text-align: left;
-            padding: 14px 18px;
-            background: white;
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            padding: 16px 20px;
+            background: linear-gradient(to bottom, #ffffff, #fafbfc);
+            border: 1.5px solid var(--border);
+            border-radius: 14px;
             color: var(--text-secondary);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--primary-blue);
+            transform: scaleY(0);
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .calculator-btn:hover {
-            background: var(--primary-blue-light);
+            background: linear-gradient(to bottom, #ffffff, var(--primary-blue-light));
             border-color: var(--primary-blue);
-            color: var(--primary-blue-dark);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            color: var(--text-primary);
+            transform: translateX(2px);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.12);
+        }
+
+        .calculator-btn:hover::before {
+            transform: scaleY(1);
         }
 
         .calculator-btn.active {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
-            border-color: var(--primary-blue-dark);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1e40af 100%);
+            border-color: transparent;
             color: white;
             font-weight: 600;
-            transform: translateX(4px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+            transform: translateX(2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .calculator-btn.active::before {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: scaleY(1);
         }
 
         /* Main Content Area */
@@ -7880,28 +7929,47 @@ CALCULATORS_HTML = """
         }
 
         .send-to-ai-btn {
-            padding: 12px 24px;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+            padding: 13px 28px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #1e40af 100%);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.01em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .send-to-ai-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .send-to-ai-btn:hover::before {
+            left: 100%;
         }
 
         .send-to-ai-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         }
 
         .send-to-ai-btn:active {
             transform: translateY(0);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
         }
 
         .calculator-section {
@@ -8261,6 +8329,36 @@ CALCULATORS_HTML = """
                 <li class="calculator-item">
                     <button class="calculator-btn" data-calc="asa">ASA Physical Status</button>
                 </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="fluid-deficit">Fluid Deficit & Replacement</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="defib">Defibrillation Energy</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="sas">Surgical Apgar Score</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="opioid">Opioid Conversion</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="last">Local Anesthetic Toxicity Dose</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="rcri">RCRI (Cardiac Risk)</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="stopbang">STOP-BANG OSA Risk</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="airway">Airway Assessment</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="mac">MAC Calculator</button>
+                </li>
+                <li class="calculator-item">
+                    <button class="calculator-btn" data-calc="propofol-tci">Propofol TCI</button>
+                </li>
             </ul>
         </div>
 
@@ -8294,7 +8392,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="ibw-value">-</div>
                         <div class="result-interpretation" id="ibw-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('ibw')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8343,7 +8441,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="mabl-value">-</div>
                         <div class="result-interpretation" id="mabl-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('mabl')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8373,7 +8471,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="bsa-value">-</div>
                         <div class="result-interpretation" id="bsa-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('bsa')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8403,7 +8501,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="qtc-value">-</div>
                         <div class="result-interpretation" id="qtc-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('qtc')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8429,7 +8527,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="fluids-value">-</div>
                         <div class="result-interpretation" id="fluids-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('fluids')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8473,7 +8571,7 @@ CALCULATORS_HTML = """
                         <div class="result-value" id="ponv-value">-</div>
                         <div class="result-interpretation" id="ponv-interpretation"></div>
                         <button class="send-to-ai-btn" onclick="sendToAI('ponv')">
-                            <span>💬</span> Send to AI
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8497,7 +8595,504 @@ CALCULATORS_HTML = """
 
                     <div id="asa-result" class="result-box visible" style="margin-top: 32px;">
                         <button class="send-to-ai-btn" onclick="sendToAI('asa')">
-                            <span>💬</span> Ask AI about ASA Classification
+                            Ask AI about ASA Classification
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fluid Deficit Calculator -->
+            <div id="calc-fluid-deficit" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Fluid Deficit & Replacement</h1>
+                    <p class="calculator-description">Calculate fluid deficit based on dehydration percentage and replacement strategy.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fd-weight">Weight (kg)</label>
+                            <input type="number" id="fd-weight" placeholder="70" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="fd-dehydration">Dehydration (%)</label>
+                            <select id="fd-dehydration">
+                                <option value="">Select...</option>
+                                <option value="3">Mild (3%)</option>
+                                <option value="5">Moderate (5%)</option>
+                                <option value="7">Severe (7%)</option>
+                                <option value="10">Critical (10%)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateFluidDeficit()">Calculate</button>
+
+                    <div id="fd-result" class="result-box">
+                        <div class="result-label">Fluid Deficit</div>
+                        <div class="result-value" id="fd-value">-</div>
+                        <div class="result-interpretation" id="fd-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('fluid-deficit')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Defibrillation Energy Calculator -->
+            <div id="calc-defib" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Defibrillation / Cardioversion Energy</h1>
+                    <p class="calculator-description">Calculate appropriate defibrillation or cardioversion energy for adults and pediatrics.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="defib-type">Procedure Type</label>
+                            <select id="defib-type">
+                                <option value="">Select...</option>
+                                <option value="defib">Defibrillation (VF/pulseless VT)</option>
+                                <option value="cardioversion">Synchronized Cardioversion</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="defib-age">Patient Age</label>
+                            <select id="defib-age">
+                                <option value="">Select...</option>
+                                <option value="adult">Adult</option>
+                                <option value="peds">Pediatric</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="defib-weight-row" style="display: none;">
+                        <div class="form-group">
+                            <label for="defib-weight">Weight (kg)</label>
+                            <input type="number" id="defib-weight" placeholder="20" step="0.1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateDefib()">Calculate</button>
+
+                    <div id="defib-result" class="result-box">
+                        <div class="result-label">Energy Recommendation</div>
+                        <div class="result-value" id="defib-value">-</div>
+                        <div class="result-interpretation" id="defib-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('defib')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Surgical Apgar Score Calculator -->
+            <div id="calc-sas" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Surgical Apgar Score (SAS)</h1>
+                    <p class="calculator-description">10-point score for predicting post-operative morbidity and mortality.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sas-ebl">Estimated Blood Loss (mL)</label>
+                            <input type="number" id="sas-ebl" placeholder="400" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="sas-hr">Lowest Heart Rate (bpm)</label>
+                            <input type="number" id="sas-hr" placeholder="75" step="1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="sas-map">Lowest MAP (mmHg)</label>
+                            <input type="number" id="sas-map" placeholder="70" step="1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateSAS()">Calculate</button>
+
+                    <div id="sas-result" class="result-box">
+                        <div class="result-label">Surgical Apgar Score</div>
+                        <div class="result-value" id="sas-value">-</div>
+                        <div class="result-interpretation" id="sas-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('sas')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opioid Conversion Calculator -->
+            <div id="calc-opioid" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Opioid Conversion Calculator</h1>
+                    <p class="calculator-description">Convert between opioid medications using morphine milligram equivalents (MME).</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="opioid-from">From Medication</label>
+                            <select id="opioid-from">
+                                <option value="">Select...</option>
+                                <option value="morphine-iv">Morphine IV</option>
+                                <option value="morphine-po">Morphine PO</option>
+                                <option value="fentanyl-iv">Fentanyl IV</option>
+                                <option value="hydromorphone-iv">Hydromorphone IV</option>
+                                <option value="hydromorphone-po">Hydromorphone PO</option>
+                                <option value="oxycodone-po">Oxycodone PO</option>
+                                <option value="hydrocodone-po">Hydrocodone PO</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="opioid-dose">Dose (mg or mcg for fentanyl)</label>
+                            <input type="number" id="opioid-dose" placeholder="10" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="opioid-to">To Medication</label>
+                            <select id="opioid-to">
+                                <option value="">Select...</option>
+                                <option value="morphine-iv">Morphine IV</option>
+                                <option value="morphine-po">Morphine PO</option>
+                                <option value="fentanyl-iv">Fentanyl IV</option>
+                                <option value="hydromorphone-iv">Hydromorphone IV</option>
+                                <option value="hydromorphone-po">Hydromorphone PO</option>
+                                <option value="oxycodone-po">Oxycodone PO</option>
+                                <option value="hydrocodone-po">Hydrocodone PO</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateOpioid()">Calculate</button>
+
+                    <div id="opioid-result" class="result-box">
+                        <div class="result-label">Converted Dose</div>
+                        <div class="result-value" id="opioid-value">-</div>
+                        <div class="result-interpretation" id="opioid-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('opioid')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Local Anesthetic Toxicity Dose Calculator -->
+            <div id="calc-last" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Local Anesthetic Toxicity Dose</h1>
+                    <p class="calculator-description">Calculate maximum safe dose for local anesthetics to prevent LAST.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="last-weight">Weight (kg)</label>
+                            <input type="number" id="last-weight" placeholder="70" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-agent">Local Anesthetic</label>
+                            <select id="last-agent">
+                                <option value="">Select...</option>
+                                <option value="lidocaine">Lidocaine (without epi)</option>
+                                <option value="lidocaine-epi">Lidocaine (with epi)</option>
+                                <option value="bupivacaine">Bupivacaine</option>
+                                <option value="ropivacaine">Ropivacaine</option>
+                                <option value="chloroprocaine">Chloroprocaine</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="last-concentration">Concentration (%)</label>
+                            <input type="number" id="last-concentration" placeholder="0.5" step="0.1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateLAST()">Calculate</button>
+
+                    <div id="last-result" class="result-box">
+                        <div class="result-label">Maximum Safe Dose</div>
+                        <div class="result-value" id="last-value">-</div>
+                        <div class="result-interpretation" id="last-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('last')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RCRI Calculator -->
+            <div id="calc-rcri" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Revised Cardiac Risk Index (RCRI)</h1>
+                    <p class="calculator-description">Estimate risk of major cardiac complications after noncardiac surgery.</p>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-highrisk" style="width: auto; display: inline-block; margin-right: 8px;">
+                            High-risk surgery (intraperitoneal, intrathoracic, or suprainguinal vascular)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-ihd" style="width: auto; display: inline-block; margin-right: 8px;">
+                            History of ischemic heart disease
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-chf" style="width: auto; display: inline-block; margin-right: 8px;">
+                            History of congestive heart failure
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-cvd" style="width: auto; display: inline-block; margin-right: 8px;">
+                            History of cerebrovascular disease
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-dm" style="width: auto; display: inline-block; margin-right: 8px;">
+                            Diabetes mellitus on insulin therapy
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="rcri-renal" style="width: auto; display: inline-block; margin-right: 8px;">
+                            Preoperative creatinine >2 mg/dL
+                        </label>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateRCRI()">Calculate</button>
+
+                    <div id="rcri-result" class="result-box">
+                        <div class="result-label">RCRI Score</div>
+                        <div class="result-value" id="rcri-value">-</div>
+                        <div class="result-interpretation" id="rcri-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('rcri')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP-BANG Calculator -->
+            <div id="calc-stopbang" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">STOP-BANG OSA Risk</h1>
+                    <p class="calculator-description">Screen for obstructive sleep apnea using the STOP-BANG questionnaire.</p>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-snore" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>S</strong>noring: Do you snore loudly?
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-tired" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>T</strong>ired: Do you often feel tired during the day?
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-observed" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>O</strong>bserved: Has anyone observed you stop breathing during sleep?
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-pressure" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>P</strong>ressure: Do you have or are you being treated for high blood pressure?
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-bmi" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>B</strong>MI >35 kg/m²
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-age" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>A</strong>ge >50 years
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-neck" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>N</strong>eck circumference >40 cm
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="sb-gender" style="width: auto; display: inline-block; margin-right: 8px;">
+                            <strong>G</strong>ender: Male
+                        </label>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateStopBang()">Calculate</button>
+
+                    <div id="stopbang-result" class="result-box">
+                        <div class="result-label">STOP-BANG Score</div>
+                        <div class="result-value" id="stopbang-value">-</div>
+                        <div class="result-interpretation" id="stopbang-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('stopbang')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Airway Assessment Calculator -->
+            <div id="calc-airway" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Airway Assessment Helper</h1>
+                    <p class="calculator-description">Predict difficult airway based on Mallampati, thyromental distance, and neck ROM.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="airway-mallampati">Mallampati Class</label>
+                            <select id="airway-mallampati">
+                                <option value="">Select...</option>
+                                <option value="1">Class I (full visibility)</option>
+                                <option value="2">Class II (uvula visible)</option>
+                                <option value="3">Class III (soft palate only)</option>
+                                <option value="4">Class IV (hard palate only)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="airway-tmd">Thyromental Distance</label>
+                            <select id="airway-tmd">
+                                <option value="">Select...</option>
+                                <option value="good">>6 cm (Normal)</option>
+                                <option value="borderline">4-6 cm (Borderline)</option>
+                                <option value="poor"><4 cm (Difficult)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="airway-neck">Neck ROM</label>
+                            <select id="airway-neck">
+                                <option value="">Select...</option>
+                                <option value="good">Normal (>35°)</option>
+                                <option value="reduced">Reduced (<35°)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="airway-mouth">Mouth Opening</label>
+                            <select id="airway-mouth">
+                                <option value="">Select...</option>
+                                <option value="good">>4 cm</option>
+                                <option value="poor"><4 cm</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateAirway()">Calculate</button>
+
+                    <div id="airway-result" class="result-box">
+                        <div class="result-label">Predicted Difficulty</div>
+                        <div class="result-value" id="airway-value">-</div>
+                        <div class="result-interpretation" id="airway-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('airway')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MAC Calculator -->
+            <div id="calc-mac" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">MAC Calculator (Age-Adjusted)</h1>
+                    <p class="calculator-description">Calculate age-adjusted MAC-awake and MAC for common volatile anesthetics.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mac-agent">Volatile Agent</label>
+                            <select id="mac-agent">
+                                <option value="">Select...</option>
+                                <option value="sevoflurane">Sevoflurane</option>
+                                <option value="desflurane">Desflurane</option>
+                                <option value="isoflurane">Isoflurane</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="mac-age">Age (years)</label>
+                            <input type="number" id="mac-age" placeholder="40" step="1">
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculateMAC()">Calculate</button>
+
+                    <div id="mac-result" class="result-box">
+                        <div class="result-label">Age-Adjusted MAC</div>
+                        <div class="result-value" id="mac-value">-</div>
+                        <div class="result-interpretation" id="mac-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('mac')">
+                            Send to AI
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Propofol TCI Calculator -->
+            <div id="calc-propofol-tci" class="calculator-section">
+                <div class="calculator-card">
+                    <h1 class="calculator-title">Propofol TCI / Infusion Rate</h1>
+                    <p class="calculator-description">Calculate target-controlled infusion rates using Marsh, Schnider, or Kataria models.</p>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tci-model">TCI Model</label>
+                            <select id="tci-model">
+                                <option value="">Select...</option>
+                                <option value="marsh">Marsh (weight-based)</option>
+                                <option value="schnider">Schnider (effect-site)</option>
+                                <option value="kataria">Kataria (pediatric)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tci-target">Target Concentration (mcg/mL)</label>
+                            <input type="number" id="tci-target" placeholder="3.5" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="tci-weight">Weight (kg)</label>
+                            <input type="number" id="tci-weight" placeholder="70" step="0.1">
+                        </div>
+                        <div class="form-group" id="tci-age-group">
+                            <label for="tci-age">Age (years)</label>
+                            <input type="number" id="tci-age" placeholder="40" step="1">
+                        </div>
+                    </div>
+
+                    <div class="form-row" id="tci-schnider-params" style="display: none;">
+                        <div class="form-group">
+                            <label for="tci-height">Height (cm)</label>
+                            <input type="number" id="tci-height" placeholder="170" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="tci-sex">Sex</label>
+                            <select id="tci-sex">
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="calculate-btn" onclick="calculatePropofolTCI()">Calculate</button>
+
+                    <div id="tci-result" class="result-box">
+                        <div class="result-label">Infusion Rate</div>
+                        <div class="result-value" id="tci-value">-</div>
+                        <div class="result-interpretation" id="tci-interpretation"></div>
+                        <button class="send-to-ai-btn" onclick="sendToAI('propofol-tci')">
+                            Send to AI
                         </button>
                     </div>
                 </div>
@@ -8521,6 +9116,7 @@ CALCULATORS_HTML = """
             </div>
             <div class="ai-chat-input-area">
                 <div class="ai-input-container">
+                    <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
                     <textarea class="ai-chat-input" id="aiChatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
                     <button class="send-ai-message-btn" onclick="sendAIMessage()">Send</button>
                 </div>
@@ -8780,6 +9376,539 @@ CALCULATORS_HTML = """
             document.getElementById('ponv-result').classList.add('visible');
         }
 
+        // Fluid Deficit Calculator
+        function calculateFluidDeficit() {
+            const weight = parseFloat(document.getElementById('fd-weight').value);
+            const dehydration = parseFloat(document.getElementById('fd-dehydration').value);
+
+            if (!weight || !dehydration) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const deficit = weight * (dehydration / 100) * 1000; // mL
+            const first8hr = deficit / 2;
+            const next16hr = deficit / 2;
+            const hourlyFirst8 = first8hr / 8;
+            const hourlyNext16 = next16hr / 16;
+
+            calculationResults['fluid-deficit'] = {
+                value: Math.round(deficit),
+                weight: weight,
+                dehydration: dehydration,
+                first8hr: Math.round(first8hr),
+                next16hr: Math.round(next16hr)
+            };
+
+            document.getElementById('fd-value').textContent = `${Math.round(deficit)} mL`;
+            document.getElementById('fd-interpretation').innerHTML = `<strong>Replacement Strategy:</strong><br>` +
+                `• First 8 hours: ${Math.round(first8hr)} mL (${Math.round(hourlyFirst8)} mL/hr)<br>` +
+                `• Next 16 hours: ${Math.round(next16hr)} mL (${Math.round(hourlyNext16)} mL/hr)<br>` +
+                `• Total fluid deficit: ${Math.round(deficit)} mL over 24 hours<br>` +
+                `• Replace with isotonic crystalloid (LR or NS) + ongoing maintenance fluids`;
+            document.getElementById('fd-result').classList.add('visible');
+        }
+
+        // Defibrillation Calculator
+        document.getElementById('defib-age').addEventListener('change', function() {
+            if (this.value === 'peds') {
+                document.getElementById('defib-weight-row').style.display = 'block';
+            } else {
+                document.getElementById('defib-weight-row').style.display = 'none';
+            }
+        });
+
+        function calculateDefib() {
+            const type = document.getElementById('defib-type').value;
+            const age = document.getElementById('defib-age').value;
+            const weight = parseFloat(document.getElementById('defib-weight').value);
+
+            if (!type || !age) {
+                alert('Please select procedure type and patient age');
+                return;
+            }
+
+            if (age === 'peds' && !weight) {
+                alert('Please enter weight for pediatric patient');
+                return;
+            }
+
+            let energy, interpretation;
+
+            if (type === 'defib') {
+                if (age === 'adult') {
+                    energy = '200 J (biphasic), 360 J (monophasic)';
+                    interpretation = '<strong>Defibrillation Energy (Adult):</strong><br>' +
+                        '• Initial: 200 J (biphasic) or 360 J (monophasic)<br>' +
+                        '• Subsequent: Same or higher (maximum 200 J biphasic, 360 J monophasic)<br>' +
+                        '• Unsynchronized shock for VF/pulseless VT';
+                } else {
+                    const dose = 2 * weight; // 2 J/kg initial
+                    const doseMax = 4 * weight; // 4 J/kg subsequent
+                    energy = `${dose} J (initial, 2 J/kg)`;
+                    interpretation = `<strong>Defibrillation Energy (Pediatric):</strong><br>` +
+                        `• Initial: ${dose} J (2 J/kg)<br>` +
+                        `• Subsequent: ${Math.min(doseMax, 200)} J (4 J/kg, max 200 J)<br>` +
+                        `• Unsynchronized shock for VF/pulseless VT`;
+                }
+            } else { // cardioversion
+                if (age === 'adult') {
+                    energy = '50-100 J (initial), 200 J (subsequent)';
+                    interpretation = '<strong>Synchronized Cardioversion (Adult):</strong><br>' +
+                        '• A-fib/A-flutter: 120-200 J (biphasic)<br>' +
+                        '• SVT/V-tach (with pulse): 50-100 J initially<br>' +
+                        '• Synchronized to R wave (avoid T wave)';
+                } else {
+                    const dose = 0.5 * weight; // 0.5 J/kg initial
+                    const doseMax = 1 * weight; // 1 J/kg subsequent
+                    energy = `${dose} J (initial, 0.5 J/kg)`;
+                    interpretation = `<strong>Synchronized Cardioversion (Pediatric):</strong><br>` +
+                        `• Initial: ${dose} J (0.5 J/kg)<br>` +
+                        `• Subsequent: ${Math.min(doseMax, 100)} J (1 J/kg, max 100 J)<br>` +
+                        `• Synchronized to R wave`;
+                }
+            }
+
+            calculationResults.defib = {
+                value: energy,
+                type: type,
+                age: age,
+                weight: weight
+            };
+
+            document.getElementById('defib-value').textContent = energy;
+            document.getElementById('defib-interpretation').innerHTML = interpretation;
+            document.getElementById('defib-result').classList.add('visible');
+        }
+
+        // Surgical Apgar Score Calculator
+        function calculateSAS() {
+            const ebl = parseFloat(document.getElementById('sas-ebl').value);
+            const hr = parseFloat(document.getElementById('sas-hr').value);
+            const map = parseFloat(document.getElementById('sas-map').value);
+
+            if (!ebl && ebl !== 0 || !hr || !map) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            let eblPoints, hrPoints, mapPoints;
+
+            // EBL points
+            if (ebl <= 100) eblPoints = 4;
+            else if (ebl <= 600) eblPoints = 3;
+            else if (ebl <= 1000) eblPoints = 2;
+            else if (ebl <= 1500) eblPoints = 1;
+            else eblPoints = 0;
+
+            // HR points
+            if (hr >= 85) hrPoints = 3;
+            else if (hr >= 76) hrPoints = 2;
+            else if (hr >= 66) hrPoints = 1;
+            else if (hr >= 56) hrPoints = 0;
+            else hrPoints = 0;
+
+            // MAP points
+            if (map >= 85) mapPoints = 3;
+            else if (map >= 76) mapPoints = 2;
+            else if (map >= 66) mapPoints = 1;
+            else if (map >= 50) mapPoints = 0;
+            else mapPoints = 0;
+
+            const total = eblPoints + hrPoints + mapPoints;
+
+            let risk, riskText;
+            if (total >= 9) {
+                risk = 'Low Risk';
+                riskText = 'Risk of major complication: 3-5% | Mortality: <1%';
+            } else if (total >= 7) {
+                risk = 'Intermediate Risk';
+                riskText = 'Risk of major complication: 10-15% | Mortality: 1-4%';
+            } else if (total >= 5) {
+                risk = 'High Risk';
+                riskText = 'Risk of major complication: 20-30% | Mortality: 5-10%';
+            } else {
+                risk = 'Very High Risk';
+                riskText = 'Risk of major complication: >40% | Mortality: >15%';
+            }
+
+            calculationResults.sas = {
+                value: total,
+                ebl: ebl,
+                hr: hr,
+                map: map,
+                risk: risk
+            };
+
+            document.getElementById('sas-value').textContent = `${total}/10 - ${risk}`;
+            document.getElementById('sas-interpretation').innerHTML = `<strong>Score Breakdown:</strong><br>` +
+                `• EBL: ${eblPoints} points (${ebl} mL)<br>` +
+                `• Lowest HR: ${hrPoints} points (${hr} bpm)<br>` +
+                `• Lowest MAP: ${mapPoints} points (${map} mmHg)<br><br>` +
+                `<strong>Risk Assessment:</strong><br>${riskText}<br><br>` +
+                `Consider closer post-op monitoring for scores <7.`;
+            document.getElementById('sas-result').classList.add('visible');
+        }
+
+        // Opioid Conversion Calculator
+        function calculateOpioid() {
+            const from = document.getElementById('opioid-from').value;
+            const dose = parseFloat(document.getElementById('opioid-dose').value);
+            const to = document.getElementById('opioid-to').value;
+
+            if (!from || !dose || !to) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Morphine equivalents (relative to morphine IV = 1)
+            const equivalents = {
+                'morphine-iv': 1,
+                'morphine-po': 3,
+                'fentanyl-iv': 0.01,
+                'hydromorphone-iv': 0.2,
+                'hydromorphone-po': 0.8,
+                'oxycodone-po': 2,
+                'hydrocodone-po': 2.5
+            };
+
+            const morphineEquivalent = dose * equivalents[from];
+            const convertedDose = morphineEquivalent / equivalents[to];
+            const reducedDose = convertedDose * 0.75; // 25% reduction for cross-tolerance
+
+            calculationResults.opioid = {
+                value: Math.round(reducedDose * 10) / 10,
+                from: from,
+                dose: dose,
+                to: to,
+                fullDose: Math.round(convertedDose * 10) / 10
+            };
+
+            const fromName = from.replace('-iv', ' IV').replace('-po', ' PO').replace(/^./, m => m.toUpperCase());
+            const toName = to.replace('-iv', ' IV').replace('-po', ' PO').replace(/^./, m => m.toUpperCase());
+
+            document.getElementById('opioid-value').textContent = `${Math.round(reducedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'}`;
+            document.getElementById('opioid-interpretation').innerHTML = `<strong>Conversion:</strong><br>` +
+                `• From: ${dose} ${from.includes('fentanyl') ? 'mcg' : 'mg'} ${fromName}<br>` +
+                `• Equianalgesic dose: ${Math.round(convertedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'} ${toName}<br>` +
+                `• <strong>Recommended starting dose: ${Math.round(reducedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'}</strong> (25% reduction for incomplete cross-tolerance)<br><br>` +
+                `<em>Warning: This is a general guide. Individual patient factors, tolerance, and clinical context must be considered. Titrate to effect.</em>`;
+            document.getElementById('opioid-result').classList.add('visible');
+        }
+
+        // Local Anesthetic Toxicity Dose Calculator
+        function calculateLAST() {
+            const weight = parseFloat(document.getElementById('last-weight').value);
+            const agent = document.getElementById('last-agent').value;
+            const concentration = parseFloat(document.getElementById('last-concentration').value);
+
+            if (!weight || !agent || !concentration) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Max doses in mg/kg
+            const maxDoses = {
+                'lidocaine': 4.5,
+                'lidocaine-epi': 7,
+                'bupivacaine': 2.5,
+                'ropivacaine': 3,
+                'chloroprocaine': 11
+            };
+
+            const maxMg = maxDoses[agent] * weight;
+            const maxVolume = maxMg / (concentration * 10); // concentration % to mg/mL
+
+            const agentName = agent.replace('-epi', ' with epinephrine').replace(/^./, m => m.toUpperCase());
+
+            calculationResults.last = {
+                value: Math.round(maxMg),
+                weight: weight,
+                agent: agentName,
+                concentration: concentration,
+                maxVolume: Math.round(maxVolume * 10) / 10
+            };
+
+            document.getElementById('last-value').textContent = `${Math.round(maxMg)} mg (${Math.round(maxVolume * 10) / 10} mL)`;
+            document.getElementById('last-interpretation').innerHTML = `<strong>Maximum Safe Dose:</strong><br>` +
+                `• Agent: ${agentName}<br>` +
+                `• Patient weight: ${weight} kg<br>` +
+                `• Concentration: ${concentration}%<br>` +
+                `• Max dose: ${maxDoses[agent]} mg/kg = ${Math.round(maxMg)} mg<br>` +
+                `• Max volume at ${concentration}%: ${Math.round(maxVolume * 10) / 10} mL<br><br>` +
+                `<strong>LAST Prevention:</strong> Use lowest effective dose, aspirate before injection, fractionate doses, use ultrasound guidance.<br>` +
+                `<strong>LAST Treatment:</strong> Stop injection, airway management, IV lipid emulsion 20% (1.5 mL/kg bolus), ACLS, avoid propofol.`;
+            document.getElementById('last-result').classList.add('visible');
+        }
+
+        // RCRI Calculator
+        function calculateRCRI() {
+            const highrisk = document.getElementById('rcri-highrisk').checked;
+            const ihd = document.getElementById('rcri-ihd').checked;
+            const chf = document.getElementById('rcri-chf').checked;
+            const cvd = document.getElementById('rcri-cvd').checked;
+            const dm = document.getElementById('rcri-dm').checked;
+            const renal = document.getElementById('rcri-renal').checked;
+
+            const score = (highrisk ? 1 : 0) + (ihd ? 1 : 0) + (chf ? 1 : 0) + (cvd ? 1 : 0) + (dm ? 1 : 0) + (renal ? 1 : 0);
+
+            let risk, percentage;
+            if (score === 0) {
+                risk = 'Low';
+                percentage = '0.4%';
+            } else if (score === 1) {
+                risk = 'Low-Moderate';
+                percentage = '0.9%';
+            } else if (score === 2) {
+                risk = 'Moderate';
+                percentage = '6.6%';
+            } else {
+                risk = 'High';
+                percentage = '>11%';
+            }
+
+            calculationResults.rcri = {
+                value: score,
+                risk: risk,
+                percentage: percentage
+            };
+
+            document.getElementById('rcri-value').textContent = `${score}/6 - ${risk} Risk`;
+            document.getElementById('rcri-interpretation').innerHTML = `<strong>Risk of Major Cardiac Event:</strong><br>` +
+                `• Score: ${score} points<br>` +
+                `• Risk category: ${risk}<br>` +
+                `• Predicted risk: ${percentage}<br><br>` +
+                `<strong>Recommendations:</strong><br>` +
+                (score >= 2 ? '• Consider preoperative cardiology consultation<br>• Consider β-blocker therapy<br>• Optimize medical management' :
+                 score === 1 ? '• Perioperative medical optimization<br>• Continue home cardiac medications' :
+                 '• Routine perioperative care');
+            document.getElementById('rcri-result').classList.add('visible');
+        }
+
+        // STOP-BANG Calculator
+        function calculateStopBang() {
+            const snore = document.getElementById('sb-snore').checked;
+            const tired = document.getElementById('sb-tired').checked;
+            const observed = document.getElementById('sb-observed').checked;
+            const pressure = document.getElementById('sb-pressure').checked;
+            const bmi = document.getElementById('sb-bmi').checked;
+            const age = document.getElementById('sb-age').checked;
+            const neck = document.getElementById('sb-neck').checked;
+            const gender = document.getElementById('sb-gender').checked;
+
+            const score = (snore ? 1 : 0) + (tired ? 1 : 0) + (observed ? 1 : 0) + (pressure ? 1 : 0) +
+                          (bmi ? 1 : 0) + (age ? 1 : 0) + (neck ? 1 : 0) + (gender ? 1 : 0);
+
+            let risk, osaSeverity;
+            if (score <= 2) {
+                risk = 'Low';
+                osaSeverity = 'Low probability of moderate-severe OSA';
+            } else if (score <= 4) {
+                risk = 'Intermediate';
+                osaSeverity = 'Intermediate probability of moderate-severe OSA';
+            } else {
+                risk = 'High';
+                osaSeverity = 'High probability of moderate-severe OSA';
+            }
+
+            calculationResults.stopbang = {
+                value: score,
+                risk: risk
+            };
+
+            document.getElementById('stopbang-value').textContent = `${score}/8 - ${risk} Risk`;
+            document.getElementById('stopbang-interpretation').innerHTML = `<strong>OSA Screening Result:</strong><br>` +
+                `• Score: ${score} points<br>` +
+                `• Risk category: ${risk}<br>` +
+                `• ${osaSeverity}<br><br>` +
+                `<strong>Perioperative Considerations:</strong><br>` +
+                (score >= 5 ? '• High risk - consider sleep study<br>• Avoid opioids/sedatives when possible<br>• Post-op monitoring with continuous pulse oximetry<br>• Consider regional anesthesia' :
+                 score >= 3 ? '• Moderate risk - consider precautions<br>• Minimize sedatives/opioids<br>• Extended PACU monitoring' :
+                 '• Standard perioperative care');
+            document.getElementById('stopbang-result').classList.add('visible');
+        }
+
+        // Airway Assessment Calculator
+        function calculateAirway() {
+            const mallampati = parseInt(document.getElementById('airway-mallampati').value);
+            const tmd = document.getElementById('airway-tmd').value;
+            const neck = document.getElementById('airway-neck').value;
+            const mouth = document.getElementById('airway-mouth').value;
+
+            if (!mallampati || !tmd || !neck || !mouth) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            let difficultyScore = 0;
+
+            // Mallampati contribution
+            if (mallampati >= 3) difficultyScore += 2;
+            else if (mallampati === 2) difficultyScore += 1;
+
+            // TMD contribution
+            if (tmd === 'poor') difficultyScore += 2;
+            else if (tmd === 'borderline') difficultyScore += 1;
+
+            // Neck ROM contribution
+            if (neck === 'reduced') difficultyScore += 1;
+
+            // Mouth opening contribution
+            if (mouth === 'poor') difficultyScore += 2;
+
+            let difficulty, recommendations;
+            if (difficultyScore === 0) {
+                difficulty = 'Easy Airway (Predicted)';
+                recommendations = 'Standard intubation equipment and approach expected to be successful.';
+            } else if (difficultyScore <= 2) {
+                difficulty = 'Potentially Difficult';
+                recommendations = 'Have backup equipment available (bougie, video laryngoscope). Consider awake look with sedation.';
+            } else if (difficultyScore <= 4) {
+                difficulty = 'Likely Difficult';
+                recommendations = 'Primary plan: Video laryngoscope. Backup: LMA, bougie. Prepare difficult airway cart. Consider awake fiberoptic intubation.';
+            } else {
+                difficulty = 'Very Difficult Airway';
+                recommendations = 'Strong consideration for awake fiberoptic intubation. Difficult airway cart at bedside. Consider ENT backup. Inform patient of risks.';
+            }
+
+            calculationResults.airway = {
+                value: difficultyScore,
+                difficulty: difficulty,
+                mallampati: mallampati,
+                tmd: tmd,
+                neck: neck,
+                mouth: mouth
+            };
+
+            document.getElementById('airway-value').textContent = difficulty;
+            document.getElementById('airway-interpretation').innerHTML = `<strong>Assessment Details:</strong><br>` +
+                `• Mallampati: Class ${mallampati}<br>` +
+                `• Thyromental distance: ${tmd}<br>` +
+                `• Neck ROM: ${neck}<br>` +
+                `• Mouth opening: ${mouth}<br>` +
+                `• Difficulty score: ${difficultyScore}/7<br><br>` +
+                `<strong>Recommendations:</strong><br>${recommendations}`;
+            document.getElementById('airway-result').classList.add('visible');
+        }
+
+        // MAC Calculator
+        function calculateMAC() {
+            const agent = document.getElementById('mac-agent').value;
+            const age = parseFloat(document.getElementById('mac-age').value);
+
+            if (!agent || !age) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // MAC at age 40
+            const macAt40 = {
+                'sevoflurane': 2.0,
+                'desflurane': 6.0,
+                'isoflurane': 1.15
+            };
+
+            // MAC decreases ~6% per decade after 40
+            const ageDiff = age - 40;
+            const macMultiplier = 1 - (ageDiff / 10) * 0.06;
+            const mac = macAt40[agent] * macMultiplier;
+            const macAwake = mac * 0.5; // MAC-awake is approximately 0.5 MAC
+
+            const agentName = agent.charAt(0).toUpperCase() + agent.slice(1);
+
+            calculationResults.mac = {
+                value: Math.round(mac * 100) / 100,
+                agent: agentName,
+                age: age,
+                macAwake: Math.round(macAwake * 100) / 100
+            };
+
+            document.getElementById('mac-value').textContent = `${Math.round(mac * 100) / 100}%`;
+            document.getElementById('mac-interpretation').innerHTML = `<strong>Age-Adjusted MAC Values:</strong><br>` +
+                `• Agent: ${agentName}<br>` +
+                `• Patient age: ${age} years<br>` +
+                `• MAC: ${Math.round(mac * 100) / 100}%<br>` +
+                `• MAC-awake: ${Math.round(macAwake * 100) / 100}%<br>` +
+                `• MAC-BAR (blocks adrenergic response): ${Math.round(mac * 1.3 * 100) / 100}%<br><br>` +
+                `<em>Note: MAC decreases ~6% per decade after age 40. These are population averages; individual requirements vary.</em>`;
+            document.getElementById('mac-result').classList.add('visible');
+        }
+
+        // Propofol TCI Calculator
+        document.getElementById('tci-model').addEventListener('change', function() {
+            if (this.value === 'schnider') {
+                document.getElementById('tci-schnider-params').style.display = 'grid';
+            } else {
+                document.getElementById('tci-schnider-params').style.display = 'none';
+            }
+        });
+
+        function calculatePropofolTCI() {
+            const model = document.getElementById('tci-model').value;
+            const target = parseFloat(document.getElementById('tci-target').value);
+            const weight = parseFloat(document.getElementById('tci-weight').value);
+            const age = parseFloat(document.getElementById('tci-age').value);
+
+            if (!model || !target || !weight || !age) {
+                alert('Please fill in required fields');
+                return;
+            }
+
+            let infusionRate, v1, k10;
+
+            if (model === 'marsh') {
+                // Simplified Marsh model
+                v1 = 0.228 * weight; // L
+                k10 = 0.119; // min^-1
+                infusionRate = target * v1 * k10 * 60 / 1000; // mg/kg/hr converted to mcg/kg/min then to mg/kg/hr
+                infusionRate = target * v1 * k10 * 60; // mg/hr
+            } else if (model === 'schnider') {
+                const height = parseFloat(document.getElementById('tci-height').value);
+                const sex = document.getElementById('tci-sex').value;
+
+                if (!height || !sex) {
+                    alert('Please enter height and sex for Schnider model');
+                    return;
+                }
+
+                // Simplified Schnider model (effect-site targeting)
+                const lbm = sex === 'male' ?
+                    1.1 * weight - 128 * (weight / height) ** 2 :
+                    1.07 * weight - 148 * (weight / height) ** 2;
+                v1 = 4.27; // L (fixed)
+                k10 = 0.443 + 0.0107 * (weight - 77) - 0.0159 * (lbm - 59) + 0.0062 * (height - 177);
+                infusionRate = target * v1 * k10 * 60; // mg/hr
+            } else { // kataria (pediatric)
+                v1 = 0.41 * weight; // L
+                k10 = 0.0678 * Math.pow(age, -0.269);
+                infusionRate = target * v1 * k10 * 60; // mg/hr
+            }
+
+            const mcgKgMin = (infusionRate * 1000) / (weight * 60);
+
+            const modelName = model.charAt(0).toUpperCase() + model.slice(1);
+            calculationResults['propofol-tci'] = {
+                value: Math.round(infusionRate),
+                model: modelName,
+                target: target,
+                weight: weight,
+                age: age
+            };
+
+            document.getElementById('tci-value').textContent = `${Math.round(mcgKgMin)} mcg/kg/min`;
+            document.getElementById('tci-interpretation').innerHTML = `<strong>TCI Parameters:</strong><br>` +
+                `• Model: ${modelName}<br>` +
+                `• Target concentration: ${target} mcg/mL<br>` +
+                `• Patient weight: ${weight} kg<br>` +
+                `• Age: ${age} years<br><br>` +
+                `<strong>Infusion Rates:</strong><br>` +
+                `• ${Math.round(mcgKgMin)} mcg/kg/min<br>` +
+                `• ${Math.round(infusionRate)} mg/hr<br>` +
+                `• ${Math.round(mcgKgMin * weight * 60 / 100)} mL/hr (at 10 mg/mL)<br><br>` +
+                `<em>Note: This is a simplified calculation. Actual TCI pumps use complex pharmacokinetic models with multiple compartments. Use for estimation only.</em>`;
+            document.getElementById('tci-result').classList.add('visible');
+        }
+
         // Send to AI function - Now opens modal instead of redirecting
         function sendToAI(calcType) {
             const result = calculationResults[calcType];
@@ -8811,6 +9940,36 @@ CALCULATORS_HTML = """
                     break;
                 case 'asa':
                     message = `Can you explain the ASA Physical Status Classification system and how it affects perioperative risk?`;
+                    break;
+                case 'fluid-deficit':
+                    message = `Patient weighs ${result.weight} kg with ${result.dehydration}% dehydration. Calculated fluid deficit = ${result.value} mL. What should I know about fluid resuscitation strategy?`;
+                    break;
+                case 'defib':
+                    message = `${result.type === 'defib' ? 'Defibrillation' : 'Cardioversion'} energy for ${result.age} patient${result.age === 'peds' ? ' (' + result.weight + ' kg)' : ''}: ${result.value}. What are the key safety considerations?`;
+                    break;
+                case 'sas':
+                    message = `Patient has Surgical Apgar Score of ${result.value}/10 (${result.risk}). EBL ${result.ebl} mL, lowest HR ${result.hr} bpm, lowest MAP ${result.map} mmHg. What does this mean for post-op management?`;
+                    break;
+                case 'opioid':
+                    message = `Converting ${result.dose} ${result.from.includes('fentanyl') ? 'mcg' : 'mg'} ${result.from} to ${result.value} ${result.to.includes('fentanyl') ? 'mcg' : 'mg'} ${result.to}. What should I know about opioid rotation and cross-tolerance?`;
+                    break;
+                case 'last':
+                    message = `Maximum safe dose of ${result.agent} at ${result.concentration}% for ${result.weight} kg patient is ${result.value} mg (${result.maxVolume} mL). What are the signs and treatment of local anesthetic systemic toxicity?`;
+                    break;
+                case 'rcri':
+                    message = `Patient has RCRI score of ${result.value}/6 (${result.risk} risk, ${result.percentage} cardiac event risk). How should I optimize this patient perioperatively?`;
+                    break;
+                case 'stopbang':
+                    message = `Patient has STOP-BANG score of ${result.value}/8 (${result.risk} OSA risk). What are the perioperative implications and management strategies?`;
+                    break;
+                case 'airway':
+                    message = `Airway assessment predicts: ${result.difficulty} (Mallampati ${result.mallampati}, TMD ${result.tmd}, neck ROM ${result.neck}, mouth ${result.mouth}). What's my airway management plan?`;
+                    break;
+                case 'mac':
+                    message = `Age-adjusted MAC for ${result.agent} in ${result.age} year old patient is ${result.value}% (MAC-awake ${result.macAwake}%). How should I titrate volatile anesthetics based on age?`;
+                    break;
+                case 'propofol-tci':
+                    message = `Propofol TCI using ${result.model} model: target ${result.target} mcg/mL for ${result.weight} kg patient, age ${result.age}. Rate = ${result.value} mg/hr. How do different TCI models compare?`;
                     break;
             }
 
@@ -8906,12 +10065,15 @@ CALCULATORS_HTML = """
             addMessageToChat('', 'loading');
 
             try {
+                // Get CSRF token
+                const csrfToken = document.getElementById('csrf_token').value;
+
                 const response = await fetch('/chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: `query=${encodeURIComponent(userMessage)}`
+                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}`
                 });
 
                 if (!response.ok) {
