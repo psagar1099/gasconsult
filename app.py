@@ -1094,9 +1094,9 @@ PREOP_HTML = """
 
         /* Main Content */
         .preop-container {
-            max-width: 1800px;
+            max-width: 2400px;
             margin: 0 auto;
-            padding: 100px 60px 60px;
+            padding: 100px 32px 60px;
         }
 
         .preop-header {
@@ -1130,7 +1130,7 @@ PREOP_HTML = """
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
-            padding: 32px 40px;
+            padding: 32px 24px;
             margin-bottom: 20px;
             box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.8);
@@ -1549,7 +1549,7 @@ PREOP_HTML = """
             }
 
             .preop-container {
-                padding: 80px 20px 40px;
+                padding: 80px 12px 40px;
             }
 
             .preop-header {
@@ -1575,7 +1575,7 @@ PREOP_HTML = """
             }
 
             .summary-container {
-                padding: 30px 20px;
+                padding: 30px 12px;
             }
 
             .summary-container h2 {
@@ -1601,7 +1601,7 @@ PREOP_HTML = """
 
             /* Form input mobile adjustments */
             .form-section {
-                padding: 20px;
+                padding: 14px;
             }
 
             .form-section h2 {
