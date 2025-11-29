@@ -2637,6 +2637,7 @@ HTML = """
             background: transparent;
             color: var(--text-primary);
             resize: none;
+            overflow: hidden;
             height: 44px;
             min-height: unset;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -2656,8 +2657,8 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.75rem;
-            font-weight: 900;
+            font-size: 1.5rem;
+            font-weight: 700;
             color: white;
             border: none;
             cursor: pointer;
@@ -2666,8 +2667,8 @@ HTML = """
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 3px 0;
-            -webkit-text-stroke: 0.5px white;
+            padding: 0;
+            line-height: 1;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
@@ -3197,17 +3198,16 @@ HTML = """
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            font-size: 1.75rem;
-            font-weight: 900;
+            font-size: 1.5rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 0 3px 0;
+            padding: 0;
             line-height: 1;
             flex-shrink: 0;
-            -webkit-text-stroke: 0.5px white;
         }
 
         .send-btn:hover {
@@ -7280,19 +7280,32 @@ PRIVACY_POLICY_HTML = """
         :root {
             --primary: #2563EB;
             --primary-blue: #2563EB;
+            --primary-blue-dark: #1D4ED8;
+            --secondary: #0066CC;
             --text-primary: #0F172A;
             --text-secondary: #475569;
             --text-muted: #94A3B8;
+            --text: #1F2937;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F8FAFC;
+            --border: #E2E8F0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #F8FAFC;
-            color: #0F172A;
-            line-height: 1.7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: #0A3D62;
+            line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            animation: pageFadeIn 0.3s ease-in;
+        }
+
+        @keyframes pageFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         nav {
@@ -7392,43 +7405,43 @@ PRIVACY_POLICY_HTML = """
         }
 
         h1 {
-            font-size: 36px;
+            font-size: 2.5rem;
             font-weight: 700;
-            color: #0F172A;
+            color: var(--text);
             margin-bottom: 12px;
         }
 
         .last-updated {
-            color: #64748B;
-            font-size: 14px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
             margin-bottom: 40px;
         }
 
         h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #0F172A;
-            margin-top: 48px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-top: 40px;
             margin-bottom: 16px;
         }
 
         h3 {
-            font-size: 18px;
+            font-size: 1.2rem;
             font-weight: 600;
-            color: #1E293B;
-            margin-top: 32px;
+            color: var(--text);
+            margin-top: 24px;
             margin-bottom: 12px;
         }
 
         p {
             margin-bottom: 16px;
-            color: #475569;
+            color: var(--text-secondary);
         }
 
         ul, ol {
             margin-left: 24px;
             margin-bottom: 16px;
-            color: #475569;
+            color: var(--text-secondary);
         }
 
         li {
@@ -7436,7 +7449,7 @@ PRIVACY_POLICY_HTML = """
         }
 
         strong {
-            color: #0F172A;
+            color: var(--text-primary);
             font-weight: 600;
         }
 
@@ -7455,26 +7468,19 @@ PRIVACY_POLICY_HTML = """
         footer {
             text-align: center;
             padding: 40px;
-            border-top: 1px solid #E2E8F0;
-            background: #FFFFFF;
+            border-top: 1px solid var(--border);
+            background: var(--bg-primary);
             color: var(--text-muted);
             font-size: 13px;
             margin: 0;
         }
 
         footer a {
-            color: var(--primary);
-            text-decoration: none;
             transition: color 0.2s ease;
         }
 
         footer a:hover {
             color: var(--text-primary);
-        }
-
-        footer p {
-            margin-bottom: 8px;
-            line-height: 1.6;
         }
 
         /* Mobile responsiveness */
@@ -7722,11 +7728,7 @@ PRIVACY_POLICY_HTML = """
     </div>
 
     <footer>
-        <p>&copy; 2025 gasconsult.ai • Educational Use Only • Not Medical Advice</p>
-        <p style="margin-top: 8px;">
-            <a href="/terms" style="color: #64748B; text-decoration: none;">Terms of Service</a> •
-            <a href="/privacy" style="color: #64748B; text-decoration: none;">Privacy Policy</a>
-        </p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 </body>
 </html>
