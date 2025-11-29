@@ -5531,47 +5531,8 @@ CHAT_HTML = """
             });
         }
 
-        // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
-        document.addEventListener('DOMContentLoaded', function() {
-            const textarea = document.getElementById('chatInput');
-            if (textarea) {
-                // Auto-expand textarea
-                textarea.addEventListener('input', function() {
-                    this.style.height = '44px';
-                    this.style.height = this.scrollHeight + 'px';
-                });
-
-                // Keyboard shortcut
-                textarea.addEventListener('keydown', function(e) {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                        e.preventDefault();
-                        const form = textarea.closest('form');
-                        if (form) {
-                            form.submit();
-                        }
-                    }
-                });
-            }
-
-            // Auto-scroll to bottom of chat
-            const chatMessages = document.getElementById('chatMessages');
-            if (chatMessages) {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-
-            // Show loading indicator when form submits
-            const chatForm = document.querySelector('.chat-form');
-            if (chatForm) {
-                chatForm.addEventListener('submit', function() {
-                    const loadingIndicator = document.getElementById('loadingIndicator');
-                    if (loadingIndicator) {
-                        loadingIndicator.classList.add('active');
-                    }
-                });
-            }
-
-            // Auto-start streaming if there's a pending stream
-            {% if pending_stream %}
+        // Auto-start streaming if there's a pending stream (MUST run immediately, not wait for DOMContentLoaded)
+        {% if pending_stream %}
             (function() {
                 const requestId = '{{ pending_stream }}';
                 console.log('[AUTO-START] Initiating streaming with request_id:', requestId);
@@ -5777,8 +5738,47 @@ CHAT_HTML = """
                             eventSource.close();
                         }
                     });
-            })();
-            {% endif %}
+        })();
+        {% endif %}
+
+        // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('chatInput');
+            if (textarea) {
+                // Auto-expand textarea
+                textarea.addEventListener('input', function() {
+                    this.style.height = '44px';
+                    this.style.height = this.scrollHeight + 'px';
+                });
+
+                // Keyboard shortcut
+                textarea.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                        e.preventDefault();
+                        const form = textarea.closest('form');
+                        if (form) {
+                            form.submit();
+                        }
+                    }
+                });
+            }
+
+            // Auto-scroll to bottom of chat
+            const chatMessages = document.getElementById('chatMessages');
+            if (chatMessages) {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            // Show loading indicator when form submits
+            const chatForm = document.querySelector('.chat-form');
+            if (chatForm) {
+                chatForm.addEventListener('submit', function() {
+                    const loadingIndicator = document.getElementById('loadingIndicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('active');
+                    }
+                });
+            }
         }); // End DOMContentLoaded
 
         // ====== Premium Features JavaScript ======
