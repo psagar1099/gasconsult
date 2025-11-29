@@ -4112,6 +4112,9 @@ HTML = """
                 // Prevent default form submission and use AJAX for chat page
                 e.preventDefault();
 
+                // Create FormData FIRST (before disabling textarea - disabled fields are excluded from FormData!)
+                const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
+
                 // Disable inputs
                 submitBtn.disabled = true;
                 textarea.disabled = true;
@@ -4139,9 +4142,6 @@ HTML = """
                 loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching PubMed database...</p></div>`;
                 messagesContainer.appendChild(loadingMsg);
                 loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-                // Make POST request to initiate streaming (before clearing textarea)
-                const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
 
                 // Clear textarea
                 textarea.value = '';
