@@ -807,11 +807,11 @@ PREOP_HTML = """
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
     <title>Pre-Op Assessment — gasconsult.ai</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
@@ -821,448 +821,319 @@ PREOP_HTML = """
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
     <style>
-        :root {
-            /* Primary Brand Colors */
-            --primary-blue: #2563EB;
-            --primary-blue-dark: #1D4ED8;
-            --primary-blue-light: #DBEAFE;
-
-            /* Anesthesia Color Palette (for logo & accents) */
-            --opioid-blue: #2563EB;
-            --nmb-red: #EF4444;
-            --induction-yellow: #FBBF24;
-            --vasopressor-violet: #8B5CF6;
-            --anticholinergic-green: #10B981;
-            --local-gray: #6B7280;
-
-            /* Neutral Palette */
-            --text-primary: #0F172A;
-            --text-secondary: #475569;
-            --text-muted: #94A3B8;
-            --bg-primary: #FFFFFF;
-            --bg-secondary: #F8FAFC;
-            --border: #E2E8F0;
-
-            /* Legacy aliases for compatibility */
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-        }
-
+        /* ==================== RESET & BASE ==================== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --brand-blue: #2563EB;
+            --brand-blue-dark: #1D4ED8;
+            --brand-violet: #8B5CF6;
+            --brand-green: #10B981;
+            --text-dark: #0F172A;
+            --text-gray: #64748B;
+            --text-light: #94A3B8;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8FAFC;
+            --border-color: #E2E8F0;
+            --warning-bg: #FEF3C7;
+            --warning-border: #F59E0B;
+            --warning-text: #92400E;
+        }
+
         html {
             scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(180deg,
-                #F8FAFC 0%,
-                #F1F5F9 50%,
-                #F8FAFC 100%);
-            background-attachment: fixed;
-            color: #0A3D62;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(to bottom, #F8FAFC 0%, #EFF6FF 100%);
+            color: var(--text-dark);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            animation: pageFadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow-x: hidden;
-            width: 100%;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            position: relative;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background:
-                radial-gradient(circle at 20% 30%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        nav,
-        .container,
-        footer {
-            position: relative;
-            z-index: 1;
-        }
-
-        @keyframes pageFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -1000px 0;
-            }
-            100% {
-                background-position: 1000px 0;
-            }
-        }
-
-        /* Navigation */
+        /* ==================== NAVIGATION ==================== */
         nav {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 16px 40px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
         }
 
-        nav .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .nav-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 1rem;
+            gap: 1rem;
             flex-wrap: wrap;
-            gap: 16px;
         }
 
-        .logo-container {
-            text-decoration: none;
+        .logo-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+            gap: 0.75rem;
+            text-decoration: none;
+            transition: transform 0.2s;
         }
 
-        .logo-container:hover {
-            transform: translateY(-1px);
+        .logo-link:hover {
+            transform: translateY(-2px);
         }
 
-        .logo-ecg {
+        .logo-svg {
             height: 28px;
             width: auto;
-            flex-shrink: 0;
         }
 
-        .logo-wordmark {
-            font-family: 'Sora', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            font-size: 20px;
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.25rem;
             font-weight: 600;
-            letter-spacing: -0.5px;
-            white-space: nowrap;
         }
 
         .logo-gas {
-            color: #2563EB;
+            color: var(--brand-blue);
         }
 
         .logo-consult {
-            color: #111111;
+            color: #111;
         }
 
         .logo-ai {
+            color: var(--text-gray);
             font-weight: 400;
-            color: #6B7280;
         }
 
-        .nav-actions {
+        .nav-links {
             display: flex;
-            gap: 12px;
-            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .nav-link {
-            color: var(--text-secondary);
+            color: var(--text-gray);
             text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            padding: 8px 16px;
+            padding: 0.5rem 1rem;
             border-radius: 8px;
-            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
         .nav-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--brand-blue);
         }
 
         .nav-link.active {
-            color: var(--primary-blue);
-            font-weight: 600;
+            background: var(--brand-blue);
+            color: white;
         }
 
-        /* PHI Warning Banner */
-        .phi-warning {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border-left: 4px solid #F59E0B;
-            padding: 16px 20px;
-            margin: 0;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.15);
+        /* ==================== PHI WARNING ==================== */
+        .phi-banner {
+            background: linear-gradient(135deg, var(--warning-bg) 0%, #FDE68A 100%);
+            border-left: 4px solid var(--warning-border);
+            padding: 1rem;
         }
 
-        .phi-warning-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .phi-content {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 1rem;
+            padding: 0 1rem;
         }
 
-        .phi-warning-icon {
+        .phi-icon {
             font-size: 1.5rem;
             flex-shrink: 0;
         }
 
-        .phi-warning-text {
-            flex: 1;
-        }
-
-        .phi-warning-text strong {
-            color: #92400E;
+        .phi-text strong {
+            color: var(--warning-text);
             font-weight: 600;
         }
 
-        .phi-warning-text p {
+        .phi-text p {
             color: #78350F;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 0.9rem;
             margin: 0;
         }
 
-        /* Main Content */
-        .preop-container {
-            max-width: 1200px;
+        /* ==================== MAIN CONTAINER ==================== */
+        .main-wrapper {
+            flex: 1;
+            width: 100%;
+            padding: 2rem 1rem;
+        }
+
+        .content-container {
+            max-width: 900px;
             margin: 0 auto;
-            padding: 100px 32px 60px;
         }
 
-        .preop-header {
+        /* ==================== HEADER ==================== */
+        .page-header {
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 3rem;
         }
 
-        .preop-header h1 {
-            font-family: 'Sora', -apple-system, BlinkMacSystemFont, sans-serif;
+        .page-title {
+            font-family: 'Sora', sans-serif;
             font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-violet) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 16px;
-            font-weight: 700;
-            letter-spacing: -1px;
-            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
         }
 
-        .preop-header p {
-            font-size: 1.15rem;
-            color: var(--text-secondary);
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-gray);
             font-weight: 500;
-            letter-spacing: -0.2px;
         }
 
-        /* Form Element - Full Width */
-        .preop-container form {
-            width: 100%;
-            max-width: 100%;
-            margin: 0;
+        /* ==================== FORM SECTIONS ==================== */
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
         }
 
-        /* Form Sections */
-        .form-section {
-            width: 100%;
-            max-width: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 32px 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+        .form-card:hover {
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+            border-color: rgba(37, 99, 235, 0.2);
         }
 
-        .form-section:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .form-section:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .form-section:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .form-section:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .form-section:nth-child(5) {
-            animation-delay: 0.5s;
-        }
-
-        .form-section::before {
+        .form-card::before {
             content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            display: block;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--vasopressor-violet) 100%);
-            opacity: 0.8;
+            background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-violet) 100%);
+            margin: -2rem -2rem 1.5rem -2rem;
+            border-radius: 16px 16px 0 0;
         }
 
-        .form-section:hover {
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08);
-            transform: translateY(-4px);
-            border-color: rgba(37, 99, 235, 0.3);
-        }
-
-        .form-section h2 {
-            color: var(--primary-blue);
-            font-size: 1.35rem;
-            margin-bottom: 24px;
+        .section-title {
+            color: var(--brand-blue);
+            font-size: 1.25rem;
             font-weight: 600;
-            letter-spacing: -0.3px;
+            margin-bottom: 1.5rem;
         }
 
-        .form-row {
+        .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 24px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
         }
 
-        .form-group {
+        .field-group {
             display: flex;
             flex-direction: column;
         }
 
-        label {
-            font-size: 11px;
+        .field-label {
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
         }
 
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            padding: 14px 16px;
-            border: 2px solid rgba(226, 232, 240, 0.6);
-            border-radius: 14px;
+        .field-input,
+        .field-select,
+        .field-textarea {
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
             font-size: 1rem;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-primary);
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            background: white;
+            color: var(--text-dark);
+            transition: all 0.2s;
         }
 
-        input:hover,
-        textarea:hover,
-        select:hover {
+        .field-input:hover,
+        .field-select:hover,
+        .field-textarea:hover {
             border-color: rgba(37, 99, 235, 0.3);
-            background: white;
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
+        .field-input:focus,
+        .field-select:focus,
+        .field-textarea:focus {
             outline: none;
-            border-color: var(--primary-blue);
-            background: white;
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.15), 0 0 0 4px rgba(37, 99, 235, 0.08);
-            transform: translateY(-1px);
+            border-color: var(--brand-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        textarea {
+        .field-textarea {
             resize: vertical;
             min-height: 80px;
         }
 
-        .checkbox-group {
+        /* Radio buttons */
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .radio-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-item label {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            text-transform: none;
+            letter-spacing: normal;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Checkboxes */
+        .checkbox-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 12px;
-            margin-top: 8px;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
 
         .checkbox-item input[type="checkbox"] {
@@ -1272,107 +1143,85 @@ PREOP_HTML = """
         }
 
         .checkbox-item label {
-            margin: 0;
-            cursor: pointer;
             font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-dark);
             text-transform: none;
             letter-spacing: normal;
-            font-size: 0.9rem;
-            color: var(--text-primary);
+            cursor: pointer;
+            margin: 0;
         }
 
-        .submit-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        /* Auto-calc display */
+        .auto-calc {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(37, 99, 235, 0.15);
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-top: 1rem;
+        }
+
+        .auto-calc strong {
+            color: var(--brand-blue);
+            font-weight: 600;
+        }
+
+        /* ==================== SUBMIT BUTTON ==================== */
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
             color: white;
-            padding: 14px 32px;
+            padding: 1rem 2rem;
             border-radius: 12px;
             font-size: 1.05rem;
             font-weight: 600;
             border: none;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            width: 100%;
-            margin-top: 20px;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            margin-top: 1rem;
         }
 
-        .submit-btn::before {
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* ==================== SUMMARY RESULTS ==================== */
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-color);
+        }
+
+        .summary-card::before {
             content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .submit-btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, #1E40AF 100%);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0) scale(0.98);
-        }
-
-        /* Summary Display */
-        .summary-container {
-            width: 100%;
-            max-width: 100%;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-radius: 24px;
-            padding: 40px;
-            margin-top: 32px;
-            box-shadow: 0 20px 60px rgba(37, 99, 235, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            position: relative;
-            overflow: hidden;
-            animation: slideUp 0.5s ease-out;
-        }
-
-        .summary-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            display: block;
             height: 6px;
-            background: linear-gradient(90deg,
-                var(--primary-blue) 0%,
-                var(--vasopressor-violet) 50%,
-                var(--anticholinergic-green) 100%);
+            background: linear-gradient(90deg, var(--brand-blue) 0%, var(--brand-violet) 50%, var(--brand-green) 100%);
+            margin: -2.5rem -2.5rem 2rem -2.5rem;
+            border-radius: 16px 16px 0 0;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .summary-container h2 {
-            color: var(--primary-blue);
-            font-size: 2rem;
-            margin-bottom: 28px;
+        .summary-title {
+            color: var(--brand-blue);
+            font-size: 1.75rem;
             font-weight: 600;
-            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
         }
 
         .summary-content {
@@ -1381,31 +1230,49 @@ PREOP_HTML = """
         }
 
         .summary-content h3 {
-            color: var(--primary-blue);
-            font-size: 1.3rem;
-            margin-top: 20px;
-            margin-bottom: 12px;
+            color: var(--brand-blue);
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
             font-weight: 600;
         }
 
         .summary-content strong {
-            color: #0052A3;
+            color: #1D4ED8;
+        }
+
+        .summary-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* References */
+        .references-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .references-title {
+            color: var(--brand-blue);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
         .ref-item {
-            padding: 8px 0;
-            transition: padding-left 0.2s ease;
+            padding: 0.5rem 0;
+            transition: padding-left 0.2s;
         }
 
         .ref-item:hover {
-            padding-left: 6px;
+            padding-left: 0.5rem;
         }
 
         .ref-item a {
             color: #0066CC;
             text-decoration: none;
             font-weight: 500;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
         }
 
         .ref-item a:hover {
@@ -1413,64 +1280,45 @@ PREOP_HTML = """
             text-decoration: underline;
         }
 
-        .auto-calc {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 16px 18px;
-            border-radius: 14px;
-            margin-top: 16px;
-            border: 1px solid rgba(37, 99, 235, 0.15);
-            font-size: 14px;
-            color: var(--text-secondary);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.06);
-            transition: all 0.2s ease;
-        }
-
-        .auto-calc:hover {
-            border-color: rgba(37, 99, 235, 0.25);
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.1);
-        }
-
-        .auto-calc strong {
-            color: var(--primary-blue);
-            font-weight: 600;
-        }
-
-        /* Footer */
-        footer {
+        /* New assessment button */
+        .new-assessment-wrapper {
             text-align: center;
-            padding: 40px;
-            border-top: 1px solid #E2E8F0;
-            background: #FFFFFF;
-            color: var(--text-muted);
-            font-size: 13px;
-            margin: 0;
+            margin-top: 2rem;
         }
 
-        footer a {
-            transition: color 0.2s ease;
+        .new-assessment-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        footer a:hover {
-            color: var(--text-primary);
+        .new-assessment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background: white;
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.85rem;
         }
 
         footer p {
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        footer .disclaimer {
-            max-width: 800px;
-            margin: 16px auto 0;
-            font-size: 0.8rem;
-            color: #9CA3AF;
-            line-height: 1.7;
+            margin-bottom: 0.5rem;
         }
 
         footer a {
-            color: var(--primary);
+            color: var(--brand-blue);
             text-decoration: none;
             font-weight: 500;
         }
@@ -1479,16 +1327,16 @@ PREOP_HTML = """
             text-decoration: underline;
         }
 
-        /* Smooth Transitions & Animations */
-        * {
-            scroll-behavior: smooth;
+        .disclaimer {
+            max-width: 800px;
+            margin: 1rem auto 0;
+            font-size: 0.8rem;
+            color: #9CA3AF;
+            line-height: 1.6;
         }
 
-        .form-section {
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        @keyframes fadeInUp {
+        /* ==================== ANIMATIONS ==================== */
+        @keyframes fadeIn {
             from {
                 opacity: 0;
                 transform: translateY(20px);
@@ -1499,167 +1347,108 @@ PREOP_HTML = """
             }
         }
 
-        .submit-btn,
-        input,
-        textarea,
-        select {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .form-card {
+            animation: fadeIn 0.5s ease-out backwards;
         }
 
-        .summary-container {
-            animation: slideIn 0.5s ease-out;
+        .form-card:nth-child(1) { animation-delay: 0.05s; }
+        .form-card:nth-child(2) { animation-delay: 0.1s; }
+        .form-card:nth-child(3) { animation-delay: 0.15s; }
+        .form-card:nth-child(4) { animation-delay: 0.2s; }
+        .form-card:nth-child(5) { animation-delay: 0.25s; }
+        .form-card:nth-child(6) { animation-delay: 0.3s; }
+
+        .summary-card {
+            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        /* Page fade-in */
-        body {
-            animation: pageFadeIn 0.3s ease-in;
-        }
-
-        @keyframes pageFadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Mobile responsiveness */
+        /* ==================== RESPONSIVE DESIGN ==================== */
         @media (max-width: 768px) {
-            nav {
-                padding: 14px 20px;
+            .page-title {
+                font-size: 2rem;
             }
 
-            .logo-text {
-                font-size: 1.2rem;
-            }
-
-            .logo-svg {
-                width: 28px;
-                height: 28px;
-            }
-
-            .nav-actions {
-                gap: 8px;
-            }
-
-            .nav-link {
-                padding: 8px 14px;
-                font-size: 0.9rem;
-            }
-
-            .preop-container {
-                padding: 80px 12px 40px;
-            }
-
-            .preop-header {
-                margin-bottom: 32px;
-            }
-
-            .preop-header h1 {
-                font-size: 2.2rem;
-                letter-spacing: -1px;
-            }
-
-            .preop-header p {
+            .page-subtitle {
                 font-size: 1rem;
             }
 
-            .form-row {
+            .form-card {
+                padding: 1.5rem;
+            }
+
+            .form-card::before {
+                margin: -1.5rem -1.5rem 1.25rem -1.5rem;
+            }
+
+            .form-grid {
                 grid-template-columns: 1fr;
-                gap: 20px;
             }
 
-            .summary-container {
-                padding: 30px 12px;
+            .checkbox-grid {
+                grid-template-columns: 1fr;
             }
 
-            .summary-container h2 {
-                font-size: 1.5rem;
+            .summary-card {
+                padding: 1.5rem;
             }
 
-            /* PHI Warning mobile adjustments */
-            .phi-warning {
-                padding: 12px 16px;
+            .summary-card::before {
+                margin: -1.5rem -1.5rem 1.5rem -1.5rem;
             }
 
-            .phi-warning-content {
-                gap: 10px;
+            .nav-links {
+                width: 100%;
+                justify-content: center;
             }
 
-            .phi-warning-icon {
+            .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.85rem;
+            }
+
+            .phi-content {
+                padding: 0 0.5rem;
+            }
+
+            .phi-icon {
                 font-size: 1.2rem;
             }
 
-            .phi-warning-text p {
-                font-size: 12px;
+            .phi-text p {
+                font-size: 0.85rem;
             }
 
-            /* Form input mobile adjustments */
-            .form-section {
-                padding: 14px;
+            /* Prevent iOS zoom on input focus */
+            .field-input,
+            .field-select,
+            .field-textarea {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-wrapper {
+                padding: 1rem 0.5rem;
             }
 
-            .form-section h2 {
+            .form-card {
+                padding: 1rem;
+            }
+
+            .form-card::before {
+                margin: -1rem -1rem 1rem -1rem;
+            }
+
+            .section-title {
                 font-size: 1.1rem;
             }
 
-            label {
-                font-size: 0.9rem;
+            .summary-card {
+                padding: 1rem;
             }
 
-            input[type="number"],
-            input[type="text"],
-            select,
-            textarea {
-                font-size: 16px !important; /* Prevents iOS zoom on focus */
-            }
-
-            .submit-btn {
-                font-size: 0.95rem;
-                padding: 14px 32px;
-            }
-        }
-
-        @media (max-width: 640px) {
-            nav .container {
-                justify-content: space-between;
-                flex-wrap: wrap;
-            }
-
-            .logo-container {
-                order: 1;
-            }
-
-            .nav-actions {
-                order: 2;
-                width: 100%;
-                justify-content: center;
-                margin-top: 8px;
-            }
-
-            .nav-link {
-                padding: 6px 10px;
-                font-size: 0.8rem;
-            }
-
-            .logo-wordmark {
-                font-size: 1rem;
-            }
-
-            .logo-ecg {
-                height: 24px;
+            .summary-card::before {
+                margin: -1rem -1rem 1rem -1rem;
             }
         }
     </style>
@@ -1687,15 +1476,38 @@ PREOP_HTML = """
                 }
             }
 
-            document.getElementById('autoCalc').innerHTML = results || 'Enter weight, height, and sex';
+            document.getElementById('autoCalc').innerHTML = results || 'Enter weight, height, and sex to calculate';
         }
+
+        // Form submission handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const btn = form.querySelector('.submit-button');
+                    if (btn) {
+                        btn.disabled = true;
+                        btn.textContent = 'Processing...';
+                    }
+                });
+            }
+
+            // Smooth scroll to summary if it exists
+            const summary = document.querySelector('.summary-card');
+            if (summary) {
+                setTimeout(() => {
+                    summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        });
     </script>
 </head>
 <body>
+    <!-- Navigation -->
     <nav>
-        <div class="container">
-            <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <div class="nav-container">
+            <a href="/" class="logo-link">
+                <svg class="logo-svg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="#2563EB"/>
@@ -1713,207 +1525,201 @@ PREOP_HTML = """
                           stroke-linejoin="round"
                           fill="none"/>
                 </svg>
-                <div class="logo-wordmark">
+                <div class="logo-text">
                     <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
                 </div>
             </a>
-            <div class="nav-actions">
+            <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link active">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <a href="/preop" class="nav-link active">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
 
-    <!-- PHI Warning Banner -->
-    <div class="phi-warning">
-        <div class="phi-warning-content">
-            <div class="phi-warning-icon">⚠️</div>
-            <div class="phi-warning-text">
+    <!-- PHI Warning -->
+    <div class="phi-banner">
+        <div class="phi-content">
+            <div class="phi-icon">⚠️</div>
+            <div class="phi-text">
                 <strong>Privacy Notice:</strong>
                 <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
             </div>
         </div>
     </div>
 
-    <div class="preop-container">
-        <div class="preop-header">
-            <h1>Pre-Operative Assessment</h1>
-            <p>Evidence-based risk stratification and recommendations</p>
-        </div>
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <div class="content-container">
+            <div class="page-header">
+                <h1 class="page-title">Pre-Operative Assessment</h1>
+                <p class="page-subtitle">Evidence-based risk stratification and recommendations</p>
+            </div>
 
-        {% if not summary %}
-        <form method="post" action="/preop">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <!-- Demographics -->
-            <div class="form-section">
-                <h2>1. Patient Demographics</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="age">Age (years)</label>
-                        <input type="number" id="age" name="age" required>
+            {% if not summary %}
+            <!-- Assessment Form -->
+            <form method="post" action="/preop">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Section 1: Demographics -->
+                <div class="form-card">
+                    <h2 class="section-title">1. Patient Demographics</h2>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="age" class="field-label">Age (years)</label>
+                            <input type="number" id="age" name="age" class="field-input" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="weight" class="field-label">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" step="0.1" class="field-input" required onchange="calculateMetrics()">
+                        </div>
+                        <div class="field-group">
+                            <label for="height" class="field-label">Height (cm)</label>
+                            <input type="number" id="height" name="height" step="0.1" class="field-input" required onchange="calculateMetrics()">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="weight">Weight (kg)</label>
-                        <input type="number" id="weight" name="weight" step="0.1" required onchange="calculateMetrics()">
-                    </div>
-                    <div class="form-group">
-                        <label for="height">Height (cm)</label>
-                        <input type="number" id="height" name="height" step="0.1" required onchange="calculateMetrics()">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Sex Assigned at Birth</label>
-                        <div style="display: flex; gap: 20px; margin-top: 8px;">
-                            <div class="checkbox-item">
+                    <div class="field-group">
+                        <label class="field-label">Sex Assigned at Birth</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
                                 <input type="radio" id="male" name="sex" value="male" onchange="calculateMetrics()" required>
                                 <label for="male">Male</label>
                             </div>
-                            <div class="checkbox-item">
+                            <div class="radio-item">
                                 <input type="radio" id="female" name="sex" value="female" onchange="calculateMetrics()" required>
                                 <label for="female">Female</label>
                             </div>
                         </div>
                     </div>
+                    <div class="auto-calc" id="autoCalc">
+                        Enter weight, height, and sex to calculate BMI and IBW
+                    </div>
                 </div>
-                <div class="auto-calc" id="autoCalc">
-                    Enter weight, height, and sex to calculate BMI and IBW
-                </div>
-            </div>
 
-            <!-- Comorbidities -->
-            <div class="form-section">
-                <h2>2. Comorbidities</h2>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
-                        <label for="dm">Diabetes Mellitus</label>
+                <!-- Section 2: Comorbidities -->
+                <div class="form-card">
+                    <h2 class="section-title">2. Comorbidities</h2>
+                    <div class="checkbox-grid">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
+                            <label for="dm">Diabetes Mellitus</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
+                            <label for="htn">Hypertension</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="cad" name="comorbidities" value="Coronary Artery Disease">
+                            <label for="cad">CAD</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
+                            <label for="chf">Heart Failure</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="copd" name="comorbidities" value="COPD">
+                            <label for="copd">COPD</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
+                            <label for="asthma">Asthma</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="osa" name="comorbidities" value="Obstructive Sleep Apnea">
+                            <label for="osa">OSA</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="ckd" name="comorbidities" value="Chronic Kidney Disease">
+                            <label for="ckd">CKD</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="stroke" name="comorbidities" value="Prior Stroke">
+                            <label for="stroke">Prior Stroke</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
+                            <label for="afib">Atrial Fibrillation</label>
+                        </div>
                     </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
-                        <label for="htn">Hypertension</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="cad" name="comorbidities" value="Coronary Artery Disease">
-                        <label for="cad">CAD</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
-                        <label for="chf">Heart Failure</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="copd" name="comorbidities" value="COPD">
-                        <label for="copd">COPD</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
-                        <label for="asthma">Asthma</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="osa" name="comorbidities" value="Obstructive Sleep Apnea">
-                        <label for="osa">OSA</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="ckd" name="comorbidities" value="Chronic Kidney Disease">
-                        <label for="ckd">CKD</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="stroke" name="comorbidities" value="Prior Stroke">
-                        <label for="stroke">Prior Stroke</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
-                        <label for="afib">Atrial Fibrillation</label>
+                    <div class="field-group" style="margin-top: 1rem;">
+                        <label for="other_comorbidities" class="field-label">Other Comorbidities</label>
+                        <textarea id="other_comorbidities" name="other_comorbidities" class="field-textarea" placeholder="e.g., GERD, Hypothyroidism, Chronic Pain..." rows="2"></textarea>
                     </div>
                 </div>
-                <div class="form-group" style="margin-top: 16px;">
-                    <label for="other_comorbidities">Other Comorbidities (if not listed above)</label>
-                    <textarea id="other_comorbidities" name="other_comorbidities" placeholder="e.g., GERD, Hypothyroidism, Chronic Pain..." rows="2"></textarea>
-                </div>
-            </div>
 
-            <!-- Functional Status -->
-            <div class="form-section">
-                <h2>2b. Functional Status</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="mets">Metabolic Equivalents (METs)</label>
-                        <select id="mets" name="mets" required>
+                <!-- Section 3: Functional Status -->
+                <div class="form-card">
+                    <h2 class="section-title">3. Functional Status</h2>
+                    <div class="field-group">
+                        <label for="mets" class="field-label">Metabolic Equivalents (METs)</label>
+                        <select id="mets" name="mets" class="field-select" required>
                             <option value="">Select...</option>
                             <option value="Unknown">Unknown / Not documented</option>
-                            <option value="<4 METs">&lt;4 METs (Cannot climb 2 flights of stairs or walk 2 blocks)</option>
+                            <option value="<4 METs">&lt;4 METs (Cannot climb 2 flights of stairs)</option>
                             <option value="4-10 METs">4-10 METs (Can climb 2 flights of stairs)</option>
-                            <option value=">10 METs">&gt;10 METs (Very active, can run or do strenuous sports)</option>
+                            <option value=">10 METs">&gt;10 METs (Very active, strenuous sports)</option>
                         </select>
                     </div>
+                    <div class="field-group" style="margin-top: 1.25rem;">
+                        <label for="previous_anesthesia" class="field-label">Previous Anesthesia History</label>
+                        <textarea id="previous_anesthesia" name="previous_anesthesia" class="field-textarea" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Anesthesia History -->
-            <div class="form-section">
-                <h2>2c. Previous Anesthesia History</h2>
-                <div class="form-group">
-                    <label for="previous_anesthesia">Previous Anesthetics & Complications</label>
-                    <textarea id="previous_anesthesia" name="previous_anesthesia" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
+                <!-- Section 4: Medications -->
+                <div class="form-card">
+                    <h2 class="section-title">4. Current Medications</h2>
+                    <div class="field-group">
+                        <label for="medications" class="field-label">List all medications</label>
+                        <textarea id="medications" name="medications" class="field-textarea" placeholder="e.g., Aspirin 81mg daily, Metoprolol 50mg BID, Apixaban 5mg BID..."></textarea>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Medications -->
-            <div class="form-section">
-                <h2>3. Current Medications</h2>
-                <div class="form-group">
-                    <label for="medications">List all medications (include anticoagulants, antiplatelets, insulin, etc.)</label>
-                    <textarea id="medications" name="medications" placeholder="e.g., Aspirin 81mg daily, Metoprolol 50mg BID, Apixaban 5mg BID..."></textarea>
+                <!-- Section 5: Labs & Cardiac -->
+                <div class="form-card">
+                    <h2 class="section-title">5. Laboratory Values & Cardiac Assessment</h2>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="hgb" class="field-label">Hemoglobin (g/dL)</label>
+                            <input type="number" id="hgb" name="hgb" step="0.1" class="field-input">
+                        </div>
+                        <div class="field-group">
+                            <label for="plt" class="field-label">Platelets (×10³/μL)</label>
+                            <input type="number" id="plt" name="plt" class="field-input">
+                        </div>
+                        <div class="field-group">
+                            <label for="cr" class="field-label">Creatinine (mg/dL)</label>
+                            <input type="number" id="cr" name="cr" step="0.01" class="field-input">
+                        </div>
+                        <div class="field-group">
+                            <label for="inr" class="field-label">INR</label>
+                            <input type="number" id="inr" name="inr" step="0.1" class="field-input">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="ef" class="field-label">Ejection Fraction (%)</label>
+                            <input type="text" id="ef" name="ef" class="field-input" placeholder="e.g., 55-60% or None">
+                        </div>
+                        <div class="field-group">
+                            <label for="ekg" class="field-label">EKG Findings</label>
+                            <input type="text" id="ekg" name="ekg" class="field-input" placeholder="e.g., NSR, Afib, or None">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Labs -->
-            <div class="form-section">
-                <h2>4. Laboratory Values & Cardiac Assessment</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="hgb">Hemoglobin (g/dL)</label>
-                        <input type="number" id="hgb" name="hgb" step="0.1">
+                <!-- Section 6: Surgical Procedure -->
+                <div class="form-card">
+                    <h2 class="section-title">6. Surgical Procedure</h2>
+                    <div class="field-group">
+                        <label for="procedure" class="field-label">Procedure Type</label>
+                        <input type="text" id="procedure" name="procedure" class="field-input" placeholder="e.g., Total Knee Arthroplasty, CABG, Laparoscopic Cholecystectomy..." required>
                     </div>
-                    <div class="form-group">
-                        <label for="plt">Platelets (×10³/μL)</label>
-                        <input type="number" id="plt" name="plt">
-                    </div>
-                    <div class="form-group">
-                        <label for="cr">Creatinine (mg/dL)</label>
-                        <input type="number" id="cr" name="cr" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="inr">INR</label>
-                        <input type="number" id="inr" name="inr" step="0.1">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="ef">Ejection Fraction (%)</label>
-                        <input type="text" id="ef" name="ef" placeholder="e.g., 55-60% or None">
-                    </div>
-                    <div class="form-group">
-                        <label for="ekg">EKG Findings</label>
-                        <input type="text" id="ekg" name="ekg" placeholder="e.g., NSR, Afib, or None">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Procedure -->
-            <div class="form-section">
-                <h2>5. Surgical Procedure</h2>
-                <div class="form-group">
-                    <label for="procedure">Procedure Type</label>
-                    <input type="text" id="procedure" name="procedure" placeholder="e.g., Total Knee Arthroplasty, CABG, Laparoscopic Cholecystectomy..." required>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="surgery_risk">Surgery Risk Category</label>
-                        <select id="surgery_risk" name="surgery_risk" required>
+                    <div class="field-group" style="margin-top: 1.25rem;">
+                        <label for="surgery_risk" class="field-label">Surgery Risk Category</label>
+                        <select id="surgery_risk" name="surgery_risk" class="field-select" required>
                             <option value="">Select...</option>
                             <option value="Low">Low Risk (&lt;1% cardiac risk)</option>
                             <option value="Intermediate">Intermediate Risk (1-5% cardiac risk)</option>
@@ -1921,79 +1727,61 @@ PREOP_HTML = """
                         </select>
                     </div>
                 </div>
-            </div>
 
-            <!-- Additional Info -->
-            <div class="form-section">
-                <h2>6. Additional Information</h2>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="npo">NPO Status</label>
-                        <input type="text" id="npo" name="npo" placeholder="e.g., NPO since midnight, last PO intake 6 hours ago...">
-                    </div>
-                    <div class="form-group">
-                        <label for="allergies">Allergies</label>
-                        <input type="text" id="allergies" name="allergies" placeholder="e.g., PCN (rash), Morphine (nausea), NKDA...">
+                <!-- Section 7: Additional Info -->
+                <div class="form-card">
+                    <h2 class="section-title">7. Additional Information</h2>
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label for="npo" class="field-label">NPO Status</label>
+                            <input type="text" id="npo" name="npo" class="field-input" placeholder="e.g., NPO since midnight...">
+                        </div>
+                        <div class="field-group">
+                            <label for="allergies" class="field-label">Allergies</label>
+                            <input type="text" id="allergies" name="allergies" class="field-input" placeholder="e.g., PCN (rash), NKDA...">
+                        </div>
                     </div>
                 </div>
+
+                <button type="submit" class="submit-button">Generate Evidence-Based Assessment</button>
+            </form>
+
+            {% else %}
+            <!-- Assessment Results -->
+            <div class="summary-card">
+                <h2 class="summary-title">Pre-Operative Assessment Summary</h2>
+                <div class="summary-content">
+                    {{ summary|safe }}
+                </div>
+
+                {% if references %}
+                <div class="references-section">
+                    <h3 class="references-title">References:</h3>
+                    {% for ref in references %}
+                    <div class="ref-item">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
+                            [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
 
-            <button type="submit" class="submit-btn">Generate Evidence-Based Assessment</button>
-        </form>
-        {% else %}
-        <div class="summary-container">
-            <h2>Pre-Operative Assessment Summary</h2>
-            <div class="summary-content">
-                {{ summary|safe }}
-            </div>
-            {% if references %}
-            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid rgba(10, 61, 98, 0.15);">
-                <h3 style="color: var(--primary); margin-bottom: 16px;">References:</h3>
-                {% for ref in references %}
-                <div class="ref-item">
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                        [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
-                    </a>
-                </div>
-                {% endfor %}
+            <div class="new-assessment-wrapper">
+                <a href="/preop" class="new-assessment-btn">New Assessment</a>
             </div>
             {% endif %}
         </div>
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="/preop" class="submit-btn" style="display: inline-block; width: auto; text-decoration: none;">Clear & New Assessment</a>
-        </div>
-        {% endif %}
     </div>
 
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
+        <div class="disclaimer">
+            This tool provides educational content only and is not medical advice. All clinical decisions should be made by qualified healthcare professionals based on individual patient circumstances and current guidelines.
+        </div>
     </footer>
-
-    <script>
-        // Smooth form transitions
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('submit', function() {
-                const submitBtn = form.querySelector('.submit-btn');
-                if (submitBtn) {
-                    submitBtn.disabled = true;
-                    submitBtn.style.opacity = '0.7';
-                    submitBtn.textContent = 'Processing...';
-                }
-            });
-        }
-
-        // Smooth scroll to summary if it exists
-        window.addEventListener('load', function() {
-            const summary = document.querySelector('.summary-container');
-            if (summary) {
-                setTimeout(() => {
-                    summary.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 200);
-            }
-        });
-    </script>
-
 </body>
 </html>
 """
