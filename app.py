@@ -4222,10 +4222,10 @@ HTML = """
                                 }
                                 responseContent += event.data;
 
-                                // Strip markdown code fences from the content (any language specifier)
+                                // Strip markdown code fences (```html ... ```) from the content
                                 let cleanedContent = responseContent
-                                    .replace(/^```\w*\s*\n?/i, '')  // Remove opening ``` with any language
-                                    .replace(/\n?\s*```\s*$/i, '');  // Remove closing ```
+                                    .replace(/^```html\s*/i, '')  // Remove opening ```html
+                                    .replace(/\s*```\s*$/i, '');  // Remove closing ```
 
                                 const messageText = responseDiv.querySelector('.message-text');
                                 if (messageText) {
@@ -4430,13 +4430,7 @@ HTML = """
                                     <div class="message-text"></div>`;
                             }
                             responseContent += event.data;
-
-                            // Strip markdown code fences from the content (any language specifier)
-                            let cleanedContent = responseContent
-                                .replace(/^```\w*\s*\n?/i, '')  // Remove opening ``` with any language
-                                .replace(/\n?\s*```\s*$/i, '');  // Remove closing ```
-
-                            messageContent.querySelector('.message-text').innerHTML = cleanedContent;
+                            messageContent.querySelector('.message-text').innerHTML = responseContent;
 
                             const chatMessages = document.getElementById('chatMessages');
                             if (chatMessages) {
