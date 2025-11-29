@@ -5531,21 +5531,27 @@ CHAT_HTML = """
             });
         }
 
-        // Auto-start streaming if there's a pending stream (MUST run immediately, not wait for DOMContentLoaded)
+        // Auto-start streaming if there's a pending stream
         {% if pending_stream %}
             (function() {
                 const requestId = '{{ pending_stream }}';
-                console.log('[AUTO-START] Initiating streaming with request_id:', requestId);
+                console.log('[AUTO-START] Request ID:', requestId);
 
-                // Show loading indicator
-                const loadingIndicator = document.getElementById('loadingIndicator');
-                if (loadingIndicator) {
-                    loadingIndicator.classList.add('active');
-                }
+                function startAutoStreaming() {
+                    console.log('[AUTO-START] DOM ready, initiating streaming');
 
-                // Find the last assistant message
-                let messages = document.querySelectorAll('.message.assistant');
-                console.log('[AUTO-START] Found', messages.length, 'assistant messages');
+                    // Show loading indicator
+                    const loadingIndicator = document.getElementById('loadingIndicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('active');
+                        console.log('[AUTO-START] Loading indicator activated');
+                    } else {
+                        console.warn('[AUTO-START] Loading indicator not found');
+                    }
+
+                    // Find the last assistant message
+                    let messages = document.querySelectorAll('.message.assistant');
+                    console.log('[AUTO-START] Found', messages.length, 'assistant messages');
 
                 let messageContent;
                 if (messages.length > 0) {
@@ -5738,7 +5744,17 @@ CHAT_HTML = """
                             eventSource.close();
                         }
                     });
-        })();
+                }
+
+                // Start streaming - run immediately if DOM is ready, otherwise wait
+                if (document.readyState === 'loading') {
+                    console.log('[AUTO-START] DOM still loading, waiting for DOMContentLoaded');
+                    document.addEventListener('DOMContentLoaded', startAutoStreaming);
+                } else {
+                    console.log('[AUTO-START] DOM already loaded, starting immediately');
+                    startAutoStreaming();
+                }
+            })();
         {% endif %}
 
         // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
