@@ -12704,13 +12704,31 @@ def stream():
             evidence_strength = get_evidence_strength(num_papers, refs)
 
             # Save complete response to session
-            session['messages'].append({
-                "role": "assistant",
-                "content": full_response,
-                "references": refs,
-                "num_papers": num_papers,
-                "evidence_strength": evidence_strength
-            })
+            # Check if last message is an empty assistant placeholder (from homepage redirect)
+            # If so, update it instead of appending a new one
+            if (session.get('messages') and
+                len(session['messages']) > 0 and
+                session['messages'][-1].get('role') == 'assistant' and
+                session['messages'][-1].get('content') == ''):
+                # Update the placeholder
+                session['messages'][-1] = {
+                    "role": "assistant",
+                    "content": full_response,
+                    "references": refs,
+                    "num_papers": num_papers,
+                    "evidence_strength": evidence_strength
+                }
+                print(f"[DEBUG] Updated existing placeholder assistant message")
+            else:
+                # Append new message (for AJAX submissions from chat page)
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": full_response,
+                    "references": refs,
+                    "num_papers": num_papers,
+                    "evidence_strength": evidence_strength
+                })
+                print(f"[DEBUG] Appended new assistant message")
             session.modified = True
 
             # Send references with evidence strength
