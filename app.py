@@ -2943,108 +2943,39 @@ HTML = """
             background-clip: padding-box;
         }
 
-        /* Chat Messages - Luxury Premium Design */
+        /* Chat Messages - Full-width Document Style */
         .message {
-            animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: left center;
-            margin-bottom: 48px;
+            margin-bottom: 0;
+            animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .message-content {
+            width: 100%;
+            padding: 32px 48px;
+            border-radius: 0;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            transition: background-color 0.2s ease;
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.98) 100%);
-            border: 1px solid rgba(37, 99, 235, 0.12);
-            padding: 24px 32px;
-            border-radius: 28px 28px 8px 28px;
-            max-width: 72%;
-            margin-left: auto;
-            box-shadow:
-                0 2px 12px rgba(37, 99, 235, 0.06),
-                0 1px 6px rgba(37, 99, 235, 0.03),
-                0 0 1px rgba(0, 0, 0, 0.02);
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            position: relative;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-
-        .message.user .message-content::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 28px 28px 8px 28px;
-            padding: 1px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(139, 92, 246, 0.1));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .message.user .message-content:hover {
-            border-color: rgba(37, 99, 235, 0.2);
-            box-shadow:
-                0 4px 20px rgba(37, 99, 235, 0.08),
-                0 2px 10px rgba(37, 99, 235, 0.04),
-                0 1px 3px rgba(0, 0, 0, 0.04);
-            transform: translateY(-1px);
-        }
-
-        .message.user .message-content:hover::before {
-            opacity: 1;
+            background: rgba(247, 248, 250, 0.6);
+            color: #1F2937;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .message.assistant .message-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(250, 251, 252, 0.98) 100%);
-            border: 1px solid rgba(226, 232, 240, 0.4);
-            padding: 40px 48px;
-            border-radius: 24px;
-            box-shadow:
-                0 4px 24px rgba(15, 23, 42, 0.04),
-                0 2px 12px rgba(15, 23, 42, 0.03),
-                0 1px 4px rgba(0, 0, 0, 0.02);
+            background: #ffffff;
+            color: #1F2937;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             position: relative;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-        }
-
-        .message.assistant .message-content::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg,
-                rgba(37, 99, 235, 0.3) 0%,
-                rgba(139, 92, 246, 0.3) 50%,
-                rgba(16, 185, 129, 0.3) 100%
-            );
-            border-radius: 24px 24px 0 0;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .message.assistant .message-content:hover {
-            box-shadow:
-                0 8px 40px rgba(15, 23, 42, 0.06),
-                0 4px 20px rgba(15, 23, 42, 0.04),
-                0 2px 8px rgba(0, 0, 0, 0.03);
-            border-color: rgba(37, 99, 235, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .message.assistant .message-content:hover::after {
-            opacity: 1;
         }
 
         .message-text {
             color: var(--text-primary);
-            font-size: 16.5px;
-            line-height: 1.9;
+            font-size: 0.95rem;
+            line-height: 1.7;
             font-weight: 400;
-            letter-spacing: 0.01em;
         }
 
         .message.user .message-text {
@@ -3732,15 +3663,6 @@ HTML = """
                 padding: 12px 24px;
                 font-size: 0.95rem;
             }
-
-            /* Message user/assistant badges mobile */
-            .message.user .message-content {
-                max-width: 85%;
-            }
-
-            .message.assistant .message-content {
-                max-width: 100%;
-            }
         }
 
         @media (max-width: 640px) {
@@ -4002,7 +3924,7 @@ HTML = """
         // Register Service Worker for offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js?v=2')
+                navigator.serviceWorker.register('/static/sw.js?v=3')
                     .then((registration) => {
                         console.log('Service Worker registered:', registration.scope);
                     })
@@ -6774,7 +6696,7 @@ QUICK_DOSE_HTML = """
         // Register Service Worker for offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js?v=2')
+                navigator.serviceWorker.register('/static/sw.js?v=3')
                     .then((registration) => {
                         console.log('Service Worker registered:', registration.scope);
                     })
