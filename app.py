@@ -4125,6 +4125,11 @@ HTML = """
             </div>
 
             <div class="chat-input-container homepage-input">
+                {% if error_message %}
+                <div style="background: #ffe5e5; border: 1px solid #ff6b6b; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; color: #c92a2a; font-size: 14px; text-align: center;">
+                    <strong>⚠️ {{ error_message }}</strong>
+                </div>
+                {% endif %}
                 <form method="post" action="/" class="homepage-chat-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
@@ -11359,7 +11364,10 @@ def index():
             if not raw_query:
                 print(f"[DEBUG] Empty query received - likely issue with form submission")
                 if is_ajax:
-                    return jsonify({'status': 'error', 'message': 'Empty query'})
+                    return jsonify({'status': 'error', 'message': 'Please enter a question before submitting.'})
+                # Return to homepage with error message in session
+                session['error_message'] = 'Please enter a question before submitting.'
+                session.modified = True
                 return redirect(url_for('index'))
 
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
@@ -11789,10 +11797,13 @@ Respond with maximum clinical utility:"""
     print(f"[DEBUG] GET / - pending_stream = {pending_stream}")
     print(f"[DEBUG] GET / - num messages = {len(session.get('messages', []))}")
 
+    # Get and clear any error message from session
+    error_message = session.pop('error_message', None)
+
     # Ensure session is saved before rendering (critical for streaming to work)
     session.modified = True
 
-    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream)
+    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream, error_message=error_message)
 
 @app.route("/clear")
 def clear():
@@ -11867,6 +11878,15 @@ def preop_assessment():
     surgery_risk = sanitize_user_query(request.form.get("surgery_risk", ""))
     npo = sanitize_user_query(request.form.get("npo", ""))
     allergies = sanitize_user_query(request.form.get("allergies", ""))
+
+    # Validate required fields
+    if not procedure or not procedure.strip():
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the surgical procedure before submitting the form.</p>"
+        return render_template_string(PREOP_HTML, summary=error_message, references=None)
+
+    if not surgery_risk:
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please select a surgery risk category before submitting the form.</p>"
+        return render_template_string(PREOP_HTML, summary=error_message, references=None)
 
     # Calculate BMI and IBW
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else None
