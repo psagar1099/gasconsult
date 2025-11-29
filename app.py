@@ -4365,7 +4365,7 @@ HTML = """
                 textarea.value = text;
                 textarea.focus();
                 // Auto-expand textarea if needed
-                textarea.style.height = '52px';
+                textarea.style.height = '56px';
                 textarea.style.height = textarea.scrollHeight + 'px';
             }
         }
@@ -4380,7 +4380,7 @@ HTML = """
                     textarea.value = prefillMessage;
                     textarea.focus();
                     // Auto-expand textarea if needed
-                    textarea.style.height = '52px';
+                    textarea.style.height = '56px';
                     textarea.style.height = textarea.scrollHeight + 'px';
                     // Clear the stored message
                     sessionStorage.removeItem('prefillMessage');
@@ -4436,199 +4436,199 @@ HTML = """
                         return;
                     }
 
-                // Prevent default form submission and use AJAX for chat page
-                e.preventDefault();
-                console.log('[CHAT-FORM] Prevented default, creating FormData...');
+                    // Prevent default form submission and use AJAX for chat page
+                    e.preventDefault();
+                    console.log('[CHAT-FORM] Prevented default, creating FormData...');
 
-                // Create FormData FIRST (before disabling textarea - disabled fields are excluded from FormData!)
-                const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
-                console.log('[CHAT-FORM] FormData created, query field:', formData.get('query'));
+                    // Create FormData FIRST (before disabling textarea - disabled fields are excluded from FormData!)
+                    const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
+                    console.log('[CHAT-FORM] FormData created, query field:', formData.get('query'));
 
-                // Disable inputs
-                submitBtn.disabled = true;
-                textarea.disabled = true;
-                submitBtn.style.opacity = '0.6';
+                    // Disable inputs
+                    submitBtn.disabled = true;
+                    textarea.disabled = true;
+                    submitBtn.style.opacity = '0.6';
 
-                // Add user message to UI
-                const messagesContainer = document.getElementById('chatMessages');
-                if (!messagesContainer) {
-                    console.error('[ERROR] Chat messages container not found');
-                    submitBtn.disabled = false;
-                    textarea.disabled = false;
-                    submitBtn.style.opacity = '1';
-                    return;
-                }
-
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message user';
-                userMsg.innerHTML = `<div class="message-content"><div class="message-text">${escapeHtml(query)}</div></div>`;
-                messagesContainer.appendChild(userMsg);
-
-                // Add loading indicator with progress steps
-                const loadingMsg = document.createElement('div');
-                loadingMsg.className = 'message assistant';
-                loadingMsg.id = 'streaming-response';
-                loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching PubMed database...</p></div>`;
-                messagesContainer.appendChild(loadingMsg);
-                loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
-                // Clear textarea
-                textarea.value = '';
-                textarea.style.height = '52px';
-
-                fetch('/', {
-                    method: 'POST',
-                    credentials: 'same-origin',  // Important for session cookies
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'  // Tell server this is AJAX
-                    },
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'calculation') {
-                        // Handle calculation result
-                        const loadingMsg = document.getElementById('streaming-response');
-                        if (loadingMsg) {
-                            loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.result}</div>`;
-                            loadingMsg.removeAttribute('id');
-                        }
-                        // Re-enable form
+                    // Add user message to UI
+                    const messagesContainer = document.getElementById('chatMessages');
+                    if (!messagesContainer) {
+                        console.error('[ERROR] Chat messages container not found');
                         submitBtn.disabled = false;
                         textarea.disabled = false;
                         submitBtn.style.opacity = '1';
-                        textarea.focus();
-                    } else if (data.status === 'error') {
-                        // Handle error
-                        const loadingMsg = document.getElementById('streaming-response');
-                        if (loadingMsg) {
-                            loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.message}</div>`;
-                            loadingMsg.removeAttribute('id');
-                        }
-                        // Re-enable form
-                        submitBtn.disabled = false;
-                        textarea.disabled = false;
-                        submitBtn.style.opacity = '1';
-                        textarea.focus();
-                    } else if (data.status === 'ready') {
-                        // Update loading indicator with progress
-                        const loadingIndicator = document.querySelector('.loading-indicator');
-                        if (loadingIndicator) {
-                            loadingIndicator.innerHTML = '📚 Found papers<br>🤖 Analyzing evidence...';
-                        }
+                        return;
+                    }
 
-                        // Connect to streaming endpoint
-                        const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
-                        const responseDiv = document.getElementById('streaming-response').querySelector('.message-content');
-                        let responseContent = '';
+                    const userMsg = document.createElement('div');
+                    userMsg.className = 'message user';
+                    userMsg.innerHTML = `<div class="message-content"><div class="message-text">${escapeHtml(query)}</div></div>`;
+                    messagesContainer.appendChild(userMsg);
 
-                        eventSource.addEventListener('message', function(e) {
-                            const event = JSON.parse(e.data);
+                    // Add loading indicator with progress steps
+                    const loadingMsg = document.createElement('div');
+                    loadingMsg.className = 'message assistant';
+                    loadingMsg.id = 'streaming-response';
+                    loadingMsg.innerHTML = `<div class="message-content"><p class="loading-indicator">🔍 Searching PubMed database...</p></div>`;
+                    messagesContainer.appendChild(loadingMsg);
+                    loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
-                            if (event.type === 'connected') {
-                                console.log('[STREAM] Connected');
-                            } else if (event.type === 'content') {
-                                // Remove loading indicator and add copy button on first content
-                                if (responseContent === '') {
-                                    responseDiv.innerHTML = `
-                                        <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                            </svg>
-                                            <span class="copy-text">Copy</span>
-                                        </button>
-                                        <div class="message-text"></div>
-                                    `;
-                                }
-                                responseContent += event.data;
+                    // Clear textarea
+                    textarea.value = '';
+                    textarea.style.height = '56px';
 
-                                // Strip markdown code fences (```html ... ```) from the content
-                                let cleanedContent = responseContent
-                                    .replace(/^```html\s*/i, '')  // Remove opening ```html
-                                    .replace(/\s*```\s*$/i, '');  // Remove closing ```
-
-                                const messageText = responseDiv.querySelector('.message-text');
-                                if (messageText) {
-                                    messageText.innerHTML = cleanedContent;
-                                } else {
-                                    responseDiv.innerHTML = cleanedContent;
-                                }
-                                // Auto-scroll
-                                responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                            } else if (event.type === 'references') {
-                                // Add references and metadata
-                                const refs = event.data;
-                                if (refs && refs.length > 0) {
-                                    let refsHtml = '<div class="message-refs"><strong>References:</strong>';
-                                    refs.forEach((ref, i) => {
-                                        refsHtml += `<div class="ref-item">
-                                            <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
-                                                [${i+1}] ${ref.title} (${ref.year})
-                                            </a>
-                                        </div>`;
-                                    });
-                                    refsHtml += '</div>';
-                                    if (event.num_papers > 0) {
-                                        refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`;
-                                    }
-                                    responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
-                                }
-                            } else if (event.type === 'done') {
-                                console.log('[STREAM] Complete');
-                                eventSource.close();
-                                // Remove ID to prevent future responses from updating this one
-                                const streamingMsg = document.getElementById('streaming-response');
-                                if (streamingMsg) {
-                                    streamingMsg.removeAttribute('id');
-                                }
-                                // Re-enable form
-                                submitBtn.disabled = false;
-                                textarea.disabled = false;
-                                submitBtn.style.opacity = '1';
-                                textarea.focus();
-                                // Session already updated on server, no reload needed
-                            } else if (event.type === 'error') {
-                                console.error('[STREAM] Error:', event.message);
-                                responseDiv.innerHTML = `<p><strong>Error:</strong> ${event.message}</p>`;
-                                // Remove ID to prevent future responses from updating this one
-                                const streamingMsg = document.getElementById('streaming-response');
-                                if (streamingMsg) {
-                                    streamingMsg.removeAttribute('id');
-                                }
-                                eventSource.close();
-                                submitBtn.disabled = false;
-                                textarea.disabled = false;
-                                submitBtn.style.opacity = '1';
+                    fetch('/', {
+                        method: 'POST',
+                        credentials: 'same-origin',  // Important for session cookies
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'  // Tell server this is AJAX
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'calculation') {
+                            // Handle calculation result
+                            const loadingMsg = document.getElementById('streaming-response');
+                            if (loadingMsg) {
+                                loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.result}</div>`;
+                                loadingMsg.removeAttribute('id');
                             }
-                        });
-
-                        eventSource.onerror = function(err) {
-                            console.error('[STREAM] Connection error:', err);
-                            // Remove ID to prevent future responses from updating this one
-                            const streamingMsg = document.getElementById('streaming-response');
-                            if (streamingMsg) {
-                                streamingMsg.removeAttribute('id');
-                            }
-                            eventSource.close();
+                            // Re-enable form
                             submitBtn.disabled = false;
                             textarea.disabled = false;
                             submitBtn.style.opacity = '1';
-                        };
-                    }
-                })
-                .catch(error => {
-                    console.error('[POST] Error:', error);
-                    const loadingMsg = document.getElementById('streaming-response');
-                    if (loadingMsg) {
-                        loadingMsg.querySelector('.message-content').innerHTML = '<p><strong>Error:</strong> Failed to start query. Please try again.</p>';
-                        loadingMsg.removeAttribute('id');
-                    }
-                    submitBtn.disabled = false;
-                    textarea.disabled = false;
-                    submitBtn.style.opacity = '1';
+                            textarea.focus();
+                        } else if (data.status === 'error') {
+                            // Handle error
+                            const loadingMsg = document.getElementById('streaming-response');
+                            if (loadingMsg) {
+                                loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.message}</div>`;
+                                loadingMsg.removeAttribute('id');
+                            }
+                            // Re-enable form
+                            submitBtn.disabled = false;
+                            textarea.disabled = false;
+                            submitBtn.style.opacity = '1';
+                            textarea.focus();
+                        } else if (data.status === 'ready') {
+                            // Update loading indicator with progress
+                            const loadingIndicator = document.querySelector('.loading-indicator');
+                            if (loadingIndicator) {
+                                loadingIndicator.innerHTML = '📚 Found papers<br>🤖 Analyzing evidence...';
+                            }
+
+                            // Connect to streaming endpoint
+                            const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
+                            const responseDiv = document.getElementById('streaming-response').querySelector('.message-content');
+                            let responseContent = '';
+
+                            eventSource.addEventListener('message', function(e) {
+                                const event = JSON.parse(e.data);
+
+                                if (event.type === 'connected') {
+                                    console.log('[STREAM] Connected');
+                                } else if (event.type === 'content') {
+                                    // Remove loading indicator and add copy button on first content
+                                    if (responseContent === '') {
+                                        responseDiv.innerHTML = `
+                                            <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
+                                                <span class="copy-text">Copy</span>
+                                            </button>
+                                            <div class="message-text"></div>
+                                        `;
+                                    }
+                                    responseContent += event.data;
+
+                                    // Strip markdown code fences (```html ... ```) from the content
+                                    let cleanedContent = responseContent
+                                        .replace(/^```html\s*/i, '')  // Remove opening ```html
+                                        .replace(/\s*```\s*$/i, '');  // Remove closing ```
+
+                                    const messageText = responseDiv.querySelector('.message-text');
+                                    if (messageText) {
+                                        messageText.innerHTML = cleanedContent;
+                                    } else {
+                                        responseDiv.innerHTML = cleanedContent;
+                                    }
+                                    // Auto-scroll
+                                    responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                } else if (event.type === 'references') {
+                                    // Add references and metadata
+                                    const refs = event.data;
+                                    if (refs && refs.length > 0) {
+                                        let refsHtml = '<div class="message-refs"><strong>References:</strong>';
+                                        refs.forEach((ref, i) => {
+                                            refsHtml += `<div class="ref-item">
+                                                <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
+                                                    [${i+1}] ${ref.title} (${ref.year})
+                                                </a>
+                                            </div>`;
+                                        });
+                                        refsHtml += '</div>';
+                                        if (event.num_papers > 0) {
+                                            refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`;
+                                        }
+                                        responseDiv.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
+                                    }
+                                } else if (event.type === 'done') {
+                                    console.log('[STREAM] Complete');
+                                    eventSource.close();
+                                    // Remove ID to prevent future responses from updating this one
+                                    const streamingMsg = document.getElementById('streaming-response');
+                                    if (streamingMsg) {
+                                        streamingMsg.removeAttribute('id');
+                                    }
+                                    // Re-enable form
+                                    submitBtn.disabled = false;
+                                    textarea.disabled = false;
+                                    submitBtn.style.opacity = '1';
+                                    textarea.focus();
+                                    // Session already updated on server, no reload needed
+                                } else if (event.type === 'error') {
+                                    console.error('[STREAM] Error:', event.message);
+                                    responseDiv.innerHTML = `<p><strong>Error:</strong> ${event.message}</p>`;
+                                    // Remove ID to prevent future responses from updating this one
+                                    const streamingMsg = document.getElementById('streaming-response');
+                                    if (streamingMsg) {
+                                        streamingMsg.removeAttribute('id');
+                                    }
+                                    eventSource.close();
+                                    submitBtn.disabled = false;
+                                    textarea.disabled = false;
+                                    submitBtn.style.opacity = '1';
+                                }
+                            });
+
+                            eventSource.onerror = function(err) {
+                                console.error('[STREAM] Connection error:', err);
+                                // Remove ID to prevent future responses from updating this one
+                                const streamingMsg = document.getElementById('streaming-response');
+                                if (streamingMsg) {
+                                    streamingMsg.removeAttribute('id');
+                                }
+                                eventSource.close();
+                                submitBtn.disabled = false;
+                                textarea.disabled = false;
+                                submitBtn.style.opacity = '1';
+                            };
+                        }
+                    })
+                    .catch(error => {
+                        console.error('[POST] Error:', error);
+                        const loadingMsg = document.getElementById('streaming-response');
+                        if (loadingMsg) {
+                            loadingMsg.querySelector('.message-content').innerHTML = '<p><strong>Error:</strong> Failed to start query. Please try again.</p>';
+                            loadingMsg.removeAttribute('id');
+                        }
+                        submitBtn.disabled = false;
+                        textarea.disabled = false;
+                        submitBtn.style.opacity = '1';
+                    });
                 });
-            });
             }
         });
 
@@ -4643,7 +4643,7 @@ HTML = """
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach(textarea => {
             textarea.addEventListener('input', function() {
-                this.style.height = '52px';
+                this.style.height = '56px';
                 this.style.height = Math.min(this.scrollHeight, 200) + 'px';
             });
         });
