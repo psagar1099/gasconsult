@@ -5600,7 +5600,9 @@ CHAT_HTML = """
         }
 
         // Auto-start streaming if there's a pending stream
+        console.log('[DEBUG] Checking for pending_stream...');
         {% if pending_stream %}
+            console.log('[DEBUG] pending_stream exists!');
             (function() {
                 const requestId = '{{ pending_stream }}';
                 console.log('[AUTO-START] Request ID:', requestId);
@@ -5656,10 +5658,13 @@ CHAT_HTML = """
                     let evidenceStrength = null;
 
                     eventSource.addEventListener('error', function(e) {
-                        console.error('Streaming error:', e);
+                        console.error('[AUTO-START] Streaming error:', e);
+                        console.error('[AUTO-START] EventSource readyState:', eventSource.readyState);
+                        console.error('[AUTO-START] EventSource url:', eventSource.url);
                         if (loadingIndicator) loadingIndicator.classList.remove('active');
                         if (eventSource.readyState === EventSource.CLOSED) {
-                            messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">Connection error. Please refresh and try again.</p></div>';
+                            console.error('[AUTO-START] EventSource connection CLOSED');
+                            messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">❌ Connection error. Please refresh and try again.</p></div>';
                         }
                     });
 
@@ -5823,6 +5828,8 @@ CHAT_HTML = """
                     startAutoStreaming();
                 }
             })();
+        {% else %}
+            console.log('[DEBUG] NO pending_stream found - normal chat page load');
         {% endif %}
 
         // Keyboard shortcut: Ctrl+Enter or Cmd+Enter to submit
