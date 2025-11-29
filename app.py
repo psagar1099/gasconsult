@@ -3697,8 +3697,8 @@ HTML = """
                         console.log('[AJAX] Response:', data);
 
                         if (data.status === 'ready' || data.status === 'calculation') {
-                            // Redirect to chat page
-                            window.location.href = '/chat';
+                            // Redirect to homepage (which shows chat interface)
+                            window.location.href = '/';
                         } else if (data.status === 'error') {
                             // Handle CSRF errors by reloading the page
                             if (data.error_type === 'csrf') {
@@ -9975,7 +9975,7 @@ CALCULATORS_HTML = """
             addMessageToModal('', 'loading');
 
             try {
-                // Send to /chat to prepare streaming
+                // Send to homepage to prepare streaming
                 const csrfToken = document.getElementById('csrf_token').value;
                 const response = await fetch('/', {
                     method: 'POST',
@@ -12220,7 +12220,7 @@ def api_status():
     return jsonify({
         "status": "operational",
         "endpoints": {
-            "chat": "/chat",
+            "chat": "/",
             "preop": "/preop",
             "hypotension": "/hypotension",
             "quick_dose": "/quick-dose",
