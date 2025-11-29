@@ -3533,19 +3533,62 @@ HTML = """
             }
         };
 
-        // Show loading animation when form submits
+        // Handle form submission via AJAX (homepage)
         document.addEventListener('DOMContentLoaded', function() {
             const chatForm = document.querySelector('.chat-form');
             const loadingContainer = document.getElementById('loadingIndicator');
 
             if (chatForm) {
                 chatForm.addEventListener('submit', function(e) {
-                    const textarea = chatForm.querySelector('textarea');
-                    if (textarea.value.trim()) {
-                        if (loadingContainer) {
-                            loadingContainer.classList.add('active');
-                        }
+                    e.preventDefault(); // Prevent default form submission
+
+                    const formData = new FormData(chatForm);
+                    const query = formData.get('query');
+
+                    if (!query || !query.trim()) {
+                        return; // Don't submit empty queries
                     }
+
+                    // Show loading indicator
+                    if (loadingContainer) {
+                        loadingContainer.classList.add('active');
+                    }
+
+                    // Disable submit button and textarea during submission
+                    const textarea = chatForm.querySelector('textarea');
+                    const submitBtn = chatForm.querySelector('button[type="submit"]');
+                    if (textarea) textarea.disabled = true;
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // Submit via AJAX
+                    fetch('/chat', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest' // Mark as AJAX request
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('[AJAX] Response:', data);
+
+                        if (data.status === 'ready' || data.status === 'calculation') {
+                            // Redirect to chat page
+                            window.location.href = '/chat';
+                        } else if (data.status === 'error') {
+                            alert('Error: ' + data.message);
+                            if (loadingContainer) loadingContainer.classList.remove('active');
+                            if (textarea) textarea.disabled = false;
+                            if (submitBtn) submitBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('[AJAX] Error:', error);
+                        alert('An error occurred. Please try again.');
+                        if (loadingContainer) loadingContainer.classList.remove('active');
+                        if (textarea) textarea.disabled = false;
+                        if (submitBtn) submitBtn.disabled = false;
+                    });
                 });
             }
         });
@@ -5794,7 +5837,8 @@ CHAT_HTML = """
                         e.preventDefault();
                         const form = textarea.closest('form');
                         if (form) {
-                            form.submit();
+                            // Trigger submit event (which will be caught by our AJAX handler)
+                            form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
                         }
                     }
                 });
@@ -5806,14 +5850,68 @@ CHAT_HTML = """
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
-            // Show loading indicator when form submits
+            // Handle form submission via AJAX
             const chatForm = document.querySelector('.chat-form');
             if (chatForm) {
-                chatForm.addEventListener('submit', function() {
+                chatForm.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevent default form submission
+
+                    const formData = new FormData(chatForm);
+                    const query = formData.get('query');
+
+                    if (!query || !query.trim()) {
+                        return; // Don't submit empty queries
+                    }
+
+                    // Show loading indicator
                     const loadingIndicator = document.getElementById('loadingIndicator');
                     if (loadingIndicator) {
                         loadingIndicator.classList.add('active');
                     }
+
+                    // Disable submit button and textarea during submission
+                    const textarea = chatForm.querySelector('textarea');
+                    const submitBtn = chatForm.querySelector('button[type="submit"]');
+                    if (textarea) textarea.disabled = true;
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // Submit via AJAX
+                    fetch('/chat', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest' // Mark as AJAX request
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('[AJAX] Response:', data);
+
+                        if (data.status === 'ready' || data.status === 'calculation') {
+                            // Clear the form
+                            chatForm.reset();
+
+                            if (data.status === 'calculation') {
+                                // For calculations, just reload the page to show result
+                                window.location.reload();
+                            } else {
+                                // For streaming responses, reload to trigger auto-start
+                                window.location.reload();
+                            }
+                        } else if (data.status === 'error') {
+                            alert('Error: ' + data.message);
+                            if (loadingIndicator) loadingIndicator.classList.remove('active');
+                            if (textarea) textarea.disabled = false;
+                            if (submitBtn) submitBtn.disabled = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('[AJAX] Error:', error);
+                        alert('An error occurred. Please try again.');
+                        if (loadingIndicator) loadingIndicator.classList.remove('active');
+                        if (textarea) textarea.disabled = false;
+                        if (submitBtn) submitBtn.disabled = false;
+                    });
                 });
             }
         }); // End DOMContentLoaded
