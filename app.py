@@ -2869,58 +2869,41 @@ HTML = """
             background: #bbb;
         }
 
-        /* Chat Messages */
+        /* Chat Messages - Full-width document style */
         .message {
-            margin-bottom: 28px;
-            display: flex;
+            margin-bottom: 0;
             animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.assistant {
-            justify-content: flex-start;
-        }
-
         .message-content {
-            max-width: 75%;
-            padding: 12px 18px;
-            border-radius: 18px;
+            width: 100%;
+            padding: 32px 48px;
+            border-radius: 0;
             font-size: 0.95rem;
-            line-height: 1.6;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-            transition: all 0.2s ease;
-        }
-
-        .message-content:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            line-height: 1.7;
+            transition: background-color 0.2s ease;
         }
 
         .message.user .message-content {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 8px rgba(0, 102, 204, 0.25);
+            background: rgba(247, 248, 250, 0.6);
+            color: #1F2937;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
         }
 
         .message.assistant .message-content {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
+            background: #ffffff;
             color: #1F2937;
-            border: 1px solid rgba(0, 102, 204, 0.1);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             position: relative;
         }
 
         /* Copy button */
         .copy-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(0, 102, 204, 0.2);
+            top: 28px;
+            right: 40px;
+            background: rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 6px;
             padding: 6px 12px;
             font-size: 0.85rem;
@@ -2935,10 +2918,9 @@ HTML = """
         }
 
         .copy-btn:hover {
-            background: white;
-            border-color: #0066CC;
-            color: #0066CC;
-            box-shadow: 0 2px 6px rgba(0, 102, 204, 0.15);
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.12);
+            color: #1F2937;
         }
 
         .copy-btn.copied {
@@ -3364,11 +3346,16 @@ HTML = """
             }
 
             .message-content {
-                max-width: 92%;
+                padding: 24px 20px;
             }
 
             .chat-messages {
-                padding: 20px 10px;
+                padding: 0;
+            }
+
+            .copy-btn {
+                top: 20px;
+                right: 16px;
             }
 
             .chat-input-container {
