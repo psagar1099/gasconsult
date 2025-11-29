@@ -5623,15 +5623,6 @@ CHAT_HTML = """
         {% endif %}
     </div>
 
-    <!-- Chat Input - Always Visible -->
-    <div class="chat-input-container">
-        <form method="post" action="/" class="chat-form">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
-            <button type="submit" class="send-btn">↑</button>
-        </form>
-    </div>
-
     <!-- Article Preview Modal -->
     <div class="modal-overlay" id="articleModal">
         <div class="modal-content article-modal-content">
