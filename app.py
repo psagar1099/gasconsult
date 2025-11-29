@@ -5574,6 +5574,7 @@ CHAT_HTML = """
             {% if pending_stream %}
             (function() {
                 const requestId = '{{ pending_stream }}';
+                console.log('[AUTO-START] Initiating streaming with request_id:', requestId);
 
                 // Show loading indicator
                 const loadingIndicator = document.getElementById('loadingIndicator');
@@ -5582,16 +5583,39 @@ CHAT_HTML = """
                 }
 
                 // Find the last assistant message
-                const messages = document.querySelectorAll('.message.assistant');
+                let messages = document.querySelectorAll('.message.assistant');
+                console.log('[AUTO-START] Found', messages.length, 'assistant messages');
+
+                let messageContent;
                 if (messages.length > 0) {
                     const lastMessage = messages[messages.length - 1];
-                    const messageContent = lastMessage.querySelector('.message-content');
+                    messageContent = lastMessage.querySelector('.message-content');
+                } else {
+                    // Fallback: Create a new message container if none found
+                    console.log('[AUTO-START] No assistant messages found, creating placeholder');
+                    const chatMessages = document.getElementById('chatMessages');
+                    if (!chatMessages) {
+                        console.error('[AUTO-START] No chatMessages container found!');
+                        return;
+                    }
+                    const newMessage = document.createElement('div');
+                    newMessage.className = 'message assistant';
+                    newMessage.innerHTML = '<div class="message-content"></div>';
+                    chatMessages.appendChild(newMessage);
+                    messageContent = newMessage.querySelector('.message-content');
+                    // Update messages NodeList after creating new message
+                    messages = document.querySelectorAll('.message.assistant');
+                }
 
-                    // Clear existing content and show loading
-                    messageContent.innerHTML = '<div class="message-text"><p class="loading-indicator">🔍 Searching medical literature...</p></div>';
+                // Calculate message index (0-based)
+                const messageIndex = Math.max(0, messages.length - 1);
 
-                    // Start streaming
-                    const eventSource = new EventSource(`/stream?request_id=${requestId}`);
+                // Clear existing content and show loading
+                messageContent.innerHTML = '<div class="message-text"><p class="loading-indicator">🔍 Searching medical literature...</p></div>';
+
+                // Start streaming
+                console.log('[AUTO-START] Starting EventSource connection to /stream');
+                const eventSource = new EventSource(`/stream?request_id=${requestId}`);
                     let responseContent = '';
                     let numPapers = 0;
                     let evidenceStrength = null;
@@ -5613,7 +5637,7 @@ CHAT_HTML = """
                             // On first content, set up the message structure
                             if (responseContent === '') {
                                 messageContent.innerHTML = `
-                                    <button class="copy-btn" onclick="smartCopy(this, ${messages.length - 1})" title="Smart copy with citations">
+                                    <button class="copy-btn" onclick="smartCopy(this, ${messageIndex})" title="Smart copy with citations">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                             <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -5644,7 +5668,7 @@ CHAT_HTML = """
                                 const evidenceLevel = evidenceStrength.level || 'Moderate';
                                 const evidenceLevelClass = evidenceLevel.toLowerCase();
                                 let evidenceBadgeHtml = `
-                                    <div class="evidence-badge ${evidenceLevelClass}" data-message-index="${messages.length - 1}">
+                                    <div class="evidence-badge ${evidenceLevelClass}" data-message-index="${messageIndex}">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                             <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
@@ -5681,13 +5705,13 @@ CHAT_HTML = """
                                 // Add premium action buttons
                                 refsHtml += `
                                     <div class="message-actions">
-                                        <button class="action-btn" onclick="toggleBookmark(this, ${messages.length - 1})" title="Bookmark this response">
+                                        <button class="action-btn" onclick="toggleBookmark(this, ${messageIndex})" title="Bookmark this response">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
                                             </svg>
                                             <span>Save</span>
                                         </button>
-                                        <button class="action-btn" onclick="shareResponse(${messages.length - 1})" title="Share this response">
+                                        <button class="action-btn" onclick="shareResponse(${messageIndex})" title="Share this response">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <circle cx="18" cy="5" r="3"></circle>
                                                 <circle cx="6" cy="12" r="3"></circle>
@@ -5697,13 +5721,13 @@ CHAT_HTML = """
                                             </svg>
                                             <span>Share</span>
                                         </button>
-                                        <button class="action-btn" onclick="exportCitations(${messages.length - 1}, 'bibtex')" title="Export to BibTeX">
+                                        <button class="action-btn" onclick="exportCitations(${messageIndex}, 'bibtex')" title="Export to BibTeX">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
                                             </svg>
                                             <span>Export .bib</span>
                                         </button>
-                                        <button class="action-btn" onclick="exportCitations(${messages.length - 1}, 'ris')" title="Export to RIS (Zotero/Mendeley)">
+                                        <button class="action-btn" onclick="exportCitations(${messageIndex}, 'ris')" title="Export to RIS (Zotero/Mendeley)">
                                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"></path>
                                             </svg>
@@ -5713,14 +5737,14 @@ CHAT_HTML = """
 
                                 // Add follow-up section
                                 refsHtml += `
-                                    <div class="followup-section" id="followup-${messages.length - 1}" style="display: none;">
+                                    <div class="followup-section" id="followup-${messageIndex}" style="display: none;">
                                         <div class="followup-title">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                                             </svg>
                                             Ask next:
                                         </div>
-                                        <div class="followup-questions" id="followup-questions-${messages.length - 1}">
+                                        <div class="followup-questions" id="followup-questions-${messageIndex}">
                                             <!-- Loaded dynamically -->
                                         </div>
                                     </div>`;
@@ -5740,7 +5764,7 @@ CHAT_HTML = """
                                 });
 
                                 // Load follow-up suggestions
-                                loadFollowupSuggestions(messages.length - 1);
+                                loadFollowupSuggestions(messageIndex);
                             }
                         } else if (event.type === 'done') {
                             if (loadingIndicator) loadingIndicator.classList.remove('active');
@@ -5753,7 +5777,6 @@ CHAT_HTML = """
                             eventSource.close();
                         }
                     });
-                }
             })();
             {% endif %}
         }); // End DOMContentLoaded
