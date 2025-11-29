@@ -2904,13 +2904,13 @@ HTML = """
 
         /* Chat Container - Luxury Premium Design */
         .chat-container {
-            max-width: 1200px;
+            max-width: 2000px;
             margin: 0 auto;
             width: 100%;
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 0 48px;
+            padding: 0 24px;
         }
 
         .chat-messages {
@@ -2951,7 +2951,7 @@ HTML = """
 
         .message-content {
             width: 100%;
-            padding: 32px 48px;
+            padding: 32px 32px;
             border-radius: 0;
             font-size: 0.95rem;
             line-height: 1.7;
@@ -2994,7 +2994,7 @@ HTML = """
         .copy-btn {
             position: absolute;
             top: 40px;
-            right: 48px;
+            right: 32px;
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: 12px;
@@ -3500,8 +3500,12 @@ HTML = """
                 padding: 32px 24px;
             }
 
+            .chat-container {
+                padding: 0 12px;
+            }
+
             .message-content {
-                padding: 24px 20px;
+                padding: 24px 12px;
             }
 
             .chat-messages {
@@ -3510,7 +3514,7 @@ HTML = """
 
             .copy-btn {
                 top: 20px;
-                right: 16px;
+                right: 12px;
             }
 
             .chat-input-container {
