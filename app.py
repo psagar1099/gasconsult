@@ -3834,8 +3834,8 @@ HTML = """
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                {% if messages %}
-                <a href="/clear" class="clear-chat-btn">Clear Chat</a>
+                {% if messages or session.get('chat_active') %}
+                <a href="/clear-chat" class="clear-chat-btn">Clear Chat</a>
                 {% endif %}
             </div>
         </div>
@@ -3855,7 +3855,7 @@ HTML = """
     {% endif %}
 
     <div class="main-content">
-        {% if not messages %}
+        {% if not messages and not session.get('chat_active') %}
         <!-- Welcome Screen -->
         <div class="welcome-screen">
             <!-- Hero Section -->
@@ -3903,7 +3903,7 @@ HTML = """
         {% endif %}
 
         <!-- Chat Input - Always Visible on Homepage -->
-        {% if not messages %}
+        {% if not messages and not session.get('chat_active') %}
         <div class="homepage-chat-section">
             <!-- Suggested Prompts -->
             <div class="suggested-prompts">
@@ -3971,7 +3971,7 @@ HTML = """
         {% endif %}
 
         <!-- Chat Container - Always present for streaming -->
-        <div class="chat-container" {% if not messages %}style="display: none;"{% endif %}>
+        <div class="chat-container" {% if not messages and not session.get('chat_active') %}style="display: none;"{% endif %}>
             <div class="chat-messages" id="chatMessages">
                 {% if messages %}
                 {% for msg in messages %}
@@ -4022,7 +4022,7 @@ HTML = """
     </div>
 
     <!-- Chat Input - Visible on Chat Page -->
-    {% if messages %}
+    {% if messages or session.get('chat_active') %}
     <div class="chat-input-container">
         <form method="post" action="/" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -5478,8 +5478,8 @@ CHAT_HTML = """
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                {% if messages %}
-                <a href="/clear" class="clear-chat-btn">Clear Chat</a>
+                {% if messages or session.get('chat_active') %}
+                <a href="/clear-chat" class="clear-chat-btn">Clear Chat</a>
                 {% endif %}
             </div>
         </div>
@@ -13135,6 +13135,7 @@ def index():
 
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
+            session['chat_active'] = True  # Set chat mode flag
             session.modified = True
             print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
 
@@ -13599,6 +13600,7 @@ def chat_old():
 
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
+            session['chat_active'] = True  # Set chat mode flag
             session.modified = True
             print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
 
@@ -14106,9 +14108,18 @@ def get_article_preview(pmid):
 
 @app.route("/clear")
 def clear():
-    """Clear conversation history and return to homepage"""
+    """Clear conversation history and return to homepage hero state"""
     session.pop('messages', None)
     session.pop('conversation_topic', None)
+    session.pop('chat_active', None)  # Clear chat mode flag
+    return redirect(url_for('index'))
+
+@app.route("/clear-chat")
+def clear_chat():
+    """Clear conversation messages but stay in active chat interface"""
+    session.pop('messages', None)
+    session.pop('conversation_topic', None)
+    session['chat_active'] = True  # Keep chat interface active
     return redirect(url_for('index'))
 
 @app.route("/terms")
