@@ -4037,6 +4037,9 @@ HTML = """
     </footer>
 
     <script>
+        // VERSION: 2025-11-29-debug-v3 - Debug empty query bug
+        console.log('[SCRIPT] Loading script version: 2025-11-29-debug-v3');
+
         // Fill query from suggested prompt
         function fillQuery(text) {
             const textarea = document.getElementById('chatInput');
@@ -4096,24 +4099,32 @@ HTML = """
 
         // Streaming form submission - must run after DOM loads
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('[INIT] DOMContentLoaded - initializing chat form handler');
             // Only handle chat page form with AJAX, let homepage form submit normally
             const chatPageForm = document.querySelector('.chat-form');
+            console.log('[INIT] .chat-form element:', chatPageForm);
             if (chatPageForm) {
+                console.log('[CHAT-FORM] Event listener attached to .chat-form');
                 chatPageForm.addEventListener('submit', function(e) {
+                    console.log('[CHAT-FORM] Submit event fired');
                     const submitBtn = chatPageForm.querySelector('.send-btn');
                     const textarea = chatPageForm.querySelector('textarea');
                     const query = textarea.value.trim();
+                    console.log('[CHAT-FORM] Query value:', query);
 
                     if (!query) {
+                        console.log('[CHAT-FORM] Empty query detected, preventing submission');
                         e.preventDefault();
                         return;
                     }
 
                 // Prevent default form submission and use AJAX for chat page
                 e.preventDefault();
+                console.log('[CHAT-FORM] Prevented default, creating FormData...');
 
                 // Create FormData FIRST (before disabling textarea - disabled fields are excluded from FormData!)
                 const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
+                console.log('[CHAT-FORM] FormData created, query field:', formData.get('query'));
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -13087,6 +13098,10 @@ def index():
         try:
             # Safely get query from form data and sanitize it
             raw_query = request.form.get("query", "").strip()
+            print(f"[DEBUG] Form data received: {dict(request.form)}")
+            print(f"[DEBUG] Query field raw value: '{request.form.get('query', 'MISSING')}'")
+            print(f"[DEBUG] Is AJAX: {request.headers.get('X-Requested-With') == 'XMLHttpRequest'}")
+            print(f"[DEBUG] Session messages count: {len(session.get('messages', []))}")
             raw_query = sanitize_user_query(raw_query)
 
             # Check if this is an AJAX request
@@ -13094,7 +13109,7 @@ def index():
 
             # If query is empty, return appropriate response
             if not raw_query:
-                print(f"[DEBUG] Empty query received")
+                print(f"[DEBUG] Empty query received - likely issue with form submission")
                 if is_ajax:
                     return jsonify({'status': 'error', 'message': 'Empty query'})
                 return redirect(url_for('index'))
