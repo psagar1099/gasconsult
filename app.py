@@ -2203,10 +2203,6 @@ HTML = """<!DOCTYPE html>
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="gasconsult.ai">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -2784,7 +2780,6 @@ HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        /* TABLET (min-width: 768px) */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
@@ -2830,7 +2825,6 @@ HTML = """<!DOCTYPE html>
             .orb-3 { width: 400px; height: 400px; }
         }
 
-        /* DESKTOP (min-width: 1024px) */
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
             .hero { padding: 180px 40px 80px; }
@@ -2858,266 +2852,8 @@ HTML = """<!DOCTYPE html>
             .orb-3 { width: 500px; height: 500px; }
         }
 
-        /* LARGE DESKTOP (min-width: 1280px) */
         @media (min-width: 1280px) {
             .hero-title { font-size: 80px; }
-        }
-
-        /* ==================== CHAT INTERFACE STYLES ==================== */
-        .messages-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            max-height: calc(100vh - 280px);
-        }
-
-        .message {
-            display: flex;
-            animation: slideIn 0.4s ease-out;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message-bubble {
-            max-width: 85%;
-            padding: 18px 22px;
-            border-radius: 18px;
-            position: relative;
-        }
-
-        .message.user .message-bubble {
-            background: rgba(255, 255, 255, 0.95);
-            color: var(--gray-900);
-            border: 1px solid var(--gray-200);
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        }
-
-        .message.assistant .message-bubble {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-            color: var(--gray-900);
-        }
-
-        .message-text {
-            font-size: 15px;
-            line-height: 1.7;
-            color: var(--gray-900);
-        }
-
-        .message-text h3 {
-            font-size: 1.1rem;
-            margin: 16px 0 8px 0;
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        .message-text h3:first-child {
-            margin-top: 0;
-        }
-
-        .message-text p {
-            margin: 8px 0;
-        }
-
-        .message-text ul, .message-text ol {
-            margin: 8px 0;
-            padding-left: 24px;
-        }
-
-        .message-text li {
-            margin: 4px 0;
-        }
-
-        .message-text strong {
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        /* Copy Button */
-        .copy-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--gray-200);
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--gray-700);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.3s ease;
-        }
-
-        .copy-btn:hover {
-            background: var(--white);
-            border-color: var(--blue-300);
-            color: var(--blue-600);
-        }
-
-        .copy-btn.copied {
-            background: rgba(16, 185, 129, 0.1);
-            border-color: rgba(16, 185, 129, 0.3);
-            color: #059669;
-        }
-
-        /* References */
-        .message-refs {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid var(--gray-200);
-            font-size: 13px;
-        }
-
-        .message-refs strong {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--gray-700);
-        }
-
-        .ref-item {
-            margin: 6px 0;
-        }
-
-        .ref-item a {
-            color: var(--blue-600);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .ref-item a:hover {
-            color: var(--blue-700);
-            text-decoration: underline;
-        }
-
-        .message-meta {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 1px solid var(--gray-200);
-            font-size: 12px;
-            color: var(--gray-500);
-        }
-
-        /* Loading */
-        .loading-indicator {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--gray-600);
-            font-size: 14px;
-        }
-
-        .loading-dots {
-            display: flex;
-            gap: 6px;
-        }
-
-        .loading-dots span {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--blue-500);
-            animation: pulse 1.4s ease-in-out infinite;
-        }
-
-        .loading-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .loading-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.3; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        /* Chat Input */
-        .chat-input-container {
-            padding: 20px 24px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .chat-form {
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .chat-textarea {
-            flex: 1;
-            padding: 14px 18px;
-            border: 1px solid var(--gray-300);
-            border-radius: 14px;
-            font-family: inherit;
-            font-size: 15px;
-            line-height: 1.5;
-            resize: none;
-            min-height: 52px;
-            max-height: 200px;
-            background: var(--white);
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        .chat-textarea:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .send-btn {
-            width: 52px;
-            height: 52px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 24px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            flex-shrink: 0;
-        }
-
-        .send-btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .send-btn:active {
-            transform: translateY(0);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
     </style>
 </head>
@@ -3150,8 +2886,6 @@ HTML = """<!DOCTYPE html>
             </div>
         </nav>
 
-        {% if not messages %}
-        <!-- Welcome Page -->
         <section class="hero">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
@@ -3173,19 +2907,19 @@ HTML = """<!DOCTYPE html>
                         </button>
                     </div>
                     <div class="chat-hints">
-                        <div class="hint-chip" onclick="fillQuery(this)">
+                        <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
                             Pre-op cardiac risk
                         </div>
-                        <div class="hint-chip" onclick="fillQuery(this)">
+                        <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                             Sugammadex dosing
                         </div>
-                        <div class="hint-chip" onclick="fillQuery(this)">
+                        <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
                             MH protocol
                         </div>
-                        <div class="hint-chip" onclick="fillQuery(this)">
+                        <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                             RSI checklist
                         </div>
@@ -3201,7 +2935,7 @@ HTML = """<!DOCTYPE html>
                 <p class="features-subtitle">Clinical tools powered by the latest evidence.</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card" onclick="window.location.href='/'">
+                <div class="feature-card">
                     <div class="feature-icon blue">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </div>
@@ -3209,7 +2943,7 @@ HTML = """<!DOCTYPE html>
                     <p class="feature-desc">Ask complex clinical questions and get evidence-based answers with PubMed citations in seconds.</p>
                     <a href="/" class="feature-link">Try it now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='/quick-dose'">
+                <div class="feature-card">
                     <div class="feature-icon emerald">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     </div>
@@ -3217,7 +2951,7 @@ HTML = """<!DOCTYPE html>
                     <p class="feature-desc">Weight-based dosing for all common anesthesia drugs with color-coded syringe labels.</p>
                     <a href="/quick-dose" class="feature-link">Calculate doses <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>
-                <div class="feature-card" onclick="window.location.href='/preop'">
+                <div class="feature-card">
                     <div class="feature-icon violet">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2 4-4"></path></svg>
                     </div>
@@ -3243,80 +2977,8 @@ HTML = """<!DOCTYPE html>
                 </div>
             </div>
         </section>
-        {% else %}
-        <!-- Chat Interface -->
-        <div class="chat-container">
-            <div class="messages-area" id="messagesArea">
-                {% for msg in messages %}
-                <div class="message {{ msg.role }}">
-                    {% if msg.role == 'user' %}
-                    <div class="message-bubble">
-                        <div class="message-text">{{ msg.content }}</div>
-                    </div>
-                    {% else %}
-                    <div class="message-bubble">
-                        {% if msg.content %}
-                        <button class="copy-btn" onclick="copyMessage(this)">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                            <span>Copy</span>
-                        </button>
-                        <div class="message-text">{{ msg.content|safe }}</div>
-                        {% if msg.references %}
-                        <div class="message-refs">
-                            <strong>References:</strong>
-                            {% for ref in msg.references %}
-                            <div class="ref-item">
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                                    [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
-                                </a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                        {% if msg.num_papers > 0 %}
-                        <div class="message-meta">📊 {{ msg.num_papers }} papers analyzed from PubMed</div>
-                        {% endif %}
-                        {% else %}
-                        <div class="loading-indicator">
-                            <div class="loading-dots">
-                                <span></span>
-                                <span></span>
-                                <span></span>
-                            </div>
-                            Analyzing medical literature...
-                        </div>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
 
-            <!-- Chat Input -->
-            <div class="chat-input-container">
-                <form method="post" action="/" class="chat-form">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                    <textarea
-                        name="query"
-                        class="chat-textarea"
-                        id="chatInput"
-                        placeholder="Ask a follow-up question..."
-                        required
-                        rows="1"
-                    ></textarea>
-                    <button type="submit" class="send-btn">↑</button>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-        {% endif %}
-    </div>
-
-    <footer class="footer">
+        <footer class="footer">
             <div class="footer-inner">
                 <div class="footer-brand">
                     <div class="footer-logo">
@@ -3333,304 +2995,22 @@ HTML = """<!DOCTYPE html>
         </footer>
     </div>
 
-        <!-- JavaScript -->
     <script>
-        // ==================== UTILITIES ====================
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        const textarea = document.querySelector('.chat-input');
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 180) + 'px';
+            });
         }
-
-        function stripMarkdownFences(content) {
-            return content
-                .replace(/^```html\s*/i, '')
-                .replace(/\s*```\s*$/i, '');
-        }
-
-        // ==================== HERO PROMPT FILL ====================
-        function fillHeroQuery(text) {
-            const textarea = document.querySelector('.hero-textarea');
+        function fillQuery(event) {
+            const chip = event.currentTarget;
+            const text = chip.textContent.trim();
             if (textarea) {
                 textarea.value = text;
                 textarea.focus();
             }
         }
-
-        // ==================== COPY FUNCTIONALITY ====================
-        function copyMessage(button) {
-            const messageBubble = button.closest('.message-bubble');
-            const messageText = messageBubble.querySelector('.message-text');
-
-            // Extract text without HTML tags
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = messageText.innerHTML;
-            const textContent = tempDiv.textContent || tempDiv.innerText || '';
-
-            navigator.clipboard.writeText(textContent.trim()).then(() => {
-                const span = button.querySelector('span');
-                const originalText = span.textContent;
-                span.textContent = 'Copied!';
-                button.classList.add('copied');
-
-                setTimeout(() => {
-                    span.textContent = originalText;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                console.error('Copy failed:', err);
-            });
-        }
-
-        // ==================== AUTO-RESIZE TEXTAREA ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            const chatTextarea = document.getElementById('chatInput');
-            if (chatTextarea) {
-                chatTextarea.addEventListener('input', function() {
-                    this.style.height = 'auto';
-                    this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-                });
-
-                // Keyboard shortcut: Ctrl/Cmd + Enter to submit
-                chatTextarea.addEventListener('keydown', function(e) {
-                    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-                        e.preventDefault();
-                        this.closest('form').requestSubmit();
-                    }
-                });
-            }
-
-            // Auto-scroll to latest message
-            const messagesArea = document.getElementById('messagesArea');
-            if (messagesArea) {
-                messagesArea.scrollTop = messagesArea.scrollHeight;
-            }
-        });
-
-        // ==================== CHAT FORM AJAX SUBMISSION ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            const chatForm = document.querySelector('.chat-form');
-            if (chatForm) {
-                chatForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    const textarea = this.querySelector('textarea');
-                    const sendBtn = this.querySelector('.send-btn');
-                    const query = textarea.value.trim();
-
-                    if (!query) return;
-
-                    // Create FormData before disabling inputs
-                    const formData = new FormData(this);
-
-                    // Disable inputs
-                    sendBtn.disabled = true;
-                    textarea.disabled = true;
-
-                    // Add user message to UI
-                    const messagesArea = document.getElementById('messagesArea');
-                    const userMsg = document.createElement('div');
-                    userMsg.className = 'message user';
-                    userMsg.innerHTML = `
-                        <div class="message-bubble">
-                            <div class="message-text">${escapeHtml(query)}</div>
-                        </div>
-                    `;
-                    messagesArea.appendChild(userMsg);
-
-                    // Add loading message
-                    const loadingMsg = document.createElement('div');
-                    loadingMsg.className = 'message assistant';
-                    loadingMsg.id = 'streamingMessage';
-                    loadingMsg.innerHTML = `
-                        <div class="message-bubble">
-                            <div class="loading-indicator">
-                                <div class="loading-dots">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                Searching PubMed database...
-                            </div>
-                        </div>
-                    `;
-                    messagesArea.appendChild(loadingMsg);
-                    messagesArea.scrollTop = messagesArea.scrollHeight;
-
-                    // Clear textarea
-                    textarea.value = '';
-                    textarea.style.height = 'auto';
-
-                    // Send request
-                    fetch('/', {
-                        method: 'POST',
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'error') {
-                            const bubble = loadingMsg.querySelector('.message-bubble');
-                            bubble.innerHTML = `<div class="message-text">${data.message}</div>`;
-                            loadingMsg.removeAttribute('id');
-                            sendBtn.disabled = false;
-                            textarea.disabled = false;
-                            textarea.focus();
-                        } else if (data.status === 'calculation') {
-                            const bubble = loadingMsg.querySelector('.message-bubble');
-                            bubble.innerHTML = `<div class="message-text">${data.result}</div>`;
-                            loadingMsg.removeAttribute('id');
-                            sendBtn.disabled = false;
-                            textarea.disabled = false;
-                            textarea.focus();
-                        } else if (data.status === 'ready') {
-                            // Update loading text
-                            const loadingIndicator = loadingMsg.querySelector('.loading-indicator');
-                            loadingIndicator.innerHTML = `
-                                <div class="loading-dots">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                Analyzing evidence...
-                            `;
-
-                            // Start streaming
-                            startStreaming(data.request_id, loadingMsg, sendBtn, textarea);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Request failed:', error);
-                        const bubble = loadingMsg.querySelector('.message-bubble');
-                        bubble.innerHTML = '<div class="message-text">❌ Request failed. Please try again.</div>';
-                        loadingMsg.removeAttribute('id');
-                        sendBtn.disabled = false;
-                        textarea.disabled = false;
-                    });
-                });
-            }
-        });
-
-        // ==================== STREAMING ====================
-        function startStreaming(requestId, messageElement, sendBtn, textarea) {
-            const eventSource = new EventSource(`/stream?request_id=${requestId}`);
-            const messageBubble = messageElement.querySelector('.message-bubble');
-            let responseContent = '';
-
-            eventSource.addEventListener('message', function(e) {
-                const event = JSON.parse(e.data);
-
-                if (event.type === 'connected') {
-                    console.log('[STREAM] Connected');
-                } else if (event.type === 'content') {
-                    // First content - replace loading with actual content
-                    if (responseContent === '') {
-                        messageBubble.innerHTML = `
-                            <button class="copy-btn" onclick="copyMessage(this)">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                </svg>
-                                <span>Copy</span>
-                            </button>
-                            <div class="message-text"></div>
-                        `;
-                    }
-
-                    responseContent += event.data;
-                    const cleanedContent = stripMarkdownFences(responseContent);
-                    const messageText = messageBubble.querySelector('.message-text');
-                    messageText.innerHTML = cleanedContent;
-
-                    // Auto-scroll
-                    const messagesArea = document.getElementById('messagesArea');
-                    messagesArea.scrollTop = messagesArea.scrollHeight;
-                } else if (event.type === 'references') {
-                    const refs = event.data;
-                    if (refs && refs.length > 0) {
-                        let refsHtml = '<div class="message-refs"><strong>References:</strong>';
-                        refs.forEach((ref, i) => {
-                            refsHtml += `
-                                <div class="ref-item">
-                                    <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
-                                        [${i+1}] ${ref.title} (${ref.year})
-                                    </a>
-                                </div>
-                            `;
-                        });
-                        refsHtml += '</div>';
-                        if (event.num_papers > 0) {
-                            refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers analyzed from PubMed</div>`;
-                        }
-                        messageBubble.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
-                    }
-                } else if (event.type === 'done') {
-                    console.log('[STREAM] Complete');
-                    eventSource.close();
-                    messageElement.removeAttribute('id');
-                    sendBtn.disabled = false;
-                    textarea.disabled = false;
-                    textarea.focus();
-                } else if (event.type === 'error') {
-                    console.error('[STREAM] Error:', event.message);
-                    messageBubble.innerHTML = `<div class="message-text">❌ ${event.message}</div>`;
-                    eventSource.close();
-                    messageElement.removeAttribute('id');
-                    sendBtn.disabled = false;
-                    textarea.disabled = false;
-                }
-            });
-
-            eventSource.onerror = function(err) {
-                console.error('[STREAM] Connection error:', err);
-                eventSource.close();
-                messageElement.removeAttribute('id');
-                sendBtn.disabled = false;
-                textarea.disabled = false;
-            };
-        }
-
-        // ==================== AUTO-START PENDING STREAM ====================
-        {% if pending_stream %}
-        (function() {
-            const requestId = '{{ pending_stream }}';
-            console.log('[AUTO-START] Streaming request:', requestId);
-
-            function startPendingStream() {
-                const messages = document.querySelectorAll('.message.assistant');
-                if (messages.length === 0) {
-                    console.error('[AUTO-START] No assistant messages found');
-                    return;
-                }
-
-                const lastMessage = messages[messages.length - 1];
-                const messageBubble = lastMessage.querySelector('.message-bubble');
-
-                // Show loading state
-                messageBubble.innerHTML = `
-                    <div class="loading-indicator">
-                        <div class="loading-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        Analyzing medical literature...
-                    </div>
-                `;
-
-                // Start streaming (reuse the same streaming function)
-                startStreaming(requestId, lastMessage, null, null);
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', startPendingStream);
-            } else {
-                startPendingStream();
-            }
-        })();
-        {% endif %}
     </script>
 </body>
 </html>
