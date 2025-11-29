@@ -2555,7 +2555,7 @@ HTML = """
             position: static !important;
         }
 
-        .homepage-input .chat-form {
+        .homepage-input .homepage-chat-form {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -2572,7 +2572,7 @@ HTML = """
             overflow: hidden;
         }
 
-        .homepage-input .chat-form::before {
+        .homepage-input .homepage-chat-form::before {
             content: '';
             position: absolute;
             top: 0;
@@ -2583,23 +2583,23 @@ HTML = """
             transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .homepage-input .chat-form:hover::before {
+        .homepage-input .homepage-chat-form:hover::before {
             left: 100%;
         }
 
-        .homepage-input .chat-form:hover {
+        .homepage-input .homepage-chat-form:hover {
             border-color: rgba(37, 99, 235, 0.2);
             box-shadow: 0 12px 48px rgba(37, 99, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
             transform: translateY(-2px);
         }
 
-        .homepage-input .chat-form:focus-within {
+        .homepage-input .homepage-chat-form:focus-within {
             border-color: var(--primary-blue);
             box-shadow: 0 16px 56px rgba(37, 99, 235, 0.18), 0 8px 24px rgba(0, 0, 0, 0.08);
             transform: translateY(-3px);
         }
 
-        .homepage-input .chat-form textarea {
+        .homepage-input .homepage-chat-form textarea {
             flex: 1;
             padding: 12px 16px;
             font-size: 15px;
@@ -2616,7 +2616,7 @@ HTML = """
             z-index: 1;
         }
 
-        .homepage-input .chat-form textarea::placeholder {
+        .homepage-input .homepage-chat-form textarea::placeholder {
             color: var(--text-muted);
         }
 
@@ -3889,7 +3889,7 @@ HTML = """
             </div>
 
             <div class="chat-input-container homepage-input">
-                <form method="post" action="/chat" class="chat-form">
+                <form method="post" action="/chat" class="homepage-chat-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
                     <button type="submit" class="send-btn">↑</button>
@@ -4067,11 +4067,12 @@ HTML = """
 
         // Streaming form submission - must run after DOM loads
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('.chat-form');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    const submitBtn = form.querySelector('.send-btn');
-                    const textarea = form.querySelector('textarea');
+            // Only handle chat page form with AJAX, let homepage form submit normally
+            const chatPageForm = document.querySelector('.chat-form');
+            if (chatPageForm) {
+                chatPageForm.addEventListener('submit', function(e) {
+                    const submitBtn = chatPageForm.querySelector('.send-btn');
+                    const textarea = chatPageForm.querySelector('textarea');
                     const query = textarea.value.trim();
 
                     if (!query) {
@@ -4079,30 +4080,13 @@ HTML = """
                         return;
                     }
 
-                // Always prevent default form submission and use AJAX
+                // Prevent default form submission and use AJAX for chat page
                 e.preventDefault();
-
-                // Check if we're on the homepage (welcome screen visible and no chat messages)
-                const welcomeScreen = document.querySelector('.welcome-screen');
-                const chatMessages = document.getElementById('chatMessages');
-                const hasMessages = chatMessages && chatMessages.children.length > 0;
-                const isHomepage = welcomeScreen && !hasMessages;
-
-                // If on homepage, hide welcome screen and show chat
-                if (isHomepage && welcomeScreen) {
-                    welcomeScreen.style.display = 'none';
-                }
 
                 // Disable inputs
                 submitBtn.disabled = true;
                 textarea.disabled = true;
                 submitBtn.style.opacity = '0.6';
-
-                // Show chat container
-                const chatContainer = document.querySelector('.chat-container');
-                if (chatContainer) {
-                    chatContainer.style.display = 'block';
-                }
 
                 // Add user message to UI
                 const messagesContainer = document.getElementById('chatMessages');
