@@ -1462,6 +1462,258 @@ PREOP_HTML = """
                 margin: -1rem -1rem 1rem -1rem;
             }
         }
+
+        /* ==================== GLASSMORPHISM BACKGROUND ==================== */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #7C3AED, #60A5FA);
+            top: 40%;
+            right: -15%;
+            animation-delay: 4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* ==================== GLASSMORPHISM NAVIGATION ==================== */
+        .nav {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--white);
+        }
+
+        .logo-text span:first-child {
+            background: linear-gradient(135deg, #60A5FA, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        /* ==================== GLASSMORPHISM FOOTER ==================== */
+        .footer {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        .footer-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* ==================== RESPONSIVE OVERRIDES ==================== */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav .nav-link {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                gap: 16px;
+            }
+        }
     </style>
     <script>
         // Auto-calculate BMI and IBW
@@ -1514,37 +1766,30 @@ PREOP_HTML = """
     </script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="/" class="logo-link">
-                <svg class="logo-svg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2563EB"/>
-                            <stop offset="20%" stop-color="#EF4444"/>
-                            <stop offset="40%" stop-color="#FBBF24"/>
-                            <stop offset="60%" stop-color="#8B5CF6"/>
-                            <stop offset="80%" stop-color="#10B981"/>
-                            <stop offset="100%" stop-color="#6B7280"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
-                          stroke="url(#ecgGrad)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          fill="none"/>
-                </svg>
-                <div class="logo-text">
-                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
             </a>
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link active">Pre-Op</a>
-                <a href="/calculators" class="nav-link">Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link active">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
@@ -1786,11 +2031,20 @@ PREOP_HTML = """
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
-        <div class="disclaimer">
-            This tool provides educational content only and is not medical advice. All clinical decisions should be made by qualified healthcare professionals based on individual patient circumstances and current guidelines.
+    <!-- Glassmorphism Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
         </div>
     </footer>
 </body>
@@ -1942,18 +2196,18 @@ HTML = """<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
-    <title>gasconsult.ai — Evidence-Based Anesthesiology AI</title>
+    <title>GasConsult.ai — AI-Powered Anesthesiology Assistant</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
     <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
+    <meta name="theme-color" content="#3B82F6">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -1968,15 +2222,37 @@ HTML = """<!DOCTYPE html>
         }
 
         :root {
-            --primary: #2563EB;
-            --primary-dark: #1D4ED8;
-            --primary-light: #DBEAFE;
-            --text-dark: #0F172A;
-            --text-gray: #64748B;
-            --text-light: #94A3B8;
-            --bg-white: #FFFFFF;
-            --bg-light: #F8FAFC;
-            --border: #E2E8F0;
+            /* Glassmorphism Color Palette */
+            --white: #FFFFFF;
+            --gray-50: #F9FAFB;
+            --gray-100: #F3F4F6;
+            --gray-200: #E5E7EB;
+            --gray-300: #D1D5DB;
+            --gray-400: #9CA3AF;
+            --gray-500: #6B7280;
+            --gray-600: #4B5563;
+            --gray-700: #374151;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --purple-500: #8B5CF6;
+            --purple-600: #7C3AED;
+
+            /* Legacy aliases for compatibility */
+            --primary: var(--blue-600);
+            --primary-dark: var(--blue-700);
+            --primary-light: var(--blue-100);
+            --text-dark: var(--gray-900);
+            --text-gray: var(--gray-600);
+            --text-light: var(--gray-500);
+            --bg-white: var(--white);
+            --bg-light: var(--gray-50);
+            --border: var(--gray-200);
             --success: #10B981;
             --warning: #F59E0B;
             --error: #EF4444;
@@ -1990,28 +2266,89 @@ HTML = """<!DOCTYPE html>
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-            background: linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--text-dark);
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ==================== ANIMATED BACKGROUND ==================== */
+        .bg-orbs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, var(--purple-600), var(--blue-400));
+            top: 40%;
+            right: -15%;
+            animation-delay: 4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, var(--blue-600), var(--purple-500));
+            bottom: -10%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
         }
 
         /* ==================== NAVIGATION ==================== */
         nav {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
             padding: 16px 24px;
-            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
         .nav-container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -2024,11 +2361,11 @@ HTML = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: transform 0.2s;
+            transition: transform 0.3s ease;
         }
 
         .logo-link:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px);
         }
 
         .logo-svg {
@@ -2041,49 +2378,62 @@ HTML = """<!DOCTYPE html>
             font-size: 22px;
             font-weight: 600;
             letter-spacing: -0.5px;
+            color: var(--white);
         }
 
-        .logo-gas { color: var(--primary); }
-        .logo-consult { color: #111111; }
-        .logo-ai { font-weight: 400; color: #6B7280; }
+        .logo-gas {
+            background: linear-gradient(135deg, var(--blue-400), var(--purple-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-consult { color: var(--white); }
+        .logo-ai {
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.7);
+        }
 
         .nav-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .nav-link {
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
             padding: 8px 16px;
-            border-radius: 8px;
-            transition: all 0.2s;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-link:hover {
-            color: var(--text-dark);
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .clear-btn {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-gray);
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: rgba(255, 255, 255, 0.95);
             padding: 8px 16px;
-            border-radius: 8px;
+            border-radius: 12px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .clear-btn:hover {
-            border-color: var(--error);
-            color: var(--error);
-            background: rgba(239, 68, 68, 0.05);
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+            transform: translateY(-2px);
         }
 
         /* ==================== MAIN CONTAINER ==================== */
@@ -2095,83 +2445,129 @@ HTML = """<!DOCTYPE html>
             width: 100%;
             margin: 0 auto;
             padding: 0 16px;
+            position: relative;
+            z-index: 1;
         }
 
         /* ==================== HERO (Homepage) ==================== */
         .hero {
             text-align: center;
-            padding: 80px 24px 40px;
-            animation: fadeIn 0.6s ease-out;
+            padding: 80px 24px 60px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        .badge-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--blue-400), var(--purple-500));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
         }
 
         .hero-title {
             font-family: 'Sora', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, #8B5CF6 100%);
+            color: var(--white);
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        .hero-title-gradient {
+            background: linear-gradient(135deg, var(--white) 0%, rgba(255, 255, 255, 0.8) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
         }
 
         .hero-subtitle {
             font-size: 1.25rem;
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.85);
             margin-bottom: 48px;
-            font-weight: 500;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-form {
             max-width: 700px;
-            margin: 0 auto 40px;
+            margin: 0 auto 48px;
         }
 
         .hero-input-wrapper {
             position: relative;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
-            border: 2px solid transparent;
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .hero-input-wrapper:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 12px 48px rgba(37, 99, 235, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .hero-textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 24px 24px 60px 24px;
+            min-height: 130px;
+            padding: 24px 24px 65px 24px;
             border: none;
-            border-radius: 16px;
+            border-radius: 20px;
             font-size: 16px;
             font-family: inherit;
             resize: none;
             outline: none;
+            background: transparent;
+            color: var(--white);
+        }
+
+        .hero-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .hero-submit {
             position: absolute;
             bottom: 16px;
             right: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--white) 0%, rgba(255, 255, 255, 0.95) 100%);
+            color: var(--blue-600);
             border: none;
-            padding: 12px 32px;
-            border-radius: 10px;
+            padding: 14px 36px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         .hero-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .suggested-prompts {
@@ -2179,26 +2575,76 @@ HTML = """<!DOCTYPE html>
             flex-wrap: wrap;
             gap: 12px;
             justify-content: center;
-            max-width: 700px;
-            margin: 0 auto;
+            max-width: 750px;
+            margin: 0 auto 60px;
         }
 
         .prompt-chip {
-            background: white;
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 10px 20px;
             border-radius: 24px;
             font-size: 14px;
-            color: var(--text-gray);
+            color: var(--white);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .prompt-chip:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: var(--primary-light);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
             transform: translateY(-2px);
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.6;
         }
 
         /* ==================== CHAT MESSAGES ==================== */
@@ -2207,6 +2653,7 @@ HTML = """<!DOCTYPE html>
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            padding-top: 20px;
         }
 
         .messages-area {
@@ -2227,12 +2674,12 @@ HTML = """<!DOCTYPE html>
         }
 
         .messages-area::-webkit-scrollbar-thumb {
-            background: var(--border);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 4px;
         }
 
         .messages-area::-webkit-scrollbar-thumb:hover {
-            background: var(--text-light);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .message {
@@ -2246,33 +2693,46 @@ HTML = """<!DOCTYPE html>
 
         .message-bubble {
             max-width: 85%;
-            padding: 16px 20px;
-            border-radius: 16px;
+            padding: 18px 22px;
+            border-radius: 18px;
             position: relative;
         }
 
         .message.user .message-bubble {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--gray-900);
             border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
 
         .message.assistant .message-bubble {
-            background: white;
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            color: var(--white);
         }
 
         .message-text {
             font-size: 15px;
-            line-height: 1.6;
+            line-height: 1.7;
+        }
+
+        .message.assistant .message-text {
+            color: var(--white);
         }
 
         .message-text h3 {
             font-size: 1.1rem;
             margin: 16px 0 8px 0;
-            color: var(--primary);
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 600;
+        }
+
+        .message.user .message-text h3 {
+            color: var(--blue-700);
         }
 
         .message-text h3:first-child {
@@ -2293,31 +2753,12 @@ HTML = """<!DOCTYPE html>
         }
 
         .message-text strong {
-            color: var(--primary-dark);
+            color: rgba(255, 255, 255, 1);
             font-weight: 600;
         }
 
-        /* Evidence Quality Badge */
-        .evidence-quality-badge {
-            margin: 16px 0;
-            padding: 12px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-            border-left: 4px solid var(--primary);
-        }
-
-        .confidence-level {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .confidence-level.high { color: var(--success); border-left-color: var(--success); }
-        .confidence-level.moderate { color: var(--warning); border-left-color: var(--warning); }
-        .confidence-level.low { color: var(--error); border-left-color: var(--error); }
-
-        .evidence-details {
-            font-size: 13px;
-            color: var(--text-gray);
+        .message.user .message-text strong {
+            color: var(--blue-700);
         }
 
         /* Copy Button */
@@ -2325,42 +2766,43 @@ HTML = """<!DOCTYPE html>
             position: absolute;
             top: 12px;
             right: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 13px;
-            color: var(--text-gray);
+            color: var(--white);
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
         }
 
         .copy-btn:hover {
-            background: white;
-            color: var(--primary);
-            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
         }
 
         .copy-btn.copied {
-            color: var(--success);
-            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #6EE7B7;
         }
 
         /* References */
         .message-refs {
             margin-top: 16px;
             padding-top: 16px;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
             font-size: 13px;
         }
 
         .message-refs strong {
             display: block;
             margin-bottom: 8px;
-            color: var(--text-dark);
+            color: rgba(255, 255, 255, 0.95);
         }
 
         .ref-item {
@@ -2369,23 +2811,25 @@ HTML = """<!DOCTYPE html>
         }
 
         .ref-item a {
-            color: var(--primary);
+            color: rgba(255, 255, 255, 0.85);
             text-decoration: none;
             transition: color 0.2s;
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.3);
         }
 
         .ref-item a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+            color: var(--white);
+            text-decoration-color: rgba(255, 255, 255, 0.6);
         }
 
         .message-meta {
             margin-top: 12px;
             padding: 8px 12px;
-            background: var(--bg-light);
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             font-size: 13px;
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         /* Loading Indicator */
@@ -2393,7 +2837,7 @@ HTML = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--text-gray);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 14px;
         }
 
@@ -2405,7 +2849,7 @@ HTML = """<!DOCTYPE html>
         .loading-dots span {
             width: 6px;
             height: 6px;
-            background: var(--primary);
+            background: var(--white);
             border-radius: 50%;
             animation: pulse 1.4s infinite;
         }
@@ -2416,10 +2860,7 @@ HTML = """<!DOCTYPE html>
 
         /* ==================== CHAT INPUT ==================== */
         .chat-input-container {
-            padding: 16px 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.8) 20%, rgba(255, 255, 255, 0.95) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            padding: 20px 0;
             position: sticky;
             bottom: 0;
         }
@@ -2428,17 +2869,19 @@ HTML = """<!DOCTYPE html>
             display: flex;
             gap: 12px;
             align-items: flex-end;
-            background: white;
-            border-radius: 16px;
-            padding: 12px;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            transition: all 0.3s;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 18px;
+            padding: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
         }
 
         .chat-form:focus-within {
-            border-color: var(--primary);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .chat-textarea {
@@ -2450,27 +2893,34 @@ HTML = """<!DOCTYPE html>
             resize: none;
             max-height: 200px;
             line-height: 1.5;
+            background: transparent;
+            color: var(--white);
+        }
+
+        .chat-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .send-btn {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--white) 0%, rgba(255, 255, 255, 0.95) 100%);
+            color: var(--blue-600);
             border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
             font-size: 20px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .send-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
         }
 
         .send-btn:disabled {
@@ -2480,34 +2930,41 @@ HTML = """<!DOCTYPE html>
 
         /* ==================== FOOTER ==================== */
         footer {
-            background: white;
-            border-top: 1px solid var(--border);
-            padding: 24px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px 24px;
             text-align: center;
-            color: var(--text-light);
+            color: rgba(255, 255, 255, 0.75);
             font-size: 13px;
+            position: relative;
+            z-index: 1;
         }
 
         footer a {
-            color: var(--primary);
+            color: var(--white);
             text-decoration: none;
+            transition: opacity 0.3s ease;
         }
 
         footer a:hover {
+            opacity: 0.8;
             text-decoration: underline;
         }
 
         .disclaimer {
             max-width: 700px;
-            margin: 12px auto 0;
+            margin: 16px auto 0;
             line-height: 1.6;
+            color: rgba(255, 255, 255, 0.65);
         }
 
         /* ==================== ANIMATIONS ==================== */
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
@@ -2528,7 +2985,7 @@ HTML = """<!DOCTYPE html>
 
         @keyframes pulse {
             0%, 100% {
-                opacity: 0.4;
+                opacity: 0.3;
                 transform: scale(0.8);
             }
             50% {
@@ -2538,13 +2995,33 @@ HTML = """<!DOCTYPE html>
         }
 
         /* ==================== RESPONSIVE ==================== */
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            nav {
+                padding: 20px 32px;
+            }
+
+            .hero {
+                padding: 100px 32px 80px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-container {
                 padding: 0;
             }
 
             .nav-actions {
-                flex-wrap: wrap;
+                gap: 6px;
             }
 
             .nav-link {
@@ -2553,7 +3030,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .hero {
-                padding: 40px 16px 24px;
+                padding: 50px 16px 40px;
             }
 
             .hero-title {
@@ -2562,16 +3039,17 @@ HTML = """<!DOCTYPE html>
 
             .hero-subtitle {
                 font-size: 1rem;
+                margin-bottom: 32px;
             }
 
             .hero-textarea {
-                min-height: 100px;
-                padding: 20px 20px 55px 20px;
+                min-height: 110px;
+                padding: 20px 20px 60px 20px;
                 font-size: 16px;
             }
 
             .hero-submit {
-                padding: 10px 24px;
+                padding: 12px 28px;
                 font-size: 15px;
             }
 
@@ -2587,6 +3065,11 @@ HTML = """<!DOCTYPE html>
             .prompt-chip {
                 font-size: 13px;
                 padding: 8px 16px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             /* Prevent iOS zoom on input focus */
@@ -2615,6 +3098,13 @@ HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <!-- Animated Background Orbs -->
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -2622,12 +3112,12 @@ HTML = """<!DOCTYPE html>
                 <svg class="logo-svg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2563EB"/>
-                            <stop offset="20%" stop-color="#EF4444"/>
+                            <stop offset="0%" stop-color="#60A5FA"/>
+                            <stop offset="20%" stop-color="#F87171"/>
                             <stop offset="40%" stop-color="#FBBF24"/>
-                            <stop offset="60%" stop-color="#8B5CF6"/>
-                            <stop offset="80%" stop-color="#10B981"/>
-                            <stop offset="100%" stop-color="#6B7280"/>
+                            <stop offset="60%" stop-color="#A78BFA"/>
+                            <stop offset="80%" stop-color="#34D399"/>
+                            <stop offset="100%" stop-color="#FFFFFF"/>
                         </linearGradient>
                     </defs>
                     <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
@@ -2645,8 +3135,11 @@ HTML = """<!DOCTYPE html>
                 {% if messages %}
                 <a href="/clear" class="clear-btn" onclick="return confirm('Clear all messages?')">Clear Chat</a>
                 {% endif %}
-                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/" class="nav-link">Home</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Calculators</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
     </nav>
@@ -2656,8 +3149,19 @@ HTML = """<!DOCTYPE html>
         {% if not messages %}
         <!-- Hero Section (Homepage) -->
         <div class="hero">
-            <h1 class="hero-title">Evidence-Based Anesthesiology</h1>
-            <p class="hero-subtitle">Ask any clinical question — get PubMed-backed answers with full citations</p>
+            <div class="hero-badge">
+                <span class="badge-icon">🔬</span>
+                <span>Evidence-Based Clinical Decisions</span>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="hero-title-gradient">PubMed-Powered</span><br>
+                Anesthesiology AI
+            </h1>
+
+            <p class="hero-subtitle">
+                Ask any clinical question and get comprehensive answers backed by the latest medical literature
+            </p>
 
             <form method="post" action="/" class="hero-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -2678,6 +3182,49 @@ HTML = """<!DOCTYPE html>
                 <button class="prompt-chip" onclick="fillHeroQuery(this.textContent)">PONV prevention</button>
                 <button class="prompt-chip" onclick="fillHeroQuery(this.textContent)">RSI contraindications</button>
                 <button class="prompt-chip" onclick="fillHeroQuery(this.textContent)">Difficult airway algorithm</button>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <div class="feature-title">PubMed Integration</div>
+                    <div class="feature-description">
+                        Real-time search of systematic reviews, RCTs, and clinical guidelines
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <div class="feature-title">Citation-Backed</div>
+                    <div class="feature-description">
+                        Every answer includes full references with direct PubMed links
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🧠</div>
+                    <div class="feature-title">GPT-4o Powered</div>
+                    <div class="feature-description">
+                        Advanced AI synthesis of medical literature for precise answers
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-title">Quick Dose Calculator</div>
+                    <div class="feature-description">
+                        Instant weight-based dosing for common anesthesia medications
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🩺</div>
+                    <div class="feature-title">Pre-Op Assessment</div>
+                    <div class="feature-description">
+                        ASA classification and risk stratification tools
+                    </div>
+                </div>
             </div>
         </div>
         {% else %}
@@ -2753,7 +3300,7 @@ HTML = """<!DOCTYPE html>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 gasconsult.ai | <a href="/terms">Terms</a> | <a href="/privacy">Privacy</a></p>
+        <p>&copy; 2025 gasconsult.ai | <a href="/terms">Terms</a> | <a href="/privacy">Privacy</a> | <a href="#">Contact</a></p>
         <div class="disclaimer">
             This tool provides educational content only and is not medical advice. All clinical decisions should be made by qualified healthcare professionals based on individual patient circumstances and current guidelines.
         </div>
@@ -3694,40 +4241,25 @@ TERMS_HTML = """
                 padding: 40px 20px;
             }
         }
+
+        /* ==================== GLASSMORPHISM STYLES ==================== */
+        .bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none}.orb{position:absolute;border-radius:50%;opacity:.15;filter:blur(60px);animation:float 20s infinite ease-in-out}.orb-1{width:400px;height:400px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);top:-10%;left:-10%;animation-delay:0s}.orb-2{width:500px;height:500px;background:linear-gradient(135deg,#7C3AED,#60A5FA);top:40%;right:-15%;animation-delay:4s}.orb-3{width:350px;height:350px;background:linear-gradient(135deg,#2563EB,#8B5CF6);bottom:-10%;left:30%;animation-delay:8s}.grain{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}.nav{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.18);padding:16px 24px;position:sticky;top:0;z-index:100}.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{text-decoration:none;display:flex;align-items:center;gap:12px;transition:transform .3s ease}.logo:hover{transform:translateY(-2px)}.logo-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center}.logo-icon svg{width:100%;height:100%}.logo-text{font-family:'Sora',sans-serif;font-size:22px;font-weight:600;letter-spacing:-.5px;color:var(--white)}.logo-text span:first-child{background:linear-gradient(135deg,#60A5FA,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.nav .nav-link{color:rgba(255,255,255,.9);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border-radius:12px;transition:all .3s ease;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}.nav .nav-link:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}.nav .nav-link.active{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);font-weight:600}.footer{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.18);padding:32px 24px;position:relative;z-index:1}.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}.footer-brand{display:flex;align-items:center;gap:12px}.footer-logo{width:24px;height:24px;opacity:.8}.footer-logo svg{width:100%;height:100%}.footer-text{font-size:13px;color:rgba(255,255,255,.75)}.footer-links{display:flex;gap:24px;align-items:center}.footer-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500;transition:all .3s ease}.footer-link:hover{color:var(--white);text-decoration:underline}@media (max-width:768px){.nav-inner{flex-direction:column;gap:12px}.nav .nav-links{width:100%;justify-content:center}.nav .nav-link{font-size:13px;padding:6px 12px}.footer-inner{flex-direction:column;text-align:center}.footer-links{gap:16px}}
     </style>
 </head>
 <body>
+    <div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
 
-    <nav>
-        <div class="container">
-            <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2563EB"/>
-                            <stop offset="20%" stop-color="#EF4444"/>
-                            <stop offset="40%" stop-color="#FBBF24"/>
-                            <stop offset="60%" stop-color="#8B5CF6"/>
-                            <stop offset="80%" stop-color="#10B981"/>
-                            <stop offset="100%" stop-color="#6B7280"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
-                          stroke="url(#ecgGrad)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          fill="none"/>
-                </svg>
-                <div class="logo-wordmark">
-                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
-                </div>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
             </a>
-            <div class="nav-actions">
+            <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
@@ -3852,8 +4384,18 @@ TERMS_HTML = """
         <p style="margin-top: 40px; font-weight: 600;">By using gasconsult.ai, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
     </div>
 
-    <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
     </footer>
 
 </body>
@@ -4136,39 +4678,25 @@ PRIVACY_POLICY_HTML = """
                 padding: 32px 20px;
             }
         }
+
+        /* ==================== GLASSMORPHISM STYLES ==================== */
+        .bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;overflow:hidden;pointer-events:none}.orb{position:absolute;border-radius:50%;opacity:.15;filter:blur(60px);animation:float 20s infinite ease-in-out}.orb-1{width:400px;height:400px;background:linear-gradient(135deg,#3B82F6,#8B5CF6);top:-10%;left:-10%;animation-delay:0s}.orb-2{width:500px;height:500px;background:linear-gradient(135deg,#7C3AED,#60A5FA);top:40%;right:-15%;animation-delay:4s}.orb-3{width:350px;height:350px;background:linear-gradient(135deg,#2563EB,#8B5CF6);bottom:-10%;left:30%;animation-delay:8s}.grain{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")}@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-50px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.9)}}.nav{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.18);padding:16px 24px;position:sticky;top:0;z-index:100}.nav-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{text-decoration:none;display:flex;align-items:center;gap:12px;transition:transform .3s ease}.logo:hover{transform:translateY(-2px)}.logo-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center}.logo-icon svg{width:100%;height:100%}.logo-text{font-family:'Sora',sans-serif;font-size:22px;font-weight:600;letter-spacing:-.5px;color:var(--white)}.logo-text span:first-child{background:linear-gradient(135deg,#60A5FA,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}.nav .nav-links{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.nav .nav-link{color:rgba(255,255,255,.9);text-decoration:none;font-size:14px;font-weight:500;padding:8px 16px;border-radius:12px;transition:all .3s ease;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}.nav .nav-link:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}.nav .nav-link.active{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);font-weight:600}.footer{background:rgba(255,255,255,.08);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.18);padding:32px 24px;position:relative;z-index:1}.footer-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}.footer-brand{display:flex;align-items:center;gap:12px}.footer-logo{width:24px;height:24px;opacity:.8}.footer-logo svg{width:100%;height:100%}.footer-text{font-size:13px;color:rgba(255,255,255,.75)}.footer-links{display:flex;gap:24px;align-items:center}.footer-link{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;font-weight:500;transition:all .3s ease}.footer-link:hover{color:var(--white);text-decoration:underline}@media (max-width:768px){.nav-inner{flex-direction:column;gap:12px}.nav .nav-links{width:100%;justify-content:center}.nav .nav-link{font-size:13px;padding:6px 12px}.footer-inner{flex-direction:column;text-align:center}.footer-links{gap:16px}}
     </style>
 </head>
 <body>
-    <nav>
-        <div class="container">
-            <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2563EB"/>
-                            <stop offset="20%" stop-color="#EF4444"/>
-                            <stop offset="40%" stop-color="#FBBF24"/>
-                            <stop offset="60%" stop-color="#8B5CF6"/>
-                            <stop offset="80%" stop-color="#10B981"/>
-                            <stop offset="100%" stop-color="#6B7280"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
-                          stroke="url(#ecgGrad)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          fill="none"/>
-                </svg>
-                <div class="logo-wordmark">
-                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
-                </div>
+    <div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
+
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
             </a>
-            <div class="nav-actions">
+            <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
@@ -4322,8 +4850,18 @@ PRIVACY_POLICY_HTML = """
         </ul>
     </div>
 
-    <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
@@ -5130,6 +5668,279 @@ QUICK_DOSE_HTML = """
                 height: 24px;
             }
         }
+
+        /* ==================== GLASSMORPHISM BACKGROUND ==================== */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #7C3AED, #60A5FA);
+            top: 40%;
+            right: -15%;
+            animation-delay: 4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* ==================== GLASSMORPHISM NAVIGATION ==================== */
+        .nav {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--white);
+        }
+
+        .logo-text span:first-child {
+            background: linear-gradient(135deg, #60A5FA, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        .nav .crisis-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: rgba(255, 255, 255, 0.95);
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav .crisis-btn:hover {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* ==================== GLASSMORPHISM FOOTER ==================== */
+        .footer {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        .footer-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* ==================== RESPONSIVE OVERRIDES ==================== */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav .nav-link {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                gap: 16px;
+            }
+        }
     </style>
     <script>
         // Register Service Worker for offline functionality
@@ -5147,52 +5958,42 @@ QUICK_DOSE_HTML = """
     </script>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="header-left">
-                <a href="/" class="logo-link">
-                    <svg class="logo-svg" viewBox="0 0 50 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2563EB"/>
-                                <stop offset="20%" stop-color="#EF4444"/>
-                                <stop offset="40%" stop-color="#FBBF24"/>
-                                <stop offset="60%" stop-color="#8B5CF6"/>
-                                <stop offset="80%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#6B7280"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M2 12 L8 12 L11 10 L14 14 L17 4 L20 20 L23 9 L26 12 L34 12"
-                              stroke="url(#ecgGrad)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              fill="none"/>
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span class="logo-text">
-                        <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
-                    </span>
-                </a>
-            </div>
-            <div class="header-center">
+                </div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 <button class="crisis-btn" onclick="toggleCrisis()">
                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
                         <line x1="12" y1="9" x2="12" y2="13"></line>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                    Crisis Mode
+                    Crisis
                 </button>
             </div>
-            <div class="nav-links">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                <a href="/quick-dose" class="nav-link active">Quick Dose</a>
-                <a href="/hypotension" class="nav-link">IOH Predictor</a>
-            </div>
         </div>
-    </header>
+    </nav>
 
     <main>
         <!-- Weight Input Section -->
@@ -5706,8 +6507,21 @@ QUICK_DOSE_HTML = """
 
     </main>
 
-    <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+    <!-- Glassmorphism Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
     </footer>
 
     <!-- Crisis Modal -->
@@ -6671,40 +7485,285 @@ CALCULATORS_HTML = """
                 padding: 20px;
             }
         }
+
+        /* ==================== GLASSMORPHISM BACKGROUND ==================== */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #7C3AED, #60A5FA);
+            top: 40%;
+            right: -15%;
+            animation-delay: 4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* ==================== GLASSMORPHISM NAVIGATION ==================== */
+        .nav {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--white);
+        }
+
+        .logo-text span:first-child {
+            background: linear-gradient(135deg, #60A5FA, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        /* ==================== GLASSMORPHISM FOOTER ==================== */
+        .footer {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        .footer-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* ==================== RESPONSIVE OVERRIDES ==================== */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav .nav-link {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="container">
-            <a href="/" class="logo-container">
-                <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stop-color="#2563EB"/>
-                            <stop offset="20%" stop-color="#EF4444"/>
-                            <stop offset="40%" stop-color="#FBBF24"/>
-                            <stop offset="60%" stop-color="#8B5CF6"/>
-                            <stop offset="80%" stop-color="#10B981"/>
-                            <stop offset="100%" stop-color="#6B7280"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M2 14 L10 14 L14 12 L18 16 L22 4 L26 24 L30 10 L34 14 L42 14"
-                          stroke="url(#ecgGrad)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          fill="none"/>
-                </svg>
-                <div class="logo-wordmark">
-                    <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
                 </div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
             </a>
-            <div class="nav-actions">
+            <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                 <a href="/hypotension" class="nav-link">IOH Predictor</a>
             </div>
         </div>
@@ -8557,6 +9616,23 @@ CALCULATORS_HTML = """
             return div.innerHTML;
         }
     </script>
+
+    <!-- Glassmorphism Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
 """
@@ -9254,45 +10330,288 @@ HYPOTENSION_HTML = """
                 height: 24px;
             }
         }
+        /* ==================== GLASSMORPHISM BACKGROUND ==================== */
+        .bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #7C3AED, #60A5FA);
+            top: 40%;
+            right: -15%;
+            animation-delay: 4s;
+        }
+
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #2563EB, #8B5CF6);
+            bottom: -10%;
+            left: 30%;
+            animation-delay: 8s;
+        }
+
+        .grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+            }
+            66% {
+                transform: translate(-20px, 20px) scale(0.9);
+            }
+        }
+
+        /* ==================== GLASSMORPHISM NAVIGATION ==================== */
+        .nav {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            color: var(--white);
+        }
+
+        .logo-text span:first-child {
+            background: linear-gradient(135deg, #60A5FA, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav .nav-links {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav .nav-link:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+        }
+
+        /* ==================== GLASSMORPHISM FOOTER ==================== */
+        .footer {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 32px 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 24px;
+            height: 24px;
+            opacity: 0.8;
+        }
+
+        .footer-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--white);
+            text-decoration: underline;
+        }
+
+        /* ==================== RESPONSIVE OVERRIDES ==================== */
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .nav .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .nav .nav-link {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <div class="header-container">
-            <div class="header-left">
-                <a href="/" class="logo-link">
-                    <svg class="logo-svg" viewBox="0 0 50 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stop-color="#2563EB"/>
-                                <stop offset="20%" stop-color="#EF4444"/>
-                                <stop offset="40%" stop-color="#FBBF24"/>
-                                <stop offset="60%" stop-color="#8B5CF6"/>
-                                <stop offset="80%" stop-color="#10B981"/>
-                                <stop offset="100%" stop-color="#6B7280"/>
-                            </linearGradient>
-                        </defs>
-                        <path d="M2 12 L8 12 L11 10 L14 14 L17 4 L20 20 L23 9 L26 12 L34 12"
-                              stroke="url(#ecgGrad)"
-                              stroke-width="2.5"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              fill="none"/>
+    <!-- Animated Background -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    <span class="logo-text">
-                        <span class="logo-gas">gas</span><span class="logo-consult">consult</span><span class="logo-ai">.ai</span>
-                    </span>
-                </a>
-            </div>
+                </div>
+                <span class="logo-text"><span>gas</span>consult.ai</span>
+            </a>
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
-                <a href="/preop" class="nav-link">Pre-Op Assessment</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/hypotension" class="nav-link active">IOH Predictor</a>
             </div>
         </div>
-    </header>
+    </nav>
 
     <main>
         <!-- Educational Warning Banner -->
@@ -9547,9 +10866,21 @@ HYPOTENSION_HTML = """
         {% endif %}
     </main>
 
-    <footer>
-        <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms">Terms of Service</a> | <a href="/privacy">Privacy Policy</a></p>
-        <p style="margin-top: 8px; font-weight: 600; color: #DC2626;">Educational Tool Only | Not for Clinical Use | No Medical Advice</p>
+    <!-- Glassmorphism Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Contact</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>
