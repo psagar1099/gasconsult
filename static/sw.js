@@ -1,7 +1,7 @@
 // Service Worker for gasconsult.ai
 // Enables offline functionality for Quick Dose page
 
-const CACHE_NAME = 'gasconsult-v1';
+const CACHE_NAME = 'gasconsult-v2-luxury-design';
 const OFFLINE_CACHE = [
     '/quick-dose',
     '/static/favicon.svg',
