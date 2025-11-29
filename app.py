@@ -1004,6 +1004,80 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -1399,6 +1473,7 @@ PREOP_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -1590,8 +1665,20 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <!-- Animated Background -->
@@ -1859,6 +1946,16 @@ PREOP_HTML = """<!DOCTYPE html>
     </footer>
         </main>
     </div>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+    </script>
 </body>
 </html>
 """
@@ -2204,6 +2301,80 @@ HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -2599,6 +2770,7 @@ HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -2695,8 +2867,20 @@ HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <section class="hero">
             <div class="hero-badge">
@@ -2821,6 +3005,14 @@ HTML = """<!DOCTYPE html>
             if (textarea) {
                 textarea.value = text;
                 textarea.focus();
+            }
+        }
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
             }
         }
     </script>
@@ -3032,6 +3224,80 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -3427,6 +3693,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -3618,8 +3885,20 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <main>
@@ -3655,6 +3934,14 @@ LIBRARY_HTML = """<!DOCTYPE html>
         async function removeBookmark(id) {
             // Implementation for removing bookmarks
             window.location.reload();
+        }
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
         }
     </script>
         </main>
@@ -3865,6 +4152,80 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -4260,6 +4621,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -4451,8 +4813,20 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <main>
@@ -4686,6 +5060,80 @@ TERMS_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -5081,6 +5529,7 @@ TERMS_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -5272,8 +5721,20 @@ TERMS_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
@@ -5620,6 +6081,80 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -6015,6 +6550,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -6206,8 +6742,20 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
@@ -6583,6 +7131,80 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .hero {
             padding: 120px 20px 60px;
             text-align: center;
@@ -6978,6 +7600,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -7169,8 +7792,20 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <!-- Animated Background -->
@@ -7823,6 +8458,16 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         document.addEventListener('DOMContentLoaded', () => {
             updateDoses();
         });
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
     </script>
         </main>
     </div>
@@ -8030,6 +8675,80 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .hero {
@@ -8427,6 +9146,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -8618,8 +9338,20 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <!-- Animated Background -->
@@ -10479,6 +11211,16 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             div.textContent = text;
             return div.innerHTML;
         }
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
     </script>
 
     <!-- Glassmorphism Footer -->
@@ -10703,6 +11445,80 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .hero {
@@ -11100,6 +11916,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .logo-icon svg { width: 22px; height: 22px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -11291,8 +12108,20 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
 
         <main class="main-content">
 <!-- Animated Background -->
