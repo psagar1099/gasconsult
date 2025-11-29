@@ -3603,7 +3603,7 @@ HTML = """
                     const csrfToken = formData.get('csrf_token');
 
                     // Submit via AJAX
-                    fetch('/chat', {
+                    fetch('/', {
                         method: 'POST',
                         body: formData,
                         headers: {
@@ -3918,7 +3918,7 @@ HTML = """
             </div>
 
             <div class="chat-input-container homepage-input">
-                <form method="post" action="/chat" class="homepage-chat-form">
+                <form method="post" action="/" class="homepage-chat-form">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
                     <button type="submit" class="send-btn">↑</button>
@@ -4024,7 +4024,7 @@ HTML = """
     <!-- Chat Input - Visible on Chat Page -->
     {% if messages %}
     <div class="chat-input-container">
-        <form method="post" action="/chat" class="chat-form">
+        <form method="post" action="/" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
@@ -4148,7 +4148,7 @@ HTML = """
                 const formData = new FormData();
                 formData.append('query', query);
 
-                fetch('/chat', {
+                fetch('/', {
                     method: 'POST',
                     credentials: 'same-origin',  // Important for session cookies
                     headers: {
@@ -4326,6 +4326,125 @@ HTML = """
                 }, 2000);
             });
         }
+
+        // Auto-start streaming if there's a pending stream
+        console.log('[DEBUG] Checking for pending_stream...');
+        {% if pending_stream %}
+            console.log('[DEBUG] pending_stream exists!');
+            (function() {
+                const requestId = '{{ pending_stream }}';
+                console.log('[AUTO-START] Request ID:', requestId);
+
+                function startAutoStreaming() {
+                    console.log('[AUTO-START] DOM ready, initiating streaming');
+
+                    // Show loading indicator
+                    const loadingIndicator = document.getElementById('loadingIndicator');
+                    if (loadingIndicator) {
+                        loadingIndicator.classList.add('active');
+                    }
+
+                    // Find the last assistant message
+                    let messages = document.querySelectorAll('.message.assistant');
+                    let messageContent;
+
+                    if (messages.length > 0) {
+                        const lastMessage = messages[messages.length - 1];
+                        messageContent = lastMessage.querySelector('.message-content');
+                    } else {
+                        // Create a new message container if none found
+                        const chatMessages = document.getElementById('chatMessages');
+                        if (!chatMessages) {
+                            console.error('[AUTO-START] No chatMessages container found!');
+                            return;
+                        }
+                        const newMessage = document.createElement('div');
+                        newMessage.className = 'message assistant';
+                        newMessage.innerHTML = '<div class="message-content"></div>';
+                        chatMessages.appendChild(newMessage);
+                        messageContent = newMessage.querySelector('.message-content');
+                    }
+
+                    // Show loading state
+                    messageContent.innerHTML = '<div class="message-text"><p class="loading-indicator">🔍 Searching medical literature...</p></div>';
+
+                    // Start streaming
+                    const eventSource = new EventSource(`/stream?request_id=${requestId}`);
+                    let responseContent = '';
+
+                    eventSource.addEventListener('error', function(e) {
+                        console.error('[AUTO-START] Streaming error:', e);
+                        if (loadingIndicator) loadingIndicator.classList.remove('active');
+                        if (eventSource.readyState === EventSource.CLOSED) {
+                            messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">❌ Connection error. Please refresh and try again.</p></div>';
+                        }
+                        eventSource.close();
+                    });
+
+                    eventSource.addEventListener('message', function(e) {
+                        const event = JSON.parse(e.data);
+
+                        if (event.type === 'connected') {
+                            console.log('[STREAM] Connected');
+                        } else if (event.type === 'content') {
+                            if (responseContent === '') {
+                                messageContent.innerHTML = `
+                                    <button class="copy-btn" onclick="copyToClipboard(this)" title="Copy to clipboard">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                        <span class="copy-text">Copy</span>
+                                    </button>
+                                    <div class="message-text"></div>`;
+                            }
+                            responseContent += event.data;
+                            messageContent.querySelector('.message-text').innerHTML = responseContent;
+
+                            const chatMessages = document.getElementById('chatMessages');
+                            if (chatMessages) {
+                                chatMessages.scrollTop = chatMessages.scrollHeight;
+                            }
+                        } else if (event.type === 'references') {
+                            if (loadingIndicator) loadingIndicator.classList.remove('active');
+
+                            const refs = event.data;
+                            if (refs && refs.length > 0) {
+                                let refsHtml = '<div class="message-refs"><strong>References:</strong>';
+                                refs.forEach((ref, i) => {
+                                    refsHtml += `<div class="ref-item">
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank">
+                                            [${i+1}] ${ref.title} (${ref.year})
+                                        </a>
+                                    </div>`;
+                                });
+                                refsHtml += '</div>';
+                                if (event.num_papers > 0) {
+                                    refsHtml += `<div class="message-meta">📊 ${event.num_papers} papers from PubMed</div>`;
+                                }
+                                messageContent.querySelector('.message-text').insertAdjacentHTML('afterend', refsHtml);
+                            }
+                        } else if (event.type === 'done') {
+                            if (loadingIndicator) loadingIndicator.classList.remove('active');
+                            eventSource.close();
+                            console.log('[STREAM] Complete');
+                        } else if (event.type === 'error') {
+                            if (loadingIndicator) loadingIndicator.classList.remove('active');
+                            messageContent.innerHTML = `<div class="message-text"><p style="color: #EF4444;">${event.message}</p></div>`;
+                            eventSource.close();
+                        }
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', startAutoStreaming);
+                } else {
+                    startAutoStreaming();
+                }
+            })();
+        {% else %}
+            console.log('[DEBUG] NO pending_stream found');
+        {% endif %}
     </script>
 
 </body>
@@ -5507,7 +5626,7 @@ CHAT_HTML = """
 
     <!-- Chat Input - Always Visible -->
     <div class="chat-input-container">
-        <form method="post" action="/chat" class="chat-form">
+        <form method="post" action="/" class="chat-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <textarea name="query" id="chatInput" placeholder="Ask anything about anesthesiology..." required rows="2"></textarea>
             <button type="submit" class="send-btn">↑</button>
@@ -5934,7 +6053,7 @@ CHAT_HTML = """
                     const csrfToken = formData.get('csrf_token');
 
                     // Submit via AJAX
-                    fetch('/chat', {
+                    fetch('/', {
                         method: 'POST',
                         body: formData,
                         headers: {
@@ -11738,7 +11857,7 @@ CALCULATORS_HTML = """
             try {
                 // Send to /chat to prepare streaming
                 const csrfToken = document.getElementById('csrf_token').value;
-                const response = await fetch('/chat', {
+                const response = await fetch('/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -12959,20 +13078,477 @@ def stream():
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def index():
-    """Homepage - welcome screen only"""
-    # Clear any existing conversation when returning to homepage
-    session.pop('messages', None)
+    """Homepage - handles both welcome screen and chat"""
+    # Initialize conversation history in session
+    if 'messages' not in session:
+        session['messages'] = []
+
+    # Initialize conversation topic tracking
+    if 'conversation_topic' not in session:
+        session['conversation_topic'] = None
+
     # Explicitly initialize session to ensure CSRF token is generated
     if 'initialized' not in session:
         session['initialized'] = True
-    session.modified = True  # Ensure session is saved
-    return render_template_string(HTML, messages=[])
+
+    if request.method == "POST":
+        try:
+            # Safely get query from form data and sanitize it
+            raw_query = request.form.get("query", "").strip()
+            raw_query = sanitize_user_query(raw_query)
+
+            # Check if this is an AJAX request
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+            # If query is empty, return appropriate response
+            if not raw_query:
+                print(f"[DEBUG] Empty query received")
+                if is_ajax:
+                    return jsonify({'status': 'error', 'message': 'Empty query'})
+                return redirect(url_for('index'))
+
+            print(f"\n[DEBUG] ===== NEW REQUEST =====")
+            print(f"[DEBUG] Raw query: '{raw_query}'")
+            print(f"[DEBUG] Session has {len(session['messages'])} messages before")
+
+            # Check if this is the first message (from homepage)
+            is_first_message = len(session['messages']) == 0
+
+            # Set conversation topic on first message (for context in future vague queries)
+            if is_first_message and not session['conversation_topic']:
+                # Extract main topic from first query (simple keyword extraction)
+                topic_words = []
+                for word in raw_query.lower().split():
+                    # Keep medical terms (4+ chars, not common words)
+                    if len(word) >= 4 and word not in ['what', 'about', 'when', 'where', 'which', 'that', 'this', 'with', 'from', 'have', 'been', 'does', 'should', 'would', 'could']:
+                        topic_words.append(word)
+                if topic_words:
+                    session['conversation_topic'] = ' '.join(topic_words[:3])  # First 3 meaningful words
+                    print(f"[DEBUG] Conversation topic set: {session['conversation_topic']}")
+
+            # Add user message to conversation
+            session['messages'].append({"role": "user", "content": raw_query})
+            session.modified = True
+            print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
+
+            # Check if this is a calculation request
+            context_hint = None
+            if len(session['messages']) >= 3:
+                last_msgs = session['messages'][-4:]
+                for msg in last_msgs:
+                    content = msg.get('content', '').lower()
+                    if any(term in content for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid', 'ideal body weight', 'body surface']):
+                        for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid']:
+                            if term in content:
+                                context_hint = term
+                                break
+                        break
+
+            calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
+
+            if calc_result:
+                print(f"[DEBUG] Calculator result generated")
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": calc_result,
+                    "references": [],
+                    "num_papers": 0
+                })
+                session.modified = True
+                if is_ajax:
+                    return jsonify({
+                        'status': 'calculation',
+                        'result': calc_result,
+                        'message': 'Calculation complete'
+                    })
+                print(f"[DEBUG] Redirecting after calculation")
+                return redirect(url_for('index'))
+
+            query = clean_query(raw_query)
+            print(f"[DEBUG] Cleaned query: '{query}'")
+
+            is_followup = len(session['messages']) >= 3
+            print(f"[DEBUG] Is follow-up: {is_followup}")
+
+            # Resolve pronouns and references using conversation context
+            query = resolve_references(query, session['messages'][:-1])  # Exclude the just-added user message
+            print(f"[DEBUG] After reference resolution: '{query}'")
+
+            # Detect question type for customized search and temperature
+            question_type = detect_question_type(query)
+            print(f"[DEBUG] Question type: {question_type}")
+
+            # Detect if this is a multi-part question
+            is_multipart = detect_multipart(query)
+            if is_multipart:
+                print(f"[DEBUG] Multi-part question detected")
+
+            # Handle negations (contraindications, when NOT to use, etc.)
+            negation_search_modifier, negation_prompt_modifier = handle_negations(query)
+            if negation_search_modifier:
+                print(f"[DEBUG] Negation detected - will modify search and prompt")
+
+            # Expand medical abbreviations and synonyms
+            q = expand_medical_abbreviations(query)
+
+            print(f"[DEBUG] Expanded query: '{q}'")
+
+            # Customize search based on question type
+            if is_followup:
+                # Broader search for follow-ups
+                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
+            else:
+                # Customize search filters based on question type
+                if question_type == 'dosing':
+                    # Prioritize guidelines and reviews for dosing questions
+                    search_term = (
+                        f'({q}) AND '
+                        f'(guideline[pt] OR "practice guideline"[pt] OR review[pt] OR meta-analysis[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                elif question_type == 'safety':
+                    # Include adverse effects and safety studies
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'guideline[pt] OR "adverse effects"[sh] OR safety[ti]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                elif question_type == 'comparison':
+                    # Prioritize comparative studies
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'"comparative study"[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                else:
+                    # Default search (general, mechanism, management)
+                    search_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
+                        f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
+                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+
+            # Add negation modifier if detected
+            if negation_search_modifier:
+                search_term += negation_search_modifier
+
+            print(f"[DEBUG] Search term: '{search_term[:150]}...'")
+
+            # Try anesthesiology-specific search first (reduced to 10 papers for speed)
+            ids = []
+            try:
+                print(f"[DEBUG] Searching PubMed (anesthesiology)...")
+                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result.get("IdList", [])
+                print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
+            except Exception as e:
+                print(f"[ERROR] PubMed search failed (anesthesiology): {e}")
+                ids = []
+
+            # Fallback: Try without anesthesiology restriction (skip for follow-ups to save time)
+            if not ids and not is_followup:
+                try:
+                    print(f"[DEBUG] Searching PubMed (general)...")
+                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
+                    result = Entrez.read(handle)
+                    ids = result.get("IdList", [])
+                    print(f"[DEBUG] Found {len(ids)} papers (general)")
+                except Exception as e:
+                    print(f"[ERROR] PubMed search failed (general): {e}")
+                    ids = []
+
+            # If no papers found, handle gracefully
+            if not ids:
+                print(f"[DEBUG] No papers found")
+                if is_followup:
+                    print(f"[DEBUG] Generating follow-up response without papers")
+                    conversation_context = ""
+                    recent_messages = session['messages'][-8:]
+                    for msg in recent_messages:
+                        if msg['role'] == 'user':
+                            conversation_context += f"User: {msg['content']}\n"
+                        else:
+                            content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                            conversation_context += f"Assistant: {content_text[:400]}\n"
+
+                    prompt = f"""You are a clinical expert anesthesiologist AI assistant. The user is asking a follow-up question based on the conversation below.
+
+Previous conversation:
+{conversation_context}
+
+Current follow-up question: {raw_query}
+
+Provide a comprehensive, evidence-based answer that:
+1. Builds naturally on the previous discussion
+2. Includes specific clinical details (dosages, indications, contraindications, side effects)
+3. Uses HTML formatting (<h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists)
+4. Is conversational but clinically complete
+5. Notes that this draws from general anesthesiology knowledge and the previous discussion
+
+Answer as if you're a colleague continuing the conversation:"""
+
+                    print(f"[DEBUG] Preparing streaming for follow-up...")
+
+                    # Generate unique request ID for this streaming session
+                    request_id = str(uuid.uuid4())
+
+                    # Prepare stream data
+                    stream_data = {
+                        'prompt': prompt,
+                        'refs': [],
+                        'num_papers': 0,
+                        'raw_query': raw_query
+                    }
+
+                    # Store in session
+                    session[f'stream_data_{request_id}'] = stream_data
+                    session.modified = True
+
+                    # Also store in memory cache as backup
+                    store_stream_data(request_id, stream_data)
+
+                    print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
+
+                    # Add placeholder assistant message and set pending_stream
+                    # This happens for BOTH AJAX and regular form submissions
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": "",  # Will be populated by streaming
+                        "references": [],
+                        "num_papers": 0
+                    })
+                    session['pending_stream'] = request_id
+                    session.modified = True
+                    print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+
+                    # If AJAX request, return JSON (JavaScript will handle redirect)
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'ready',
+                            'request_id': request_id,
+                            'raw_query': raw_query
+                        })
+
+                    # For regular form submissions, redirect to index page
+                    print(f"[DEBUG] Redirecting to index page")
+                    return redirect(url_for('index'))
+                else:
+                    print(f"[DEBUG] No results for initial query")
+                    error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
+                    session['messages'].append({
+                        "role": "assistant",
+                        "content": error_msg,
+                        "references": [],
+                        "num_papers": 0
+                    })
+                    session.modified = True
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'error',
+                            'message': error_msg
+                        })
+                    print(f"[DEBUG] Error message added, redirecting")
+                    return redirect(url_for('index'))
+
+            print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
+            handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+            papers = Entrez.read(handle)["PubmedArticle"]
+            print(f"[DEBUG] Papers fetched successfully")
+
+            refs = []
+            context = ""
+            # Process only 8 papers for faster GPT processing
+            for p in papers[:8]:
+                try:
+                    art = p["MedlineCitation"]["Article"]
+                    title = art.get("ArticleTitle", "No title")
+                    # Truncate abstracts to 600 chars for faster GPT processing
+                    abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                    abstract = abstract[:600] + "..." if len(abstract) > 600 else abstract
+                    authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
+                    journal = art["Journal"].get("Title", "Unknown")
+                    year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
+                    pmid = p["MedlineCitation"]["PMID"]
+
+                    refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                    context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                except:
+                    continue
+
+            num_papers = len(refs)
+            print(f"[DEBUG] Processed {num_papers} paper references")
+
+            # Build smart conversation context (includes relevant earlier messages + recent)
+            conversation_context = build_smart_context(session['messages'][:-1], raw_query)  # Exclude just-added user message
+            print(f"[DEBUG] Smart context built ({len(conversation_context)} chars)")
+
+            # Create numbered reference list for citation
+            ref_list = ""
+            for i, ref in enumerate(refs, 1):
+                ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+            prompt = f"""You are a clinical anesthesiologist AI providing evidence-based answers with citations.
+
+Previous conversation:
+{conversation_context if len(session['messages']) > 1 else "New conversation."}
+
+Current question: {raw_query}
+{'This is a FOLLOW-UP - build on the previous discussion.' if is_followup else ''}
+{negation_prompt_modifier if negation_prompt_modifier else ''}
+{'NOTE: This question has multiple parts - address each thoroughly.' if is_multipart else ''}
+
+Research papers (cite as [1], [2], etc.):
+{ref_list}
+
+Paper details:
+{context}
+
+INSTRUCTIONS:
+1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
+2. For acute situations, provide step-by-step protocols with drugs and doses
+3. Use numbered citations [1], [2] - NO author names in text
+4. Be conversational but clinically complete - like talking to a colleague
+5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
+6. START your response with a confidence badge using this exact HTML format:
+   <div class="evidence-quality-badge">
+   <div class="confidence-level [high/moderate/low]">
+   <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
+   </div>
+   <div class="evidence-details">
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+   </div>
+   </div>
+
+Example response format:
+"<div class="evidence-quality-badge">
+<div class="confidence-level high">
+<strong>Evidence Quality:</strong> High Confidence
+</div>
+<div class="evidence-details">
+📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
+</div>
+</div>
+
+<h3>Acute Bronchospasm Management</h3>
+<p><strong>Immediate Actions:</strong><br>
+Deepen anesthesia with propofol 0.5-1 mg/kg or increase volatile to 2+ MAC [1]</p>
+<p><strong>Bronchodilators:</strong><br>
+Albuterol 4-8 puffs via ETT [2]</p>"
+
+Respond with maximum clinical utility:"""
+
+            print(f"[DEBUG] Preparing streaming with {num_papers} papers...")
+            logger.info(f"[CHAT] Preparing streaming with {num_papers} papers")
+
+            # Generate unique request ID for this streaming session
+            request_id = str(uuid.uuid4())
+            logger.info(f"[CHAT] Generated request_id: {request_id}")
+
+            # Prepare stream data
+            stream_data = {
+                'prompt': prompt,
+                'refs': refs,
+                'num_papers': num_papers,
+                'raw_query': raw_query,
+                'question_type': question_type  # Store for temperature adjustment
+            }
+
+            # Store in session
+            stream_key = f'stream_data_{request_id}'
+            session[stream_key] = stream_data
+            session.modified = True
+
+            # Also store in memory cache as backup (helps with session sync issues)
+            store_stream_data(request_id, stream_data)
+
+            logger.info(f"[CHAT] Stored stream data with key: {stream_key}")
+            logger.info(f"[CHAT] Session keys after storing: {[k for k in session.keys() if k.startswith('stream_')]}")
+            logger.info(f"[CHAT] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
+
+            print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
+
+            # Add placeholder assistant message for auto-start JavaScript to populate
+            # This happens for BOTH AJAX and regular form submissions
+            session['messages'].append({
+                "role": "assistant",
+                "content": "",  # Will be populated by streaming
+                "references": [],
+                "num_papers": 0
+            })
+            session['pending_stream'] = request_id
+            session.modified = True
+            print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+
+            # If AJAX request, return JSON (JavaScript will handle redirect)
+            if is_ajax:
+                return jsonify({
+                    'status': 'ready',
+                    'request_id': request_id,
+                    'raw_query': raw_query
+                })
+
+            # For regular form submissions (not AJAX), redirect to index page
+            print(f"[DEBUG] Redirecting to index page")
+            return redirect(url_for('index'))
+
+        except Exception as e:
+            # Catch all unhandled errors
+            print(f"\n[ERROR] ===== UNHANDLED EXCEPTION =====")
+            print(f"[ERROR] {type(e).__name__}: {e}")
+            import traceback
+            traceback.print_exc()
+
+            error_content = f"<p><strong>Error:</strong> {str(e)}</p><p>Please try rephrasing your question or start a new conversation.</p>"
+            session['messages'].append({
+                "role": "assistant",
+                "content": error_content,
+                "references": [],
+                "num_papers": 0
+            })
+            session.modified = True
+
+            # Check if AJAX (may not be defined if error occurred early)
+            is_ajax_check = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+            if is_ajax_check:
+                return jsonify({
+                    'status': 'error',
+                    'message': error_content
+                })
+            return redirect(url_for('index'))
+
+    # GET request - check for pending stream and render page
+    pending_stream = session.pop('pending_stream', None)
+
+    # Log session state for debugging
+    logger.info(f"[INDEX GET] pending_stream = {pending_stream}")
+    logger.info(f"[INDEX GET] num messages = {len(session.get('messages', []))}")
+    logger.info(f"[INDEX GET] stream_data keys = {[k for k in session.keys() if k.startswith('stream_')]}")
+
+    print(f"[DEBUG] GET / - pending_stream = {pending_stream}")
+    print(f"[DEBUG] GET / - num messages = {len(session.get('messages', []))}")
+
+    # Ensure session is saved before rendering (critical for streaming to work)
+    session.modified = True
+
+    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream)
 
 @app.route("/chat", methods=["GET", "POST"])
 def chat():
-    """Chat interface with conversation history"""
+    """Redirect to homepage - chat now handled there"""
+    return redirect(url_for('index'))
+
+# Legacy /chat route - now redirects to /
+# All chat functionality has been moved to the index() route for single-page architecture
+
+@app.route("/chat_old", methods=["GET", "POST"])
+def chat_old():
+    """Old chat interface - preserved for reference"""
     # Initialize conversation history in session
     if 'messages' not in session:
         session['messages'] = []
@@ -13525,9 +14101,10 @@ def get_article_preview(pmid):
 
 @app.route("/clear")
 def clear():
-    """Clear conversation history and start new chat"""
+    """Clear conversation history and return to homepage"""
     session.pop('messages', None)
-    return redirect(url_for('chat'))
+    session.pop('conversation_topic', None)
+    return redirect(url_for('index'))
 
 @app.route("/terms")
 def terms():
