@@ -5569,15 +5569,28 @@ CHAT_HTML = """
         <p>&copy; 2025 gasconsult.ai. All rights reserved. | <a href="/terms" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | <a href="/privacy" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
     </footer>
 
-    <script>
+    <script type="text/javascript">
+        'use strict';
+
+        // Global error handler for debugging
+        window.addEventListener('error', function(event) {
+            console.error('[GLOBAL ERROR]', event.error || event.message, 'at', event.filename, event.lineno, event.colno);
+        });
+
+        console.log('[INIT] Chat page JavaScript loading...');
+
         // Fill query from suggested prompt
         function fillQuery(text) {
-            const textarea = document.getElementById('chatInput');
-            if (textarea) {
-                textarea.value = text;
-                textarea.focus();
-                textarea.style.height = '52px';
-                textarea.style.height = textarea.scrollHeight + 'px';
+            try {
+                const textarea = document.getElementById('chatInput');
+                if (textarea) {
+                    textarea.value = text;
+                    textarea.focus();
+                    textarea.style.height = '52px';
+                    textarea.style.height = textarea.scrollHeight + 'px';
+                }
+            } catch (error) {
+                console.error('[fillQuery] Error:', error);
             }
         }
 
