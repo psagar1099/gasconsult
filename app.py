@@ -13134,15 +13134,8 @@ Answer as if you're a colleague continuing the conversation:"""
 
                     print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
 
-                    # If AJAX request, return JSON
-                    if is_ajax:
-                        return jsonify({
-                            'status': 'ready',
-                            'request_id': request_id,
-                            'raw_query': raw_query
-                        })
-
-                    # For regular form submissions, redirect with pending_stream
+                    # Add placeholder assistant message and set pending_stream
+                    # This happens for BOTH AJAX and regular form submissions
                     session['messages'].append({
                         "role": "assistant",
                         "content": "",  # Will be populated by streaming
@@ -13151,13 +13144,18 @@ Answer as if you're a colleague continuing the conversation:"""
                     })
                     session['pending_stream'] = request_id
                     session.modified = True
+                    print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+
+                    # If AJAX request, return JSON (JavaScript will handle redirect)
                     if is_ajax:
                         return jsonify({
                             'status': 'ready',
                             'request_id': request_id,
                             'raw_query': raw_query
                         })
-                    print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+
+                    # For regular form submissions, redirect to /chat page
+                    print(f"[DEBUG] Redirecting to /chat page")
                     return redirect(url_for('chat'))
                 else:
                     print(f"[DEBUG] No results for initial query")
@@ -13281,16 +13279,8 @@ Respond with maximum clinical utility:"""
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
 
-            # If AJAX request, always return JSON
-            if is_ajax:
-                return jsonify({
-                    'status': 'ready',
-                    'request_id': request_id,
-                    'raw_query': raw_query
-                })
-
-            # For regular form submissions (not AJAX), always redirect to chat page
             # Add placeholder assistant message for auto-start JavaScript to populate
+            # This happens for BOTH AJAX and regular form submissions
             session['messages'].append({
                 "role": "assistant",
                 "content": "",  # Will be populated by streaming
@@ -13299,7 +13289,18 @@ Respond with maximum clinical utility:"""
             })
             session['pending_stream'] = request_id
             session.modified = True
-            print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
+            print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+
+            # If AJAX request, return JSON (JavaScript will handle redirect)
+            if is_ajax:
+                return jsonify({
+                    'status': 'ready',
+                    'request_id': request_id,
+                    'raw_query': raw_query
+                })
+
+            # For regular form submissions (not AJAX), redirect to chat page
+            print(f"[DEBUG] Redirecting to /chat page")
             return redirect(url_for('chat'))
 
         except Exception as e:
