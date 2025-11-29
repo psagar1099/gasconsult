@@ -4016,20 +4016,19 @@ HTML = """
                         return;
                     }
 
+                // Always prevent default form submission and use AJAX
+                e.preventDefault();
+
                 // Check if we're on the homepage (welcome screen visible and no chat messages)
                 const welcomeScreen = document.querySelector('.welcome-screen');
                 const chatMessages = document.getElementById('chatMessages');
                 const hasMessages = chatMessages && chatMessages.children.length > 0;
                 const isHomepage = welcomeScreen && !hasMessages;
 
-                // If on homepage, navigate to /chat page with query
-                if (isHomepage) {
-                    // Let the form submit naturally - it will POST to /chat and redirect
-                    return;
+                // If on homepage, hide welcome screen and show chat
+                if (isHomepage && welcomeScreen) {
+                    welcomeScreen.style.display = 'none';
                 }
-
-                // On chat page - prevent default and use streaming
-                e.preventDefault();
 
                 // Disable inputs
                 submitBtn.disabled = true;
@@ -4083,7 +4082,29 @@ HTML = """
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === 'ready') {
+                    if (data.status === 'calculation') {
+                        // Handle calculation result
+                        const loadingMsg = document.getElementById('streaming-response');
+                        if (loadingMsg) {
+                            loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.result}</div>`;
+                        }
+                        // Re-enable form
+                        submitBtn.disabled = false;
+                        textarea.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        textarea.focus();
+                    } else if (data.status === 'error') {
+                        // Handle error
+                        const loadingMsg = document.getElementById('streaming-response');
+                        if (loadingMsg) {
+                            loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.message}</div>`;
+                        }
+                        // Re-enable form
+                        submitBtn.disabled = false;
+                        textarea.disabled = false;
+                        submitBtn.style.opacity = '1';
+                        textarea.focus();
+                    } else if (data.status === 'ready') {
                         // Update loading indicator with progress
                         const loadingIndicator = document.querySelector('.loading-indicator');
                         if (loadingIndicator) {
@@ -12775,9 +12796,14 @@ def chat():
             raw_query = request.form.get("query", "").strip()
             raw_query = sanitize_user_query(raw_query)
 
-            # If query is empty, redirect to GET
+            # Check if this is an AJAX request
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+            # If query is empty, return appropriate response
             if not raw_query:
-                print(f"[DEBUG] Empty query received, redirecting to GET")
+                print(f"[DEBUG] Empty query received")
+                if is_ajax:
+                    return jsonify({'status': 'error', 'message': 'Empty query'})
                 return redirect(url_for('chat'))
 
             print(f"\n[DEBUG] ===== NEW REQUEST =====")
@@ -12828,6 +12854,12 @@ def chat():
                     "num_papers": 0
                 })
                 session.modified = True
+                if is_ajax:
+                    return jsonify({
+                        'status': 'calculation',
+                        'result': calc_result,
+                        'message': 'Calculation complete'
+                    })
                 print(f"[DEBUG] Redirecting after calculation")
                 return redirect(url_for('chat'))
 
@@ -12974,10 +13006,7 @@ Answer as if you're a colleague continuing the conversation:"""
 
                     print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
 
-                    # Check if this is an AJAX request from the calculator modal
-                    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
-
-                    # If AJAX request (from modal), return JSON
+                    # If AJAX request, return JSON
                     if is_ajax:
                         return jsonify({
                             'status': 'ready',
@@ -12994,6 +13023,12 @@ Answer as if you're a colleague continuing the conversation:"""
                     })
                     session['pending_stream'] = request_id
                     session.modified = True
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'ready',
+                            'request_id': request_id,
+                            'raw_query': raw_query
+                        })
                     print(f"[DEBUG] Added placeholder assistant message, redirecting to /chat page")
                     return redirect(url_for('chat'))
                 else:
@@ -13006,6 +13041,11 @@ Answer as if you're a colleague continuing the conversation:"""
                         "num_papers": 0
                     })
                     session.modified = True
+                    if is_ajax:
+                        return jsonify({
+                            'status': 'error',
+                            'message': error_msg
+                        })
                     print(f"[DEBUG] Error message added, redirecting")
                     return redirect(url_for('chat'))
 
@@ -13113,10 +13153,7 @@ Respond with maximum clinical utility:"""
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
 
-            # Check if this is an AJAX request from the calculator modal
-            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
-
-            # If AJAX request (from modal), always return JSON
+            # If AJAX request, always return JSON
             if is_ajax:
                 return jsonify({
                     'status': 'ready',
@@ -13144,13 +13181,22 @@ Respond with maximum clinical utility:"""
             import traceback
             traceback.print_exc()
 
+            error_content = f"<p><strong>Error:</strong> {str(e)}</p><p>Please try rephrasing your question or start a new conversation.</p>"
             session['messages'].append({
                 "role": "assistant",
-                "content": f"<p><strong>Error:</strong> {str(e)}</p><p>Please try rephrasing your question or start a new conversation.</p>",
+                "content": error_content,
                 "references": [],
                 "num_papers": 0
             })
             session.modified = True
+
+            # Check if AJAX (may not be defined if error occurred early)
+            is_ajax_check = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+            if is_ajax_check:
+                return jsonify({
+                    'status': 'error',
+                    'message': error_content
+                })
             return redirect(url_for('chat'))
 
     # Check for pending stream (from homepage redirect)
