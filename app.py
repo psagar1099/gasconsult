@@ -13322,6 +13322,7 @@ Provide a comprehensive, evidence-based answer that:
 3. Uses HTML formatting (<h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists)
 4. Is conversational but clinically complete
 5. Notes that this draws from general anesthesiology knowledge and the previous discussion
+6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
 
 Answer as if you're a colleague continuing the conversation:"""
 
@@ -13447,6 +13448,7 @@ INSTRUCTIONS:
 3. Use numbered citations [1], [2] - NO author names in text
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
+6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
 6. START your response with a confidence badge using this exact HTML format:
    <div class="evidence-quality-badge">
    <div class="confidence-level [high/moderate/low]">
@@ -13787,6 +13789,7 @@ Provide a comprehensive, evidence-based answer that:
 3. Uses HTML formatting (<h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists)
 4. Is conversational but clinically complete
 5. Notes that this draws from general anesthesiology knowledge and the previous discussion
+6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
 
 Answer as if you're a colleague continuing the conversation:"""
 
@@ -13912,6 +13915,7 @@ INSTRUCTIONS:
 3. Use numbered citations [1], [2] - NO author names in text
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
+6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
 6. START your response with a confidence badge using this exact HTML format:
    <div class="evidence-quality-badge">
    <div class="confidence-level [high/moderate/low]">
