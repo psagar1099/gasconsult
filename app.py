@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify
+from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify, make_response
 from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -4002,7 +4002,7 @@ HTML = """
         // Register Service Worker for offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js')
+                navigator.serviceWorker.register('/static/sw.js?v=2')
                     .then((registration) => {
                         console.log('Service Worker registered:', registration.scope);
                     })
@@ -6774,7 +6774,7 @@ QUICK_DOSE_HTML = """
         // Register Service Worker for offline functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/static/sw.js')
+                navigator.serviceWorker.register('/static/sw.js?v=2')
                     .then((registration) => {
                         console.log('Service Worker registered:', registration.scope);
                     })
@@ -11807,7 +11807,12 @@ Respond with maximum clinical utility:"""
     # Ensure session is saved before rendering (critical for streaming to work)
     session.modified = True
 
-    return render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream, error_message=error_message)
+    # Create response with no-cache headers to prevent stale UI
+    response = make_response(render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream, error_message=error_message))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route("/clear")
 def clear():
@@ -11860,7 +11865,11 @@ def quick_dose():
 def preop_assessment():
     """Pre-operative assessment with evidence-based risk stratification"""
     if request.method == "GET":
-        return render_template_string(PREOP_HTML, summary=None, references=None)
+        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None))
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
 
     # Collect and sanitize form data
     age = int(request.form.get("age", 0))
