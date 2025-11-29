@@ -1100,8 +1100,6 @@ PREOP_HTML = """
         }
 
         .preop-header {
-            width: 100%;
-            max-width: 100%;
             text-align: center;
             margin-bottom: 48px;
         }
