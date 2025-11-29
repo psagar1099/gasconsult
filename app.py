@@ -175,7 +175,17 @@ def log_response(response):
 def handle_csrf_error(e):
     """Handle CSRF token errors with helpful message"""
     logger.warning(f"CSRF error: {str(e)}")
-    # Redirect to homepage to regenerate session/CSRF token
+
+    # For AJAX requests, return JSON error instead of redirect
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    if is_ajax:
+        return jsonify({
+            "status": "error",
+            "message": "Your session has expired. Please reload the page and try again.",
+            "error_type": "csrf"
+        }), 400
+
+    # For regular requests, redirect to homepage to regenerate session/CSRF token
     return redirect(url_for('index'))
 
 @app.errorhandler(404)
@@ -3560,12 +3570,16 @@ HTML = """
                     if (textarea) textarea.disabled = true;
                     if (submitBtn) submitBtn.disabled = true;
 
+                    // Get CSRF token from form
+                    const csrfToken = formData.get('csrf_token');
+
                     // Submit via AJAX
                     fetch('/chat', {
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'X-Requested-With': 'XMLHttpRequest' // Mark as AJAX request
+                            'X-Requested-With': 'XMLHttpRequest', // Mark as AJAX request
+                            'X-CSRFToken': csrfToken // Include CSRF token in headers
                         }
                     })
                     .then(response => response.json())
@@ -3576,10 +3590,16 @@ HTML = """
                             // Redirect to chat page
                             window.location.href = '/chat';
                         } else if (data.status === 'error') {
-                            alert('Error: ' + data.message);
-                            if (loadingContainer) loadingContainer.classList.remove('active');
-                            if (textarea) textarea.disabled = false;
-                            if (submitBtn) submitBtn.disabled = false;
+                            // Handle CSRF errors by reloading the page
+                            if (data.error_type === 'csrf') {
+                                alert(data.message);
+                                window.location.reload();
+                            } else {
+                                alert('Error: ' + data.message);
+                                if (loadingContainer) loadingContainer.classList.remove('active');
+                                if (textarea) textarea.disabled = false;
+                                if (submitBtn) submitBtn.disabled = false;
+                            }
                         }
                     })
                     .catch(error => {
@@ -5875,12 +5895,16 @@ CHAT_HTML = """
                     if (textarea) textarea.disabled = true;
                     if (submitBtn) submitBtn.disabled = true;
 
+                    // Get CSRF token from form
+                    const csrfToken = formData.get('csrf_token');
+
                     // Submit via AJAX
                     fetch('/chat', {
                         method: 'POST',
                         body: formData,
                         headers: {
-                            'X-Requested-With': 'XMLHttpRequest' // Mark as AJAX request
+                            'X-Requested-With': 'XMLHttpRequest', // Mark as AJAX request
+                            'X-CSRFToken': csrfToken // Include CSRF token in headers
                         }
                     })
                     .then(response => response.json())
@@ -5899,10 +5923,16 @@ CHAT_HTML = """
                                 window.location.reload();
                             }
                         } else if (data.status === 'error') {
-                            alert('Error: ' + data.message);
-                            if (loadingIndicator) loadingIndicator.classList.remove('active');
-                            if (textarea) textarea.disabled = false;
-                            if (submitBtn) submitBtn.disabled = false;
+                            // Handle CSRF errors by reloading the page
+                            if (data.error_type === 'csrf') {
+                                alert(data.message);
+                                window.location.reload();
+                            } else {
+                                alert('Error: ' + data.message);
+                                if (loadingIndicator) loadingIndicator.classList.remove('active');
+                                if (textarea) textarea.disabled = false;
+                                if (submitBtn) submitBtn.disabled = false;
+                            }
                         }
                     })
                     .catch(error => {
