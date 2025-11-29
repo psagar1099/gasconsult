@@ -4519,11 +4519,36 @@ HTML = """
 
                             // Connect to streaming endpoint
                             const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
-                            const responseDiv = document.getElementById('streaming-response').querySelector('.message-content');
+                            const streamingElement = document.getElementById('streaming-response');
+
+                            if (!streamingElement) {
+                                console.error('[STREAM] Streaming response element not found!');
+                                submitBtn.disabled = false;
+                                textarea.disabled = false;
+                                submitBtn.style.opacity = '1';
+                                return;
+                            }
+
+                            const responseDiv = streamingElement.querySelector('.message-content');
+                            if (!responseDiv) {
+                                console.error('[STREAM] Message content element not found!');
+                                submitBtn.disabled = false;
+                                textarea.disabled = false;
+                                submitBtn.style.opacity = '1';
+                                return;
+                            }
+
                             let responseContent = '';
 
                             eventSource.addEventListener('message', function(e) {
-                                const event = JSON.parse(e.data);
+                                let event;
+                                try {
+                                    event = JSON.parse(e.data);
+                                } catch (parseError) {
+                                    console.error('[STREAM] Failed to parse event data:', parseError);
+                                    console.error('[STREAM] Raw data:', e.data);
+                                    return;
+                                }
 
                                 if (event.type === 'connected') {
                                     console.log('[STREAM] Connected');
@@ -4551,11 +4576,18 @@ HTML = """
                                     const messageText = responseDiv.querySelector('.message-text');
                                     if (messageText) {
                                         messageText.innerHTML = cleanedContent;
-                                    } else {
+                                    } else if (cleanedContent.trim()) {
+                                        // Only update if there's actual content
+                                        console.log('[STREAM] No .message-text found, updating responseDiv directly');
                                         responseDiv.innerHTML = cleanedContent;
+                                    } else {
+                                        console.log('[STREAM] No .message-text and cleanedContent is empty, skipping update');
                                     }
-                                    // Auto-scroll
-                                    responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                    // Auto-scroll to the message container, not just the content div
+                                    const streamingMsg = document.getElementById('streaming-response');
+                                    if (streamingMsg) {
+                                        streamingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                                    }
                                 } else if (event.type === 'references') {
                                     // Add references and metadata
                                     const refs = event.data;
@@ -4605,9 +4637,14 @@ HTML = """
 
                             eventSource.onerror = function(err) {
                                 console.error('[STREAM] Connection error:', err);
-                                // Remove ID to prevent future responses from updating this one
+                                console.error('[STREAM] EventSource readyState:', eventSource.readyState);
+                                // Show error message to user
                                 const streamingMsg = document.getElementById('streaming-response');
                                 if (streamingMsg) {
+                                    const contentDiv = streamingMsg.querySelector('.message-content');
+                                    if (contentDiv) {
+                                        contentDiv.innerHTML = '<div class="message-text"><p style="color: #EF4444;"><strong>Connection Error</strong></p><p>Failed to connect to the streaming endpoint. This could be due to:<br>- Network connectivity issues<br>- Server configuration problems<br>- Session expired</p><p>Please try refreshing the page and submitting your question again.</p></div>';
+                                    }
                                     streamingMsg.removeAttribute('id');
                                 }
                                 eventSource.close();
