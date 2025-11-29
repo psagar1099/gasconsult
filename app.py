@@ -56,6 +56,35 @@ openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 # In production, replace with database (Redis, PostgreSQL, etc.)
 BOOKMARKS_STORAGE = {}  # {user_session_id: [{id, query, answer, references, timestamp}]}
 SHARED_LINKS_STORAGE = {}  # {share_id: {query, answer, references, timestamp, expires}}
+
+# In-memory cache for stream data (backup for session issues)
+# This helps when session state isn't shared properly between requests
+# WARNING: This won't work with multiple Gunicorn workers unless using sticky sessions
+STREAM_DATA_CACHE = {}  # {request_id: {data, expires_at}}
+STREAM_CACHE_TTL = 300  # 5 minutes
+
+def store_stream_data(request_id, data):
+    """Store stream data in both session and cache"""
+    STREAM_DATA_CACHE[request_id] = {
+        'data': data,
+        'expires_at': datetime.now() + timedelta(seconds=STREAM_CACHE_TTL)
+    }
+    # Clean up expired entries
+    now = datetime.now()
+    expired = [k for k, v in STREAM_DATA_CACHE.items() if v['expires_at'] < now]
+    for k in expired:
+        del STREAM_DATA_CACHE[k]
+
+def get_stream_data(request_id):
+    """Get stream data from cache (fallback for session issues)"""
+    if request_id in STREAM_DATA_CACHE:
+        entry = STREAM_DATA_CACHE[request_id]
+        if entry['expires_at'] > datetime.now():
+            return entry['data']
+        else:
+            del STREAM_DATA_CACHE[request_id]
+    return None
+
 from datetime import datetime, timedelta
 
 # ====== Security Functions ======
@@ -5677,8 +5706,10 @@ CHAT_HTML = """
                         if (loadingIndicator) loadingIndicator.classList.remove('active');
                         if (eventSource.readyState === EventSource.CLOSED) {
                             console.error('[AUTO-START] EventSource connection CLOSED');
-                            messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">❌ Connection error. Please refresh and try again.</p></div>';
+                            // Check if we got an error message in the last event
+                            messageContent.innerHTML = '<div class="message-text"><p style="color: #EF4444;">❌ Connection error. The streaming session may have expired. Please <a href="/" style="color: #2563EB;">go back</a> and try again.</p></div>';
                         }
+                        eventSource.close();
                     });
 
                     eventSource.addEventListener('message', function(e) {
@@ -12790,19 +12821,47 @@ HYPOTENSION_HTML = """
 """
 
 @app.route("/stream")
+@csrf.exempt  # SSE endpoint uses GET requests, CSRF not applicable
 def stream():
     """Server-Sent Events endpoint for streaming GPT responses"""
     request_id = request.args.get('request_id')
 
+    logger.info(f"[STREAM] Received request with request_id: {request_id}")
+
     if not request_id:
-        return Response("error: Invalid request - no request_id\n\n", mimetype='text/event-stream')
+        logger.error("[STREAM] No request_id provided")
+        error_msg = json.dumps({'type': 'error', 'message': 'No request ID provided'})
+        return Response(f"data: {error_msg}\n\n", mimetype='text/event-stream')
 
     stream_key = f'stream_data_{request_id}'
-    if stream_key not in session:
-        return Response("error: Invalid request - stream data not found\n\n", mimetype='text/event-stream')
+    stream_data = None
 
-    # Get prepared data from session
-    stream_data = session[f'stream_data_{request_id}']
+    # Try to get from session first
+    logger.info(f"[STREAM] Looking for key: {stream_key}")
+    logger.info(f"[STREAM] Session stream keys: {[k for k in session.keys() if k.startswith('stream_')]}")
+
+    if stream_key in session:
+        stream_data = session[stream_key]
+        logger.info(f"[STREAM] Found stream data in session")
+    else:
+        # Fallback to in-memory cache
+        logger.info(f"[STREAM] Session miss, checking cache...")
+        logger.info(f"[STREAM] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
+        stream_data = get_stream_data(request_id)
+        if stream_data:
+            logger.info(f"[STREAM] Found stream data in cache (session fallback)")
+
+    if not stream_data:
+        logger.error(f"[STREAM] Stream data not found in session or cache for key: {stream_key}")
+        logger.error(f"[STREAM] This usually means the session was not properly shared between requests")
+        logger.error(f"[STREAM] If using multiple workers, consider using Redis for session storage")
+        error_msg = json.dumps({
+            'type': 'error',
+            'message': 'Session expired or not found. This can happen if the server restarted. Please go back and try again.'
+        })
+        return Response(f"data: {error_msg}\n\n", mimetype='text/event-stream')
+
+    # Extract data from stream_data (already retrieved from session or cache)
     prompt = stream_data['prompt']
     refs = stream_data['refs']
     num_papers = stream_data['num_papers']
@@ -13127,14 +13186,20 @@ Answer as if you're a colleague continuing the conversation:"""
                     # Generate unique request ID for this streaming session
                     request_id = str(uuid.uuid4())
 
-                    # Store data in session for streaming endpoint
-                    session[f'stream_data_{request_id}'] = {
+                    # Prepare stream data
+                    stream_data = {
                         'prompt': prompt,
                         'refs': [],
                         'num_papers': 0,
                         'raw_query': raw_query
                     }
+
+                    # Store in session
+                    session[f'stream_data_{request_id}'] = stream_data
                     session.modified = True
+
+                    # Also store in memory cache as backup
+                    store_stream_data(request_id, stream_data)
 
                     print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
 
@@ -13267,19 +13332,32 @@ Albuterol 4-8 puffs via ETT [2]</p>"
 Respond with maximum clinical utility:"""
 
             print(f"[DEBUG] Preparing streaming with {num_papers} papers...")
+            logger.info(f"[CHAT] Preparing streaming with {num_papers} papers")
 
             # Generate unique request ID for this streaming session
             request_id = str(uuid.uuid4())
+            logger.info(f"[CHAT] Generated request_id: {request_id}")
 
-            # Store data in session for streaming endpoint
-            session[f'stream_data_{request_id}'] = {
+            # Prepare stream data
+            stream_data = {
                 'prompt': prompt,
                 'refs': refs,
                 'num_papers': num_papers,
                 'raw_query': raw_query,
                 'question_type': question_type  # Store for temperature adjustment
             }
+
+            # Store in session
+            stream_key = f'stream_data_{request_id}'
+            session[stream_key] = stream_data
             session.modified = True
+
+            # Also store in memory cache as backup (helps with session sync issues)
+            store_stream_data(request_id, stream_data)
+
+            logger.info(f"[CHAT] Stored stream data with key: {stream_key}")
+            logger.info(f"[CHAT] Session keys after storing: {[k for k in session.keys() if k.startswith('stream_')]}")
+            logger.info(f"[CHAT] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
 
             print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
 
@@ -13334,8 +13412,18 @@ Respond with maximum clinical utility:"""
 
     # Check for pending stream (from homepage redirect)
     pending_stream = session.pop('pending_stream', None)
+
+    # Log session state for debugging
+    logger.info(f"[CHAT GET] pending_stream = {pending_stream}")
+    logger.info(f"[CHAT GET] num messages = {len(session.get('messages', []))}")
+    logger.info(f"[CHAT GET] stream_data keys = {[k for k in session.keys() if k.startswith('stream_')]}")
+
     print(f"[DEBUG] GET /chat - pending_stream = {pending_stream}")
     print(f"[DEBUG] GET /chat - num messages = {len(session.get('messages', []))}")
+
+    # Ensure session is saved before rendering (critical for streaming to work)
+    session.modified = True
+
     return render_template_string(CHAT_HTML, messages=session.get('messages', []), pending_stream=pending_stream)
 
 @app.route("/article/<pmid>")
