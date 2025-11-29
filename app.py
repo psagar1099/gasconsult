@@ -3805,7 +3805,7 @@ HTML = """
 <body>
     <nav>
         <div class="container">
-            <a href="/" class="logo-container">
+            <a href="/clear" class="logo-container">
                 <svg class="logo-ecg" viewBox="0 0 60 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="ecgGrad" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -3829,7 +3829,7 @@ HTML = """
                 </div>
             </a>
             <div class="nav-actions">
-                <a href="/" class="nav-link active">Home</a>
+                <a href="/clear" class="nav-link active">Home</a>
                 <a href="/preop" class="nav-link">Pre-Op Assessment</a>
                 <a href="/calculators" class="nav-link">Clinical Calculators</a>
                 <a href="/quick-dose" class="nav-link">Quick Dose</a>
@@ -4173,6 +4173,7 @@ HTML = """
                         const loadingMsg = document.getElementById('streaming-response');
                         if (loadingMsg) {
                             loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.result}</div>`;
+                            loadingMsg.removeAttribute('id');
                         }
                         // Re-enable form
                         submitBtn.disabled = false;
@@ -4184,6 +4185,7 @@ HTML = """
                         const loadingMsg = document.getElementById('streaming-response');
                         if (loadingMsg) {
                             loadingMsg.querySelector('.message-content').innerHTML = `<div class="message-text">${data.message}</div>`;
+                            loadingMsg.removeAttribute('id');
                         }
                         // Re-enable form
                         submitBtn.disabled = false;
@@ -4251,6 +4253,11 @@ HTML = """
                             } else if (event.type === 'done') {
                                 console.log('[STREAM] Complete');
                                 eventSource.close();
+                                // Remove ID to prevent future responses from updating this one
+                                const streamingMsg = document.getElementById('streaming-response');
+                                if (streamingMsg) {
+                                    streamingMsg.removeAttribute('id');
+                                }
                                 // Re-enable form
                                 submitBtn.disabled = false;
                                 textarea.disabled = false;
@@ -4260,6 +4267,11 @@ HTML = """
                             } else if (event.type === 'error') {
                                 console.error('[STREAM] Error:', event.message);
                                 responseDiv.innerHTML = `<p><strong>Error:</strong> ${event.message}</p>`;
+                                // Remove ID to prevent future responses from updating this one
+                                const streamingMsg = document.getElementById('streaming-response');
+                                if (streamingMsg) {
+                                    streamingMsg.removeAttribute('id');
+                                }
                                 eventSource.close();
                                 submitBtn.disabled = false;
                                 textarea.disabled = false;
@@ -4269,6 +4281,11 @@ HTML = """
 
                         eventSource.onerror = function(err) {
                             console.error('[STREAM] Connection error:', err);
+                            // Remove ID to prevent future responses from updating this one
+                            const streamingMsg = document.getElementById('streaming-response');
+                            if (streamingMsg) {
+                                streamingMsg.removeAttribute('id');
+                            }
                             eventSource.close();
                             submitBtn.disabled = false;
                             textarea.disabled = false;
@@ -4281,6 +4298,7 @@ HTML = """
                     const loadingMsg = document.getElementById('streaming-response');
                     if (loadingMsg) {
                         loadingMsg.querySelector('.message-content').innerHTML = '<p><strong>Error:</strong> Failed to start query. Please try again.</p>';
+                        loadingMsg.removeAttribute('id');
                     }
                     submitBtn.disabled = false;
                     textarea.disabled = false;
@@ -14112,7 +14130,13 @@ def clear():
     session.pop('messages', None)
     session.pop('conversation_topic', None)
     session.pop('chat_active', None)  # Clear chat mode flag
-    return redirect(url_for('index'))
+    session.modified = True  # Ensure session is saved
+    response = redirect(url_for('index'))
+    # Prevent caching to ensure fresh page load
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route("/clear-chat")
 def clear_chat():
@@ -14120,7 +14144,13 @@ def clear_chat():
     session.pop('messages', None)
     session.pop('conversation_topic', None)
     session['chat_active'] = True  # Keep chat interface active
-    return redirect(url_for('index'))
+    session.modified = True  # Ensure session is saved
+    response = redirect(url_for('index'))
+    # Prevent caching to ensure fresh page load
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 @app.route("/terms")
 def terms():
