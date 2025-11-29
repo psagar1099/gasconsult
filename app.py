@@ -976,7 +976,7 @@ PREOP_HTML = """
         }
 
         nav .container {
-            max-width: 2400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -1064,7 +1064,7 @@ PREOP_HTML = """
         }
 
         .phi-warning-content {
-            max-width: 2400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -1094,7 +1094,7 @@ PREOP_HTML = """
 
         /* Main Content */
         .preop-container {
-            max-width: 2400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 100px 32px 60px;
         }
