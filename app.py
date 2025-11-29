@@ -3574,7 +3574,7 @@ HTML = """
 
         // Handle form submission via AJAX (homepage)
         document.addEventListener('DOMContentLoaded', function() {
-            const chatForm = document.querySelector('.chat-form');
+            const chatForm = document.querySelector('.homepage-chat-form');
             const loadingContainer = document.getElementById('loadingIndicator');
 
             if (chatForm) {
@@ -4140,13 +4140,12 @@ HTML = """
                 messagesContainer.appendChild(loadingMsg);
                 loadingMsg.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
+                // Make POST request to initiate streaming (before clearing textarea)
+                const formData = new FormData(chatPageForm);  // Include all form fields (query + CSRF token)
+
                 // Clear textarea
                 textarea.value = '';
                 textarea.style.height = '52px';
-
-                // Make POST request to initiate streaming
-                const formData = new FormData();
-                formData.append('query', query);
 
                 fetch('/', {
                     method: 'POST',
