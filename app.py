@@ -1100,6 +1100,8 @@ PREOP_HTML = """
         }
 
         .preop-header {
+            width: 100%;
+            max-width: 100%;
             text-align: center;
             margin-bottom: 48px;
         }
@@ -1124,8 +1126,17 @@ PREOP_HTML = """
             letter-spacing: -0.2px;
         }
 
+        /* Form Element - Full Width */
+        .preop-container form {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+        }
+
         /* Form Sections */
         .form-section {
+            width: 100%;
+            max-width: 100%;
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -1319,6 +1330,8 @@ PREOP_HTML = """
 
         /* Summary Display */
         .summary-container {
+            width: 100%;
+            max-width: 100%;
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
