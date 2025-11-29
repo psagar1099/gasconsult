@@ -85,6 +85,16 @@ def get_stream_data(request_id):
             del STREAM_DATA_CACHE[request_id]
     return None
 
+def strip_markdown_code_fences(content):
+    """Remove markdown code fences (```html ... ```) from content"""
+    if not content:
+        return content
+    # Remove opening code fence with language specifier (```html, ```HTML, etc.)
+    content = re.sub(r'^```\w*\s*\n?', '', content, flags=re.IGNORECASE)
+    # Remove closing code fence
+    content = re.sub(r'\n?```\s*$', '', content)
+    return content
+
 from datetime import datetime, timedelta
 
 # ====== Security Functions ======
@@ -4211,11 +4221,17 @@ HTML = """
                                     `;
                                 }
                                 responseContent += event.data;
+
+                                // Strip markdown code fences (```html ... ```) from the content
+                                let cleanedContent = responseContent
+                                    .replace(/^```html\s*/i, '')  // Remove opening ```html
+                                    .replace(/\s*```\s*$/i, '');  // Remove closing ```
+
                                 const messageText = responseDiv.querySelector('.message-text');
                                 if (messageText) {
-                                    messageText.innerHTML = responseContent;
+                                    messageText.innerHTML = cleanedContent;
                                 } else {
-                                    responseDiv.innerHTML = responseContent;
+                                    responseDiv.innerHTML = cleanedContent;
                                 }
                                 // Auto-scroll
                                 responseDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -13042,6 +13058,9 @@ def stream():
             # Calculate evidence strength
             evidence_strength = get_evidence_strength(num_papers, refs)
 
+            # Clean markdown code fences from the response
+            cleaned_response = strip_markdown_code_fences(full_response)
+
             # Save complete response to session
             # Check if last message is an empty assistant placeholder (from homepage redirect)
             # If so, update it instead of appending a new one
@@ -13052,7 +13071,7 @@ def stream():
                 # Update the placeholder
                 session['messages'][-1] = {
                     "role": "assistant",
-                    "content": full_response,
+                    "content": cleaned_response,
                     "references": refs,
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
@@ -13062,7 +13081,7 @@ def stream():
                 # Append new message (for AJAX submissions from chat page)
                 session['messages'].append({
                     "role": "assistant",
-                    "content": full_response,
+                    "content": cleaned_response,
                     "references": refs,
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
