@@ -952,31 +952,28 @@ PREOP_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -1435,17 +1432,12 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -1469,9 +1461,8 @@ PREOP_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -1502,8 +1493,7 @@ PREOP_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -1984,11 +1974,13 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -2254,7 +2246,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
                 </div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
@@ -2570,31 +2566,28 @@ HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -3053,17 +3046,12 @@ HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -3087,9 +3075,8 @@ HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -3120,8 +3107,7 @@ HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -3289,6 +3275,77 @@ HTML = """<!DOCTYPE html>
             background: #FEF2F2;
             color: #DC2626;
             border: 1px solid #FECACA;
+        }
+
+        /* Evidence Quality Badge - Sleek Modern Design */
+        .evidence-quality-badge {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .evidence-quality-badge:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .confidence-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .confidence-level strong {
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .confidence-level.high {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            color: #047857;
+            border: 1.5px solid #10B981;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .confidence-level.moderate {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+            color: #B45309;
+            border: 1.5px solid #F59E0B;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .confidence-level.low {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            color: #B91C1C;
+            border: 1.5px solid #EF4444;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .evidence-details {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.6;
+            padding: 4px 0;
+            font-weight: 500;
+        }
+
+        .evidence-details::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            background: #9CA3AF;
+            border-radius: 50%;
+            margin: 0 8px 2px 0;
         }
 
         .references-section {
@@ -3681,11 +3738,13 @@ HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link active">Home</a>
@@ -3998,13 +4057,18 @@ HTML = """<!DOCTYPE html>
                         // Stream content chunks
                         if (event.data) {
                             accumulatedMarkdown += event.data;
-                            // Show raw markdown during streaming for instant feedback
-                            streamingContent.textContent = accumulatedMarkdown;
+                            // Parse and show formatted markdown in real-time
+                            if (typeof marked !== 'undefined') {
+                                streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
+                            } else {
+                                streamingContent.textContent = accumulatedMarkdown;
+                            }
                             scrollToBottom();
                         }
                     } else if (event.type === 'references') {
-                        // Parse accumulated markdown to HTML now that streaming is complete
-                        if (accumulatedMarkdown && typeof marked !== 'undefined') {
+                        // Markdown already parsed in real-time, no need to parse again
+                        // (keeping this for backwards compatibility if needed)
+                        if (!streamingContent.innerHTML && accumulatedMarkdown && typeof marked !== 'undefined') {
                             streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
                         }
 
@@ -4259,31 +4323,28 @@ LIBRARY_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -4742,17 +4803,12 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -4776,9 +4832,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -4809,8 +4864,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -4959,11 +5013,13 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -5187,31 +5243,28 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -5670,17 +5723,12 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -5704,9 +5752,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -5737,8 +5784,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -5887,11 +5933,13 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -6095,31 +6143,28 @@ TERMS_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -6578,17 +6623,12 @@ TERMS_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -6612,9 +6652,8 @@ TERMS_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -6645,8 +6684,7 @@ TERMS_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -6795,11 +6833,13 @@ TERMS_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -6946,7 +6986,7 @@ TERMS_HTML = """<!DOCTYPE html>
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <div class="footer-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
             <div class="footer-links">
@@ -7122,31 +7162,28 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -7605,17 +7642,12 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -7639,9 +7671,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -7672,8 +7703,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -7822,11 +7852,13 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -8002,7 +8034,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-brand">
-                <div class="footer-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
             <div class="footer-links">
@@ -8178,31 +8210,28 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -8661,17 +8690,12 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -8695,9 +8719,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -8728,8 +8751,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -9304,11 +9326,13 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -9849,7 +9873,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
                 </div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
@@ -10138,31 +10166,28 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -10621,17 +10646,12 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -10655,9 +10675,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -10688,8 +10707,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -10838,11 +10856,13 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -12648,37 +12668,41 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
                     let fullResponse = '';
                     let refs = [];
+                    let aiMessageEl = null;  // Keep reference to the AI message element
 
                     eventSource.addEventListener('message', function(e) {
                         const event = JSON.parse(e.data);
 
                         if (event.type === 'content') {
-                            // Remove loading on first content
+                            // Remove loading and create AI message on first content
                             const loadingMsg = document.getElementById('loadingMessage');
-                            if (loadingMsg && fullResponse === '') {
+                            if (loadingMsg && fullResponse === '' && !aiMessageEl) {
                                 loadingMsg.remove();
-                                addMessageToModal('', 'ai');  // Add empty AI message
+                                // Create AI message element directly
+                                const messagesDiv = document.getElementById('aiChatMessages');
+                                aiMessageEl = document.createElement('div');
+                                aiMessageEl.className = 'ai-message';
+                                messagesDiv.appendChild(aiMessageEl);
+                                messagesDiv.scrollTop = messagesDiv.scrollHeight;
                             }
 
                             fullResponse += event.content;
-                            const messages = document.querySelectorAll('.ai-message');
-                            const lastMsg = messages[messages.length - 1];
-                            lastMsg.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                            if (aiMessageEl) {
+                                aiMessageEl.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                            }
                         } else if (event.type === 'references') {
                             refs = event.references;
                         } else if (event.type === 'done') {
                             eventSource.close();
 
                             // Add references if any
-                            if (refs && refs.length > 0) {
-                                const messages = document.querySelectorAll('.ai-message');
-                                const lastMsg = messages[messages.length - 1];
+                            if (refs && refs.length > 0 && aiMessageEl) {
                                 let refsHTML = '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"><strong>References:</strong><div>';
                                 refs.forEach((ref, index) => {
                                     refsHTML += `<div style="margin: 8px 0; font-size: 13px;"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank" style="color: var(--primary-blue);">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
                                 });
                                 refsHTML += '</div></div>';
-                                lastMsg.innerHTML += refsHTML;
+                                aiMessageEl.innerHTML += refsHTML;
                             }
                         } else if (event.type === 'error') {
                             console.error('Stream error:', event.message);
@@ -12730,7 +12754,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
                 </div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
@@ -12897,31 +12925,28 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             text-decoration: none;
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--blue-600);
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(37,99,235,0.15), 0 6px 20px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.15), inset 0 -1px 0 rgba(0,0,0,0.1);
         }
 
-        .logo-icon svg { width: 18px; height: 18px; }
+        .logo-icon svg { width: 52px; height: 18px; }
 
         .logo-text {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: 700;
-            letter-spacing: -0.4px;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .logo-text span { color: var(--blue-600); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -13380,17 +13405,12 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         }
 
         .footer-logo {
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
-        .footer-logo svg { width: 16px; height: 16px; }
+        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
             font-size: 13px;
@@ -13414,9 +13434,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon { width: 42px; height: 42px; border-radius: 12px; }
-            .logo-icon svg { width: 22px; height: 22px; }
-            .logo-text { font-size: 20px; }
+            .logo-icon svg { width: 60px; height: 21px; }
+            .logo-text { font-size: 28px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -13447,8 +13466,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo { width: 36px; height: 36px; border-radius: 10px; }
-            .footer-logo svg { width: 18px; height: 18px; }
+            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -13832,11 +13850,13 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span>gas</span>consult.ai</span>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
@@ -14118,7 +14138,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
                 </div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
