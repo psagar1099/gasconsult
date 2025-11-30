@@ -1637,6 +1637,338 @@ PREOP_HTML = """<!DOCTYPE html>
             .main-content { padding: 140px 40px 80px; }
         }
 
+        /* Pre-Op Assessment Specific Styles */
+        .phi-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+        }
+
+        .phi-content {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .phi-icon {
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .phi-text {
+            flex: 1;
+        }
+
+        .phi-text strong {
+            display: block;
+            font-size: 15px;
+            font-weight: 700;
+            color: #DC2626;
+            margin-bottom: 6px;
+        }
+
+        .phi-text p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+            margin: 0;
+        }
+
+        .main-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .content-container {
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+            font-weight: 400;
+        }
+
+        .form-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .field-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .field-input, select.field-input, textarea.field-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            background: var(--white);
+            color: var(--gray-900);
+            transition: all 0.2s ease;
+        }
+
+        .field-input:focus, select.field-input:focus, textarea.field-input:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-item label {
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 768px) {
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        textarea.field-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--blue-600);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            margin-top: 12px;
+        }
+
+        .submit-button:hover {
+            background: var(--blue-700);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .result-section {
+            margin-top: 32px;
+        }
+
+        .result-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .risk-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .risk-badge.low {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .risk-badge.moderate {
+            background: rgba(245, 158, 11, 0.1);
+            color: #D97706;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .risk-badge.high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--blue-600);
+        }
+
+        .evidence-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .evidence-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .reference-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .reference-item {
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--blue-500);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .reference-item:last-child {
+            margin-bottom: 0;
+        }
+
     </style>
 </head>
 <body>
@@ -1661,7 +1993,7 @@ PREOP_HTML = """<!DOCTYPE html>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
@@ -8338,6 +8670,432 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .main-content { padding: 140px 40px 80px; }
         }
 
+        /* Quick Dose Specific Styles */
+        .weight-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .weight-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .weight-input-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .weight-input-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .weight-input-wrapper input {
+            width: 100%;
+            padding: 14px 48px 14px 16px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            border: 2px solid var(--blue-200);
+            border-radius: 12px;
+            background: var(--white);
+        }
+
+        .weight-unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .conversion-text {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .conversion-value {
+            font-weight: 700;
+            color: var(--blue-600);
+        }
+
+        .quick-weights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quick-weight-btn {
+            padding: 10px 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-weight-btn:hover {
+            border-color: var(--blue-500);
+            color: var(--blue-600);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+        }
+
+        .quick-weight-btn.active {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+            color: var(--white);
+        }
+
+        .drug-category {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 20px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-header:hover {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .color-indicator {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .category-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .chevron {
+            width: 24px;
+            height: 24px;
+            color: var(--gray-400);
+            transition: transform 0.3s ease;
+        }
+
+        .drug-category.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .drug-category.open .category-content {
+            max-height: 5000px;
+            padding: 0 24px 24px;
+        }
+
+        .drug-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .drug-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .drug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .drug-name-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .drug-subtitle {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .concentration-badge {
+            background: var(--blue-50);
+            color: var(--blue-700);
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .dose-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .dose-item {
+            text-align: center;
+        }
+
+        .dose-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+
+        .dose-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--blue-600);
+            margin-bottom: 4px;
+        }
+
+        .dose-unit {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .dose-range {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .clinical-pearl {
+            display: flex;
+            gap: 12px;
+            background: var(--blue-50);
+            border-left: 3px solid var(--blue-500);
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .pearl-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--blue-600);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .pearl-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .color-legend {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .legend-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .legend-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .disclaimer {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .disclaimer strong {
+            color: #DC2626;
+        }
+
+        .crisis-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .crisis-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .crisis-modal {
+            background: var(--white);
+            border-radius: 24px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .crisis-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .crisis-modal-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .crisis-modal-title svg {
+            color: #EF4444;
+        }
+
+        .crisis-close-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .crisis-close-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        .crisis-modal-content {
+            padding: 24px;
+        }
+
+        .protocol-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .protocol-btn {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .protocol-btn:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+            transform: translateX(4px);
+        }
+
+        .protocol-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .protocol-desc {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
     </style>
 </head>
 <body>
@@ -8361,7 +9119,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
@@ -12631,6 +13389,241 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .main-content { padding: 140px 40px 80px; }
         }
 
+        /* IOH Predictor Specific Styles */
+        .edu-warning {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.08) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .edu-warning-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .edu-warning-content h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #DC2626;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .edu-warning-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .edu-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            margin-top: 16px;
+        }
+
+        .disclaimer-box {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-left: 4px solid #DC2626;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .disclaimer-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #DC2626;
+            margin-bottom: 16px;
+        }
+
+        .disclaimer-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        .disclaimer-box p:last-of-type {
+            margin-bottom: 8px;
+        }
+
+        .disclaimer-box ul {
+            margin-left: 24px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        .disclaimer-box li {
+            margin-bottom: 6px;
+        }
+
+        .metrics-box {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .metrics-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .predictor-form {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .input-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .input-group {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .prediction-result {
+            background: var(--white);
+            border: 2px solid var(--blue-200);
+            border-radius: 16px;
+            padding: 32px;
+            margin-top: 32px;
+            text-align: center;
+        }
+
+        .risk-level {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .risk-level.low { color: #059669; }
+        .risk-level.moderate { color: #D97706; }
+        .risk-level.high { color: #DC2626; }
+        .risk-level.very-high { color: #991B1B; }
+
+        .risk-percentage {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .risk-percentage.low { color: #059669; }
+        .risk-percentage.moderate { color: #D97706; }
+        .risk-percentage.high { color: #DC2626; }
+        .risk-percentage.very-high { color: #991B1B; }
+
+        .risk-description {
+            font-size: 15px;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        .risk-factors-list {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: left;
+            margin-top: 24px;
+        }
+
+        .risk-factors-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .risk-factor-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: var(--white);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--blue-500);
+        }
+
+        .risk-factor-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .risk-factor-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .risk-factor-desc {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 <body>
@@ -12657,7 +13650,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/hypotension" class="nav-link active">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
