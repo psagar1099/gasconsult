@@ -1681,17 +1681,6 @@ PREOP_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<!-- Animated Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <!-- Glassmorphism Navigation -->
-    
-
     <!-- PHI Warning -->
     <div class="phi-banner">
         <div class="phi-content">
@@ -3499,75 +3488,79 @@ HTML = """<!DOCTYPE html>
 
             const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
 
-            eventSource.addEventListener('chunk', function(e) {
+            eventSource.addEventListener('message', function(e) {
                 try {
-                    const data = JSON.parse(e.data);
-                    if (data.chunk) {
-                        streamingContent.innerHTML += data.chunk;
-                        scrollToBottom();
-                    }
-                } catch (err) {
-                    console.error('[SSE] Error parsing chunk:', err);
-                }
-            });
+                    const event = JSON.parse(e.data);
 
-            eventSource.addEventListener('references', function(e) {
-                try {
-                    const data = JSON.parse(e.data);
-                    if (data.references && data.references.length > 0) {
-                        console.log('[SSE] Received', data.references.length, 'references');
+                    if (event.type === 'content') {
+                        // Stream content chunks
+                        if (event.data) {
+                            streamingContent.innerHTML += event.data;
+                            scrollToBottom();
+                        }
+                    } else if (event.type === 'references') {
+                        // Display references
+                        if (event.data && event.data.length > 0) {
+                            console.log('[SSE] Received', event.data.length, 'references');
+
+                            // Hide streaming indicator
+                            if (streamingIndicator) {
+                                streamingIndicator.style.display = 'none';
+                            }
+
+                            // Build references HTML
+                            let refsHTML = '<div class="references-title">';
+                            refsHTML += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
+                            refsHTML += '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>';
+                            refsHTML += '<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>';
+                            refsHTML += '</svg>';
+                            refsHTML += 'References (' + event.data.length + ')';
+                            refsHTML += '</div>';
+
+                            event.data.forEach(function(ref) {
+                                refsHTML += '<div class="reference-item">';
+                                refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
+                                refsHTML += ref.title;
+                                refsHTML += '</a>';
+                                refsHTML += '<div class="reference-meta">';
+                                refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
+                                refsHTML += '</div>';
+                                refsHTML += '</div>';
+                            });
+
+                            streamingReferences.innerHTML = refsHTML;
+                            streamingReferences.style.display = 'block';
+                            scrollToBottom();
+                        }
+                    } else if (event.type === 'done') {
+                        console.log('[SSE] Stream complete');
 
                         // Hide streaming indicator
                         if (streamingIndicator) {
                             streamingIndicator.style.display = 'none';
                         }
 
-                        // Build references HTML
-                        let refsHTML = '<div class="references-title">';
-                        refsHTML += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
-                        refsHTML += '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>';
-                        refsHTML += '<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>';
-                        refsHTML += '</svg>';
-                        refsHTML += 'References (' + data.references.length + ')';
-                        refsHTML += '</div>';
-
-                        data.references.forEach(function(ref) {
-                            refsHTML += '<div class="reference-item">';
-                            refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
-                            refsHTML += ref.title;
-                            refsHTML += '</a>';
-                            refsHTML += '<div class="reference-meta">';
-                            refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
-                            refsHTML += '</div>';
-                            refsHTML += '</div>';
-                        });
-
-                        streamingReferences.innerHTML = refsHTML;
-                        streamingReferences.style.display = 'block';
+                        eventSource.close();
                         scrollToBottom();
+                    } else if (event.type === 'error') {
+                        console.error('[SSE] Server error:', event.message);
+
+                        if (streamingIndicator) {
+                            streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error: ' + (event.message || 'Unknown error') + '</span>';
+                        }
+
+                        eventSource.close();
                     }
                 } catch (err) {
-                    console.error('[SSE] Error parsing references:', err);
+                    console.error('[SSE] Error parsing message:', err);
                 }
-            });
-
-            eventSource.addEventListener('done', function(e) {
-                console.log('[SSE] Stream complete');
-
-                // Hide streaming indicator
-                if (streamingIndicator) {
-                    streamingIndicator.style.display = 'none';
-                }
-
-                eventSource.close();
-                scrollToBottom();
             });
 
             eventSource.addEventListener('error', function(e) {
-                console.error('[SSE] Error event:', e);
+                console.error('[SSE] Connection error:', e);
 
                 if (streamingIndicator) {
-                    streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error loading response</span>';
+                    streamingIndicator.innerHTML = '<span style="color: #DC2626;">Connection error - please refresh and try again</span>';
                 }
 
                 eventSource.close();
@@ -8389,18 +8382,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<!-- Animated Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <!-- Glassmorphism Navigation -->
-    
-
-    <main>
         <!-- Weight Input Section -->
         <div class="weight-section">
             <div class="weight-label">Patient Weight</div>
@@ -12705,18 +12686,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<!-- Animated Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <!-- Glassmorphism Navigation -->
-    
-
-    <main>
         <!-- Educational Warning Banner -->
         <div class="edu-warning">
             <div class="edu-warning-icon">⚠️</div>
