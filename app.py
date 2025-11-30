@@ -583,9 +583,8 @@ def expand_medical_abbreviations(query):
     # PRIS - use word boundary (less likely to be a common word)
     q = re.sub(r'\bpris\b', '("propofol infusion syndrome" OR PRIS)', q, flags=re.IGNORECASE)
     q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
-    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH')
-    # MH - keep space-based to avoid matching "mh" in other words
-    q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH) ')
+    # Remove ambiguous "MH" abbreviation - it matches "Mental Health" in PubMed
+    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis"')
 
     # Common scenarios
     q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
@@ -13957,6 +13956,17 @@ def index():
             # Expand medical abbreviations and synonyms
             q = expand_medical_abbreviations(query)
 
+            # Boost emergency protocol searches
+            query_lower = query.lower()
+            if any(word in query_lower for word in ['protocol', 'checklist', 'crisis', 'emergency', 'management']):
+                # Add protocol/guideline terms to boost relevant results
+                if 'malignant hyperthermia' in query_lower or 'mh' in query_lower:
+                    q = q + ' AND (protocol[ti] OR emergency[ti] OR crisis[ti] OR treatment[ti])'
+                elif any(term in query_lower for term in ['rapid sequence', 'rsi', 'intubation']):
+                    q = q + ' AND (protocol[ti] OR guideline[ti] OR airway[ti])'
+                elif 'last' in query_lower or 'local anesthetic' in query_lower:
+                    q = q + ' AND (protocol[ti] OR treatment[ti] OR resuscitation[ti])'
+
             print(f"[DEBUG] Expanded query: '{q}'")
 
             # Customize search based on question type
@@ -14003,28 +14013,44 @@ def index():
 
             print(f"[DEBUG] Search term: '{search_term[:150]}...'")
 
-            # Try anesthesiology-specific search first (reduced to 10 papers for speed)
+            # Multi-tier search strategy to find relevant papers
             ids = []
+
+            # Tier 1: Anesthesiology + original filters (strict)
             try:
-                print(f"[DEBUG] Searching PubMed (anesthesiology)...")
+                print(f"[DEBUG] Tier 1: Searching PubMed (anesthesiology + strict filters)...")
                 handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
-                print(f"[DEBUG] Found {len(ids)} papers (anesthesiology)")
+                print(f"[DEBUG] Found {len(ids)} papers")
             except Exception as e:
-                print(f"[ERROR] PubMed search failed (anesthesiology): {e}")
+                print(f"[ERROR] Tier 1 search failed: {e}")
                 ids = []
 
-            # Fallback: Try without anesthesiology restriction (skip for follow-ups to save time)
+            # Tier 2: Anesthesiology + broader filters (if Tier 1 failed and not a follow-up)
             if not ids and not is_followup:
                 try:
-                    print(f"[DEBUG] Searching PubMed (general)...")
-                    handle = Entrez.esearch(db="pubmed", term=search_term, retmax=10, sort="relevance")
+                    print(f"[DEBUG] Tier 2: Broadening filters (anesthesiology + any publication type)...")
+                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
+                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {broader_term}', retmax=10, sort="relevance")
                     result = Entrez.read(handle)
                     ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers (general)")
+                    print(f"[DEBUG] Found {len(ids)} papers")
                 except Exception as e:
-                    print(f"[ERROR] PubMed search failed (general): {e}")
+                    print(f"[ERROR] Tier 2 search failed: {e}")
+                    ids = []
+
+            # Tier 3: General search WITHOUT anesthesiology restriction (last resort)
+            if not ids and not is_followup:
+                try:
+                    print(f"[DEBUG] Tier 3: General search (no anesthesiology restriction)...")
+                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
+                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=10, sort="relevance")
+                    result = Entrez.read(handle)
+                    ids = result.get("IdList", [])
+                    print(f"[DEBUG] Found {len(ids)} papers")
+                except Exception as e:
+                    print(f"[ERROR] Tier 3 search failed: {e}")
                     ids = []
 
             # If no papers found, handle gracefully
