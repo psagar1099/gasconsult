@@ -14184,6 +14184,12 @@ Answer as if you're a colleague continuing the conversation:"""
             for i, ref in enumerate(refs, 1):
                 ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
 
+            # Log papers being used for debugging
+            print(f"\n[DEBUG] ===== PAPERS RETURNED FOR QUERY: '{raw_query}' =====")
+            for i, ref in enumerate(refs[:3], 1):  # Show first 3
+                print(f"[DEBUG] [{i}] {ref['title'][:100]}...")
+            print(f"[DEBUG] ================================================\n")
+
             prompt = f"""You are a clinical anesthesiologist AI providing evidence-based answers with citations.
 
 Previous conversation:
@@ -14200,16 +14206,6 @@ Research papers (cite as [1], [2], etc.):
 Paper details:
 {context}
 
-⚠️ CRITICAL FIRST STEP - RELEVANCE CHECK:
-Before proceeding, check if the provided papers are actually about the topic asked:
-- Question topic: {raw_query}
-- Are the paper titles/abstracts about this topic?
-- ❌ If papers are OFF-TOPIC (e.g., asking about RSI but papers are about ACL injuries):
-  * Answer the question from general knowledge WITHOUT any citations
-  * State at the top: "⚠️ Note: The search did not return relevant papers for this topic. Answer based on general medical knowledge."
-  * Do NOT cite irrelevant papers - it's misleading
-- ✅ If papers ARE relevant: Proceed normally with citations
-
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
 2. For acute situations, provide step-by-step protocols with drugs and doses
@@ -14224,23 +14220,17 @@ INSTRUCTIONS:
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
-7. START your response with a confidence badge:
-   - If papers ARE relevant to the topic, use:
-     <div class="evidence-quality-badge">
-     <div class="confidence-level [high/moderate/low]">
-     <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
-     </div>
-     <div class="evidence-details">
-     📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
-     </div>
-     </div>
+7. START your response with an evidence quality badge:
+   <div class="evidence-quality-badge">
+   <div class="confidence-level [high/moderate/low]">
+   <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
+   </div>
+   <div class="evidence-details">
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+   </div>
+   </div>
 
-   - If papers are OFF-TOPIC or irrelevant, SKIP the badge and start with:
-     <p style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px;">
-     ⚠️ <strong>Note:</strong> Search did not return relevant papers. Answer based on general anesthesiology knowledge.
-     </p>
-
-CONFIDENCE LEVEL GUIDANCE (only if papers ARE relevant):
+CONFIDENCE LEVEL GUIDANCE:
 - **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence
 - **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence
 - **Low Confidence**: Few papers OR case reports/expert opinion only
@@ -14252,7 +14242,9 @@ CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
    ✅ CORRECT: "TXA reduces blood loss in spine surgery [1][2]" when both abstracts explicitly state this
    ✅ CORRECT: "Standard monitoring includes pulse oximetry" (NO citation - general knowledge)
 
-EXAMPLE 1 - When papers ARE relevant (with proper citation):
+IMPORTANT: Use the provided research papers to inform your answer. Only cite papers when their abstracts directly support the specific claim. If a claim is general knowledge or not supported by the abstracts, omit the citation.
+
+Example with proper conservative citation:
 "<div class="evidence-quality-badge">
 <div class="confidence-level high">
 <strong>Evidence Quality:</strong> High Confidence
@@ -14270,18 +14262,7 @@ Inhaled beta-2 agonists are first-line treatment [1][2]. Response typically seen
 <p><strong>Monitoring:</strong><br>
 Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
 
-EXAMPLE 2 - When papers are OFF-TOPIC (question about RSI, but papers are about ACL injuries):
-"<p style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px;">
-⚠️ <strong>Note:</strong> Search did not return relevant papers. Answer based on general anesthesiology knowledge.
-</p>
-
-<h3>Rapid Sequence Induction (RSI) Checklist</h3>
-<p><strong>Preparation:</strong><br>
-Ensure all airway equipment ready, including laryngoscope, ETT, suction, and backup devices. Standard ASA monitoring. Preoxygenate with 100% O2 for 3-5 minutes.</p>
-<p><strong>Medications:</strong><br>
-Induction agent (propofol 1.5-2.5 mg/kg or etomidate 0.2-0.3 mg/kg) followed immediately by paralytic (succinylcholine 1-1.5 mg/kg or rocuronium 1.2 mg/kg).</p>"
-
-NOTE: Example 1 shows CONSERVATIVE citation - only when abstracts explicitly support claims. Example 2 shows handling irrelevant papers - NO citations, clear disclaimer.
+NOTE: Only cite when abstracts explicitly support claims. Generic principles have NO citations as they're standard knowledge.
 
 Respond with maximum clinical utility:"""
 
