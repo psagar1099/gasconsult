@@ -1972,7 +1972,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -1983,7 +1983,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -1997,7 +1997,7 @@ PREOP_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -3257,6 +3257,13 @@ HTML = """<!DOCTYPE html>
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 12px;
+            cursor: help;
+            transition: all 0.2s ease;
+        }
+
+        .evidence-badge:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .evidence-badge.high {
@@ -3275,6 +3282,16 @@ HTML = """<!DOCTYPE html>
             background: #FEF2F2;
             color: #DC2626;
             border: 1px solid #FECACA;
+        }
+
+        .evidence-explanation {
+            display: block;
+            font-size: 10px;
+            opacity: 0.85;
+            font-weight: 500;
+            margin-top: 2px;
+            text-transform: none;
+            letter-spacing: 0px;
         }
 
         /* Evidence Quality Badge - Sleek Modern Design */
@@ -3761,7 +3778,7 @@ HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
@@ -3785,15 +3802,29 @@ HTML = """<!DOCTYPE html>
                     <div class="message ai-message">
                         <div class="message-bubble">
                             {% if message.get('evidence_strength') %}
-                            <div class="evidence-badge {{ 'high' if message.evidence_strength == 'High' else ('moderate' if message.evidence_strength == 'Moderate' else 'low') }}">
-                                {% if message.evidence_strength == 'High' %}
-                                ✓ High Confidence
-                                {% elif message.evidence_strength == 'Moderate' %}
-                                ~ Moderate Confidence
-                                {% else %}
-                                ! Low Confidence
-                                {% endif %}
-                                • {{ message.num_papers }} studies
+                            <div class="evidence-badge {{ 'high' if message.evidence_strength == 'High' else ('moderate' if message.evidence_strength == 'Moderate' else 'low') }}"
+                                 title="{% if message.evidence_strength == 'High' %}Based on {{ message.num_papers }} high-quality studies including meta-analyses, systematic reviews, or RCTs{% elif message.evidence_strength == 'Moderate' %}Based on {{ message.num_papers }} studies with some high-quality evidence{% else %}Limited evidence available ({{ message.num_papers }} studies). Use clinical judgment.{% endif %}">
+                                <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                                    <div>
+                                        {% if message.evidence_strength == 'High' %}
+                                        ✓ High Confidence
+                                        {% elif message.evidence_strength == 'Moderate' %}
+                                        ~ Moderate Confidence
+                                        {% else %}
+                                        ! Low Confidence
+                                        {% endif %}
+                                        • {{ message.num_papers }} studies
+                                    </div>
+                                    <div class="evidence-explanation">
+                                        {% if message.evidence_strength == 'High' %}
+                                        Strong evidence from meta-analyses, RCTs, or systematic reviews
+                                        {% elif message.evidence_strength == 'Moderate' %}
+                                        Moderate evidence - consider individual patient factors
+                                        {% else %}
+                                        Limited evidence - use caution and clinical judgment
+                                        {% endif %}
+                                    </div>
+                                </div>
                             </div>
                             {% endif %}
 
@@ -3828,7 +3859,7 @@ HTML = """<!DOCTYPE html>
                 {% if pending_stream %}
                 <div class="message ai-message" id="streamingMessage">
                     <div class="message-bubble">
-                        <div class="message-content" id="streamingContent"></div>
+                        <div class="message-content" id="streamingContent" style="display: none;"></div>
                         <div class="streaming-indicator">
                             <div class="streaming-dots">
                                 <span></span>
@@ -4056,6 +4087,10 @@ HTML = """<!DOCTYPE html>
                     if (event.type === 'content') {
                         // Stream content chunks
                         if (event.data) {
+                            // Show content div on first content chunk
+                            if (streamingContent.style.display === 'none') {
+                                streamingContent.style.display = 'block';
+                            }
                             accumulatedMarkdown += event.data;
                             // Parse and show formatted markdown in real-time
                             if (typeof marked !== 'undefined') {
@@ -5011,7 +5046,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -5022,7 +5057,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -5036,7 +5071,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -5931,7 +5966,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -5942,7 +5977,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -5956,7 +5991,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -6831,7 +6866,7 @@ TERMS_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -6842,7 +6877,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -6856,7 +6891,7 @@ TERMS_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -7850,7 +7885,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -7861,7 +7896,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -7875,7 +7910,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -9324,7 +9359,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -9335,7 +9370,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -9349,7 +9384,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -10841,6 +10876,174 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .main-content { padding: 140px 40px 80px; }
         }
 
+
+        /* AI Chat Modal Styles */
+        .ai-chat-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .ai-chat-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-chat-container {
+            background: var(--white);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+        }
+
+        .ai-chat-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .ai-chat-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .close-modal-btn {
+            background: var(--gray-100);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--gray-600);
+        }
+
+        .close-modal-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            min-height: 200px;
+            max-height: 400px;
+        }
+
+        .ai-message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-800);
+        }
+
+        .user-message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--blue-50);
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--blue-900);
+            text-align: right;
+        }
+
+        .ai-chat-input-area {
+            padding: 16px 24px 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .ai-input-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            padding: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .ai-input-container:focus-within {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            background: transparent;
+            padding: 8px 12px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--gray-900);
+            resize: none;
+            min-height: 42px;
+            max-height: 120px;
+            line-height: 1.5;
+        }
+
+        .ai-chat-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .send-ai-message-btn {
+            background: var(--blue-600);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .send-ai-message-btn:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .send-ai-message-btn:active {
+            transform: translateY(0);
+        }
+
+        .send-ai-message-btn:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            transform: none;
+        }
     </style>
 </head>
 <body>
@@ -10854,7 +11057,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -10865,7 +11068,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -10879,7 +11082,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -13848,7 +14051,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -13859,7 +14062,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
@@ -13873,7 +14076,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             </div>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
@@ -14304,6 +14507,14 @@ def stream():
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Homepage - handles both welcome screen and chat"""
+    # Check if user wants to clear chat and return to hero state
+    if request.method == "GET" and request.args.get('clear') == '1':
+        session.pop('messages', None)
+        session.pop('chat_active', None)
+        session.pop('conversation_topic', None)
+        session.modified = True
+        return redirect(url_for('index'))
+
     # Initialize conversation history in session
     if 'messages' not in session:
         session['messages'] = []
