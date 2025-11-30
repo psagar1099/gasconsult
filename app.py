@@ -2043,7 +2043,6 @@ PREOP_HTML = """<!DOCTYPE html>
             justify-content: center;
             margin-top: 48px;
             padding-top: 40px;
-            border-top: 2px solid var(--gray-200);
         }
 
         .submit-btn {
@@ -2058,14 +2057,14 @@ PREOP_HTML = """<!DOCTYPE html>
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
             color: var(--white);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .submit-btn:active {
@@ -4516,7 +4515,7 @@ HTML = """<!DOCTYPE html>
             bottom: 0;
             background: var(--gray-50);
             border-top: 1px solid var(--gray-200);
-            padding: 16px;
+            padding: 12px;
             z-index: 10;
         }
 
@@ -4592,7 +4591,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 20px 24px;
+                padding: 14px 24px;
             }
 
             .new-chat-btn {
@@ -4607,7 +4606,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 24px 32px;
+                padding: 16px 32px;
             }
         }
 
@@ -10105,7 +10104,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -14191,15 +14190,21 @@ INSTRUCTIONS:
    <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
    </div>
    <div class="evidence-details">
-   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]<br>
-   💡 Why this confidence? [Brief explanation based on evidence quality]
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
    </div>
    </div>
 
 CONFIDENCE LEVEL GUIDANCE:
-- **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence (e.g., "Multiple meta-analyses confirm this approach" or "Supported by 4+ high-quality RCTs")
-- **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence (e.g., "Based on several studies but evidence is mixed" or "Limited to observational data")
-- **Low Confidence**: Few papers OR case reports/expert opinion only (e.g., "Limited research available, mostly expert consensus" or "Only case reports and small studies")
+- **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence
+- **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence
+- **Low Confidence**: Few papers OR case reports/expert opinion only
+
+CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
+   ❌ WRONG: "Propofol 2-3 mg/kg is recommended [1]" when abstract says "induction agents" generally
+   ❌ WRONG: "TXA reduces blood loss by 30% [2]" when abstract doesn't give specific percentage
+   ❌ WRONG: "Common side effects include nausea [3]" when abstract doesn't mention side effects
+   ✅ CORRECT: "TXA reduces blood loss in spine surgery [1][2]" when both abstracts explicitly state this
+   ✅ CORRECT: "Standard monitoring includes pulse oximetry" (NO citation - general knowledge)
 
 Example response showing proper citation usage:
 "<div class="evidence-quality-badge">
@@ -14207,20 +14212,19 @@ Example response showing proper citation usage:
 <strong>Evidence Quality:</strong> High Confidence
 </div>
 <div class="evidence-details">
-📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024<br>
-💡 Why this confidence? Multiple meta-analyses and RCTs provide robust evidence for these interventions.
+📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
 </div>
 </div>
 
 <h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
-100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol 0.5-1 mg/kg [1] or increase volatile agent to 2+ MAC.</p>
+100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol or increase volatile agent to 2+ MAC.</p>
 <p><strong>Bronchodilators:</strong><br>
-Albuterol 4-8 puffs MDI via ETT is first-line treatment [2][3]. Response typically seen within 2-3 minutes.</p>
+Inhaled beta-2 agonists are first-line treatment [1][2]. Response typically seen within minutes. Severe cases may require IV epinephrine.</p>
 <p><strong>Monitoring:</strong><br>
 Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
 
-NOTE: In this example, propofol dose and albuterol are cited because abstracts explicitly mention them. Generic monitoring principles are not cited because they're standard knowledge not specifically from these papers.
+NOTE: This example shows CONSERVATIVE citation - only cite when the abstract explicitly supports the exact claim. Generic principles (100% oxygen, monitoring) have NO citations because they're standard knowledge.
 
 Respond with maximum clinical utility:"""
 
