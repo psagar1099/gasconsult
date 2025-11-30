@@ -807,7 +807,7 @@ PREOP_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Op Assessment — gasconsult.ai</title>
+    <title>Pre-Op Risk Assessment — gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
@@ -815,7 +815,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
 
         :root {
@@ -1627,7 +1627,7 @@ PREOP_HTML = """<!DOCTYPE html>
             .main-content { padding: 140px 40px 80px; }
         }
 
-        /* Pre-Op Assessment Specific Styles */
+        /* Pre-Op Assessment Wizard Styles */
         .phi-banner {
             background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
             border: 1px solid rgba(239, 68, 68, 0.2);
@@ -1694,105 +1694,279 @@ PREOP_HTML = """<!DOCTYPE html>
             font-weight: 400;
         }
 
-        .form-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+        /* Wizard Container */
+        .wizard-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .wizard-card {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 32px;
+            border-radius: 24px;
+            padding: 40px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.05), 0 32px 100px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 24px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--blue-100);
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 40px;
         }
 
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
+        .progress-bar-bg {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 100px;
+            overflow: hidden;
+            position: relative;
         }
 
-        @media (min-width: 768px) {
-            .form-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-500), var(--blue-600));
+            border-radius: 100px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
 
-        @media (min-width: 1024px) {
-            .form-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .field-group {
+        .progress-text {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .progress-text .step-count {
+            color: var(--blue-600);
+        }
+
+        /* Step Header */
+        .step-header {
+            margin-bottom: 32px;
+        }
+
+        .step-indicator {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blue-600);
+            margin-bottom: 12px;
+        }
+
+        .step-title {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-600);
+        }
+
+        /* Step Content */
+        .step-content {
+            opacity: 0;
+            animation: fadeSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        /* Form Fields */
+        .field-group {
+            margin-bottom: 24px;
         }
 
         .field-label {
+            display: block;
             font-size: 14px;
             font-weight: 600;
             color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .field-label .required {
+            color: #DC2626;
+            margin-left: 2px;
         }
 
         .field-input, select.field-input, textarea.field-input {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--gray-300);
+            padding: 14px 16px;
+            border: 2px solid var(--gray-300);
             border-radius: 12px;
             font-family: inherit;
             font-size: 15px;
             background: var(--white);
             color: var(--gray-900);
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .field-input:focus, select.field-input:focus, textarea.field-input:focus {
             outline: none;
             border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 16px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
         }
 
+        .field-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        textarea.field-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 640px) {
+            .field-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .field-row.three-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Radio Buttons */
         .radio-group {
             display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        .radio-item {
+        .radio-option {
+            position: relative;
+            padding: 16px 20px;
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .radio-option:hover {
+            border-color: var(--blue-400);
+            transform: translateX(4px);
+        }
+
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-option input[type="radio"]:checked ~ .radio-label {
+            font-weight: 700;
+            color: var(--blue-600);
+        }
+
+        .radio-option input[type="radio"]:checked ~ .radio-check {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+        }
+
+        .radio-option input[type="radio"]:checked ~ .radio-check::after {
+            opacity: 1;
+        }
+
+        .radio-option.selected {
+            background: var(--blue-50);
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .radio-content {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: flex-start;
+            gap: 12px;
         }
 
-        .radio-item input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+        .radio-check {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-400);
+            border-radius: 50%;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.3s ease;
+            margin-top: 2px;
         }
 
-        .radio-item label {
-            font-size: 14px;
-            color: var(--gray-700);
-            cursor: pointer;
+        .radio-check::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
+        .radio-text {
+            flex: 1;
+        }
+
+        .radio-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-800);
+            display: block;
+            margin-bottom: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .radio-desc {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--gray-600);
+        }
+
+        /* Checkbox Groups */
         .checkbox-group {
             display: grid;
             grid-template-columns: 1fr;
             gap: 12px;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
             .checkbox-group {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -1802,161 +1976,479 @@ PREOP_HTML = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 12px;
+            background: var(--white);
+            border: 2px solid var(--gray-300);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
         }
 
         .checkbox-item input[type="checkbox"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
+            accent-color: var(--blue-600);
         }
 
         .checkbox-item label {
             font-size: 14px;
+            font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
+            flex: 1;
         }
 
-        textarea.field-input {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .submit-button {
-            width: 100%;
-            padding: 16px 32px;
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-            margin-top: 12px;
-        }
-
-        .submit-button:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        .result-section {
-            margin-top: 32px;
-        }
-
-        .result-card {
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-
-        .result-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-        }
-
-        .risk-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 100px;
-            font-size: 13px;
+        .checkbox-item input[type="checkbox"]:checked ~ label {
+            color: var(--blue-700);
             font-weight: 600;
-            margin-bottom: 16px;
         }
 
-        .risk-badge.low {
-            background: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+        /* System Groups */
+        .system-group {
+            margin-bottom: 28px;
         }
 
-        .risk-badge.moderate {
-            background: rgba(245, 158, 11, 0.1);
-            color: #D97706;
-            border: 1px solid rgba(245, 158, 11, 0.2);
+        .system-group:last-child {
+            margin-bottom: 0;
         }
 
-        .risk-badge.high {
-            background: rgba(239, 68, 68, 0.1);
-            color: #DC2626;
-            border: 1px solid rgba(239, 68, 68, 0.2);
+        .system-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+            padding-left: 4px;
         }
 
-        .metrics-grid {
+        /* Auto-calculations */
+        .auto-calc-box {
+            margin-top: 28px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+            border: 2px solid var(--blue-200);
+            border-radius: 14px;
+        }
+
+        .auto-calc-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-700);
+            margin-bottom: 12px;
+        }
+
+        .calc-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
         }
 
-        .metric-card {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 16px;
+        .calc-item {
             text-align: center;
         }
 
-        .metric-label {
-            font-size: 12px;
+        .calc-label {
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--gray-600);
-            margin-bottom: 8px;
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: 800;
             color: var(--blue-600);
+            margin-bottom: 4px;
         }
 
-        .evidence-section {
-            margin-top: 24px;
-            padding-top: 24px;
-            border-top: 1px solid var(--gray-200);
+        .calc-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--blue-700);
         }
 
-        .evidence-title {
-            font-size: 16px;
+        .calc-unit {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue-600);
+            margin-left: 4px;
+        }
+
+        /* Wizard Navigation */
+        .wizard-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid var(--gray-200);
+        }
+
+        .wizard-btn {
+            padding: 14px 28px;
+            font-family: inherit;
+            font-size: 15px;
             font-weight: 700;
-            color: var(--gray-900);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wizard-btn-prev {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .wizard-btn-prev:hover {
+            border-color: var(--gray-400);
+            background: var(--gray-50);
+            transform: translateX(-4px);
+        }
+
+        .wizard-btn-prev:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .wizard-btn-next, .wizard-btn-submit {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .wizard-btn-next:hover, .wizard-btn-submit:hover {
+            transform: translateX(4px) translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .wizard-btn-submit {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .wizard-btn-submit:hover {
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        /* Error Messages */
+        .error-message {
+            margin-top: 8px;
+            padding: 12px 16px;
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #DC2626;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #DC2626;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Results Page */
+        .results-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--blue-50) 100%);
+            border: 2px solid var(--blue-200);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
+        }
+
+        .risk-level-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 32px;
+            border-radius: 100px;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             margin-bottom: 16px;
         }
 
-        .reference-list {
+        .risk-level-badge.low {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .risk-level-badge.moderate {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .risk-level-badge.high {
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+        }
+
+        .risk-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .risk-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+            margin-bottom: 16px;
+        }
+
+        .info-card-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        .score-display {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--blue-600);
+            margin-bottom: 8px;
+        }
+
+        .score-description {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .risk-factors-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .reference-item {
-            padding: 12px 16px;
-            background: var(--gray-50);
-            border-left: 3px solid var(--blue-500);
+        .risk-factors-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 14px;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .risk-factors-list li:last-child {
+            border-bottom: none;
+        }
+
+        .risk-factors-list li::before {
+            content: '•';
+            color: var(--blue-600);
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .recommendations-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--blue-200);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+
+        .recommendations-title {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .recommendations-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recommendation-item {
+            padding: 16px;
+            background: var(--blue-50);
+            border-left: 4px solid var(--blue-600);
             border-radius: 8px;
             margin-bottom: 12px;
-            font-size: 13px;
+            font-size: 15px;
             line-height: 1.6;
+            color: var(--gray-800);
+        }
+
+        .recommendation-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .recommendation-item strong {
+            color: var(--blue-700);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .action-btn {
+            padding: 14px 28px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+        }
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+        }
+
+        .action-btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .action-btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
             color: var(--gray-700);
         }
 
-        .reference-item:last-child {
-            margin-bottom: 0;
+        /* Responsive */
+        @media (max-width: 640px) {
+            .wizard-card {
+                padding: 24px;
+            }
+            .step-title {
+                font-size: 22px;
+            }
+            .wizard-nav {
+                flex-direction: column;
+            }
+            .wizard-btn-prev {
+                order: 2;
+            }
+            .wizard-btn-next, .wizard-btn-submit {
+                order: 1;
+            }
         }
 
     </style>
@@ -2020,224 +2512,717 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="main-wrapper">
         <div class="content-container">
             <div class="page-header">
-                <h1 class="page-title">Pre-Operative Assessment</h1>
-                <p class="page-subtitle">Evidence-based risk stratification and recommendations</p>
+                <h1 class="page-title">Pre-Operative Risk Assessment</h1>
+                <p class="page-subtitle">Comprehensive NSQIP-inspired risk stratification with evidence-based recommendations</p>
             </div>
 
             {% if not summary %}
-            <!-- Assessment Form -->
-            <form method="post" action="/preop">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-                <!-- Section 1: Demographics -->
-                <div class="form-card">
-                    <h2 class="section-title">1. Patient Demographics</h2>
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label for="age" class="field-label">Age (years)</label>
-                            <input type="number" id="age" name="age" class="field-input" required>
+            <!-- Wizard Container -->
+            <div class="wizard-container">
+                <div class="wizard-card">
+                    <!-- Progress Bar -->
+                    <div class="progress-container">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBar" style="width: 14.28%;"></div>
                         </div>
-                        <div class="field-group">
-                            <label for="weight" class="field-label">Weight (kg)</label>
-                            <input type="number" id="weight" name="weight" step="0.1" class="field-input" required onchange="calculateMetrics()">
-                        </div>
-                        <div class="field-group">
-                            <label for="height" class="field-label">Height (cm)</label>
-                            <input type="number" id="height" name="height" step="0.1" class="field-input" required onchange="calculateMetrics()">
+                        <div class="progress-text">
+                            <span class="step-count" id="stepCount">Step 1 of 7</span>
+                            <span id="stepPercentage">14%</span>
                         </div>
                     </div>
-                    <div class="field-group">
-                        <label class="field-label">Sex Assigned at Birth</label>
-                        <div class="radio-group">
-                            <div class="radio-item">
-                                <input type="radio" id="male" name="sex" value="male" onchange="calculateMetrics()" required>
-                                <label for="male">Male</label>
+
+                    <!-- Wizard Form -->
+                    <form method="post" action="/preop" id="wizardForm">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                        <!-- STEP 1: Demographics -->
+                        <div class="step active" id="step1">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 1 of 7</div>
+                                <h2 class="step-title">Patient Demographics</h2>
+                                <p class="step-description">Basic patient information for risk calculation</p>
                             </div>
-                            <div class="radio-item">
-                                <input type="radio" id="female" name="sex" value="female" onchange="calculateMetrics()" required>
-                                <label for="female">Female</label>
+
+                            <div class="step-content">
+                                <div class="field-row three-col">
+                                    <div class="field-group">
+                                        <label for="age" class="field-label">Age <span class="required">*</span></label>
+                                        <input type="number" id="age" name="age" class="field-input" placeholder="Years" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="weight" class="field-label">Weight <span class="required">*</span></label>
+                                        <input type="number" id="weight" name="weight" step="0.1" class="field-input" placeholder="kg" required>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="height" class="field-label">Height <span class="required">*</span></label>
+                                        <input type="number" id="height" name="height" step="0.1" class="field-input" placeholder="cm" required>
+                                    </div>
+                                </div>
+
+                                <div class="field-group">
+                                    <label class="field-label">Sex Assigned at Birth <span class="required">*</span></label>
+                                    <div class="field-row">
+                                        <label class="radio-option" onclick="selectRadio('sex', 'male')">
+                                            <input type="radio" id="sex-male" name="sex" value="male" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Male</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('sex', 'female')">
+                                            <input type="radio" id="sex-female" name="sex" value="female" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Female</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Auto-calculations -->
+                                <div class="auto-calc-box" id="autoCalcBox" style="display: none;">
+                                    <div class="auto-calc-title">Calculated Metrics</div>
+                                    <div class="calc-grid">
+                                        <div class="calc-item">
+                                            <div class="calc-label">BMI</div>
+                                            <div class="calc-value" id="calcBMI">--</div>
+                                        </div>
+                                        <div class="calc-item">
+                                            <div class="calc-label">BMI Category</div>
+                                            <div class="calc-value" id="calcBMICategory" style="font-size: 14px;">--</div>
+                                        </div>
+                                        <div class="calc-item">
+                                            <div class="calc-label">IBW</div>
+                                            <div class="calc-value" id="calcIBW">--<span class="calc-unit">kg</span></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="auto-calc" id="autoCalc">
-                        Enter weight, height, and sex to calculate BMI and IBW
-                    </div>
-                </div>
 
-                <!-- Section 2: Comorbidities -->
-                <div class="form-card">
-                    <h2 class="section-title">2. Comorbidities</h2>
-                    <div class="checkbox-grid">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
-                            <label for="dm">Diabetes Mellitus</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
-                            <label for="htn">Hypertension</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="cad" name="comorbidities" value="Coronary Artery Disease">
-                            <label for="cad">CAD</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
-                            <label for="chf">Heart Failure</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="copd" name="comorbidities" value="COPD">
-                            <label for="copd">COPD</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
-                            <label for="asthma">Asthma</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="osa" name="comorbidities" value="Obstructive Sleep Apnea">
-                            <label for="osa">OSA</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="ckd" name="comorbidities" value="Chronic Kidney Disease">
-                            <label for="ckd">CKD</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="stroke" name="comorbidities" value="Prior Stroke">
-                            <label for="stroke">Prior Stroke</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
-                            <label for="afib">Atrial Fibrillation</label>
-                        </div>
-                    </div>
-                    <div class="field-group" style="margin-top: 1rem;">
-                        <label for="other_comorbidities" class="field-label">Other Comorbidities</label>
-                        <textarea id="other_comorbidities" name="other_comorbidities" class="field-textarea" placeholder="e.g., GERD, Hypothyroidism, Chronic Pain..." rows="2"></textarea>
-                    </div>
-                </div>
+                        <!-- STEP 2: ASA Classification -->
+                        <div class="step" id="step2">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 2 of 7</div>
+                                <h2 class="step-title">ASA Physical Status</h2>
+                                <p class="step-description">Select the appropriate ASA classification</p>
+                            </div>
 
-                <!-- Section 3: Functional Status -->
-                <div class="form-card">
-                    <h2 class="section-title">3. Functional Status</h2>
-                    <div class="field-group">
-                        <label for="mets" class="field-label">Metabolic Equivalents (METs)</label>
-                        <select id="mets" name="mets" class="field-select" required>
-                            <option value="">Select...</option>
-                            <option value="Unknown">Unknown / Not documented</option>
-                            <option value="<4 METs">&lt;4 METs (Cannot climb 2 flights of stairs)</option>
-                            <option value="4-10 METs">4-10 METs (Can climb 2 flights of stairs)</option>
-                            <option value=">10 METs">&gt;10 METs (Very active, strenuous sports)</option>
-                        </select>
-                    </div>
-                    <div class="field-group" style="margin-top: 1.25rem;">
-                        <label for="previous_anesthesia" class="field-label">Previous Anesthesia History</label>
-                        <textarea id="previous_anesthesia" name="previous_anesthesia" class="field-textarea" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
-                    </div>
-                </div>
+                            <div class="step-content">
+                                <div class="field-group">
+                                    <label class="field-label">ASA Classification <span class="required">*</span></label>
+                                    <div class="radio-group">
+                                        <label class="radio-option" onclick="selectRadio('asa', '1')">
+                                            <input type="radio" id="asa-1" name="asa" value="1" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA I</span>
+                                                    <span class="radio-desc">Normal healthy patient</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('asa', '2')">
+                                            <input type="radio" id="asa-2" name="asa" value="2" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA II</span>
+                                                    <span class="radio-desc">Mild systemic disease, no functional limitations</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('asa', '3')">
+                                            <input type="radio" id="asa-3" name="asa" value="3" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA III</span>
+                                                    <span class="radio-desc">Severe systemic disease with functional limitations</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('asa', '4')">
+                                            <input type="radio" id="asa-4" name="asa" value="4" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA IV</span>
+                                                    <span class="radio-desc">Severe systemic disease that is a constant threat to life</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('asa', '5')">
+                                            <input type="radio" id="asa-5" name="asa" value="5" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA V</span>
+                                                    <span class="radio-desc">Moribund patient not expected to survive without operation</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('asa', '6')">
+                                            <input type="radio" id="asa-6" name="asa" value="6" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">ASA VI</span>
+                                                    <span class="radio-desc">Declared brain-dead patient for organ donation</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
 
-                <!-- Section 4: Medications -->
-                <div class="form-card">
-                    <h2 class="section-title">4. Current Medications</h2>
-                    <div class="field-group">
-                        <label for="medications" class="field-label">List all medications</label>
-                        <textarea id="medications" name="medications" class="field-textarea" placeholder="e.g., Aspirin 81mg daily, Metoprolol 50mg BID, Apixaban 5mg BID..."></textarea>
-                    </div>
-                </div>
+                                <div class="field-group" style="margin-top: 24px;">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="emergency" name="emergency" value="true">
+                                        <label for="emergency">Emergency Surgery (E modifier)</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- Section 5: Labs & Cardiac -->
-                <div class="form-card">
-                    <h2 class="section-title">5. Laboratory Values & Cardiac Assessment</h2>
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label for="hgb" class="field-label">Hemoglobin (g/dL)</label>
-                            <input type="number" id="hgb" name="hgb" step="0.1" class="field-input">
-                        </div>
-                        <div class="field-group">
-                            <label for="plt" class="field-label">Platelets (×10³/μL)</label>
-                            <input type="number" id="plt" name="plt" class="field-input">
-                        </div>
-                        <div class="field-group">
-                            <label for="cr" class="field-label">Creatinine (mg/dL)</label>
-                            <input type="number" id="cr" name="cr" step="0.01" class="field-input">
-                        </div>
-                        <div class="field-group">
-                            <label for="inr" class="field-label">INR</label>
-                            <input type="number" id="inr" name="inr" step="0.1" class="field-input">
-                        </div>
-                    </div>
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label for="ef" class="field-label">Ejection Fraction (%)</label>
-                            <input type="text" id="ef" name="ef" class="field-input" placeholder="e.g., 55-60% or None">
-                        </div>
-                        <div class="field-group">
-                            <label for="ekg" class="field-label">EKG Findings</label>
-                            <input type="text" id="ekg" name="ekg" class="field-input" placeholder="e.g., NSR, Afib, or None">
-                        </div>
-                    </div>
-                </div>
+                        <!-- STEP 3: Comorbidities -->
+                        <div class="step" id="step3">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 3 of 7</div>
+                                <h2 class="step-title">Comorbidities</h2>
+                                <p class="step-description">Select all applicable conditions organized by system</p>
+                            </div>
 
-                <!-- Section 6: Surgical Procedure -->
-                <div class="form-card">
-                    <h2 class="section-title">6. Surgical Procedure</h2>
-                    <div class="field-group">
-                        <label for="procedure" class="field-label">Procedure Type</label>
-                        <input type="text" id="procedure" name="procedure" class="field-input" placeholder="e.g., Total Knee Arthroplasty, CABG, Laparoscopic Cholecystectomy..." required>
-                    </div>
-                    <div class="field-group" style="margin-top: 1.25rem;">
-                        <label for="surgery_risk" class="field-label">Surgery Risk Category</label>
-                        <select id="surgery_risk" name="surgery_risk" class="field-select" required>
-                            <option value="">Select...</option>
-                            <option value="Low">Low Risk (&lt;1% cardiac risk)</option>
-                            <option value="Intermediate">Intermediate Risk (1-5% cardiac risk)</option>
-                            <option value="High">High Risk (&gt;5% cardiac risk)</option>
-                        </select>
-                    </div>
-                </div>
+                            <div class="step-content">
+                                <!-- Cardiac -->
+                                <div class="system-group">
+                                    <div class="system-title">Cardiac</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="cad" name="comorbidities" value="CAD">
+                                            <label for="cad">Coronary Artery Disease</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="mi" name="comorbidities" value="Prior MI">
+                                            <label for="mi">Prior MI</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
+                                            <label for="chf">Heart Failure</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
+                                            <label for="afib">Atrial Fibrillation</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="pacemaker" name="comorbidities" value="Pacemaker/ICD">
+                                            <label for="pacemaker">Pacemaker/ICD</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="valvular" name="comorbidities" value="Valvular Disease">
+                                            <label for="valvular">Valvular Disease</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <!-- Section 7: Additional Info -->
-                <div class="form-card">
-                    <h2 class="section-title">7. Additional Information</h2>
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label for="npo" class="field-label">NPO Status</label>
-                            <input type="text" id="npo" name="npo" class="field-input" placeholder="e.g., NPO since midnight...">
-                        </div>
-                        <div class="field-group">
-                            <label for="allergies" class="field-label">Allergies</label>
-                            <input type="text" id="allergies" name="allergies" class="field-input" placeholder="e.g., PCN (rash), NKDA...">
-                        </div>
-                    </div>
-                </div>
+                                <!-- Pulmonary -->
+                                <div class="system-group">
+                                    <div class="system-title">Pulmonary</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="copd" name="comorbidities" value="COPD">
+                                            <label for="copd">COPD</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
+                                            <label for="asthma">Asthma</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="osa" name="comorbidities" value="OSA">
+                                            <label for="osa">Obstructive Sleep Apnea</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="ild" name="comorbidities" value="Interstitial Lung Disease">
+                                            <label for="ild">Interstitial Lung Disease</label>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <button type="submit" class="submit-button">Generate Evidence-Based Assessment</button>
-            </form>
+                                <!-- Endocrine -->
+                                <div class="system-group">
+                                    <div class="system-title">Endocrine</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
+                                            <label for="dm">Diabetes Mellitus</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="dm-insulin" name="comorbidities" value="DM on Insulin">
+                                            <label for="dm-insulin">DM on Insulin</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="thyroid" name="comorbidities" value="Thyroid Disease">
+                                            <label for="thyroid">Thyroid Disease</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="adrenal" name="comorbidities" value="Adrenal Insufficiency">
+                                            <label for="adrenal">Adrenal Insufficiency</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Renal -->
+                                <div class="system-group">
+                                    <div class="system-title">Renal</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="ckd" name="comorbidities" value="CKD">
+                                            <label for="ckd">Chronic Kidney Disease</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="esrd" name="comorbidities" value="ESRD">
+                                            <label for="esrd">ESRD</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="dialysis" name="comorbidities" value="Dialysis">
+                                            <label for="dialysis">On Dialysis</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Neurological -->
+                                <div class="system-group">
+                                    <div class="system-title">Neurological</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="stroke" name="comorbidities" value="CVA/TIA">
+                                            <label for="stroke">Prior CVA/TIA</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="seizure" name="comorbidities" value="Seizure Disorder">
+                                            <label for="seizure">Seizure Disorder</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="neuromuscular" name="comorbidities" value="Neuromuscular Disease">
+                                            <label for="neuromuscular">Neuromuscular Disease</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Hematologic -->
+                                <div class="system-group">
+                                    <div class="system-title">Hematologic</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="anemia" name="comorbidities" value="Anemia">
+                                            <label for="anemia">Anemia</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="bleeding" name="comorbidities" value="Bleeding Disorder">
+                                            <label for="bleeding">Bleeding Disorder</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="anticoag" name="comorbidities" value="On Anticoagulation">
+                                            <label for="anticoag">On Anticoagulation</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Other -->
+                                <div class="system-group">
+                                    <div class="system-title">Other</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
+                                            <label for="htn">Hypertension</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="liver" name="comorbidities" value="Liver Disease">
+                                            <label for="liver">Liver Disease</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="cancer" name="comorbidities" value="Cancer">
+                                            <label for="cancer">Cancer</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="immunosupp" name="comorbidities" value="Immunosuppression">
+                                            <label for="immunosupp">Immunosuppression</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-group" style="margin-top: 24px;">
+                                    <label for="other_comorbidities" class="field-label">Other Conditions</label>
+                                    <textarea id="other_comorbidities" name="other_comorbidities" class="field-input" placeholder="List any other relevant conditions..." rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 4: Functional Status -->
+                        <div class="step" id="step4">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 4 of 7</div>
+                                <h2 class="step-title">Functional Status & Exercise Tolerance</h2>
+                                <p class="step-description">Assess patient's functional capacity and activity level</p>
+                            </div>
+
+                            <div class="step-content">
+                                <div class="field-group">
+                                    <label class="field-label">Metabolic Equivalents (METs) <span class="required">*</span></label>
+                                    <div class="radio-group">
+                                        <label class="radio-option" onclick="selectRadio('mets', 'poor')">
+                                            <input type="radio" id="mets-poor" name="mets" value="<4 METs" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">&lt;4 METs - Poor Functional Capacity</span>
+                                                    <span class="radio-desc">Cannot climb 2 flights of stairs or walk 4 blocks</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('mets', 'moderate')">
+                                            <input type="radio" id="mets-moderate" name="mets" value="4-10 METs" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">4-10 METs - Moderate Functional Capacity</span>
+                                                    <span class="radio-desc">Can climb 2 flights of stairs, moderate exertion tolerated</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('mets', 'excellent')">
+                                            <input type="radio" id="mets-excellent" name="mets" value=">10 METs" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">&gt;10 METs - Excellent Functional Capacity</span>
+                                                    <span class="radio-desc">Strenuous exercise, high activity level</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="field-group" style="margin-top: 32px;">
+                                    <label class="field-label">Activities of Daily Living (ADLs) <span class="required">*</span></label>
+                                    <div class="field-row">
+                                        <label class="radio-option" onclick="selectRadio('adl', 'independent')">
+                                            <input type="radio" id="adl-independent" name="adl" value="Independent" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Independent</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('adl', 'partial')">
+                                            <input type="radio" id="adl-partial" name="adl" value="Partially Dependent" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Partially Dependent</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('adl', 'dependent')">
+                                            <input type="radio" id="adl-dependent" name="adl" value="Fully Dependent" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Fully Dependent</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="field-group" style="margin-top: 32px;">
+                                    <label for="anesthesia_history" class="field-label">Previous Anesthesia History</label>
+                                    <textarea id="anesthesia_history" name="anesthesia_history" class="field-input" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 5: Medications -->
+                        <div class="step" id="step5">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 5 of 7</div>
+                                <h2 class="step-title">Current Medications</h2>
+                                <p class="step-description">List medications and identify critical agents</p>
+                            </div>
+
+                            <div class="step-content">
+                                <div class="field-group">
+                                    <label for="medications" class="field-label">Medication List</label>
+                                    <textarea id="medications" name="medications" class="field-input" placeholder="e.g., Metoprolol 50mg BID, Lisinopril 10mg daily, Atorvastatin 40mg nightly..." rows="4"></textarea>
+                                </div>
+
+                                <div class="system-group" style="margin-top: 32px;">
+                                    <div class="system-title">Specific Medications of Interest</div>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="aspirin" name="medications_specific" value="Aspirin">
+                                            <label for="aspirin">Aspirin</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="p2y12" name="medications_specific" value="P2Y12 Inhibitor">
+                                            <label for="p2y12">P2Y12 Inhibitor (Plavix/Ticagrelor)</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="warfarin" name="medications_specific" value="Warfarin">
+                                            <label for="warfarin">Warfarin</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="doac" name="medications_specific" value="DOAC">
+                                            <label for="doac">DOAC (Apixaban/Rivaroxaban/Edoxaban)</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="beta-blocker" name="medications_specific" value="Beta Blocker">
+                                            <label for="beta-blocker">Beta Blocker</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="ace-arb" name="medications_specific" value="ACE-I/ARB">
+                                            <label for="ace-arb">ACE-I/ARB</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="diuretic" name="medications_specific" value="Diuretic">
+                                            <label for="diuretic">Diuretic</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="insulin" name="medications_specific" value="Insulin">
+                                            <label for="insulin">Insulin</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="oral-hypoglycemic" name="medications_specific" value="Oral Hypoglycemic">
+                                            <label for="oral-hypoglycemic">Oral Hypoglycemic</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="steroids" name="medications_specific" value="Steroids">
+                                            <label for="steroids">Steroids</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row" style="margin-top: 24px;">
+                                    <div class="field-group">
+                                        <label for="anticoag_last_dose" class="field-label">Last Anticoagulant Dose</label>
+                                        <input type="text" id="anticoag_last_dose" name="anticoag_last_dose" class="field-input" placeholder="e.g., Apixaban 5mg yesterday PM">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="allergies" class="field-label">Allergies</label>
+                                        <input type="text" id="allergies" name="allergies" class="field-input" placeholder="e.g., PCN (rash), NKDA">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 6: Labs & Cardiac Workup -->
+                        <div class="step" id="step6">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 6 of 7</div>
+                                <h2 class="step-title">Laboratory Values & Cardiac Assessment</h2>
+                                <p class="step-description">Enter available lab results and cardiac workup findings</p>
+                            </div>
+
+                            <div class="step-content">
+                                <div class="field-row">
+                                    <div class="field-group">
+                                        <label for="hgb" class="field-label">Hemoglobin (g/dL)</label>
+                                        <input type="number" id="hgb" name="hgb" step="0.1" class="field-input" placeholder="e.g., 12.5">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="plt" class="field-label">Platelets (×10³/μL)</label>
+                                        <input type="number" id="plt" name="plt" class="field-input" placeholder="e.g., 250">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="cr" class="field-label">Creatinine (mg/dL)</label>
+                                        <input type="number" id="cr" name="cr" step="0.01" class="field-input" placeholder="e.g., 0.9">
+                                    </div>
+                                </div>
+
+                                <div class="field-row" style="margin-top: 20px;">
+                                    <div class="field-group">
+                                        <label for="inr" class="field-label">INR</label>
+                                        <input type="number" id="inr" name="inr" step="0.1" class="field-input" placeholder="e.g., 1.1">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="glucose" class="field-label">Glucose (mg/dL)</label>
+                                        <input type="number" id="glucose" name="glucose" class="field-input" placeholder="e.g., 110">
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="ef" class="field-label">Ejection Fraction (%)</label>
+                                        <input type="number" id="ef" name="ef" class="field-input" placeholder="e.g., 60">
+                                    </div>
+                                </div>
+
+                                <!-- Auto-calculated eGFR -->
+                                <div class="auto-calc-box" id="eGFRBox" style="display: none; margin-top: 24px;">
+                                    <div class="auto-calc-title">Calculated Renal Function</div>
+                                    <div class="calc-grid">
+                                        <div class="calc-item">
+                                            <div class="calc-label">eGFR</div>
+                                            <div class="calc-value" id="calcEGFR">--<span class="calc-unit">mL/min</span></div>
+                                        </div>
+                                        <div class="calc-item">
+                                            <div class="calc-label">CKD Stage</div>
+                                            <div class="calc-value" id="calcCKDStage" style="font-size: 16px;">--</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field-row" style="margin-top: 24px;">
+                                    <div class="field-group">
+                                        <label for="ekg" class="field-label">EKG Findings</label>
+                                        <select id="ekg" name="ekg" class="field-input">
+                                            <option value="">Select or type...</option>
+                                            <option value="Normal Sinus Rhythm">Normal Sinus Rhythm</option>
+                                            <option value="Atrial Fibrillation">Atrial Fibrillation</option>
+                                            <option value="Old MI">Old MI</option>
+                                            <option value="Left Ventricular Hypertrophy">LVH</option>
+                                            <option value="Bundle Branch Block">Bundle Branch Block</option>
+                                            <option value="Other">Other</option>
+                                            <option value="Not Done">Not Done</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="npo" class="field-label">NPO Status</label>
+                                        <input type="text" id="npo" name="npo" class="field-input" placeholder="e.g., NPO since midnight">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- STEP 7: Surgical Procedure -->
+                        <div class="step" id="step7">
+                            <div class="step-header">
+                                <div class="step-indicator">Step 7 of 7</div>
+                                <h2 class="step-title">Surgical Procedure</h2>
+                                <p class="step-description">Details about the planned operation</p>
+                            </div>
+
+                            <div class="step-content">
+                                <div class="field-group">
+                                    <label for="procedure" class="field-label">Procedure Name <span class="required">*</span></label>
+                                    <input type="text" id="procedure" name="procedure" class="field-input" placeholder="e.g., Total Knee Arthroplasty, Laparoscopic Cholecystectomy, CABG..." required>
+                                </div>
+
+                                <div class="field-group" style="margin-top: 24px;">
+                                    <label class="field-label">Surgical Risk Category <span class="required">*</span></label>
+                                    <div class="radio-group">
+                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'low')">
+                                            <input type="radio" id="risk-low" name="surgery_risk" value="Low" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Low Risk (&lt;1% cardiac risk)</span>
+                                                    <span class="radio-desc">Superficial procedures, cataract surgery, breast surgery, ambulatory procedures</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'intermediate')">
+                                            <input type="radio" id="risk-intermediate" name="surgery_risk" value="Intermediate" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">Intermediate Risk (1-5% cardiac risk)</span>
+                                                    <span class="radio-desc">Intraperitoneal, intrathoracic, orthopedic, head/neck surgery</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'high')">
+                                            <input type="radio" id="risk-high" name="surgery_risk" value="High" required>
+                                            <div class="radio-content">
+                                                <div class="radio-check"></div>
+                                                <div class="radio-text">
+                                                    <span class="radio-label">High Risk (&gt;5% cardiac risk)</span>
+                                                    <span class="radio-desc">Vascular surgery, aortic surgery, prolonged procedures with major fluid shifts</span>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="field-row" style="margin-top: 24px;">
+                                    <div class="field-group">
+                                        <label class="field-label">Urgency <span class="required">*</span></label>
+                                        <select id="urgency" name="urgency" class="field-input" required>
+                                            <option value="">Select...</option>
+                                            <option value="Elective">Elective</option>
+                                            <option value="Urgent">Urgent (within 24-48 hours)</option>
+                                            <option value="Emergent">Emergent (immediate)</option>
+                                        </select>
+                                    </div>
+                                    <div class="field-group">
+                                        <label for="duration" class="field-label">Expected Duration (hours)</label>
+                                        <input type="number" id="duration" name="duration" step="0.5" class="field-input" placeholder="e.g., 2.5">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wizard Navigation -->
+                        <div class="wizard-nav">
+                            <button type="button" class="wizard-btn wizard-btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>
+                                ← Previous
+                            </button>
+                            <button type="button" class="wizard-btn wizard-btn-next" id="nextBtn" onclick="changeStep(1)">
+                                Next →
+                            </button>
+                            <button type="submit" class="wizard-btn wizard-btn-submit" id="submitBtn" style="display: none;">
+                                Generate Assessment →
+                            </button>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div class="error-message" id="errorMessage"></div>
+                    </form>
+                </div>
+            </div>
 
             {% else %}
-            <!-- Assessment Results -->
-            <div class="summary-card">
-                <h2 class="summary-title">Pre-Operative Assessment Summary</h2>
-                <div class="summary-content">
-                    {{ summary|safe }}
-                </div>
+            <!-- Results Display -->
+            <div class="results-container">
+                <div class="wizard-card">
+                    <h2 style="font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; letter-spacing: -1px;">Pre-Operative Assessment Summary</h2>
 
-                {% if references %}
-                <div class="references-section">
-                    <h3 class="references-title">References:</h3>
-                    {% for ref in references %}
-                    <div class="ref-item">
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank">
-                            [{{ loop.index }}] {{ ref.title }} ({{ ref.year }})
-                        </a>
+                    <div class="info-card" style="margin-bottom: 24px;">
+                        {{ summary|safe }}
                     </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-            </div>
 
-            <div class="new-assessment-wrapper">
-                <a href="/preop" class="new-assessment-btn">New Assessment</a>
+                    {% if references %}
+                    <div class="info-card">
+                        <div class="info-card-title">Evidence-Based References</div>
+                        <div class="info-card-content">
+                            {% for ref in references %}
+                            <div style="padding: 12px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px;">
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
+                                    [{{ loop.index }}] {{ ref.title }}
+                                </a>
+                                <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="action-buttons" style="margin-top: 32px;">
+                    <a href="/preop" class="action-btn action-btn-primary">New Assessment</a>
+                    <button onclick="window.print()" class="action-btn action-btn-secondary">Print/Export</button>
+                </div>
             </div>
             {% endif %}
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Generating Evidence-Based Assessment...</div>
         </div>
     </div>
 
@@ -2263,7 +3248,298 @@ PREOP_HTML = """<!DOCTYPE html>
     </footer>
         </main>
     </div>
+
     <script>
+        // ====== WIZARD STATE ======
+        let currentStep = 1;
+        const totalSteps = 7;
+
+        // ====== SESSION STORAGE ======
+        function saveFormData() {
+            const form = document.getElementById('wizardForm');
+            const formData = new FormData(form);
+            const data = {};
+
+            // Save all form fields
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            sessionStorage.setItem('preopFormData', JSON.stringify(data));
+        }
+
+        function loadFormData() {
+            const saved = sessionStorage.getItem('preopFormData');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                const form = document.getElementById('wizardForm');
+
+                for (let [key, value] of Object.entries(data)) {
+                    const elements = form.elements[key];
+                    if (!elements) continue;
+
+                    if (elements.type === 'radio') {
+                        form.elements[key].forEach(radio => {
+                            if (radio.value === value) radio.checked = true;
+                        });
+                    } else if (elements.type === 'checkbox') {
+                        if (Array.isArray(value)) {
+                            form.elements[key].forEach(checkbox => {
+                                if (value.includes(checkbox.value)) checkbox.checked = true;
+                            });
+                        } else {
+                            elements.checked = value === 'true';
+                        }
+                    } else {
+                        elements.value = value;
+                    }
+                }
+
+                // Recalculate metrics if data loaded
+                calculateMetrics();
+                calculateEGFR();
+            } catch (e) {
+                console.error('Error loading form data:', e);
+            }
+        }
+
+        // ====== NAVIGATION ======
+        function showStep(n) {
+            const steps = document.querySelectorAll('.step');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+
+            // Hide all steps
+            steps.forEach(step => step.classList.remove('active'));
+
+            // Show current step
+            if (steps[n - 1]) {
+                steps[n - 1].classList.add('active');
+
+                // Reset animation
+                const content = steps[n - 1].querySelector('.step-content');
+                content.style.animation = 'none';
+                setTimeout(() => {
+                    content.style.animation = '';
+                }, 10);
+            }
+
+            // Update progress
+            const percentage = (n / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('stepCount').textContent = `Step ${n} of ${totalSteps}`;
+            document.getElementById('stepPercentage').textContent = Math.round(percentage) + '%';
+
+            // Update buttons
+            prevBtn.disabled = (n === 1);
+
+            if (n === totalSteps) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-flex';
+            } else {
+                nextBtn.style.display = 'inline-flex';
+                submitBtn.style.display = 'none';
+            }
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Save progress
+            saveFormData();
+        }
+
+        function changeStep(direction) {
+            const errorMsg = document.getElementById('errorMessage');
+            errorMsg.classList.remove('show');
+
+            // Validate current step before advancing
+            if (direction === 1) {
+                if (!validateCurrentStep()) {
+                    return;
+                }
+            }
+
+            currentStep += direction;
+
+            if (currentStep < 1) currentStep = 1;
+            if (currentStep > totalSteps) currentStep = totalSteps;
+
+            showStep(currentStep);
+        }
+
+        function validateCurrentStep() {
+            const currentStepDiv = document.getElementById(`step${currentStep}`);
+            const requiredFields = currentStepDiv.querySelectorAll('[required]');
+            const errorMsg = document.getElementById('errorMessage');
+
+            for (let field of requiredFields) {
+                if (field.type === 'radio') {
+                    const name = field.name;
+                    const checked = currentStepDiv.querySelector(`input[name="${name}"]:checked`);
+                    if (!checked) {
+                        errorMsg.textContent = 'Please complete all required fields before continuing.';
+                        errorMsg.classList.add('show');
+                        return false;
+                    }
+                } else if (field.type === 'checkbox') {
+                    if (!field.checked && field.required) {
+                        errorMsg.textContent = 'Please complete all required fields before continuing.';
+                        errorMsg.classList.add('show');
+                        return false;
+                    }
+                } else {
+                    if (!field.value.trim()) {
+                        errorMsg.textContent = 'Please complete all required fields before continuing.';
+                        errorMsg.classList.add('show');
+                        field.focus();
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        // ====== RADIO BUTTON SELECTION ======
+        function selectRadio(name, value) {
+            const radio = document.getElementById(`${name}-${value}`);
+            if (radio) {
+                radio.checked = true;
+
+                // Update visual state
+                const options = document.querySelectorAll(`input[name="${name}"]`);
+                options.forEach(opt => {
+                    const parent = opt.closest('.radio-option');
+                    if (parent) {
+                        if (opt.checked) {
+                            parent.classList.add('selected');
+                        } else {
+                            parent.classList.remove('selected');
+                        }
+                    }
+                });
+
+                // Save and recalculate
+                saveFormData();
+                calculateMetrics();
+            }
+        }
+
+        // ====== AUTO-CALCULATIONS ======
+        function calculateMetrics() {
+            const age = parseFloat(document.getElementById('age')?.value);
+            const weight = parseFloat(document.getElementById('weight')?.value);
+            const height = parseFloat(document.getElementById('height')?.value);
+            const sex = document.querySelector('input[name="sex"]:checked')?.value;
+
+            if (!weight || !height || !sex) return;
+
+            // Calculate BMI
+            const heightM = height / 100;
+            const bmi = weight / (heightM * heightM);
+
+            // BMI Category
+            let bmiCategory = '';
+            if (bmi < 18.5) bmiCategory = 'Underweight';
+            else if (bmi < 25) bmiCategory = 'Normal';
+            else if (bmi < 30) bmiCategory = 'Overweight';
+            else if (bmi < 35) bmiCategory = 'Obese I';
+            else if (bmi < 40) bmiCategory = 'Obese II';
+            else bmiCategory = 'Obese III';
+
+            // Calculate IBW (Devine formula)
+            let ibw;
+            if (sex === 'male') {
+                ibw = 50 + 2.3 * ((height / 2.54) - 60);
+            } else {
+                ibw = 45.5 + 2.3 * ((height / 2.54) - 60);
+            }
+
+            // Display results
+            document.getElementById('calcBMI').textContent = bmi.toFixed(1);
+            document.getElementById('calcBMICategory').textContent = bmiCategory;
+            document.getElementById('calcIBW').innerHTML = ibw.toFixed(1) + '<span class="calc-unit">kg</span>';
+            document.getElementById('autoCalcBox').style.display = 'block';
+        }
+
+        function calculateEGFR() {
+            const age = parseFloat(document.getElementById('age')?.value);
+            const cr = parseFloat(document.getElementById('cr')?.value);
+            const sex = document.querySelector('input[name="sex"]:checked')?.value;
+
+            if (!age || !cr || !sex) return;
+
+            // CKD-EPI equation (simplified)
+            let egfr;
+            const k = sex === 'female' ? 0.7 : 0.9;
+            const a = sex === 'female' ? -0.329 : -0.411;
+            const factor = sex === 'female' ? 1.018 : 1;
+
+            const creatRatio = cr / k;
+            const minVal = Math.min(creatRatio, 1);
+            const maxVal = Math.max(creatRatio, 1);
+
+            egfr = 141 * Math.pow(minVal, a) * Math.pow(maxVal, -1.209) * Math.pow(0.993, age) * factor;
+
+            // CKD Stage
+            let ckdStage = '';
+            if (egfr >= 90) ckdStage = 'Normal';
+            else if (egfr >= 60) ckdStage = 'Stage 2';
+            else if (egfr >= 45) ckdStage = 'Stage 3a';
+            else if (egfr >= 30) ckdStage = 'Stage 3b';
+            else if (egfr >= 15) ckdStage = 'Stage 4';
+            else ckdStage = 'Stage 5';
+
+            // Display results
+            document.getElementById('calcEGFR').innerHTML = egfr.toFixed(1) + '<span class="calc-unit">mL/min</span>';
+            document.getElementById('calcCKDStage').textContent = ckdStage;
+            document.getElementById('eGFRBox').style.display = 'block';
+        }
+
+        // ====== EVENT LISTENERS ======
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved data
+            loadFormData();
+
+            // Show first step
+            showStep(1);
+
+            // Auto-calculate on input
+            ['age', 'weight', 'height'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', calculateMetrics);
+                }
+            });
+
+            ['age', 'cr'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', calculateEGFR);
+                }
+            });
+
+            // Save on any input change
+            document.getElementById('wizardForm').addEventListener('change', saveFormData);
+
+            // Show loading overlay on submit
+            document.getElementById('wizardForm').addEventListener('submit', function() {
+                document.getElementById('loadingOverlay').classList.add('show');
+            });
+        });
+
+        // ====== MOBILE MENU ======
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -9757,9 +11033,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-
         :root {
             --white: #FFFFFF;
             --gray-50: #F8FAFC;
@@ -9780,6 +11055,16 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
+            --green-50: #F0FDF4;
+            --green-500: #10B981;
+            --green-600: #059669;
+            --green-700: #047857;
+            --yellow-50: #FEFCE8;
+            --yellow-500: #F59E0B;
+            --yellow-600: #D97706;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -9798,6 +11083,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Glassmorphic Background */
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -9866,6 +11152,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
+        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -10017,8 +11304,14 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+        }
+
+        /* Hero Section */
         .hero {
-            padding: 120px 20px 60px;
+            padding: 120px 20px 40px;
             text-align: center;
         }
 
@@ -10030,7 +11323,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             border: 1px solid var(--gray-200);
             border-radius: 100px;
             padding: 8px 16px 8px 12px;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
             opacity: 0;
@@ -10058,6 +11351,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             100% { transform: scale(2); opacity: 0; }
         }
 
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .badge-text {
             font-size: 12px;
             font-weight: 600;
@@ -10065,325 +11363,428 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         .hero-title {
-            font-size: 40px;
-            font-weight: 800;
+            font-size: 42px;
+            font-weight: 900;
             line-height: 1.1;
-            letter-spacing: -2px;
+            letter-spacing: -1.5px;
             color: var(--gray-900);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
             opacity: 0;
         }
 
-        .hero-title .gradient { color: var(--blue-600); }
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .hero-subtitle {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 400;
             line-height: 1.6;
-            color: var(--gray-500);
-            max-width: 560px;
-            margin: 0 auto 40px;
+            color: var(--gray-600);
+            max-width: 580px;
+            margin: 0 auto;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
             opacity: 0;
         }
 
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 0 20px 80px;
         }
 
-        .chat-container {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Calculator Grid */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
             opacity: 0;
         }
 
-        .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        @media (min-width: 768px) {
+            .calc-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
+        @media (min-width: 1200px) {
+            .calc-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
-        .chat-inner {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 6px;
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        .chat-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: transparent;
-            resize: none;
-            min-height: 52px;
-            max-height: 150px;
-            line-height: 1.5;
-        }
-
-        .chat-input::placeholder { color: var(--gray-400); }
-
-        .chat-send {
-            width: 48px;
-            height: 48px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 12px;
-            color: var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-            flex-shrink: 0;
-            margin: 6px;
-        }
-
-        .chat-send:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-        }
-
-        .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
-
-        .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 16px 8px 6px;
-        }
-
-        .hint-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 10px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-        }
-
-        .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
-        .hint-chip:hover svg { opacity: 1; color: var(--blue-500); }
-
-        .features { padding: 60px 20px 80px; }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .features-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
-
-        .features-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 12px;
-        }
-
-        .features-subtitle {
-            font-size: 16px;
-            color: var(--gray-500);
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(255,255,255,0.7);
+        /* Calculator Card */
+        .calc-card {
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
-            padding: 28px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-            cursor: pointer;
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
-        }
-
-        .feature-card:hover {
+        .calc-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 24px 64px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.06), 0 24px 64px rgba(0,0,0,0.08);
             border-color: rgba(59,130,246,0.2);
         }
 
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .calc-card.large {
+            grid-column: span 1;
+        }
+
+        @media (min-width: 768px) {
+            .calc-card.large {
+                grid-column: span 2;
+            }
+        }
+
+        .calc-header {
             margin-bottom: 20px;
-            transition: all 0.3s ease;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .feature-card:hover .feature-icon { transform: scale(1.05); }
-        .feature-icon svg { width: 24px; height: 24px; }
-
-        .feature-icon.blue {
-            background: var(--blue-50);
-            border: 1px solid var(--blue-100);
-            box-shadow: 0 4px 16px rgba(37,99,235,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.blue svg { color: var(--blue-600); }
-
-        .feature-icon.emerald {
-            background: #ECFDF5;
-            border: 1px solid #D1FAE5;
-            box-shadow: 0 4px 16px rgba(16,185,129,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.emerald svg { color: #059669; }
-
-        .feature-icon.violet {
-            background: #F5F3FF;
-            border: 1px solid #EDE9FE;
-            box-shadow: 0 4px 16px rgba(139,92,246,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.violet svg { color: #7C3AED; }
-
-        .feature-icon.rose {
-            background: #FFF1F2;
-            border: 1px solid #FFE4E6;
-            box-shadow: 0 4px 16px rgba(244,63,94,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.rose svg { color: #E11D48; }
-
-        .feature-icon.cyan {
-            background: #ECFEFF;
-            border: 1px solid #CFFAFE;
-            box-shadow: 0 4px 16px rgba(6,182,212,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.cyan svg { color: #0891B2; }
-
-        .feature-title {
-            font-size: 18px;
+        .calc-title {
+            font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
-            margin-bottom: 10px;
-            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
 
-        .feature-desc {
-            font-size: 14px;
-            line-height: 1.6;
+        .calc-desc {
+            font-size: 13px;
             color: var(--gray-500);
+            line-height: 1.5;
+        }
+
+        .calc-body {
             margin-bottom: 20px;
         }
 
-        .feature-link {
+        /* Form Inputs */
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .calc-input, .calc-select {
+            width: 100%;
+            padding: 12px 16px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-900);
+            background: var(--white);
+            border: 1.5px solid var(--gray-300);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .calc-input:focus, .calc-select:focus {
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+        }
+
+        .calc-input::placeholder {
+            color: var(--gray-400);
+            font-weight: 400;
+        }
+
+        .input-unit {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-500);
+            pointer-events: none;
+        }
+
+        /* Checkbox Inputs */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--blue-600);
+        }
+
+        .checkbox-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            flex: 1;
+        }
+
+        /* Radio Inputs */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: start;
+            padding: 12px;
+            background: var(--gray-50);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .radio-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .radio-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .radio-content {
+            flex: 1;
+        }
+
+        .radio-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+            cursor: pointer;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .radio-desc {
+            font-size: 12px;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        /* Results Section */
+        .calc-result {
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+            border: 1.5px solid var(--blue-200);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+
+        .calc-result.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .calc-result.green {
+            background: linear-gradient(135deg, var(--green-50) 0%, #E6F7EE 100%);
+            border-color: var(--green-500);
+        }
+
+        .calc-result.yellow {
+            background: linear-gradient(135deg, var(--yellow-50) 0%, #FEF9E7 100%);
+            border-color: var(--yellow-500);
+        }
+
+        .calc-result.red {
+            background: linear-gradient(135deg, var(--red-50) 0%, #FFEBEE 100%);
+            border-color: var(--red-500);
+        }
+
+        .result-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--blue-700);
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .green .result-value { color: var(--green-700); }
+        .yellow .result-value { color: var(--yellow-600); }
+        .red .result-value { color: var(--red-600); }
+
+        .result-unit {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-left: 4px;
+        }
+
+        .result-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .result-item-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+
+        .result-item-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+
+        .result-item-unit {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-left: 2px;
+        }
+
+        /* Reference Link */
+        .calc-reference {
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .ref-link {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--blue-600);
             text-decoration: none;
             transition: all 0.2s ease;
         }
 
-        .feature-link:hover { gap: 10px; }
-        .feature-link svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-        .feature-link:hover svg { transform: translateX(4px); }
+        .ref-link:hover {
+            color: var(--blue-700);
+            gap: 8px;
+        }
 
+        .ref-link svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Footer */
         .footer {
-            padding: 32px 20px;
+            padding: 40px 20px;
             border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
             gap: 20px;
-            text-align: center;
         }
 
         .footer-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 16px;
         }
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .footer-logo svg {
+            width: 32px;
+            height: 32px;
         }
-
-        .footer-logo svg { width: 32px; height: 32px; }
 
         .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
+            font-size: 14px;
+            color: var(--gray-600);
         }
 
         .footer-links {
@@ -10392,354 +11793,70 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
-        .footer-link:hover { color: var(--gray-700); }
-
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .hero { padding: 160px 32px 80px; }
-            .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
-            .badge-dot { width: 10px; height: 10px; }
-            .badge-text { font-size: 13px; }
-            .hero-title { font-size: 56px; letter-spacing: -2.5px; margin-bottom: 24px; }
-            .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
-            .chat-container { padding: 0 24px; margin-bottom: 80px; }
-            .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
-            .hint-chip { padding: 12px 18px; font-size: 13px; }
-            .hint-chip svg { width: 16px; height: 16px; }
-            .features { padding: 80px 32px 100px; }
-            .features-header { margin-bottom: 56px; }
-            .features-label { font-size: 12px; margin-bottom: 16px; }
-            .features-title { font-size: 36px; letter-spacing: -1.5px; }
-            .features-subtitle { font-size: 18px; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .feature-card { padding: 36px; border-radius: 24px; }
-            .feature-card:hover { transform: translateY(-6px); }
-            .feature-icon { width: 60px; height: 60px; border-radius: 18px; margin-bottom: 24px; }
-            .feature-icon svg { width: 26px; height: 26px; }
-            .feature-title { font-size: 20px; margin-bottom: 12px; }
-            .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-            .orb-1 { width: 600px; height: 600px; left: -10%; }
-            .orb-2 { width: 450px; height: 450px; right: -10%; }
-            .orb-3 { width: 400px; height: 400px; }
+        .footer-link:hover {
+            color: var(--blue-600);
         }
 
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            .hero { padding: 180px 40px 80px; }
-            .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
-            .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
-            .chat-container { margin-bottom: 100px; }
-            .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
-            .chat-hints { padding: 20px 12px 8px; }
-            .hint-chip { padding: 12px 20px; }
-            .features { padding: 80px 40px 120px; }
-            .features-header { margin-bottom: 64px; }
-            .features-title { font-size: 40px; }
-            .features-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .feature-card { padding: 40px; border-radius: 28px; }
-            .feature-card:hover { transform: translateY(-8px); }
-            .feature-icon { width: 64px; height: 64px; border-radius: 20px; margin-bottom: 28px; }
-            .feature-icon svg { width: 28px; height: 28px; }
-            .footer { padding: 48px 40px; }
-            .orb-1 { width: 800px; height: 800px; top: -20%; left: -10%; }
-            .orb-2 { width: 600px; height: 600px; right: -15%; }
-            .orb-3 { width: 500px; height: 500px; }
-        }
-
-        @media (min-width: 1280px) {
-            .hero-title { font-size: 80px; }
-        }
-    
-
-        .main-content {
-            flex: 1;
-            padding: 100px 20px 40px;
+        /* Medical Disclaimer */
+        .disclaimer {
             max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+            margin: 0 auto 40px;
+            padding: 0 20px;
         }
 
-        .content-card {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-
-        h1 { font-size: 32px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; }
-        h2 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-        h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.3px; }
-
-        input[type="text"], input[type="number"], input[type="email"], select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--gray-300);
+        .disclaimer-card {
+            background: rgba(239, 246, 255, 0.6);
+            border: 1px solid var(--blue-200);
             border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            background: var(--white);
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        button, .btn {
-            padding: 12px 24px;
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:hover, .btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:active, .btn:active {
-            transform: translateY(0);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        th {
-            background: rgba(37,99,235,0.05);
-            font-weight: 600;
-            color: var(--blue-700);
-        }
-
-        @media (min-width: 768px) {
-            .main-content { padding: 120px 32px 60px; }
-        }
-
-        @media (min-width: 1024px) {
-            .main-content { padding: 140px 40px 80px; }
-        }
-
-
-        /* AI Chat Modal Styles */
-        .ai-chat-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .ai-chat-modal.active {
+            padding: 16px 20px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .ai-chat-container {
-            background: var(--white);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 600px;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 24px 64px rgba(0,0,0,0.2);
-        }
-
-        .ai-chat-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .ai-chat-header h3 {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--gray-900);
-            margin: 0;
-        }
-
-        .close-modal-btn {
-            background: var(--gray-100);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--gray-600);
-        }
-
-        .close-modal-btn:hover {
-            background: var(--gray-200);
-            color: var(--gray-900);
-        }
-
-        .ai-chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 24px;
-            min-height: 200px;
-            max-height: 400px;
-        }
-
-        .ai-message {
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: var(--gray-50);
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-800);
-        }
-
-        .user-message {
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: var(--blue-50);
-            border-radius: 12px;
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--blue-900);
-            text-align: right;
-        }
-
-        .ai-chat-input-area {
-            padding: 16px 24px 20px;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .ai-input-container {
-            display: flex;
-            align-items: flex-end;
+            align-items: start;
             gap: 12px;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            padding: 8px;
-            transition: all 0.2s ease;
         }
 
-        .ai-input-container:focus-within {
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .ai-chat-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            background: transparent;
-            padding: 8px 12px;
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--gray-900);
-            resize: none;
-            min-height: 42px;
-            max-height: 120px;
-            line-height: 1.5;
-        }
-
-        .ai-chat-input::placeholder {
-            color: var(--gray-400);
-        }
-
-        .send-ai-message-btn {
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .disclaimer-icon {
             flex-shrink: 0;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 20px;
+            height: 20px;
+            color: var(--blue-600);
         }
 
-        .send-ai-message-btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        .disclaimer-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
         }
 
-        .send-ai-message-btn:active {
-            transform: translateY(0);
+        .disclaimer-text strong {
+            font-weight: 600;
+            color: var(--gray-900);
         }
 
-        .send-ai-message-btn:disabled {
-            background: var(--gray-300);
-            cursor: not-allowed;
-            transform: none;
+        @media (max-width: 767px) {
+            .hero-title {
+                font-size: 32px;
+            }
+
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -10748,1036 +11865,712 @@ CALCULATORS_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
                 </a>
                 <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/chat" class="nav-link">Chat</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/calculators" class="nav-link active">Calculators</a>
+                    <a href="/preop" class="nav-link">PreOp</a>
+                    <a href="/hypotension" class="nav-link">IOH</a>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/chat" class="mobile-menu-link">Chat</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/preop" class="mobile-menu-link">PreOp Assessment</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
-        <main class="main-content">
-    <!-- Main Container -->
-    <div class="main-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h2 class="sidebar-header">Clinical Calculators</h2>
-            <ul class="calculator-list">
-                <li class="calculator-item">
-                    <button class="calculator-btn active" data-calc="ibw">Ideal Body Weight (IBW)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="mabl">Maximum Allowable Blood Loss</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="bsa">Body Surface Area (BSA)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="qtc">QTc Interval (Bazett)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="fluids">Maintenance Fluids (4-2-1)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="ponv">PONV Risk (Apfel Score)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="asa">ASA Physical Status</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="fluid-deficit">Fluid Deficit & Replacement</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="defib">Defibrillation Energy</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="sas">Surgical Apgar Score</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="opioid">Opioid Conversion</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="last">Local Anesthetic Toxicity Dose</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="rcri">RCRI (Cardiac Risk)</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="stopbang">STOP-BANG OSA Risk</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="airway">Airway Assessment</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="mac">MAC Calculator</button>
-                </li>
-                <li class="calculator-item">
-                    <button class="calculator-btn" data-calc="propofol-tci">Propofol TCI</button>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Content Area -->
-        <div class="content-area">
-            <!-- IBW Calculator -->
-            <div id="calc-ibw" class="calculator-section active">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Ideal Body Weight (IBW)</h1>
-                    <p class="calculator-description">Calculate ideal body weight using the Devine formula. Used for weight-based drug dosing and ventilator settings.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="ibw-height">Height (cm)</label>
-                            <input type="number" id="ibw-height" placeholder="170" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="ibw-sex">Biological Sex</label>
-                            <select id="ibw-sex">
-                                <option value="">Select...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateIBW()">Calculate</button>
-
-                    <div id="ibw-result" class="result-box">
-                        <div class="result-label">Ideal Body Weight</div>
-                        <div class="result-value" id="ibw-value">-</div>
-                        <div class="result-interpretation" id="ibw-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('ibw')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">
+                <div class="badge-dot"></div>
+                <span class="badge-text">Evidence-Based Formulas</span>
             </div>
-
-            <!-- MABL Calculator -->
-            <div id="calc-mabl" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Maximum Allowable Blood Loss (MABL)</h1>
-                    <p class="calculator-description">Estimate maximum allowable blood loss before transfusion is indicated based on starting and target hematocrit.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mabl-weight">Weight (kg)</label>
-                            <input type="number" id="mabl-weight" placeholder="70" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="mabl-height">Height (cm)</label>
-                            <input type="number" id="mabl-height" placeholder="170" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="mabl-sex">Biological Sex</label>
-                            <select id="mabl-sex">
-                                <option value="">Select...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mabl-initial-hct">Initial Hematocrit (%)</label>
-                            <input type="number" id="mabl-initial-hct" placeholder="45" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="mabl-target-hct">Target Hematocrit (%)</label>
-                            <input type="number" id="mabl-target-hct" placeholder="25" step="0.1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateMABL()">Calculate</button>
-
-                    <div id="mabl-result" class="result-box">
-                        <div class="result-label">Maximum Allowable Blood Loss</div>
-                        <div class="result-value" id="mabl-value">-</div>
-                        <div class="result-interpretation" id="mabl-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('mabl')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BSA Calculator -->
-            <div id="calc-bsa" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Body Surface Area (BSA)</h1>
-                    <p class="calculator-description">Calculate BSA using the Mosteller formula. Used for chemotherapy dosing and cardiac output calculation.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="bsa-weight">Weight (kg)</label>
-                            <input type="number" id="bsa-weight" placeholder="70" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="bsa-height">Height (cm)</label>
-                            <input type="number" id="bsa-height" placeholder="170" step="0.1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateBSA()">Calculate</button>
-
-                    <div id="bsa-result" class="result-box">
-                        <div class="result-label">Body Surface Area</div>
-                        <div class="result-value" id="bsa-value">-</div>
-                        <div class="result-interpretation" id="bsa-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('bsa')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- QTc Calculator -->
-            <div id="calc-qtc" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">QTc Interval (Bazett Formula)</h1>
-                    <p class="calculator-description">Calculate heart rate-corrected QT interval. Prolonged QTc increases risk of torsades de pointes.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="qtc-qt">QT Interval (ms)</label>
-                            <input type="number" id="qtc-qt" placeholder="400" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="qtc-rr">RR Interval (ms)</label>
-                            <input type="number" id="qtc-rr" placeholder="800" step="1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateQTc()">Calculate</button>
-
-                    <div id="qtc-result" class="result-box">
-                        <div class="result-label">Corrected QT Interval</div>
-                        <div class="result-value" id="qtc-value">-</div>
-                        <div class="result-interpretation" id="qtc-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('qtc')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fluids Calculator -->
-            <div id="calc-fluids" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Maintenance Fluids (4-2-1 Rule)</h1>
-                    <p class="calculator-description">Calculate hourly maintenance fluid rate using the Holliday-Segar method.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="fluids-weight">Weight (kg)</label>
-                            <input type="number" id="fluids-weight" placeholder="70" step="0.1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateFluids()">Calculate</button>
-
-                    <div id="fluids-result" class="result-box">
-                        <div class="result-label">Maintenance Fluid Rate</div>
-                        <div class="result-value" id="fluids-value">-</div>
-                        <div class="result-interpretation" id="fluids-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('fluids')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PONV Calculator -->
-            <div id="calc-ponv" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">PONV Risk (Apfel Score)</h1>
-                    <p class="calculator-description">Predict risk of postoperative nausea and vomiting based on 4 independent risk factors.</p>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="ponv-female" style="width: auto; display: inline-block; margin-right: 8px;">
-                            Female sex
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="ponv-nonsmoker" style="width: auto; display: inline-block; margin-right: 8px;">
-                            Non-smoker
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="ponv-history" style="width: auto; display: inline-block; margin-right: 8px;">
-                            History of PONV or motion sickness
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="ponv-opioids" style="width: auto; display: inline-block; margin-right: 8px;">
-                            Postoperative opioids expected
-                        </label>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculatePONV()">Calculate</button>
-
-                    <div id="ponv-result" class="result-box">
-                        <div class="result-label">PONV Risk</div>
-                        <div class="result-value" id="ponv-value">-</div>
-                        <div class="result-interpretation" id="ponv-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('ponv')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ASA Helper -->
-            <div id="calc-asa" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">ASA Physical Status Classification</h1>
-                    <p class="calculator-description">Reference guide for ASA physical status classification system.</p>
-
-                    <div style="color: var(--text-secondary); line-height: 1.8;">
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA I:</strong> Normal healthy patient (no organic, physiologic, or psychiatric disturbance)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA II:</strong> Patient with mild systemic disease (well-controlled HTN, DM, obesity, smoking)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA III:</strong> Patient with severe systemic disease (poorly controlled HTN/DM, COPD, morbid obesity, active hepatitis, CAD, MI >3mo ago)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA IV:</strong> Patient with severe systemic disease that is a constant threat to life (recent MI <3mo, CVA, ongoing cardiac ischemia, severe valve dysfunction, sepsis, ESRD)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA V:</strong> Moribund patient not expected to survive without operation (ruptured AAA, massive trauma, intracranial bleed with mass effect)</p>
-                        <p style="margin-bottom: 16px;"><strong style="color: var(--primary-blue);">ASA VI:</strong> Brain-dead patient for organ donation</p>
-                        <p style="margin-top: 24px; font-style: italic; color: var(--text-muted);">Add "E" suffix for emergency surgery (e.g., ASA 3E)</p>
-                    </div>
-
-                    <div id="asa-result" class="result-box visible" style="margin-top: 32px;">
-                        <button class="send-to-ai-btn" onclick="sendToAI('asa')">
-                            Ask AI about ASA Classification
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Fluid Deficit Calculator -->
-            <div id="calc-fluid-deficit" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Fluid Deficit & Replacement</h1>
-                    <p class="calculator-description">Calculate fluid deficit based on dehydration percentage and replacement strategy.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="fd-weight">Weight (kg)</label>
-                            <input type="number" id="fd-weight" placeholder="70" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="fd-dehydration">Dehydration (%)</label>
-                            <select id="fd-dehydration">
-                                <option value="">Select...</option>
-                                <option value="3">Mild (3%)</option>
-                                <option value="5">Moderate (5%)</option>
-                                <option value="7">Severe (7%)</option>
-                                <option value="10">Critical (10%)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateFluidDeficit()">Calculate</button>
-
-                    <div id="fd-result" class="result-box">
-                        <div class="result-label">Fluid Deficit</div>
-                        <div class="result-value" id="fd-value">-</div>
-                        <div class="result-interpretation" id="fd-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('fluid-deficit')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Defibrillation Energy Calculator -->
-            <div id="calc-defib" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Defibrillation / Cardioversion Energy</h1>
-                    <p class="calculator-description">Calculate appropriate defibrillation or cardioversion energy for adults and pediatrics.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="defib-type">Procedure Type</label>
-                            <select id="defib-type">
-                                <option value="">Select...</option>
-                                <option value="defib">Defibrillation (VF/pulseless VT)</option>
-                                <option value="cardioversion">Synchronized Cardioversion</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="defib-age">Patient Age</label>
-                            <select id="defib-age">
-                                <option value="">Select...</option>
-                                <option value="adult">Adult</option>
-                                <option value="peds">Pediatric</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row" id="defib-weight-row" style="display: none;">
-                        <div class="form-group">
-                            <label for="defib-weight">Weight (kg)</label>
-                            <input type="number" id="defib-weight" placeholder="20" step="0.1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateDefib()">Calculate</button>
-
-                    <div id="defib-result" class="result-box">
-                        <div class="result-label">Energy Recommendation</div>
-                        <div class="result-value" id="defib-value">-</div>
-                        <div class="result-interpretation" id="defib-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('defib')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Surgical Apgar Score Calculator -->
-            <div id="calc-sas" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Surgical Apgar Score (SAS)</h1>
-                    <p class="calculator-description">10-point score for predicting post-operative morbidity and mortality.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="sas-ebl">Estimated Blood Loss (mL)</label>
-                            <input type="number" id="sas-ebl" placeholder="400" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="sas-hr">Lowest Heart Rate (bpm)</label>
-                            <input type="number" id="sas-hr" placeholder="75" step="1">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="sas-map">Lowest MAP (mmHg)</label>
-                            <input type="number" id="sas-map" placeholder="70" step="1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateSAS()">Calculate</button>
-
-                    <div id="sas-result" class="result-box">
-                        <div class="result-label">Surgical Apgar Score</div>
-                        <div class="result-value" id="sas-value">-</div>
-                        <div class="result-interpretation" id="sas-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('sas')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Opioid Conversion Calculator -->
-            <div id="calc-opioid" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Opioid Conversion Calculator</h1>
-                    <p class="calculator-description">Convert between opioid medications using morphine milligram equivalents (MME).</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="opioid-from">From Medication</label>
-                            <select id="opioid-from">
-                                <option value="">Select...</option>
-                                <option value="morphine-iv">Morphine IV</option>
-                                <option value="morphine-po">Morphine PO</option>
-                                <option value="fentanyl-iv">Fentanyl IV</option>
-                                <option value="hydromorphone-iv">Hydromorphone IV</option>
-                                <option value="hydromorphone-po">Hydromorphone PO</option>
-                                <option value="oxycodone-po">Oxycodone PO</option>
-                                <option value="hydrocodone-po">Hydrocodone PO</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="opioid-dose">Dose (mg or mcg for fentanyl)</label>
-                            <input type="number" id="opioid-dose" placeholder="10" step="0.1">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="opioid-to">To Medication</label>
-                            <select id="opioid-to">
-                                <option value="">Select...</option>
-                                <option value="morphine-iv">Morphine IV</option>
-                                <option value="morphine-po">Morphine PO</option>
-                                <option value="fentanyl-iv">Fentanyl IV</option>
-                                <option value="hydromorphone-iv">Hydromorphone IV</option>
-                                <option value="hydromorphone-po">Hydromorphone PO</option>
-                                <option value="oxycodone-po">Oxycodone PO</option>
-                                <option value="hydrocodone-po">Hydrocodone PO</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateOpioid()">Calculate</button>
-
-                    <div id="opioid-result" class="result-box">
-                        <div class="result-label">Converted Dose</div>
-                        <div class="result-value" id="opioid-value">-</div>
-                        <div class="result-interpretation" id="opioid-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('opioid')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Local Anesthetic Toxicity Dose Calculator -->
-            <div id="calc-last" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Local Anesthetic Toxicity Dose</h1>
-                    <p class="calculator-description">Calculate maximum safe dose for local anesthetics to prevent LAST.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="last-weight">Weight (kg)</label>
-                            <input type="number" id="last-weight" placeholder="70" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="last-agent">Local Anesthetic</label>
-                            <select id="last-agent">
-                                <option value="">Select...</option>
-                                <option value="lidocaine">Lidocaine (without epi)</option>
-                                <option value="lidocaine-epi">Lidocaine (with epi)</option>
-                                <option value="bupivacaine">Bupivacaine</option>
-                                <option value="ropivacaine">Ropivacaine</option>
-                                <option value="chloroprocaine">Chloroprocaine</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="last-concentration">Concentration (%)</label>
-                            <input type="number" id="last-concentration" placeholder="0.5" step="0.1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateLAST()">Calculate</button>
-
-                    <div id="last-result" class="result-box">
-                        <div class="result-label">Maximum Safe Dose</div>
-                        <div class="result-value" id="last-value">-</div>
-                        <div class="result-interpretation" id="last-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('last')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RCRI Calculator -->
-            <div id="calc-rcri" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Revised Cardiac Risk Index (RCRI)</h1>
-                    <p class="calculator-description">Estimate risk of major cardiac complications after noncardiac surgery.</p>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-highrisk" style="width: auto; display: inline-block; margin-right: 8px;">
-                            High-risk surgery (intraperitoneal, intrathoracic, or suprainguinal vascular)
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-ihd" style="width: auto; display: inline-block; margin-right: 8px;">
-                            History of ischemic heart disease
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-chf" style="width: auto; display: inline-block; margin-right: 8px;">
-                            History of congestive heart failure
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-cvd" style="width: auto; display: inline-block; margin-right: 8px;">
-                            History of cerebrovascular disease
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-dm" style="width: auto; display: inline-block; margin-right: 8px;">
-                            Diabetes mellitus on insulin therapy
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="rcri-renal" style="width: auto; display: inline-block; margin-right: 8px;">
-                            Preoperative creatinine >2 mg/dL
-                        </label>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateRCRI()">Calculate</button>
-
-                    <div id="rcri-result" class="result-box">
-                        <div class="result-label">RCRI Score</div>
-                        <div class="result-value" id="rcri-value">-</div>
-                        <div class="result-interpretation" id="rcri-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('rcri')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- STOP-BANG Calculator -->
-            <div id="calc-stopbang" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">STOP-BANG OSA Risk</h1>
-                    <p class="calculator-description">Screen for obstructive sleep apnea using the STOP-BANG questionnaire.</p>
-
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-snore" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>S</strong>noring: Do you snore loudly?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-tired" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>T</strong>ired: Do you often feel tired during the day?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-observed" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>O</strong>bserved: Has anyone observed you stop breathing during sleep?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-pressure" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>P</strong>ressure: Do you have or are you being treated for high blood pressure?
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-bmi" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>B</strong>MI >35 kg/m²
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-age" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>A</strong>ge >50 years
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-neck" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>N</strong>eck circumference >40 cm
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="sb-gender" style="width: auto; display: inline-block; margin-right: 8px;">
-                            <strong>G</strong>ender: Male
-                        </label>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateStopBang()">Calculate</button>
-
-                    <div id="stopbang-result" class="result-box">
-                        <div class="result-label">STOP-BANG Score</div>
-                        <div class="result-value" id="stopbang-value">-</div>
-                        <div class="result-interpretation" id="stopbang-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('stopbang')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Airway Assessment Calculator -->
-            <div id="calc-airway" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Airway Assessment Helper</h1>
-                    <p class="calculator-description">Predict difficult airway based on Mallampati, thyromental distance, and neck ROM.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="airway-mallampati">Mallampati Class</label>
-                            <select id="airway-mallampati">
-                                <option value="">Select...</option>
-                                <option value="1">Class I (full visibility)</option>
-                                <option value="2">Class II (uvula visible)</option>
-                                <option value="3">Class III (soft palate only)</option>
-                                <option value="4">Class IV (hard palate only)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="airway-tmd">Thyromental Distance</label>
-                            <select id="airway-tmd">
-                                <option value="">Select...</option>
-                                <option value="good">>6 cm (Normal)</option>
-                                <option value="borderline">4-6 cm (Borderline)</option>
-                                <option value="poor"><4 cm (Difficult)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="airway-neck">Neck ROM</label>
-                            <select id="airway-neck">
-                                <option value="">Select...</option>
-                                <option value="good">Normal (>35°)</option>
-                                <option value="reduced">Reduced (<35°)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="airway-mouth">Mouth Opening</label>
-                            <select id="airway-mouth">
-                                <option value="">Select...</option>
-                                <option value="good">>4 cm</option>
-                                <option value="poor"><4 cm</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateAirway()">Calculate</button>
-
-                    <div id="airway-result" class="result-box">
-                        <div class="result-label">Predicted Difficulty</div>
-                        <div class="result-value" id="airway-value">-</div>
-                        <div class="result-interpretation" id="airway-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('airway')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MAC Calculator -->
-            <div id="calc-mac" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">MAC Calculator (Age-Adjusted)</h1>
-                    <p class="calculator-description">Calculate age-adjusted MAC-awake and MAC for common volatile anesthetics.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mac-agent">Volatile Agent</label>
-                            <select id="mac-agent">
-                                <option value="">Select...</option>
-                                <option value="sevoflurane">Sevoflurane</option>
-                                <option value="desflurane">Desflurane</option>
-                                <option value="isoflurane">Isoflurane</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="mac-age">Age (years)</label>
-                            <input type="number" id="mac-age" placeholder="40" step="1">
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculateMAC()">Calculate</button>
-
-                    <div id="mac-result" class="result-box">
-                        <div class="result-label">Age-Adjusted MAC</div>
-                        <div class="result-value" id="mac-value">-</div>
-                        <div class="result-interpretation" id="mac-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('mac')">
-                            Send to AI
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Propofol TCI Calculator -->
-            <div id="calc-propofol-tci" class="calculator-section">
-                <div class="calculator-card">
-                    <h1 class="calculator-title">Propofol TCI / Infusion Rate</h1>
-                    <p class="calculator-description">Calculate target-controlled infusion rates using Marsh, Schnider, or Kataria models.</p>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tci-model">TCI Model</label>
-                            <select id="tci-model">
-                                <option value="">Select...</option>
-                                <option value="marsh">Marsh (weight-based)</option>
-                                <option value="schnider">Schnider (effect-site)</option>
-                                <option value="kataria">Kataria (pediatric)</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="tci-target">Target Concentration (mcg/mL)</label>
-                            <input type="number" id="tci-target" placeholder="3.5" step="0.1">
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="tci-weight">Weight (kg)</label>
-                            <input type="number" id="tci-weight" placeholder="70" step="0.1">
-                        </div>
-                        <div class="form-group" id="tci-age-group">
-                            <label for="tci-age">Age (years)</label>
-                            <input type="number" id="tci-age" placeholder="40" step="1">
-                        </div>
-                    </div>
-
-                    <div class="form-row" id="tci-schnider-params" style="display: none;">
-                        <div class="form-group">
-                            <label for="tci-height">Height (cm)</label>
-                            <input type="number" id="tci-height" placeholder="170" step="1">
-                        </div>
-                        <div class="form-group">
-                            <label for="tci-sex">Sex</label>
-                            <select id="tci-sex">
-                                <option value="">Select...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button class="calculate-btn" onclick="calculatePropofolTCI()">Calculate</button>
-
-                    <div id="tci-result" class="result-box">
-                        <div class="result-label">Infusion Rate</div>
-                        <div class="result-value" id="tci-value">-</div>
-                        <div class="result-interpretation" id="tci-interpretation"></div>
-                        <button class="send-to-ai-btn" onclick="sendToAI('propofol-tci')">
-                            Send to AI
-                        </button>
-                    </div>
+            <h1 class="hero-title">
+                Clinical <span class="gradient">Calculators</span>
+            </h1>
+            <p class="hero-subtitle">
+                Real-time medical calculations with validated formulas. All results are instant — no submit buttons needed.
+            </p>
+        </section>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <div class="disclaimer-card">
+                <svg class="disclaimer-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="disclaimer-text">
+                    <strong>Medical Disclaimer:</strong> These calculators are for educational purposes only. Always verify calculations and consult clinical judgment before making treatment decisions.
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- AI Chat Modal -->
-    <div class="ai-chat-modal" id="aiChatModal">
-        <div class="ai-chat-container">
-            <div class="ai-chat-header">
-                <h3>Ask AI About Your Results</h3>
-                <button class="close-modal-btn" onclick="closeAIChat()">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="ai-chat-messages" id="aiChatMessages">
-                <!-- Messages will be added here dynamically -->
-            </div>
-            <div class="ai-chat-input-area">
-                <div class="ai-input-container">
-                    <input type="hidden" id="csrf_token" value="{{ csrf_token() }}"/>
-                    <textarea class="ai-chat-input" id="aiChatInput" placeholder="Ask a follow-up question..." rows="1"></textarea>
-                    <button class="send-ai-message-btn" onclick="sendAIMessage()">Send</button>
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <div class="calc-grid">
+
+                    <!-- IDEAL BODY WEIGHT -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Ideal Body Weight (IBW)</h3>
+                            <p class="calc-desc">Devine formula for anesthesia dosing</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Sex</label>
+                                <select class="calc-select" id="ibw-sex" onchange="calcIBW()">
+                                    <option value="">Select...</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Height</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="ibw-height" placeholder="Enter height" oninput="calcIBW()" min="0" step="0.1">
+                                    <span class="input-unit">inches</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Actual Weight (optional, for ABW)</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="ibw-weight" placeholder="Enter weight" oninput="calcIBW()" min="0" step="0.1">
+                                    <span class="input-unit">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ibw-result" class="calc-result">
+                            <div class="result-label">Ideal Body Weight</div>
+                            <div class="result-value"><span id="ibw-value">--</span><span class="result-unit">kg</span></div>
+                            <div id="abw-display" style="margin-top: 12px; display: none;">
+                                <div class="result-label" style="margin-bottom: 4px;">Adjusted Body Weight</div>
+                                <div style="font-size: 20px; font-weight: 700; color: var(--gray-700);"><span id="abw-value">--</span> kg</div>
+                            </div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://clincalc.com/kinetics/idealbw.aspx" target="_blank" class="ref-link">
+                                <span>Reference: ClinCalc IBW</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- BODY SURFACE AREA -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Body Surface Area (BSA)</h3>
+                            <p class="calc-desc">Mosteller, DuBois & Haycock formulas</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Height</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="bsa-height" placeholder="Enter height" oninput="calcBSA()" min="0" step="0.1">
+                                    <span class="input-unit">cm</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Weight</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="bsa-weight" placeholder="Enter weight" oninput="calcBSA()" min="0" step="0.1">
+                                    <span class="input-unit">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="bsa-result" class="calc-result green">
+                            <div class="result-grid">
+                                <div class="result-item">
+                                    <div class="result-item-label">Mosteller ⭐</div>
+                                    <div class="result-item-value"><span id="bsa-mosteller">--</span><span class="result-item-unit">m²</span></div>
+                                </div>
+                                <div class="result-item">
+                                    <div class="result-item-label">DuBois</div>
+                                    <div class="result-item-value"><span id="bsa-dubois">--</span><span class="result-item-unit">m²</span></div>
+                                </div>
+                                <div class="result-item" style="grid-column: 1 / -1;">
+                                    <div class="result-item-label">Haycock (Pediatric)</div>
+                                    <div class="result-item-value"><span id="bsa-haycock">--</span><span class="result-item-unit">m²</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://medplore.com/health-tools/bsa-calculator-with-formulas/" target="_blank" class="ref-link">
+                                <span>Reference: BSA Formulas</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- MAXIMUM ALLOWABLE BLOOD LOSS -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Maximum Allowable Blood Loss</h3>
+                            <p class="calc-desc">Estimated blood volume & transfusion threshold</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Patient Type</label>
+                                <select class="calc-select" id="mabl-type" onchange="calcMABL()">
+                                    <option value="">Select...</option>
+                                    <option value="male">Adult Male</option>
+                                    <option value="female">Adult Female</option>
+                                    <option value="pediatric">Pediatric</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Weight</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="mabl-weight" placeholder="Enter weight" oninput="calcMABL()" min="0" step="0.1">
+                                    <span class="input-unit">kg</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Starting Hematocrit</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="mabl-start-hct" placeholder="e.g., 40" oninput="calcMABL()" min="0" max="100" step="0.1">
+                                    <span class="input-unit">%</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Target Hematocrit</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="mabl-target-hct" placeholder="e.g., 25" oninput="calcMABL()" min="0" max="100" step="0.1">
+                                    <span class="input-unit">%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="mabl-result" class="calc-result yellow">
+                            <div class="result-label">Max Allowable Blood Loss</div>
+                            <div class="result-value"><span id="mabl-value">--</span><span class="result-unit">mL</span></div>
+                            <div class="result-text">Estimated Blood Volume: <strong id="ebv-value">--</strong> mL</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.mdcalc.com/calc/3905/maximum-allowable-blood-loss-abl-without-transfusion" target="_blank" class="ref-link">
+                                <span>Reference: MDCalc MABL</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- QTc INTERVAL -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">QTc Interval (Bazett)</h3>
+                            <p class="calc-desc">Corrected QT interval for cardiac risk</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">QT Interval</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="qtc-qt" placeholder="e.g., 400" oninput="calcQTc()" min="0" step="1">
+                                    <span class="input-unit">ms</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Heart Rate</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="qtc-hr" placeholder="e.g., 75" oninput="calcQTc()" min="0" step="1">
+                                    <span class="input-unit">bpm</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Sex (for interpretation)</label>
+                                <select class="calc-select" id="qtc-sex" onchange="calcQTc()">
+                                    <option value="">Select...</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="qtc-result" class="calc-result">
+                            <div class="result-label">QTc (Bazett)</div>
+                            <div class="result-value"><span id="qtc-value">--</span><span class="result-unit">ms</span></div>
+                            <div class="result-text" id="qtc-interpretation">Enter values above</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://en.wikipedia.org/wiki/QT_interval#Corrected_QT_interval" target="_blank" class="ref-link">
+                                <span>Reference: Bazett Formula</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- MAINTENANCE FLUIDS -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Maintenance Fluids (4-2-1 Rule)</h3>
+                            <p class="calc-desc">Holliday-Segar method for pediatrics</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Weight</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="fluids-weight" placeholder="Enter weight" oninput="calcFluids()" min="0" step="0.1">
+                                    <span class="input-unit">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="fluids-result" class="calc-result green">
+                            <div class="result-label">Maintenance Rate</div>
+                            <div class="result-value"><span id="fluids-value">--</span><span class="result-unit">mL/hr</span></div>
+                            <div class="result-text">Daily volume: <strong id="fluids-daily">--</strong> mL/day</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.ncbi.nlm.nih.gov/books/NBK562337/" target="_blank" class="ref-link">
+                                <span>Reference: 4-2-1 Rule</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- PONV RISK (APFEL SCORE) -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">PONV Risk (Apfel Score)</h3>
+                            <p class="calc-desc">Postoperative nausea & vomiting prediction</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ponv-female" onchange="calcPONV()">
+                                    <span class="checkbox-label">Female</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ponv-nonsmoker" onchange="calcPONV()">
+                                    <span class="checkbox-label">Non-smoker</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ponv-history" onchange="calcPONV()">
+                                    <span class="checkbox-label">History of PONV or motion sickness</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="ponv-opioids" onchange="calcPONV()">
+                                    <span class="checkbox-label">Postoperative opioids planned</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="ponv-result" class="calc-result">
+                            <div class="result-label">PONV Risk</div>
+                            <div class="result-value"><span id="ponv-value">--</span><span class="result-unit">%</span></div>
+                            <div class="result-text">Score: <strong id="ponv-score">0</strong> / 4 risk factors</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.mdcalc.com/calc/1887/apfel-score-postoperative-nausea-vomiting" target="_blank" class="ref-link">
+                                <span>Reference: Apfel Score</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- RCRI (CARDIAC RISK INDEX) -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">RCRI (Revised Cardiac Risk Index)</h3>
+                            <p class="calc-desc">Perioperative cardiac event prediction</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="checkbox-group">
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-surgery" onchange="calcRCRI()">
+                                    <span class="checkbox-label">High-risk surgery (vascular, intraperitoneal, intrathoracic)</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-ihd" onchange="calcRCRI()">
+                                    <span class="checkbox-label">History of ischemic heart disease</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-chf" onchange="calcRCRI()">
+                                    <span class="checkbox-label">History of congestive heart failure</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-cvd" onchange="calcRCRI()">
+                                    <span class="checkbox-label">History of cerebrovascular disease</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-dm" onchange="calcRCRI()">
+                                    <span class="checkbox-label">Diabetes on insulin therapy</span>
+                                </label>
+                                <label class="checkbox-item">
+                                    <input type="checkbox" id="rcri-cr" onchange="calcRCRI()">
+                                    <span class="checkbox-label">Preoperative creatinine > 2.0 mg/dL</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="rcri-result" class="calc-result">
+                            <div class="result-label">Cardiac Event Risk</div>
+                            <div class="result-value"><span id="rcri-value">--</span><span class="result-unit">%</span></div>
+                            <div class="result-text">Score: <strong id="rcri-score">0</strong> / 6 risk factors</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10578796/" target="_blank" class="ref-link">
+                                <span>Reference: RCRI Validation</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ASA PHYSICAL STATUS -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">ASA Physical Status</h3>
+                            <p class="calc-desc">Classification of patient health status</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="1" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA I</span>
+                                        <span class="radio-desc">Healthy patient, no systemic disease</span>
+                                    </div>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="2" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA II</span>
+                                        <span class="radio-desc">Mild systemic disease, no functional limitations</span>
+                                    </div>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="3" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA III</span>
+                                        <span class="radio-desc">Severe systemic disease with functional limitations</span>
+                                    </div>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="4" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA IV</span>
+                                        <span class="radio-desc">Severe disease that is constant threat to life</span>
+                                    </div>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="5" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA V</span>
+                                        <span class="radio-desc">Moribund, not expected to survive without operation</span>
+                                    </div>
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="asa" value="6" onchange="calcASA()">
+                                    <div class="radio-content">
+                                        <span class="radio-label">ASA VI</span>
+                                        <span class="radio-desc">Brain-dead patient for organ donation</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="asa-result" class="calc-result" style="display: none;">
+                            <div class="result-label">Selected Classification</div>
+                            <div class="result-value" style="font-size: 24px;"><span id="asa-value">--</span></div>
+                            <div class="result-text" id="asa-desc">--</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.asahq.org/standards-and-guidelines/asa-physical-status-classification-system" target="_blank" class="ref-link">
+                                <span>Reference: ASA Guidelines</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- OPIOID CONVERSION -->
+                    <div class="calc-card large">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Opioid Conversion Calculator</h3>
+                            <p class="calc-desc">Convert to morphine milligram equivalents (MME)</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Opioid</label>
+                                <select class="calc-select" id="opioid-type" onchange="calcOpioid()">
+                                    <option value="">Select opioid...</option>
+                                    <option value="1">Morphine (IV/IM/SC)</option>
+                                    <option value="3">Morphine (PO)</option>
+                                    <option value="0.01">Fentanyl (IV/IM)</option>
+                                    <option value="0.3">Fentanyl (Transdermal mcg/hr)</option>
+                                    <option value="5">Hydromorphone (PO)</option>
+                                    <option value="1.5">Oxycodone (PO)</option>
+                                    <option value="1.5">Hydrocodone (PO)</option>
+                                    <option value="10">Tramadol (PO)</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Dose</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="opioid-dose" placeholder="Enter dose" oninput="calcOpioid()" min="0" step="0.1">
+                                    <span class="input-unit">mg (or mcg/hr for fentanyl patch)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="opioid-result" class="calc-result yellow">
+                            <div class="result-label">Morphine Milligram Equivalent (MME)</div>
+                            <div class="result-value"><span id="opioid-value">--</span><span class="result-unit">mg</span></div>
+                            <div class="result-text">Use caution with opioid conversions — consider patient factors and start at lower doses.</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.cdc.gov/opioids/data-resources/calculating-mme.html" target="_blank" class="ref-link">
+                                <span>Reference: CDC MME Conversion</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL ANESTHETIC MAX DOSE -->
+                    <div class="calc-card">
+                        <div class="calc-header">
+                            <h3 class="calc-title">Local Anesthetic Max Dose</h3>
+                            <p class="calc-desc">Maximum safe dosing to prevent LAST</p>
+                        </div>
+                        <div class="calc-body">
+                            <div class="input-group">
+                                <label class="input-label">Local Anesthetic</label>
+                                <select class="calc-select" id="la-type" onchange="calcLA()">
+                                    <option value="">Select...</option>
+                                    <option value="lidocaine">Lidocaine (without epi)</option>
+                                    <option value="lidocaine-epi">Lidocaine (with epi)</option>
+                                    <option value="bupivacaine">Bupivacaine (without epi)</option>
+                                    <option value="bupivacaine-epi">Bupivacaine (with epi)</option>
+                                    <option value="ropivacaine">Ropivacaine</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Patient Weight</label>
+                                <div class="input-wrapper">
+                                    <input type="number" class="calc-input" id="la-weight" placeholder="Enter weight" oninput="calcLA()" min="0" step="0.1">
+                                    <span class="input-unit">kg</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="la-result" class="calc-result red">
+                            <div class="result-label">Maximum Dose</div>
+                            <div class="result-value"><span id="la-value">--</span><span class="result-unit">mg</span></div>
+                            <div class="result-text" id="la-volume">--</div>
+                        </div>
+                        <div class="calc-reference">
+                            <a href="https://www.nysora.com/topics/foundations-of-regional-anesthesia/pharmacology/local-anesthetics/" target="_blank" class="ref-link">
+                                <span>Reference: NYSORA Guidelines</span>
+                                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script>
-        // Store calculation results
-        let calculationResults = {};
-        let currentChatContext = '';
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
 
-        // Calculator switching
-        document.querySelectorAll('.calculator-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const calcType = this.dataset.calc;
-
-                // Update sidebar
-                document.querySelectorAll('.calculator-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // Update content
-                document.querySelectorAll('.calculator-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById(`calc-${calcType}`).classList.add('active');
-            });
-        });
-
-        // IBW Calculator
-        function calculateIBW() {
-            const height = parseFloat(document.getElementById('ibw-height').value);
+        // IDEAL BODY WEIGHT
+        function calcIBW() {
             const sex = document.getElementById('ibw-sex').value;
+            const height = parseFloat(document.getElementById('ibw-height').value);
+            const weight = parseFloat(document.getElementById('ibw-weight').value);
 
-            if (!height || !sex) {
-                alert('Please fill in all fields');
-                return;
-            }
+            if (!sex || !height) return;
 
             let ibw;
             if (sex === 'male') {
-                ibw = 50 + 0.91 * (height - 152.4);
+                ibw = 50 + 2.3 * (height - 60);
             } else {
-                ibw = 45.5 + 0.91 * (height - 152.4);
+                ibw = 45.5 + 2.3 * (height - 60);
             }
 
-            ibw = Math.round(ibw * 10) / 10;
+            ibw = Math.max(ibw, 0);
+            document.getElementById('ibw-value').textContent = ibw.toFixed(1);
 
-            calculationResults.ibw = {
-                value: ibw,
-                height: height,
-                sex: sex
-            };
+            // Calculate ABW if actual weight provided
+            if (weight) {
+                const abw = ibw + 0.4 * (weight - ibw);
+                document.getElementById('abw-value').textContent = abw.toFixed(1);
+                document.getElementById('abw-display').style.display = 'block';
+            } else {
+                document.getElementById('abw-display').style.display = 'none';
+            }
 
-            document.getElementById('ibw-value').textContent = `${ibw} kg`;
-            document.getElementById('ibw-interpretation').innerHTML =
-                `Based on Devine formula for ${sex} patient with height ${height} cm. Used for dosing propofol, succinylcholine, and tidal volume calculations (6-8 mL/kg IBW).`;
-            document.getElementById('ibw-result').classList.add('visible');
+            const result = document.getElementById('ibw-result');
+            result.classList.add('show');
         }
 
-        // MABL Calculator
-        function calculateMABL() {
+        // BODY SURFACE AREA
+        function calcBSA() {
+            const height = parseFloat(document.getElementById('bsa-height').value);
+            const weight = parseFloat(document.getElementById('bsa-weight').value);
+
+            if (!height || !weight) return;
+
+            // Mosteller
+            const mosteller = Math.sqrt((height * weight) / 3600);
+
+            // DuBois
+            const dubois = 0.007184 * Math.pow(height, 0.725) * Math.pow(weight, 0.425);
+
+            // Haycock
+            const haycock = 0.024265 * Math.pow(height, 0.3964) * Math.pow(weight, 0.5378);
+
+            document.getElementById('bsa-mosteller').textContent = mosteller.toFixed(2);
+            document.getElementById('bsa-dubois').textContent = dubois.toFixed(2);
+            document.getElementById('bsa-haycock').textContent = haycock.toFixed(2);
+
+            const result = document.getElementById('bsa-result');
+            result.classList.add('show');
+        }
+
+        // MAXIMUM ALLOWABLE BLOOD LOSS
+        function calcMABL() {
+            const type = document.getElementById('mabl-type').value;
             const weight = parseFloat(document.getElementById('mabl-weight').value);
-            const height = parseFloat(document.getElementById('mabl-height').value);
-            const sex = document.getElementById('mabl-sex').value;
-            const initialHct = parseFloat(document.getElementById('mabl-initial-hct').value);
+            const startHct = parseFloat(document.getElementById('mabl-start-hct').value);
             const targetHct = parseFloat(document.getElementById('mabl-target-hct').value);
 
-            if (!weight || !height || !sex || !initialHct || !targetHct) {
-                alert('Please fill in all fields');
-                return;
-            }
+            if (!type || !weight || !startHct || !targetHct) return;
 
-            // Calculate blood volume
-            let bloodVolume;
-            if (sex === 'male') {
-                bloodVolume = weight * 75; // mL
-            } else {
-                bloodVolume = weight * 65; // mL
-            }
+            let ebvPerKg;
+            if (type === 'male') ebvPerKg = 75;
+            else if (type === 'female') ebvPerKg = 65;
+            else ebvPerKg = 85; // pediatric
 
-            // MABL = Blood Volume × (Initial Hct - Target Hct) / Initial Hct
-            const mabl = bloodVolume * (initialHct - targetHct) / initialHct;
+            const ebv = weight * ebvPerKg;
+            const avgHct = (startHct + targetHct) / 2;
+            const mabl = ebv * ((startHct - targetHct) / avgHct);
 
-            calculationResults.mabl = {
-                value: Math.round(mabl),
-                weight: weight,
-                height: height,
-                sex: sex,
-                initialHct: initialHct,
-                targetHct: targetHct,
-                bloodVolume: Math.round(bloodVolume)
-            };
+            document.getElementById('ebv-value').textContent = Math.round(ebv);
+            document.getElementById('mabl-value').textContent = Math.round(mabl);
 
-            document.getElementById('mabl-value').textContent = `${Math.round(mabl)} mL`;
-            document.getElementById('mabl-interpretation').innerHTML =
-                `Estimated blood volume: ${Math.round(bloodVolume)} mL (${sex === 'male' ? '75' : '65'} mL/kg).<br>
-                This represents the maximum blood loss before transfusion should be considered, assuming no ongoing bleeding and adequate crystalloid resuscitation.`;
-            document.getElementById('mabl-result').classList.add('visible');
+            const result = document.getElementById('mabl-result');
+            result.classList.add('show');
         }
 
-        // BSA Calculator
-        function calculateBSA() {
-            const weight = parseFloat(document.getElementById('bsa-weight').value);
-            const height = parseFloat(document.getElementById('bsa-height').value);
-
-            if (!weight || !height) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Mosteller formula
-            const bsa = Math.sqrt((weight * height) / 3600);
-
-            calculationResults.bsa = {
-                value: bsa.toFixed(2),
-                weight: weight,
-                height: height
-            };
-
-            document.getElementById('bsa-value').textContent = `${bsa.toFixed(2)} m²`;
-            document.getElementById('bsa-interpretation').innerHTML =
-                `Calculated using Mosteller formula. Normal adult BSA is approximately 1.7 m². Used for chemotherapy dosing and cardiac index calculations (CI = CO / BSA).`;
-            document.getElementById('bsa-result').classList.add('visible');
-        }
-
-        // QTc Calculator
-        function calculateQTc() {
+        // QTc INTERVAL
+        function calcQTc() {
             const qt = parseFloat(document.getElementById('qtc-qt').value);
-            const rr = parseFloat(document.getElementById('qtc-rr').value);
+            const hr = parseFloat(document.getElementById('qtc-hr').value);
+            const sex = document.getElementById('qtc-sex').value;
 
-            if (!qt || !rr) {
-                alert('Please fill in all fields');
-                return;
-            }
+            if (!qt || !hr) return;
 
-            // Bazett formula: QTc = QT / sqrt(RR in seconds)
-            const rrSeconds = rr / 1000;
-            const qtc = qt / Math.sqrt(rrSeconds);
+            const rr = 60000 / hr; // RR interval in ms
+            const qtc = qt / Math.sqrt(rr / 1000);
+
+            document.getElementById('qtc-value').textContent = Math.round(qtc);
 
             let interpretation = '';
-            let risk = '';
-            if (qtc > 500) {
-                interpretation = '⚠️ <strong>Severely prolonged</strong> (>500 ms) - HIGH RISK for torsades de pointes. Avoid QT-prolonging drugs.';
-                risk = 'severe';
-            } else if (qtc > 470) {
-                interpretation = '⚠️ <strong>Prolonged</strong> (>470 ms females, >450 ms males) - Increased risk for torsades. Use caution with QT-prolonging drugs.';
-                risk = 'moderate';
-            } else if (qtc >= 440) {
-                interpretation = '⚠️ <strong>Borderline prolonged</strong> (440-470 ms) - Monitor closely if using QT-prolonging medications.';
-                risk = 'mild';
+            let resultClass = 'green';
+
+            if (sex === 'male') {
+                if (qtc < 440) {
+                    interpretation = 'Normal (< 440 ms in males)';
+                    resultClass = 'green';
+                } else if (qtc < 500) {
+                    interpretation = 'Borderline prolonged (440-500 ms)';
+                    resultClass = 'yellow';
+                } else {
+                    interpretation = 'Prolonged (> 500 ms) - High risk for arrhythmia';
+                    resultClass = 'red';
+                }
+            } else if (sex === 'female') {
+                if (qtc < 460) {
+                    interpretation = 'Normal (< 460 ms in females)';
+                    resultClass = 'green';
+                } else if (qtc < 500) {
+                    interpretation = 'Borderline prolonged (460-500 ms)';
+                    resultClass = 'yellow';
+                } else {
+                    interpretation = 'Prolonged (> 500 ms) - High risk for arrhythmia';
+                    resultClass = 'red';
+                }
             } else {
-                interpretation = '✓ <strong>Normal</strong> (<440 ms) - Standard perioperative management.';
-                risk = 'normal';
+                interpretation = 'Select sex for interpretation';
             }
 
-            calculationResults.qtc = {
-                value: Math.round(qtc),
-                qt: qt,
-                rr: rr,
-                hr: Math.round(60000 / rr),
-                risk: risk
-            };
+            document.getElementById('qtc-interpretation').textContent = interpretation;
 
-            document.getElementById('qtc-value').textContent = `${Math.round(qtc)} ms`;
-            document.getElementById('qtc-interpretation').innerHTML = interpretation;
-            document.getElementById('qtc-result').classList.add('visible');
+            const result = document.getElementById('qtc-result');
+            result.className = 'calc-result ' + resultClass + ' show';
         }
 
-        // Fluids Calculator
-        function calculateFluids() {
+        // MAINTENANCE FLUIDS
+        function calcFluids() {
             const weight = parseFloat(document.getElementById('fluids-weight').value);
 
-            if (!weight) {
-                alert('Please enter weight');
-                return;
-            }
+            if (!weight) return;
 
-            // 4-2-1 rule
-            let rate = 0;
+            let rate;
             if (weight <= 10) {
                 rate = weight * 4;
             } else if (weight <= 20) {
@@ -11786,24 +12579,17 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                 rate = 60 + (weight - 20) * 1;
             }
 
-            calculationResults.fluids = {
-                value: Math.round(rate),
-                weight: weight,
-                daily: Math.round(rate * 24)
-            };
+            const daily = rate * 24;
 
-            document.getElementById('fluids-value').textContent = `${Math.round(rate)} mL/hr`;
-            document.getElementById('fluids-interpretation').innerHTML =
-                `Based on 4-2-1 rule (Holliday-Segar):<br>
-                • First 10 kg: 4 mL/kg/hr<br>
-                • Second 10 kg: 2 mL/kg/hr<br>
-                • Each additional kg: 1 mL/kg/hr<br>
-                <strong>Daily total: ${Math.round(rate * 24)} mL/day</strong>`;
-            document.getElementById('fluids-result').classList.add('visible');
+            document.getElementById('fluids-value').textContent = Math.round(rate);
+            document.getElementById('fluids-daily').textContent = Math.round(daily);
+
+            const result = document.getElementById('fluids-result');
+            result.classList.add('show');
         }
 
-        // PONV Calculator
-        function calculatePONV() {
+        // PONV RISK
+        function calcPONV() {
             const female = document.getElementById('ponv-female').checked;
             const nonsmoker = document.getElementById('ponv-nonsmoker').checked;
             const history = document.getElementById('ponv-history').checked;
@@ -11811,866 +12597,125 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
             const score = (female ? 1 : 0) + (nonsmoker ? 1 : 0) + (history ? 1 : 0) + (opioids ? 1 : 0);
 
-            let risk, percentage, recommendations;
-            switch(score) {
-                case 0:
-                    risk = 'Very Low';
-                    percentage = '10%';
-                    recommendations = 'Standard anesthetic care. Prophylaxis generally not indicated.';
-                    break;
-                case 1:
-                    risk = 'Low';
-                    percentage = '20%';
-                    recommendations = 'Consider single antiemetic (ondansetron 4 mg or dexamethasone 4-8 mg).';
-                    break;
-                case 2:
-                    risk = 'Moderate';
-                    percentage = '40%';
-                    recommendations = 'Use 2 antiemetics from different classes. Consider TIVA instead of volatile agents.';
-                    break;
-                case 3:
-                    risk = 'High';
-                    percentage = '60%';
-                    recommendations = '3+ antiemetics recommended. Strong consideration for TIVA. Minimize opioids, use multimodal analgesia.';
-                    break;
-                case 4:
-                    risk = 'Very High';
-                    percentage = '80%';
-                    recommendations = 'Maximum prophylaxis: 3-4 antiemetics, TIVA, opioid-sparing techniques, consider regional anesthesia.';
-                    break;
-            }
+            const risks = [10, 20, 40, 60, 80];
+            const risk = score === 0 ? 10 : score === 1 ? 20 : score === 2 ? 40 : score === 3 ? 60 : 80;
 
-            calculationResults.ponv = {
-                score: score,
-                risk: risk,
-                percentage: percentage,
-                factors: {
-                    female: female,
-                    nonsmoker: nonsmoker,
-                    history: history,
-                    opioids: opioids
-                }
-            };
+            document.getElementById('ponv-score').textContent = score;
+            document.getElementById('ponv-value').textContent = risk;
 
-            document.getElementById('ponv-value').textContent = `${score}/4 - ${risk} Risk (${percentage})`;
-            document.getElementById('ponv-interpretation').innerHTML = `<strong>Recommendations:</strong><br>${recommendations}`;
-            document.getElementById('ponv-result').classList.add('visible');
+            const result = document.getElementById('ponv-result');
+            result.className = 'calc-result show';
+            if (risk <= 20) result.classList.add('green');
+            else if (risk <= 60) result.classList.add('yellow');
+            else result.classList.add('red');
         }
 
-        // Fluid Deficit Calculator
-        function calculateFluidDeficit() {
-            const weight = parseFloat(document.getElementById('fd-weight').value);
-            const dehydration = parseFloat(document.getElementById('fd-dehydration').value);
-
-            if (!weight || !dehydration) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            const deficit = weight * (dehydration / 100) * 1000; // mL
-            const first8hr = deficit / 2;
-            const next16hr = deficit / 2;
-            const hourlyFirst8 = first8hr / 8;
-            const hourlyNext16 = next16hr / 16;
-
-            calculationResults['fluid-deficit'] = {
-                value: Math.round(deficit),
-                weight: weight,
-                dehydration: dehydration,
-                first8hr: Math.round(first8hr),
-                next16hr: Math.round(next16hr)
-            };
-
-            document.getElementById('fd-value').textContent = `${Math.round(deficit)} mL`;
-            document.getElementById('fd-interpretation').innerHTML = `<strong>Replacement Strategy:</strong><br>` +
-                `• First 8 hours: ${Math.round(first8hr)} mL (${Math.round(hourlyFirst8)} mL/hr)<br>` +
-                `• Next 16 hours: ${Math.round(next16hr)} mL (${Math.round(hourlyNext16)} mL/hr)<br>` +
-                `• Total fluid deficit: ${Math.round(deficit)} mL over 24 hours<br>` +
-                `• Replace with isotonic crystalloid (LR or NS) + ongoing maintenance fluids`;
-            document.getElementById('fd-result').classList.add('visible');
-        }
-
-        // Defibrillation Calculator
-        document.getElementById('defib-age').addEventListener('change', function() {
-            if (this.value === 'peds') {
-                document.getElementById('defib-weight-row').style.display = 'block';
-            } else {
-                document.getElementById('defib-weight-row').style.display = 'none';
-            }
-        });
-
-        function calculateDefib() {
-            const type = document.getElementById('defib-type').value;
-            const age = document.getElementById('defib-age').value;
-            const weight = parseFloat(document.getElementById('defib-weight').value);
-
-            if (!type || !age) {
-                alert('Please select procedure type and patient age');
-                return;
-            }
-
-            if (age === 'peds' && !weight) {
-                alert('Please enter weight for pediatric patient');
-                return;
-            }
-
-            let energy, interpretation;
-
-            if (type === 'defib') {
-                if (age === 'adult') {
-                    energy = '200 J (biphasic), 360 J (monophasic)';
-                    interpretation = '<strong>Defibrillation Energy (Adult):</strong><br>' +
-                        '• Initial: 200 J (biphasic) or 360 J (monophasic)<br>' +
-                        '• Subsequent: Same or higher (maximum 200 J biphasic, 360 J monophasic)<br>' +
-                        '• Unsynchronized shock for VF/pulseless VT';
-                } else {
-                    const dose = 2 * weight; // 2 J/kg initial
-                    const doseMax = 4 * weight; // 4 J/kg subsequent
-                    energy = `${dose} J (initial, 2 J/kg)`;
-                    interpretation = `<strong>Defibrillation Energy (Pediatric):</strong><br>` +
-                        `• Initial: ${dose} J (2 J/kg)<br>` +
-                        `• Subsequent: ${Math.min(doseMax, 200)} J (4 J/kg, max 200 J)<br>` +
-                        `• Unsynchronized shock for VF/pulseless VT`;
-                }
-            } else { // cardioversion
-                if (age === 'adult') {
-                    energy = '50-100 J (initial), 200 J (subsequent)';
-                    interpretation = '<strong>Synchronized Cardioversion (Adult):</strong><br>' +
-                        '• A-fib/A-flutter: 120-200 J (biphasic)<br>' +
-                        '• SVT/V-tach (with pulse): 50-100 J initially<br>' +
-                        '• Synchronized to R wave (avoid T wave)';
-                } else {
-                    const dose = 0.5 * weight; // 0.5 J/kg initial
-                    const doseMax = 1 * weight; // 1 J/kg subsequent
-                    energy = `${dose} J (initial, 0.5 J/kg)`;
-                    interpretation = `<strong>Synchronized Cardioversion (Pediatric):</strong><br>` +
-                        `• Initial: ${dose} J (0.5 J/kg)<br>` +
-                        `• Subsequent: ${Math.min(doseMax, 100)} J (1 J/kg, max 100 J)<br>` +
-                        `• Synchronized to R wave`;
-                }
-            }
-
-            calculationResults.defib = {
-                value: energy,
-                type: type,
-                age: age,
-                weight: weight
-            };
-
-            document.getElementById('defib-value').textContent = energy;
-            document.getElementById('defib-interpretation').innerHTML = interpretation;
-            document.getElementById('defib-result').classList.add('visible');
-        }
-
-        // Surgical Apgar Score Calculator
-        function calculateSAS() {
-            const ebl = parseFloat(document.getElementById('sas-ebl').value);
-            const hr = parseFloat(document.getElementById('sas-hr').value);
-            const map = parseFloat(document.getElementById('sas-map').value);
-
-            if (!ebl && ebl !== 0 || !hr || !map) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            let eblPoints, hrPoints, mapPoints;
-
-            // EBL points
-            if (ebl <= 100) eblPoints = 4;
-            else if (ebl <= 600) eblPoints = 3;
-            else if (ebl <= 1000) eblPoints = 2;
-            else if (ebl <= 1500) eblPoints = 1;
-            else eblPoints = 0;
-
-            // HR points
-            if (hr >= 85) hrPoints = 3;
-            else if (hr >= 76) hrPoints = 2;
-            else if (hr >= 66) hrPoints = 1;
-            else if (hr >= 56) hrPoints = 0;
-            else hrPoints = 0;
-
-            // MAP points
-            if (map >= 85) mapPoints = 3;
-            else if (map >= 76) mapPoints = 2;
-            else if (map >= 66) mapPoints = 1;
-            else if (map >= 50) mapPoints = 0;
-            else mapPoints = 0;
-
-            const total = eblPoints + hrPoints + mapPoints;
-
-            let risk, riskText;
-            if (total >= 9) {
-                risk = 'Low Risk';
-                riskText = 'Risk of major complication: 3-5% | Mortality: <1%';
-            } else if (total >= 7) {
-                risk = 'Intermediate Risk';
-                riskText = 'Risk of major complication: 10-15% | Mortality: 1-4%';
-            } else if (total >= 5) {
-                risk = 'High Risk';
-                riskText = 'Risk of major complication: 20-30% | Mortality: 5-10%';
-            } else {
-                risk = 'Very High Risk';
-                riskText = 'Risk of major complication: >40% | Mortality: >15%';
-            }
-
-            calculationResults.sas = {
-                value: total,
-                ebl: ebl,
-                hr: hr,
-                map: map,
-                risk: risk
-            };
-
-            document.getElementById('sas-value').textContent = `${total}/10 - ${risk}`;
-            document.getElementById('sas-interpretation').innerHTML = `<strong>Score Breakdown:</strong><br>` +
-                `• EBL: ${eblPoints} points (${ebl} mL)<br>` +
-                `• Lowest HR: ${hrPoints} points (${hr} bpm)<br>` +
-                `• Lowest MAP: ${mapPoints} points (${map} mmHg)<br><br>` +
-                `<strong>Risk Assessment:</strong><br>${riskText}<br><br>` +
-                `Consider closer post-op monitoring for scores <7.`;
-            document.getElementById('sas-result').classList.add('visible');
-        }
-
-        // Opioid Conversion Calculator
-        function calculateOpioid() {
-            const from = document.getElementById('opioid-from').value;
-            const dose = parseFloat(document.getElementById('opioid-dose').value);
-            const to = document.getElementById('opioid-to').value;
-
-            if (!from || !dose || !to) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Morphine equivalents (relative to morphine IV = 1)
-            const equivalents = {
-                'morphine-iv': 1,
-                'morphine-po': 3,
-                'fentanyl-iv': 0.01,
-                'hydromorphone-iv': 0.2,
-                'hydromorphone-po': 0.8,
-                'oxycodone-po': 2,
-                'hydrocodone-po': 2.5
-            };
-
-            const morphineEquivalent = dose * equivalents[from];
-            const convertedDose = morphineEquivalent / equivalents[to];
-            const reducedDose = convertedDose * 0.75; // 25% reduction for cross-tolerance
-
-            calculationResults.opioid = {
-                value: Math.round(reducedDose * 10) / 10,
-                from: from,
-                dose: dose,
-                to: to,
-                fullDose: Math.round(convertedDose * 10) / 10
-            };
-
-            const fromName = from.replace('-iv', ' IV').replace('-po', ' PO').replace(/^./, m => m.toUpperCase());
-            const toName = to.replace('-iv', ' IV').replace('-po', ' PO').replace(/^./, m => m.toUpperCase());
-
-            document.getElementById('opioid-value').textContent = `${Math.round(reducedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'}`;
-            document.getElementById('opioid-interpretation').innerHTML = `<strong>Conversion:</strong><br>` +
-                `• From: ${dose} ${from.includes('fentanyl') ? 'mcg' : 'mg'} ${fromName}<br>` +
-                `• Equianalgesic dose: ${Math.round(convertedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'} ${toName}<br>` +
-                `• <strong>Recommended starting dose: ${Math.round(reducedDose * 10) / 10} ${to.includes('fentanyl') ? 'mcg' : 'mg'}</strong> (25% reduction for incomplete cross-tolerance)<br><br>` +
-                `<em>Warning: This is a general guide. Individual patient factors, tolerance, and clinical context must be considered. Titrate to effect.</em>`;
-            document.getElementById('opioid-result').classList.add('visible');
-        }
-
-        // Local Anesthetic Toxicity Dose Calculator
-        function calculateLAST() {
-            const weight = parseFloat(document.getElementById('last-weight').value);
-            const agent = document.getElementById('last-agent').value;
-            const concentration = parseFloat(document.getElementById('last-concentration').value);
-
-            if (!weight || !agent || !concentration) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            // Max doses in mg/kg
-            const maxDoses = {
-                'lidocaine': 4.5,
-                'lidocaine-epi': 7,
-                'bupivacaine': 2.5,
-                'ropivacaine': 3,
-                'chloroprocaine': 11
-            };
-
-            const maxMg = maxDoses[agent] * weight;
-            const maxVolume = maxMg / (concentration * 10); // concentration % to mg/mL
-
-            const agentName = agent.replace('-epi', ' with epinephrine').replace(/^./, m => m.toUpperCase());
-
-            calculationResults.last = {
-                value: Math.round(maxMg),
-                weight: weight,
-                agent: agentName,
-                concentration: concentration,
-                maxVolume: Math.round(maxVolume * 10) / 10
-            };
-
-            document.getElementById('last-value').textContent = `${Math.round(maxMg)} mg (${Math.round(maxVolume * 10) / 10} mL)`;
-            document.getElementById('last-interpretation').innerHTML = `<strong>Maximum Safe Dose:</strong><br>` +
-                `• Agent: ${agentName}<br>` +
-                `• Patient weight: ${weight} kg<br>` +
-                `• Concentration: ${concentration}%<br>` +
-                `• Max dose: ${maxDoses[agent]} mg/kg = ${Math.round(maxMg)} mg<br>` +
-                `• Max volume at ${concentration}%: ${Math.round(maxVolume * 10) / 10} mL<br><br>` +
-                `<strong>LAST Prevention:</strong> Use lowest effective dose, aspirate before injection, fractionate doses, use ultrasound guidance.<br>` +
-                `<strong>LAST Treatment:</strong> Stop injection, airway management, IV lipid emulsion 20% (1.5 mL/kg bolus), ACLS, avoid propofol.`;
-            document.getElementById('last-result').classList.add('visible');
-        }
-
-        // RCRI Calculator
-        function calculateRCRI() {
-            const highrisk = document.getElementById('rcri-highrisk').checked;
+        // RCRI
+        function calcRCRI() {
+            const surgery = document.getElementById('rcri-surgery').checked;
             const ihd = document.getElementById('rcri-ihd').checked;
             const chf = document.getElementById('rcri-chf').checked;
             const cvd = document.getElementById('rcri-cvd').checked;
             const dm = document.getElementById('rcri-dm').checked;
-            const renal = document.getElementById('rcri-renal').checked;
+            const cr = document.getElementById('rcri-cr').checked;
 
-            const score = (highrisk ? 1 : 0) + (ihd ? 1 : 0) + (chf ? 1 : 0) + (cvd ? 1 : 0) + (dm ? 1 : 0) + (renal ? 1 : 0);
+            const score = (surgery ? 1 : 0) + (ihd ? 1 : 0) + (chf ? 1 : 0) + (cvd ? 1 : 0) + (dm ? 1 : 0) + (cr ? 1 : 0);
 
-            let risk, percentage;
-            if (score === 0) {
-                risk = 'Low';
-                percentage = '0.4%';
-            } else if (score === 1) {
-                risk = 'Low-Moderate';
-                percentage = '0.9%';
-            } else if (score === 2) {
-                risk = 'Moderate';
-                percentage = '6.6%';
-            } else {
-                risk = 'High';
-                percentage = '>11%';
-            }
+            const risks = [0.4, 1.0, 2.4, 5.4, 5.4, 5.4, 5.4];
+            const risk = risks[score];
 
-            calculationResults.rcri = {
-                value: score,
-                risk: risk,
-                percentage: percentage
-            };
+            document.getElementById('rcri-score').textContent = score;
+            document.getElementById('rcri-value').textContent = risk.toFixed(1);
 
-            document.getElementById('rcri-value').textContent = `${score}/6 - ${risk} Risk`;
-            document.getElementById('rcri-interpretation').innerHTML = `<strong>Risk of Major Cardiac Event:</strong><br>` +
-                `• Score: ${score} points<br>` +
-                `• Risk category: ${risk}<br>` +
-                `• Predicted risk: ${percentage}<br><br>` +
-                `<strong>Recommendations:</strong><br>` +
-                (score >= 2 ? '• Consider preoperative cardiology consultation<br>• Consider β-blocker therapy<br>• Optimize medical management' :
-                 score === 1 ? '• Perioperative medical optimization<br>• Continue home cardiac medications' :
-                 '• Routine perioperative care');
-            document.getElementById('rcri-result').classList.add('visible');
+            const result = document.getElementById('rcri-result');
+            result.className = 'calc-result show';
+            if (score === 0) result.classList.add('green');
+            else if (score <= 2) result.classList.add('yellow');
+            else result.classList.add('red');
         }
 
-        // STOP-BANG Calculator
-        function calculateStopBang() {
-            const snore = document.getElementById('sb-snore').checked;
-            const tired = document.getElementById('sb-tired').checked;
-            const observed = document.getElementById('sb-observed').checked;
-            const pressure = document.getElementById('sb-pressure').checked;
-            const bmi = document.getElementById('sb-bmi').checked;
-            const age = document.getElementById('sb-age').checked;
-            const neck = document.getElementById('sb-neck').checked;
-            const gender = document.getElementById('sb-gender').checked;
+        // ASA PHYSICAL STATUS
+        function calcASA() {
+            const selected = document.querySelector('input[name="asa"]:checked');
+            if (!selected) return;
 
-            const score = (snore ? 1 : 0) + (tired ? 1 : 0) + (observed ? 1 : 0) + (pressure ? 1 : 0) +
-                          (bmi ? 1 : 0) + (age ? 1 : 0) + (neck ? 1 : 0) + (gender ? 1 : 0);
-
-            let risk, osaSeverity;
-            if (score <= 2) {
-                risk = 'Low';
-                osaSeverity = 'Low probability of moderate-severe OSA';
-            } else if (score <= 4) {
-                risk = 'Intermediate';
-                osaSeverity = 'Intermediate probability of moderate-severe OSA';
-            } else {
-                risk = 'High';
-                osaSeverity = 'High probability of moderate-severe OSA';
-            }
-
-            calculationResults.stopbang = {
-                value: score,
-                risk: risk
+            const value = selected.value;
+            const descriptions = {
+                '1': 'Healthy patient with no systemic disease',
+                '2': 'Mild systemic disease without functional limitations',
+                '3': 'Severe systemic disease with definite functional limitations',
+                '4': 'Severe systemic disease that is constant threat to life',
+                '5': 'Moribund patient not expected to survive without operation',
+                '6': 'Brain-dead patient whose organs are being removed for donation'
             };
 
-            document.getElementById('stopbang-value').textContent = `${score}/8 - ${risk} Risk`;
-            document.getElementById('stopbang-interpretation').innerHTML = `<strong>OSA Screening Result:</strong><br>` +
-                `• Score: ${score} points<br>` +
-                `• Risk category: ${risk}<br>` +
-                `• ${osaSeverity}<br><br>` +
-                `<strong>Perioperative Considerations:</strong><br>` +
-                (score >= 5 ? '• High risk - consider sleep study<br>• Avoid opioids/sedatives when possible<br>• Post-op monitoring with continuous pulse oximetry<br>• Consider regional anesthesia' :
-                 score >= 3 ? '• Moderate risk - consider precautions<br>• Minimize sedatives/opioids<br>• Extended PACU monitoring' :
-                 '• Standard perioperative care');
-            document.getElementById('stopbang-result').classList.add('visible');
+            document.getElementById('asa-value').textContent = 'ASA ' + value;
+            document.getElementById('asa-desc').textContent = descriptions[value];
+
+            const result = document.getElementById('asa-result');
+            result.style.display = 'block';
+            result.className = 'calc-result show';
+            if (value <= 2) result.classList.add('green');
+            else if (value <= 3) result.classList.add('yellow');
+            else result.classList.add('red');
         }
 
-        // Airway Assessment Calculator
-        function calculateAirway() {
-            const mallampati = parseInt(document.getElementById('airway-mallampati').value);
-            const tmd = document.getElementById('airway-tmd').value;
-            const neck = document.getElementById('airway-neck').value;
-            const mouth = document.getElementById('airway-mouth').value;
+        // OPIOID CONVERSION
+        function calcOpioid() {
+            const type = parseFloat(document.getElementById('opioid-type').value);
+            const dose = parseFloat(document.getElementById('opioid-dose').value);
 
-            if (!mallampati || !tmd || !neck || !mouth) {
-                alert('Please fill in all fields');
-                return;
-            }
+            if (!type || !dose) return;
 
-            let difficultyScore = 0;
+            const mme = dose / type;
 
-            // Mallampati contribution
-            if (mallampati >= 3) difficultyScore += 2;
-            else if (mallampati === 2) difficultyScore += 1;
+            document.getElementById('opioid-value').textContent = mme.toFixed(1);
 
-            // TMD contribution
-            if (tmd === 'poor') difficultyScore += 2;
-            else if (tmd === 'borderline') difficultyScore += 1;
-
-            // Neck ROM contribution
-            if (neck === 'reduced') difficultyScore += 1;
-
-            // Mouth opening contribution
-            if (mouth === 'poor') difficultyScore += 2;
-
-            let difficulty, recommendations;
-            if (difficultyScore === 0) {
-                difficulty = 'Easy Airway (Predicted)';
-                recommendations = 'Standard intubation equipment and approach expected to be successful.';
-            } else if (difficultyScore <= 2) {
-                difficulty = 'Potentially Difficult';
-                recommendations = 'Have backup equipment available (bougie, video laryngoscope). Consider awake look with sedation.';
-            } else if (difficultyScore <= 4) {
-                difficulty = 'Likely Difficult';
-                recommendations = 'Primary plan: Video laryngoscope. Backup: LMA, bougie. Prepare difficult airway cart. Consider awake fiberoptic intubation.';
-            } else {
-                difficulty = 'Very Difficult Airway';
-                recommendations = 'Strong consideration for awake fiberoptic intubation. Difficult airway cart at bedside. Consider ENT backup. Inform patient of risks.';
-            }
-
-            calculationResults.airway = {
-                value: difficultyScore,
-                difficulty: difficulty,
-                mallampati: mallampati,
-                tmd: tmd,
-                neck: neck,
-                mouth: mouth
-            };
-
-            document.getElementById('airway-value').textContent = difficulty;
-            document.getElementById('airway-interpretation').innerHTML = `<strong>Assessment Details:</strong><br>` +
-                `• Mallampati: Class ${mallampati}<br>` +
-                `• Thyromental distance: ${tmd}<br>` +
-                `• Neck ROM: ${neck}<br>` +
-                `• Mouth opening: ${mouth}<br>` +
-                `• Difficulty score: ${difficultyScore}/7<br><br>` +
-                `<strong>Recommendations:</strong><br>${recommendations}`;
-            document.getElementById('airway-result').classList.add('visible');
+            const result = document.getElementById('opioid-result');
+            result.classList.add('show');
         }
 
-        // MAC Calculator
-        function calculateMAC() {
-            const agent = document.getElementById('mac-agent').value;
-            const age = parseFloat(document.getElementById('mac-age').value);
+        // LOCAL ANESTHETIC MAX DOSE
+        function calcLA() {
+            const type = document.getElementById('la-type').value;
+            const weight = parseFloat(document.getElementById('la-weight').value);
 
-            if (!agent || !age) {
-                alert('Please fill in all fields');
-                return;
-            }
+            if (!type || !weight) return;
 
-            // MAC at age 40
-            const macAt40 = {
-                'sevoflurane': 2.0,
-                'desflurane': 6.0,
-                'isoflurane': 1.15
+            const maxDoses = {
+                'lidocaine': 5,
+                'lidocaine-epi': 7,
+                'bupivacaine': 2.5,
+                'bupivacaine-epi': 3,
+                'ropivacaine': 3
             };
 
-            // MAC decreases ~6% per decade after 40
-            const ageDiff = age - 40;
-            const macMultiplier = 1 - (ageDiff / 10) * 0.06;
-            const mac = macAt40[agent] * macMultiplier;
-            const macAwake = mac * 0.5; // MAC-awake is approximately 0.5 MAC
-
-            const agentName = agent.charAt(0).toUpperCase() + agent.slice(1);
-
-            calculationResults.mac = {
-                value: Math.round(mac * 100) / 100,
-                agent: agentName,
-                age: age,
-                macAwake: Math.round(macAwake * 100) / 100
+            const concentrations = {
+                'lidocaine': '1% = 10 mg/mL, 2% = 20 mg/mL',
+                'lidocaine-epi': '1% = 10 mg/mL, 2% = 20 mg/mL',
+                'bupivacaine': '0.25% = 2.5 mg/mL, 0.5% = 5 mg/mL',
+                'bupivacaine-epi': '0.25% = 2.5 mg/mL, 0.5% = 5 mg/mL',
+                'ropivacaine': '0.2% = 2 mg/mL, 0.5% = 5 mg/mL'
             };
 
-            document.getElementById('mac-value').textContent = `${Math.round(mac * 100) / 100}%`;
-            document.getElementById('mac-interpretation').innerHTML = `<strong>Age-Adjusted MAC Values:</strong><br>` +
-                `• Agent: ${agentName}<br>` +
-                `• Patient age: ${age} years<br>` +
-                `• MAC: ${Math.round(mac * 100) / 100}%<br>` +
-                `• MAC-awake: ${Math.round(macAwake * 100) / 100}%<br>` +
-                `• MAC-BAR (blocks adrenergic response): ${Math.round(mac * 1.3 * 100) / 100}%<br><br>` +
-                `<em>Note: MAC decreases ~6% per decade after age 40. These are population averages; individual requirements vary.</em>`;
-            document.getElementById('mac-result').classList.add('visible');
+            const maxDose = weight * maxDoses[type];
+
+            document.getElementById('la-value').textContent = Math.round(maxDose);
+            document.getElementById('la-volume').textContent = 'Common concentrations: ' + concentrations[type];
+
+            const result = document.getElementById('la-result');
+            result.classList.add('show');
         }
 
-        // Propofol TCI Calculator
-        document.getElementById('tci-model').addEventListener('change', function() {
-            if (this.value === 'schnider') {
-                document.getElementById('tci-schnider-params').style.display = 'grid';
-            } else {
-                document.getElementById('tci-schnider-params').style.display = 'none';
-            }
+        // Initialize PONV result on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            calcPONV();
+            calcRCRI();
         });
-
-        function calculatePropofolTCI() {
-            const model = document.getElementById('tci-model').value;
-            const target = parseFloat(document.getElementById('tci-target').value);
-            const weight = parseFloat(document.getElementById('tci-weight').value);
-            const age = parseFloat(document.getElementById('tci-age').value);
-
-            if (!model || !target || !weight || !age) {
-                alert('Please fill in required fields');
-                return;
-            }
-
-            let infusionRate, v1, k10;
-
-            if (model === 'marsh') {
-                // Simplified Marsh model
-                v1 = 0.228 * weight; // L
-                k10 = 0.119; // min^-1
-                infusionRate = target * v1 * k10 * 60 / 1000; // mg/kg/hr converted to mcg/kg/min then to mg/kg/hr
-                infusionRate = target * v1 * k10 * 60; // mg/hr
-            } else if (model === 'schnider') {
-                const height = parseFloat(document.getElementById('tci-height').value);
-                const sex = document.getElementById('tci-sex').value;
-
-                if (!height || !sex) {
-                    alert('Please enter height and sex for Schnider model');
-                    return;
-                }
-
-                // Simplified Schnider model (effect-site targeting)
-                const lbm = sex === 'male' ?
-                    1.1 * weight - 128 * (weight / height) ** 2 :
-                    1.07 * weight - 148 * (weight / height) ** 2;
-                v1 = 4.27; // L (fixed)
-                k10 = 0.443 + 0.0107 * (weight - 77) - 0.0159 * (lbm - 59) + 0.0062 * (height - 177);
-                infusionRate = target * v1 * k10 * 60; // mg/hr
-            } else { // kataria (pediatric)
-                v1 = 0.41 * weight; // L
-                k10 = 0.0678 * Math.pow(age, -0.269);
-                infusionRate = target * v1 * k10 * 60; // mg/hr
-            }
-
-            const mcgKgMin = (infusionRate * 1000) / (weight * 60);
-
-            const modelName = model.charAt(0).toUpperCase() + model.slice(1);
-            calculationResults['propofol-tci'] = {
-                value: Math.round(infusionRate),
-                model: modelName,
-                target: target,
-                weight: weight,
-                age: age
-            };
-
-            document.getElementById('tci-value').textContent = `${Math.round(mcgKgMin)} mcg/kg/min`;
-            document.getElementById('tci-interpretation').innerHTML = `<strong>TCI Parameters:</strong><br>` +
-                `• Model: ${modelName}<br>` +
-                `• Target concentration: ${target} mcg/mL<br>` +
-                `• Patient weight: ${weight} kg<br>` +
-                `• Age: ${age} years<br><br>` +
-                `<strong>Infusion Rates:</strong><br>` +
-                `• ${Math.round(mcgKgMin)} mcg/kg/min<br>` +
-                `• ${Math.round(infusionRate)} mg/hr<br>` +
-                `• ${Math.round(mcgKgMin * weight * 60 / 100)} mL/hr (at 10 mg/mL)<br><br>` +
-                `<em>Note: This is a simplified calculation. Actual TCI pumps use complex pharmacokinetic models with multiple compartments. Use for estimation only.</em>`;
-            document.getElementById('tci-result').classList.add('visible');
-        }
-
-        // Send to AI function - Now opens modal instead of redirecting
-        function sendToAI(calcType) {
-            const result = calculationResults[calcType];
-            if (!result && calcType !== 'asa') {
-                alert('Please calculate first');
-                return;
-            }
-
-            let message = '';
-
-            switch(calcType) {
-                case 'ibw':
-                    message = `Patient: ${result.sex}, ${result.height} cm tall. IBW = ${result.value} kg. What should I consider for anesthetic drug dosing?`;
-                    break;
-                case 'mabl':
-                    message = `Patient: ${result.weight} kg ${result.sex}, height ${result.height} cm. Initial Hct ${result.initialHct}%, target Hct ${result.targetHct}%. Estimated blood volume ${result.bloodVolume} mL, MABL = ${result.value} mL. What's my transfusion strategy for this case?`;
-                    break;
-                case 'bsa':
-                    message = `Patient: ${result.weight} kg, ${result.height} cm. BSA = ${result.value} m². How does this affect my anesthetic management?`;
-                    break;
-                case 'qtc':
-                    message = `Patient has QTc = ${result.value} ms (QT ${result.qt} ms, HR ${result.hr} bpm). Risk level: ${result.risk}. What anesthetic drugs should I avoid or use with caution?`;
-                    break;
-                case 'fluids':
-                    message = `Patient weighs ${result.weight} kg. Calculated maintenance fluids = ${result.value} mL/hr (${result.daily} mL/day). What should I know about perioperative fluid management?`;
-                    break;
-                case 'ponv':
-                    message = `Patient has Apfel score ${result.score}/4 (${result.risk} PONV risk, ~${result.percentage} incidence). Risk factors: ${result.factors.female ? 'female, ' : ''}${result.factors.nonsmoker ? 'non-smoker, ' : ''}${result.factors.history ? 'PONV/motion sickness history, ' : ''}${result.factors.opioids ? 'postop opioids expected' : ''}. What's my best prophylaxis strategy?`;
-                    break;
-                case 'asa':
-                    message = `Can you explain the ASA Physical Status Classification system and how it affects perioperative risk?`;
-                    break;
-                case 'fluid-deficit':
-                    message = `Patient weighs ${result.weight} kg with ${result.dehydration}% dehydration. Calculated fluid deficit = ${result.value} mL. What should I know about fluid resuscitation strategy?`;
-                    break;
-                case 'defib':
-                    message = `${result.type === 'defib' ? 'Defibrillation' : 'Cardioversion'} energy for ${result.age} patient${result.age === 'peds' ? ' (' + result.weight + ' kg)' : ''}: ${result.value}. What are the key safety considerations?`;
-                    break;
-                case 'sas':
-                    message = `Patient has Surgical Apgar Score of ${result.value}/10 (${result.risk}). EBL ${result.ebl} mL, lowest HR ${result.hr} bpm, lowest MAP ${result.map} mmHg. What does this mean for post-op management?`;
-                    break;
-                case 'opioid':
-                    message = `Converting ${result.dose} ${result.from.includes('fentanyl') ? 'mcg' : 'mg'} ${result.from} to ${result.value} ${result.to.includes('fentanyl') ? 'mcg' : 'mg'} ${result.to}. What should I know about opioid rotation and cross-tolerance?`;
-                    break;
-                case 'last':
-                    message = `Maximum safe dose of ${result.agent} at ${result.concentration}% for ${result.weight} kg patient is ${result.value} mg (${result.maxVolume} mL). What are the signs and treatment of local anesthetic systemic toxicity?`;
-                    break;
-                case 'rcri':
-                    message = `Patient has RCRI score of ${result.value}/6 (${result.risk} risk, ${result.percentage} cardiac event risk). How should I optimize this patient perioperatively?`;
-                    break;
-                case 'stopbang':
-                    message = `Patient has STOP-BANG score of ${result.value}/8 (${result.risk} OSA risk). What are the perioperative implications and management strategies?`;
-                    break;
-                case 'airway':
-                    message = `Airway assessment predicts: ${result.difficulty} (Mallampati ${result.mallampati}, TMD ${result.tmd}, neck ROM ${result.neck}, mouth ${result.mouth}). What's my airway management plan?`;
-                    break;
-                case 'mac':
-                    message = `Age-adjusted MAC for ${result.agent} in ${result.age} year old patient is ${result.value}% (MAC-awake ${result.macAwake}%). How should I titrate volatile anesthetics based on age?`;
-                    break;
-                case 'propofol-tci':
-                    message = `Propofol TCI using ${result.model} model: target ${result.target} mcg/mL for ${result.weight} kg patient, age ${result.age}. Rate = ${result.value} mg/hr. How do different TCI models compare?`;
-                    break;
-            }
-
-            // Redirect to chat page with the message
-            openAIChat(message);
-        }
-
-        // AI Chat Modal Functions
-        async function openAIChat(initialMessage) {
-            const modal = document.getElementById('aiChatModal');
-            const messagesDiv = document.getElementById('aiChatMessages');
-
-            // Clear previous messages
-            messagesDiv.innerHTML = '';
-
-            // Show modal
-            modal.classList.add('active');
-
-            // Send initial message
-            if (initialMessage) {
-                addMessageToModal(initialMessage, 'user');
-                await fetchAIResponseForModal(initialMessage);
-            }
-        }
-
-        function closeAIChat() {
-            document.getElementById('aiChatModal').classList.remove('active');
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('aiChatModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAIChat();
-            }
-        });
-
-        // Send message on Enter key
-        document.getElementById('aiChatInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendAIMessage();
-            }
-        });
-
-        function sendAIMessage() {
-            const input = document.getElementById('aiChatInput');
-            const message = input.value.trim();
-
-            if (!message) return;
-
-            // Add user message
-            addMessageToModal(message, 'user');
-            input.value = '';
-
-            // Fetch AI response
-            fetchAIResponseForModal(message);
-        }
-
-        function addMessageToModal(message, type) {
-            const messagesDiv = document.getElementById('aiChatMessages');
-            const messageEl = document.createElement('div');
-            messageEl.className = 'ai-message';
-
-            if (type === 'user') {
-                messageEl.style.background = 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)';
-                messageEl.style.borderLeft = '3px solid var(--primary-blue)';
-                messageEl.innerHTML = `<strong>You:</strong> ${escapeHtml(message)}`;
-            } else if (type === 'loading') {
-                messageEl.className = 'ai-loading';
-                messageEl.innerHTML = `
-                    Thinking...
-                    <div class="ai-loading-dots">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                `;
-                messageEl.id = 'loadingMessage';
-            } else {
-                messageEl.innerHTML = `<strong>AI:</strong> ${message}`;
-            }
-
-            messagesDiv.appendChild(messageEl);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            return messageEl;
-        }
-
-        async function fetchAIResponseForModal(userMessage) {
-            // Show loading indicator
-            addMessageToModal('', 'loading');
-
-            try {
-                // Send to homepage to prepare streaming
-                const csrfToken = document.getElementById('csrf_token').value;
-                const response = await fetch('/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-Requested-With': 'XMLHttpRequest'  // Signal this is AJAX
-                    },
-                    body: `query=${encodeURIComponent(userMessage)}&csrf_token=${encodeURIComponent(csrfToken)}&modal=1`,
-                    redirect: 'manual'  // Don't follow redirects
-                });
-
-                // Handle response - it might be JSON with request_id
-                const data = await response.json();
-
-                if (data.request_id) {
-                    // Start streaming with EventSource
-                    const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
-                    let fullResponse = '';
-                    let refs = [];
-                    let aiMessageEl = null;  // Keep reference to the AI message element
-
-                    eventSource.addEventListener('message', function(e) {
-                        const event = JSON.parse(e.data);
-
-                        if (event.type === 'content') {
-                            // Remove loading and create AI message on first content
-                            const loadingMsg = document.getElementById('loadingMessage');
-                            if (loadingMsg && fullResponse === '' && !aiMessageEl) {
-                                loadingMsg.remove();
-                                // Create AI message element directly
-                                const messagesDiv = document.getElementById('aiChatMessages');
-                                aiMessageEl = document.createElement('div');
-                                aiMessageEl.className = 'ai-message';
-                                messagesDiv.appendChild(aiMessageEl);
-                                messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                            }
-
-                            fullResponse += event.content;
-                            if (aiMessageEl) {
-                                aiMessageEl.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
-                            }
-                        } else if (event.type === 'references') {
-                            refs = event.references;
-                        } else if (event.type === 'done') {
-                            eventSource.close();
-
-                            // Add references if any
-                            if (refs && refs.length > 0 && aiMessageEl) {
-                                let refsHTML = '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"><strong>References:</strong><div>';
-                                refs.forEach((ref, index) => {
-                                    refsHTML += `<div style="margin: 8px 0; font-size: 13px;"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank" style="color: var(--primary-blue);">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
-                                });
-                                refsHTML += '</div></div>';
-                                aiMessageEl.innerHTML += refsHTML;
-                            }
-                        } else if (event.type === 'error') {
-                            console.error('Stream error:', event.message);
-                            const loadingMsg = document.getElementById('loadingMessage');
-                            if (loadingMsg) loadingMsg.remove();
-                            addMessageToModal(`Error: ${event.message}`, 'ai');
-                            eventSource.close();
-                        }
-                    });
-
-                    eventSource.addEventListener('error', function() {
-                        console.error('EventSource connection error');
-                        const loadingMsg = document.getElementById('loadingMessage');
-                        if (loadingMsg) loadingMsg.remove();
-                        addMessageToModal('Connection error. Please try again.', 'ai');
-                        eventSource.close();
-                    });
-                } else {
-                    throw new Error('No request_id received');
-                }
-
-            } catch (error) {
-                console.error('Error:', error);
-                const loadingMsg = document.getElementById('loadingMessage');
-                if (loadingMsg) loadingMsg.remove();
-                addMessageToModal('Sorry, there was an error. Please try again.', 'ai');
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
     </script>
-
-    <!-- Glassmorphism Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
-                </div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-            </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </div>
-    </footer>
-        </main>
-    </div>
 </body>
 </html>
 """
-
 HYPOTENSION_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
