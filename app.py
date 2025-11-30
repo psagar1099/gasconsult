@@ -3497,7 +3497,176 @@ HTML = """<!DOCTYPE html>
                 padding: 24px 32px;
             }
         }
+
+        /* Markdown Content Styling */
+        .message-content {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-800);
+        }
+
+        .message-content h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin: 24px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .message-content h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 20px 0 12px 0;
+        }
+
+        .message-content h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 16px 0 10px 0;
+        }
+
+        .message-content h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 14px 0 8px 0;
+        }
+
+        .message-content p {
+            margin: 12px 0;
+            line-height: 1.7;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .message-content li {
+            margin: 6px 0;
+            line-height: 1.6;
+        }
+
+        .message-content ul li {
+            list-style-type: disc;
+        }
+
+        .message-content ol li {
+            list-style-type: decimal;
+        }
+
+        .message-content ul ul,
+        .message-content ol ul,
+        .message-content ul ol,
+        .message-content ol ol {
+            margin: 4px 0;
+        }
+
+        .message-content strong {
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .message-content em {
+            font-style: italic;
+        }
+
+        .message-content code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            color: #E11D48;
+        }
+
+        .message-content pre {
+            background: var(--gray-900);
+            color: var(--gray-50);
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .message-content pre code {
+            background: transparent;
+            padding: 0;
+            color: var(--gray-50);
+            border-radius: 0;
+        }
+
+        .message-content blockquote {
+            border-left: 4px solid var(--blue-500);
+            padding-left: 16px;
+            margin: 16px 0;
+            color: var(--gray-700);
+            font-style: italic;
+        }
+
+        .message-content hr {
+            border: none;
+            border-top: 1px solid var(--gray-200);
+            margin: 24px 0;
+        }
+
+        .message-content a {
+            color: var(--blue-600);
+            text-decoration: none;
+            border-bottom: 1px solid var(--blue-200);
+            transition: all 0.2s ease;
+        }
+
+        .message-content a:hover {
+            color: var(--blue-700);
+            border-bottom-color: var(--blue-500);
+        }
+
+        .message-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+
+        .message-content th,
+        .message-content td {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid var(--gray-200);
+        }
+
+        .message-content th {
+            background: var(--gray-50);
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .message-content tr:nth-child(even) {
+            background: var(--gray-50);
+        }
+
+        /* First paragraph no top margin */
+        .message-content > p:first-child,
+        .message-content > h1:first-child,
+        .message-content > h2:first-child,
+        .message-content > h3:first-child {
+            margin-top: 0;
+        }
+
+        /* Last element no bottom margin */
+        .message-content > *:last-child {
+            margin-bottom: 0;
+        }
+
     </style>
+
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
 </head>
 <body>
     <div class="bg-canvas">
@@ -3819,6 +3988,7 @@ HTML = """<!DOCTYPE html>
             console.log('[SSE] Starting stream for request_id:', requestId);
 
             const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
+            let accumulatedMarkdown = ''; // Accumulate markdown during streaming
 
             eventSource.addEventListener('message', function(e) {
                 try {
@@ -3827,10 +3997,17 @@ HTML = """<!DOCTYPE html>
                     if (event.type === 'content') {
                         // Stream content chunks
                         if (event.data) {
-                            streamingContent.innerHTML += event.data;
+                            accumulatedMarkdown += event.data;
+                            // Show raw markdown during streaming for instant feedback
+                            streamingContent.textContent = accumulatedMarkdown;
                             scrollToBottom();
                         }
                     } else if (event.type === 'references') {
+                        // Parse accumulated markdown to HTML now that streaming is complete
+                        if (accumulatedMarkdown && typeof marked !== 'undefined') {
+                            streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
+                        }
+
                         // Display references
                         if (event.data && event.data.length > 0) {
                             console.log('[SSE] Received', event.data.length, 'references');
@@ -3902,6 +4079,22 @@ HTML = """<!DOCTYPE html>
             setTimeout(scrollToBottom, 100);
         })();
         {% endif %}
+
+        // Parse markdown in existing messages on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof marked !== 'undefined') {
+                // Find all message-content divs that contain markdown
+                const messageContents = document.querySelectorAll('.ai-message .message-content');
+                messageContents.forEach(function(element) {
+                    // Get the text content (markdown)
+                    const markdownText = element.textContent;
+                    // Parse and replace with HTML
+                    if (markdownText && markdownText.trim()) {
+                        element.innerHTML = marked.parse(markdownText);
+                    }
+                });
+            }
+        });
 
         // Auto-scroll to bottom on page load (for chat view)
         {% if messages and messages|length > 0 %}
