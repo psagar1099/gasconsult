@@ -3291,6 +3291,77 @@ HTML = """<!DOCTYPE html>
             border: 1px solid #FECACA;
         }
 
+        /* Evidence Quality Badge - Sleek Modern Design */
+        .evidence-quality-badge {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            border: 1px solid rgba(229, 231, 235, 0.8);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+        }
+
+        .evidence-quality-badge:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .confidence-level {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .confidence-level strong {
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .confidence-level.high {
+            background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+            color: #047857;
+            border: 1.5px solid #10B981;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.1);
+        }
+
+        .confidence-level.moderate {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+            color: #B45309;
+            border: 1.5px solid #F59E0B;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .confidence-level.low {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            color: #B91C1C;
+            border: 1.5px solid #EF4444;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);
+        }
+
+        .evidence-details {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.6;
+            padding: 4px 0;
+            font-weight: 500;
+        }
+
+        .evidence-details::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 3px;
+            background: #9CA3AF;
+            border-radius: 50%;
+            margin: 0 8px 2px 0;
+        }
+
         .references-section {
             margin-top: 16px;
             padding-top: 16px;
@@ -3998,13 +4069,18 @@ HTML = """<!DOCTYPE html>
                         // Stream content chunks
                         if (event.data) {
                             accumulatedMarkdown += event.data;
-                            // Show raw markdown during streaming for instant feedback
-                            streamingContent.textContent = accumulatedMarkdown;
+                            // Parse and show formatted markdown in real-time
+                            if (typeof marked !== 'undefined') {
+                                streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
+                            } else {
+                                streamingContent.textContent = accumulatedMarkdown;
+                            }
                             scrollToBottom();
                         }
                     } else if (event.type === 'references') {
-                        // Parse accumulated markdown to HTML now that streaming is complete
-                        if (accumulatedMarkdown && typeof marked !== 'undefined') {
+                        // Markdown already parsed in real-time, no need to parse again
+                        // (keeping this for backwards compatibility if needed)
+                        if (!streamingContent.innerHTML && accumulatedMarkdown && typeof marked !== 'undefined') {
                             streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
                         }
 
@@ -12648,37 +12724,41 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     const eventSource = new EventSource(`/stream?request_id=${data.request_id}`);
                     let fullResponse = '';
                     let refs = [];
+                    let aiMessageEl = null;  // Keep reference to the AI message element
 
                     eventSource.addEventListener('message', function(e) {
                         const event = JSON.parse(e.data);
 
                         if (event.type === 'content') {
-                            // Remove loading on first content
+                            // Remove loading and create AI message on first content
                             const loadingMsg = document.getElementById('loadingMessage');
-                            if (loadingMsg && fullResponse === '') {
+                            if (loadingMsg && fullResponse === '' && !aiMessageEl) {
                                 loadingMsg.remove();
-                                addMessageToModal('', 'ai');  // Add empty AI message
+                                // Create AI message element directly
+                                const messagesDiv = document.getElementById('aiChatMessages');
+                                aiMessageEl = document.createElement('div');
+                                aiMessageEl.className = 'ai-message';
+                                messagesDiv.appendChild(aiMessageEl);
+                                messagesDiv.scrollTop = messagesDiv.scrollHeight;
                             }
 
                             fullResponse += event.content;
-                            const messages = document.querySelectorAll('.ai-message');
-                            const lastMsg = messages[messages.length - 1];
-                            lastMsg.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                            if (aiMessageEl) {
+                                aiMessageEl.innerHTML = `<strong>AI:</strong> ${fullResponse}`;
+                            }
                         } else if (event.type === 'references') {
                             refs = event.references;
                         } else if (event.type === 'done') {
                             eventSource.close();
 
                             // Add references if any
-                            if (refs && refs.length > 0) {
-                                const messages = document.querySelectorAll('.ai-message');
-                                const lastMsg = messages[messages.length - 1];
+                            if (refs && refs.length > 0 && aiMessageEl) {
                                 let refsHTML = '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);"><strong>References:</strong><div>';
                                 refs.forEach((ref, index) => {
                                     refsHTML += `<div style="margin: 8px 0; font-size: 13px;"><a href="https://pubmed.ncbi.nlm.nih.gov/${ref.pmid}/" target="_blank" style="color: var(--primary-blue);">[${index + 1}] ${ref.title} (${ref.year})</a></div>`;
                                 });
                                 refsHTML += '</div></div>';
-                                lastMsg.innerHTML += refsHTML;
+                                aiMessageEl.innerHTML += refsHTML;
                             }
                         } else if (event.type === 'error') {
                             console.error('Stream error:', event.message);
