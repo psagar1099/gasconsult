@@ -3753,7 +3753,7 @@ HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -3764,7 +3764,7 @@ HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/?clear=1" class="nav-link active">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
@@ -3794,6 +3794,7 @@ HTML = """<!DOCTYPE html>
                 {% endif %}
 
                 {% for message in messages %}
+                    {% if message.content and message.content.strip() %}
                     {% if message.role == 'user' %}
                     <div class="message user-message">
                         <div class="message-bubble">{{ message.content }}</div>
@@ -3853,6 +3854,7 @@ HTML = """<!DOCTYPE html>
                             {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
 
@@ -6033,7 +6035,7 @@ TERMS_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service - gasconsult.ai</title>
+    <title>Terms of Service — gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
@@ -6301,339 +6303,103 @@ TERMS_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .hero {
-            padding: 120px 20px 60px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-            opacity: 0;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-500);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .badge-dot::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: var(--blue-400);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .hero-title {
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
-            opacity: 0;
-        }
-
-        .hero-title .gradient { color: var(--blue-600); }
-
-        .hero-subtitle {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--gray-500);
-            max-width: 560px;
-            margin: 0 auto 40px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-            opacity: 0;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-container {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-            opacity: 0;
-        }
-
-        .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
-        }
-
-        .chat-inner {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 6px;
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        .chat-input {
+        .main-content {
             flex: 1;
-            border: none;
-            outline: none;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: transparent;
-            resize: none;
-            min-height: 52px;
-            max-height: 150px;
-            line-height: 1.5;
-        }
-
-        .chat-input::placeholder { color: var(--gray-400); }
-
-        .chat-send {
-            width: 48px;
-            height: 48px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 12px;
-            color: var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-            flex-shrink: 0;
-            margin: 6px;
-        }
-
-        .chat-send:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-        }
-
-        .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
-
-        .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 16px 8px 6px;
-        }
-
-        .hint-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 10px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-        }
-
-        .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
-        .hint-chip:hover svg { opacity: 1; color: var(--blue-500); }
-
-        .features { padding: 60px 20px 80px; }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .features-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
-
-        .features-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 12px;
-        }
-
-        .features-subtitle {
-            font-size: 16px;
-            color: var(--gray-500);
-            max-width: 480px;
+            padding: 100px 20px 40px;
+            max-width: 900px;
             margin: 0 auto;
+            width: 100%;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
+        .content-card {
             background: rgba(255,255,255,0.7);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 20px;
-            padding: 28px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-            cursor: pointer;
+            padding: 40px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
         }
 
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 24px 64px rgba(0,0,0,0.08);
-            border-color: rgba(59,130,246,0.2);
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon { transform: scale(1.05); }
-        .feature-icon svg { width: 24px; height: 24px; }
-
-        .feature-icon.blue {
-            background: var(--blue-50);
-            border: 1px solid var(--blue-100);
-            box-shadow: 0 4px 16px rgba(37,99,235,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.blue svg { color: var(--blue-600); }
-
-        .feature-icon.emerald {
-            background: #ECFDF5;
-            border: 1px solid #D1FAE5;
-            box-shadow: 0 4px 16px rgba(16,185,129,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.emerald svg { color: #059669; }
-
-        .feature-icon.violet {
-            background: #F5F3FF;
-            border: 1px solid #EDE9FE;
-            box-shadow: 0 4px 16px rgba(139,92,246,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.violet svg { color: #7C3AED; }
-
-        .feature-icon.rose {
-            background: #FFF1F2;
-            border: 1px solid #FFE4E6;
-            box-shadow: 0 4px 16px rgba(244,63,94,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.rose svg { color: #E11D48; }
-
-        .feature-icon.cyan {
-            background: #ECFEFF;
-            border: 1px solid #CFFAFE;
-            box-shadow: 0 4px 16px rgba(6,182,212,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.cyan svg { color: #0891B2; }
-
-        .feature-title {
-            font-size: 18px;
-            font-weight: 700;
+        h1 {
+            font-size: 36px;
+            margin-bottom: 8px;
+            font-weight: 800;
+            letter-spacing: -1px;
             color: var(--gray-900);
-            margin-bottom: 10px;
-            letter-spacing: -0.3px;
         }
 
-        .feature-desc {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-500);
-            margin-bottom: 20px;
+        h2 {
+            font-size: 22px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
         }
 
-        .feature-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
+        h3 {
+            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 12px;
             font-weight: 600;
-            color: var(--blue-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
+            letter-spacing: -0.3px;
+            color: var(--gray-800);
         }
 
-        .feature-link:hover { gap: 10px; }
-        .feature-link svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-        .feature-link:hover svg { transform: translateX(4px); }
+        p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        strong {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .last-updated {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .notice-box {
+            background: rgba(239, 68, 68, 0.05);
+            border-left: 4px solid #EF4444;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 24px 0;
+        }
+
+        .notice-box h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #DC2626;
+            margin: 0 0 12px 0;
+        }
+
+        .notice-box p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-800);
+            margin: 0;
+        }
 
         .footer {
             padding: 32px 20px;
@@ -6691,32 +6457,11 @@ TERMS_HTML = """<!DOCTYPE html>
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-            .hero { padding: 160px 32px 80px; }
-            .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
-            .badge-dot { width: 10px; height: 10px; }
-            .badge-text { font-size: 13px; }
-            .hero-title { font-size: 56px; letter-spacing: -2.5px; margin-bottom: 24px; }
-            .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
-            .chat-container { padding: 0 24px; margin-bottom: 80px; }
-            .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
-            .hint-chip { padding: 12px 18px; font-size: 13px; }
-            .hint-chip svg { width: 16px; height: 16px; }
-            .features { padding: 80px 32px 100px; }
-            .features-header { margin-bottom: 56px; }
-            .features-label { font-size: 12px; margin-bottom: 16px; }
-            .features-title { font-size: 36px; letter-spacing: -1.5px; }
-            .features-subtitle { font-size: 18px; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .feature-card { padding: 36px; border-radius: 24px; }
-            .feature-card:hover { transform: translateY(-6px); }
-            .feature-icon { width: 60px; height: 60px; border-radius: 18px; margin-bottom: 24px; }
-            .feature-icon svg { width: 26px; height: 26px; }
-            .feature-title { font-size: 20px; margin-bottom: 12px; }
-            .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
+            .main-content { padding: 120px 32px 60px; }
+            .content-card { padding: 48px 40px; border-radius: 24px; }
+            h1 { font-size: 42px; margin-bottom: 12px; }
+            h2 { font-size: 24px; margin-top: 40px; margin-bottom: 18px; }
+            h3 { font-size: 19px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
             .footer-logo svg { width: 36px; height: 36px; }
@@ -6730,127 +6475,16 @@ TERMS_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
-            .hero { padding: 180px 40px 80px; }
-            .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
-            .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
-            .chat-container { margin-bottom: 100px; }
-            .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
-            .chat-hints { padding: 20px 12px 8px; }
-            .hint-chip { padding: 12px 20px; }
-            .features { padding: 80px 40px 120px; }
-            .features-header { margin-bottom: 64px; }
-            .features-title { font-size: 40px; }
-            .features-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .feature-card { padding: 40px; border-radius: 28px; }
-            .feature-card:hover { transform: translateY(-8px); }
-            .feature-icon { width: 64px; height: 64px; border-radius: 20px; margin-bottom: 28px; }
-            .feature-icon svg { width: 28px; height: 28px; }
+            .main-content { padding: 140px 40px 80px; }
+            .content-card { padding: 56px 48px; border-radius: 28px; }
+            h1 { font-size: 48px; letter-spacing: -1.5px; }
+            h2 { font-size: 26px; }
+            h3 { font-size: 20px; }
+            p, li { font-size: 16px; }
             .footer { padding: 48px 40px; }
             .orb-1 { width: 800px; height: 800px; top: -20%; left: -10%; }
             .orb-2 { width: 600px; height: 600px; right: -15%; }
             .orb-3 { width: 500px; height: 500px; }
-        }
-
-        @media (min-width: 1280px) {
-            .hero-title { font-size: 80px; }
-        }
-    
-
-        .main-content {
-            flex: 1;
-            padding: 100px 20px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .content-card {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-
-        h1 { font-size: 32px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; }
-        h2 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-        h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.3px; }
-
-        input[type="text"], input[type="number"], input[type="email"], select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            background: var(--white);
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        button, .btn {
-            padding: 12px 24px;
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:hover, .btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:active, .btn:active {
-            transform: translateY(0);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        th {
-            background: rgba(37,99,235,0.05);
-            font-weight: 600;
-            color: var(--blue-700);
-        }
-
-        @media (min-width: 768px) {
-            .main-content { padding: 120px 32px 60px; }
-        }
-
-        @media (min-width: 1024px) {
-            .main-content { padding: 140px 40px 80px; }
         }
 
     </style>
@@ -6899,140 +6533,141 @@ TERMS_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-    <div class="content">
-        <h1>Terms of Service</h1>
-        <p class="last-updated">Last Updated: November 25, 2025</p>
+            <div class="content-card">
+                <h1>Terms of Service</h1>
+                <p class="last-updated">Last Updated: November 25, 2025</p>
 
-        <div class="notice-box">
-            <h3>⚠️ Critical Notice</h3>
-            <p><strong>gasconsult.ai is NOT a substitute for professional medical judgment.</strong> This tool is strictly for informational and educational purposes only and must be used exclusively by qualified healthcare professionals as a clinical decision support aid.</p>
-        </div>
+                <div class="notice-box">
+                    <h3>⚠️ Critical Notice</h3>
+                    <p><strong>gasconsult.ai is NOT a substitute for professional medical judgment.</strong> This tool is strictly for informational and educational purposes only and must be used exclusively by qualified healthcare professionals as a clinical decision support aid.</p>
+                </div>
 
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing or using gasconsult.ai ("the Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use this Service.</p>
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using gasconsult.ai ("the Service"), you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, you must not use this Service.</p>
 
-        <h2>2. Medical Disclaimer</h2>
-        <h3>2.1 Not Medical Advice</h3>
-        <p>The information provided by gasconsult.ai is for <strong>informational and educational purposes only</strong>. It is not intended to be, and should not be interpreted as:</p>
-        <ul>
-            <li>Medical advice, diagnosis, or treatment recommendations</li>
-            <li>A substitute for professional medical judgment or clinical expertise</li>
-            <li>A replacement for consultation with qualified healthcare professionals</li>
-            <li>Definitive clinical guidance for patient care decisions</li>
-        </ul>
+                <h2>2. Medical Disclaimer</h2>
+                <h3>2.1 Not Medical Advice</h3>
+                <p>The information provided by gasconsult.ai is for <strong>informational and educational purposes only</strong>. It is not intended to be, and should not be interpreted as:</p>
+                <ul>
+                    <li>Medical advice, diagnosis, or treatment recommendations</li>
+                    <li>A substitute for professional medical judgment or clinical expertise</li>
+                    <li>A replacement for consultation with qualified healthcare professionals</li>
+                    <li>Definitive clinical guidance for patient care decisions</li>
+                </ul>
 
-        <h3>2.2 Professional Use Only</h3>
-        <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
+                <h3>2.2 Professional Use Only</h3>
+                <p>This Service is designed exclusively for use by licensed healthcare professionals, including but not limited to physicians, nurse anesthetists (CRNAs), and other qualified medical practitioners. The Service must not be used by patients or non-medical personnel for self-diagnosis or self-treatment.</p>
 
-        <h3>2.3 Clinical Decision Support</h3>
-        <p>gasconsult.ai serves solely as a <strong>clinical decision support tool</strong> to assist qualified healthcare providers. All treatment decisions must be made by licensed healthcare professionals based on:</p>
-        <ul>
-            <li>Comprehensive patient assessment and clinical evaluation</li>
-            <li>Individual patient circumstances, comorbidities, and risk factors</li>
-            <li>Current evidence-based medical practice and institutional protocols</li>
-            <li>Professional medical judgment and clinical expertise</li>
-        </ul>
+                <h3>2.3 Clinical Decision Support</h3>
+                <p>gasconsult.ai serves solely as a <strong>clinical decision support tool</strong> to assist qualified healthcare providers. All treatment decisions must be made by licensed healthcare professionals based on:</p>
+                <ul>
+                    <li>Comprehensive patient assessment and clinical evaluation</li>
+                    <li>Individual patient circumstances, comorbidities, and risk factors</li>
+                    <li>Current evidence-based medical practice and institutional protocols</li>
+                    <li>Professional medical judgment and clinical expertise</li>
+                </ul>
 
-        <h2>3. No Warranty or Guarantee</h2>
-        <h3>3.1 Information Accuracy</h3>
-        <p>While gasconsult.ai strives to provide evidence-based information sourced from peer-reviewed medical literature (PubMed), we make <strong>NO WARRANTIES OR GUARANTEES</strong> regarding:</p>
-        <ul>
-            <li>The accuracy, completeness, or currentness of any information provided</li>
-            <li>The suitability of information for any particular patient or clinical situation</li>
-            <li>The reliability of AI-generated content or literature interpretations</li>
-            <li>The absence of errors, omissions, or inaccuracies in responses</li>
-        </ul>
+                <h2>3. No Warranty or Guarantee</h2>
+                <h3>3.1 Information Accuracy</h3>
+                <p>While gasconsult.ai strives to provide evidence-based information sourced from peer-reviewed medical literature (PubMed), we make <strong>NO WARRANTIES OR GUARANTEES</strong> regarding:</p>
+                <ul>
+                    <li>The accuracy, completeness, or currentness of any information provided</li>
+                    <li>The suitability of information for any particular patient or clinical situation</li>
+                    <li>The reliability of AI-generated content or literature interpretations</li>
+                    <li>The absence of errors, omissions, or inaccuracies in responses</li>
+                </ul>
 
-        <h3>3.2 Service Availability</h3>
-        <p>The Service is provided "AS IS" and "AS AVAILABLE" without any warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+                <h3>3.2 Service Availability</h3>
+                <p>The Service is provided "AS IS" and "AS AVAILABLE" without any warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
 
-        <h2>4. Limitation of Liability</h2>
-        <h3>4.1 No Liability for Medical Outcomes</h3>
-        <p>To the fullest extent permitted by law, gasconsult.ai, its developers, operators, and affiliates shall NOT BE LIABLE for any:</p>
-        <ul>
-            <li>Patient injuries, adverse outcomes, or complications arising from use of this Service</li>
-            <li>Clinical decisions made based on information provided by the Service</li>
-            <li>Errors, omissions, or inaccuracies in AI-generated content or literature citations</li>
-            <li>Damages arising from reliance on the Service for medical decision-making</li>
-            <li>Direct, indirect, incidental, consequential, or punitive damages of any kind</li>
-        </ul>
+                <h2>4. Limitation of Liability</h2>
+                <h3>4.1 No Liability for Medical Outcomes</h3>
+                <p>To the fullest extent permitted by law, gasconsult.ai, its developers, operators, and affiliates shall NOT BE LIABLE for any:</p>
+                <ul>
+                    <li>Patient injuries, adverse outcomes, or complications arising from use of this Service</li>
+                    <li>Clinical decisions made based on information provided by the Service</li>
+                    <li>Errors, omissions, or inaccuracies in AI-generated content or literature citations</li>
+                    <li>Damages arising from reliance on the Service for medical decision-making</li>
+                    <li>Direct, indirect, incidental, consequential, or punitive damages of any kind</li>
+                </ul>
 
-        <h3>4.2 User Responsibility</h3>
-        <p>Users of this Service assume <strong>FULL RESPONSIBILITY</strong> for:</p>
-        <ul>
-            <li>Verifying all information through primary sources and current medical literature</li>
-            <li>Exercising independent professional judgment in all clinical decisions</li>
-            <li>Complying with institutional policies, protocols, and standard of care requirements</li>
-            <li>Obtaining informed consent and following applicable medical regulations</li>
-        </ul>
+                <h3>4.2 User Responsibility</h3>
+                <p>Users of this Service assume <strong>FULL RESPONSIBILITY</strong> for:</p>
+                <ul>
+                    <li>Verifying all information through primary sources and current medical literature</li>
+                    <li>Exercising independent professional judgment in all clinical decisions</li>
+                    <li>Complying with institutional policies, protocols, and standard of care requirements</li>
+                    <li>Obtaining informed consent and following applicable medical regulations</li>
+                </ul>
 
-        <h2>5. User Obligations</h2>
-        <h3>5.1 Professional Qualifications</h3>
-        <p>By using this Service, you represent and warrant that you are:</p>
-        <ul>
-            <li>A licensed healthcare professional authorized to practice medicine</li>
-            <li>Qualified to interpret medical information and make clinical decisions</li>
-            <li>Using the Service solely for professional educational purposes</li>
-            <li>Capable of independently verifying all medical information</li>
-        </ul>
+                <h2>5. User Obligations</h2>
+                <h3>5.1 Professional Qualifications</h3>
+                <p>By using this Service, you represent and warrant that you are:</p>
+                <ul>
+                    <li>A licensed healthcare professional authorized to practice medicine</li>
+                    <li>Qualified to interpret medical information and make clinical decisions</li>
+                    <li>Using the Service solely for professional educational purposes</li>
+                    <li>Capable of independently verifying all medical information</li>
+                </ul>
 
-        <h3>5.2 Prohibited Uses</h3>
-        <p>You agree NOT to use this Service for:</p>
-        <ul>
-            <li>Patient self-diagnosis, self-treatment, or medical decision-making by non-professionals</li>
-            <li>Emergency medical situations requiring immediate clinical intervention without healthcare professional oversight and judgement</li>
-            <li>Situations where delays in obtaining professional medical care could cause harm</li>
-            <li>Any unlawful, fraudulent, or unauthorized purposes</li>
-        </ul>
+                <h3>5.2 Prohibited Uses</h3>
+                <p>You agree NOT to use this Service for:</p>
+                <ul>
+                    <li>Patient self-diagnosis, self-treatment, or medical decision-making by non-professionals</li>
+                    <li>Emergency medical situations requiring immediate clinical intervention without healthcare professional oversight and judgement</li>
+                    <li>Situations where delays in obtaining professional medical care could cause harm</li>
+                    <li>Any unlawful, fraudulent, or unauthorized purposes</li>
+                </ul>
 
-        <h2>6. Third-Party Content</h2>
-        <p>The Service aggregates information from third-party sources, including PubMed and medical literature databases. We are not responsible for the accuracy, reliability, or content of third-party sources. Citations and references should be independently verified through original publications.</p>
+                <h2>6. Third-Party Content</h2>
+                <p>The Service aggregates information from third-party sources, including PubMed and medical literature databases. We are not responsible for the accuracy, reliability, or content of third-party sources. Citations and references should be independently verified through original publications.</p>
 
-        <h2>7. Privacy and Data</h2>
-        <p>Your use of the Service is subject to our Privacy Policy. We do not store patient health information (PHI) or individually identifiable medical data. Users must not input protected health information into the Service.</p>
+                <h2>7. Privacy and Data</h2>
+                <p>Your use of the Service is subject to our Privacy Policy. We do not store patient health information (PHI) or individually identifiable medical data. Users must not input protected health information into the Service.</p>
 
-        <h2>8. Modifications to Terms</h2>
-        <p>We reserve the right to modify these Terms of Service at any time. Continued use of the Service following any changes constitutes acceptance of modified terms. Users are responsible for regularly reviewing these terms.</p>
+                <h2>8. Modifications to Terms</h2>
+                <p>We reserve the right to modify these Terms of Service at any time. Continued use of the Service following any changes constitutes acceptance of modified terms. Users are responsible for regularly reviewing these terms.</p>
 
-        <h2>9. Indemnification</h2>
-        <p>You agree to indemnify, defend, and hold harmless gasconsult.ai and its operators from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:</p>
-        <ul>
-            <li>Your use or misuse of the Service</li>
-            <li>Clinical decisions made based on information from the Service</li>
-            <li>Violation of these Terms of Service</li>
-            <li>Violation of any applicable laws or regulations</li>
-        </ul>
+                <h2>9. Indemnification</h2>
+                <p>You agree to indemnify, defend, and hold harmless gasconsult.ai and its operators from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from:</p>
+                <ul>
+                    <li>Your use or misuse of the Service</li>
+                    <li>Clinical decisions made based on information from the Service</li>
+                    <li>Violation of these Terms of Service</li>
+                    <li>Violation of any applicable laws or regulations</li>
+                </ul>
 
-        <h2>10. Governing Law and Jurisdiction</h2>
-        <p>These Terms shall be governed by and construed in accordance with the laws of the United States. Any disputes arising from these Terms or use of the Service shall be subject to the exclusive jurisdiction of the courts in the United States.</p>
+                <h2>10. Governing Law and Jurisdiction</h2>
+                <p>These Terms shall be governed by and construed in accordance with the laws of the United States. Any disputes arising from these Terms or use of the Service shall be subject to the exclusive jurisdiction of the courts in the United States.</p>
 
-        <h2>11. Emergency Medical Situations</h2>
-        <div class="notice-box">
-            <h3>⚠️ Emergency Disclaimer</h3>
-            <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES WITHOUT HEALTHCARE PROFESSIONAL OVERSIGHT.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
-        </div>
+                <h2>11. Emergency Medical Situations</h2>
+                <div class="notice-box">
+                    <h3>⚠️ Emergency Disclaimer</h3>
+                    <p><strong>DO NOT USE THIS SERVICE FOR MEDICAL EMERGENCIES WITHOUT HEALTHCARE PROFESSIONAL OVERSIGHT.</strong> In case of medical emergency, call 911 (or your local emergency number) immediately or seek emergency medical care at the nearest hospital.</p>
+                </div>
 
-        <h2>12. Contact Information</h2>
-        <p>For questions regarding these Terms of Service, please contact us at: <strong>support@gasconsult.ai</strong></p>
+                <h2>12. Contact Information</h2>
+                <p>For questions regarding these Terms of Service, please contact us at: <strong>support@gasconsult.ai</strong></p>
 
-        <p style="margin-top: 40px; font-weight: 600;">By using gasconsult.ai, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <p style="margin-top: 40px; font-weight: 600;">By using gasconsult.ai, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service.</p>
             </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </div>
-    </footer>
         </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
+
     <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -7052,7 +6687,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - gasconsult.ai</title>
+    <title>Privacy Policy — gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
@@ -7320,340 +6955,6 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .hero {
-            padding: 120px 20px 60px;
-            text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-            opacity: 0;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-500);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .badge-dot::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: var(--blue-400);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .hero-title {
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
-            opacity: 0;
-        }
-
-        .hero-title .gradient { color: var(--blue-600); }
-
-        .hero-subtitle {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--gray-500);
-            max-width: 560px;
-            margin: 0 auto 40px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-            opacity: 0;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-container {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-            opacity: 0;
-        }
-
-        .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
-        }
-
-        .chat-inner {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 6px;
-            display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        .chat-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: transparent;
-            resize: none;
-            min-height: 52px;
-            max-height: 150px;
-            line-height: 1.5;
-        }
-
-        .chat-input::placeholder { color: var(--gray-400); }
-
-        .chat-send {
-            width: 48px;
-            height: 48px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 12px;
-            color: var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-            flex-shrink: 0;
-            margin: 6px;
-        }
-
-        .chat-send:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-        }
-
-        .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
-
-        .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 16px 8px 6px;
-        }
-
-        .hint-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 10px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-        }
-
-        .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
-        .hint-chip:hover svg { opacity: 1; color: var(--blue-500); }
-
-        .features { padding: 60px 20px 80px; }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .features-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
-
-        .features-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 12px;
-        }
-
-        .features-subtitle {
-            font-size: 16px;
-            color: var(--gray-500);
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px;
-            padding: 28px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-            cursor: pointer;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 24px 64px rgba(0,0,0,0.08);
-            border-color: rgba(59,130,246,0.2);
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon { transform: scale(1.05); }
-        .feature-icon svg { width: 24px; height: 24px; }
-
-        .feature-icon.blue {
-            background: var(--blue-50);
-            border: 1px solid var(--blue-100);
-            box-shadow: 0 4px 16px rgba(37,99,235,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.blue svg { color: var(--blue-600); }
-
-        .feature-icon.emerald {
-            background: #ECFDF5;
-            border: 1px solid #D1FAE5;
-            box-shadow: 0 4px 16px rgba(16,185,129,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.emerald svg { color: #059669; }
-
-        .feature-icon.violet {
-            background: #F5F3FF;
-            border: 1px solid #EDE9FE;
-            box-shadow: 0 4px 16px rgba(139,92,246,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.violet svg { color: #7C3AED; }
-
-        .feature-icon.rose {
-            background: #FFF1F2;
-            border: 1px solid #FFE4E6;
-            box-shadow: 0 4px 16px rgba(244,63,94,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.rose svg { color: #E11D48; }
-
-        .feature-icon.cyan {
-            background: #ECFEFF;
-            border: 1px solid #CFFAFE;
-            box-shadow: 0 4px 16px rgba(6,182,212,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.cyan svg { color: #0891B2; }
-
-        .feature-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 10px;
-            letter-spacing: -0.3px;
-        }
-
-        .feature-desc {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-500);
-            margin-bottom: 20px;
-        }
-
-        .feature-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--blue-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .feature-link:hover { gap: 10px; }
-        .feature-link svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-        .feature-link:hover svg { transform: translateX(4px); }
-
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
@@ -7710,32 +7011,6 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-            .hero { padding: 160px 32px 80px; }
-            .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
-            .badge-dot { width: 10px; height: 10px; }
-            .badge-text { font-size: 13px; }
-            .hero-title { font-size: 56px; letter-spacing: -2.5px; margin-bottom: 24px; }
-            .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
-            .chat-container { padding: 0 24px; margin-bottom: 80px; }
-            .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
-            .hint-chip { padding: 12px 18px; font-size: 13px; }
-            .hint-chip svg { width: 16px; height: 16px; }
-            .features { padding: 80px 32px 100px; }
-            .features-header { margin-bottom: 56px; }
-            .features-label { font-size: 12px; margin-bottom: 16px; }
-            .features-title { font-size: 36px; letter-spacing: -1.5px; }
-            .features-subtitle { font-size: 18px; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .feature-card { padding: 36px; border-radius: 24px; }
-            .feature-card:hover { transform: translateY(-6px); }
-            .feature-icon { width: 60px; height: 60px; border-radius: 18px; margin-bottom: 24px; }
-            .feature-icon svg { width: 26px; height: 26px; }
-            .feature-title { font-size: 20px; margin-bottom: 12px; }
-            .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
             .footer-logo svg { width: 36px; height: 36px; }
@@ -7749,40 +7024,16 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
-            .hero { padding: 180px 40px 80px; }
-            .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
-            .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
-            .chat-container { margin-bottom: 100px; }
-            .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
-            .chat-hints { padding: 20px 12px 8px; }
-            .hint-chip { padding: 12px 20px; }
-            .features { padding: 80px 40px 120px; }
-            .features-header { margin-bottom: 64px; }
-            .features-title { font-size: 40px; }
-            .features-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .feature-card { padding: 40px; border-radius: 28px; }
-            .feature-card:hover { transform: translateY(-8px); }
-            .feature-icon { width: 64px; height: 64px; border-radius: 20px; margin-bottom: 28px; }
-            .feature-icon svg { width: 28px; height: 28px; }
             .footer { padding: 48px 40px; }
             .orb-1 { width: 800px; height: 800px; top: -20%; left: -10%; }
             .orb-2 { width: 600px; height: 600px; right: -15%; }
             .orb-3 { width: 500px; height: 500px; }
         }
 
-        @media (min-width: 1280px) {
-            .hero-title { font-size: 80px; }
-        }
-    
-
         .main-content {
             flex: 1;
             padding: 100px 20px 40px;
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             width: 100%;
         }
@@ -7798,78 +7049,97 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
         }
 
-        h1 { font-size: 32px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; }
-        h2 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-        h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.3px; }
-
-        input[type="text"], input[type="number"], input[type="email"], select, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            background: var(--white);
+        h1 {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
             color: var(--gray-900);
-            transition: all 0.2s ease;
+            margin-bottom: 8px;
         }
 
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        h2 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+            margin-top: 32px;
+            margin-bottom: 16px;
         }
 
-        button, .btn {
-            padding: 12px 24px;
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
+        h3 {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: var(--gray-800);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        p {
             font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        ul {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        strong {
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+            color: var(--gray-900);
         }
 
-        button:hover, .btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        .last-updated {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 24px;
         }
 
-        button:active, .btn:active {
-            transform: translateY(0);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255,255,255,0.5);
+        .highlight-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.15);
             border-radius: 12px;
-            overflow: hidden;
+            padding: 20px;
+            margin: 24px 0;
         }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        th {
-            background: rgba(37,99,235,0.05);
-            font-weight: 600;
+        .highlight-box strong {
             color: var(--blue-700);
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+
+        .highlight-box ul {
+            margin-top: 12px;
+            margin-bottom: 0;
         }
 
         @media (min-width: 768px) {
             .main-content { padding: 120px 32px 60px; }
+            .content-card { padding: 40px; border-radius: 24px; }
+            h1 { font-size: 40px; margin-bottom: 12px; }
+            h2 { font-size: 26px; margin-top: 40px; margin-bottom: 20px; }
+            h3 { font-size: 20px; margin-top: 28px; margin-bottom: 14px; }
+            p { font-size: 16px; }
+            li { font-size: 16px; }
         }
 
         @media (min-width: 1024px) {
-            .main-content { padding: 140px 40px 80px; }
+            .main-content { padding: 140px 40px 80px; max-width: 1000px; }
+            .content-card { padding: 48px; }
+            h1 { font-size: 48px; letter-spacing: -1.5px; }
         }
 
     </style>
@@ -7918,167 +7188,167 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-    <div class="content">
-        <h1>Privacy Policy</h1>
-        <p class="last-updated">Last Updated: November 27, 2025</p>
+            <div class="content-card">
+                <h1>Privacy Policy</h1>
+                <p class="last-updated">Last Updated: November 27, 2025</p>
 
-        <div class="highlight-box">
-            <strong>TL;DR:</strong> We take your privacy seriously. We don't sell your data. We don't store personal health information.
-            Your medical queries are processed to provide answers and are not used to identify you.
-        </div>
+                <div class="highlight-box">
+                    <strong>TL;DR:</strong> We take your privacy seriously. We don't sell your data. We don't store personal health information.
+                    Your medical queries are processed to provide answers and are not used to identify you.
+                </div>
 
-        <h2>1. Introduction</h2>
-        <p>
-            Welcome to gasconsult.ai ("we," "our," or "us"). This Privacy Policy explains how we collect, use,
-            disclose, and safeguard your information when you use our web application.
-        </p>
-        <p>
-            <strong>Please read this privacy policy carefully.</strong> If you do not agree with the terms of this
-            privacy policy, please do not access the application.
-        </p>
+                <h2>1. Introduction</h2>
+                <p>
+                    Welcome to gasconsult.ai ("we," "our," or "us"). This Privacy Policy explains how we collect, use,
+                    disclose, and safeguard your information when you use our web application.
+                </p>
+                <p>
+                    <strong>Please read this privacy policy carefully.</strong> If you do not agree with the terms of this
+                    privacy policy, please do not access the application.
+                </p>
 
-        <h2>2. Information We Collect</h2>
+                <h2>2. Information We Collect</h2>
 
-        <h3>2.1 Information You Provide</h3>
-        <p>We collect information that you voluntarily provide when using our service:</p>
-        <ul>
-            <li><strong>Medical Queries:</strong> Questions you submit about anesthesiology topics</li>
-            <li><strong>Form Data:</strong> Information entered in pre-operative assessments or clinical calculators</li>
-            <li><strong>Session Data:</strong> Temporary conversation history during your active session</li>
-        </ul>
+                <h3>2.1 Information You Provide</h3>
+                <p>We collect information that you voluntarily provide when using our service:</p>
+                <ul>
+                    <li><strong>Medical Queries:</strong> Questions you submit about anesthesiology topics</li>
+                    <li><strong>Form Data:</strong> Information entered in pre-operative assessments or clinical calculators</li>
+                    <li><strong>Session Data:</strong> Temporary conversation history during your active session</li>
+                </ul>
 
-        <h3>2.2 Automatically Collected Information</h3>
-        <p>We automatically collect certain information when you use our service:</p>
-        <ul>
-            <li><strong>Usage Data:</strong> Pages visited, features used, timestamps</li>
-            <li><strong>Technical Data:</strong> IP address, browser type, device information</li>
-            <li><strong>Log Data:</strong> Error logs and performance metrics for service improvement</li>
-        </ul>
+                <h3>2.2 Automatically Collected Information</h3>
+                <p>We automatically collect certain information when you use our service:</p>
+                <ul>
+                    <li><strong>Usage Data:</strong> Pages visited, features used, timestamps</li>
+                    <li><strong>Technical Data:</strong> IP address, browser type, device information</li>
+                    <li><strong>Log Data:</strong> Error logs and performance metrics for service improvement</li>
+                </ul>
 
-        <h3>2.3 Third-Party Services</h3>
-        <p>We use the following third-party services that may collect information:</p>
-        <ul>
-            <li><strong>OpenAI (GPT-4):</strong> Processes your queries to generate responses</li>
-            <li><strong>NCBI PubMed:</strong> Searches medical literature based on your queries</li>
-        </ul>
+                <h3>2.3 Third-Party Services</h3>
+                <p>We use the following third-party services that may collect information:</p>
+                <ul>
+                    <li><strong>OpenAI (GPT-4):</strong> Processes your queries to generate responses</li>
+                    <li><strong>NCBI PubMed:</strong> Searches medical literature based on your queries</li>
+                </ul>
 
-        <h2>3. How We Use Your Information</h2>
-        <p>We use the collected information for the following purposes:</p>
-        <ul>
-            <li><strong>Service Delivery:</strong> To provide evidence-based anesthesiology answers</li>
-            <li><strong>Improvement:</strong> To analyze usage patterns and improve our service</li>
-            <li><strong>Security:</strong> To detect, prevent, and address technical issues</li>
-            <li><strong>Communication:</strong> To respond to your inquiries and provide support</li>
-            <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
-        </ul>
+                <h2>3. How We Use Your Information</h2>
+                <p>We use the collected information for the following purposes:</p>
+                <ul>
+                    <li><strong>Service Delivery:</strong> To provide evidence-based anesthesiology answers</li>
+                    <li><strong>Improvement:</strong> To analyze usage patterns and improve our service</li>
+                    <li><strong>Security:</strong> To detect, prevent, and address technical issues</li>
+                    <li><strong>Communication:</strong> To respond to your inquiries and provide support</li>
+                    <li><strong>Legal Compliance:</strong> To comply with applicable laws and regulations</li>
+                </ul>
 
-        <h2>4. Data Retention</h2>
-        <ul>
-            <li><strong>Session Data:</strong> Conversation history is stored temporarily during your session and cleared when you close your browser or clear your session</li>
-            <li><strong>Log Data:</strong> System logs are retained for 90 days for debugging and security purposes</li>
-            <li><strong>No Long-Term Storage:</strong> We do not store your medical queries or personal health information long-term</li>
-        </ul>
+                <h2>4. Data Retention</h2>
+                <ul>
+                    <li><strong>Session Data:</strong> Conversation history is stored temporarily during your session and cleared when you close your browser or clear your session</li>
+                    <li><strong>Log Data:</strong> System logs are retained for 90 days for debugging and security purposes</li>
+                    <li><strong>No Long-Term Storage:</strong> We do not store your medical queries or personal health information long-term</li>
+                </ul>
 
-        <h2>5. Data Security</h2>
-        <p>
-            We implement industry-standard security measures to protect your information:
-        </p>
-        <ul>
-            <li>HTTPS encryption for all data transmission</li>
-            <li>Server-side session storage (not in cookies)</li>
-            <li>Input sanitization to prevent malicious attacks</li>
-            <li>Rate limiting to prevent abuse</li>
-            <li>Regular security updates and monitoring</li>
-        </ul>
-        <p>
-            <strong>However, no method of transmission over the internet is 100% secure.</strong> While we strive
-            to protect your information, we cannot guarantee absolute security.
-        </p>
+                <h2>5. Data Security</h2>
+                <p>
+                    We implement industry-standard security measures to protect your information:
+                </p>
+                <ul>
+                    <li>HTTPS encryption for all data transmission</li>
+                    <li>Server-side session storage (not in cookies)</li>
+                    <li>Input sanitization to prevent malicious attacks</li>
+                    <li>Rate limiting to prevent abuse</li>
+                    <li>Regular security updates and monitoring</li>
+                </ul>
+                <p>
+                    <strong>However, no method of transmission over the internet is 100% secure.</strong> While we strive
+                    to protect your information, we cannot guarantee absolute security.
+                </p>
 
-        <h2>6. Your Privacy Rights</h2>
-        <p>Depending on your location, you may have the following rights:</p>
-        <ul>
-            <li><strong>Access:</strong> Request a copy of the information we have about you</li>
-            <li><strong>Correction:</strong> Request correction of inaccurate information</li>
-            <li><strong>Deletion:</strong> Request deletion of your information</li>
-            <li><strong>Objection:</strong> Object to our processing of your information</li>
-            <li><strong>Data Portability:</strong> Request transfer of your data to another service</li>
-        </ul>
-        <p>
-            To exercise these rights, please contact us at: <strong>privacy@gasconsult.ai</strong>
-        </p>
+                <h2>6. Your Privacy Rights</h2>
+                <p>Depending on your location, you may have the following rights:</p>
+                <ul>
+                    <li><strong>Access:</strong> Request a copy of the information we have about you</li>
+                    <li><strong>Correction:</strong> Request correction of inaccurate information</li>
+                    <li><strong>Deletion:</strong> Request deletion of your information</li>
+                    <li><strong>Objection:</strong> Object to our processing of your information</li>
+                    <li><strong>Data Portability:</strong> Request transfer of your data to another service</li>
+                </ul>
+                <p>
+                    To exercise these rights, please contact us at: <strong>privacy@gasconsult.ai</strong>
+                </p>
 
-        <h2>7. Protected Health Information (PHI)</h2>
-        <div class="highlight-box">
-            <strong>IMPORTANT:</strong> gasconsult.ai is an educational tool only.
-            <strong>Do not enter any personally identifiable patient information (PHI)</strong> such as:
-            <ul style="margin-top: 12px;">
-                <li>Patient names, dates of birth, medical record numbers</li>
-                <li>Specific case details that could identify individuals</li>
-                <li>Protected health information under HIPAA regulations</li>
-            </ul>
-            <p style="margin-top: 12px; margin-bottom: 0;">
-                Use only hypothetical scenarios and generalized clinical questions.
-            </p>
-        </div>
+                <h2>7. Protected Health Information (PHI)</h2>
+                <div class="highlight-box">
+                    <strong>IMPORTANT:</strong> gasconsult.ai is an educational tool only.
+                    <strong>Do not enter any personally identifiable patient information (PHI)</strong> such as:
+                    <ul style="margin-top: 12px;">
+                        <li>Patient names, dates of birth, medical record numbers</li>
+                        <li>Specific case details that could identify individuals</li>
+                        <li>Protected health information under HIPAA regulations</li>
+                    </ul>
+                    <p style="margin-top: 12px; margin-bottom: 0;">
+                        Use only hypothetical scenarios and generalized clinical questions.
+                    </p>
+                </div>
 
-        <h2>8. Children's Privacy</h2>
-        <p>
-            Our service is not intended for children under 18 years of age. We do not knowingly collect
-            personal information from children. If you believe we have collected information from a child,
-            please contact us immediately.
-        </p>
+                <h2>8. Children's Privacy</h2>
+                <p>
+                    Our service is not intended for children under 18 years of age. We do not knowingly collect
+                    personal information from children. If you believe we have collected information from a child,
+                    please contact us immediately.
+                </p>
 
-        <h2>9. International Users</h2>
-        <p>
-            Our service is hosted in the United States. If you access our service from outside the US,
-            your information may be transferred to, stored, and processed in the US where our servers are located.
-            Data protection laws in the US may differ from those in your country.
-        </p>
+                <h2>9. International Users</h2>
+                <p>
+                    Our service is hosted in the United States. If you access our service from outside the US,
+                    your information may be transferred to, stored, and processed in the US where our servers are located.
+                    Data protection laws in the US may differ from those in your country.
+                </p>
 
-        <h2>10. Changes to This Policy</h2>
-        <p>
-            We may update this Privacy Policy from time to time. We will notify you of any changes by
-            posting the new policy on this page and updating the "Last Updated" date.
-        </p>
-        <p>
-            <strong>Continued use of our service after changes constitutes acceptance of the updated policy.</strong>
-        </p>
+                <h2>10. Changes to This Policy</h2>
+                <p>
+                    We may update this Privacy Policy from time to time. We will notify you of any changes by
+                    posting the new policy on this page and updating the "Last Updated" date.
+                </p>
+                <p>
+                    <strong>Continued use of our service after changes constitutes acceptance of the updated policy.</strong>
+                </p>
 
-        <h2>11. Contact Us</h2>
-        <p>
-            If you have questions or concerns about this Privacy Policy, please contact us at:
-        </p>
-        <ul>
-            <li><strong>Email:</strong> privacy@gasconsult.ai</li>
-            <li><strong>Website:</strong> gasconsult.ai</li>
-        </ul>
+                <h2>11. Contact Us</h2>
+                <p>
+                    If you have questions or concerns about this Privacy Policy, please contact us at:
+                </p>
+                <ul>
+                    <li><strong>Email:</strong> privacy@gasconsult.ai</li>
+                    <li><strong>Website:</strong> gasconsult.ai</li>
+                </ul>
 
-        <h2>12. Compliance</h2>
-        <p>
-            We are committed to complying with applicable data protection laws, including:
-        </p>
-        <ul>
-            <li>General Data Protection Regulation (GDPR) for EU users</li>
-            <li>California Consumer Privacy Act (CCPA) for California residents</li>
-            <li>Health Insurance Portability and Accountability Act (HIPAA) - Note: We are not a covered entity
-                but follow privacy best practices</li>
-        </ul>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <h2>12. Compliance</h2>
+                <p>
+                    We are committed to complying with applicable data protection laws, including:
+                </p>
+                <ul>
+                    <li>General Data Protection Regulation (GDPR) for EU users</li>
+                    <li>California Consumer Privacy Act (CCPA) for California residents</li>
+                    <li>Health Insurance Portability and Accountability Act (HIPAA) - Note: We are not a covered entity
+                        but follow privacy best practices</li>
+                </ul>
             </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </div>
-    </footer>
+
+            <footer class="footer">
+                <div class="footer-inner">
+                    <div class="footer-brand">
+                        <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
+                        <span class="footer-text">© 2025 GasConsult.ai</span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="/privacy" class="footer-link">Privacy</a>
+                        <a href="/terms" class="footer-link">Terms</a>
+                        <a href="#" class="footer-link">Contact</a>
+                    </div>
+                </div>
+            </footer>
         </main>
     </div>
     <script>
@@ -13251,233 +12521,934 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .hero {
-            padding: 120px 20px 60px;
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             text-align: center;
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-            opacity: 0;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-500);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .badge-dot::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: var(--blue-400);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .hero-title {
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
-            opacity: 0;
-        }
-
-        .hero-title .gradient { color: var(--blue-600); }
-
-        .hero-subtitle {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--gray-500);
-            max-width: 560px;
-            margin: 0 auto 40px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-            opacity: 0;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .chat-container {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-            opacity: 0;
-        }
-
-        .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 8px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
-        }
-
-        .chat-inner {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 6px;
+        .footer-brand {
             display: flex;
-            align-items: flex-end;
-            gap: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
+            align-items: center;
+            gap: 10px;
         }
 
-        .chat-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: transparent;
-            resize: none;
-            min-height: 52px;
-            max-height: 150px;
-            line-height: 1.5;
-        }
-
-        .chat-input::placeholder { color: var(--gray-400); }
-
-        .chat-send {
-            width: 48px;
-            height: 48px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 12px;
-            color: var(--white);
-            cursor: pointer;
+        .footer-logo {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-            flex-shrink: 0;
-            margin: 6px;
         }
 
-        .chat-send:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
+        .footer-logo svg { width: 32px; height: 32px; }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
         }
 
-        .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
-
-        .chat-hints {
+        .footer-links {
             display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 16px 8px 6px;
+            gap: 24px;
         }
 
-        .hint-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 10px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600);
-            cursor: pointer;
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover { color: var(--gray-700); }
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .footer { padding: 48px 40px; }
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-card {
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        h1 { font-size: 32px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; color: var(--gray-900); }
+        h2 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; color: var(--gray-900); }
+        h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.3px; color: var(--gray-900); }
+
+        p { line-height: 1.6; color: var(--gray-700); }
+
+        input[type="text"], input[type="number"], input[type="email"], select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            background: var(--white);
+            color: var(--gray-900);
             transition: all 0.2s ease;
         }
 
-        .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
-        .hint-chip:hover svg { opacity: 1; color: var(--blue-500); }
+        button, .btn {
+            padding: 12px 24px;
+            background: var(--blue-600);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
 
-        .features { padding: 60px 20px 80px; }
+        button:hover, .btn:hover {
+            background: var(--blue-700);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
 
-        .features-header {
+        button:active, .btn:active {
+            transform: translateY(0);
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .main-content { padding: 120px 32px 60px; }
+        }
+
+        @media (min-width: 1024px) {
+            .main-content { padding: 140px 40px 80px; }
+        }
+
+        /* IOH Predictor Specific Styles */
+        .page-header {
             text-align: center;
             margin-bottom: 40px;
         }
 
-        .features-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
-
-        .features-title {
-            font-size: 28px;
+        .page-header h1 {
+            font-size: 36px;
             font-weight: 800;
             letter-spacing: -1px;
             color: var(--gray-900);
             margin-bottom: 12px;
         }
 
-        .features-subtitle {
+        .page-header p {
             font-size: 16px;
-            color: var(--gray-500);
-            max-width: 480px;
-            margin: 0 auto;
+            color: var(--gray-600);
+            margin-bottom: 16px;
         }
 
-        .features-grid {
+        .edu-warning {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.08) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .edu-warning-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .edu-warning-content h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #DC2626;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .edu-warning-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .edu-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .disclaimer-box {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-left: 4px solid #DC2626;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .disclaimer-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #DC2626;
+            margin-bottom: 16px;
+        }
+
+        .disclaimer-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        .disclaimer-box p:last-of-type {
+            margin-bottom: 8px;
+        }
+
+        .disclaimer-box ul {
+            margin-left: 24px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        .disclaimer-box li {
+            margin-bottom: 6px;
+        }
+
+        .metrics-box {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .metrics-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .metrics-intro {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-600);
+            margin-bottom: 24px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--blue-600);
+            margin-bottom: 4px;
+        }
+
+        .metric-description {
+            font-size: 12px;
+            color: var(--gray-600);
+        }
+
+        .metrics-explanation {
+            background: var(--blue-50);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .metrics-explanation h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .metrics-explanation ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .metrics-explanation li {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 10px;
+            padding-left: 0;
+        }
+
+        .metric-term {
+            font-weight: 700;
+            color: var(--blue-700);
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .form-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
+            gap: 20px;
         }
 
-        .feature-card {
-            background: rgba(255,255,255,0.7);
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .form-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 24px;
+        }
+
+        .results-warning {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(245, 158, 11, 0.08) 100%);
+            border: 2px solid rgba(251, 191, 36, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .results-warning p {
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400E;
+            margin: 0;
+        }
+
+        .risk-gauges {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 768px) {
+            .risk-gauges {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .risk-gauge {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .risk-gauge h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-value {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .risk-value.low { color: #059669; }
+        .risk-value.moderate { color: #D97706; }
+        .risk-value.high { color: #DC2626; }
+        .risk-value.very-high { color: #991B1B; }
+
+        .risk-label {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-label.low {
+            background: rgba(5, 150, 105, 0.1);
+            color: #059669;
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .risk-label.moderate {
+            background: rgba(217, 119, 6, 0.1);
+            color: #D97706;
+            border: 1px solid rgba(217, 119, 6, 0.2);
+        }
+
+        .risk-label.high {
+            background: rgba(220, 38, 38, 0.1);
+            color: #DC2626;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .risk-label.very-high {
+            background: rgba(153, 27, 27, 0.1);
+            color: #991B1B;
+            border: 1px solid rgba(153, 27, 27, 0.2);
+        }
+
+        .factors-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .factors-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .factor-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--blue-50);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--blue-500);
+        }
+
+        .factor-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .factor-item strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        .interventions-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .interventions-section h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .intervention-item {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .intervention-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .intervention-rank {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--blue-600);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .intervention-content {
+            flex: 1;
+        }
+
+        .intervention-content h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .intervention-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-600);
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/hypotension" class="nav-link active">IOH Predictor</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
+
+        <main class="main-content">
+            <!-- Educational Warning Banner -->
+            <div class="edu-warning">
+                <div class="edu-warning-icon">⚠️</div>
+                <div class="edu-warning-content">
+                    <h3>EDUCATIONAL USE ONLY - NOT FOR CLINICAL DECISION MAKING</h3>
+                    <p>This tool is for educational demonstration purposes only. It is NOT validated for clinical use, NOT FDA-approved, and should NEVER be used to make actual patient care decisions.</p>
+                </div>
+            </div>
+
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Intraoperative Hypotension Predictor</h1>
+                <p>Educational simulator for predicting intraoperative hypotension risk based on patient and procedural factors</p>
+                <span class="edu-badge">Educational Demo Only</span>
+            </div>
+
+            <!-- Legal Disclaimer -->
+            <div class="disclaimer-box">
+                <h3>Legal Disclaimer</h3>
+                <p><strong>This Intraoperative Hypotension Predictor is a LEARNING TOOL designed for educational purposes only.</strong> It is not a medical device, has not been validated in clinical settings, and is not approved by the FDA or any regulatory body.</p>
+                <p><strong>DO NOT use this tool to make clinical decisions.</strong> Predictions may be inaccurate and should never replace clinical judgment, monitoring, or standard anesthesia care protocols.</p>
+                <p>By using this tool, you acknowledge that:</p>
+                <ul>
+                    <li>This is for EDUCATIONAL DEMONSTRATION only</li>
+                    <li>Predictions are hypothetical and may be incorrect</li>
+                    <li>No patient data should be entered</li>
+                    <li>You will not rely on outputs for any clinical decisions</li>
+                    <li>The creators assume no liability for any use of this tool</li>
+                </ul>
+            </div>
+
+            <!-- Model Performance Metrics -->
+            <div class="metrics-box">
+                <h3>📊 Model Performance Metrics</h3>
+                <p class="metrics-intro">
+                    This educational model demonstrates hypotension prediction capabilities based on published research.
+                    Below are typical performance metrics from validated intraoperative hypotension prediction models in the literature.
+                    Understanding these metrics helps interpret the model's reliability and limitations.
+                </p>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">AUC-ROC</div>
+                        <div class="metric-value">0.84</div>
+                        <div class="metric-description">Overall discrimination ability</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Sensitivity</div>
+                        <div class="metric-value">78%</div>
+                        <div class="metric-description">True positive rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Specificity</div>
+                        <div class="metric-value">76%</div>
+                        <div class="metric-description">True negative rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">PPV</div>
+                        <div class="metric-value">68%</div>
+                        <div class="metric-description">Positive predictive value</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">NPV</div>
+                        <div class="metric-value">84%</div>
+                        <div class="metric-description">Negative predictive value</div>
+                    </div>
+                </div>
+
+                <div class="metrics-explanation">
+                    <h4>What These Metrics Mean:</h4>
+                    <ul>
+                        <li><span class="metric-term">AUC-ROC (0.84):</span> Area Under the Receiver Operating Characteristic curve. Ranges from 0.5 (random) to 1.0 (perfect). 0.84 indicates good discrimination between patients who will/won't develop hypotension.</li>
+                        <li><span class="metric-term">Sensitivity (78%):</span> Of patients who actually develop hypotension, the model correctly predicts 78% of them. Higher is better for avoiding missed cases.</li>
+                        <li><span class="metric-term">Specificity (76%):</span> Of patients who don't develop hypotension, the model correctly identifies 76% as low-risk. Higher reduces false alarms.</li>
+                        <li><span class="metric-term">PPV (68%):</span> When the model predicts hypotension, there's a 68% chance it will actually occur. Depends on baseline hypotension prevalence.</li>
+                        <li><span class="metric-term">NPV (84%):</span> When the model predicts no hypotension, there's an 84% chance the prediction is correct. Useful for reassurance in low-risk cases.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Input Form -->
+            <div class="content-card">
+                <form method="POST" action="/hypotension">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <div class="form-section">
+                        <h2>Patient Demographics</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="age">Age (years)</label>
+                                <input type="number" id="age" name="age" min="1" max="120" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sex">Sex</label>
+                                <select id="sex" name="sex" required>
+                                    <option value="">Select...</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="weight" min="1" max="300" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" id="height" name="height" min="50" max="250" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="asa">ASA Classification</label>
+                                <select id="asa" name="asa" required>
+                                    <option value="">Select...</option>
+                                    <option value="1">ASA I - Healthy</option>
+                                    <option value="2">ASA II - Mild systemic disease</option>
+                                    <option value="3">ASA III - Severe systemic disease</option>
+                                    <option value="4">ASA IV - Life-threatening disease</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Baseline Vitals</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="baseline_map">Baseline MAP (mmHg)</label>
+                                <input type="number" id="baseline_map" name="baseline_map" min="40" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="baseline_hr">Baseline Heart Rate (bpm)</label>
+                                <input type="number" id="baseline_hr" name="baseline_hr" min="30" max="200" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Current Intraoperative State</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="current_map">Current MAP (mmHg)</label>
+                                <input type="number" id="current_map" name="current_map" min="40" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="map_5min">MAP 5 min ago (mmHg)</label>
+                                <input type="number" id="map_5min" name="map_5min" min="40" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="map_10min">MAP 10 min ago (mmHg)</label>
+                                <input type="number" id="map_10min" name="map_10min" min="40" max="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="surgery_duration">Surgery Duration (min)</label>
+                                <input type="number" id="surgery_duration" name="surgery_duration" min="0" max="1000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vasopressor">Vasopressor Use</label>
+                                <select id="vasopressor" name="vasopressor" required>
+                                    <option value="none">None</option>
+                                    <option value="phenylephrine">Phenylephrine</option>
+                                    <option value="ephedrine">Ephedrine</option>
+                                    <option value="norepinephrine">Norepinephrine</option>
+                                    <option value="epinephrine">Epinephrine</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="surgery_type">Surgery Type</label>
+                                <select id="surgery_type" name="surgery_type" required>
+                                    <option value="">Select...</option>
+                                    <option value="cardiac">Cardiac Surgery</option>
+                                    <option value="major_abdominal">Major Abdominal</option>
+                                    <option value="spine">Spine Surgery</option>
+                                    <option value="orthopedic">Orthopedic</option>
+                                    <option value="neuro">Neurosurgery</option>
+                                    <option value="vascular">Vascular</option>
+                                    <option value="thoracic">Thoracic</option>
+                                    <option value="minor">Minor/Superficial</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="induction_agent">Induction Agent</label>
+                                <select id="induction_agent" name="induction_agent" required>
+                                    <option value="">Select...</option>
+                                    <option value="propofol">Propofol</option>
+                                    <option value="etomidate">Etomidate</option>
+                                    <option value="ketamine">Ketamine</option>
+                                    <option value="thiopental">Thiopental</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="emergency">Emergency Status</label>
+                                <select id="emergency" name="emergency" required>
+                                    <option value="no">Elective</option>
+                                    <option value="yes">Emergency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Calculate Hypotension Risk</button>
+                </form>
+            </div>
+
+            {% if prediction %}
+            <!-- Results Section -->
+            <div style="margin-top: 48px;">
+                <div class="results-warning">
+                    <p>⚠️ SIMULATION ONLY - These predictions are for educational purposes and may not reflect actual clinical outcomes. Always follow institutional protocols and use validated monitoring.</p>
+                </div>
+
+                <!-- Risk Gauges -->
+                <div class="risk-gauges">
+                    <div class="risk-gauge">
+                        <h3>5-Minute Risk</h3>
+                        <div class="risk-value {{ prediction.risk_5min_class }}">{{ prediction.prob_5min }}%</div>
+                        <span class="risk-label {{ prediction.risk_5min_label }}">{{ prediction.risk_5min_text }}</span>
+                    </div>
+                    <div class="risk-gauge">
+                        <h3>10-Minute Risk</h3>
+                        <div class="risk-value {{ prediction.risk_10min_class }}">{{ prediction.prob_10min }}%</div>
+                        <span class="risk-label {{ prediction.risk_10min_label }}">{{ prediction.risk_10min_text }}</span>
+                    </div>
+                    <div class="risk-gauge">
+                        <h3>20-Minute Risk</h3>
+                        <div class="risk-value {{ prediction.risk_20min_class }}">{{ prediction.prob_20min }}%</div>
+                        <span class="risk-label {{ prediction.risk_20min_label }}">{{ prediction.risk_20min_text }}</span>
+                    </div>
+                </div>
+
+                <!-- Contributing Factors -->
+                <div class="factors-section">
+                    <h2>Top Contributing Factors</h2>
+                    {% for factor in prediction.factors %}
+                    <div class="factor-item">
+                        <strong>{{ factor.name }}:</strong> {{ factor.description }}
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Suggested Interventions -->
+                <div class="interventions-section">
+                    <h2>Evidence-Based Intervention Suggestions</h2>
+                    {% for intervention in prediction.interventions %}
+                    <div class="intervention-item">
+                        <div class="intervention-rank">#{{ loop.index }}</div>
+                        <div class="intervention-content">
+                            <h3>{{ intervention.name }}</h3>
+                            <p>{{ intervention.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </main>
+
+        <!-- Glassmorphism Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>
+"""
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
