@@ -2839,6 +2839,343 @@ HTML = """<!DOCTYPE html>
         @media (min-width: 1280px) {
             .hero-title { font-size: 80px; }
         }
+
+        /* Chat Interface Styles */
+        .chat-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .messages-container {
+            flex: 1;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 16px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 24px;
+            animation: fade-up 0.4s ease;
+        }
+
+        .user-message {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .user-message .message-bubble {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            padding: 16px 20px;
+            border-radius: 20px 20px 4px 20px;
+            max-width: 80%;
+            font-size: 15px;
+            line-height: 1.5;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.2), 0 8px 24px rgba(37,99,235,0.15);
+            word-wrap: break-word;
+        }
+
+        .ai-message {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .ai-message .message-bubble {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.8);
+            padding: 20px 24px;
+            border-radius: 20px 20px 20px 4px;
+            max-width: 85%;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-800);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .ai-message .message-bubble h1,
+        .ai-message .message-bubble h2,
+        .ai-message .message-bubble h3 {
+            color: var(--gray-900);
+            margin: 16px 0 12px 0;
+            font-weight: 700;
+        }
+
+        .ai-message .message-bubble h1 { font-size: 20px; }
+        .ai-message .message-bubble h2 { font-size: 18px; }
+        .ai-message .message-bubble h3 { font-size: 16px; }
+
+        .ai-message .message-bubble ul,
+        .ai-message .message-bubble ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .ai-message .message-bubble li {
+            margin: 6px 0;
+        }
+
+        .ai-message .message-bubble p {
+            margin: 12px 0;
+        }
+
+        .ai-message .message-bubble strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .ai-message .message-bubble code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .evidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-badge.high {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #D1FAE5;
+        }
+
+        .evidence-badge.moderate {
+            background: #FEF3C7;
+            color: #D97706;
+            border: 1px solid #FDE68A;
+        }
+
+        .evidence-badge.low {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .references-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .references-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gray-700);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .references-title svg {
+            width: 16px;
+            height: 16px;
+            color: var(--blue-600);
+        }
+
+        .reference-item {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .reference-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-size: 14px;
+            line-height: 1.5;
+            font-weight: 500;
+            display: block;
+        }
+
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .streaming-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue-600);
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .streaming-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .streaming-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--blue-600);
+            border-radius: 50%;
+            animation: pulse-dot 1.4s ease-in-out infinite;
+        }
+
+        .streaming-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .streaming-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulse-dot {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+
+        .chat-input-area {
+            position: sticky;
+            bottom: 0;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            padding: 16px;
+            z-index: 10;
+        }
+
+        .chat-input-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        #chat-form {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        #chat-form .chat-card {
+            flex: 1;
+            margin: 0;
+        }
+
+        .new-chat-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            color: var(--gray-700);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            align-self: flex-start;
+        }
+
+        .new-chat-btn:hover {
+            background: white;
+            border-color: var(--blue-200);
+            color: var(--blue-600);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+        }
+
+        .new-chat-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .error-message {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: #DC2626;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (min-width: 768px) {
+            .messages-container {
+                padding: 32px 24px;
+            }
+
+            .message {
+                margin-bottom: 32px;
+            }
+
+            .user-message .message-bubble {
+                padding: 18px 24px;
+                font-size: 16px;
+                border-radius: 24px 24px 6px 24px;
+            }
+
+            .ai-message .message-bubble {
+                padding: 24px 28px;
+                font-size: 16px;
+                border-radius: 24px 24px 24px 6px;
+            }
+
+            .chat-input-area {
+                padding: 20px 24px;
+            }
+
+            .chat-input-wrapper {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            #chat-form {
+                flex: 1;
+                max-width: 720px;
+            }
+
+            .new-chat-btn {
+                padding: 14px 24px;
+                font-size: 15px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .messages-container {
+                padding: 40px 32px 60px;
+            }
+
+            .chat-input-area {
+                padding: 24px 32px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2882,6 +3219,108 @@ HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
+        {% if messages and messages|length > 0 %}
+        <!-- Chat Interface -->
+        <section class="chat-view">
+            <div class="messages-container" id="messagesContainer">
+                {% if error_message %}
+                <div class="error-message">{{ error_message|safe }}</div>
+                {% endif %}
+
+                {% for message in messages %}
+                    {% if message.role == 'user' %}
+                    <div class="message user-message">
+                        <div class="message-bubble">{{ message.content }}</div>
+                    </div>
+                    {% else %}
+                    <div class="message ai-message">
+                        <div class="message-bubble">
+                            {% if message.get('evidence_strength') %}
+                            <div class="evidence-badge {{ 'high' if message.evidence_strength == 'High' else ('moderate' if message.evidence_strength == 'Moderate' else 'low') }}">
+                                {% if message.evidence_strength == 'High' %}
+                                ✓ High Confidence
+                                {% elif message.evidence_strength == 'Moderate' %}
+                                ~ Moderate Confidence
+                                {% else %}
+                                ! Low Confidence
+                                {% endif %}
+                                • {{ message.num_papers }} studies
+                            </div>
+                            {% endif %}
+
+                            <div class="message-content">{{ message.content|safe }}</div>
+
+                            {% if message.references and message.references|length > 0 %}
+                            <div class="references-section">
+                                <div class="references-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                    </svg>
+                                    References ({{ message.references|length }})
+                                </div>
+                                {% for ref in message.references %}
+                                <div class="reference-item">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                                        {{ ref.title }}
+                                    </a>
+                                    <div class="reference-meta">
+                                        {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if pending_stream %}
+                <div class="message ai-message" id="streamingMessage">
+                    <div class="message-bubble">
+                        <div class="message-content" id="streamingContent"></div>
+                        <div class="streaming-indicator">
+                            <div class="streaming-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            Thinking...
+                        </div>
+                        <div class="references-section" id="streamingReferences" style="display: none;"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="chat-input-area">
+                <div class="chat-input-wrapper">
+                    <form method="post" action="/" id="chat-form" class="chat-card">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <div class="chat-inner">
+                            <textarea name="query" class="chat-input" placeholder="Ask a follow-up question..." rows="1" required></textarea>
+                            <button type="submit" class="chat-send">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                                    <polyline points="5 12 12 5 19 12"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    <a href="/clear" class="new-chat-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="1 4 1 10 7 10"></polyline>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                        </svg>
+                        New Chat
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        {% else %}
+        <!-- Homepage Hero -->
         <section class="hero">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
@@ -2923,6 +3362,7 @@ HTML = """<!DOCTYPE html>
                 </form>
             </div>
         </section>
+        {% endif %}
 
         <section class="features">
             <div class="features-header">
@@ -2992,21 +3432,38 @@ HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        const textarea = document.querySelector('.chat-input');
-        if (textarea) {
+        // Auto-resize textarea on input
+        const textareas = document.querySelectorAll('.chat-input');
+        textareas.forEach(textarea => {
             textarea.addEventListener('input', function() {
                 this.style.height = 'auto';
                 this.style.height = Math.min(this.scrollHeight, 180) + 'px';
             });
-        }
+
+            // Cmd/Ctrl + Enter to submit
+            textarea.addEventListener('keydown', function(e) {
+                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                    e.preventDefault();
+                    const form = this.closest('form');
+                    if (form) {
+                        form.requestSubmit();
+                    }
+                }
+            });
+        });
+
+        // Fill query from hint chips (homepage only)
         function fillQuery(event) {
             const chip = event.currentTarget;
             const text = chip.textContent.trim();
+            const textarea = document.querySelector('.chat-input');
             if (textarea) {
                 textarea.value = text;
                 textarea.focus();
             }
         }
+
+        // Toggle mobile menu
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -3015,6 +3472,118 @@ HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        // Scroll to bottom of messages
+        function scrollToBottom() {
+            const container = document.getElementById('messagesContainer');
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        // SSE Streaming functionality
+        {% if pending_stream %}
+        (function() {
+            const requestId = '{{ pending_stream }}';
+            const streamingContent = document.getElementById('streamingContent');
+            const streamingReferences = document.getElementById('streamingReferences');
+            const streamingIndicator = document.querySelector('.streaming-indicator');
+            const streamingMessage = document.getElementById('streamingMessage');
+
+            if (!streamingContent) {
+                console.error('[SSE] Streaming elements not found');
+                return;
+            }
+
+            console.log('[SSE] Starting stream for request_id:', requestId);
+
+            const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
+
+            eventSource.addEventListener('chunk', function(e) {
+                try {
+                    const data = JSON.parse(e.data);
+                    if (data.chunk) {
+                        streamingContent.innerHTML += data.chunk;
+                        scrollToBottom();
+                    }
+                } catch (err) {
+                    console.error('[SSE] Error parsing chunk:', err);
+                }
+            });
+
+            eventSource.addEventListener('references', function(e) {
+                try {
+                    const data = JSON.parse(e.data);
+                    if (data.references && data.references.length > 0) {
+                        console.log('[SSE] Received', data.references.length, 'references');
+
+                        // Hide streaming indicator
+                        if (streamingIndicator) {
+                            streamingIndicator.style.display = 'none';
+                        }
+
+                        // Build references HTML
+                        let refsHTML = '<div class="references-title">';
+                        refsHTML += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
+                        refsHTML += '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>';
+                        refsHTML += '<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>';
+                        refsHTML += '</svg>';
+                        refsHTML += 'References (' + data.references.length + ')';
+                        refsHTML += '</div>';
+
+                        data.references.forEach(function(ref) {
+                            refsHTML += '<div class="reference-item">';
+                            refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
+                            refsHTML += ref.title;
+                            refsHTML += '</a>';
+                            refsHTML += '<div class="reference-meta">';
+                            refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
+                            refsHTML += '</div>';
+                            refsHTML += '</div>';
+                        });
+
+                        streamingReferences.innerHTML = refsHTML;
+                        streamingReferences.style.display = 'block';
+                        scrollToBottom();
+                    }
+                } catch (err) {
+                    console.error('[SSE] Error parsing references:', err);
+                }
+            });
+
+            eventSource.addEventListener('done', function(e) {
+                console.log('[SSE] Stream complete');
+
+                // Hide streaming indicator
+                if (streamingIndicator) {
+                    streamingIndicator.style.display = 'none';
+                }
+
+                eventSource.close();
+                scrollToBottom();
+            });
+
+            eventSource.addEventListener('error', function(e) {
+                console.error('[SSE] Error event:', e);
+
+                if (streamingIndicator) {
+                    streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error loading response</span>';
+                }
+
+                eventSource.close();
+            });
+
+            // Scroll to bottom on page load
+            setTimeout(scrollToBottom, 100);
+        })();
+        {% endif %}
+
+        // Auto-scroll to bottom on page load (for chat view)
+        {% if messages and messages|length > 0 %}
+        window.addEventListener('load', function() {
+            scrollToBottom();
+        });
+        {% endif %}
     </script>
 </body>
 </html>
@@ -5737,10 +6306,6 @@ TERMS_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
-
-    
-
     <div class="content">
         <h1>Terms of Service</h1>
         <p class="last-updated">Last Updated: November 25, 2025</p>
@@ -5875,6 +6440,16 @@ TERMS_HTML = """<!DOCTYPE html>
     </footer>
         </main>
     </div>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+    </script>
 </body>
 </html>
 """
@@ -6758,10 +7333,6 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<div class="bg-canvas"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div><div class="grain"></div>
-
-    
-
     <div class="content">
         <h1>Privacy Policy</h1>
         <p class="last-updated">Last Updated: November 27, 2025</p>
@@ -6925,6 +7496,16 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     </footer>
         </main>
     </div>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+    </script>
 </body>
 </html>
 """
