@@ -1711,57 +1711,13 @@ PREOP_HTML = """<!DOCTYPE html>
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.05), 0 32px 100px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
         }
 
-        /* Progress Bar */
-        .progress-container {
-            margin-bottom: 40px;
-        }
-
-        .progress-bar-bg {
-            height: 8px;
-            background: var(--gray-200);
-            border-radius: 100px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--blue-500), var(--blue-600));
-            border-radius: 100px;
-            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
-
-        .progress-text {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-600);
-        }
-
-        .progress-text .step-count {
-            color: var(--blue-600);
-        }
-
-        /* Step Header */
-        .step-header {
+        /* Section Header */
+        .section-header {
             margin-bottom: 32px;
         }
 
-        .step-indicator {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
 
-        .step-title {
+        .section-title {
             font-size: 26px;
             font-weight: 800;
             letter-spacing: -0.8px;
@@ -1769,14 +1725,14 @@ PREOP_HTML = """<!DOCTYPE html>
             margin-bottom: 8px;
         }
 
-        .step-description {
+        .section-description {
             font-size: 14px;
             line-height: 1.6;
             color: var(--gray-600);
         }
 
         /* Step Content */
-        .step-content {
+        .section-content {
             opacity: 0;
             animation: fadeSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
@@ -1792,12 +1748,15 @@ PREOP_HTML = """<!DOCTYPE html>
             }
         }
 
-        .step {
-            display: none;
+        .form-section {
+            display: block;
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .step.active {
-            display: block;
+        .form-section:last-of-type {
+            border-bottom: none;
         }
 
         /* Form Fields */
@@ -2078,84 +2037,39 @@ PREOP_HTML = """<!DOCTYPE html>
             margin-left: 4px;
         }
 
-        /* Wizard Navigation */
-        .wizard-nav {
+        /* Form Submit */
+        .form-submit {
             display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            margin-top: 40px;
-            padding-top: 32px;
+            justify-content: center;
+            margin-top: 48px;
+            padding-top: 40px;
             border-top: 2px solid var(--gray-200);
         }
 
-        .wizard-btn {
-            padding: 14px 28px;
+        .submit-btn {
+            padding: 16px 40px;
             font-family: inherit;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 700;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .wizard-btn-prev {
-            background: var(--white);
-            color: var(--gray-700);
-            border: 2px solid var(--gray-300);
-        }
-
-        .wizard-btn-prev:hover {
-            border-color: var(--gray-400);
-            background: var(--gray-50);
-            transform: translateX(-4px);
-        }
-
-        .wizard-btn-prev:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .wizard-btn-next, .wizard-btn-submit {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .wizard-btn-next:hover, .wizard-btn-submit:hover {
-            transform: translateX(4px) translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        }
-
-        .wizard-btn-submit {
+            gap: 10px;
             background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            color: var(--white);
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        .wizard-btn-submit:hover {
+        .submit-btn:hover {
+            transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
-        /* Error Messages */
-        .error-message {
-            margin-top: 8px;
-            padding: 12px 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid #DC2626;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #DC2626;
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-            animation: shake 0.5s ease;
+        .submit-btn:active {
+            transform: translateY(0);
         }
 
         @keyframes shake {
@@ -2437,7 +2351,7 @@ PREOP_HTML = """<!DOCTYPE html>
             .wizard-card {
                 padding: 24px;
             }
-            .step-title {
+            .section-title {
                 font-size: 22px;
             }
             .wizard-nav {
@@ -2478,7 +2392,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -2492,7 +2406,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -2517,33 +2431,21 @@ PREOP_HTML = """<!DOCTYPE html>
             </div>
 
             {% if not summary %}
-            <!-- Wizard Container -->
+            <!-- Form Container -->
             <div class="wizard-container">
                 <div class="wizard-card">
-                    <!-- Progress Bar -->
-                    <div class="progress-container">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="progressBar" style="width: 14.28%;"></div>
-                        </div>
-                        <div class="progress-text">
-                            <span class="step-count" id="stepCount">Step 1 of 7</span>
-                            <span id="stepPercentage">14%</span>
-                        </div>
-                    </div>
-
-                    <!-- Wizard Form -->
-                    <form method="post" action="/preop" id="wizardForm">
+                    <!-- Single Form -->
+                    <form method="post" action="/preop" id="preopForm">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                        <!-- STEP 1: Demographics -->
-                        <div class="step active" id="step1">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 1 of 7</div>
-                                <h2 class="step-title">Patient Demographics</h2>
-                                <p class="step-description">Basic patient information for risk calculation</p>
+                        <!-- Section 1: Demographics -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h2 class="section-title">Patient Demographics</h2>
+                                <p class="section-description">Basic patient information for risk calculation</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-row three-col">
                                     <div class="field-group">
                                         <label for="age" class="field-label">Age <span class="required">*</span></label>
@@ -2604,15 +2506,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 2: ASA Classification -->
-                        <div class="step" id="step2">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 2 of 7</div>
-                                <h2 class="step-title">ASA Physical Status</h2>
-                                <p class="step-description">Select the appropriate ASA classification</p>
+                        <!-- Section 2: ASA Classification -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h2 class="section-title">ASA Physical Status</h2>
+                                <p class="section-description">Select the appropriate ASA classification</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-group">
                                     <label class="field-label">ASA Classification <span class="required">*</span></label>
                                     <div class="radio-group">
@@ -2688,15 +2589,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 3: Comorbidities -->
-                        <div class="step" id="step3">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 3 of 7</div>
-                                <h2 class="step-title">Comorbidities</h2>
-                                <p class="step-description">Select all applicable conditions organized by system</p>
+                        <!-- Section3: Comorbidities -->
+                        <div class="form-section" id="section3">
+                            <div class="section-header">
+                                <h2 class="section-title">Comorbidities</h2>
+                                <p class="section-description">Select all applicable conditions organized by system</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <!-- Cardiac -->
                                 <div class="system-group">
                                     <div class="system-title">Cardiac</div>
@@ -2861,15 +2761,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 4: Functional Status -->
-                        <div class="step" id="step4">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 4 of 7</div>
-                                <h2 class="step-title">Functional Status & Exercise Tolerance</h2>
-                                <p class="step-description">Assess patient's functional capacity and activity level</p>
+                        <!-- Section4: Functional Status -->
+                        <div class="form-section" id="section4">
+                            <div class="section-header">
+                                <h2 class="section-title">Functional Status & Exercise Tolerance</h2>
+                                <p class="section-description">Assess patient's functional capacity and activity level</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-group">
                                     <label class="field-label">Metabolic Equivalents (METs) <span class="required">*</span></label>
                                     <div class="radio-group">
@@ -2946,15 +2845,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 5: Medications -->
-                        <div class="step" id="step5">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 5 of 7</div>
-                                <h2 class="step-title">Current Medications</h2>
-                                <p class="step-description">List medications and identify critical agents</p>
+                        <!-- Section5: Medications -->
+                        <div class="form-section" id="section5">
+                            <div class="section-header">
+                                <h2 class="section-title">Current Medications</h2>
+                                <p class="section-description">List medications and identify critical agents</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-group">
                                     <label for="medications" class="field-label">Medication List</label>
                                     <textarea id="medications" name="medications" class="field-input" placeholder="e.g., Metoprolol 50mg BID, Lisinopril 10mg daily, Atorvastatin 40mg nightly..." rows="4"></textarea>
@@ -3019,15 +2917,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 6: Labs & Cardiac Workup -->
-                        <div class="step" id="step6">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 6 of 7</div>
-                                <h2 class="step-title">Laboratory Values & Cardiac Assessment</h2>
-                                <p class="step-description">Enter available lab results and cardiac workup findings</p>
+                        <!-- Section6: Labs & Cardiac Workup -->
+                        <div class="form-section" id="section6">
+                            <div class="section-header">
+                                <h2 class="section-title">Laboratory Values & Cardiac Assessment</h2>
+                                <p class="section-description">Enter available lab results and cardiac workup findings</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-row">
                                     <div class="field-group">
                                         <label for="hgb" class="field-label">Hemoglobin (g/dL)</label>
@@ -3095,15 +2992,14 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- STEP 7: Surgical Procedure -->
-                        <div class="step" id="step7">
-                            <div class="step-header">
-                                <div class="step-indicator">Step 7 of 7</div>
-                                <h2 class="step-title">Surgical Procedure</h2>
-                                <p class="step-description">Details about the planned operation</p>
+                        <!-- Section7: Surgical Procedure -->
+                        <div class="form-section" id="section7">
+                            <div class="section-header">
+                                <h2 class="section-title">Surgical Procedure</h2>
+                                <p class="section-description">Details about the planned operation</p>
                             </div>
 
-                            <div class="step-content">
+                            <div class="section-content">
                                 <div class="field-group">
                                     <label for="procedure" class="field-label">Procedure Name <span class="required">*</span></label>
                                     <input type="text" id="procedure" name="procedure" class="field-input" placeholder="e.g., Total Knee Arthroplasty, Laparoscopic Cholecystectomy, CABG..." required>
@@ -3163,21 +3059,12 @@ PREOP_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <!-- Wizard Navigation -->
-                        <div class="wizard-nav">
-                            <button type="button" class="wizard-btn wizard-btn-prev" id="prevBtn" onclick="changeStep(-1)" disabled>
-                                ← Previous
-                            </button>
-                            <button type="button" class="wizard-btn wizard-btn-next" id="nextBtn" onclick="changeStep(1)">
-                                Next →
-                            </button>
-                            <button type="submit" class="wizard-btn wizard-btn-submit" id="submitBtn" style="display: none;">
+                        <!-- Submit Button -->
+                        <div class="form-submit">
+                            <button type="submit" class="submit-btn">
                                 Generate Assessment →
                             </button>
                         </div>
-
-                        <!-- Error Message -->
-                        <div class="error-message" id="errorMessage"></div>
                     </form>
                 </div>
             </div>
@@ -3225,38 +3112,35 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="loading-text">Generating Evidence-Based Assessment...</div>
         </div>
     </div>
-
-    <!-- Glassmorphism Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
-                </div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-            </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Contact</a>
-            </div>
-        </div>
-    </footer>
         </main>
+
+        <!-- Glassmorphism Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
+                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script>
-        // ====== WIZARD STATE ======
-        let currentStep = 1;
-        const totalSteps = 7;
 
         // ====== SESSION STORAGE ======
         function saveFormData() {
-            const form = document.getElementById('wizardForm');
+            const form = document.getElementById('preopForm');
             const formData = new FormData(form);
             const data = {};
 
@@ -3282,7 +3166,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             try {
                 const data = JSON.parse(saved);
-                const form = document.getElementById('wizardForm');
+                const form = document.getElementById('preopForm');
 
                 for (let [key, value] of Object.entries(data)) {
                     const elements = form.elements[key];
@@ -3313,103 +3197,6 @@ PREOP_HTML = """<!DOCTYPE html>
             }
         }
 
-        // ====== NAVIGATION ======
-        function showStep(n) {
-            const steps = document.querySelectorAll('.step');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const submitBtn = document.getElementById('submitBtn');
-
-            // Hide all steps
-            steps.forEach(step => step.classList.remove('active'));
-
-            // Show current step
-            if (steps[n - 1]) {
-                steps[n - 1].classList.add('active');
-
-                // Reset animation
-                const content = steps[n - 1].querySelector('.step-content');
-                content.style.animation = 'none';
-                setTimeout(() => {
-                    content.style.animation = '';
-                }, 10);
-            }
-
-            // Update progress
-            const percentage = (n / totalSteps) * 100;
-            document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('stepCount').textContent = `Step ${n} of ${totalSteps}`;
-            document.getElementById('stepPercentage').textContent = Math.round(percentage) + '%';
-
-            // Update buttons
-            prevBtn.disabled = (n === 1);
-
-            if (n === totalSteps) {
-                nextBtn.style.display = 'none';
-                submitBtn.style.display = 'inline-flex';
-            } else {
-                nextBtn.style.display = 'inline-flex';
-                submitBtn.style.display = 'none';
-            }
-
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Save progress
-            saveFormData();
-        }
-
-        function changeStep(direction) {
-            const errorMsg = document.getElementById('errorMessage');
-            errorMsg.classList.remove('show');
-
-            // Validate current step before advancing
-            if (direction === 1) {
-                if (!validateCurrentStep()) {
-                    return;
-                }
-            }
-
-            currentStep += direction;
-
-            if (currentStep < 1) currentStep = 1;
-            if (currentStep > totalSteps) currentStep = totalSteps;
-
-            showStep(currentStep);
-        }
-
-        function validateCurrentStep() {
-            const currentStepDiv = document.getElementById(`step${currentStep}`);
-            const requiredFields = currentStepDiv.querySelectorAll('[required]');
-            const errorMsg = document.getElementById('errorMessage');
-
-            for (let field of requiredFields) {
-                if (field.type === 'radio') {
-                    const name = field.name;
-                    const checked = currentStepDiv.querySelector(`input[name="${name}"]:checked`);
-                    if (!checked) {
-                        errorMsg.textContent = 'Please complete all required fields before continuing.';
-                        errorMsg.classList.add('show');
-                        return false;
-                    }
-                } else if (field.type === 'checkbox') {
-                    if (!field.checked && field.required) {
-                        errorMsg.textContent = 'Please complete all required fields before continuing.';
-                        errorMsg.classList.add('show');
-                        return false;
-                    }
-                } else {
-                    if (!field.value.trim()) {
-                        errorMsg.textContent = 'Please complete all required fields before continuing.';
-                        errorMsg.classList.add('show');
-                        field.focus();
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
 
         // ====== RADIO BUTTON SELECTION ======
         function selectRadio(name, value) {
@@ -3511,9 +3298,6 @@ PREOP_HTML = """<!DOCTYPE html>
         document.addEventListener('DOMContentLoaded', function() {
             // Load saved data
             loadFormData();
-
-            // Show first step
-            showStep(1);
 
             // Auto-calculate on input
             ['age', 'weight', 'height'].forEach(id => {
@@ -4737,21 +4521,11 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-input-wrapper {
-            max-width: 900px;
+            max-width: 720px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
-        #chat-form {
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
-        }
-
-        #chat-form .chat-card {
-            flex: 1;
+        #chat-form.chat-card {
             margin: 0;
         }
 
@@ -4819,17 +4593,6 @@ HTML = """<!DOCTYPE html>
 
             .chat-input-area {
                 padding: 20px 24px;
-            }
-
-            .chat-input-wrapper {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            #chat-form {
-                flex: 1;
-                max-width: 720px;
             }
 
             .new-chat-btn {
@@ -6352,7 +6115,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -7272,7 +7035,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -7804,7 +7567,7 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -8733,7 +8496,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -10356,7 +10119,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -11899,7 +11662,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/chat" class="mobile-menu-link">Chat</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/preop" class="mobile-menu-link">PreOp Assessment</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
@@ -13622,7 +13385,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -14367,9 +14130,9 @@ Answer as if you're a colleague continuing the conversation:"""
                 try:
                     art = p["MedlineCitation"]["Article"]
                     title = art.get("ArticleTitle", "No title")
-                    # Truncate abstracts to 600 chars for faster GPT processing
+                    # Truncate abstracts to 1200 chars for better citation accuracy
                     abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                    abstract = abstract[:600] + "..." if len(abstract) > 600 else abstract
+                    abstract = abstract[:1200] + "..." if len(abstract) > 1200 else abstract
                     authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
                     journal = art["Journal"].get("Title", "Unknown")
                     year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
@@ -14411,35 +14174,53 @@ Paper details:
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
 2. For acute situations, provide step-by-step protocols with drugs and doses
-3. Use numbered citations [1], [2] - NO author names in text
+3. **CITATION ACCURACY (CRITICAL):**
+   - ONLY cite a paper [N] if that SPECIFIC paper's abstract directly supports the exact claim you're making
+   - Verify each citation: Does the abstract contain this specific fact/dose/finding?
+   - If a claim is from your general knowledge but NOT explicitly in the provided abstracts, DO NOT add a citation
+   - Better to have NO citation than an INACCURATE citation
+   - When citing: use [1], [2], etc. - NO author names in text
+   - Multiple papers can support one claim: "X is effective [1][2][3]"
+   - If papers discuss a topic generally but don't support your specific claim, omit the citation
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
-6. START your response with a confidence badge using this exact HTML format:
+7. START your response with a confidence badge using this exact HTML format:
    <div class="evidence-quality-badge">
    <div class="confidence-level [high/moderate/low]">
    <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
    </div>
    <div class="evidence-details">
-   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]<br>
+   💡 Why this confidence? [Brief explanation based on evidence quality]
    </div>
    </div>
 
-Example response format:
+CONFIDENCE LEVEL GUIDANCE:
+- **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence (e.g., "Multiple meta-analyses confirm this approach" or "Supported by 4+ high-quality RCTs")
+- **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence (e.g., "Based on several studies but evidence is mixed" or "Limited to observational data")
+- **Low Confidence**: Few papers OR case reports/expert opinion only (e.g., "Limited research available, mostly expert consensus" or "Only case reports and small studies")
+
+Example response showing proper citation usage:
 "<div class="evidence-quality-badge">
 <div class="confidence-level high">
 <strong>Evidence Quality:</strong> High Confidence
 </div>
 <div class="evidence-details">
-📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
+📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024<br>
+💡 Why this confidence? Multiple meta-analyses and RCTs provide robust evidence for these interventions.
 </div>
 </div>
 
 <h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
-Deepen anesthesia with propofol 0.5-1 mg/kg or increase volatile to 2+ MAC [1]</p>
+100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol 0.5-1 mg/kg [1] or increase volatile agent to 2+ MAC.</p>
 <p><strong>Bronchodilators:</strong><br>
-Albuterol 4-8 puffs via ETT [2]</p>"
+Albuterol 4-8 puffs MDI via ETT is first-line treatment [2][3]. Response typically seen within 2-3 minutes.</p>
+<p><strong>Monitoring:</strong><br>
+Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
+
+NOTE: In this example, propofol dose and albuterol are cited because abstracts explicitly mention them. Generic monitoring principles are not cited because they're standard knowledge not specifically from these papers.
 
 Respond with maximum clinical utility:"""
 
