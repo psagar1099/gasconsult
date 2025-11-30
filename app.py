@@ -9916,17 +9916,6 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<!-- Animated Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <!-- Glassmorphism Navigation -->
-    
-
     <!-- Main Container -->
     <div class="main-container">
         <!-- Sidebar -->
@@ -13049,8 +13038,8 @@ def stream():
                 if chunk.choices[0].delta.content:
                     content = chunk.choices[0].delta.content
                     full_response += content
-                    # Send content chunk
-                    yield f"data: {json.dumps({'type': 'content', 'data': content})}\n\n"
+                    # Send content chunk - ensure_ascii=False to preserve HTML characters
+                    yield f"data: {json.dumps({'type': 'content', 'data': content}, ensure_ascii=False)}\n\n"
 
             # Calculate evidence strength
             evidence_strength = get_evidence_strength(num_papers, refs)
@@ -13087,7 +13076,7 @@ def stream():
             session.modified = True
 
             # Send references with evidence strength
-            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength})}\n\n"
+            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
 
             # Send completion event
             yield f"data: {json.dumps({'type': 'done'})}\n\n"
