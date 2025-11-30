@@ -566,21 +566,25 @@ def expand_medical_abbreviations(query):
     q = q.replace("vasopressin", '"vasopressin"[MeSH Terms] OR vasopressin OR pitressin')
 
     # Common procedures
-    q = q.replace(" rsi ", ' ("rapid sequence induction" OR RSI OR "rapid sequence intubation" OR "airway management") ')
+    # Fix RSI - handle both standalone and embedded (order matters - do specific before general)
+    q = re.sub(r'\brsi\b', '("rapid sequence induction" OR RSI OR "rapid sequence intubation" OR "airway management")', q, flags=re.IGNORECASE)
     q = q.replace("rapid sequence", '"rapid sequence induction" OR RSI OR "rapid sequence intubation"')
     q = q.replace("awake intubation", '"awake intubation" OR "fiberoptic intubation" OR "difficult airway"')
     q = q.replace("awake fiberoptic", '"awake intubation" OR "fiberoptic intubation" OR "difficult airway"')
-    q = q.replace(" cabg ", ' ("coronary artery bypass" OR CABG OR "cardiac surgery") ')
+    q = re.sub(r'\bcabg\b', '("coronary artery bypass" OR CABG OR "cardiac surgery")', q, flags=re.IGNORECASE)
     q = q.replace("coronary artery bypass", '"coronary artery bypass" OR CABG OR "cardiac surgery"')
-    q = q.replace(" tavr ", ' ("transcatheter aortic valve" OR TAVR OR "structural heart") ')
+    q = re.sub(r'\btavr\b', '("transcatheter aortic valve" OR TAVR OR "structural heart")', q, flags=re.IGNORECASE)
     q = q.replace("transcatheter aortic", '"transcatheter aortic valve" OR TAVR')
 
     # Common complications
+    # LAST - keep space-based to avoid matching "last" in "the last time"
     q = q.replace(" last ", ' ("local anesthetic systemic toxicity" OR LAST OR "lipid emulsion" OR "intralipid") ')
     q = q.replace("local anesthetic toxicity", '"local anesthetic systemic toxicity" OR LAST OR "lipid emulsion"')
-    q = q.replace(" pris ", ' ("propofol infusion syndrome" OR PRIS) ')
+    # PRIS - use word boundary (less likely to be a common word)
+    q = re.sub(r'\bpris\b', '("propofol infusion syndrome" OR PRIS)', q, flags=re.IGNORECASE)
     q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
     q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH')
+    # MH - keep space-based to avoid matching "mh" in other words
     q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR "dantrolene" OR MH) ')
 
     # Common scenarios
@@ -14170,6 +14174,16 @@ Research papers (cite as [1], [2], etc.):
 Paper details:
 {context}
 
+⚠️ CRITICAL FIRST STEP - RELEVANCE CHECK:
+Before proceeding, check if the provided papers are actually about the topic asked:
+- Question topic: {raw_query}
+- Are the paper titles/abstracts about this topic?
+- ❌ If papers are OFF-TOPIC (e.g., asking about RSI but papers are about ACL injuries):
+  * Answer the question from general knowledge WITHOUT any citations
+  * State at the top: "⚠️ Note: The search did not return relevant papers for this topic. Answer based on general medical knowledge."
+  * Do NOT cite irrelevant papers - it's misleading
+- ✅ If papers ARE relevant: Proceed normally with citations
+
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
 2. For acute situations, provide step-by-step protocols with drugs and doses
@@ -14184,17 +14198,23 @@ INSTRUCTIONS:
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
-7. START your response with a confidence badge using this exact HTML format:
-   <div class="evidence-quality-badge">
-   <div class="confidence-level [high/moderate/low]">
-   <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
-   </div>
-   <div class="evidence-details">
-   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
-   </div>
-   </div>
+7. START your response with a confidence badge:
+   - If papers ARE relevant to the topic, use:
+     <div class="evidence-quality-badge">
+     <div class="confidence-level [high/moderate/low]">
+     <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
+     </div>
+     <div class="evidence-details">
+     📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+     </div>
+     </div>
 
-CONFIDENCE LEVEL GUIDANCE:
+   - If papers are OFF-TOPIC or irrelevant, SKIP the badge and start with:
+     <p style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px;">
+     ⚠️ <strong>Note:</strong> Search did not return relevant papers. Answer based on general anesthesiology knowledge.
+     </p>
+
+CONFIDENCE LEVEL GUIDANCE (only if papers ARE relevant):
 - **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence
 - **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence
 - **Low Confidence**: Few papers OR case reports/expert opinion only
@@ -14206,7 +14226,7 @@ CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
    ✅ CORRECT: "TXA reduces blood loss in spine surgery [1][2]" when both abstracts explicitly state this
    ✅ CORRECT: "Standard monitoring includes pulse oximetry" (NO citation - general knowledge)
 
-Example response showing proper citation usage:
+EXAMPLE 1 - When papers ARE relevant (with proper citation):
 "<div class="evidence-quality-badge">
 <div class="confidence-level high">
 <strong>Evidence Quality:</strong> High Confidence
@@ -14224,7 +14244,18 @@ Inhaled beta-2 agonists are first-line treatment [1][2]. Response typically seen
 <p><strong>Monitoring:</strong><br>
 Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
 
-NOTE: This example shows CONSERVATIVE citation - only cite when the abstract explicitly supports the exact claim. Generic principles (100% oxygen, monitoring) have NO citations because they're standard knowledge.
+EXAMPLE 2 - When papers are OFF-TOPIC (question about RSI, but papers are about ACL injuries):
+"<p style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px;">
+⚠️ <strong>Note:</strong> Search did not return relevant papers. Answer based on general anesthesiology knowledge.
+</p>
+
+<h3>Rapid Sequence Induction (RSI) Checklist</h3>
+<p><strong>Preparation:</strong><br>
+Ensure all airway equipment ready, including laryngoscope, ETT, suction, and backup devices. Standard ASA monitoring. Preoxygenate with 100% O2 for 3-5 minutes.</p>
+<p><strong>Medications:</strong><br>
+Induction agent (propofol 1.5-2.5 mg/kg or etomidate 0.2-0.3 mg/kg) followed immediately by paralytic (succinylcholine 1-1.5 mg/kg or rocuronium 1.2 mg/kg).</p>"
+
+NOTE: Example 1 shows CONSERVATIVE citation - only when abstracts explicitly support claims. Example 2 shows handling irrelevant papers - NO citations, clear disclaimer.
 
 Respond with maximum clinical utility:"""
 
