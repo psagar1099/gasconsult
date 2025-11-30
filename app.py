@@ -1192,22 +1192,22 @@ PREOP_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 52px;
-            max-height: 150px;
+            min-height: 40px;
+            max-height: 120px;
             line-height: 1.5;
         }
 
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -1219,7 +1219,7 @@ PREOP_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 6px;
+            margin: 4px;
         }
 
         .chat-send:hover {
@@ -3865,22 +3865,22 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 52px;
-            max-height: 150px;
+            min-height: 40px;
+            max-height: 120px;
             line-height: 1.5;
         }
 
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -3892,7 +3892,7 @@ HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 6px;
+            margin: 4px;
         }
 
         .chat-send:hover {
@@ -4216,6 +4216,9 @@ HTML = """<!DOCTYPE html>
             flex-direction: column;
             padding-top: 80px;
             min-height: 100vh;
+            background: var(--gray-50);
+            position: relative;
+            z-index: 10;
         }
 
         .messages-container {
@@ -4987,6 +4990,7 @@ HTML = """<!DOCTYPE html>
         </section>
         {% endif %}
 
+        {% if not messages or messages|length == 0 %}
         <section class="features">
             <div class="features-header">
                 <div class="features-label">Features</div>
@@ -5036,6 +5040,7 @@ HTML = """<!DOCTYPE html>
                 </div>
             </div>
         </section>
+        {% endif %}
 
         <footer class="footer">
             <div class="footer-inner">
@@ -5638,22 +5643,22 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 52px;
-            max-height: 150px;
+            min-height: 40px;
+            max-height: 120px;
             line-height: 1.5;
         }
 
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -5665,7 +5670,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 6px;
+            margin: 4px;
         }
 
         .chat-send:hover {
@@ -6558,22 +6563,22 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 52px;
-            max-height: 150px;
+            min-height: 40px;
+            max-height: 120px;
             line-height: 1.5;
         }
 
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -6585,7 +6590,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 6px;
+            margin: 4px;
         }
 
         .chat-send:hover {
@@ -9216,22 +9221,22 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 52px;
-            max-height: 150px;
+            min-height: 40px;
+            max-height: 120px;
             line-height: 1.5;
         }
 
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -9243,7 +9248,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 6px;
+            margin: 4px;
         }
 
         .chat-send:hover {
