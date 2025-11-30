@@ -4521,21 +4521,11 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-input-wrapper {
-            max-width: 900px;
+            max-width: 720px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
         }
 
-        #chat-form {
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
-        }
-
-        #chat-form .chat-card {
-            flex: 1;
+        #chat-form.chat-card {
             margin: 0;
         }
 
@@ -4603,17 +4593,6 @@ HTML = """<!DOCTYPE html>
 
             .chat-input-area {
                 padding: 20px 24px;
-            }
-
-            .chat-input-wrapper {
-                flex-direction: row;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            #chat-form {
-                flex: 1;
-                max-width: 720px;
             }
 
             .new-chat-btn {
@@ -14212,9 +14191,15 @@ INSTRUCTIONS:
    <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
    </div>
    <div class="evidence-details">
-   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
+   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]<br>
+   💡 Why this confidence? [Brief explanation based on evidence quality]
    </div>
    </div>
+
+CONFIDENCE LEVEL GUIDANCE:
+- **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence (e.g., "Multiple meta-analyses confirm this approach" or "Supported by 4+ high-quality RCTs")
+- **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence (e.g., "Based on several studies but evidence is mixed" or "Limited to observational data")
+- **Low Confidence**: Few papers OR case reports/expert opinion only (e.g., "Limited research available, mostly expert consensus" or "Only case reports and small studies")
 
 Example response showing proper citation usage:
 "<div class="evidence-quality-badge">
@@ -14222,7 +14207,8 @@ Example response showing proper citation usage:
 <strong>Evidence Quality:</strong> High Confidence
 </div>
 <div class="evidence-details">
-📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
+📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024<br>
+💡 Why this confidence? Multiple meta-analyses and RCTs provide robust evidence for these interventions.
 </div>
 </div>
 
