@@ -3753,7 +3753,7 @@ HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -3764,7 +3764,7 @@ HTML = """<!DOCTYPE html>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
-                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/?clear=1" class="nav-link active">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
@@ -3794,6 +3794,7 @@ HTML = """<!DOCTYPE html>
                 {% endif %}
 
                 {% for message in messages %}
+                    {% if message.content and message.content.strip() %}
                     {% if message.role == 'user' %}
                     <div class="message user-message">
                         <div class="message-bubble">{{ message.content }}</div>
@@ -3853,6 +3854,7 @@ HTML = """<!DOCTYPE html>
                             {% endif %}
                         </div>
                     </div>
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
 
