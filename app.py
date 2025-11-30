@@ -14151,9 +14151,9 @@ Answer as if you're a colleague continuing the conversation:"""
                 try:
                     art = p["MedlineCitation"]["Article"]
                     title = art.get("ArticleTitle", "No title")
-                    # Truncate abstracts to 600 chars for faster GPT processing
+                    # Truncate abstracts to 1200 chars for better citation accuracy
                     abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                    abstract = abstract[:600] + "..." if len(abstract) > 600 else abstract
+                    abstract = abstract[:1200] + "..." if len(abstract) > 1200 else abstract
                     authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
                     journal = art["Journal"].get("Title", "Unknown")
                     year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
@@ -14195,11 +14195,18 @@ Paper details:
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
 2. For acute situations, provide step-by-step protocols with drugs and doses
-3. Use numbered citations [1], [2] - NO author names in text
+3. **CITATION ACCURACY (CRITICAL):**
+   - ONLY cite a paper [N] if that SPECIFIC paper's abstract directly supports the exact claim you're making
+   - Verify each citation: Does the abstract contain this specific fact/dose/finding?
+   - If a claim is from your general knowledge but NOT explicitly in the provided abstracts, DO NOT add a citation
+   - Better to have NO citation than an INACCURATE citation
+   - When citing: use [1], [2], etc. - NO author names in text
+   - Multiple papers can support one claim: "X is effective [1][2][3]"
+   - If papers discuss a topic generally but don't support your specific claim, omit the citation
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
-6. START your response with a confidence badge using this exact HTML format:
+7. START your response with a confidence badge using this exact HTML format:
    <div class="evidence-quality-badge">
    <div class="confidence-level [high/moderate/low]">
    <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
@@ -14209,7 +14216,7 @@ INSTRUCTIONS:
    </div>
    </div>
 
-Example response format:
+Example response showing proper citation usage:
 "<div class="evidence-quality-badge">
 <div class="confidence-level high">
 <strong>Evidence Quality:</strong> High Confidence
@@ -14221,9 +14228,13 @@ Example response format:
 
 <h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
-Deepen anesthesia with propofol 0.5-1 mg/kg or increase volatile to 2+ MAC [1]</p>
+100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol 0.5-1 mg/kg [1] or increase volatile agent to 2+ MAC.</p>
 <p><strong>Bronchodilators:</strong><br>
-Albuterol 4-8 puffs via ETT [2]</p>"
+Albuterol 4-8 puffs MDI via ETT is first-line treatment [2][3]. Response typically seen within 2-3 minutes.</p>
+<p><strong>Monitoring:</strong><br>
+Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
+
+NOTE: In this example, propofol dose and albuterol are cited because abstracts explicitly mention them. Generic monitoring principles are not cited because they're standard knowledge not specifically from these papers.
 
 Respond with maximum clinical utility:"""
 
