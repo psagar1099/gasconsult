@@ -962,10 +962,10 @@ PREOP_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -1461,8 +1461,8 @@ PREOP_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -1974,7 +1974,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -2576,10 +2576,10 @@ HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -3075,8 +3075,8 @@ HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -3738,7 +3738,7 @@ HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -4333,10 +4333,10 @@ LIBRARY_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -4832,8 +4832,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -5013,7 +5013,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -5253,10 +5253,10 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -5752,8 +5752,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -5933,7 +5933,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -6153,10 +6153,10 @@ TERMS_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -6652,8 +6652,8 @@ TERMS_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -6833,7 +6833,7 @@ TERMS_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -7172,10 +7172,10 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -7671,8 +7671,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -7852,7 +7852,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -8220,10 +8220,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -8719,8 +8719,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -9326,7 +9326,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -10176,10 +10176,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -10675,8 +10675,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -10856,7 +10856,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
@@ -12935,10 +12935,10 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-icon svg { width: 52px; height: 18px; }
+        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
-            font-size: 24px;
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
@@ -13434,8 +13434,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 60px; height: 21px; }
-            .logo-text { font-size: 28px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .hero { padding: 160px 32px 80px; }
@@ -13850,7 +13850,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="52" height="18" viewBox="0 0 52 18" fill="none">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
                             <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
