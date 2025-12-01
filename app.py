@@ -3378,6 +3378,8 @@ PREOP_HTML = """<!DOCTYPE html>
                     <div class="info-card" style="margin-bottom: 24px;">
                         {{ summary|safe }}
                     </div>
+                </div>
+            </div>
 
                     {% if references %}
                     <div class="info-card">
