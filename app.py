@@ -1629,6 +1629,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -1643,6 +1644,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -12420,6 +12422,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link active">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -14145,6 +14148,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link active">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
