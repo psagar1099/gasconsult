@@ -8804,21 +8804,21 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     We prioritize your privacy, collect minimal data, and never sell your information.
                 </div>
             </div>
-
-            <footer class="footer">
-                <div class="footer-inner">
-                    <div class="footer-brand">
-                        <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
-                        <span class="footer-text">© 2025 GasConsult.ai</span>
-                    </div>
-                    <div class="footer-links">
-                        <a href="/privacy" class="footer-link">Privacy</a>
-                        <a href="/terms" class="footer-link">Terms</a>
-                        <a href="#" class="footer-link">Contact</a>
-                    </div>
-                </div>
-            </footer>
         </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="#" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
     <script>
         function toggleMobileMenu() {
@@ -11651,11 +11651,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
                 </a>
                 <div class="nav-links">
-                    <a href="/chat" class="nav-link">Chat</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/calculators" class="nav-link active">Calculators</a>
-                    <a href="/preop" class="nav-link">PreOp</a>
-                    <a href="/hypotension" class="nav-link">IOH</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link active">Clinical Calculators</a>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -11667,10 +11667,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/chat" class="mobile-menu-link">Chat</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/preop" class="mobile-menu-link">PreOp Assessment</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
