@@ -3381,8 +3381,16 @@ PREOP_HTML = """<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Modern Results Display -->
-            <div class="results-wrapper-modern">
+                    {% if references %}
+                    <div class="info-card">
+                        <div class="info-card-title">Evidence-Based References</div>
+                        <div class="info-card-content">
+                            {% for ref in references %}
+                            <div style="padding: 12px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px;">
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
+                                    [{{ loop.index }}] {{ ref.title }}
+                                </a>
+                                <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
                 <!-- Header Section -->
                 <div class="results-header">
                     <div class="results-header-content">
