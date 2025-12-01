@@ -2348,6 +2348,302 @@ PREOP_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        /* Modern Results UI */
+        .results-header {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            padding: 32px;
+            border-radius: 20px 20px 0 0;
+            margin: -24px -24px 0 -24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .results-header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .results-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .results-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: white;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .results-subtitle {
+            font-size: 14px;
+            margin: 4px 0 0 0;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .results-actions-compact {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+        }
+
+        .results-body {
+            padding: 32px 24px;
+        }
+
+        .assessment-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .assessment-content {
+            padding: 32px;
+            line-height: 1.8;
+        }
+
+        .assessment-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 32px 0 16px 0;
+        }
+
+        .assessment-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .assessment-content p {
+            margin: 12px 0;
+            color: var(--gray-700);
+        }
+
+        .assessment-content ul {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .assessment-content li {
+            margin: 8px 0;
+            color: var(--gray-700);
+        }
+
+        .assessment-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .references-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .references-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .references-card-header svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .references-count {
+            margin-left: auto;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .references-list {
+            padding: 8px;
+        }
+
+        .reference-item-modern {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item-modern:hover {
+            background: var(--gray-50);
+        }
+
+        .reference-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue-600);
+            flex-shrink: 0;
+            min-width: 32px;
+        }
+
+        .reference-content-modern {
+            flex: 1;
+        }
+
+        .reference-title-link {
+            color: var(--gray-900);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .reference-title-link:hover {
+            color: var(--blue-600);
+        }
+
+        .reference-meta-modern {
+            font-size: 13px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .reference-separator {
+            color: var(--gray-400);
+        }
+
+        .study-type-badge-preop {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: white;
+        }
+
+        .results-footer {
+            padding: 24px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-modern {
+            padding: 14px 24px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-modern svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-modern-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+
+        .btn-modern-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+        }
+
+        .btn-modern-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-modern-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+        }
+
+        .btn-modern-tertiary {
+            background: transparent;
+            color: var(--gray-600);
+            border: none;
+        }
+
+        .btn-modern-tertiary:hover {
+            color: var(--gray-900);
+            background: var(--gray-100);
+        }
+
         /* Responsive */
         @media (max-width: 640px) {
             .wizard-card {
@@ -2395,6 +2691,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -2409,6 +2706,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -2468,8 +2766,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="field-row">
                                         <label class="radio-option" onclick="selectRadio('sex', 'male')">
                                             <input type="radio" id="sex-male" name="sex" value="male" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Male</span>
                                                 </div>
@@ -2477,8 +2775,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('sex', 'female')">
                                             <input type="radio" id="sex-female" name="sex" value="female" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Female</span>
                                                 </div>
@@ -2521,8 +2819,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('asa', '1')">
                                             <input type="radio" id="asa-1" name="asa" value="1" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA I</span>
                                                     <span class="radio-desc">Normal healthy patient</span>
@@ -2531,8 +2829,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '2')">
                                             <input type="radio" id="asa-2" name="asa" value="2" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA II</span>
                                                     <span class="radio-desc">Mild systemic disease, no functional limitations</span>
@@ -2541,8 +2839,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '3')">
                                             <input type="radio" id="asa-3" name="asa" value="3" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA III</span>
                                                     <span class="radio-desc">Severe systemic disease with functional limitations</span>
@@ -2551,8 +2849,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '4')">
                                             <input type="radio" id="asa-4" name="asa" value="4" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA IV</span>
                                                     <span class="radio-desc">Severe systemic disease that is a constant threat to life</span>
@@ -2561,8 +2859,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '5')">
                                             <input type="radio" id="asa-5" name="asa" value="5" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA V</span>
                                                     <span class="radio-desc">Moribund patient not expected to survive without operation</span>
@@ -2571,8 +2869,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '6')">
                                             <input type="radio" id="asa-6" name="asa" value="6" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA VI</span>
                                                     <span class="radio-desc">Declared brain-dead patient for organ donation</span>
@@ -2776,8 +3074,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('mets', 'poor')">
                                             <input type="radio" id="mets-poor" name="mets" value="<4 METs" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">&lt;4 METs - Poor Functional Capacity</span>
                                                     <span class="radio-desc">Cannot climb 2 flights of stairs or walk 4 blocks</span>
@@ -2786,8 +3084,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('mets', 'moderate')">
                                             <input type="radio" id="mets-moderate" name="mets" value="4-10 METs" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">4-10 METs - Moderate Functional Capacity</span>
                                                     <span class="radio-desc">Can climb 2 flights of stairs, moderate exertion tolerated</span>
@@ -2812,8 +3110,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="field-row">
                                         <label class="radio-option" onclick="selectRadio('adl', 'independent')">
                                             <input type="radio" id="adl-independent" name="adl" value="Independent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Independent</span>
                                                 </div>
@@ -2821,8 +3119,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('adl', 'partial')">
                                             <input type="radio" id="adl-partial" name="adl" value="Partially Dependent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Partially Dependent</span>
                                                 </div>
@@ -2830,8 +3128,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('adl', 'dependent')">
                                             <input type="radio" id="adl-dependent" name="adl" value="Fully Dependent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Fully Dependent</span>
                                                 </div>
@@ -3011,9 +3309,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <label class="field-label">Surgical Risk Category <span class="required">*</span></label>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'low')">
-                                            <input type="radio" id="risk-low" name="surgery_risk" value="Low" required>
+                                            <input type="radio" id="surgery_risk-low" name="surgery_risk" value="Low" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Low Risk (&lt;1% cardiac risk)</span>
                                                     <span class="radio-desc">Superficial procedures, cataract surgery, breast surgery, ambulatory procedures</span>
@@ -3021,9 +3319,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                             </div>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'intermediate')">
-                                            <input type="radio" id="risk-intermediate" name="surgery_risk" value="Intermediate" required>
+                                            <input type="radio" id="surgery_risk-intermediate" name="surgery_risk" value="Intermediate" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Intermediate Risk (1-5% cardiac risk)</span>
                                                     <span class="radio-desc">Intraperitoneal, intrathoracic, orthopedic, head/neck surgery</span>
@@ -3031,9 +3329,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                             </div>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'high')">
-                                            <input type="radio" id="risk-high" name="surgery_risk" value="High" required>
+                                            <input type="radio" id="surgery_risk-high" name="surgery_risk" value="High" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">High Risk (&gt;5% cardiac risk)</span>
                                                     <span class="radio-desc">Vascular surgery, aortic surgery, prolonged procedures with major fluid shifts</span>
@@ -3072,7 +3370,7 @@ PREOP_HTML = """<!DOCTYPE html>
             </div>
 
             {% else %}
-            <!-- Results Display -->
+            <!-- Results Display - Modern Redesigned UI -->
             <div class="results-container">
                 <div class="wizard-card">
                     <h2 style="font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; letter-spacing: -1px;"><span style="color: var(--blue-600);">Pre-Operative</span> Assessment Summary</h2>
@@ -3091,6 +3389,76 @@ PREOP_HTML = """<!DOCTYPE html>
                                     [{{ loop.index }}] {{ ref.title }}
                                 </a>
                                 <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
+                <!-- Header Section -->
+                <div class="results-header">
+                    <div class="results-header-content">
+                        <div class="results-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="results-title">Pre-Operative Assessment Complete</h1>
+                            <p class="results-subtitle">Evidence-based risk stratification and optimization recommendations</p>
+                        </div>
+                    </div>
+                    <div class="results-actions-compact">
+                        <button onclick="window.print()" class="icon-btn" title="Print Assessment">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+                                <path d="M9 21H15"/>
+                                <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
+                            </svg>
+                        </button>
+                        <a href="/preop" class="icon-btn" title="New Assessment">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Assessment Content -->
+                <div class="results-body">
+                    <div class="assessment-card">
+                        <div class="assessment-content">
+                            {{ summary|safe }}
+                        </div>
+                    </div>
+
+                    <!-- References Section -->
+                    {% if references %}
+                    <div class="references-card">
+                        <div class="references-card-header">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            <span>Evidence-Based References</span>
+                            <span class="references-count">{{ references|length }} papers</span>
+                        </div>
+                        <div class="references-list">
+                            {% for ref in references %}
+                            <div class="reference-item-modern">
+                                <div class="reference-number">[{{ loop.index }}]</div>
+                                <div class="reference-content-modern">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-title-link">
+                                        {{ ref.title }}
+                                    </a>
+                                    <div class="reference-meta-modern">
+                                        <span class="reference-authors">{{ ref.authors }}</span>
+                                        <span class="reference-separator">•</span>
+                                        <span class="reference-journal">{{ ref.journal }}</span>
+                                        <span class="reference-separator">•</span>
+                                        <span class="reference-year">{{ ref.year }}</span>
+                                    </div>
+                                    {% if ref.get('study_badge') and ref.get('study_color') %}
+                                    <span class="study-type-badge-preop" style="background-color: {{ ref.study_color }};">
+                                        {{ ref.study_badge }}
+                                    </span>
+                                    {% endif %}
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -3098,9 +3466,25 @@ PREOP_HTML = """<!DOCTYPE html>
                     {% endif %}
                 </div>
 
-                <div class="action-buttons" style="margin-top: 32px;">
-                    <a href="/preop" class="action-btn action-btn-primary">New Assessment</a>
-                    <button onclick="window.print()" class="action-btn action-btn-secondary">Print/Export</button>
+                <!-- Action Buttons -->
+                <div class="results-footer">
+                    <a href="/preop" class="btn-modern btn-modern-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        New Assessment
+                    </a>
+                    <button onclick="window.print()" class="btn-modern btn-modern-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+                            <path d="M9 21H15"/>
+                            <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
+                        </svg>
+                        Print/Save PDF
+                    </button>
+                    <a href="/" class="btn-modern btn-modern-tertiary">
+                        Back to Home
+                    </a>
                 </div>
             </div>
             {% endif %}
@@ -3403,80 +3787,319 @@ ER  - """
 
     return '\n\n'.join(ris_entries)
 
+def classify_study_type(title, journal):
+    """
+    Classify a single study based on its title and journal.
+    Returns dict with study_type, quality_score, badge_text, and badge_color.
+
+    Study types ranked by evidence quality (highest to lowest):
+    1. Guideline/Consensus
+    2. Meta-analysis
+    3. Systematic Review
+    4. RCT
+    5. Observational Study
+    6. Review Article
+    7. Case Report/Series
+    """
+    title_lower = title.lower()
+    journal_lower = journal.lower()
+
+    # Check for guidelines/consensus (highest quality)
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['guideline', 'guidelines', 'consensus', 'recommendation', 'practice parameter',
+            'practice guideline', 'clinical practice', 'society statement']):
+        return {
+            'type': 'Guideline',
+            'score': 4,
+            'badge_text': 'Guideline',
+            'badge_color': '#7C3AED',  # Purple
+            'sort_priority': 1
+        }
+
+    # Check for meta-analysis
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['meta-analysis', 'metaanalysis', 'meta analysis', 'pooled analysis',
+            'network meta-analysis', 'meta-regression']):
+        return {
+            'type': 'Meta-analysis',
+            'score': 3,
+            'badge_text': 'Meta-analysis',
+            'badge_color': '#059669',  # Green
+            'sort_priority': 2
+        }
+
+    # Check for systematic review (separate from meta-analysis)
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['systematic review', 'cochrane review', 'systematic literature review']):
+        return {
+            'type': 'Systematic Review',
+            'score': 2.5,
+            'badge_text': 'Systematic Review',
+            'badge_color': '#0891B2',  # Teal
+            'sort_priority': 3
+        }
+
+    # Check for RCT
+    if any(keyword in title_lower for keyword in
+           ['randomized', 'randomised', ' rct', 'randomized controlled trial',
+            'randomised controlled trial', 'double-blind', 'double blind',
+            'placebo-controlled', 'placebo controlled', 'controlled clinical trial']):
+        return {
+            'type': 'RCT',
+            'score': 2,
+            'badge_text': 'RCT',
+            'badge_color': '#2563EB',  # Blue
+            'sort_priority': 4
+        }
+
+    # Check for observational studies
+    if any(keyword in title_lower for keyword in
+           ['cohort study', 'cohort analysis', 'case-control', 'case control',
+            'observational study', 'prospective study', 'retrospective study',
+            'retrospective analysis', 'database analysis', 'registry']):
+        return {
+            'type': 'Observational',
+            'score': 1,
+            'badge_text': 'Observational',
+            'badge_color': '#F59E0B',  # Amber
+            'sort_priority': 5
+        }
+
+    # Check for case reports (lowest quality)
+    if any(keyword in title_lower for keyword in
+           ['case report', 'case series', 'case study']):
+        return {
+            'type': 'Case Report',
+            'score': 0.5,
+            'badge_text': 'Case Report',
+            'badge_color': '#DC2626',  # Red
+            'sort_priority': 7
+        }
+
+    # Check for review articles (general)
+    if 'review' in title_lower:
+        return {
+            'type': 'Review',
+            'score': 1,
+            'badge_text': 'Review',
+            'badge_color': '#6B7280',  # Gray
+            'sort_priority': 6
+        }
+
+    # Default: unclassified
+    return {
+        'type': 'Study',
+        'score': 0.5,
+        'badge_text': 'Study',
+        'badge_color': '#9CA3AF',  # Light gray
+        'sort_priority': 8
+    }
+
 def get_evidence_strength(num_papers, references):
-    """Analyze evidence strength and return classification"""
+    """
+    Analyze evidence strength and return classification based on study quality hierarchy.
+
+    Evidence Hierarchy (points assigned):
+    - Guidelines/Consensus: 4 points
+    - Meta-analysis: 3 points
+    - Systematic Review: 2.5 points
+    - RCT: 2 points
+    - Observational Study: 1 point
+    - Review Article: 1 point
+    - Case Report/Series: 0.5 points
+
+    Confidence Levels:
+    - High: score ≥8 OR 2+ meta-analyses OR (1+ guideline AND 1+ meta-analysis)
+    - Moderate: score ≥4 OR 1+ meta-analysis OR 2+ RCTs OR 1+ guideline
+    - Low: everything else
+    """
     if not num_papers or num_papers == 0:
         return {
             'level': 'Low',
             'color': '#EF4444',
-            'description': 'Limited evidence available',
-            'score': 1
+            'description': 'No evidence found',
+            'score': 0,
+            'breakdown': {
+                'guidelines': 0,
+                'meta_analyses': 0,
+                'systematic_reviews': 0,
+                'rcts': 0,
+                'observational': 0,
+                'reviews': 0,
+                'case_reports': 0,
+                'total': 0,
+                'recent_count': 0
+            }
         }
 
-    # Analyze study types
-    high_quality_count = 0
+    # Initialize counters
+    guideline_count = 0
     meta_analysis_count = 0
+    systematic_review_count = 0
     rct_count = 0
+    observational_count = 0
     review_count = 0
+    case_report_count = 0
+    recent_count = 0  # Papers from last 5 years
 
+    quality_score = 0
+    current_year = 2025
+
+    # Analyze each paper for multiple study type indicators
     for ref in references:
         title = ref.get('title', '').lower()
         journal = ref.get('journal', '').lower()
+        year = ref.get('year', '')
 
-        if 'meta-analysis' in title or 'meta-analysis' in journal:
+        # Track recency (papers from last 5 years)
+        try:
+            paper_year = int(year) if year else 0
+            if current_year - paper_year <= 5:
+                recent_count += 1
+        except (ValueError, TypeError):
+            pass
+
+        # Check for guidelines/consensus (highest quality)
+        if any(keyword in title or keyword in journal for keyword in
+               ['guideline', 'guidelines', 'consensus', 'recommendation', 'practice parameter',
+                'practice guideline', 'clinical practice', 'society statement']):
+            guideline_count += 1
+            quality_score += 4
+
+        # Check for meta-analysis
+        if any(keyword in title or keyword in journal for keyword in
+               ['meta-analysis', 'metaanalysis', 'meta analysis', 'pooled analysis',
+                'network meta-analysis', 'meta-regression']):
             meta_analysis_count += 1
-            high_quality_count += 3
-        elif 'randomized' in title or 'rct' in title:
+            quality_score += 3
+
+        # Check for systematic review (separate from meta-analysis)
+        elif any(keyword in title or keyword in journal for keyword in
+                 ['systematic review', 'cochrane review', 'systematic literature review']):
+            systematic_review_count += 1
+            quality_score += 2.5
+
+        # Check for RCT
+        elif any(keyword in title for keyword in
+                 ['randomized', 'randomised', ' rct', 'randomized controlled trial',
+                  'randomised controlled trial', 'double-blind', 'double blind',
+                  'placebo-controlled', 'placebo controlled', 'controlled clinical trial']):
             rct_count += 1
-            high_quality_count += 2
-        elif 'systematic review' in title or 'cochrane' in journal:
-            review_count += 1
-            high_quality_count += 2
+            quality_score += 2
+
+        # Check for observational studies
+        elif any(keyword in title for keyword in
+                 ['cohort study', 'cohort analysis', 'case-control', 'case control',
+                  'observational study', 'prospective study', 'retrospective study',
+                  'retrospective analysis', 'database analysis', 'registry']):
+            observational_count += 1
+            quality_score += 1
+
+        # Check for case reports (lowest quality)
+        elif any(keyword in title for keyword in
+                 ['case report', 'case series', 'case study']):
+            case_report_count += 1
+            quality_score += 0.5
+
+        # Check for review articles (general)
         elif 'review' in title:
             review_count += 1
-            high_quality_count += 1
+            quality_score += 1
 
-    # Calculate strength score
-    strength_score = (num_papers * 0.5) + high_quality_count
+    # Add recency bonus (5% boost for recent evidence)
+    recency_bonus = (recent_count / num_papers) * 0.5 if num_papers > 0 else 0
+    total_score = quality_score + recency_bonus
 
-    if strength_score >= 10 or meta_analysis_count >= 2:
+    # Build breakdown object
+    breakdown = {
+        'guidelines': guideline_count,
+        'meta_analyses': meta_analysis_count,
+        'systematic_reviews': systematic_review_count,
+        'rcts': rct_count,
+        'observational': observational_count,
+        'reviews': review_count,
+        'case_reports': case_report_count,
+        'total': num_papers,
+        'recent_count': recent_count
+    }
+
+    # Determine confidence level based on refined criteria
+    # HIGH CONFIDENCE: Strong evidence from multiple high-quality sources
+    if (total_score >= 8 or
+        meta_analysis_count >= 2 or
+        (guideline_count >= 1 and meta_analysis_count >= 1) or
+        (guideline_count >= 1 and rct_count >= 2)):
+
+        # Build description highlighting strongest evidence
+        desc_parts = []
+        if guideline_count > 0:
+            desc_parts.append(f"{guideline_count} guideline{'s' if guideline_count != 1 else ''}")
+        if meta_analysis_count > 0:
+            desc_parts.append(f"{meta_analysis_count} meta-analysis/analyses")
+        if systematic_review_count > 0:
+            desc_parts.append(f"{systematic_review_count} systematic review{'s' if systematic_review_count != 1 else ''}")
+        if rct_count > 0:
+            desc_parts.append(f"{rct_count} RCT{'s' if rct_count != 1 else ''}")
+
+        description = f"{num_papers} papers: {', '.join(desc_parts) if desc_parts else 'high-quality evidence'}"
+
         return {
             'level': 'High',
             'color': '#10B981',
-            'description': f'{num_papers} papers including {meta_analysis_count} meta-analyses, {rct_count} RCTs',
-            'score': 3,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
-    elif strength_score >= 5 or num_papers >= 5:
+
+    # MODERATE CONFIDENCE: Some high-quality evidence or multiple moderate-quality sources
+    elif (total_score >= 4 or
+          meta_analysis_count >= 1 or
+          systematic_review_count >= 1 or
+          rct_count >= 2 or
+          guideline_count >= 1):
+
+        # Build description
+        desc_parts = []
+        if guideline_count > 0:
+            desc_parts.append(f"{guideline_count} guideline{'s' if guideline_count != 1 else ''}")
+        if meta_analysis_count > 0:
+            desc_parts.append(f"{meta_analysis_count} meta-analysis/analyses")
+        if systematic_review_count > 0:
+            desc_parts.append(f"{systematic_review_count} systematic review{'s' if systematic_review_count != 1 else ''}")
+        if rct_count > 0:
+            desc_parts.append(f"{rct_count} RCT{'s' if rct_count != 1 else ''}")
+        if observational_count > 0:
+            desc_parts.append(f"{observational_count} observational")
+
+        description = f"{num_papers} papers: {', '.join(desc_parts) if desc_parts else 'moderate-quality evidence'}"
+
         return {
             'level': 'Moderate',
             'color': '#FBBF24',
-            'description': f'{num_papers} papers including {rct_count} RCTs, {review_count} reviews',
-            'score': 2,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
+
+    # LOW CONFIDENCE: Limited or low-quality evidence
     else:
+        # Build description
+        desc_parts = []
+        if observational_count > 0:
+            desc_parts.append(f"{observational_count} observational")
+        if review_count > 0:
+            desc_parts.append(f"{review_count} review{'s' if review_count != 1 else ''}")
+        if case_report_count > 0:
+            desc_parts.append(f"{case_report_count} case report{'s' if case_report_count != 1 else ''}")
+
+        description = f"Limited evidence ({num_papers} papers): {', '.join(desc_parts) if desc_parts else 'low-quality studies'}"
+
         return {
             'level': 'Low',
             'color': '#EF4444',
-            'description': f'Limited evidence ({num_papers} papers)',
-            'score': 1,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
 
 HTML = """<!DOCTYPE html>
@@ -4485,6 +5108,29 @@ HTML = """<!DOCTYPE html>
             margin-top: 4px;
         }
 
+        .study-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 6px;
+            color: white;
+        }
+
+        .reference-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .reference-link-container {
+            flex: 1;
+        }
+
         .streaming-indicator {
             display: inline-flex;
             align-items: center;
@@ -4812,6 +5458,7 @@ HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -4826,6 +5473,7 @@ HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -4847,13 +5495,16 @@ HTML = """<!DOCTYPE html>
                     <div class="message ai-message">
                         <div class="message-bubble">
                             {% if message.get('evidence_strength') %}
-                            <div class="evidence-badge {{ 'high' if message.evidence_strength == 'High' else ('moderate' if message.evidence_strength == 'Moderate' else 'low') }}"
-                                 title="{% if message.evidence_strength == 'High' %}Based on {{ message.num_papers }} high-quality studies including meta-analyses, systematic reviews, or RCTs{% elif message.evidence_strength == 'Moderate' %}Based on {{ message.num_papers }} studies with some high-quality evidence{% else %}Limited evidence available ({{ message.num_papers }} studies). Use clinical judgment.{% endif %}">
+                            {% set level = message.evidence_strength.level if message.evidence_strength is mapping else message.evidence_strength %}
+                            {% set breakdown = message.evidence_strength.breakdown if message.evidence_strength is mapping else {} %}
+                            {% set description = message.evidence_strength.description if message.evidence_strength is mapping else '' %}
+                            <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }}"
+                                 title="Evidence Quality: {{ level }} - {{ description }}">
                                 <div style="display: flex; flex-direction: column; align-items: flex-start;">
                                     <div>
-                                        {% if message.evidence_strength == 'High' %}
+                                        {% if level == 'High' %}
                                         ✓ High Confidence
-                                        {% elif message.evidence_strength == 'Moderate' %}
+                                        {% elif level == 'Moderate' %}
                                         ~ Moderate Confidence
                                         {% else %}
                                         ! Low Confidence
@@ -4861,13 +5512,7 @@ HTML = """<!DOCTYPE html>
                                         • {{ message.num_papers }} studies
                                     </div>
                                     <div class="evidence-explanation">
-                                        {% if message.evidence_strength == 'High' %}
-                                        Strong evidence from meta-analyses, RCTs, or systematic reviews
-                                        {% elif message.evidence_strength == 'Moderate' %}
-                                        Moderate evidence - consider individual patient factors
-                                        {% else %}
-                                        Limited evidence - use caution and clinical judgment
-                                        {% endif %}
+                                        {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
                                     </div>
                                 </div>
                             </div>
@@ -4886,11 +5531,20 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 {% for ref in message.references %}
                                 <div class="reference-item">
-                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                                        {{ ref.title }}
-                                    </a>
-                                    <div class="reference-meta">
-                                        {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                    <div class="reference-header">
+                                        <div class="reference-link-container">
+                                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                                                {{ ref.title }}
+                                            </a>
+                                            <div class="reference-meta">
+                                                {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                            </div>
+                                            {% if ref.get('study_badge') and ref.get('study_color') %}
+                                            <span class="study-type-badge" style="background-color: {{ ref.study_color }};">
+                                                {{ ref.study_badge }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -4905,6 +5559,7 @@ HTML = """<!DOCTYPE html>
                 {% if pending_stream %}
                 <div class="message ai-message" id="streamingMessage">
                     <div class="message-bubble">
+                        <div id="streamingEvidenceBadge" style="display: none;"></div>
                         <div class="message-content" id="streamingContent" style="display: none;"></div>
                         <div class="streaming-indicator">
                             <div class="streaming-dots">
@@ -5155,6 +5810,34 @@ HTML = """<!DOCTYPE html>
                             streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
                         }
 
+                        // Display evidence badge
+                        if (event.evidence_strength) {
+                            const evidenceBadge = document.getElementById('streamingEvidenceBadge');
+                            if (evidenceBadge) {
+                                const strength = event.evidence_strength;
+                                const level = strength.level || 'Low';
+                                const description = strength.description || '';
+                                const numPapers = event.num_papers || 0;
+
+                                // Determine CSS class
+                                const badgeClass = level === 'High' ? 'high' : (level === 'Moderate' ? 'moderate' : 'low');
+
+                                // Determine icon
+                                const icon = level === 'High' ? '✓' : (level === 'Moderate' ? '~' : '!');
+
+                                // Build badge HTML
+                                let badgeHTML = '<div class="evidence-badge ' + badgeClass + '" ';
+                                badgeHTML += 'title="Evidence Quality: ' + level + ' - ' + description + '">';
+                                badgeHTML += '<div style="display: flex; flex-direction: column; align-items: flex-start;">';
+                                badgeHTML += '<div>' + icon + ' ' + level + ' Confidence • ' + numPapers + ' studies</div>';
+                                badgeHTML += '<div class="evidence-explanation">' + description + '</div>';
+                                badgeHTML += '</div></div>';
+
+                                evidenceBadge.innerHTML = badgeHTML;
+                                evidenceBadge.style.display = 'block';
+                            }
+                        }
+
                         // Display references
                         if (event.data && event.data.length > 0) {
                             console.log('[SSE] Received', event.data.length, 'references');
@@ -5175,12 +5858,20 @@ HTML = """<!DOCTYPE html>
 
                             event.data.forEach(function(ref) {
                                 refsHTML += '<div class="reference-item">';
+                                refsHTML += '<div class="reference-header"><div class="reference-link-container">';
                                 refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
                                 refsHTML += ref.title;
                                 refsHTML += '</a>';
                                 refsHTML += '<div class="reference-meta">';
                                 refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
                                 refsHTML += '</div>';
+                                // Add study type badge if available
+                                if (ref.study_badge && ref.study_color) {
+                                    refsHTML += '<span class="study-type-badge" style="background-color: ' + ref.study_color + ';">';
+                                    refsHTML += ref.study_badge;
+                                    refsHTML += '</span>';
+                                }
+                                refsHTML += '</div></div>';
                                 refsHTML += '</div>';
                             });
 
@@ -6109,6 +6800,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -6123,6 +6815,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -7029,6 +7722,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -7043,6 +7737,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -7561,6 +8256,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -7575,6 +8271,7 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -8490,6 +9187,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -8504,6 +9202,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -8829,6 +9528,1812 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+    </script>
+</body>
+</html>
+"""
+
+CRISIS_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crisis Protocols — gasconsult.ai</title>
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
+            --red-700: #B91C1C;
+            --orange-50: #FFF7ED;
+            --orange-500: #F97316;
+            --orange-600: #EA580C;
+            --purple-50: #FAF5FF;
+            --purple-500: #A855F7;
+            --purple-600: #9333EA;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
+            --amber-600: #D97706;
+            --emerald-50: #ECFDF5;
+            --emerald-500: #10B981;
+            --emerald-600: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .hero {
+            padding: 100px 20px 40px;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--red-50) 0%, #FEE2E2 100%);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.08);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+            opacity: 0;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--red-500);
+            border-radius: 50%;
+            position: relative;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--red-700);
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+            opacity: 0;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--red-600) 0%, var(--orange-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--gray-600);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 50px;
+            padding: 0 20px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+            opacity: 0;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 48px 14px 48px;
+            font-size: 16px;
+            font-family: inherit;
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            background: var(--white);
+            color: var(--gray-900);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .clear-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 8px;
+            display: none;
+            transition: all 0.2s ease;
+        }
+
+        .clear-btn:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .clear-btn.visible {
+            display: block;
+        }
+
+        .protocols-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+            opacity: 0;
+        }
+
+        .category-section:nth-child(1) { animation-delay: 0.4s; }
+        .category-section:nth-child(2) { animation-delay: 0.5s; }
+        .category-section:nth-child(3) { animation-delay: 0.6s; }
+        .category-section:nth-child(4) { animation-delay: 0.7s; }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .category-icon.red {
+            background: linear-gradient(135deg, var(--red-500) 0%, var(--red-600) 100%);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .category-icon.orange {
+            background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+        }
+
+        .category-icon.purple {
+            background: linear-gradient(135deg, var(--purple-500) 0%, var(--purple-600) 100%);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+
+        .category-icon.amber {
+            background: linear-gradient(135deg, var(--amber-500) 0%, var(--amber-600) 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .category-icon.blue {
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .category-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+        }
+
+        .protocols-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .protocol-card {
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .protocol-card.red::before { background: linear-gradient(90deg, var(--red-500) 0%, var(--red-600) 100%); }
+        .protocol-card.orange::before { background: linear-gradient(90deg, var(--orange-500) 0%, var(--orange-600) 100%); }
+        .protocol-card.purple::before { background: linear-gradient(90deg, var(--purple-500) 0%, var(--purple-600) 100%); }
+        .protocol-card.amber::before { background: linear-gradient(90deg, var(--amber-500) 0%, var(--amber-600) 100%); }
+        .protocol-card.blue::before { background: linear-gradient(90deg, var(--blue-500) 0%, var(--blue-600) 100%); }
+
+        .protocol-card:hover {
+            border-color: var(--gray-300);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .protocol-card.expanded {
+            border-color: var(--blue-400);
+            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.15);
+        }
+
+        .protocol-header {
+            display: flex;
+            align-items: start;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .protocol-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .expand-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .protocol-card.expanded .expand-icon {
+            background: var(--blue-100);
+            transform: rotate(180deg);
+        }
+
+        .protocol-summary {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .protocol-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .protocol-tag {
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .protocol-tag.immediate {
+            background: var(--red-50);
+            color: var(--red-700);
+        }
+
+        .protocol-tag.urgent {
+            background: var(--orange-50);
+            color: var(--orange-700);
+        }
+
+        .protocol-tag.call-help {
+            background: var(--purple-50);
+            color: var(--purple-700);
+        }
+
+        .protocol-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .protocol-card.expanded .protocol-content {
+            max-height: 3000px;
+        }
+
+        .protocol-details {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--gray-100);
+        }
+
+        .protocol-section {
+            margin-bottom: 20px;
+        }
+
+        .protocol-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .protocol-steps {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .protocol-step {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 36px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .protocol-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .protocol-step strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .dose-box {
+            background: var(--emerald-50);
+            border-left: 3px solid var(--emerald-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .dose-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--emerald-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dose-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+
+        .warning-box {
+            background: var(--red-50);
+            border-left: 3px solid var(--red-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .warning-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--red-700);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .warning-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        .info-box {
+            background: var(--blue-50);
+            border-left: 3px solid var(--blue-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .info-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--blue-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--gray-200);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .disclaimer {
+            background: var(--amber-50);
+            border: 2px solid var(--amber-200);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .disclaimer-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--amber-700);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--blue-600);
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 56px;
+            }
+
+            .protocols-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .protocols-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 100 100" fill="currentColor">
+                            <circle cx="20" cy="50" r="8" fill="#2563EB" opacity="0.6"/>
+                            <circle cx="50" cy="50" r="10" fill="#2563EB"/>
+                            <circle cx="80" cy="50" r="8" fill="#2563EB" opacity="0.6"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
+                </a>
+
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link active">Crisis Protocols</a>
+                    <a href="/privacy" class="nav-link">Privacy</a>
+                </div>
+
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/privacy" class="mobile-menu-link">Privacy</a>
+        </div>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">
+                <div class="badge-dot"></div>
+                <div class="badge-text">Emergency Reference</div>
+            </div>
+            <h1 class="hero-title">
+                <span class="gradient">Crisis</span> Protocols
+            </h1>
+            <p class="hero-subtitle">
+                Evidence-based, step-by-step management for anesthesia emergencies. Quick access to critical protocols when seconds count.
+            </p>
+        </section>
+
+        <!-- Search -->
+        <div class="search-container">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input
+                    type="text"
+                    class="search-input"
+                    id="searchInput"
+                    placeholder="Search protocols (e.g., malignant hyperthermia, anaphylaxis...)"
+                    oninput="filterProtocols()"
+                />
+                <button class="clear-btn" id="clearBtn" onclick="clearSearch()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Protocols -->
+        <div class="protocols-container">
+            <!-- Life-Threatening / Cardiac -->
+            <div class="category-section" data-category="cardiac">
+                <div class="category-header">
+                    <div class="category-icon red">⚡</div>
+                    <h2 class="category-title">Life-Threatening / Cardiac</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    <!-- Malignant Hyperthermia -->
+                    <div class="protocol-card red" data-keywords="malignant hyperthermia mh dantrolene hypermetabolic crisis muscle rigidity hyperthermia">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Malignant Hyperthermia</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Hypermetabolic crisis triggered by volatile anesthetics or succinylcholine</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP triggers immediately:</strong> Discontinue all volatile anesthetics and succinylcholine</li>
+                                        <li class="protocol-step"><strong>Call for help:</strong> Activate MH emergency protocol, assign roles</li>
+                                        <li class="protocol-step"><strong>Hyperventilate with 100% O₂:</strong> 2-3× normal minute ventilation to eliminate CO₂</li>
+                                        <li class="protocol-step"><strong>Give dantrolene immediately:</strong> See dosing below</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Dantrolene Dosing</div>
+                                    <div class="dose-detail"><strong>Initial:</strong> 2.5 mg/kg IV rapid push (reconstitute each 20mg vial with 60mL sterile water)</div>
+                                    <div class="dose-detail"><strong>Repeat:</strong> 1 mg/kg boluses every 5-10 min until signs resolve</div>
+                                    <div class="dose-detail"><strong>Maximum:</strong> Up to 10 mg/kg in acute phase (rarely >10 vials needed initially)</div>
+                                    <div class="dose-detail"><strong>Continuation:</strong> 1 mg/kg IV q6h × 24-48h to prevent recrudescence</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Supportive Care</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Cool the patient:</strong> Cold IV saline, ice packs to groin/axilla, cooling blanket. Target temp <38.5°C</li>
+                                        <li class="protocol-step"><strong>Treat hyperkalemia:</strong> Insulin/dextrose, calcium chloride, bicarbonate, avoid Ca²⁺ channel blockers with dantrolene</li>
+                                        <li class="protocol-step"><strong>Manage arrhythmias:</strong> Standard ACLS (avoid calcium channel blockers)</li>
+                                        <li class="protocol-step"><strong>Monitor urine output:</strong> Foley catheter, maintain >1 mL/kg/h to prevent myoglobin-induced renal failure</li>
+                                        <li class="protocol-step"><strong>Labs:</strong> ABG, electrolytes, CK, lactate, coags, myoglobin q6h</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">📞 MH Hotline</div>
+                                    <div class="info-detail"><strong>USA:</strong> 1-800-MH-HYPER (1-800-644-9737)</div>
+                                    <div class="info-detail"><strong>Outside USA:</strong> +1-315-464-7079</div>
+                                    <div class="info-detail">Expert consultant available 24/7 for real-time guidance</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Points</div>
+                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness — prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cardiac Arrest -->
+                    <div class="protocol-card red" data-keywords="cardiac arrest code blue cpr acls asystole vfib pea pulseless">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Cardiac Arrest (ACLS)</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Immediate CPR and rhythm-specific advanced life support</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Universal Steps (All Rhythms)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Start CPR immediately:</strong> 100-120 compressions/min, depth 2-2.4 inches, minimize interruptions</li>
+                                        <li class="protocol-step"><strong>Call for help / Code Blue</strong></li>
+                                        <li class="protocol-step"><strong>Attach defibrillator/monitor:</strong> Identify rhythm</li>
+                                        <li class="protocol-step"><strong>Secure airway:</strong> ETT or supraglottic device + capnography (target EtCO₂ >10 mmHg)</li>
+                                        <li class="protocol-step"><strong>IV/IO access:</strong> Establish vascular access for medications</li>
+                                        <li class="protocol-step"><strong>Consider reversible causes (H's and T's)</strong></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Shockable Rhythms (VF/pVT)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Defibrillate:</strong> Biphasic 120-200J (or manufacturer recommendation), resume CPR immediately × 2 min</li>
+                                        <li class="protocol-step"><strong>After 2nd shock:</strong> Epinephrine 1 mg IV/IO q3-5min</li>
+                                        <li class="protocol-step"><strong>After 3rd shock:</strong> Amiodarone 300 mg IV/IO (or lidocaine 1-1.5 mg/kg if amio unavailable)</li>
+                                        <li class="protocol-step"><strong>Continue CPR + defibrillation every 2 min</strong></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Non-Shockable Rhythms (PEA/Asystole)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>High-quality CPR × 2 min</strong></li>
+                                        <li class="protocol-step"><strong>Epinephrine 1 mg IV/IO immediately,</strong> then q3-5min</li>
+                                        <li class="protocol-step"><strong>Consider atropine 1 mg IV</strong> if slow PEA (rate <60), may repeat to total 3 mg</li>
+                                        <li class="protocol-step"><strong>Treat reversible causes aggressively</strong> (see H's and T's below)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Key Medications</div>
+                                    <div class="dose-detail"><strong>Epinephrine:</strong> 1 mg (1:10,000) IV/IO every 3-5 minutes</div>
+                                    <div class="dose-detail"><strong>Amiodarone:</strong> 300 mg IV/IO first dose, then 150 mg second dose</div>
+                                    <div class="dose-detail"><strong>Lidocaine (alternative):</strong> 1-1.5 mg/kg first dose, then 0.5-0.75 mg/kg</div>
+                                    <div class="dose-detail"><strong>Sodium bicarbonate:</strong> 1 mEq/kg (for hyperkalemia, TCA overdose, prolonged arrest)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 H's and T's (Reversible Causes)</div>
+                                    <div class="info-detail"><strong>H's:</strong> Hypovolemia, Hypoxia, H⁺ (acidosis), Hyper/hypokalemia, Hypothermia<br>
+                                    <strong>T's:</strong> Tension pneumothorax, Tamponade (cardiac), Toxins, Thrombosis (coronary/pulmonary)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Anesthesia-Specific Considerations</div>
+                                    <div class="warning-detail">• Turn off volatile anesthetics during arrest<br>• Consider <strong>anesthesia-specific causes:</strong> local anesthetic toxicity (give lipid emulsion), hyperkalemia from succinylcholine, pneumothorax from line placement, total spinal<br>• Continue CPR during transfer to ICU if needed<br>• Document ROSC time, rhythm changes, total epi/defib doses</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anaphylaxis -->
+                    <div class="protocol-card red" data-keywords="anaphylaxis allergic reaction epinephrine bronchospasm hypotension urticaria angioedema">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Anaphylaxis</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Severe IgE-mediated hypersensitivity reaction with cardiovascular/airway collapse</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP suspected trigger:</strong> Antibiotics, NMBs, latex, colloids are most common</li>
+                                        <li class="protocol-step"><strong>Call for help</strong></li>
+                                        <li class="protocol-step"><strong>Epinephrine IM immediately:</strong> 0.3-0.5 mg (0.3-0.5 mL of 1:1000) into anterolateral thigh, repeat q5-15min PRN</li>
+                                        <li class="protocol-step"><strong>100% O₂:</strong> Maintain airway, consider early intubation if upper airway edema</li>
+                                        <li class="protocol-step"><strong>Aggressive fluid resuscitation:</strong> 20-50 mL/kg crystalloid rapidly for refractory hypotension</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Epinephrine Dosing</div>
+                                    <div class="dose-detail"><strong>IM (first-line):</strong> 0.3-0.5 mg (1:1000) into thigh, repeat q5-15min</div>
+                                    <div class="dose-detail"><strong>IV bolus (severe/arrest):</strong> 10-100 mcg (0.01-0.1 mg) slow push, titrate to effect</div>
+                                    <div class="dose-detail"><strong>IV infusion (refractory):</strong> 0.05-0.5 mcg/kg/min, titrate to BP/HR</div>
+                                    <div class="dose-detail"><strong>Pediatric IM:</strong> 0.01 mg/kg (max 0.5 mg)</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Adjunct Therapies</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>H1 blocker:</strong> Diphenhydramine 25-50 mg IV slowly</li>
+                                        <li class="protocol-step"><strong>H2 blocker:</strong> Famotidine 20 mg IV or ranitidine 50 mg IV</li>
+                                        <li class="protocol-step"><strong>Corticosteroids:</strong> Methylprednisolone 1-2 mg/kg IV (prevents late-phase reaction)</li>
+                                        <li class="protocol-step"><strong>Bronchodilators:</strong> Albuterol for persistent bronchospasm</li>
+                                        <li class="protocol-step"><strong>Glucagon (if on β-blockers):</strong> 1-2 mg IV (epinephrine may be ineffective)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Diagnostic Criteria (2 or more)</div>
+                                    <div class="info-detail">• <strong>Skin/mucosal:</strong> Urticaria, angioedema, flushing<br>• <strong>Respiratory:</strong> Bronchospasm, wheezing, stridor, dyspnea, ↓SpO₂<br>• <strong>Cardiovascular:</strong> Hypotension (SBP <90 or >30% drop), tachycardia, arrhythmia, collapse<br>• <strong>GI:</strong> Cramping, vomiting, diarrhea</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Considerations</div>
+                                    <div class="warning-detail">• <strong>Common triggers:</strong> NMBs (rocuronium, succinylcholine), antibiotics (cephalosporins, penicillins), latex, chlorhexidine<br>• Confirm diagnosis: Send tryptase levels (draw immediately, then 1-2h and 24h later)<br>• Biphasic reactions occur in 20% — observe ≥4-6h minimum, admit if severe<br>• Document reaction in chart and advise patient to see allergist<br>• Refractory hypotension: Consider methylene blue 1-2 mg/kg for vasoplegia</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LAST -->
+                    <div class="protocol-card red" data-keywords="last local anesthetic systemic toxicity lipid emulsion intralipid bupivacaine ropivacaine seizure arrhythmia">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Local Anesthetic Systemic Toxicity (LAST)</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">CNS/cardiac toxicity from systemic absorption of local anesthetics</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP local anesthetic injection</strong></li>
+                                        <li class="protocol-step"><strong>Call for help:</strong> Get lipid emulsion (Intralipid 20%)</li>
+                                        <li class="protocol-step"><strong>Airway management:</strong> 100% O₂, ventilate if needed, suppress seizures</li>
+                                        <li class="protocol-step"><strong>Give lipid emulsion immediately</strong> (see dosing below) — DO NOT DELAY</li>
+                                        <li class="protocol-step"><strong>If cardiac arrest:</strong> Start CPR, consider prolonged resuscitation (LAST arrest can require >1h CPR)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Lipid Emulsion 20% (Intralipid) Dosing</div>
+                                    <div class="dose-detail"><strong>Bolus:</strong> 1.5 mL/kg IV (lean body weight) over 1 minute (~100 mL for 70 kg adult)</div>
+                                    <div class="dose-detail"><strong>Infusion:</strong> 0.25 mL/kg/min (~18 mL/min for 70 kg = ~500 mL bag over 30 min)</div>
+                                    <div class="dose-detail"><strong>Repeat bolus:</strong> If cardiovascular instability persists after 5 min, give up to 2 more boluses (same dose)</div>
+                                    <div class="dose-detail"><strong>Increase infusion:</strong> Double rate to 0.5 mL/kg/min if BP remains unstable</div>
+                                    <div class="dose-detail"><strong>Maximum dose:</strong> ~10 mL/kg over first 30 minutes</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Seizure Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Benzodiazepines:</strong> Midazolam 1-2 mg IV or lorazepam 1-2 mg IV</li>
+                                        <li class="protocol-step"><strong>AVOID propofol</strong> in large doses (additional lipid load, myocardial depression)</li>
+                                        <li class="protocol-step"><strong>Small-dose propofol OK</strong> if lipid already given and seizures refractory</li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Cardiac Arrest Modifications</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Reduce epinephrine doses:</strong> Use <1 mcg/kg (ACLS doses may worsen outcome)</li>
+                                        <li class="protocol-step"><strong>Avoid vasopressin, calcium, β-blockers, local anesthetics (lidocaine)</strong></li>
+                                        <li class="protocol-step"><strong>CONTINUE lipid infusion</strong></li>
+                                        <li class="protocol-step"><strong>Prolonged CPR:</strong> Full recovery reported after >60 min resuscitation</li>
+                                        <li class="protocol-step"><strong>Consider ECMO/CPB</strong> if available and refractory arrest</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Signs of LAST</div>
+                                    <div class="info-detail"><strong>Early CNS:</strong> Circumoral numbness, metallic taste, tinnitus, confusion, agitation<br>
+                                    <strong>Severe CNS:</strong> Seizures, loss of consciousness<br>
+                                    <strong>Cardiac:</strong> Bradycardia, hypotension, arrhythmias (wide QRS), asystole, PEA<br>
+                                    <strong>Note:</strong> Cardiac toxicity can occur WITHOUT preceding CNS symptoms (especially bupivacaine)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Critical Points</div>
+                                    <div class="warning-detail">• Lipid emulsion is PRIMARY treatment — give early, don't wait for arrest<br>• Bupivacaine/ropivacaine are more cardiotoxic than lidocaine/mepivacaine<br>• Max doses: Bupivacaine 2.5 mg/kg plain, 3 mg/kg with epi; Lidocaine 5 mg/kg plain, 7 mg/kg with epi<br>• Post-resuscitation: Monitor ≥4-6h (cardiac arrest patients → ICU), watch for pancreatitis from lipid load</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Airway Emergencies -->
+            <div class="category-section" data-category="airway">
+                <div class="category-header">
+                    <div class="category-icon orange">🫁</div>
+                    <h2 class="category-title">Airway Emergencies</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    <!-- Can't Intubate Can't Oxygenate -->
+                    <div class="protocol-card orange" data-keywords="cico cant intubate oxygenate difficult airway cricothyroidotomy emergency front neck access scalpel bougie">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Can't Intubate, Can't Oxygenate (CICO)</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Failed intubation + failed oxygenation requiring emergency front of neck access</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">CICO Criteria (Declare CICO if both present)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Can't Intubate:</strong> 3 failed laryngoscopy attempts by experienced provider OR 2 failed attempts + failed supraglottic device</li>
+                                        <li class="protocol-step"><strong>Can't Oxygenate:</strong> SpO₂ <90% despite 100% O₂, facemask, OPA/NPA, 2-person BVM, and/or SGA</li>
+                                    </ol>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Declare CICO Out Loud</div>
+                                    <div class="warning-detail">"This is a CAN'T INTUBATE, CAN'T OXYGENATE situation. Prepare for emergency cricothyroidotomy NOW."</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Emergency Front of Neck Access (Scalpel-Bougie-Tube)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Position:</strong> Extend neck (if no C-spine concerns), palpate cricothyroid membrane</li>
+                                        <li class="protocol-step"><strong>Scalpel:</strong> Transverse stab incision through skin + cricothyroid membrane (1 motion, blade perpendicular)</li>
+                                        <li class="protocol-step"><strong>Bougie:</strong> Insert bougie (or tracheal hook to retract) into trachea, advance caudally</li>
+                                        <li class="protocol-step"><strong>Tube:</strong> Railroad cuffed ETT (6.0 or smaller) or Shiley 6 trach over bougie, inflate cuff</li>
+                                        <li class="protocol-step"><strong>Ventilate:</strong> Confirm with capnography, ventilate, secure tube</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">🔪 Scalpel Cricothyroidotomy Technique</div>
+                                    <div class="dose-detail"><strong>Equipment:</strong> #10 scalpel blade, bougie, 6.0 cuffed ETT (or 6.0 Shiley trach)</div>
+                                    <div class="dose-detail"><strong>Incision:</strong> Horizontal stab through cricothyroid membrane, turn blade 90° to open</div>
+                                    <div class="dose-detail"><strong>Depth:</strong> 1-1.5 cm deep (through membrane into trachea)</div>
+                                    <div class="dose-detail"><strong>Time goal:</strong> <60 seconds from declaration to ventilation</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Post-Procedure</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Confirm placement:</strong> Capnography, chest rise, SpO₂ improvement</li>
+                                        <li class="protocol-step"><strong>Secure tube:</strong> Suture or trach ties, note depth</li>
+                                        <li class="protocol-step"><strong>CXR:</strong> Confirm position, rule out pneumothorax</li>
+                                        <li class="protocol-step"><strong>ENT/surgery consult:</strong> For formal tracheostomy or laryngeal evaluation</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">Alternative: Needle Cricothyroidotomy (Temporizing Only)</div>
+                                    <div class="info-detail">• <strong>Indication:</strong> Pediatric <10 years (cricoid cartilage too small for surgical cric)<br>• <strong>Technique:</strong> 14G or 16G IV catheter through cricothyroid membrane, attach to jet ventilator or BVM with Y-connector<br>• <strong>Limitation:</strong> Inadequate ventilation (↑ CO₂), only buys 30-45 min before hypercapnia/barotrauma</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Critical Reminders</div>
+                                    <div class="warning-detail">• Do NOT attempt >3 laryngoscopies — recognize failure early<br>• Do NOT delay cricothyroidotomy — hypoxic brain injury starts after 3-5 min<br>• Scalpel technique is superior to needle cric in adults (faster, more reliable ventilation)<br>• Practice on simulators regularly — muscle memory is critical</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laryngospasm -->
+                    <div class="protocol-card orange" data-keywords="laryngospasm stridor vocal cord spasm cpap jaw thrust succinylcholine propofol">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Laryngospasm</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Reflex closure of vocal cords causing airway obstruction</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag urgent">Urgent</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Management (Escalating)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Remove stimulus:</strong> Suction secretions, blood, stop surgical stimulation</li>
+                                        <li class="protocol-step"><strong>100% O₂:</strong> Via facemask with reservoir</li>
+                                        <li class="protocol-step"><strong>Jaw thrust + CPAP:</strong> Anterior displacement of mandible at TMJ (Larson maneuver: press behind ramus), apply gentle positive pressure (10-20 cm H₂O)</li>
+                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Propofol 0.5-1 mg/kg IV (if IV access and patient not apneic)</li>
+                                        <li class="protocol-step"><strong>If persistent/desaturating:</strong> Proceed to step 6</li>
+                                        <li class="protocol-step"><strong>Succinylcholine:</strong> 0.5-1 mg/kg IV (or 2-4 mg/kg IM if no IV access)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Medication Doses</div>
+                                    <div class="dose-detail"><strong>Propofol:</strong> 0.5-1 mg/kg IV bolus to deepen anesthesia</div>
+                                    <div class="dose-detail"><strong>Succinylcholine (IV):</strong> 0.5-1 mg/kg IV (lower dose than RSI, may give without pretreatment in emergency)</div>
+                                    <div class="dose-detail"><strong>Succinylcholine (IM):</strong> 2-4 mg/kg IM into deltoid or thigh if no IV access</div>
+                                    <div class="dose-detail"><strong>Atropine (for bradycardia):</strong> 0.01-0.02 mg/kg IV (especially in children)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Clinical Presentation</div>
+                                    <div class="info-detail"><strong>Partial:</strong> High-pitched stridor, crowing sound, difficulty ventilating<br><strong>Complete:</strong> Silent chest, no air movement, severe paradoxical chest/abdominal motion, rapid desaturation</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Points</div>
+                                    <div class="warning-detail">• Most common during light anesthesia (stage II) — emergence, extubation, airway instrumentation<br>• <strong>Larson's maneuver:</strong> Firm pressure at "laryngospasm notch" (behind angle of mandible, anterior to mastoid) + jaw thrust often breaks spasm<br>• Avoid repeated forceful PPV — worsens spasm and risks gastric insufflation/aspiration<br>• After succinylcholine, MUST ventilate/intubate until spontaneous breathing returns (~5-10 min)<br>• Consider intubation if multiple episodes or risk of recurrence</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bronchospasm -->
+                    <div class="protocol-card orange" data-keywords="bronchospasm wheezing asthma copd albuterol epinephrine deepen anesthesia">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Bronchospasm</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Diffuse small airway constriction causing wheezing and ↑ airway pressure</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag urgent">Urgent</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>100% O₂:</strong> Increase FiO₂ to 1.0</li>
+                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Increase volatile (if not contraindicated) or propofol bolus 0.5-1 mg/kg</li>
+                                        <li class="protocol-step"><strong>Hand ventilate:</strong> Slow rate (8-10/min), low tidal volume, prolonged expiration (I:E = 1:3 or 1:4) to avoid air trapping</li>
+                                        <li class="protocol-step"><strong>Albuterol MDI:</strong> 4-8 puffs via ETT/LMA or in-line with circuit</li>
+                                        <li class="protocol-step"><strong>Rule out other causes:</strong> Check circuit (kink, ETT obstruction), suction secretions, confirm tube not endobronchial</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Bronchodilator Therapy</div>
+                                    <div class="dose-detail"><strong>Albuterol MDI:</strong> 4-8 puffs (90 mcg/puff) via ETT, may repeat q20min</div>
+                                    <div class="dose-detail"><strong>Albuterol nebulizer:</strong> 2.5-5 mg in-line with circuit (continuous if refractory)</div>
+                                    <div class="dose-detail"><strong>Epinephrine (severe):</strong> 10-50 mcg IV boluses, titrate to effect</div>
+                                    <div class="dose-detail"><strong>Epinephrine infusion:</strong> 0.02-0.1 mcg/kg/min for refractory cases</div>
+                                    <div class="dose-detail"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus (bronchodilator + anesthetic), then 0.5-2 mg/kg/h infusion</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Escalation for Severe/Refractory Bronchospasm</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>IV Steroids:</strong> Methylprednisolone 1-2 mg/kg IV (benefit after 4-6h)</li>
+                                        <li class="protocol-step"><strong>Magnesium sulfate:</strong> 2 g IV over 20 min (smooth muscle relaxation)</li>
+                                        <li class="protocol-step"><strong>Ipratropium bromide:</strong> 500 mcg nebulized (anticholinergic, add to albuterol)</li>
+                                        <li class="protocol-step"><strong>Heliox:</strong> 60-70% helium / 30-40% O₂ mixture (reduces turbulent flow, buys time)</li>
+                                        <li class="protocol-step"><strong>Consider anaphylaxis</strong> if new-onset bronchospasm without asthma history → give epinephrine IM</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Differential Diagnosis</div>
+                                    <div class="info-detail"><strong>Not bronchospasm:</strong> ETT in bronchus, kinked tube, mucus plug, pneumothorax, pulmonary edema, aspiration, pulmonary embolism<br><strong>Confirm:</strong> Auscultate lungs (bilateral expiratory wheezing), check plateau pressure (↑ in bronchospasm, normal in obstruction)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Ventilation Strategy</div>
+                                    <div class="warning-detail">• <strong>Allow permissive hypercapnia</strong> — accept high CO₂ to avoid barotrauma from air trapping<br>• <strong>Avoid high PEEP</strong> initially (worsens air trapping) — use low PEEP (0-5 cm H₂O)<br>• Reduce respiratory rate, increase expiratory time (I:E ratio 1:3 or 1:4)<br>• Goal: Peak pressure <40 cm H₂O, plateau <30 cm H₂O if possible<br>• If refractory + deteriorating: Consider ECMO/VV-ECMO</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Neurologic / Regional -->
+            <div class="category-section" data-category="neurologic">
+                <div class="category-header">
+                    <div class="category-icon purple">🧠</div>
+                    <h2 class="category-title">Neurologic / Regional Complications</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    <!-- High/Total Spinal -->
+                    <div class="protocol-card purple" data-keywords="high spinal total spinal neuraxial block hypotension bradycardia respiratory arrest spinal epidural">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">High/Total Spinal</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Excessive cephalad spread of neuraxial anesthesia causing cardiorespiratory compromise</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Management (ABC approach)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Call for help</strong></li>
+                                        <li class="protocol-step"><strong>Airway:</strong> Secure airway immediately if respiratory distress, intubate if apneic or unable to protect airway</li>
+                                        <li class="protocol-step"><strong>Breathing:</strong> Ventilate with 100% O₂ (PPV or mechanical ventilation)</li>
+                                        <li class="protocol-step"><strong>Circulation:</strong> Aggressive vasopressor/fluid resuscitation (see below)</li>
+                                        <li class="protocol-step"><strong>Position:</strong> Supine with legs elevated (↑ venous return), avoid Trendelenburg (worsens block height)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Hemodynamic Support</div>
+                                    <div class="dose-detail"><strong>Ephedrine:</strong> 5-10 mg IV boluses (first-line if bradycardic)</div>
+                                    <div class="dose-detail"><strong>Phenylephrine:</strong> 50-100 mcg IV boluses (if tachycardic)</div>
+                                    <div class="dose-detail"><strong>Epinephrine:</strong> 10-100 mcg IV if refractory hypotension, or 0.05-0.1 mcg/kg/min infusion</div>
+                                    <div class="dose-detail"><strong>Atropine:</strong> 0.4-0.6 mg IV for bradycardia</div>
+                                    <div class="dose-detail"><strong>Fluids:</strong> Crystalloid 500-1000 mL rapid bolus</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Additional Supportive Care</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Reassure patient:</strong> Explain what's happening if conscious, give anxiolysis (midazolam 1-2 mg IV)</li>
+                                        <li class="protocol-step"><strong>Monitor:</strong> Continuous BP, HR, SpO₂, capnography if intubated</li>
+                                        <li class="protocol-step"><strong>Assess block level:</strong> Check sensory level when stable</li>
+                                        <li class="protocol-step"><strong>Duration:</strong> Expect resolution in 1-3 hours (depends on local anesthetic type/dose)</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Clinical Presentation</div>
+                                    <div class="info-detail"><strong>Early signs:</strong> Dyspnea, difficulty speaking, upper extremity weakness/tingling, nausea<br>
+                                    <strong>Severe signs:</strong> Apnea, loss of consciousness, severe hypotension, bradycardia → asystole<br>
+                                    <strong>Block level:</strong> High spinal = T1-T4 (respiratory muscles affected), Total spinal = brainstem involvement (unconsciousness)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Considerations</div>
+                                    <div class="warning-detail">• <strong>Causes:</strong> Excessive local anesthetic dose, migration of epidural catheter into subarachnoid space, unrecognized dural puncture during epidural placement<br>• Differentiate from local anesthetic toxicity (LAST) — high spinal has symmetric block and bradycardia; LAST has CNS excitation → seizures<br>• Most patients fully recover — maintain oxygenation and BP until block wears off<br>• Document event, monitor for post-dural puncture headache if unintentional wet tap</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Venous Air Embolism -->
+                    <div class="protocol-card purple" data-keywords="air embolism vae gas embolism durant position sitting craniotomy etco2">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Venous Air Embolism (VAE)</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Air entrainment into venous circulation causing cardiovascular collapse</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Notify surgeon — STOP surgery:</strong> Flood surgical field with saline, occlude open veins</li>
+                                        <li class="protocol-step"><strong>100% FiO₂:</strong> Discontinue nitrous oxide (N₂O expands air bubbles)</li>
+                                        <li class="protocol-step"><strong>Lower surgical site:</strong> Reduce gradient between surgical site and heart</li>
+                                        <li class="protocol-step"><strong>Durant position:</strong> Left lateral decubitus + Trendelenburg (traps air in RV apex, away from outflow)</li>
+                                        <li class="protocol-step"><strong>Attempt aspiration:</strong> If CVL in place, aspirate from distal port (withdraw air from RA/RV)</li>
+                                        <li class="protocol-step"><strong>Hemodynamic support:</strong> Fluids, vasopressors, inotropes as needed</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Signs of VAE (in order of sensitivity)</div>
+                                    <div class="info-detail">1. <strong>Precordial Doppler:</strong> Mill-wheel murmur (most sensitive, requires placement)<br>
+                                    2. <strong>↓ EtCO₂:</strong> Sudden drop (dead space ↑ from pulmonary embolism)<br>
+                                    3. <strong>↓ SpO₂, ↓ BP, ↑ CVP, arrhythmias</strong><br>
+                                    4. <strong>Cardiac arrest</strong> (if large volume air)</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Supportive Therapy</div>
+                                    <div class="dose-detail"><strong>Volume:</strong> Rapid crystalloid infusion (↑ CVP reduces further air entrainment)</div>
+                                    <div class="dose-detail"><strong>Vasopressors:</strong> Phenylephrine 50-200 mcg IV boluses or epinephrine 10-100 mcg IV</div>
+                                    <div class="dose-detail"><strong>Inotropes:</strong> Epinephrine infusion 0.05-0.5 mcg/kg/min if myocardial dysfunction</div>
+                                    <div class="dose-detail"><strong>CPR if arrest:</strong> Standard ACLS + prolonged resuscitation (air resorbs over time)</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Post-Event Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Neuro assessment:</strong> Evaluate for paradoxical embolism (if PFO) → stroke symptoms</li>
+                                        <li class="protocol-step"><strong>Consider hyperbaric O₂</strong> if neurologic deficits (shrinks bubbles, improves oxygenation)</li>
+                                        <li class="protocol-step"><strong>ICU monitoring:</strong> For severe VAE with hemodynamic instability</li>
+                                        <li class="protocol-step"><strong>Echocardiography:</strong> TEE/TTE to assess for residual air, PFO, cardiac function</li>
+                                    </ol>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ High-Risk Situations</div>
+                                    <div class="warning-detail">• <strong>Sitting position craniotomy</strong> (most common, head >20 cm above heart)<br>• Posterior fossa surgery, cervical laminectomy<br>• Cesarean section, liver resection, laparoscopy with insufflation issues<br>• Central line placement with air entrainment<br>• <strong>Lethal dose:</strong> 3-5 mL/kg rapid bolus (200-300 mL in adults) can cause cardiovascular collapse<br>• <strong>Prevention:</strong> Avoid sitting position when possible, maintain adequate hydration, use precordial Doppler monitoring</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Metabolic / Other -->
+            <div class="category-section" data-category="metabolic">
+                <div class="category-header">
+                    <div class="category-icon amber">⚗️</div>
+                    <h2 class="category-title">Metabolic / Electrolyte Crises</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    <!-- Hyperkalemia -->
+                    <div class="protocol-card amber" data-keywords="hyperkalemia potassium peaked t wave arrhythmia calcium insulin dextrose kayexalate dialysis">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Severe Hyperkalemia</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Elevated serum potassium (K⁺ >6.5 mEq/L) with cardiac toxicity</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Treatment (3-Step Approach)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STABILIZE cardiac membrane:</strong> Calcium (see dosing below) — immediate effect</li>
+                                        <li class="protocol-step"><strong>SHIFT K⁺ intracellularly:</strong> Insulin + dextrose, beta-agonists, bicarbonate — onset 15-30 min</li>
+                                        <li class="protocol-step"><strong>REMOVE K⁺ from body:</strong> Diuretics, dialysis, Kayexalate — onset 2-24 hours</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Step 1: Stabilize Cardiac Membrane</div>
+                                    <div class="dose-detail"><strong>Calcium chloride 10%:</strong> 10-20 mL (1-2 grams) IV over 2-5 min via central line (or diluted peripheral)</div>
+                                    <div class="dose-detail"><strong>Calcium gluconate 10%:</strong> 30 mL (3 grams) IV over 2-5 min (alternative if only peripheral access)</div>
+                                    <div class="dose-detail"><strong>Onset:</strong> 1-3 minutes, duration 30-60 min</div>
+                                    <div class="dose-detail"><strong>Monitor:</strong> Continuous ECG during administration</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Step 2: Shift K⁺ Intracellularly</div>
+                                    <div class="dose-detail"><strong>Insulin + Dextrose:</strong> 10 units regular insulin IV + 50 mL D50 (25g dextrose) over 5 min</div>
+                                    <div class="dose-detail"><strong>Albuterol:</strong> 10-20 mg nebulized over 10 min (or 0.5 mg IV if available)</div>
+                                    <div class="dose-detail"><strong>Sodium bicarbonate:</strong> 50-100 mEq (1-2 amps) IV over 5 min (if concurrent acidosis)</div>
+                                    <div class="dose-detail"><strong>Effect:</strong> Lowers K⁺ by 0.5-1.5 mEq/L, onset 15-30 min, duration 4-6 hours</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Step 3: Remove K⁺ from Body</div>
+                                    <div class="dose-detail"><strong>Furosemide:</strong> 40-80 mg IV (if adequate renal function)</div>
+                                    <div class="dose-detail"><strong>Sodium polystyrene sulfonate (Kayexalate):</strong> 15-30 g PO/PR (slow, avoid if ileus)</div>
+                                    <div class="dose-detail"><strong>Hemodialysis:</strong> Most effective for refractory hyperkalemia or ESRD (lowers K⁺ by 1-2 mEq/L/hour)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 ECG Changes (Progressive Severity)</div>
+                                    <div class="info-detail">1. Peaked T waves (tall, narrow, symmetric)<br>
+                                    2. Prolonged PR interval, flattened P waves<br>
+                                    3. Widened QRS complex<br>
+                                    4. Sine wave pattern → VF/asystole</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Anesthesia-Specific Causes</div>
+                                    <div class="warning-detail">• <strong>Succinylcholine:</strong> ↑ K⁺ by 0.5 mEq/L normally; AVOID in burns, denervation injuries, chronic paralysis, massive trauma (can → fatal hyperkalemia)<br>• <strong>Massive transfusion:</strong> Stored blood has high K⁺<br>• <strong>Tourniquet release:</strong> Washout of ischemic tissue K⁺<br>• <strong>Tumor lysis, rhabdomyolysis, crush injury</strong><br>• Always check K⁺ before giving succinylcholine in at-risk patients</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Severe Hypoglycemia -->
+                    <div class="protocol-card amber" data-keywords="hypoglycemia low blood sugar glucose dextrose glucagon insulin">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">Severe Hypoglycemia</h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Blood glucose <70 mg/dL with altered mental status or coma</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag urgent">Urgent</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Confirm with glucose check:</strong> Fingerstick or lab draw</li>
+                                        <li class="protocol-step"><strong>If conscious and able to swallow:</strong> 15-20 g oral glucose (juice, glucose tabs)</li>
+                                        <li class="protocol-step"><strong>If unconscious or NPO:</strong> Give IV dextrose (see dosing below)</li>
+                                        <li class="protocol-step"><strong>Recheck glucose:</strong> Every 15 minutes until >100 mg/dL</li>
+                                        <li class="protocol-step"><strong>Investigate cause:</strong> Insulin overdose, missed meal, sepsis, liver failure, adrenal insufficiency</li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 IV Dextrose Dosing</div>
+                                    <div class="dose-detail"><strong>D50 (50% dextrose):</strong> 50 mL (25 g) IV push (adults) — verify IV patency (caustic if extravasates)</div>
+                                    <div class="dose-detail"><strong>D10 (10% dextrose):</strong> 250 mL (25 g) IV over 5-10 min (safer for peripheral IV, pediatrics)</div>
+                                    <div class="dose-detail"><strong>Pediatric:</strong> 0.5-1 g/kg IV (2-4 mL/kg of D25 or 5-10 mL/kg of D10)</div>
+                                    <div class="dose-detail"><strong>Maintenance:</strong> Start D5 or D10 infusion after bolus to prevent recurrence</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Glucagon (if no IV access)</div>
+                                    <div class="dose-detail"><strong>Adult dose:</strong> 1 mg IM or SC</div>
+                                    <div class="dose-detail"><strong>Pediatric dose:</strong> 0.5 mg IM/SC if <20 kg, 1 mg if >20 kg</div>
+                                    <div class="dose-detail"><strong>Onset:</strong> 10-15 minutes, duration 60-90 min</div>
+                                    <div class="dose-detail"><strong>Note:</strong> Ineffective in glycogen-depleted states (starvation, alcoholism, adrenal insufficiency)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🩺 Clinical Presentation</div>
+                                    <div class="info-detail"><strong>Mild (50-70 mg/dL):</strong> Tremor, palpitations, sweating, hunger, anxiety<br>
+                                    <strong>Moderate (40-50 mg/dL):</strong> Confusion, difficulty concentrating, slurred speech, blurred vision<br>
+                                    <strong>Severe (<40 mg/dL):</strong> Seizures, loss of consciousness, coma, death if untreated</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Perioperative Considerations</div>
+                                    <div class="warning-detail">• <strong>High-risk patients:</strong> Type 1 diabetes, insulin pumps, sulfonylurea use, prolonged fasting<br>• Intraoperative hypoglycemia may be masked by anesthesia — check glucose regularly in diabetics<br>• Avoid over-treating (hyperglycemia is harmful too) — target 100-180 mg/dL perioperatively<br>• After treatment, give complex carbs/meal to prevent rebound hypoglycemia (if patient able to eat)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="disclaimer">
+                    <div class="disclaimer-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Important Disclaimer
+                    </div>
+                    <p class="disclaimer-text">
+                        These protocols are for educational reference only and should NOT replace clinical judgment, institutional protocols, or expert consultation. Always follow your institution's guidelines and call for help early in any crisis situation. This is not medical advice.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="/" class="footer-link">Home</a>
+                    <a href="/calculators" class="footer-link">Calculators</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                </div>
+                <p class="footer-copy">
+                    © 2025 gasconsult.ai — Evidence-based anesthesiology AI assistant
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const btn = document.querySelector('.mobile-menu-btn');
+            const menu = document.getElementById('mobileMenu');
+            btn.classList.toggle('active');
+            menu.classList.toggle('active');
+        }
+
+        // Protocol card expansion
+        document.addEventListener('DOMContentLoaded', function() {
+            const protocolCards = document.querySelectorAll('.protocol-card');
+
+            protocolCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't toggle if clicking on a link inside the card
+                    if (e.target.tagName === 'A') return;
+
+                    this.classList.toggle('expanded');
+                });
+            });
+
+            // Search input clear button visibility
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearBtn');
+
+            searchInput.addEventListener('input', function() {
+                if (this.value.length > 0) {
+                    clearBtn.classList.add('visible');
+                } else {
+                    clearBtn.classList.remove('visible');
+                }
+            });
+        });
+
+        // Search/filter functionality
+        function filterProtocols() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.protocol-card');
+            const sections = document.querySelectorAll('.category-section');
+
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const keywords = card.getAttribute('data-keywords').toLowerCase();
+                const title = card.querySelector('.protocol-title').textContent.toLowerCase();
+                const summary = card.querySelector('.protocol-summary').textContent.toLowerCase();
+
+                if (keywords.includes(searchTerm) || title.includes(searchTerm) || summary.includes(searchTerm)) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Hide empty categories
+            sections.forEach(section => {
+                const visibleCards = section.querySelectorAll('.protocol-card:not([style*="display: none"])');
+                if (visibleCards.length === 0) {
+                    section.classList.add('hidden');
+                } else {
+                    section.classList.remove('hidden');
+                }
+            });
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearBtn');
+            searchInput.value = '';
+            clearBtn.classList.remove('visible');
+            filterProtocols();
+        }
+
+        // Keyboard shortcut: Press '/' to focus search
+        document.addEventListener('keydown', function(e) {
+            if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            // Press Escape to clear search and collapse all cards
+            if (e.key === 'Escape') {
+                clearSearch();
+                document.querySelectorAll('.protocol-card.expanded').forEach(card => {
+                    card.classList.remove('expanded');
+                });
+            }
+        });
     </script>
 </body>
 </html>
@@ -10113,6 +12618,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -10127,6 +12633,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -11675,6 +14182,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -13397,6 +15905,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
@@ -14025,42 +16534,71 @@ def index():
             # Multi-tier search strategy to find relevant papers
             ids = []
 
-            # Tier 1: Anesthesiology + original filters (strict)
+            # Detect well-established topics that should have lots of evidence
+            well_established_topics = [
+                'malignant hyperthermia', 'difficult airway', 'aspiration', 'local anesthetic systemic toxicity',
+                'last', 'propofol infusion syndrome', 'pris', 'anaphylaxis', 'tranexamic acid', 'txa',
+                'postoperative nausea', 'ponv', 'rapid sequence', 'rsi', 'spinal anesthesia', 'epidural',
+                'general anesthesia', 'blood transfusion', 'massive transfusion', 'coagulopathy'
+            ]
+            is_established_topic = any(topic in query_lower for topic in well_established_topics)
+
+            # Adjust date range for established topics (go back further for classic evidence)
+            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2015/01/01"[PDAT] : "3000"[PDAT])'
+
+            # Tier 1: Broader search WITHOUT anesthesiology restriction first (better recall)
             try:
-                print(f"[DEBUG] Tier 1: Searching PubMed (anesthesiology + strict filters)...")
-                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
+                print(f"[DEBUG] Tier 1: Searching PubMed (broad, high-quality filters)...")
+                handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=25, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
-                print(f"[DEBUG] Found {len(ids)} papers")
+                print(f"[DEBUG] Tier 1 found {len(ids)} papers")
             except Exception as e:
                 print(f"[ERROR] Tier 1 search failed: {e}")
                 ids = []
 
-            # Tier 2: Anesthesiology + broader filters (if Tier 1 failed and not a follow-up)
-            if not ids and not is_followup:
+            # Tier 2: Add anesthesiology MeSH if we got too few results
+            if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 2: Broadening filters (anesthesiology + any publication type)...")
-                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
-                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {broader_term}', retmax=10, sort="relevance")
+                    print(f"[DEBUG] Tier 2: Adding anesthesiology MeSH refinement...")
+                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=25, sort="relevance")
                     result = Entrez.read(handle)
-                    ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers")
+                    tier2_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier2_ids))
+                    print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
                     print(f"[ERROR] Tier 2 search failed: {e}")
-                    ids = []
 
-            # Tier 3: General search WITHOUT anesthesiology restriction (last resort)
-            if not ids and not is_followup:
+            # Tier 3: Further broaden if still insufficient (remove publication type restrictions)
+            if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: General search (no anesthesiology restriction)...")
-                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
-                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=10, sort="relevance")
+                    print(f"[DEBUG] Tier 3: Broadening to all publication types...")
+                    broader_term = f'({q}) AND {date_range}'
+                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=25, sort="relevance")
                     result = Entrez.read(handle)
-                    ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers")
+                    tier3_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier3_ids))
+                    print(f"[DEBUG] Tier 3 found {len(tier3_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
                     print(f"[ERROR] Tier 3 search failed: {e}")
-                    ids = []
+
+            # Tier 4: Last resort - very broad search with anesthesia-related terms
+            if len(ids) < 3 and not is_followup:
+                try:
+                    print(f"[DEBUG] Tier 4: Very broad search with anesthesia terms...")
+                    anesthesia_boost = f'({q}) AND (anesthesia OR anesthetic OR perioperative OR intraoperative)'
+                    handle = Entrez.esearch(db="pubmed", term=anesthesia_boost, retmax=20, sort="relevance")
+                    result = Entrez.read(handle)
+                    tier4_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier4_ids))
+                    print(f"[DEBUG] Tier 4 found {len(tier4_ids)} papers, total unique: {len(ids)}")
+                except Exception as e:
+                    print(f"[ERROR] Tier 4 search failed: {e}")
+
+            print(f"[DEBUG] Final total: {len(ids)} unique papers found")
 
             # If no papers found, handle gracefully
             if not ids:
@@ -14163,8 +16701,9 @@ Answer as if you're a colleague continuing the conversation:"""
 
             refs = []
             context = ""
-            # Process only 8 papers for faster GPT processing
-            for p in papers[:8]:
+            # Process up to 15 papers for comprehensive evidence (increased from 8)
+            # More papers = better coverage of high-quality evidence = higher confidence ratings
+            for p in papers[:15]:
                 try:
                     art = p["MedlineCitation"]["Article"]
                     title = art.get("ArticleTitle", "No title")
@@ -14176,10 +16715,27 @@ Answer as if you're a colleague continuing the conversation:"""
                     year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                     pmid = p["MedlineCitation"]["PMID"]
 
-                    refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                    # Classify study type for quality indicators
+                    study_classification = classify_study_type(title, journal)
+
+                    refs.append({
+                        "title": title,
+                        "authors": authors,
+                        "journal": journal,
+                        "year": year,
+                        "pmid": pmid,
+                        "study_type": study_classification['type'],
+                        "study_badge": study_classification['badge_text'],
+                        "study_color": study_classification['badge_color'],
+                        "study_score": study_classification['score'],
+                        "sort_priority": study_classification['sort_priority']
+                    })
                     context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
                 except:
                     continue
+
+            # Sort references by quality (highest quality first)
+            refs.sort(key=lambda x: x.get('sort_priority', 99))
 
             num_papers = len(refs)
             print(f"[DEBUG] Processed {num_papers} paper references")
@@ -14421,6 +16977,11 @@ def calculators():
     """Clinical Calculators Hub - IBW, MABL, BSA, QTc, Fluids, PONV, ASA"""
     return render_template_string(CALCULATORS_HTML)
 
+@app.route("/crisis")
+def crisis_protocols():
+    """Crisis Protocols - Evidence-based anesthesia emergency management"""
+    return render_template_string(CRISIS_HTML)
+
 @app.route("/quick-dose")
 def quick_dose():
     """Quick Dose Reference - Weight-based drug dosing calculator"""
@@ -14553,7 +17114,21 @@ def preop_assessment():
                         year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                         pmid = p["MedlineCitation"]["PMID"]
 
-                        all_refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                        # Classify study type for quality indicators
+                        study_classification = classify_study_type(title, journal)
+
+                        all_refs.append({
+                            "title": title,
+                            "authors": authors,
+                            "journal": journal,
+                            "year": year,
+                            "pmid": pmid,
+                            "study_type": study_classification['type'],
+                            "study_badge": study_classification['badge_text'],
+                            "study_color": study_classification['badge_color'],
+                            "study_score": study_classification['score'],
+                            "sort_priority": study_classification['sort_priority']
+                        })
                         all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
                     except:
                         continue
@@ -14567,6 +17142,9 @@ def preop_assessment():
         if ref['pmid'] not in seen_pmids:
             seen_pmids.add(ref['pmid'])
             unique_refs.append(ref)
+
+    # Sort references by quality (highest quality first)
+    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
 
     # Create numbered reference list for GPT
     ref_list = ""
