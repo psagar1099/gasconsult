@@ -2348,6 +2348,302 @@ PREOP_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        /* Modern Results UI */
+        .results-header {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            padding: 32px;
+            border-radius: 20px 20px 0 0;
+            margin: -24px -24px 0 -24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .results-header-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .results-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .results-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke: white;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .results-subtitle {
+            font-size: 14px;
+            margin: 4px 0 0 0;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .results-actions-compact {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        .icon-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+        }
+
+        .results-body {
+            padding: 32px 24px;
+        }
+
+        .assessment-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+        }
+
+        .assessment-content {
+            padding: 32px;
+            line-height: 1.8;
+        }
+
+        .assessment-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 32px 0 16px 0;
+        }
+
+        .assessment-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .assessment-content p {
+            margin: 12px 0;
+            color: var(--gray-700);
+        }
+
+        .assessment-content ul {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .assessment-content li {
+            margin: 8px 0;
+            color: var(--gray-700);
+        }
+
+        .assessment-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .references-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .references-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .references-card-header svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .references-count {
+            margin-left: auto;
+            font-size: 13px;
+            font-weight: 600;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .references-list {
+            padding: 8px;
+        }
+
+        .reference-item-modern {
+            display: flex;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item-modern:hover {
+            background: var(--gray-50);
+        }
+
+        .reference-number {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--blue-600);
+            flex-shrink: 0;
+            min-width: 32px;
+        }
+
+        .reference-content-modern {
+            flex: 1;
+        }
+
+        .reference-title-link {
+            color: var(--gray-900);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .reference-title-link:hover {
+            color: var(--blue-600);
+        }
+
+        .reference-meta-modern {
+            font-size: 13px;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 8px;
+        }
+
+        .reference-separator {
+            color: var(--gray-400);
+        }
+
+        .study-type-badge-preop {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: white;
+        }
+
+        .results-footer {
+            padding: 24px;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-modern {
+            padding: 14px 24px;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-modern svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-modern-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+
+        .btn-modern-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+        }
+
+        .btn-modern-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-modern-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+        }
+
+        .btn-modern-tertiary {
+            background: transparent;
+            color: var(--gray-600);
+            border: none;
+        }
+
+        .btn-modern-tertiary:hover {
+            color: var(--gray-900);
+            background: var(--gray-100);
+        }
+
         /* Responsive */
         @media (max-width: 640px) {
             .wizard-card {
@@ -2468,8 +2764,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="field-row">
                                         <label class="radio-option" onclick="selectRadio('sex', 'male')">
                                             <input type="radio" id="sex-male" name="sex" value="male" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Male</span>
                                                 </div>
@@ -2477,8 +2773,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('sex', 'female')">
                                             <input type="radio" id="sex-female" name="sex" value="female" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Female</span>
                                                 </div>
@@ -2521,8 +2817,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('asa', '1')">
                                             <input type="radio" id="asa-1" name="asa" value="1" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA I</span>
                                                     <span class="radio-desc">Normal healthy patient</span>
@@ -2531,8 +2827,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '2')">
                                             <input type="radio" id="asa-2" name="asa" value="2" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA II</span>
                                                     <span class="radio-desc">Mild systemic disease, no functional limitations</span>
@@ -2541,8 +2837,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '3')">
                                             <input type="radio" id="asa-3" name="asa" value="3" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA III</span>
                                                     <span class="radio-desc">Severe systemic disease with functional limitations</span>
@@ -2551,8 +2847,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '4')">
                                             <input type="radio" id="asa-4" name="asa" value="4" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA IV</span>
                                                     <span class="radio-desc">Severe systemic disease that is a constant threat to life</span>
@@ -2561,8 +2857,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '5')">
                                             <input type="radio" id="asa-5" name="asa" value="5" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA V</span>
                                                     <span class="radio-desc">Moribund patient not expected to survive without operation</span>
@@ -2571,8 +2867,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('asa', '6')">
                                             <input type="radio" id="asa-6" name="asa" value="6" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">ASA VI</span>
                                                     <span class="radio-desc">Declared brain-dead patient for organ donation</span>
@@ -2776,8 +3072,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('mets', 'poor')">
                                             <input type="radio" id="mets-poor" name="mets" value="<4 METs" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">&lt;4 METs - Poor Functional Capacity</span>
                                                     <span class="radio-desc">Cannot climb 2 flights of stairs or walk 4 blocks</span>
@@ -2786,8 +3082,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('mets', 'moderate')">
                                             <input type="radio" id="mets-moderate" name="mets" value="4-10 METs" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">4-10 METs - Moderate Functional Capacity</span>
                                                     <span class="radio-desc">Can climb 2 flights of stairs, moderate exertion tolerated</span>
@@ -2812,8 +3108,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <div class="field-row">
                                         <label class="radio-option" onclick="selectRadio('adl', 'independent')">
                                             <input type="radio" id="adl-independent" name="adl" value="Independent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Independent</span>
                                                 </div>
@@ -2821,8 +3117,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('adl', 'partial')">
                                             <input type="radio" id="adl-partial" name="adl" value="Partially Dependent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Partially Dependent</span>
                                                 </div>
@@ -2830,8 +3126,8 @@ PREOP_HTML = """<!DOCTYPE html>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('adl', 'dependent')">
                                             <input type="radio" id="adl-dependent" name="adl" value="Fully Dependent" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Fully Dependent</span>
                                                 </div>
@@ -3011,9 +3307,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                     <label class="field-label">Surgical Risk Category <span class="required">*</span></label>
                                     <div class="radio-group">
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'low')">
-                                            <input type="radio" id="risk-low" name="surgery_risk" value="Low" required>
+                                            <input type="radio" id="surgery_risk-low" name="surgery_risk" value="Low" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Low Risk (&lt;1% cardiac risk)</span>
                                                     <span class="radio-desc">Superficial procedures, cataract surgery, breast surgery, ambulatory procedures</span>
@@ -3021,9 +3317,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                             </div>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'intermediate')">
-                                            <input type="radio" id="risk-intermediate" name="surgery_risk" value="Intermediate" required>
+                                            <input type="radio" id="surgery_risk-intermediate" name="surgery_risk" value="Intermediate" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">Intermediate Risk (1-5% cardiac risk)</span>
                                                     <span class="radio-desc">Intraperitoneal, intrathoracic, orthopedic, head/neck surgery</span>
@@ -3031,9 +3327,9 @@ PREOP_HTML = """<!DOCTYPE html>
                                             </div>
                                         </label>
                                         <label class="radio-option" onclick="selectRadio('surgery_risk', 'high')">
-                                            <input type="radio" id="risk-high" name="surgery_risk" value="High" required>
+                                            <input type="radio" id="surgery_risk-high" name="surgery_risk" value="High" required>
+                                            <div class="radio-check"></div>
                                             <div class="radio-content">
-                                                <div class="radio-check"></div>
                                                 <div class="radio-text">
                                                     <span class="radio-label">High Risk (&gt;5% cardiac risk)</span>
                                                     <span class="radio-desc">Vascular surgery, aortic surgery, prolonged procedures with major fluid shifts</span>
@@ -3072,25 +3368,78 @@ PREOP_HTML = """<!DOCTYPE html>
             </div>
 
             {% else %}
-            <!-- Results Display -->
+            <!-- Results Display - Modern Redesigned UI -->
             <div class="results-container">
-                <div class="wizard-card">
-                    <h2 style="font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; letter-spacing: -1px;">Pre-Operative Assessment Summary</h2>
+                <!-- Header Section -->
+                <div class="results-header">
+                    <div class="results-header-content">
+                        <div class="results-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="results-title">Pre-Operative Assessment Complete</h1>
+                            <p class="results-subtitle">Evidence-based risk stratification and optimization recommendations</p>
+                        </div>
+                    </div>
+                    <div class="results-actions-compact">
+                        <button onclick="window.print()" class="icon-btn" title="Print Assessment">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+                                <path d="M9 21H15"/>
+                                <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
+                            </svg>
+                        </button>
+                        <a href="/preop" class="icon-btn" title="New Assessment">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 4v16m8-8H4"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
 
-                    <div class="info-card" style="margin-bottom: 24px;">
-                        {{ summary|safe }}
+                <!-- Assessment Content -->
+                <div class="results-body">
+                    <div class="assessment-card">
+                        <div class="assessment-content">
+                            {{ summary|safe }}
+                        </div>
                     </div>
 
+                    <!-- References Section -->
                     {% if references %}
-                    <div class="info-card">
-                        <div class="info-card-title">Evidence-Based References</div>
-                        <div class="info-card-content">
+                    <div class="references-card">
+                        <div class="references-card-header">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            <span>Evidence-Based References</span>
+                            <span class="references-count">{{ references|length }} papers</span>
+                        </div>
+                        <div class="references-list">
                             {% for ref in references %}
-                            <div style="padding: 12px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px;">
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
-                                    [{{ loop.index }}] {{ ref.title }}
-                                </a>
-                                <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
+                            <div class="reference-item-modern">
+                                <div class="reference-number">[{{ loop.index }}]</div>
+                                <div class="reference-content-modern">
+                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-title-link">
+                                        {{ ref.title }}
+                                    </a>
+                                    <div class="reference-meta-modern">
+                                        <span class="reference-authors">{{ ref.authors }}</span>
+                                        <span class="reference-separator">•</span>
+                                        <span class="reference-journal">{{ ref.journal }}</span>
+                                        <span class="reference-separator">•</span>
+                                        <span class="reference-year">{{ ref.year }}</span>
+                                    </div>
+                                    {% if ref.get('study_badge') and ref.get('study_color') %}
+                                    <span class="study-type-badge-preop" style="background-color: {{ ref.study_color }};">
+                                        {{ ref.study_badge }}
+                                    </span>
+                                    {% endif %}
+                                </div>
                             </div>
                             {% endfor %}
                         </div>
@@ -3098,9 +3447,25 @@ PREOP_HTML = """<!DOCTYPE html>
                     {% endif %}
                 </div>
 
-                <div class="action-buttons" style="margin-top: 32px;">
-                    <a href="/preop" class="action-btn action-btn-primary">New Assessment</a>
-                    <button onclick="window.print()" class="action-btn action-btn-secondary">Print/Export</button>
+                <!-- Action Buttons -->
+                <div class="results-footer">
+                    <a href="/preop" class="btn-modern btn-modern-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 4v16m8-8H4"/>
+                        </svg>
+                        New Assessment
+                    </a>
+                    <button onclick="window.print()" class="btn-modern btn-modern-secondary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+                            <path d="M9 21H15"/>
+                            <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
+                        </svg>
+                        Print/Save PDF
+                    </button>
+                    <a href="/" class="btn-modern btn-modern-tertiary">
+                        Back to Home
+                    </a>
                 </div>
             </div>
             {% endif %}
