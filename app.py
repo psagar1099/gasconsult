@@ -813,8 +813,8 @@ PREOP_HTML = """<!DOCTYPE html>
     <title>Pre-Op Risk Assessment — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -3487,8 +3487,8 @@ HTML = """<!DOCTYPE html>
     <title>GasConsult.ai — AI-Powered Anesthesiology Assistant</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -5264,8 +5264,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
     <title>Library — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -6184,8 +6184,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
     <title>Shared Response — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -7084,8 +7084,8 @@ TERMS_HTML = """<!DOCTYPE html>
     <title>Terms of Service — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -8010,8 +8010,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     <title>Privacy Policy — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -8842,8 +8842,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <title>Quick Dose Reference — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -10798,8 +10798,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
     <title>Clinical Calculators — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
@@ -12494,8 +12494,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     <title>IOH Predictor — gasconsult.ai</title>
 
     <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=5">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=5">
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
