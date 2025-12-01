@@ -810,17 +810,15 @@ PREOP_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Op Risk Assessment — gasconsult.ai</title>
-
-    <!-- PWA -->
+    <title>Pre-Operative Assessment — gasconsult.ai</title>
+    
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
-
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-
         :root {
             --white: #FFFFFF;
             --gray-50: #F8FAFC;
@@ -859,6 +857,7 @@ PREOP_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Background Canvas */
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -927,6 +926,7 @@ PREOP_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
+        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -959,19 +959,12 @@ PREOP_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
             font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
-            color: var(--gray-900);
         }
 
         .logo-text .gas { color: var(--blue-600); }
@@ -1013,11 +1006,6 @@ PREOP_HTML = """<!DOCTYPE html>
             cursor: pointer;
             padding: 8px;
             border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn span {
@@ -1029,18 +1017,6 @@ PREOP_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
         .mobile-menu {
             display: none;
             position: fixed;
@@ -1049,7 +1025,6 @@ PREOP_HTML = """<!DOCTYPE html>
             right: 16px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 8px;
@@ -1059,9 +1034,7 @@ PREOP_HTML = """<!DOCTYPE html>
             gap: 4px;
         }
 
-        .mobile-menu.active {
-            display: flex;
-        }
+        .mobile-menu.active { display: flex; }
 
         .mobile-menu-link {
             padding: 14px 16px;
@@ -1078,766 +1051,121 @@ PREOP_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .hero {
-            padding: 120px 20px 60px;
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 88px 16px 32px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
             text-align: center;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
-            opacity: 0;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-500);
-            border-radius: 50%;
-            position: relative;
-        }
-
-        .badge-dot::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: var(--blue-400);
-            animation: pulse-ring 2s ease-out infinite;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.8); opacity: 0.8; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .hero-title {
-            font-size: 40px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
-            opacity: 0;
-        }
-
-        .hero-title .gradient { color: var(--blue-600); }
-
-        .hero-subtitle {
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--gray-500);
-            max-width: 560px;
-            margin: 0 auto 40px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-            opacity: 0;
+            margin-bottom: 32px;
+            animation: fade-up 0.6s ease forwards;
         }
 
         @keyframes fade-up {
-            from { opacity: 0; transform: translateY(24px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .chat-container {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 0 16px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
-            opacity: 0;
-        }
-
-        .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-        }
-
-        .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
-        }
-
-        .chat-inner {
-            background: var(--white);
-            border-radius: 14px;
-            padding: 4px;
-            display: flex;
-            align-items: flex-end;
-            gap: 4px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
-        }
-
-        .chat-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: 10px 14px;
-            font-size: 16px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: transparent;
-            resize: none;
-            min-height: 38px;
-            max-height: 110px;
-            line-height: 1.5;
-        }
-
-        .chat-input::placeholder { color: var(--gray-400); }
-
-        .chat-send {
-            width: 44px;
-            height: 44px;
-            background: var(--blue-600);
-            border: none;
-            border-radius: 12px;
-            color: var(--white);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-            flex-shrink: 0;
-            margin: 4px;
-        }
-
-        .chat-send:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
-        }
-
-        .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
-
-        .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 16px 8px 6px;
-        }
-
-        .hint-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 10px 14px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
-        }
-
-        .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
-        .hint-chip:hover svg { opacity: 1; color: var(--blue-500); }
-
-        .features { padding: 60px 20px 80px; }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .features-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--blue-600);
-            margin-bottom: 12px;
-        }
-
-        .features-title {
+        .header-title {
             font-size: 28px;
             font-weight: 800;
             letter-spacing: -1px;
             color: var(--gray-900);
-            margin-bottom: 12px;
+            margin-bottom: 8px;
         }
 
-        .features-subtitle {
-            font-size: 16px;
+        .header-title .blue { color: var(--blue-600); }
+
+        .header-subtitle {
+            font-size: 15px;
             color: var(--gray-500);
-            max-width: 480px;
-            margin: 0 auto;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px;
-            padding: 28px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-            cursor: pointer;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 24px 64px rgba(0,0,0,0.08);
-            border-color: rgba(59,130,246,0.2);
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover .feature-icon { transform: scale(1.05); }
-        .feature-icon svg { width: 24px; height: 24px; }
-
-        .feature-icon.blue {
-            background: var(--blue-50);
-            border: 1px solid var(--blue-100);
-            box-shadow: 0 4px 16px rgba(37,99,235,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.blue svg { color: var(--blue-600); }
-
-        .feature-icon.emerald {
-            background: #ECFDF5;
-            border: 1px solid #D1FAE5;
-            box-shadow: 0 4px 16px rgba(16,185,129,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.emerald svg { color: #059669; }
-
-        .feature-icon.violet {
-            background: #F5F3FF;
-            border: 1px solid #EDE9FE;
-            box-shadow: 0 4px 16px rgba(139,92,246,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.violet svg { color: #7C3AED; }
-
-        .feature-icon.rose {
-            background: #FFF1F2;
-            border: 1px solid #FFE4E6;
-            box-shadow: 0 4px 16px rgba(244,63,94,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.rose svg { color: #E11D48; }
-
-        .feature-icon.cyan {
-            background: #ECFEFF;
-            border: 1px solid #CFFAFE;
-            box-shadow: 0 4px 16px rgba(6,182,212,0.1), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-        .feature-icon.cyan svg { color: #0891B2; }
-
-        .feature-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 10px;
-            letter-spacing: -0.3px;
-        }
-
-        .feature-desc {
-            font-size: 14px;
             line-height: 1.6;
-            color: var(--gray-500);
-            margin-bottom: 20px;
         }
 
-        .feature-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+        /* Form Card */
+        .form-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
+            animation: fade-up 0.6s 0.1s ease forwards;
+            opacity: 0;
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
             font-size: 14px;
             font-weight: 600;
-            color: var(--blue-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
+            color: var(--gray-700);
+            margin-bottom: 8px;
         }
 
-        .feature-link:hover { gap: 10px; }
-        .feature-link svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
-        .feature-link:hover svg { transform: translateX(4px); }
-
-        .footer {
-            padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+        .form-label .required {
+            color: #EF4444;
+            margin-left: 2px;
         }
 
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover { color: var(--gray-700); }
-
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .hero { padding: 160px 32px 80px; }
-            .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
-            .badge-dot { width: 10px; height: 10px; }
-            .badge-text { font-size: 13px; }
-            .hero-title { font-size: 56px; letter-spacing: -2.5px; margin-bottom: 24px; }
-            .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
-            .chat-container { padding: 0 24px; margin-bottom: 80px; }
-            .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
-            .hint-chip { padding: 12px 18px; font-size: 13px; }
-            .hint-chip svg { width: 16px; height: 16px; }
-            .features { padding: 80px 32px 100px; }
-            .features-header { margin-bottom: 56px; }
-            .features-label { font-size: 12px; margin-bottom: 16px; }
-            .features-title { font-size: 36px; letter-spacing: -1.5px; }
-            .features-subtitle { font-size: 18px; }
-            .features-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-            .feature-card { padding: 36px; border-radius: 24px; }
-            .feature-card:hover { transform: translateY(-6px); }
-            .feature-icon { width: 60px; height: 60px; border-radius: 18px; margin-bottom: 24px; }
-            .feature-icon svg { width: 26px; height: 26px; }
-            .feature-title { font-size: 20px; margin-bottom: 12px; }
-            .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-            .orb-1 { width: 600px; height: 600px; left: -10%; }
-            .orb-2 { width: 450px; height: 450px; right: -10%; }
-            .orb-3 { width: 400px; height: 400px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            .hero { padding: 180px 40px 80px; }
-            .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
-            .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
-            .chat-container { margin-bottom: 100px; }
-            .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
-            .chat-hints { padding: 20px 12px 8px; }
-            .hint-chip { padding: 12px 20px; }
-            .features { padding: 80px 40px 120px; }
-            .features-header { margin-bottom: 64px; }
-            .features-title { font-size: 40px; }
-            .features-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
-            .feature-card { padding: 40px; border-radius: 28px; }
-            .feature-card:hover { transform: translateY(-8px); }
-            .feature-icon { width: 64px; height: 64px; border-radius: 20px; margin-bottom: 28px; }
-            .feature-icon svg { width: 28px; height: 28px; }
-            .footer { padding: 48px 40px; }
-            .orb-1 { width: 800px; height: 800px; top: -20%; left: -10%; }
-            .orb-2 { width: 600px; height: 600px; right: -15%; }
-            .orb-3 { width: 500px; height: 500px; }
-        }
-
-        @media (min-width: 1280px) {
-            .hero-title { font-size: 80px; }
-        }
-    
-
-        .main-content {
-            flex: 1;
-            padding: 100px 20px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .content-card {
-            background: rgba(255,255,255,0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-        }
-
-        h1 { font-size: 32px; margin-bottom: 16px; font-weight: 700; letter-spacing: -0.5px; }
-        h2 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-        h3 { font-size: 20px; margin-bottom: 10px; font-weight: 700; letter-spacing: -0.3px; }
-
-        input[type="text"], input[type="number"], input[type="email"], select, textarea {
+        /* Input Styles */
+        .form-input {
             width: 100%;
             padding: 12px 16px;
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            font-family: inherit;
             font-size: 15px;
+            font-family: inherit;
+            color: var(--gray-800);
             background: var(--white);
-            color: var(--gray-900);
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
             transition: all 0.2s ease;
         }
 
-        input:focus, select:focus, textarea:focus {
+        .form-input:focus {
             outline: none;
             border-color: var(--blue-500);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        button, .btn {
-            padding: 12px 24px;
-            background: var(--blue-600);
-            color: var(--white);
-            border: none;
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:hover, .btn:hover {
-            background: var(--blue-700);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 4px rgba(37,99,235,0.2), 0 12px 40px rgba(37,99,235,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        button:active, .btn:active {
-            transform: translateY(0);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        th {
-            background: rgba(37,99,235,0.05);
-            font-weight: 600;
-            color: var(--blue-700);
-        }
-
-        @media (min-width: 768px) {
-            .main-content { padding: 120px 32px 60px; }
-        }
-
-        @media (min-width: 1024px) {
-            .main-content { padding: 140px 40px 80px; }
-        }
-
-        /* Pre-Op Assessment Wizard Styles */
-        .phi-banner {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.05) 100%);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 32px;
-        }
-
-        .phi-content {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .phi-icon {
-            font-size: 28px;
-            flex-shrink: 0;
-        }
-
-        .phi-text {
-            flex: 1;
-        }
-
-        .phi-text strong {
-            display: block;
-            font-size: 15px;
-            font-weight: 700;
-            color: #DC2626;
-            margin-bottom: 6px;
-        }
-
-        .phi-text p {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-700);
-            margin: 0;
-        }
-
-        .main-wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .content-container {
-            width: 100%;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .page-title {
-            font-size: 36px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 12px;
-        }
-
-        .page-subtitle {
-            font-size: 16px;
-            color: var(--gray-600);
-            font-weight: 400;
-        }
-
-        /* Wizard Container */
-        .wizard-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .wizard-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(30px) saturate(180%);
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 24px;
-            padding: 40px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.05), 0 32px 100px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        /* Section Header */
-        .section-header {
-            margin-bottom: 32px;
-        }
-
-
-        .section-title {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.8px;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-        }
-
-        .section-description {
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-600);
-        }
-
-        /* Step Content */
-        .section-content {
-            opacity: 0;
-            animation: fadeSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes fadeSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .form-section {
-            display: block;
-            margin-bottom: 40px;
-            padding-bottom: 40px;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .form-section:last-of-type {
-            border-bottom: none;
-        }
-
-        /* Form Fields */
-        .field-group {
-            margin-bottom: 24px;
-        }
-
-        .field-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .field-label .required {
-            color: #DC2626;
-            margin-left: 2px;
-        }
-
-        .field-input, select.field-input, textarea.field-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--gray-300);
-            border-radius: 12px;
-            font-family: inherit;
-            font-size: 15px;
-            background: var(--white);
-            color: var(--gray-900);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .field-input:focus, select.field-input:focus, textarea.field-input:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1), 0 4px 16px rgba(59, 130, 246, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .field-input::placeholder {
+        .form-input::placeholder {
             color: var(--gray-400);
         }
 
-        textarea.field-input {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .field-row {
+        /* Input Row for Multiple Fields */
+        .input-row {
             display: grid;
+            gap: 12px;
             grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 640px) {
-            .field-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .field-row.three-col {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
 
         /* Radio Buttons */
         .radio-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .radio-option {
             position: relative;
-            padding: 18px 22px;
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
             background: var(--white);
             border: 2px solid var(--gray-200);
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
 
         .radio-option:hover {
@@ -1851,16 +1179,16 @@ PREOP_HTML = """<!DOCTYPE html>
             pointer-events: none;
         }
 
-        .radio-option input[type="radio"]:checked ~ .radio-content .radio-check {
+        .radio-option input[type="radio"]:checked + .radio-visual {
             background: var(--blue-600);
             border-color: var(--blue-600);
         }
 
-        .radio-option input[type="radio"]:checked ~ .radio-content .radio-check::after {
+        .radio-option input[type="radio"]:checked + .radio-visual::after {
             opacity: 1;
         }
 
-        .radio-option input[type="radio"]:checked ~ .radio-content .radio-label {
+        .radio-option input[type="radio"]:checked ~ .radio-label {
             font-weight: 600;
             color: var(--blue-600);
         }
@@ -1871,798 +1199,407 @@ PREOP_HTML = """<!DOCTYPE html>
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
         }
 
-        .radio-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-
-        .radio-check {
-            width: 22px;
-            height: 22px;
-            border: 2.5px solid var(--gray-300);
+        .radio-visual {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gray-300);
             border-radius: 50%;
             flex-shrink: 0;
             position: relative;
-            transition: all 0.25s ease;
-            margin-top: 0px;
+            transition: all 0.2s ease;
+            margin-right: 12px;
         }
 
-        .radio-check::after {
+        .radio-visual::after {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
-            background: white;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
+            background: white;
             opacity: 0;
-            transition: opacity 0.25s ease;
-        }
-
-        .radio-text {
-            flex: 1;
+            transition: opacity 0.2s ease;
         }
 
         .radio-label {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--gray-800);
-            display: block;
-            margin-bottom: 4px;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            color: var(--gray-700);
+            flex: 1;
+            transition: all 0.2s ease;
         }
 
-        .radio-desc {
-            font-size: 13px;
-            line-height: 1.5;
-            color: var(--gray-600);
-        }
-
-        /* Checkbox Groups */
+        /* Checkboxes */
         .checkbox-group {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 10px;
         }
 
-        @media (min-width: 640px) {
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .checkbox-item {
+        .checkbox-option {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 12px;
+            padding: 12px 14px;
             background: var(--white);
-            border: 2px solid var(--gray-300);
+            border: 2px solid var(--gray-200);
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .checkbox-item:hover {
-            border-color: var(--blue-400);
-            background: var(--blue-50);
+        .checkbox-option:hover {
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
         }
 
-        .checkbox-item input[type="checkbox"] {
+        .checkbox-option input[type="checkbox"] {
             width: 18px;
             height: 18px;
+            margin-right: 10px;
             cursor: pointer;
             accent-color: var(--blue-600);
         }
 
-        .checkbox-item label {
+        .checkbox-label {
             font-size: 14px;
-            font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
             flex: 1;
         }
 
-        .checkbox-item input[type="checkbox"]:checked ~ label {
-            color: var(--blue-700);
-            font-weight: 600;
+        /* Textarea */
+        textarea.form-input {
+            resize: vertical;
+            min-height: 80px;
         }
 
-        /* System Groups */
-        .system-group {
-            margin-bottom: 28px;
+        /* Section Divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+            margin: 32px 0;
         }
 
-        .system-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .system-title {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray-700);
-            margin-bottom: 12px;
-            padding-left: 4px;
-        }
-
-        /* Auto-calculations */
-        .auto-calc-box {
-            margin-top: 28px;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-            border: 2px solid var(--blue-200);
-            border-radius: 14px;
-        }
-
-        .auto-calc-title {
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-700);
-            margin-bottom: 12px;
-        }
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 12px;
-        }
-
-        .calc-item {
-            text-align: center;
-        }
-
-        .calc-label {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-            margin-bottom: 4px;
-        }
-
-        .calc-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--blue-700);
-        }
-
-        .calc-unit {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--blue-600);
-            margin-left: 4px;
-        }
-
-        /* Form Submit */
-        .form-submit {
-            display: flex;
-            justify-content: center;
-            margin-top: 48px;
-            padding-top: 40px;
-        }
-
-        .submit-btn {
-            padding: 16px 40px;
-            font-family: inherit;
+        .section-title {
             font-size: 16px;
             font-weight: 700;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3), 0 8px 24px rgba(37,99,235,0.2);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4), 0 12px 32px rgba(37,99,235,0.25);
         }
 
         .submit-btn:active {
             transform: translateY(0);
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        /* Results Page */
+        /* Results State */
         .results-container {
-            max-width: 900px;
-            margin: 0 auto;
+            animation: fade-up 0.6s ease forwards;
         }
 
-        .hero-card {
-            background: linear-gradient(135deg, var(--white) 0%, var(--blue-50) 100%);
-            border: 2px solid var(--blue-200);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            margin-bottom: 32px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
-        }
-
-        .risk-level-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px 32px;
-            border-radius: 100px;
-            font-size: 16px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-
-        .risk-level-badge.low {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .risk-level-badge.moderate {
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-            color: white;
-            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
-        }
-
-        .risk-level-badge.high {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            color: white;
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-        }
-
-        .risk-title {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 12px;
-        }
-
-        .risk-subtitle {
-            font-size: 16px;
-            color: var(--gray-600);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        @media (min-width: 768px) {
-            .info-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .info-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--gray-200);
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-        }
-
-        .info-card-title {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-            margin-bottom: 16px;
-        }
-
-        .info-card-content {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--gray-700);
-        }
-
-        .score-display {
-            font-size: 36px;
-            font-weight: 800;
-            color: var(--blue-600);
-            margin-bottom: 8px;
-        }
-
-        .score-description {
-            font-size: 13px;
-            color: var(--gray-600);
-        }
-
-        .risk-factors-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .risk-factors-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gray-200);
-            font-size: 14px;
-            color: var(--gray-700);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .risk-factors-list li:last-child {
-            border-bottom: none;
-        }
-
-        .risk-factors-list li::before {
-            content: '•';
-            color: var(--blue-600);
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        .recommendations-card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 2px solid var(--blue-200);
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 32px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-        }
-
-        .recommendations-title {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-        }
-
-        .recommendations-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .recommendation-item {
-            padding: 16px;
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-600);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--gray-800);
-        }
-
-        .recommendation-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .recommendation-item strong {
-            color: var(--blue-700);
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .action-btn {
-            padding: 14px 28px;
-            font-family: inherit;
-            font-size: 15px;
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .action-btn-primary {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: var(--white);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
-        }
-
-        .action-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
-        }
-
-        .action-btn-secondary {
-            background: var(--white);
-            color: var(--gray-700);
-            border: 2px solid var(--gray-300);
-        }
-
-        .action-btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
-            transform: translateY(-2px);
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 9999;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-overlay.show {
-            display: flex;
-        }
-
-        .loading-content {
-            text-align: center;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid var(--gray-200);
-            border-top-color: var(--blue-600);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        /* Modern Results UI */
         .results-header {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: white;
-            padding: 32px;
-            border-radius: 20px 20px 0 0;
-            margin: -24px -24px 0 -24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .results-header-content {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            text-align: center;
+            padding: 32px 24px;
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+            border-radius: 20px;
+            margin-bottom: 24px;
         }
 
         .results-icon {
             width: 56px;
             height: 56px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 16px;
+            margin: 0 auto 16px;
+            background: var(--blue-600);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
         }
 
         .results-icon svg {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             stroke: white;
         }
 
         .results-title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
-            margin: 0;
+            color: var(--gray-900);
+            margin-bottom: 8px;
             letter-spacing: -0.5px;
         }
 
         .results-subtitle {
             font-size: 14px;
-            margin: 4px 0 0 0;
-            opacity: 0.9;
-            font-weight: 500;
+            color: var(--gray-600);
         }
 
-        .results-actions-compact {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            width: 44px;
-            height: 44px;
-            background: rgba(255,255,255,0.2);
-            border: none;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: white;
-            text-decoration: none;
-        }
-
-        .icon-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-
-        .icon-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: white;
-        }
-
-        .results-body {
-            padding: 32px 24px;
-        }
-
-        .assessment-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid var(--gray-200);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        .results-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 24px;
             margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
         }
 
-        .assessment-content {
-            padding: 32px;
-            line-height: 1.8;
-        }
-
-        .assessment-content h3 {
-            font-size: 20px;
+        .results-card h3 {
+            font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
-            margin: 32px 0 16px 0;
+            margin-bottom: 16px;
         }
 
-        .assessment-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .assessment-content p {
-            margin: 12px 0;
+        .results-content {
+            font-size: 15px;
+            line-height: 1.7;
             color: var(--gray-700);
         }
 
-        .assessment-content ul {
-            margin: 12px 0;
-            padding-left: 24px;
-        }
-
-        .assessment-content li {
-            margin: 8px 0;
-            color: var(--gray-700);
-        }
-
-        .assessment-content strong {
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
+        /* References */
         .references-card {
-            background: white;
-            border-radius: 16px;
-            border: 1px solid var(--gray-200);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
         }
 
-        .references-card-header {
+        .references-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-200);
-            font-size: 16px;
+            gap: 10px;
+            font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
+            margin-bottom: 20px;
         }
 
-        .references-card-header svg {
+        .references-title svg {
             width: 20px;
             height: 20px;
             stroke: var(--blue-600);
-            flex-shrink: 0;
         }
 
-        .references-count {
-            margin-left: auto;
-            font-size: 13px;
-            font-weight: 600;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            padding: 4px 12px;
-            border-radius: 20px;
+        .reference-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
         }
 
-        .references-list {
-            padding: 8px;
-        }
-
-        .reference-item-modern {
-            display: flex;
-            gap: 16px;
-            padding: 16px;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .reference-item-modern:hover {
-            background: var(--gray-50);
+        .reference-item:last-child {
+            border-bottom: none;
         }
 
         .reference-number {
-            font-size: 14px;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 32px;
+            font-size: 13px;
             font-weight: 700;
-            color: var(--blue-600);
+            margin-right: 12px;
             flex-shrink: 0;
-            min-width: 32px;
         }
 
-        .reference-content-modern {
-            flex: 1;
-        }
-
-        .reference-title-link {
-            color: var(--gray-900);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.5;
-            display: block;
-            margin-bottom: 8px;
-            transition: color 0.2s ease;
-        }
-
-        .reference-title-link:hover {
+        .reference-link {
             color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
-        .reference-meta-modern {
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
             font-size: 13px;
             color: var(--gray-600);
+            margin-top: 6px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 8px;
-        }
-
-        .reference-separator {
-            color: var(--gray-400);
-        }
-
-        .study-type-badge-preop {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: white;
-        }
-
-        .results-footer {
-            padding: 24px;
-            border-top: 1px solid var(--gray-200);
-            display: flex;
+            flex-direction: column;
             gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
         }
 
-        .btn-modern {
-            padding: 14px 24px;
-            font-family: inherit;
+        .btn {
+            padding: 14px 20px;
             font-size: 15px;
             font-weight: 600;
+            text-align: center;
+            text-decoration: none;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: none;
-            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .btn-modern svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .btn-modern-primary {
+        .btn-primary {
             background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
             color: white;
+            border: none;
             box-shadow: 0 2px 8px rgba(37,99,235,0.3);
         }
 
-        .btn-modern-primary:hover {
+        .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(37,99,235,0.4);
         }
 
-        .btn-modern-secondary {
+        .btn-secondary {
             background: white;
             color: var(--gray-700);
             border: 2px solid var(--gray-300);
         }
 
-        .btn-modern-secondary:hover {
+        .btn-secondary:hover {
             background: var(--gray-50);
             border-color: var(--gray-400);
-            transform: translateY(-2px);
         }
 
-        .btn-modern-tertiary {
-            background: transparent;
+        /* Footer */
+        .footer {
+            padding: 32px 16px;
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .footer-text {
+            font-size: 13px;
             color: var(--gray-600);
-            border: none;
         }
 
-        .btn-modern-tertiary:hover {
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
             color: var(--gray-900);
-            background: var(--gray-100);
         }
 
-        /* Responsive */
-        @media (max-width: 640px) {
-            .wizard-card {
-                padding: 24px;
+        /* Tablet & Desktop */
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
             }
-            .section-title {
-                font-size: 22px;
+
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr);
             }
-            .wizard-nav {
-                flex-direction: column;
+
+            .radio-group {
+                flex-direction: row;
+                flex-wrap: wrap;
             }
-            .wizard-btn-prev {
-                order: 2;
-            }
-            .wizard-btn-next, .wizard-btn-submit {
-                order: 1;
+
+            .radio-option {
+                flex: 1;
+                min-width: calc(50% - 5px);
             }
         }
 
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
+            .main-content {
+                padding: 108px 32px 48px;
+            }
+
+            .header-title {
+                font-size: 36px;
+            }
+
+            .form-card {
+                padding: 32px;
+            }
+
+            .action-buttons {
+                flex-direction: row;
+            }
+
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .main-content {
+                max-width: 900px;
+            }
+
+            .header-title {
+                font-size: 42px;
+            }
+
+            .form-card {
+                padding: 40px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2674,6 +1611,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
                 <a href="/?clear=1" class="logo">
@@ -2691,7 +1629,6 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -2706,1012 +1643,300 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
+        <!-- Main Content -->
         <main class="main-content">
-    <!-- PHI Warning -->
-    <div class="phi-banner">
-        <div class="phi-content">
-            <div class="phi-icon">⚠️</div>
-            <div class="phi-text">
-                <strong>Privacy Notice:</strong>
-                <p>Do not enter patient names, dates of birth, MRNs, or other identifying information. Use age, weight, and clinical details only.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-wrapper">
-        <div class="content-container">
-            <div class="page-header">
-                <h1 class="page-title"><span style="color: var(--blue-600);">Pre-Operative</span> Risk Assessment</h1>
-                <p class="page-subtitle">Comprehensive NSQIP-inspired risk stratification with evidence-based recommendations</p>
-            </div>
-
             {% if not summary %}
-            <!-- Form Container -->
-            <div class="wizard-container">
-                <div class="wizard-card">
-                    <!-- Single Form -->
-                    <form method="post" action="/preop" id="preopForm">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <!-- Form State -->
+            <div class="header">
+                <h1 class="header-title"><span class="blue">Pre-Operative</span> Assessment</h1>
+                <p class="header-subtitle">Evidence-based risk stratification with personalized recommendations</p>
+            </div>
 
-                        <!-- Section 1: Demographics -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <h2 class="section-title">Patient Demographics</h2>
-                                <p class="section-description">Basic patient information for risk calculation</p>
-                            </div>
+            <div class="form-card">
+                <form method="POST" action="/preop">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                            <div class="section-content">
-                                <div class="field-row three-col">
-                                    <div class="field-group">
-                                        <label for="age" class="field-label">Age <span class="required">*</span></label>
-                                        <input type="number" id="age" name="age" class="field-input" placeholder="Years" required>
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="weight" class="field-label">Weight <span class="required">*</span></label>
-                                        <input type="number" id="weight" name="weight" step="0.1" class="field-input" placeholder="kg" required>
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="height" class="field-label">Height <span class="required">*</span></label>
-                                        <input type="number" id="height" name="height" step="0.1" class="field-input" placeholder="cm" required>
-                                    </div>
-                                </div>
-
-                                <div class="field-group">
-                                    <label class="field-label">Sex Assigned at Birth <span class="required">*</span></label>
-                                    <div class="field-row">
-                                        <label class="radio-option" onclick="selectRadio('sex', 'male')">
-                                            <input type="radio" id="sex-male" name="sex" value="male" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Male</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('sex', 'female')">
-                                            <input type="radio" id="sex-female" name="sex" value="female" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Female</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <!-- Auto-calculations -->
-                                <div class="auto-calc-box" id="autoCalcBox" style="display: none;">
-                                    <div class="auto-calc-title">Calculated Metrics</div>
-                                    <div class="calc-grid">
-                                        <div class="calc-item">
-                                            <div class="calc-label">BMI</div>
-                                            <div class="calc-value" id="calcBMI">--</div>
-                                        </div>
-                                        <div class="calc-item">
-                                            <div class="calc-label">BMI Category</div>
-                                            <div class="calc-value" id="calcBMICategory" style="font-size: 14px;">--</div>
-                                        </div>
-                                        <div class="calc-item">
-                                            <div class="calc-label">IBW</div>
-                                            <div class="calc-value" id="calcIBW">--<span class="calc-unit">kg</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Patient Demographics -->
+                    <div class="section-title">Patient Information</div>
+                    
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="65" required min="0" max="120">
                         </div>
-
-                        <!-- Section 2: ASA Classification -->
-                        <div class="form-section">
-                            <div class="section-header">
-                                <h2 class="section-title">ASA Physical Status</h2>
-                                <p class="section-description">Select the appropriate ASA classification</p>
-                            </div>
-
-                            <div class="section-content">
-                                <div class="field-group">
-                                    <label class="field-label">ASA Classification <span class="required">*</span></label>
-                                    <div class="radio-group">
-                                        <label class="radio-option" onclick="selectRadio('asa', '1')">
-                                            <input type="radio" id="asa-1" name="asa" value="1" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA I</span>
-                                                    <span class="radio-desc">Normal healthy patient</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('asa', '2')">
-                                            <input type="radio" id="asa-2" name="asa" value="2" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA II</span>
-                                                    <span class="radio-desc">Mild systemic disease, no functional limitations</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('asa', '3')">
-                                            <input type="radio" id="asa-3" name="asa" value="3" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA III</span>
-                                                    <span class="radio-desc">Severe systemic disease with functional limitations</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('asa', '4')">
-                                            <input type="radio" id="asa-4" name="asa" value="4" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA IV</span>
-                                                    <span class="radio-desc">Severe systemic disease that is a constant threat to life</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('asa', '5')">
-                                            <input type="radio" id="asa-5" name="asa" value="5" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA V</span>
-                                                    <span class="radio-desc">Moribund patient not expected to survive without operation</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('asa', '6')">
-                                            <input type="radio" id="asa-6" name="asa" value="6" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">ASA VI</span>
-                                                    <span class="radio-desc">Declared brain-dead patient for organ donation</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="field-group" style="margin-top: 24px;">
-                                    <div class="checkbox-item">
-                                        <input type="checkbox" id="emergency" name="emergency" value="true">
-                                        <label for="emergency">Emergency Surgery (E modifier)</label>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">Weight (kg)<span class="required">*</span></label>
+                            <input type="number" name="weight" class="form-input" placeholder="70" required min="1" max="300" step="0.1">
                         </div>
+                    </div>
 
-                        <!-- Section3: Comorbidities -->
-                        <div class="form-section" id="section3">
-                            <div class="section-header">
-                                <h2 class="section-title">Comorbidities</h2>
-                                <p class="section-description">Select all applicable conditions organized by system</p>
-                            </div>
-
-                            <div class="section-content">
-                                <!-- Cardiac -->
-                                <div class="system-group">
-                                    <div class="system-title">Cardiac</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="cad" name="comorbidities" value="CAD">
-                                            <label for="cad">Coronary Artery Disease</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="mi" name="comorbidities" value="Prior MI">
-                                            <label for="mi">Prior MI</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="chf" name="comorbidities" value="Heart Failure">
-                                            <label for="chf">Heart Failure</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="afib" name="comorbidities" value="Atrial Fibrillation">
-                                            <label for="afib">Atrial Fibrillation</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="pacemaker" name="comorbidities" value="Pacemaker/ICD">
-                                            <label for="pacemaker">Pacemaker/ICD</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="valvular" name="comorbidities" value="Valvular Disease">
-                                            <label for="valvular">Valvular Disease</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Pulmonary -->
-                                <div class="system-group">
-                                    <div class="system-title">Pulmonary</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="copd" name="comorbidities" value="COPD">
-                                            <label for="copd">COPD</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="asthma" name="comorbidities" value="Asthma">
-                                            <label for="asthma">Asthma</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="osa" name="comorbidities" value="OSA">
-                                            <label for="osa">Obstructive Sleep Apnea</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="ild" name="comorbidities" value="Interstitial Lung Disease">
-                                            <label for="ild">Interstitial Lung Disease</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Endocrine -->
-                                <div class="system-group">
-                                    <div class="system-title">Endocrine</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="dm" name="comorbidities" value="Diabetes Mellitus">
-                                            <label for="dm">Diabetes Mellitus</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="dm-insulin" name="comorbidities" value="DM on Insulin">
-                                            <label for="dm-insulin">DM on Insulin</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="thyroid" name="comorbidities" value="Thyroid Disease">
-                                            <label for="thyroid">Thyroid Disease</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="adrenal" name="comorbidities" value="Adrenal Insufficiency">
-                                            <label for="adrenal">Adrenal Insufficiency</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Renal -->
-                                <div class="system-group">
-                                    <div class="system-title">Renal</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="ckd" name="comorbidities" value="CKD">
-                                            <label for="ckd">Chronic Kidney Disease</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="esrd" name="comorbidities" value="ESRD">
-                                            <label for="esrd">ESRD</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="dialysis" name="comorbidities" value="Dialysis">
-                                            <label for="dialysis">On Dialysis</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Neurological -->
-                                <div class="system-group">
-                                    <div class="system-title">Neurological</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="stroke" name="comorbidities" value="CVA/TIA">
-                                            <label for="stroke">Prior CVA/TIA</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="seizure" name="comorbidities" value="Seizure Disorder">
-                                            <label for="seizure">Seizure Disorder</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="neuromuscular" name="comorbidities" value="Neuromuscular Disease">
-                                            <label for="neuromuscular">Neuromuscular Disease</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Hematologic -->
-                                <div class="system-group">
-                                    <div class="system-title">Hematologic</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="anemia" name="comorbidities" value="Anemia">
-                                            <label for="anemia">Anemia</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="bleeding" name="comorbidities" value="Bleeding Disorder">
-                                            <label for="bleeding">Bleeding Disorder</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="anticoag" name="comorbidities" value="On Anticoagulation">
-                                            <label for="anticoag">On Anticoagulation</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Other -->
-                                <div class="system-group">
-                                    <div class="system-title">Other</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="htn" name="comorbidities" value="Hypertension">
-                                            <label for="htn">Hypertension</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="liver" name="comorbidities" value="Liver Disease">
-                                            <label for="liver">Liver Disease</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="cancer" name="comorbidities" value="Cancer">
-                                            <label for="cancer">Cancer</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="immunosupp" name="comorbidities" value="Immunosuppression">
-                                            <label for="immunosupp">Immunosuppression</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field-group" style="margin-top: 24px;">
-                                    <label for="other_comorbidities" class="field-label">Other Conditions</label>
-                                    <textarea id="other_comorbidities" name="other_comorbidities" class="field-input" placeholder="List any other relevant conditions..." rows="2"></textarea>
-                                </div>
-                            </div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Height (cm)<span class="required">*</span></label>
+                            <input type="number" name="height" class="form-input" placeholder="170" required min="50" max="250">
                         </div>
-
-                        <!-- Section4: Functional Status -->
-                        <div class="form-section" id="section4">
-                            <div class="section-header">
-                                <h2 class="section-title">Functional Status & Exercise Tolerance</h2>
-                                <p class="section-description">Assess patient's functional capacity and activity level</p>
-                            </div>
-
-                            <div class="section-content">
-                                <div class="field-group">
-                                    <label class="field-label">Metabolic Equivalents (METs) <span class="required">*</span></label>
-                                    <div class="radio-group">
-                                        <label class="radio-option" onclick="selectRadio('mets', 'poor')">
-                                            <input type="radio" id="mets-poor" name="mets" value="<4 METs" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">&lt;4 METs - Poor Functional Capacity</span>
-                                                    <span class="radio-desc">Cannot climb 2 flights of stairs or walk 4 blocks</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('mets', 'moderate')">
-                                            <input type="radio" id="mets-moderate" name="mets" value="4-10 METs" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">4-10 METs - Moderate Functional Capacity</span>
-                                                    <span class="radio-desc">Can climb 2 flights of stairs, moderate exertion tolerated</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('mets', 'excellent')">
-                                            <input type="radio" id="mets-excellent" name="mets" value=">10 METs" required>
-                                            <div class="radio-content">
-                                                <div class="radio-check"></div>
-                                                <div class="radio-text">
-                                                    <span class="radio-label">&gt;10 METs - Excellent Functional Capacity</span>
-                                                    <span class="radio-desc">Strenuous exercise, high activity level</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="field-group" style="margin-top: 32px;">
-                                    <label class="field-label">Activities of Daily Living (ADLs) <span class="required">*</span></label>
-                                    <div class="field-row">
-                                        <label class="radio-option" onclick="selectRadio('adl', 'independent')">
-                                            <input type="radio" id="adl-independent" name="adl" value="Independent" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Independent</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('adl', 'partial')">
-                                            <input type="radio" id="adl-partial" name="adl" value="Partially Dependent" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Partially Dependent</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('adl', 'dependent')">
-                                            <input type="radio" id="adl-dependent" name="adl" value="Fully Dependent" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Fully Dependent</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="field-group" style="margin-top: 32px;">
-                                    <label for="anesthesia_history" class="field-label">Previous Anesthesia History</label>
-                                    <textarea id="anesthesia_history" name="anesthesia_history" class="field-input" placeholder="e.g., General anesthesia for appendectomy 2015 - no complications. Family history of malignant hyperthermia..." rows="3"></textarea>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label class="form-label">Sex<span class="required">*</span></label>
+                            <select name="sex" class="form-input" required>
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
                         </div>
+                    </div>
 
-                        <!-- Section5: Medications -->
-                        <div class="form-section" id="section5">
-                            <div class="section-header">
-                                <h2 class="section-title">Current Medications</h2>
-                                <p class="section-description">List medications and identify critical agents</p>
-                            </div>
+                    <div class="section-divider"></div>
 
-                            <div class="section-content">
-                                <div class="field-group">
-                                    <label for="medications" class="field-label">Medication List</label>
-                                    <textarea id="medications" name="medications" class="field-input" placeholder="e.g., Metoprolol 50mg BID, Lisinopril 10mg daily, Atorvastatin 40mg nightly..." rows="4"></textarea>
-                                </div>
-
-                                <div class="system-group" style="margin-top: 32px;">
-                                    <div class="system-title">Specific Medications of Interest</div>
-                                    <div class="checkbox-group">
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="aspirin" name="medications_specific" value="Aspirin">
-                                            <label for="aspirin">Aspirin</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="p2y12" name="medications_specific" value="P2Y12 Inhibitor">
-                                            <label for="p2y12">P2Y12 Inhibitor (Plavix/Ticagrelor)</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="warfarin" name="medications_specific" value="Warfarin">
-                                            <label for="warfarin">Warfarin</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="doac" name="medications_specific" value="DOAC">
-                                            <label for="doac">DOAC (Apixaban/Rivaroxaban/Edoxaban)</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="beta-blocker" name="medications_specific" value="Beta Blocker">
-                                            <label for="beta-blocker">Beta Blocker</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="ace-arb" name="medications_specific" value="ACE-I/ARB">
-                                            <label for="ace-arb">ACE-I/ARB</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="diuretic" name="medications_specific" value="Diuretic">
-                                            <label for="diuretic">Diuretic</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="insulin" name="medications_specific" value="Insulin">
-                                            <label for="insulin">Insulin</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="oral-hypoglycemic" name="medications_specific" value="Oral Hypoglycemic">
-                                            <label for="oral-hypoglycemic">Oral Hypoglycemic</label>
-                                        </div>
-                                        <div class="checkbox-item">
-                                            <input type="checkbox" id="steroids" name="medications_specific" value="Steroids">
-                                            <label for="steroids">Steroids</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field-row" style="margin-top: 24px;">
-                                    <div class="field-group">
-                                        <label for="anticoag_last_dose" class="field-label">Last Anticoagulant Dose</label>
-                                        <input type="text" id="anticoag_last_dose" name="anticoag_last_dose" class="field-input" placeholder="e.g., Apixaban 5mg yesterday PM">
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="allergies" class="field-label">Allergies</label>
-                                        <input type="text" id="allergies" name="allergies" class="field-input" placeholder="e.g., PCN (rash), NKDA">
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Functional Capacity -->
+                    <div class="section-title">Functional Capacity</div>
+                    <div class="form-group">
+                        <label class="form-label">METs Capacity<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mets" value="<4 METs" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&lt;4 METs - Poor</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mets" value="4-10 METs" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">4-10 METs - Moderate</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mets" value=">10 METs" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&gt;10 METs - Excellent</span>
+                            </label>
                         </div>
+                    </div>
 
-                        <!-- Section6: Labs & Cardiac Workup -->
-                        <div class="form-section" id="section6">
-                            <div class="section-header">
-                                <h2 class="section-title">Laboratory Values & Cardiac Assessment</h2>
-                                <p class="section-description">Enter available lab results and cardiac workup findings</p>
-                            </div>
+                    <div class="section-divider"></div>
 
-                            <div class="section-content">
-                                <div class="field-row">
-                                    <div class="field-group">
-                                        <label for="hgb" class="field-label">Hemoglobin (g/dL)</label>
-                                        <input type="number" id="hgb" name="hgb" step="0.1" class="field-input" placeholder="e.g., 12.5">
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="plt" class="field-label">Platelets (×10³/μL)</label>
-                                        <input type="number" id="plt" name="plt" class="field-input" placeholder="e.g., 250">
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="cr" class="field-label">Creatinine (mg/dL)</label>
-                                        <input type="number" id="cr" name="cr" step="0.01" class="field-input" placeholder="e.g., 0.9">
-                                    </div>
-                                </div>
-
-                                <div class="field-row" style="margin-top: 20px;">
-                                    <div class="field-group">
-                                        <label for="inr" class="field-label">INR</label>
-                                        <input type="number" id="inr" name="inr" step="0.1" class="field-input" placeholder="e.g., 1.1">
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="glucose" class="field-label">Glucose (mg/dL)</label>
-                                        <input type="number" id="glucose" name="glucose" class="field-input" placeholder="e.g., 110">
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="ef" class="field-label">Ejection Fraction (%)</label>
-                                        <input type="number" id="ef" name="ef" class="field-input" placeholder="e.g., 60">
-                                    </div>
-                                </div>
-
-                                <!-- Auto-calculated eGFR -->
-                                <div class="auto-calc-box" id="eGFRBox" style="display: none; margin-top: 24px;">
-                                    <div class="auto-calc-title">Calculated Renal Function</div>
-                                    <div class="calc-grid">
-                                        <div class="calc-item">
-                                            <div class="calc-label">eGFR</div>
-                                            <div class="calc-value" id="calcEGFR">--<span class="calc-unit">mL/min</span></div>
-                                        </div>
-                                        <div class="calc-item">
-                                            <div class="calc-label">CKD Stage</div>
-                                            <div class="calc-value" id="calcCKDStage" style="font-size: 16px;">--</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="field-row" style="margin-top: 24px;">
-                                    <div class="field-group">
-                                        <label for="ekg" class="field-label">EKG Findings</label>
-                                        <select id="ekg" name="ekg" class="field-input">
-                                            <option value="">Select or type...</option>
-                                            <option value="Normal Sinus Rhythm">Normal Sinus Rhythm</option>
-                                            <option value="Atrial Fibrillation">Atrial Fibrillation</option>
-                                            <option value="Old MI">Old MI</option>
-                                            <option value="Left Ventricular Hypertrophy">LVH</option>
-                                            <option value="Bundle Branch Block">Bundle Branch Block</option>
-                                            <option value="Other">Other</option>
-                                            <option value="Not Done">Not Done</option>
-                                        </select>
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="npo" class="field-label">NPO Status</label>
-                                        <input type="text" id="npo" name="npo" class="field-input" placeholder="e.g., NPO since midnight">
-                                    </div>
-                                </div>
-                            </div>
+                    <!-- Comorbidities -->
+                    <div class="section-title">Comorbidities</div>
+                    <div class="form-group">
+                        <label class="form-label">Select all that apply</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Hypertension">
+                                <span class="checkbox-label">Hypertension</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Diabetes Mellitus">
+                                <span class="checkbox-label">Diabetes</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Coronary Artery Disease">
+                                <span class="checkbox-label">CAD</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Heart Failure">
+                                <span class="checkbox-label">Heart Failure</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Chronic Kidney Disease">
+                                <span class="checkbox-label">CKD</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Obstructive Sleep Apnea">
+                                <span class="checkbox-label">OSA</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="COPD">
+                                <span class="checkbox-label">COPD</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Prior Stroke">
+                                <span class="checkbox-label">Prior Stroke</span>
+                            </label>
                         </div>
+                    </div>
 
-                        <!-- Section7: Surgical Procedure -->
-                        <div class="form-section" id="section7">
-                            <div class="section-header">
-                                <h2 class="section-title">Surgical Procedure</h2>
-                                <p class="section-description">Details about the planned operation</p>
-                            </div>
+                    <div class="form-group">
+                        <label class="form-label">Other Comorbidities</label>
+                        <input type="text" name="other_comorbidities" class="form-input" placeholder="Enter any other conditions...">
+                    </div>
 
-                            <div class="section-content">
-                                <div class="field-group">
-                                    <label for="procedure" class="field-label">Procedure Name <span class="required">*</span></label>
-                                    <input type="text" id="procedure" name="procedure" class="field-input" placeholder="e.g., Total Knee Arthroplasty, Laparoscopic Cholecystectomy, CABG..." required>
-                                </div>
+                    <div class="section-divider"></div>
 
-                                <div class="field-group" style="margin-top: 24px;">
-                                    <label class="field-label">Surgical Risk Category <span class="required">*</span></label>
-                                    <div class="radio-group">
-                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'low')">
-                                            <input type="radio" id="surgery_risk-low" name="surgery_risk" value="Low" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Low Risk (&lt;1% cardiac risk)</span>
-                                                    <span class="radio-desc">Superficial procedures, cataract surgery, breast surgery, ambulatory procedures</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'intermediate')">
-                                            <input type="radio" id="surgery_risk-intermediate" name="surgery_risk" value="Intermediate" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">Intermediate Risk (1-5% cardiac risk)</span>
-                                                    <span class="radio-desc">Intraperitoneal, intrathoracic, orthopedic, head/neck surgery</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                        <label class="radio-option" onclick="selectRadio('surgery_risk', 'high')">
-                                            <input type="radio" id="surgery_risk-high" name="surgery_risk" value="High" required>
-                                            <div class="radio-check"></div>
-                                            <div class="radio-content">
-                                                <div class="radio-text">
-                                                    <span class="radio-label">High Risk (&gt;5% cardiac risk)</span>
-                                                    <span class="radio-desc">Vascular surgery, aortic surgery, prolonged procedures with major fluid shifts</span>
-                                                </div>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </div>
+                    <!-- Medications -->
+                    <div class="section-title">Medications & Allergies</div>
+                    <div class="form-group">
+                        <label class="form-label">Current Medications</label>
+                        <textarea name="medications" class="form-input" placeholder="List medications (e.g., aspirin, metoprolol, lisinopril...)"></textarea>
+                    </div>
 
-                                <div class="field-row" style="margin-top: 24px;">
-                                    <div class="field-group">
-                                        <label class="field-label">Urgency <span class="required">*</span></label>
-                                        <select id="urgency" name="urgency" class="field-input" required>
-                                            <option value="">Select...</option>
-                                            <option value="Elective">Elective</option>
-                                            <option value="Urgent">Urgent (within 24-48 hours)</option>
-                                            <option value="Emergent">Emergent (immediate)</option>
-                                        </select>
-                                    </div>
-                                    <div class="field-group">
-                                        <label for="duration" class="field-label">Expected Duration (hours)</label>
-                                        <input type="number" id="duration" name="duration" step="0.5" class="field-input" placeholder="e.g., 2.5">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group">
+                        <label class="form-label">Allergies</label>
+                        <input type="text" name="allergies" class="form-input" placeholder="Drug allergies and reactions...">
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Procedure Details -->
+                    <div class="section-title">Surgical Procedure</div>
+                    <div class="form-group">
+                        <label class="form-label">Planned Procedure<span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Total hip arthroplasty" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgery Risk Category<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="surgery_risk" value="low" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Low Risk</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="surgery_risk" value="intermediate" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Intermediate</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="surgery_risk" value="high" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">High Risk</span>
+                            </label>
                         </div>
+                    </div>
 
-                        <!-- Submit Button -->
-                        <div class="form-submit">
-                            <button type="submit" class="submit-btn">
-                                Generate Assessment →
-                            </button>
+                    <div class="section-divider"></div>
+
+                    <!-- Additional Details -->
+                    <div class="section-title">Additional Information (Optional)</div>
+                    
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Hemoglobin (g/dL)</label>
+                            <input type="text" name="hgb" class="form-input" placeholder="12.5">
                         </div>
-                    </form>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label">Creatinine (mg/dL)</label>
+                            <input type="text" name="cr" class="form-input" placeholder="1.0">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Platelets (×10³/µL)</label>
+                            <input type="text" name="plt" class="form-input" placeholder="250">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">INR</label>
+                            <input type="text" name="inr" class="form-input" placeholder="1.0">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Ejection Fraction (%)</label>
+                        <input type="text" name="ef" class="form-input" placeholder="55-60%">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">EKG Findings</label>
+                        <input type="text" name="ekg" class="form-input" placeholder="Normal sinus rhythm">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">NPO Status</label>
+                        <input type="text" name="npo" class="form-input" placeholder="NPO after midnight">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Previous Anesthesia Issues</label>
+                        <textarea name="previous_anesthesia" class="form-input" placeholder="Any prior anesthesia complications, difficult airway, PONV history..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Generate Assessment</button>
+                </form>
             </div>
 
             {% else %}
-            <!-- Results Display - Modern Redesigned UI -->
+            <!-- Results State -->
             <div class="results-container">
-                <div class="wizard-card">
-                    <h2 style="font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; letter-spacing: -1px;"><span style="color: var(--blue-600);">Pre-Operative</span> Assessment Summary</h2>
+                <div class="results-header">
+                    <div class="results-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h1 class="results-title"><span style="color: var(--blue-600);">Pre-Operative</span> Assessment Complete</h1>
+                    <p class="results-subtitle">Evidence-based risk stratification and optimization recommendations</p>
+                </div>
 
-                    <div class="info-card" style="margin-bottom: 24px;">
+                <div class="results-card">
+                    <div class="results-content">
                         {{ summary|safe }}
                     </div>
                 </div>
-            </div>
 
-                    {% if references %}
-                    <div class="info-card">
-                        <div class="info-card-title">Evidence-Based References</div>
-                        <div class="info-card-content">
-                            {% for ref in references %}
-                            <div style="padding: 12px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px;">
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
-                                    [{{ loop.index }}] {{ ref.title }}
-                                </a>
-                                <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
-                <!-- Header Section -->
-                <div class="results-header">
-                    <div class="results-header-content">
-                        <div class="results-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                                <path d="M9 12l2 2 4-4"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h1 class="results-title">Pre-Operative Assessment Complete</h1>
-                            <p class="results-subtitle">Evidence-based risk stratification and optimization recommendations</p>
-                        </div>
+                {% if references %}
+                <div class="references-card">
+                    <div class="references-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>Evidence-Based References</span>
                     </div>
-                    <div class="results-actions-compact">
-                        <button onclick="window.print()" class="icon-btn" title="Print Assessment">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
-                                <path d="M9 21H15"/>
-                                <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
-                            </svg>
-                        </button>
-                        <a href="/preop" class="icon-btn" title="New Assessment">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 4v16m8-8H4"/>
-                            </svg>
+                    {% for ref in references %}
+                    <div class="reference-item">
+                        <span class="reference-number">[{{ loop.index }}]</span>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                            {{ ref.title }}
                         </a>
+                        <div class="reference-meta">{{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}</div>
                     </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
 
-                <!-- Assessment Content -->
-                <div class="results-body">
-                    <div class="assessment-card">
-                        <div class="assessment-content">
-                            {{ summary|safe }}
-                        </div>
-                    </div>
-
-                    <!-- References Section -->
-                    {% if references %}
-                    <div class="references-card">
-                        <div class="references-card-header">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                            </svg>
-                            <span>Evidence-Based References</span>
-                            <span class="references-count">{{ references|length }} papers</span>
-                        </div>
-                        <div class="references-list">
-                            {% for ref in references %}
-                            <div class="reference-item-modern">
-                                <div class="reference-number">[{{ loop.index }}]</div>
-                                <div class="reference-content-modern">
-                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-title-link">
-                                        {{ ref.title }}
-                                    </a>
-                                    <div class="reference-meta-modern">
-                                        <span class="reference-authors">{{ ref.authors }}</span>
-                                        <span class="reference-separator">•</span>
-                                        <span class="reference-journal">{{ ref.journal }}</span>
-                                        <span class="reference-separator">•</span>
-                                        <span class="reference-year">{{ ref.year }}</span>
-                                    </div>
-                                    {% if ref.get('study_badge') and ref.get('study_color') %}
-                                    <span class="study-type-badge-preop" style="background-color: {{ ref.study_color }};">
-                                        {{ ref.study_badge }}
-                                    </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="results-footer">
-                    <a href="/preop" class="btn-modern btn-modern-primary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 4v16m8-8H4"/>
+                <div class="action-buttons">
+                    <a href="/preop" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                         New Assessment
                     </a>
-                    <button onclick="window.print()" class="btn-modern btn-modern-secondary">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
-                            <path d="M9 21H15"/>
-                            <path d="M7 9V5a2 2 0 012-2h6a2 2 0 012 2v4"/>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
                         </svg>
                         Print/Save PDF
                     </button>
-                    <a href="/" class="btn-modern btn-modern-tertiary">
-                        Back to Home
-                    </a>
                 </div>
             </div>
             {% endif %}
-        </div>
-    </div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="loading-spinner"></div>
-            <div class="loading-text">Generating Evidence-Based Assessment...</div>
-        </div>
-    </div>
         </main>
 
-        <!-- Glassmorphism Footer -->
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                     <span class="footer-text">© 2025 GasConsult.ai</span>
                 </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="#" class="footer-link">Contact</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
     </div>
 
     <script>
-
-        // ====== SESSION STORAGE ======
-        function saveFormData() {
-            const form = document.getElementById('preopForm');
-            const formData = new FormData(form);
-            const data = {};
-
-            // Save all form fields
-            for (let [key, value] of formData.entries()) {
-                if (data[key]) {
-                    if (Array.isArray(data[key])) {
-                        data[key].push(value);
-                    } else {
-                        data[key] = [data[key], value];
-                    }
-                } else {
-                    data[key] = value;
-                }
-            }
-
-            sessionStorage.setItem('preopFormData', JSON.stringify(data));
-        }
-
-        function loadFormData() {
-            const saved = sessionStorage.getItem('preopFormData');
-            if (!saved) return;
-
-            try {
-                const data = JSON.parse(saved);
-                const form = document.getElementById('preopForm');
-
-                for (let [key, value] of Object.entries(data)) {
-                    const elements = form.elements[key];
-                    if (!elements) continue;
-
-                    if (elements.type === 'radio') {
-                        form.elements[key].forEach(radio => {
-                            if (radio.value === value) radio.checked = true;
-                        });
-                    } else if (elements.type === 'checkbox') {
-                        if (Array.isArray(value)) {
-                            form.elements[key].forEach(checkbox => {
-                                if (value.includes(checkbox.value)) checkbox.checked = true;
-                            });
-                        } else {
-                            elements.checked = value === 'true';
-                        }
-                    } else {
-                        elements.value = value;
-                    }
-                }
-
-                // Recalculate metrics if data loaded
-                calculateMetrics();
-                calculateEGFR();
-            } catch (e) {
-                console.error('Error loading form data:', e);
-            }
-        }
-
-
-        // ====== RADIO BUTTON SELECTION ======
-        function selectRadio(name, value) {
-            const radio = document.getElementById(`${name}-${value}`);
-            if (radio) {
-                radio.checked = true;
-
-                // Update visual state
-                const options = document.querySelectorAll(`input[name="${name}"]`);
-                options.forEach(opt => {
-                    const parent = opt.closest('.radio-option');
-                    if (parent) {
-                        if (opt.checked) {
-                            parent.classList.add('selected');
-                        } else {
-                            parent.classList.remove('selected');
-                        }
-                    }
-                });
-
-                // Save and recalculate
-                saveFormData();
-                calculateMetrics();
-            }
-        }
-
-        // ====== AUTO-CALCULATIONS ======
-        function calculateMetrics() {
-            const age = parseFloat(document.getElementById('age')?.value);
-            const weight = parseFloat(document.getElementById('weight')?.value);
-            const height = parseFloat(document.getElementById('height')?.value);
-            const sex = document.querySelector('input[name="sex"]:checked')?.value;
-
-            if (!weight || !height || !sex) return;
-
-            // Calculate BMI
-            const heightM = height / 100;
-            const bmi = weight / (heightM * heightM);
-
-            // BMI Category
-            let bmiCategory = '';
-            if (bmi < 18.5) bmiCategory = 'Underweight';
-            else if (bmi < 25) bmiCategory = 'Normal';
-            else if (bmi < 30) bmiCategory = 'Overweight';
-            else if (bmi < 35) bmiCategory = 'Obese I';
-            else if (bmi < 40) bmiCategory = 'Obese II';
-            else bmiCategory = 'Obese III';
-
-            // Calculate IBW (Devine formula)
-            let ibw;
-            if (sex === 'male') {
-                ibw = 50 + 2.3 * ((height / 2.54) - 60);
-            } else {
-                ibw = 45.5 + 2.3 * ((height / 2.54) - 60);
-            }
-
-            // Display results
-            document.getElementById('calcBMI').textContent = bmi.toFixed(1);
-            document.getElementById('calcBMICategory').textContent = bmiCategory;
-            document.getElementById('calcIBW').innerHTML = ibw.toFixed(1) + '<span class="calc-unit">kg</span>';
-            document.getElementById('autoCalcBox').style.display = 'block';
-        }
-
-        function calculateEGFR() {
-            const age = parseFloat(document.getElementById('age')?.value);
-            const cr = parseFloat(document.getElementById('cr')?.value);
-            const sex = document.querySelector('input[name="sex"]:checked')?.value;
-
-            if (!age || !cr || !sex) return;
-
-            // CKD-EPI equation (simplified)
-            let egfr;
-            const k = sex === 'female' ? 0.7 : 0.9;
-            const a = sex === 'female' ? -0.329 : -0.411;
-            const factor = sex === 'female' ? 1.018 : 1;
-
-            const creatRatio = cr / k;
-            const minVal = Math.min(creatRatio, 1);
-            const maxVal = Math.max(creatRatio, 1);
-
-            egfr = 141 * Math.pow(minVal, a) * Math.pow(maxVal, -1.209) * Math.pow(0.993, age) * factor;
-
-            // CKD Stage
-            let ckdStage = '';
-            if (egfr >= 90) ckdStage = 'Normal';
-            else if (egfr >= 60) ckdStage = 'Stage 2';
-            else if (egfr >= 45) ckdStage = 'Stage 3a';
-            else if (egfr >= 30) ckdStage = 'Stage 3b';
-            else if (egfr >= 15) ckdStage = 'Stage 4';
-            else ckdStage = 'Stage 5';
-
-            // Display results
-            document.getElementById('calcEGFR').innerHTML = egfr.toFixed(1) + '<span class="calc-unit">mL/min</span>';
-            document.getElementById('calcCKDStage').textContent = ckdStage;
-            document.getElementById('eGFRBox').style.display = 'block';
-        }
-
-        // ====== EVENT LISTENERS ======
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load saved data
-            loadFormData();
-
-            // Auto-calculate on input
-            ['age', 'weight', 'height'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', calculateMetrics);
-                }
-            });
-
-            ['age', 'cr'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('input', calculateEGFR);
-                }
-            });
-
-            // Save on any input change
-            document.getElementById('wizardForm').addEventListener('change', saveFormData);
-
-            // Show loading overlay on submit
-            document.getElementById('wizardForm').addEventListener('submit', function() {
-                document.getElementById('loadingOverlay').classList.add('show');
-            });
-        });
-
-        // ====== MOBILE MENU ======
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -3720,6 +1945,33 @@ PREOP_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        // Radio button selection handler
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                    // Remove selected class from siblings
+                    const name = radio.getAttribute('name');
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                        r.closest('.radio-option').classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        // Form submission loading state
+        document.querySelector('form')?.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.submit-btn');
+            if (submitBtn) {
+                submitBtn.textContent = 'Generating Assessment...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.disabled = true;
+            }
+        });
     </script>
 </body>
 </html>
