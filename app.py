@@ -3403,80 +3403,319 @@ ER  - """
 
     return '\n\n'.join(ris_entries)
 
+def classify_study_type(title, journal):
+    """
+    Classify a single study based on its title and journal.
+    Returns dict with study_type, quality_score, badge_text, and badge_color.
+
+    Study types ranked by evidence quality (highest to lowest):
+    1. Guideline/Consensus
+    2. Meta-analysis
+    3. Systematic Review
+    4. RCT
+    5. Observational Study
+    6. Review Article
+    7. Case Report/Series
+    """
+    title_lower = title.lower()
+    journal_lower = journal.lower()
+
+    # Check for guidelines/consensus (highest quality)
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['guideline', 'guidelines', 'consensus', 'recommendation', 'practice parameter',
+            'practice guideline', 'clinical practice', 'society statement']):
+        return {
+            'type': 'Guideline',
+            'score': 4,
+            'badge_text': 'Guideline',
+            'badge_color': '#7C3AED',  # Purple
+            'sort_priority': 1
+        }
+
+    # Check for meta-analysis
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['meta-analysis', 'metaanalysis', 'meta analysis', 'pooled analysis',
+            'network meta-analysis', 'meta-regression']):
+        return {
+            'type': 'Meta-analysis',
+            'score': 3,
+            'badge_text': 'Meta-analysis',
+            'badge_color': '#059669',  # Green
+            'sort_priority': 2
+        }
+
+    # Check for systematic review (separate from meta-analysis)
+    if any(keyword in title_lower or keyword in journal_lower for keyword in
+           ['systematic review', 'cochrane review', 'systematic literature review']):
+        return {
+            'type': 'Systematic Review',
+            'score': 2.5,
+            'badge_text': 'Systematic Review',
+            'badge_color': '#0891B2',  # Teal
+            'sort_priority': 3
+        }
+
+    # Check for RCT
+    if any(keyword in title_lower for keyword in
+           ['randomized', 'randomised', ' rct', 'randomized controlled trial',
+            'randomised controlled trial', 'double-blind', 'double blind',
+            'placebo-controlled', 'placebo controlled', 'controlled clinical trial']):
+        return {
+            'type': 'RCT',
+            'score': 2,
+            'badge_text': 'RCT',
+            'badge_color': '#2563EB',  # Blue
+            'sort_priority': 4
+        }
+
+    # Check for observational studies
+    if any(keyword in title_lower for keyword in
+           ['cohort study', 'cohort analysis', 'case-control', 'case control',
+            'observational study', 'prospective study', 'retrospective study',
+            'retrospective analysis', 'database analysis', 'registry']):
+        return {
+            'type': 'Observational',
+            'score': 1,
+            'badge_text': 'Observational',
+            'badge_color': '#F59E0B',  # Amber
+            'sort_priority': 5
+        }
+
+    # Check for case reports (lowest quality)
+    if any(keyword in title_lower for keyword in
+           ['case report', 'case series', 'case study']):
+        return {
+            'type': 'Case Report',
+            'score': 0.5,
+            'badge_text': 'Case Report',
+            'badge_color': '#DC2626',  # Red
+            'sort_priority': 7
+        }
+
+    # Check for review articles (general)
+    if 'review' in title_lower:
+        return {
+            'type': 'Review',
+            'score': 1,
+            'badge_text': 'Review',
+            'badge_color': '#6B7280',  # Gray
+            'sort_priority': 6
+        }
+
+    # Default: unclassified
+    return {
+        'type': 'Study',
+        'score': 0.5,
+        'badge_text': 'Study',
+        'badge_color': '#9CA3AF',  # Light gray
+        'sort_priority': 8
+    }
+
 def get_evidence_strength(num_papers, references):
-    """Analyze evidence strength and return classification"""
+    """
+    Analyze evidence strength and return classification based on study quality hierarchy.
+
+    Evidence Hierarchy (points assigned):
+    - Guidelines/Consensus: 4 points
+    - Meta-analysis: 3 points
+    - Systematic Review: 2.5 points
+    - RCT: 2 points
+    - Observational Study: 1 point
+    - Review Article: 1 point
+    - Case Report/Series: 0.5 points
+
+    Confidence Levels:
+    - High: score ≥8 OR 2+ meta-analyses OR (1+ guideline AND 1+ meta-analysis)
+    - Moderate: score ≥4 OR 1+ meta-analysis OR 2+ RCTs OR 1+ guideline
+    - Low: everything else
+    """
     if not num_papers or num_papers == 0:
         return {
             'level': 'Low',
             'color': '#EF4444',
-            'description': 'Limited evidence available',
-            'score': 1
+            'description': 'No evidence found',
+            'score': 0,
+            'breakdown': {
+                'guidelines': 0,
+                'meta_analyses': 0,
+                'systematic_reviews': 0,
+                'rcts': 0,
+                'observational': 0,
+                'reviews': 0,
+                'case_reports': 0,
+                'total': 0,
+                'recent_count': 0
+            }
         }
 
-    # Analyze study types
-    high_quality_count = 0
+    # Initialize counters
+    guideline_count = 0
     meta_analysis_count = 0
+    systematic_review_count = 0
     rct_count = 0
+    observational_count = 0
     review_count = 0
+    case_report_count = 0
+    recent_count = 0  # Papers from last 5 years
 
+    quality_score = 0
+    current_year = 2025
+
+    # Analyze each paper for multiple study type indicators
     for ref in references:
         title = ref.get('title', '').lower()
         journal = ref.get('journal', '').lower()
+        year = ref.get('year', '')
 
-        if 'meta-analysis' in title or 'meta-analysis' in journal:
+        # Track recency (papers from last 5 years)
+        try:
+            paper_year = int(year) if year else 0
+            if current_year - paper_year <= 5:
+                recent_count += 1
+        except (ValueError, TypeError):
+            pass
+
+        # Check for guidelines/consensus (highest quality)
+        if any(keyword in title or keyword in journal for keyword in
+               ['guideline', 'guidelines', 'consensus', 'recommendation', 'practice parameter',
+                'practice guideline', 'clinical practice', 'society statement']):
+            guideline_count += 1
+            quality_score += 4
+
+        # Check for meta-analysis
+        if any(keyword in title or keyword in journal for keyword in
+               ['meta-analysis', 'metaanalysis', 'meta analysis', 'pooled analysis',
+                'network meta-analysis', 'meta-regression']):
             meta_analysis_count += 1
-            high_quality_count += 3
-        elif 'randomized' in title or 'rct' in title:
+            quality_score += 3
+
+        # Check for systematic review (separate from meta-analysis)
+        elif any(keyword in title or keyword in journal for keyword in
+                 ['systematic review', 'cochrane review', 'systematic literature review']):
+            systematic_review_count += 1
+            quality_score += 2.5
+
+        # Check for RCT
+        elif any(keyword in title for keyword in
+                 ['randomized', 'randomised', ' rct', 'randomized controlled trial',
+                  'randomised controlled trial', 'double-blind', 'double blind',
+                  'placebo-controlled', 'placebo controlled', 'controlled clinical trial']):
             rct_count += 1
-            high_quality_count += 2
-        elif 'systematic review' in title or 'cochrane' in journal:
-            review_count += 1
-            high_quality_count += 2
+            quality_score += 2
+
+        # Check for observational studies
+        elif any(keyword in title for keyword in
+                 ['cohort study', 'cohort analysis', 'case-control', 'case control',
+                  'observational study', 'prospective study', 'retrospective study',
+                  'retrospective analysis', 'database analysis', 'registry']):
+            observational_count += 1
+            quality_score += 1
+
+        # Check for case reports (lowest quality)
+        elif any(keyword in title for keyword in
+                 ['case report', 'case series', 'case study']):
+            case_report_count += 1
+            quality_score += 0.5
+
+        # Check for review articles (general)
         elif 'review' in title:
             review_count += 1
-            high_quality_count += 1
+            quality_score += 1
 
-    # Calculate strength score
-    strength_score = (num_papers * 0.5) + high_quality_count
+    # Add recency bonus (5% boost for recent evidence)
+    recency_bonus = (recent_count / num_papers) * 0.5 if num_papers > 0 else 0
+    total_score = quality_score + recency_bonus
 
-    if strength_score >= 10 or meta_analysis_count >= 2:
+    # Build breakdown object
+    breakdown = {
+        'guidelines': guideline_count,
+        'meta_analyses': meta_analysis_count,
+        'systematic_reviews': systematic_review_count,
+        'rcts': rct_count,
+        'observational': observational_count,
+        'reviews': review_count,
+        'case_reports': case_report_count,
+        'total': num_papers,
+        'recent_count': recent_count
+    }
+
+    # Determine confidence level based on refined criteria
+    # HIGH CONFIDENCE: Strong evidence from multiple high-quality sources
+    if (total_score >= 8 or
+        meta_analysis_count >= 2 or
+        (guideline_count >= 1 and meta_analysis_count >= 1) or
+        (guideline_count >= 1 and rct_count >= 2)):
+
+        # Build description highlighting strongest evidence
+        desc_parts = []
+        if guideline_count > 0:
+            desc_parts.append(f"{guideline_count} guideline{'s' if guideline_count != 1 else ''}")
+        if meta_analysis_count > 0:
+            desc_parts.append(f"{meta_analysis_count} meta-analysis/analyses")
+        if systematic_review_count > 0:
+            desc_parts.append(f"{systematic_review_count} systematic review{'s' if systematic_review_count != 1 else ''}")
+        if rct_count > 0:
+            desc_parts.append(f"{rct_count} RCT{'s' if rct_count != 1 else ''}")
+
+        description = f"{num_papers} papers: {', '.join(desc_parts) if desc_parts else 'high-quality evidence'}"
+
         return {
             'level': 'High',
             'color': '#10B981',
-            'description': f'{num_papers} papers including {meta_analysis_count} meta-analyses, {rct_count} RCTs',
-            'score': 3,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
-    elif strength_score >= 5 or num_papers >= 5:
+
+    # MODERATE CONFIDENCE: Some high-quality evidence or multiple moderate-quality sources
+    elif (total_score >= 4 or
+          meta_analysis_count >= 1 or
+          systematic_review_count >= 1 or
+          rct_count >= 2 or
+          guideline_count >= 1):
+
+        # Build description
+        desc_parts = []
+        if guideline_count > 0:
+            desc_parts.append(f"{guideline_count} guideline{'s' if guideline_count != 1 else ''}")
+        if meta_analysis_count > 0:
+            desc_parts.append(f"{meta_analysis_count} meta-analysis/analyses")
+        if systematic_review_count > 0:
+            desc_parts.append(f"{systematic_review_count} systematic review{'s' if systematic_review_count != 1 else ''}")
+        if rct_count > 0:
+            desc_parts.append(f"{rct_count} RCT{'s' if rct_count != 1 else ''}")
+        if observational_count > 0:
+            desc_parts.append(f"{observational_count} observational")
+
+        description = f"{num_papers} papers: {', '.join(desc_parts) if desc_parts else 'moderate-quality evidence'}"
+
         return {
             'level': 'Moderate',
             'color': '#FBBF24',
-            'description': f'{num_papers} papers including {rct_count} RCTs, {review_count} reviews',
-            'score': 2,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
+
+    # LOW CONFIDENCE: Limited or low-quality evidence
     else:
+        # Build description
+        desc_parts = []
+        if observational_count > 0:
+            desc_parts.append(f"{observational_count} observational")
+        if review_count > 0:
+            desc_parts.append(f"{review_count} review{'s' if review_count != 1 else ''}")
+        if case_report_count > 0:
+            desc_parts.append(f"{case_report_count} case report{'s' if case_report_count != 1 else ''}")
+
+        description = f"Limited evidence ({num_papers} papers): {', '.join(desc_parts) if desc_parts else 'low-quality studies'}"
+
         return {
             'level': 'Low',
             'color': '#EF4444',
-            'description': f'Limited evidence ({num_papers} papers)',
-            'score': 1,
-            'breakdown': {
-                'meta_analyses': meta_analysis_count,
-                'rcts': rct_count,
-                'reviews': review_count,
-                'total': num_papers
-            }
+            'description': description,
+            'score': total_score,
+            'breakdown': breakdown
         }
 
 HTML = """<!DOCTYPE html>
@@ -4485,6 +4724,29 @@ HTML = """<!DOCTYPE html>
             margin-top: 4px;
         }
 
+        .study-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-top: 6px;
+            color: white;
+        }
+
+        .reference-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .reference-link-container {
+            flex: 1;
+        }
+
         .streaming-indicator {
             display: inline-flex;
             align-items: center;
@@ -4847,13 +5109,16 @@ HTML = """<!DOCTYPE html>
                     <div class="message ai-message">
                         <div class="message-bubble">
                             {% if message.get('evidence_strength') %}
-                            <div class="evidence-badge {{ 'high' if message.evidence_strength == 'High' else ('moderate' if message.evidence_strength == 'Moderate' else 'low') }}"
-                                 title="{% if message.evidence_strength == 'High' %}Based on {{ message.num_papers }} high-quality studies including meta-analyses, systematic reviews, or RCTs{% elif message.evidence_strength == 'Moderate' %}Based on {{ message.num_papers }} studies with some high-quality evidence{% else %}Limited evidence available ({{ message.num_papers }} studies). Use clinical judgment.{% endif %}">
+                            {% set level = message.evidence_strength.level if message.evidence_strength is mapping else message.evidence_strength %}
+                            {% set breakdown = message.evidence_strength.breakdown if message.evidence_strength is mapping else {} %}
+                            {% set description = message.evidence_strength.description if message.evidence_strength is mapping else '' %}
+                            <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }}"
+                                 title="Evidence Quality: {{ level }} - {{ description }}">
                                 <div style="display: flex; flex-direction: column; align-items: flex-start;">
                                     <div>
-                                        {% if message.evidence_strength == 'High' %}
+                                        {% if level == 'High' %}
                                         ✓ High Confidence
-                                        {% elif message.evidence_strength == 'Moderate' %}
+                                        {% elif level == 'Moderate' %}
                                         ~ Moderate Confidence
                                         {% else %}
                                         ! Low Confidence
@@ -4861,13 +5126,7 @@ HTML = """<!DOCTYPE html>
                                         • {{ message.num_papers }} studies
                                     </div>
                                     <div class="evidence-explanation">
-                                        {% if message.evidence_strength == 'High' %}
-                                        Strong evidence from meta-analyses, RCTs, or systematic reviews
-                                        {% elif message.evidence_strength == 'Moderate' %}
-                                        Moderate evidence - consider individual patient factors
-                                        {% else %}
-                                        Limited evidence - use caution and clinical judgment
-                                        {% endif %}
+                                        {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
                                     </div>
                                 </div>
                             </div>
@@ -4886,11 +5145,20 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 {% for ref in message.references %}
                                 <div class="reference-item">
-                                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                                        {{ ref.title }}
-                                    </a>
-                                    <div class="reference-meta">
-                                        {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                    <div class="reference-header">
+                                        <div class="reference-link-container">
+                                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                                                {{ ref.title }}
+                                            </a>
+                                            <div class="reference-meta">
+                                                {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                            </div>
+                                            {% if ref.get('study_badge') and ref.get('study_color') %}
+                                            <span class="study-type-badge" style="background-color: {{ ref.study_color }};">
+                                                {{ ref.study_badge }}
+                                            </span>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
                                 {% endfor %}
@@ -4905,6 +5173,7 @@ HTML = """<!DOCTYPE html>
                 {% if pending_stream %}
                 <div class="message ai-message" id="streamingMessage">
                     <div class="message-bubble">
+                        <div id="streamingEvidenceBadge" style="display: none;"></div>
                         <div class="message-content" id="streamingContent" style="display: none;"></div>
                         <div class="streaming-indicator">
                             <div class="streaming-dots">
@@ -5155,6 +5424,34 @@ HTML = """<!DOCTYPE html>
                             streamingContent.innerHTML = marked.parse(accumulatedMarkdown);
                         }
 
+                        // Display evidence badge
+                        if (event.evidence_strength) {
+                            const evidenceBadge = document.getElementById('streamingEvidenceBadge');
+                            if (evidenceBadge) {
+                                const strength = event.evidence_strength;
+                                const level = strength.level || 'Low';
+                                const description = strength.description || '';
+                                const numPapers = event.num_papers || 0;
+
+                                // Determine CSS class
+                                const badgeClass = level === 'High' ? 'high' : (level === 'Moderate' ? 'moderate' : 'low');
+
+                                // Determine icon
+                                const icon = level === 'High' ? '✓' : (level === 'Moderate' ? '~' : '!');
+
+                                // Build badge HTML
+                                let badgeHTML = '<div class="evidence-badge ' + badgeClass + '" ';
+                                badgeHTML += 'title="Evidence Quality: ' + level + ' - ' + description + '">';
+                                badgeHTML += '<div style="display: flex; flex-direction: column; align-items: flex-start;">';
+                                badgeHTML += '<div>' + icon + ' ' + level + ' Confidence • ' + numPapers + ' studies</div>';
+                                badgeHTML += '<div class="evidence-explanation">' + description + '</div>';
+                                badgeHTML += '</div></div>';
+
+                                evidenceBadge.innerHTML = badgeHTML;
+                                evidenceBadge.style.display = 'block';
+                            }
+                        }
+
                         // Display references
                         if (event.data && event.data.length > 0) {
                             console.log('[SSE] Received', event.data.length, 'references');
@@ -5175,12 +5472,20 @@ HTML = """<!DOCTYPE html>
 
                             event.data.forEach(function(ref) {
                                 refsHTML += '<div class="reference-item">';
+                                refsHTML += '<div class="reference-header"><div class="reference-link-container">';
                                 refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
                                 refsHTML += ref.title;
                                 refsHTML += '</a>';
                                 refsHTML += '<div class="reference-meta">';
                                 refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
                                 refsHTML += '</div>';
+                                // Add study type badge if available
+                                if (ref.study_badge && ref.study_color) {
+                                    refsHTML += '<span class="study-type-badge" style="background-color: ' + ref.study_color + ';">';
+                                    refsHTML += ref.study_badge;
+                                    refsHTML += '</span>';
+                                }
+                                refsHTML += '</div></div>';
                                 refsHTML += '</div>';
                             });
 
@@ -14180,10 +14485,27 @@ Answer as if you're a colleague continuing the conversation:"""
                     year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                     pmid = p["MedlineCitation"]["PMID"]
 
-                    refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                    # Classify study type for quality indicators
+                    study_classification = classify_study_type(title, journal)
+
+                    refs.append({
+                        "title": title,
+                        "authors": authors,
+                        "journal": journal,
+                        "year": year,
+                        "pmid": pmid,
+                        "study_type": study_classification['type'],
+                        "study_badge": study_classification['badge_text'],
+                        "study_color": study_classification['badge_color'],
+                        "study_score": study_classification['score'],
+                        "sort_priority": study_classification['sort_priority']
+                    })
                     context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
                 except:
                     continue
+
+            # Sort references by quality (highest quality first)
+            refs.sort(key=lambda x: x.get('sort_priority', 99))
 
             num_papers = len(refs)
             print(f"[DEBUG] Processed {num_papers} paper references")
@@ -14557,7 +14879,21 @@ def preop_assessment():
                         year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
                         pmid = p["MedlineCitation"]["PMID"]
 
-                        all_refs.append({"title": title, "authors": authors, "journal": journal, "year": year, "pmid": pmid})
+                        # Classify study type for quality indicators
+                        study_classification = classify_study_type(title, journal)
+
+                        all_refs.append({
+                            "title": title,
+                            "authors": authors,
+                            "journal": journal,
+                            "year": year,
+                            "pmid": pmid,
+                            "study_type": study_classification['type'],
+                            "study_badge": study_classification['badge_text'],
+                            "study_color": study_classification['badge_color'],
+                            "study_score": study_classification['score'],
+                            "sort_priority": study_classification['sort_priority']
+                        })
                         all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
                     except:
                         continue
@@ -14571,6 +14907,9 @@ def preop_assessment():
         if ref['pmid'] not in seen_pmids:
             seen_pmids.add(ref['pmid'])
             unique_refs.append(ref)
+
+    # Sort references by quality (highest quality first)
+    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
 
     # Create numbered reference list for GPT
     ref_list = ""
