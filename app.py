@@ -1168,7 +1168,7 @@ PREOP_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
@@ -1181,10 +1181,10 @@ PREOP_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -1192,14 +1192,14 @@ PREOP_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 38px;
+            max-height: 110px;
             line-height: 1.5;
         }
 
@@ -3841,7 +3841,7 @@ HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
@@ -3854,10 +3854,10 @@ HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -3865,14 +3865,14 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 38px;
+            max-height: 110px;
             line-height: 1.5;
         }
 
@@ -4521,7 +4521,7 @@ HTML = """<!DOCTYPE html>
             bottom: 0;
             background: var(--gray-50);
             border-top: 1px solid var(--gray-200);
-            padding: 12px;
+            padding: 8px;
             z-index: 10;
         }
 
@@ -4597,7 +4597,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 14px 24px;
+                padding: 10px 24px;
             }
 
             .new-chat-btn {
@@ -4612,7 +4612,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 16px 32px;
+                padding: 12px 32px;
             }
         }
 
@@ -5619,7 +5619,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
@@ -5632,10 +5632,10 @@ LIBRARY_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -5643,14 +5643,14 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 38px;
+            max-height: 110px;
             line-height: 1.5;
         }
 
@@ -6539,7 +6539,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
@@ -6552,10 +6552,10 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -6563,14 +6563,14 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 38px;
+            max-height: 110px;
             line-height: 1.5;
         }
 
@@ -9197,7 +9197,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 8px;
+            padding: 6px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
         }
@@ -9210,10 +9210,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             align-items: flex-end;
-            gap: 6px;
+            gap: 4px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -9221,14 +9221,14 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 12px 16px;
+            padding: 10px 14px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 40px;
-            max-height: 120px;
+            min-height: 38px;
+            max-height: 110px;
             line-height: 1.5;
         }
 
