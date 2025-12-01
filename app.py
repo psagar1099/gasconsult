@@ -11075,6 +11075,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
         }
@@ -11185,6 +11189,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .calc-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
         }
 
         @media (min-width: 1200px) {
@@ -13378,7 +13386,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/hypotension" class="nav-link active">IOH Predictor</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
