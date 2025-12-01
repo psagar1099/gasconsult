@@ -1564,6 +1564,10 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
 
@@ -1590,6 +1594,8 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+
             .main-content {
                 max-width: 900px;
             }
@@ -8252,6 +8258,12 @@ CRISIS_HTML = """<!DOCTYPE html>
             font-size: 20px;
         }
 
+        .category-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: white;
+        }
+
         .category-icon.red {
             background: linear-gradient(135deg, var(--red-500) 0%, var(--red-600) 100%);
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
@@ -8535,69 +8547,59 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .footer {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
+            padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
-            padding: 40px 20px;
-            text-align: center;
-            margin-top: auto;
+            background: rgba(255,255,255,0.5);
         }
 
-        .footer-content {
-            max-width: 800px;
+        .footer-inner {
+            max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
         }
 
-        .disclaimer {
-            background: var(--amber-50);
-            border: 2px solid var(--amber-200);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-
-        .disclaimer-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--amber-700);
-            margin-bottom: 8px;
+        .footer-brand {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 12px;
         }
 
-        .disclaimer-text {
+        .footer-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .footer-text {
             font-size: 13px;
-            color: var(--gray-700);
-            line-height: 1.6;
+            color: var(--gray-600);
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
             gap: 24px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
         }
 
         .footer-link {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--gray-600);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--blue-600);
-        }
-
-        .footer-copy {
-            font-size: 13px;
-            color: var(--gray-500);
+            color: var(--gray-900);
         }
 
         @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+
             .nav-links {
                 display: flex;
             }
@@ -8616,6 +8618,8 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+
             .protocols-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -8718,7 +8722,11 @@ CRISIS_HTML = """<!DOCTYPE html>
             <!-- Life-Threatening / Cardiac -->
             <div class="category-section" data-category="cardiac">
                 <div class="category-header">
-                    <div class="category-icon red">⚡</div>
+                    <div class="category-icon red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Life-Threatening / Cardiac</h2>
                 </div>
                 <div class="protocols-grid">
@@ -9002,7 +9010,13 @@ CRISIS_HTML = """<!DOCTYPE html>
             <!-- Airway Emergencies -->
             <div class="category-section" data-category="airway">
                 <div class="category-header">
-                    <div class="category-icon orange">🫁</div>
+                    <div class="category-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>
+                            <path d="M12 12v6"/>
+                            <path d="M6 15c-2.213 -1.246 -3.5 -3.154 -3.5 -5.294 0 -3.314 2.686 -6 6 -6h7c3.314 0 6 2.686 6 6 0 2.14 -1.287 4.048 -3.5 5.294"/>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Airway Emergencies</h2>
                 </div>
                 <div class="protocols-grid">
@@ -9200,7 +9214,16 @@ CRISIS_HTML = """<!DOCTYPE html>
             <!-- Neurologic / Regional -->
             <div class="category-section" data-category="neurologic">
                 <div class="category-header">
-                    <div class="category-icon purple">🧠</div>
+                    <div class="category-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1a3.5 3.5 0 0 0 -3.5 -3.5z"/>
+                            <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1a3.5 3.5 0 0 1 3.5 -3.5z"/>
+                            <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5"/>
+                            <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0"/>
+                            <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5"/>
+                            <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10"/>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Neurologic / Regional Complications</h2>
                 </div>
                 <div class="protocols-grid">
@@ -9339,7 +9362,15 @@ CRISIS_HTML = """<!DOCTYPE html>
             <!-- Metabolic / Other -->
             <div class="category-section" data-category="metabolic">
                 <div class="category-header">
-                    <div class="category-icon amber">⚗️</div>
+                    <div class="category-icon amber">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 3h6"/>
+                            <path d="M10 9v-3"/>
+                            <path d="M14 9v-3"/>
+                            <path d="M10 9l-7 7a3 3 0 0 0 -.5 3.5a3 3 0 0 0 2.5 1.5h14a3 3 0 0 0 2.5 -1.5a3 3 0 0 0 -.5 -3.5l-7 -7"/>
+                            <circle cx="12" cy="15" r="1"/>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Metabolic / Electrolyte Crises</h2>
                 </div>
                 <div class="protocols-grid">
@@ -9477,29 +9508,18 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         <!-- Footer -->
         <footer class="footer">
-            <div class="footer-content">
-                <div class="disclaimer">
-                    <div class="disclaimer-title">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                            <line x1="12" y1="9" x2="12" y2="13"></line>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
-                        Important Disclaimer
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
-                    <p class="disclaimer-text">
-                        These protocols are for educational reference only and should NOT replace clinical judgment, institutional protocols, or expert consultation. Always follow your institution's guidelines and call for help early in any crisis situation. This is not medical advice.
-                    </p>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
                 </div>
                 <div class="footer-links">
-                    <a href="/" class="footer-link">Home</a>
-                    <a href="/calculators" class="footer-link">Calculators</a>
-                    <a href="/terms" class="footer-link">Terms</a>
                     <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
-                <p class="footer-copy">
-                    © 2025 gasconsult.ai — Evidence-based anesthesiology AI assistant
-                </p>
             </div>
         </footer>
 
