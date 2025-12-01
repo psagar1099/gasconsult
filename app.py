@@ -1832,60 +1832,60 @@ PREOP_HTML = """<!DOCTYPE html>
 
         .radio-option {
             position: relative;
-            padding: 16px 20px;
+            padding: 18px 22px;
             background: var(--white);
-            border: 2px solid var(--gray-300);
-            border-radius: 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .radio-option:hover {
-            border-color: var(--blue-400);
-            transform: translateX(4px);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
         }
 
         .radio-option input[type="radio"] {
             position: absolute;
             opacity: 0;
-            cursor: pointer;
+            pointer-events: none;
         }
 
-        .radio-option input[type="radio"]:checked ~ .radio-label {
-            font-weight: 700;
-            color: var(--blue-600);
-        }
-
-        .radio-option input[type="radio"]:checked ~ .radio-check {
+        .radio-option input[type="radio"]:checked ~ .radio-content .radio-check {
             background: var(--blue-600);
             border-color: var(--blue-600);
         }
 
-        .radio-option input[type="radio"]:checked ~ .radio-check::after {
+        .radio-option input[type="radio"]:checked ~ .radio-content .radio-check::after {
             opacity: 1;
+        }
+
+        .radio-option input[type="radio"]:checked ~ .radio-content .radio-label {
+            font-weight: 600;
+            color: var(--blue-600);
         }
 
         .radio-option.selected {
             background: var(--blue-50);
             border-color: var(--blue-500);
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
         }
 
         .radio-content {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
+            gap: 14px;
         }
 
         .radio-check {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gray-400);
+            width: 22px;
+            height: 22px;
+            border: 2.5px solid var(--gray-300);
             border-radius: 50%;
             flex-shrink: 0;
             position: relative;
-            transition: all 0.3s ease;
-            margin-top: 2px;
+            transition: all 0.25s ease;
+            margin-top: 0px;
         }
 
         .radio-check::after {
@@ -1894,12 +1894,12 @@ PREOP_HTML = """<!DOCTYPE html>
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             background: white;
             border-radius: 50%;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
         }
 
         .radio-text {
@@ -2726,7 +2726,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="main-wrapper">
         <div class="content-container">
             <div class="page-header">
-                <h1 class="page-title">Pre-Operative Risk Assessment</h1>
+                <h1 class="page-title"><span style="color: var(--blue-600);">Pre-Operative</span> Risk Assessment</h1>
                 <p class="page-subtitle">Comprehensive NSQIP-inspired risk stratification with evidence-based recommendations</p>
             </div>
 
@@ -3372,6 +3372,23 @@ PREOP_HTML = """<!DOCTYPE html>
             {% else %}
             <!-- Results Display - Modern Redesigned UI -->
             <div class="results-container">
+                <div class="wizard-card">
+                    <h2 style="font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 32px; letter-spacing: -1px;"><span style="color: var(--blue-600);">Pre-Operative</span> Assessment Summary</h2>
+
+                    <div class="info-card" style="margin-bottom: 24px;">
+                        {{ summary|safe }}
+                    </div>
+
+                    {% if references %}
+                    <div class="info-card">
+                        <div class="info-card-title">Evidence-Based References</div>
+                        <div class="info-card-content">
+                            {% for ref in references %}
+                            <div style="padding: 12px 0; border-bottom: 1px solid var(--gray-200); font-size: 14px;">
+                                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600;">
+                                    [{{ loop.index }}] {{ ref.title }}
+                                </a>
+                                <div style="color: var(--gray-600); font-size: 13px; margin-top: 4px;">{{ ref.year }}</div>
                 <!-- Header Section -->
                 <div class="results-header">
                     <div class="results-header-content">
@@ -13137,18 +13154,14 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         <div class="footer-inner">
             <div class="footer-brand">
                 <div class="footer-logo">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                        <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 </div>
                 <span class="footer-text">© 2025 GasConsult.ai</span>
             </div>
             <div class="footer-links">
                 <a href="/privacy" class="footer-link">Privacy</a>
                 <a href="/terms" class="footer-link">Terms</a>
-                <a href="#" class="footer-link">Contact</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
             </div>
         </div>
     </footer>
