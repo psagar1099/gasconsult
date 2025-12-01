@@ -14334,42 +14334,71 @@ def index():
             # Multi-tier search strategy to find relevant papers
             ids = []
 
-            # Tier 1: Anesthesiology + original filters (strict)
+            # Detect well-established topics that should have lots of evidence
+            well_established_topics = [
+                'malignant hyperthermia', 'difficult airway', 'aspiration', 'local anesthetic systemic toxicity',
+                'last', 'propofol infusion syndrome', 'pris', 'anaphylaxis', 'tranexamic acid', 'txa',
+                'postoperative nausea', 'ponv', 'rapid sequence', 'rsi', 'spinal anesthesia', 'epidural',
+                'general anesthesia', 'blood transfusion', 'massive transfusion', 'coagulopathy'
+            ]
+            is_established_topic = any(topic in query_lower for topic in well_established_topics)
+
+            # Adjust date range for established topics (go back further for classic evidence)
+            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2015/01/01"[PDAT] : "3000"[PDAT])'
+
+            # Tier 1: Broader search WITHOUT anesthesiology restriction first (better recall)
             try:
-                print(f"[DEBUG] Tier 1: Searching PubMed (anesthesiology + strict filters)...")
-                handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=10, sort="relevance")
+                print(f"[DEBUG] Tier 1: Searching PubMed (broad, high-quality filters)...")
+                handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=25, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
-                print(f"[DEBUG] Found {len(ids)} papers")
+                print(f"[DEBUG] Tier 1 found {len(ids)} papers")
             except Exception as e:
                 print(f"[ERROR] Tier 1 search failed: {e}")
                 ids = []
 
-            # Tier 2: Anesthesiology + broader filters (if Tier 1 failed and not a follow-up)
-            if not ids and not is_followup:
+            # Tier 2: Add anesthesiology MeSH if we got too few results
+            if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 2: Broadening filters (anesthesiology + any publication type)...")
-                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
-                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {broader_term}', retmax=10, sort="relevance")
+                    print(f"[DEBUG] Tier 2: Adding anesthesiology MeSH refinement...")
+                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=25, sort="relevance")
                     result = Entrez.read(handle)
-                    ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers")
+                    tier2_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier2_ids))
+                    print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
                     print(f"[ERROR] Tier 2 search failed: {e}")
-                    ids = []
 
-            # Tier 3: General search WITHOUT anesthesiology restriction (last resort)
-            if not ids and not is_followup:
+            # Tier 3: Further broaden if still insufficient (remove publication type restrictions)
+            if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: General search (no anesthesiology restriction)...")
-                    broader_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
-                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=10, sort="relevance")
+                    print(f"[DEBUG] Tier 3: Broadening to all publication types...")
+                    broader_term = f'({q}) AND {date_range}'
+                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=25, sort="relevance")
                     result = Entrez.read(handle)
-                    ids = result.get("IdList", [])
-                    print(f"[DEBUG] Found {len(ids)} papers")
+                    tier3_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier3_ids))
+                    print(f"[DEBUG] Tier 3 found {len(tier3_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
                     print(f"[ERROR] Tier 3 search failed: {e}")
-                    ids = []
+
+            # Tier 4: Last resort - very broad search with anesthesia-related terms
+            if len(ids) < 3 and not is_followup:
+                try:
+                    print(f"[DEBUG] Tier 4: Very broad search with anesthesia terms...")
+                    anesthesia_boost = f'({q}) AND (anesthesia OR anesthetic OR perioperative OR intraoperative)'
+                    handle = Entrez.esearch(db="pubmed", term=anesthesia_boost, retmax=20, sort="relevance")
+                    result = Entrez.read(handle)
+                    tier4_ids = result.get("IdList", [])
+                    # Combine and deduplicate
+                    ids = list(set(ids + tier4_ids))
+                    print(f"[DEBUG] Tier 4 found {len(tier4_ids)} papers, total unique: {len(ids)}")
+                except Exception as e:
+                    print(f"[ERROR] Tier 4 search failed: {e}")
+
+            print(f"[DEBUG] Final total: {len(ids)} unique papers found")
 
             # If no papers found, handle gracefully
             if not ids:
@@ -14472,8 +14501,9 @@ Answer as if you're a colleague continuing the conversation:"""
 
             refs = []
             context = ""
-            # Process only 8 papers for faster GPT processing
-            for p in papers[:8]:
+            # Process up to 15 papers for comprehensive evidence (increased from 8)
+            # More papers = better coverage of high-quality evidence = higher confidence ratings
+            for p in papers[:15]:
                 try:
                     art = p["MedlineCitation"]["Article"]
                     title = art.get("ArticleTitle", "No title")
