@@ -1495,8 +1495,9 @@ PREOP_HTML = """<!DOCTYPE html>
 
         /* Footer */
         .footer {
-            padding: 32px 16px;
-            text-align: center;
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
         }
 
         .footer-inner {
@@ -1505,7 +1506,8 @@ PREOP_HTML = """<!DOCTYPE html>
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
+            text-align: center;
         }
 
         .footer-brand {
@@ -1924,7 +1926,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="footer-inner">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                     <span class="footer-text">© 2025 GasConsult.ai</span>
                 </div>
@@ -2733,10 +2735,10 @@ HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 4px;
+            padding: 3px;
             display: flex;
             align-items: flex-end;
-            gap: 4px;
+            gap: 3px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -2744,13 +2746,13 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 10px 14px;
+            padding: 8px 12px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 38px;
+            min-height: 32px;
             max-height: 110px;
             line-height: 1.5;
         }
@@ -2758,8 +2760,8 @@ HTML = """<!DOCTYPE html>
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -3028,9 +3030,9 @@ HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
+            .chat-inner { border-radius: 16px; padding: 4px; }
+            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-send { width: 44px; height: 44px; border-radius: 12px; }
             .chat-hints { gap: 10px; padding: 18px 10px 8px; }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
@@ -3064,10 +3066,10 @@ HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
             .chat-container { margin-bottom: 100px; }
             .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
+            .chat-inner { border-radius: 18px; }
+            .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
+            .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
+            .chat-send svg { width: 20px; height: 20px; }
             .chat-hints { padding: 20px 12px 8px; }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
@@ -3423,7 +3425,7 @@ HTML = """<!DOCTYPE html>
             bottom: 0;
             background: var(--gray-50);
             border-top: 1px solid var(--gray-200);
-            padding: 8px;
+            padding: 6px;
             z-index: 10;
         }
 
@@ -3439,8 +3441,8 @@ HTML = """<!DOCTYPE html>
         .new-chat-btn {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 12px 20px;
+            gap: 6px;
+            padding: 8px 14px;
             background: rgba(255,255,255,0.8);
             border: 1px solid var(--gray-200);
             border-radius: 12px;
@@ -3499,12 +3501,12 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 10px 24px;
+                padding: 8px 20px;
             }
 
             .new-chat-btn {
-                padding: 14px 24px;
-                font-size: 15px;
+                padding: 10px 18px;
+                font-size: 14px;
             }
         }
 
@@ -3514,7 +3516,7 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 12px 32px;
+                padding: 10px 28px;
             }
         }
 
@@ -4579,10 +4581,10 @@ LIBRARY_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 4px;
+            padding: 3px;
             display: flex;
             align-items: flex-end;
-            gap: 4px;
+            gap: 3px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -4590,13 +4592,13 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 10px 14px;
+            padding: 8px 12px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 38px;
+            min-height: 32px;
             max-height: 110px;
             line-height: 1.5;
         }
@@ -4604,8 +4606,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -4874,9 +4876,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
+            .chat-inner { border-radius: 16px; padding: 4px; }
+            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-send { width: 44px; height: 44px; border-radius: 12px; }
             .chat-hints { gap: 10px; padding: 18px 10px 8px; }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
@@ -4910,10 +4912,10 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
             .chat-container { margin-bottom: 100px; }
             .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
+            .chat-inner { border-radius: 18px; }
+            .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
+            .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
+            .chat-send svg { width: 20px; height: 20px; }
             .chat-hints { padding: 20px 12px 8px; }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
@@ -5501,10 +5503,10 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 4px;
+            padding: 3px;
             display: flex;
             align-items: flex-end;
-            gap: 4px;
+            gap: 3px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -5512,13 +5514,13 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 10px 14px;
+            padding: 8px 12px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 38px;
+            min-height: 32px;
             max-height: 110px;
             line-height: 1.5;
         }
@@ -5526,8 +5528,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -5796,9 +5798,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
+            .chat-inner { border-radius: 16px; padding: 4px; }
+            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-send { width: 44px; height: 44px; border-radius: 12px; }
             .chat-hints { gap: 10px; padding: 18px 10px 8px; }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
@@ -5832,10 +5834,10 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
             .chat-container { margin-bottom: 100px; }
             .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
+            .chat-inner { border-radius: 18px; }
+            .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
+            .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
+            .chat-send svg { width: 20px; height: 20px; }
             .chat-hints { padding: 20px 12px 8px; }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
@@ -8637,24 +8639,24 @@ CRISIS_HTML = """<!DOCTYPE html>
         <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 100 100" fill="currentColor">
-                            <circle cx="20" cy="50" r="8" fill="#2563EB" opacity="0.6"/>
-                            <circle cx="50" cy="50" r="10" fill="#2563EB"/>
-                            <circle cx="80" cy="50" r="8" fill="#2563EB" opacity="0.6"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <div class="logo-text">
-                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
-                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
 
                 <div class="nav-links">
-                    <a href="/" class="nav-link">Home</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link active">Crisis Protocols</a>
-                    <a href="/privacy" class="nav-link">Privacy</a>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
                 </div>
 
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -8666,10 +8668,12 @@ CRISIS_HTML = """<!DOCTYPE html>
         </nav>
 
         <div class="mobile-menu" id="mobileMenu">
-            <a href="/" class="mobile-menu-link">Home</a>
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/privacy" class="mobile-menu-link">Privacy</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
         <!-- Hero -->
@@ -9971,10 +9975,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .chat-inner {
             background: var(--white);
             border-radius: 14px;
-            padding: 4px;
+            padding: 3px;
             display: flex;
             align-items: flex-end;
-            gap: 4px;
+            gap: 3px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,1);
         }
 
@@ -9982,13 +9986,13 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 10px 14px;
+            padding: 8px 12px;
             font-size: 16px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 38px;
+            min-height: 32px;
             max-height: 110px;
             line-height: 1.5;
         }
@@ -9996,8 +10000,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .chat-input::placeholder { color: var(--gray-400); }
 
         .chat-send {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             background: var(--blue-600);
             border: none;
             border-radius: 12px;
@@ -10266,9 +10270,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 18px; margin-bottom: 48px; }
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
-            .chat-inner { border-radius: 18px; padding: 8px; }
-            .chat-input { padding: 16px 18px; min-height: 56px; }
-            .chat-send { width: 52px; height: 52px; border-radius: 14px; }
+            .chat-inner { border-radius: 16px; padding: 4px; }
+            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-send { width: 44px; height: 44px; border-radius: 12px; }
             .chat-hints { gap: 10px; padding: 18px 10px 8px; }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
@@ -10302,10 +10306,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
             .chat-container { margin-bottom: 100px; }
             .chat-card { border-radius: 28px; }
-            .chat-inner { border-radius: 20px; }
-            .chat-input { padding: 18px 20px; min-height: 60px; max-height: 180px; }
-            .chat-send { width: 56px; height: 56px; border-radius: 16px; margin: 8px; }
-            .chat-send svg { width: 22px; height: 22px; }
+            .chat-inner { border-radius: 18px; }
+            .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
+            .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
+            .chat-send svg { width: 20px; height: 20px; }
             .chat-hints { padding: 20px 12px 8px; }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
@@ -15043,20 +15047,6 @@ INSTRUCTIONS:
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
-7. START your response with an evidence quality badge:
-   <div class="evidence-quality-badge">
-   <div class="confidence-level [high/moderate/low]">
-   <strong>Evidence Quality:</strong> [High/Moderate/Low] Confidence
-   </div>
-   <div class="evidence-details">
-   📊 {num_papers} papers analyzed • Study types: [list types] • Date range: [range]
-   </div>
-   </div>
-
-CONFIDENCE LEVEL GUIDANCE:
-- **High Confidence**: Multiple meta-analyses/systematic reviews OR strong RCT evidence
-- **Moderate Confidence**: Some RCTs/reviews but limited OR conflicting evidence
-- **Low Confidence**: Few papers OR case reports/expert opinion only
 
 CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
    ❌ WRONG: "Propofol 2-3 mg/kg is recommended [1]" when abstract says "induction agents" generally
@@ -15068,16 +15058,7 @@ CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
 IMPORTANT: Use the provided research papers to inform your answer. Only cite papers when their abstracts directly support the specific claim. If a claim is general knowledge or not supported by the abstracts, omit the citation.
 
 Example with proper conservative citation:
-"<div class="evidence-quality-badge">
-<div class="confidence-level high">
-<strong>Evidence Quality:</strong> High Confidence
-</div>
-<div class="evidence-details">
-📊 8 papers analyzed • Study types: 3 meta-analyses, 4 RCTs, 1 systematic review • Date range: 2015-2024
-</div>
-</div>
-
-<h3>Acute Bronchospasm Management</h3>
+"<h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
 100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol or increase volatile agent to 2+ MAC.</p>
 <p><strong>Bronchodilators:</strong><br>
