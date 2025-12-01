@@ -11075,6 +11075,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
         }
@@ -11185,6 +11189,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .calc-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
         }
 
         @media (min-width: 1200px) {
