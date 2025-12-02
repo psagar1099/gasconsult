@@ -9798,6 +9798,28 @@ CRISIS_HTML = """<!DOCTYPE html>
             padding: 0 20px 80px;
         }
 
+        .demo-note {
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--purple-50) 100%);
+            border: 2px solid var(--blue-200);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .demo-note-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .demo-note-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
         .category-section {
             margin-bottom: 40px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
@@ -9876,7 +9898,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             border-radius: 16px;
             padding: 24px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -9899,13 +9921,13 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         .protocol-card:hover {
             border-color: var(--gray-300);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
         }
 
         .protocol-card.expanded {
             border-color: var(--blue-400);
-            box-shadow: 0 12px 32px rgba(59, 130, 246, 0.15);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.2);
         }
 
         .protocol-header {
@@ -9923,6 +9945,19 @@ CRISIS_HTML = """<!DOCTYPE html>
             line-height: 1.3;
         }
 
+        .protocol-ref-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--blue-50);
+            color: var(--blue-700);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
+        }
+
         .expand-icon {
             width: 24px;
             height: 24px;
@@ -9932,7 +9967,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .protocol-card.expanded .expand-icon {
@@ -9980,11 +10015,11 @@ CRISIS_HTML = """<!DOCTYPE html>
         .protocol-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .protocol-card.expanded .protocol-content {
-            max-height: 3000px;
+            max-height: 6000px;
         }
 
         .protocol-details {
@@ -10041,6 +10076,31 @@ CRISIS_HTML = """<!DOCTYPE html>
         .protocol-step strong {
             color: var(--gray-900);
             font-weight: 600;
+        }
+
+        .ref-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-left: 2px;
+            cursor: help;
+            vertical-align: super;
+            line-height: 1;
+            padding: 2px 4px;
+            transition: all 0.2s ease;
+        }
+
+        .ref-num:hover {
+            background: var(--blue-600);
+            color: white;
+            transform: scale(1.15);
         }
 
         .dose-box {
@@ -10112,6 +10172,102 @@ CRISIS_HTML = """<!DOCTYPE html>
             font-size: 14px;
             color: var(--gray-800);
             line-height: 1.5;
+        }
+
+        .protocol-references {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .references-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gray-50);
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            transition: all 0.2s ease;
+        }
+
+        .references-toggle:hover {
+            background: var(--gray-100);
+        }
+
+        .references-toggle svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .references-toggle.expanded svg {
+            transform: rotate(180deg);
+        }
+
+        .references-list {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-top: 0;
+        }
+
+        .references-list.show {
+            max-height: 1200px;
+            padding-top: 12px;
+        }
+
+        .reference-item {
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+            border-left: 3px solid transparent;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item:hover {
+            background: var(--gray-50);
+            border-left-color: var(--blue-500);
+        }
+
+        .reference-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            font-size: 11px;
+            font-weight: 700;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .reference-citation {
+            color: var(--gray-600);
+        }
+
+        .reference-citation strong {
+            color: var(--gray-800);
+        }
+
+        .reference-citation a {
+            color: var(--blue-600);
+            text-decoration: none;
+        }
+
+        .reference-citation a:hover {
+            text-decoration: underline;
         }
 
         .footer {
@@ -10309,6 +10465,15 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         <!-- Protocols -->
         <div class="protocols-container">
+
+            <!-- Demo Note -->
+            <div class="demo-note">
+                <div class="demo-note-title">✨ Enhanced Design Preview</div>
+                <div class="demo-note-text">
+                    Showing 3 protocols with the new reference system: reference count badges 📚, inline citation numbers, collapsible references, and improved hover effects. Click any protocol to see the enhancements!
+                </div>
+            </div>
+
             <!-- Life-Threatening / Cardiac -->
             <div class="category-section" data-category="cardiac">
                 <div class="category-header">
@@ -10321,11 +10486,14 @@ CRISIS_HTML = """<!DOCTYPE html>
                 </div>
                 <div class="protocols-grid">
 
-                    <!-- Malignant Hyperthermia -->
-                    <div class="protocol-card red" data-keywords="malignant hyperthermia mh dantrolene hypermetabolic crisis muscle rigidity hyperthermia">
+                    <!-- Malignant Hyperthermia (ENHANCED) -->
+                    <div class="protocol-card red" data-keywords="malignant hyperthermia mh dantrolene hypermetabolic crisis muscle rigidity hyperthermia" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
-                                <h3 class="protocol-title">Malignant Hyperthermia</h3>
+                                <h3 class="protocol-title">
+                                    Malignant Hyperthermia
+                                    <span class="protocol-ref-count">📚 5 refs</span>
+                                </h3>
                             </div>
                             <div class="expand-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -10343,15 +10511,15 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Immediate Actions</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STOP triggers immediately:</strong> Discontinue all volatile anesthetics and succinylcholine</li>
-                                        <li class="protocol-step"><strong>Call for help:</strong> Activate MH emergency protocol, assign roles</li>
-                                        <li class="protocol-step"><strong>Hyperventilate with 100% O₂:</strong> 2-3× normal minute ventilation to eliminate CO₂</li>
-                                        <li class="protocol-step"><strong>Give dantrolene immediately:</strong> See dosing below</li>
+                                        <li class="protocol-step"><strong>STOP triggers immediately:</strong> Discontinue all volatile anesthetics and succinylcholine<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Call for help:</strong> Activate MH emergency protocol, assign roles<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Hyperventilate with 100% O₂:</strong> 2-3× normal minute ventilation to eliminate CO₂<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Give dantrolene immediately:</strong> See dosing below<sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
 
                                 <div class="dose-box">
-                                    <div class="dose-box-title">💊 Dantrolene Dosing</div>
+                                    <div class="dose-box-title">💊 Dantrolene Dosing<sup class="ref-num">2</sup></div>
                                     <div class="dose-detail"><strong>Initial:</strong> 2.5 mg/kg IV rapid push (reconstitute each 20mg vial with 60mL sterile water)</div>
                                     <div class="dose-detail"><strong>Repeat:</strong> 1 mg/kg boluses every 5-10 min until signs resolve</div>
                                     <div class="dose-detail"><strong>Maximum:</strong> Up to 10 mg/kg in acute phase (rarely >10 vials needed initially)</div>
@@ -10361,11 +10529,11 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Supportive Care</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Cool the patient:</strong> Cold IV saline, ice packs to groin/axilla, cooling blanket. Target temp <38.5°C</li>
-                                        <li class="protocol-step"><strong>Treat hyperkalemia:</strong> Insulin/dextrose, calcium chloride, bicarbonate, avoid Ca²⁺ channel blockers with dantrolene</li>
-                                        <li class="protocol-step"><strong>Manage arrhythmias:</strong> Standard ACLS (avoid calcium channel blockers)</li>
-                                        <li class="protocol-step"><strong>Monitor urine output:</strong> Foley catheter, maintain >1 mL/kg/h to prevent myoglobin-induced renal failure</li>
-                                        <li class="protocol-step"><strong>Labs:</strong> ABG, electrolytes, CK, lactate, coags, myoglobin q6h</li>
+                                        <li class="protocol-step"><strong>Cool the patient:</strong> Cold IV saline, ice packs to groin/axilla, cooling blanket. Target temp <38.5°C<sup class="ref-num">1,3</sup></li>
+                                        <li class="protocol-step"><strong>Treat hyperkalemia:</strong> Insulin/dextrose, calcium chloride, bicarbonate, avoid Ca²⁺ channel blockers with dantrolene<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Manage arrhythmias:</strong> Standard ACLS (avoid calcium channel blockers)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Monitor urine output:</strong> Foley catheter, maintain >1 mL/kg/h to prevent myoglobin-induced renal failure<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Labs:</strong> ABG, electrolytes, CK, lactate, coags, myoglobin q6h<sup class="ref-num">1</sup></li>
                                     </ol>
                                 </div>
 
@@ -10373,22 +10541,57 @@ CRISIS_HTML = """<!DOCTYPE html>
                                     <div class="info-box-title">📞 MH Hotline</div>
                                     <div class="info-detail"><strong>USA:</strong> 1-800-MH-HYPER (1-800-644-9737)</div>
                                     <div class="info-detail"><strong>Outside USA:</strong> +1-315-464-7079</div>
-                                    <div class="info-detail">Expert consultant available 24/7 for real-time guidance</div>
+                                    <div class="info-detail">Expert consultant available 24/7 for real-time guidance<sup class="ref-num">4</sup></div>
                                 </div>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness — prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)</div>
+                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness — prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)<sup class="ref-num">5</sup></div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (5)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Litman RS, Griggs SM, Dowling JJ, et al. <strong>Malignant Hyperthermia Susceptibility and Related Diseases.</strong> <em>Anesthesiology</em>. 2018;128(1):159-167. PMID: 29200006</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">MHAUS Emergency Therapy for MH (2022 Update). <a href="https://www.mhaus.org/healthcare-professionals/be-prepared/managing-a-crisis/" target="_blank">mhaus.org/managing-a-crisis</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Rosenberg H, Pollock N, Schiemann A, et al. <strong>Malignant hyperthermia: a review.</strong> <em>Orphanet J Rare Dis</em>. 2015;10:93. PMID: 26238698</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Malignant Hyperthermia Association of the United States (MHAUS). <strong>24/7 Emergency Hotline.</strong> <a href="https://www.mhaus.org" target="_blank">mhaus.org</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">5</span>
+                                            <span class="reference-citation">Larach MG, Brandom BW, Allen GC, et al. <strong>Malignant Hyperthermia Deaths Related to Inadequate Temperature Monitoring.</strong> <em>Anesthesiology</em>. 2019;130(1):40-51. PMID: 30475256</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Cardiac Arrest -->
-                    <div class="protocol-card red" data-keywords="cardiac arrest code blue cpr acls asystole vfib pea pulseless">
+                    <!-- Cardiac Arrest (ENHANCED) -->
+                    <div class="protocol-card red" data-keywords="cardiac arrest code blue cpr acls asystole vfib pea pulseless" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
-                                <h3 class="protocol-title">Cardiac Arrest (ACLS)</h3>
+                                <h3 class="protocol-title">
+                                    Cardiac Arrest (ACLS)
+                                    <span class="protocol-ref-count">📚 4 refs</span>
+                                </h3>
                             </div>
                             <div class="expand-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -10406,21 +10609,21 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Universal Steps (All Rhythms)</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Start CPR immediately:</strong> 100-120 compressions/min, depth 2-2.4 inches, minimize interruptions</li>
+                                        <li class="protocol-step"><strong>Start CPR immediately:</strong> 100-120 compressions/min, depth 2-2.4 inches, minimize interruptions<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Call for help / Code Blue</strong></li>
                                         <li class="protocol-step"><strong>Attach defibrillator/monitor:</strong> Identify rhythm</li>
-                                        <li class="protocol-step"><strong>Secure airway:</strong> ETT or supraglottic device + capnography (target EtCO₂ >10 mmHg)</li>
+                                        <li class="protocol-step"><strong>Secure airway:</strong> ETT or supraglottic device + capnography (target EtCO₂ >10 mmHg)<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>IV/IO access:</strong> Establish vascular access for medications</li>
-                                        <li class="protocol-step"><strong>Consider reversible causes (H's and T's)</strong></li>
+                                        <li class="protocol-step"><strong>Consider reversible causes (H's and T's)</strong><sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
 
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Shockable Rhythms (VF/pVT)</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Defibrillate:</strong> Biphasic 120-200J (or manufacturer recommendation), resume CPR immediately × 2 min</li>
-                                        <li class="protocol-step"><strong>After 2nd shock:</strong> Epinephrine 1 mg IV/IO q3-5min</li>
-                                        <li class="protocol-step"><strong>After 3rd shock:</strong> Amiodarone 300 mg IV/IO (or lidocaine 1-1.5 mg/kg if amio unavailable)</li>
+                                        <li class="protocol-step"><strong>Defibrillate:</strong> Biphasic 120-200J (or manufacturer recommendation), resume CPR immediately × 2 min<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>After 2nd shock:</strong> Epinephrine 1 mg IV/IO q3-5min<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>After 3rd shock:</strong> Amiodarone 300 mg IV/IO (or lidocaine 1-1.5 mg/kg if amio unavailable)<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Continue CPR + defibrillation every 2 min</strong></li>
                                     </ol>
                                 </div>
@@ -10428,15 +10631,15 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Non-Shockable Rhythms (PEA/Asystole)</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>High-quality CPR × 2 min</strong></li>
-                                        <li class="protocol-step"><strong>Epinephrine 1 mg IV/IO immediately,</strong> then q3-5min</li>
+                                        <li class="protocol-step"><strong>High-quality CPR × 2 min</strong><sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Epinephrine 1 mg IV/IO immediately,</strong> then q3-5min<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Consider atropine 1 mg IV</strong> if slow PEA (rate <60), may repeat to total 3 mg</li>
-                                        <li class="protocol-step"><strong>Treat reversible causes aggressively</strong> (see H's and T's below)</li>
+                                        <li class="protocol-step"><strong>Treat reversible causes aggressively</strong> (see H's and T's below)<sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
 
                                 <div class="dose-box">
-                                    <div class="dose-box-title">💊 Key Medications</div>
+                                    <div class="dose-box-title">💊 Key Medications<sup class="ref-num">1</sup></div>
                                     <div class="dose-detail"><strong>Epinephrine:</strong> 1 mg (1:10,000) IV/IO every 3-5 minutes</div>
                                     <div class="dose-detail"><strong>Amiodarone:</strong> 300 mg IV/IO first dose, then 150 mg second dose</div>
                                     <div class="dose-detail"><strong>Lidocaine (alternative):</strong> 1-1.5 mg/kg first dose, then 0.5-0.75 mg/kg</div>
@@ -10444,24 +10647,55 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 </div>
 
                                 <div class="info-box">
-                                    <div class="info-box-title">🔍 H's and T's (Reversible Causes)</div>
+                                    <div class="info-box-title">🔍 H's and T's (Reversible Causes)<sup class="ref-num">2</sup></div>
                                     <div class="info-detail"><strong>H's:</strong> Hypovolemia, Hypoxia, H⁺ (acidosis), Hyper/hypokalemia, Hypothermia<br>
                                     <strong>T's:</strong> Tension pneumothorax, Tamponade (cardiac), Toxins, Thrombosis (coronary/pulmonary)</div>
                                 </div>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Anesthesia-Specific Considerations</div>
-                                    <div class="warning-detail">• Turn off volatile anesthetics during arrest<br>• Consider <strong>anesthesia-specific causes:</strong> local anesthetic toxicity (give lipid emulsion), hyperkalemia from succinylcholine, pneumothorax from line placement, total spinal<br>• Continue CPR during transfer to ICU if needed<br>• Document ROSC time, rhythm changes, total epi/defib doses</div>
+                                    <div class="warning-detail">• Turn off volatile anesthetics during arrest<br>• Consider <strong>anesthesia-specific causes:</strong> local anesthetic toxicity (give lipid emulsion), hyperkalemia from succinylcholine, pneumothorax from line placement, total spinal<sup class="ref-num">3</sup><br>• Continue CPR during transfer to ICU if needed<br>• Document ROSC time, rhythm changes, total epi/defib doses<sup class="ref-num">4</sup></div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Panchal AR, et al. <strong>Part 3: Adult Basic and Advanced Life Support. 2020 AHA Guidelines.</strong> <em>Circulation</em>. 2020;142(16_suppl_2):S366-S468. PMID: 33081529</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Link MS, et al. <strong>Part 7: Adult Advanced Cardiovascular Life Support.</strong> <em>Circulation</em>. 2015;132(18 Suppl 2):S444-64. PMID: 26472995</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Neal JM, et al. <strong>Anesthesia-Related Cardiac Arrest: A Registry Analysis.</strong> <em>Anesthesiology</em>. 2014;120(4):829-838. PMID: 24694841</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Soar J, et al. <strong>European Resuscitation Council Guidelines.</strong> <em>Resuscitation</em>. 2021;161:98-114. PMID: 33773831</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Anaphylaxis -->
-                    <div class="protocol-card red" data-keywords="anaphylaxis allergic reaction epinephrine bronchospasm hypotension urticaria angioedema">
+                    <!-- Anaphylaxis (ENHANCED) -->
+                    <div class="protocol-card red" data-keywords="anaphylaxis allergic reaction epinephrine bronchospasm hypotension urticaria angioedema" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
-                                <h3 class="protocol-title">Anaphylaxis</h3>
+                                <h3 class="protocol-title">
+                                    Anaphylaxis
+                                    <span class="protocol-ref-count">📚 4 refs</span>
+                                </h3>
                             </div>
                             <div class="expand-icon">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -10479,16 +10713,16 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Immediate Management</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STOP suspected trigger:</strong> Antibiotics, NMBs, latex, colloids are most common</li>
+                                        <li class="protocol-step"><strong>STOP suspected trigger:</strong> Antibiotics, NMBs, latex, colloids are most common<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Call for help</strong></li>
-                                        <li class="protocol-step"><strong>Epinephrine IM immediately:</strong> 0.3-0.5 mg (0.3-0.5 mL of 1:1000) into anterolateral thigh, repeat q5-15min PRN</li>
-                                        <li class="protocol-step"><strong>100% O₂:</strong> Maintain airway, consider early intubation if upper airway edema</li>
-                                        <li class="protocol-step"><strong>Aggressive fluid resuscitation:</strong> 20-50 mL/kg crystalloid rapidly for refractory hypotension</li>
+                                        <li class="protocol-step"><strong>Epinephrine IM immediately:</strong> 0.3-0.5 mg (0.3-0.5 mL of 1:1000) into anterolateral thigh, repeat q5-15min PRN<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>100% O₂:</strong> Maintain airway, consider early intubation if upper airway edema<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Aggressive fluid resuscitation:</strong> 20-50 mL/kg crystalloid rapidly for refractory hypotension<sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
 
                                 <div class="dose-box">
-                                    <div class="dose-box-title">💊 Epinephrine Dosing</div>
+                                    <div class="dose-box-title">💊 Epinephrine Dosing<sup class="ref-num">2</sup></div>
                                     <div class="dose-detail"><strong>IM (first-line):</strong> 0.3-0.5 mg (1:1000) into thigh, repeat q5-15min</div>
                                     <div class="dose-detail"><strong>IV bolus (severe/arrest):</strong> 10-100 mcg (0.01-0.1 mg) slow push, titrate to effect</div>
                                     <div class="dose-detail"><strong>IV infusion (refractory):</strong> 0.05-0.5 mcg/kg/min, titrate to BP/HR</div>
@@ -10498,97 +10732,50 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Adjunct Therapies</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>H1 blocker:</strong> Diphenhydramine 25-50 mg IV slowly</li>
-                                        <li class="protocol-step"><strong>H2 blocker:</strong> Famotidine 20 mg IV or ranitidine 50 mg IV</li>
-                                        <li class="protocol-step"><strong>Corticosteroids:</strong> Methylprednisolone 1-2 mg/kg IV (prevents late-phase reaction)</li>
+                                        <li class="protocol-step"><strong>H1 blocker:</strong> Diphenhydramine 25-50 mg IV slowly<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>H2 blocker:</strong> Famotidine 20 mg IV or ranitidine 50 mg IV<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Corticosteroids:</strong> Methylprednisolone 1-2 mg/kg IV (prevents late-phase reaction)<sup class="ref-num">2</sup></li>
                                         <li class="protocol-step"><strong>Bronchodilators:</strong> Albuterol for persistent bronchospasm</li>
-                                        <li class="protocol-step"><strong>Glucagon (if on β-blockers):</strong> 1-2 mg IV (epinephrine may be ineffective)</li>
+                                        <li class="protocol-step"><strong>Glucagon (if on β-blockers):</strong> 1-2 mg IV (epinephrine may be ineffective)<sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
 
                                 <div class="info-box">
-                                    <div class="info-box-title">🩺 Diagnostic Criteria (2 or more)</div>
+                                    <div class="info-box-title">🩺 Diagnostic Criteria (2 or more)<sup class="ref-num">2</sup></div>
                                     <div class="info-detail">• <strong>Skin/mucosal:</strong> Urticaria, angioedema, flushing<br>• <strong>Respiratory:</strong> Bronchospasm, wheezing, stridor, dyspnea, ↓SpO₂<br>• <strong>Cardiovascular:</strong> Hypotension (SBP <90 or >30% drop), tachycardia, arrhythmia, collapse<br>• <strong>GI:</strong> Cramping, vomiting, diarrhea</div>
                                 </div>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Considerations</div>
-                                    <div class="warning-detail">• <strong>Common triggers:</strong> NMBs (rocuronium, succinylcholine), antibiotics (cephalosporins, penicillins), latex, chlorhexidine<br>• Confirm diagnosis: Send tryptase levels (draw immediately, then 1-2h and 24h later)<br>• Biphasic reactions occur in 20% — observe ≥4-6h minimum, admit if severe<br>• Document reaction in chart and advise patient to see allergist<br>• Refractory hypotension: Consider methylene blue 1-2 mg/kg for vasoplegia</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LAST -->
-                    <div class="protocol-card red" data-keywords="last local anesthetic systemic toxicity lipid emulsion intralipid bupivacaine ropivacaine seizure arrhythmia">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Local Anesthetic Systemic Toxicity (LAST)</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">CNS/cardiac toxicity from systemic absorption of local anesthetics</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                            <span class="protocol-tag call-help">Call Help</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STOP local anesthetic injection</strong></li>
-                                        <li class="protocol-step"><strong>Call for help:</strong> Get lipid emulsion (Intralipid 20%)</li>
-                                        <li class="protocol-step"><strong>Airway management:</strong> 100% O₂, ventilate if needed, suppress seizures</li>
-                                        <li class="protocol-step"><strong>Give lipid emulsion immediately</strong> (see dosing below) — DO NOT DELAY</li>
-                                        <li class="protocol-step"><strong>If cardiac arrest:</strong> Start CPR, consider prolonged resuscitation (LAST arrest can require >1h CPR)</li>
-                                    </ol>
+                                    <div class="warning-detail">• <strong>Common triggers:</strong> NMBs (rocuronium, succinylcholine), antibiotics (cephalosporins, penicillins), latex, chlorhexidine<sup class="ref-num">3</sup><br>• Confirm diagnosis: Send tryptase levels (draw immediately, then 1-2h and 24h later)<sup class="ref-num">4</sup><br>• Biphasic reactions occur in 20% — observe ≥4-6h minimum, admit if severe<sup class="ref-num">2</sup><br>• Document reaction in chart and advise patient to see allergist<br>• Refractory hypotension: Consider methylene blue 1-2 mg/kg for vasoplegia</div>
                                 </div>
 
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Lipid Emulsion 20% (Intralipid) Dosing</div>
-                                    <div class="dose-detail"><strong>Bolus:</strong> 1.5 mL/kg IV (lean body weight) over 1 minute (~100 mL for 70 kg adult)</div>
-                                    <div class="dose-detail"><strong>Infusion:</strong> 0.25 mL/kg/min (~18 mL/min for 70 kg = ~500 mL bag over 30 min)</div>
-                                    <div class="dose-detail"><strong>Repeat bolus:</strong> If cardiovascular instability persists after 5 min, give up to 2 more boluses (same dose)</div>
-                                    <div class="dose-detail"><strong>Increase infusion:</strong> Double rate to 0.5 mL/kg/min if BP remains unstable</div>
-                                    <div class="dose-detail"><strong>Maximum dose:</strong> ~10 mL/kg over first 30 minutes</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Seizure Management</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Benzodiazepines:</strong> Midazolam 1-2 mg IV or lorazepam 1-2 mg IV</li>
-                                        <li class="protocol-step"><strong>AVOID propofol</strong> in large doses (additional lipid load, myocardial depression)</li>
-                                        <li class="protocol-step"><strong>Small-dose propofol OK</strong> if lipid already given and seizures refractory</li>
-                                    </ol>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Cardiac Arrest Modifications</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Reduce epinephrine doses:</strong> Use <1 mcg/kg (ACLS doses may worsen outcome)</li>
-                                        <li class="protocol-step"><strong>Avoid vasopressin, calcium, β-blockers, local anesthetics (lidocaine)</strong></li>
-                                        <li class="protocol-step"><strong>CONTINUE lipid infusion</strong></li>
-                                        <li class="protocol-step"><strong>Prolonged CPR:</strong> Full recovery reported after >60 min resuscitation</li>
-                                        <li class="protocol-step"><strong>Consider ECMO/CPB</strong> if available and refractory arrest</li>
-                                    </ol>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 Signs of LAST</div>
-                                    <div class="info-detail"><strong>Early CNS:</strong> Circumoral numbness, metallic taste, tinnitus, confusion, agitation<br>
-                                    <strong>Severe CNS:</strong> Seizures, loss of consciousness<br>
-                                    <strong>Cardiac:</strong> Bradycardia, hypotension, arrhythmias (wide QRS), asystole, PEA<br>
-                                    <strong>Note:</strong> Cardiac toxicity can occur WITHOUT preceding CNS symptoms (especially bupivacaine)</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Critical Points</div>
-                                    <div class="warning-detail">• Lipid emulsion is PRIMARY treatment — give early, don't wait for arrest<br>• Bupivacaine/ropivacaine are more cardiotoxic than lidocaine/mepivacaine<br>• Max doses: Bupivacaine 2.5 mg/kg plain, 3 mg/kg with epi; Lidocaine 5 mg/kg plain, 7 mg/kg with epi<br>• Post-resuscitation: Monitor ≥4-6h (cardiac arrest patients → ICU), watch for pancreatitis from lipid load</div>
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Dewachter P, et al. <strong>Perioperative Anaphylaxis.</strong> <em>Anesthesiology</em>. 2009;111(5):1141-1150. PMID: 19858877</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Shaker MS, et al. <strong>Anaphylaxis: A 2020 Practice Parameter Update.</strong> <em>Ann Allergy Asthma Immunol</em>. 2020;125(4):346-373. PMID: 32846301</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Mertes PM, et al. <strong>Reducing the Risk of Anaphylaxis During Anesthesia.</strong> <em>J Allergy Clin Immunol Pract</em>. 2020;8(8):2544-2555. PMID: 32505781</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Fisher MM, Baldo BA. <strong>Mast Cell Tryptase in Anaesthetic Anaphylactoid Reactions.</strong> <em>Br J Anaesth</em>. 1998;80(1):26-29. PMID: 9505773</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -10596,504 +10783,6 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                 </div>
             </div>
-
-            <!-- Airway Emergencies -->
-            <div class="category-section" data-category="airway">
-                <div class="category-header">
-                    <div class="category-icon orange">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>
-                            <path d="M12 12v6"/>
-                            <path d="M6 15c-2.213 -1.246 -3.5 -3.154 -3.5 -5.294 0 -3.314 2.686 -6 6 -6h7c3.314 0 6 2.686 6 6 0 2.14 -1.287 4.048 -3.5 5.294"/>
-                        </svg>
-                    </div>
-                    <h2 class="category-title">Airway Emergencies</h2>
-                </div>
-                <div class="protocols-grid">
-
-                    <!-- Can't Intubate Can't Oxygenate -->
-                    <div class="protocol-card orange" data-keywords="cico cant intubate oxygenate difficult airway cricothyroidotomy emergency front neck access scalpel bougie">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Can't Intubate, Can't Oxygenate (CICO)</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Failed intubation + failed oxygenation requiring emergency front of neck access</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                            <span class="protocol-tag call-help">Call Help</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">CICO Criteria (Declare CICO if both present)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Can't Intubate:</strong> 3 failed laryngoscopy attempts by experienced provider OR 2 failed attempts + failed supraglottic device</li>
-                                        <li class="protocol-step"><strong>Can't Oxygenate:</strong> SpO₂ <90% despite 100% O₂, facemask, OPA/NPA, 2-person BVM, and/or SGA</li>
-                                    </ol>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Declare CICO Out Loud</div>
-                                    <div class="warning-detail">"This is a CAN'T INTUBATE, CAN'T OXYGENATE situation. Prepare for emergency cricothyroidotomy NOW."</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Emergency Front of Neck Access (Scalpel-Bougie-Tube)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Position:</strong> Extend neck (if no C-spine concerns), palpate cricothyroid membrane</li>
-                                        <li class="protocol-step"><strong>Scalpel:</strong> Transverse stab incision through skin + cricothyroid membrane (1 motion, blade perpendicular)</li>
-                                        <li class="protocol-step"><strong>Bougie:</strong> Insert bougie (or tracheal hook to retract) into trachea, advance caudally</li>
-                                        <li class="protocol-step"><strong>Tube:</strong> Railroad cuffed ETT (6.0 or smaller) or Shiley 6 trach over bougie, inflate cuff</li>
-                                        <li class="protocol-step"><strong>Ventilate:</strong> Confirm with capnography, ventilate, secure tube</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">🔪 Scalpel Cricothyroidotomy Technique</div>
-                                    <div class="dose-detail"><strong>Equipment:</strong> #10 scalpel blade, bougie, 6.0 cuffed ETT (or 6.0 Shiley trach)</div>
-                                    <div class="dose-detail"><strong>Incision:</strong> Horizontal stab through cricothyroid membrane, turn blade 90° to open</div>
-                                    <div class="dose-detail"><strong>Depth:</strong> 1-1.5 cm deep (through membrane into trachea)</div>
-                                    <div class="dose-detail"><strong>Time goal:</strong> <60 seconds from declaration to ventilation</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Post-Procedure</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Confirm placement:</strong> Capnography, chest rise, SpO₂ improvement</li>
-                                        <li class="protocol-step"><strong>Secure tube:</strong> Suture or trach ties, note depth</li>
-                                        <li class="protocol-step"><strong>CXR:</strong> Confirm position, rule out pneumothorax</li>
-                                        <li class="protocol-step"><strong>ENT/surgery consult:</strong> For formal tracheostomy or laryngeal evaluation</li>
-                                    </ol>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">Alternative: Needle Cricothyroidotomy (Temporizing Only)</div>
-                                    <div class="info-detail">• <strong>Indication:</strong> Pediatric <10 years (cricoid cartilage too small for surgical cric)<br>• <strong>Technique:</strong> 14G or 16G IV catheter through cricothyroid membrane, attach to jet ventilator or BVM with Y-connector<br>• <strong>Limitation:</strong> Inadequate ventilation (↑ CO₂), only buys 30-45 min before hypercapnia/barotrauma</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Critical Reminders</div>
-                                    <div class="warning-detail">• Do NOT attempt >3 laryngoscopies — recognize failure early<br>• Do NOT delay cricothyroidotomy — hypoxic brain injury starts after 3-5 min<br>• Scalpel technique is superior to needle cric in adults (faster, more reliable ventilation)<br>• Practice on simulators regularly — muscle memory is critical</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Laryngospasm -->
-                    <div class="protocol-card orange" data-keywords="laryngospasm stridor vocal cord spasm cpap jaw thrust succinylcholine propofol">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Laryngospasm</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Reflex closure of vocal cords causing airway obstruction</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag urgent">Urgent</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Management (Escalating)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Remove stimulus:</strong> Suction secretions, blood, stop surgical stimulation</li>
-                                        <li class="protocol-step"><strong>100% O₂:</strong> Via facemask with reservoir</li>
-                                        <li class="protocol-step"><strong>Jaw thrust + CPAP:</strong> Anterior displacement of mandible at TMJ (Larson maneuver: press behind ramus), apply gentle positive pressure (10-20 cm H₂O)</li>
-                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Propofol 0.5-1 mg/kg IV (if IV access and patient not apneic)</li>
-                                        <li class="protocol-step"><strong>If persistent/desaturating:</strong> Proceed to step 6</li>
-                                        <li class="protocol-step"><strong>Succinylcholine:</strong> 0.5-1 mg/kg IV (or 2-4 mg/kg IM if no IV access)</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Medication Doses</div>
-                                    <div class="dose-detail"><strong>Propofol:</strong> 0.5-1 mg/kg IV bolus to deepen anesthesia</div>
-                                    <div class="dose-detail"><strong>Succinylcholine (IV):</strong> 0.5-1 mg/kg IV (lower dose than RSI, may give without pretreatment in emergency)</div>
-                                    <div class="dose-detail"><strong>Succinylcholine (IM):</strong> 2-4 mg/kg IM into deltoid or thigh if no IV access</div>
-                                    <div class="dose-detail"><strong>Atropine (for bradycardia):</strong> 0.01-0.02 mg/kg IV (especially in children)</div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 Clinical Presentation</div>
-                                    <div class="info-detail"><strong>Partial:</strong> High-pitched stridor, crowing sound, difficulty ventilating<br><strong>Complete:</strong> Silent chest, no air movement, severe paradoxical chest/abdominal motion, rapid desaturation</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• Most common during light anesthesia (stage II) — emergence, extubation, airway instrumentation<br>• <strong>Larson's maneuver:</strong> Firm pressure at "laryngospasm notch" (behind angle of mandible, anterior to mastoid) + jaw thrust often breaks spasm<br>• Avoid repeated forceful PPV — worsens spasm and risks gastric insufflation/aspiration<br>• After succinylcholine, MUST ventilate/intubate until spontaneous breathing returns (~5-10 min)<br>• Consider intubation if multiple episodes or risk of recurrence</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bronchospasm -->
-                    <div class="protocol-card orange" data-keywords="bronchospasm wheezing asthma copd albuterol epinephrine deepen anesthesia">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Bronchospasm</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Diffuse small airway constriction causing wheezing and ↑ airway pressure</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag urgent">Urgent</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>100% O₂:</strong> Increase FiO₂ to 1.0</li>
-                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Increase volatile (if not contraindicated) or propofol bolus 0.5-1 mg/kg</li>
-                                        <li class="protocol-step"><strong>Hand ventilate:</strong> Slow rate (8-10/min), low tidal volume, prolonged expiration (I:E = 1:3 or 1:4) to avoid air trapping</li>
-                                        <li class="protocol-step"><strong>Albuterol MDI:</strong> 4-8 puffs via ETT/LMA or in-line with circuit</li>
-                                        <li class="protocol-step"><strong>Rule out other causes:</strong> Check circuit (kink, ETT obstruction), suction secretions, confirm tube not endobronchial</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Bronchodilator Therapy</div>
-                                    <div class="dose-detail"><strong>Albuterol MDI:</strong> 4-8 puffs (90 mcg/puff) via ETT, may repeat q20min</div>
-                                    <div class="dose-detail"><strong>Albuterol nebulizer:</strong> 2.5-5 mg in-line with circuit (continuous if refractory)</div>
-                                    <div class="dose-detail"><strong>Epinephrine (severe):</strong> 10-50 mcg IV boluses, titrate to effect</div>
-                                    <div class="dose-detail"><strong>Epinephrine infusion:</strong> 0.02-0.1 mcg/kg/min for refractory cases</div>
-                                    <div class="dose-detail"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus (bronchodilator + anesthetic), then 0.5-2 mg/kg/h infusion</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Escalation for Severe/Refractory Bronchospasm</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>IV Steroids:</strong> Methylprednisolone 1-2 mg/kg IV (benefit after 4-6h)</li>
-                                        <li class="protocol-step"><strong>Magnesium sulfate:</strong> 2 g IV over 20 min (smooth muscle relaxation)</li>
-                                        <li class="protocol-step"><strong>Ipratropium bromide:</strong> 500 mcg nebulized (anticholinergic, add to albuterol)</li>
-                                        <li class="protocol-step"><strong>Heliox:</strong> 60-70% helium / 30-40% O₂ mixture (reduces turbulent flow, buys time)</li>
-                                        <li class="protocol-step"><strong>Consider anaphylaxis</strong> if new-onset bronchospasm without asthma history → give epinephrine IM</li>
-                                    </ol>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🔍 Differential Diagnosis</div>
-                                    <div class="info-detail"><strong>Not bronchospasm:</strong> ETT in bronchus, kinked tube, mucus plug, pneumothorax, pulmonary edema, aspiration, pulmonary embolism<br><strong>Confirm:</strong> Auscultate lungs (bilateral expiratory wheezing), check plateau pressure (↑ in bronchospasm, normal in obstruction)</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Ventilation Strategy</div>
-                                    <div class="warning-detail">• <strong>Allow permissive hypercapnia</strong> — accept high CO₂ to avoid barotrauma from air trapping<br>• <strong>Avoid high PEEP</strong> initially (worsens air trapping) — use low PEEP (0-5 cm H₂O)<br>• Reduce respiratory rate, increase expiratory time (I:E ratio 1:3 or 1:4)<br>• Goal: Peak pressure <40 cm H₂O, plateau <30 cm H₂O if possible<br>• If refractory + deteriorating: Consider ECMO/VV-ECMO</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Neurologic / Regional -->
-            <div class="category-section" data-category="neurologic">
-                <div class="category-header">
-                    <div class="category-icon purple">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M15.5 13a3.5 3.5 0 0 0 -3.5 3.5v1a3.5 3.5 0 0 0 7 0v-1a3.5 3.5 0 0 0 -3.5 -3.5z"/>
-                            <path d="M8.5 13a3.5 3.5 0 0 1 3.5 3.5v1a3.5 3.5 0 0 1 -7 0v-1a3.5 3.5 0 0 1 3.5 -3.5z"/>
-                            <path d="M17.5 16a3.5 3.5 0 0 0 0 -7h-.5"/>
-                            <path d="M19 9.3v-2.8a3.5 3.5 0 0 0 -7 0"/>
-                            <path d="M6.5 16a3.5 3.5 0 0 1 0 -7h.5"/>
-                            <path d="M5 9.3v-2.8a3.5 3.5 0 0 1 7 0v10"/>
-                        </svg>
-                    </div>
-                    <h2 class="category-title">Neurologic / Regional Complications</h2>
-                </div>
-                <div class="protocols-grid">
-
-                    <!-- High/Total Spinal -->
-                    <div class="protocol-card purple" data-keywords="high spinal total spinal neuraxial block hypotension bradycardia respiratory arrest spinal epidural">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">High/Total Spinal</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Excessive cephalad spread of neuraxial anesthesia causing cardiorespiratory compromise</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Management (ABC approach)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Call for help</strong></li>
-                                        <li class="protocol-step"><strong>Airway:</strong> Secure airway immediately if respiratory distress, intubate if apneic or unable to protect airway</li>
-                                        <li class="protocol-step"><strong>Breathing:</strong> Ventilate with 100% O₂ (PPV or mechanical ventilation)</li>
-                                        <li class="protocol-step"><strong>Circulation:</strong> Aggressive vasopressor/fluid resuscitation (see below)</li>
-                                        <li class="protocol-step"><strong>Position:</strong> Supine with legs elevated (↑ venous return), avoid Trendelenburg (worsens block height)</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Hemodynamic Support</div>
-                                    <div class="dose-detail"><strong>Ephedrine:</strong> 5-10 mg IV boluses (first-line if bradycardic)</div>
-                                    <div class="dose-detail"><strong>Phenylephrine:</strong> 50-100 mcg IV boluses (if tachycardic)</div>
-                                    <div class="dose-detail"><strong>Epinephrine:</strong> 10-100 mcg IV if refractory hypotension, or 0.05-0.1 mcg/kg/min infusion</div>
-                                    <div class="dose-detail"><strong>Atropine:</strong> 0.4-0.6 mg IV for bradycardia</div>
-                                    <div class="dose-detail"><strong>Fluids:</strong> Crystalloid 500-1000 mL rapid bolus</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Additional Supportive Care</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Reassure patient:</strong> Explain what's happening if conscious, give anxiolysis (midazolam 1-2 mg IV)</li>
-                                        <li class="protocol-step"><strong>Monitor:</strong> Continuous BP, HR, SpO₂, capnography if intubated</li>
-                                        <li class="protocol-step"><strong>Assess block level:</strong> Check sensory level when stable</li>
-                                        <li class="protocol-step"><strong>Duration:</strong> Expect resolution in 1-3 hours (depends on local anesthetic type/dose)</li>
-                                    </ol>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 Clinical Presentation</div>
-                                    <div class="info-detail"><strong>Early signs:</strong> Dyspnea, difficulty speaking, upper extremity weakness/tingling, nausea<br>
-                                    <strong>Severe signs:</strong> Apnea, loss of consciousness, severe hypotension, bradycardia → asystole<br>
-                                    <strong>Block level:</strong> High spinal = T1-T4 (respiratory muscles affected), Total spinal = brainstem involvement (unconsciousness)</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Key Considerations</div>
-                                    <div class="warning-detail">• <strong>Causes:</strong> Excessive local anesthetic dose, migration of epidural catheter into subarachnoid space, unrecognized dural puncture during epidural placement<br>• Differentiate from local anesthetic toxicity (LAST) — high spinal has symmetric block and bradycardia; LAST has CNS excitation → seizures<br>• Most patients fully recover — maintain oxygenation and BP until block wears off<br>• Document event, monitor for post-dural puncture headache if unintentional wet tap</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Venous Air Embolism -->
-                    <div class="protocol-card purple" data-keywords="air embolism vae gas embolism durant position sitting craniotomy etco2">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Venous Air Embolism (VAE)</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Air entrainment into venous circulation causing cardiovascular collapse</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                            <span class="protocol-tag call-help">Call Help</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Notify surgeon — STOP surgery:</strong> Flood surgical field with saline, occlude open veins</li>
-                                        <li class="protocol-step"><strong>100% FiO₂:</strong> Discontinue nitrous oxide (N₂O expands air bubbles)</li>
-                                        <li class="protocol-step"><strong>Lower surgical site:</strong> Reduce gradient between surgical site and heart</li>
-                                        <li class="protocol-step"><strong>Durant position:</strong> Left lateral decubitus + Trendelenburg (traps air in RV apex, away from outflow)</li>
-                                        <li class="protocol-step"><strong>Attempt aspiration:</strong> If CVL in place, aspirate from distal port (withdraw air from RA/RV)</li>
-                                        <li class="protocol-step"><strong>Hemodynamic support:</strong> Fluids, vasopressors, inotropes as needed</li>
-                                    </ol>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 Signs of VAE (in order of sensitivity)</div>
-                                    <div class="info-detail">1. <strong>Precordial Doppler:</strong> Mill-wheel murmur (most sensitive, requires placement)<br>
-                                    2. <strong>↓ EtCO₂:</strong> Sudden drop (dead space ↑ from pulmonary embolism)<br>
-                                    3. <strong>↓ SpO₂, ↓ BP, ↑ CVP, arrhythmias</strong><br>
-                                    4. <strong>Cardiac arrest</strong> (if large volume air)</div>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Supportive Therapy</div>
-                                    <div class="dose-detail"><strong>Volume:</strong> Rapid crystalloid infusion (↑ CVP reduces further air entrainment)</div>
-                                    <div class="dose-detail"><strong>Vasopressors:</strong> Phenylephrine 50-200 mcg IV boluses or epinephrine 10-100 mcg IV</div>
-                                    <div class="dose-detail"><strong>Inotropes:</strong> Epinephrine infusion 0.05-0.5 mcg/kg/min if myocardial dysfunction</div>
-                                    <div class="dose-detail"><strong>CPR if arrest:</strong> Standard ACLS + prolonged resuscitation (air resorbs over time)</div>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Post-Event Management</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Neuro assessment:</strong> Evaluate for paradoxical embolism (if PFO) → stroke symptoms</li>
-                                        <li class="protocol-step"><strong>Consider hyperbaric O₂</strong> if neurologic deficits (shrinks bubbles, improves oxygenation)</li>
-                                        <li class="protocol-step"><strong>ICU monitoring:</strong> For severe VAE with hemodynamic instability</li>
-                                        <li class="protocol-step"><strong>Echocardiography:</strong> TEE/TTE to assess for residual air, PFO, cardiac function</li>
-                                    </ol>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ High-Risk Situations</div>
-                                    <div class="warning-detail">• <strong>Sitting position craniotomy</strong> (most common, head >20 cm above heart)<br>• Posterior fossa surgery, cervical laminectomy<br>• Cesarean section, liver resection, laparoscopy with insufflation issues<br>• Central line placement with air entrainment<br>• <strong>Lethal dose:</strong> 3-5 mL/kg rapid bolus (200-300 mL in adults) can cause cardiovascular collapse<br>• <strong>Prevention:</strong> Avoid sitting position when possible, maintain adequate hydration, use precordial Doppler monitoring</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- Metabolic / Other -->
-            <div class="category-section" data-category="metabolic">
-                <div class="category-header">
-                    <div class="category-icon amber">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 3h6"/>
-                            <path d="M10 9v-3"/>
-                            <path d="M14 9v-3"/>
-                            <path d="M10 9l-7 7a3 3 0 0 0 -.5 3.5a3 3 0 0 0 2.5 1.5h14a3 3 0 0 0 2.5 -1.5a3 3 0 0 0 -.5 -3.5l-7 -7"/>
-                            <circle cx="12" cy="15" r="1"/>
-                        </svg>
-                    </div>
-                    <h2 class="category-title">Metabolic / Electrolyte Crises</h2>
-                </div>
-                <div class="protocols-grid">
-
-                    <!-- Hyperkalemia -->
-                    <div class="protocol-card amber" data-keywords="hyperkalemia potassium peaked t wave arrhythmia calcium insulin dextrose kayexalate dialysis">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Severe Hyperkalemia</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Elevated serum potassium (K⁺ >6.5 mEq/L) with cardiac toxicity</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Treatment (3-Step Approach)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STABILIZE cardiac membrane:</strong> Calcium (see dosing below) — immediate effect</li>
-                                        <li class="protocol-step"><strong>SHIFT K⁺ intracellularly:</strong> Insulin + dextrose, beta-agonists, bicarbonate — onset 15-30 min</li>
-                                        <li class="protocol-step"><strong>REMOVE K⁺ from body:</strong> Diuretics, dialysis, Kayexalate — onset 2-24 hours</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Step 1: Stabilize Cardiac Membrane</div>
-                                    <div class="dose-detail"><strong>Calcium chloride 10%:</strong> 10-20 mL (1-2 grams) IV over 2-5 min via central line (or diluted peripheral)</div>
-                                    <div class="dose-detail"><strong>Calcium gluconate 10%:</strong> 30 mL (3 grams) IV over 2-5 min (alternative if only peripheral access)</div>
-                                    <div class="dose-detail"><strong>Onset:</strong> 1-3 minutes, duration 30-60 min</div>
-                                    <div class="dose-detail"><strong>Monitor:</strong> Continuous ECG during administration</div>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Step 2: Shift K⁺ Intracellularly</div>
-                                    <div class="dose-detail"><strong>Insulin + Dextrose:</strong> 10 units regular insulin IV + 50 mL D50 (25g dextrose) over 5 min</div>
-                                    <div class="dose-detail"><strong>Albuterol:</strong> 10-20 mg nebulized over 10 min (or 0.5 mg IV if available)</div>
-                                    <div class="dose-detail"><strong>Sodium bicarbonate:</strong> 50-100 mEq (1-2 amps) IV over 5 min (if concurrent acidosis)</div>
-                                    <div class="dose-detail"><strong>Effect:</strong> Lowers K⁺ by 0.5-1.5 mEq/L, onset 15-30 min, duration 4-6 hours</div>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Step 3: Remove K⁺ from Body</div>
-                                    <div class="dose-detail"><strong>Furosemide:</strong> 40-80 mg IV (if adequate renal function)</div>
-                                    <div class="dose-detail"><strong>Sodium polystyrene sulfonate (Kayexalate):</strong> 15-30 g PO/PR (slow, avoid if ileus)</div>
-                                    <div class="dose-detail"><strong>Hemodialysis:</strong> Most effective for refractory hyperkalemia or ESRD (lowers K⁺ by 1-2 mEq/L/hour)</div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 ECG Changes (Progressive Severity)</div>
-                                    <div class="info-detail">1. Peaked T waves (tall, narrow, symmetric)<br>
-                                    2. Prolonged PR interval, flattened P waves<br>
-                                    3. Widened QRS complex<br>
-                                    4. Sine wave pattern → VF/asystole</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Anesthesia-Specific Causes</div>
-                                    <div class="warning-detail">• <strong>Succinylcholine:</strong> ↑ K⁺ by 0.5 mEq/L normally; AVOID in burns, denervation injuries, chronic paralysis, massive trauma (can → fatal hyperkalemia)<br>• <strong>Massive transfusion:</strong> Stored blood has high K⁺<br>• <strong>Tourniquet release:</strong> Washout of ischemic tissue K⁺<br>• <strong>Tumor lysis, rhabdomyolysis, crush injury</strong><br>• Always check K⁺ before giving succinylcholine in at-risk patients</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Severe Hypoglycemia -->
-                    <div class="protocol-card amber" data-keywords="hypoglycemia low blood sugar glucose dextrose glucagon insulin">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">Severe Hypoglycemia</h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Blood glucose <70 mg/dL with altered mental status or coma</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag urgent">Urgent</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Management</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Confirm with glucose check:</strong> Fingerstick or lab draw</li>
-                                        <li class="protocol-step"><strong>If conscious and able to swallow:</strong> 15-20 g oral glucose (juice, glucose tabs)</li>
-                                        <li class="protocol-step"><strong>If unconscious or NPO:</strong> Give IV dextrose (see dosing below)</li>
-                                        <li class="protocol-step"><strong>Recheck glucose:</strong> Every 15 minutes until >100 mg/dL</li>
-                                        <li class="protocol-step"><strong>Investigate cause:</strong> Insulin overdose, missed meal, sepsis, liver failure, adrenal insufficiency</li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 IV Dextrose Dosing</div>
-                                    <div class="dose-detail"><strong>D50 (50% dextrose):</strong> 50 mL (25 g) IV push (adults) — verify IV patency (caustic if extravasates)</div>
-                                    <div class="dose-detail"><strong>D10 (10% dextrose):</strong> 250 mL (25 g) IV over 5-10 min (safer for peripheral IV, pediatrics)</div>
-                                    <div class="dose-detail"><strong>Pediatric:</strong> 0.5-1 g/kg IV (2-4 mL/kg of D25 or 5-10 mL/kg of D10)</div>
-                                    <div class="dose-detail"><strong>Maintenance:</strong> Start D5 or D10 infusion after bolus to prevent recurrence</div>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Glucagon (if no IV access)</div>
-                                    <div class="dose-detail"><strong>Adult dose:</strong> 1 mg IM or SC</div>
-                                    <div class="dose-detail"><strong>Pediatric dose:</strong> 0.5 mg IM/SC if <20 kg, 1 mg if >20 kg</div>
-                                    <div class="dose-detail"><strong>Onset:</strong> 10-15 minutes, duration 60-90 min</div>
-                                    <div class="dose-detail"><strong>Note:</strong> Ineffective in glycogen-depleted states (starvation, alcoholism, adrenal insufficiency)</div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🩺 Clinical Presentation</div>
-                                    <div class="info-detail"><strong>Mild (50-70 mg/dL):</strong> Tremor, palpitations, sweating, hunger, anxiety<br>
-                                    <strong>Moderate (40-50 mg/dL):</strong> Confusion, difficulty concentrating, slurred speech, blurred vision<br>
-                                    <strong>Severe (<40 mg/dL):</strong> Seizures, loss of consciousness, coma, death if untreated</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Perioperative Considerations</div>
-                                    <div class="warning-detail">• <strong>High-risk patients:</strong> Type 1 diabetes, insulin pumps, sulfonylurea use, prolonged fasting<br>• Intraoperative hypoglycemia may be masked by anesthesia — check glucose regularly in diabetics<br>• Avoid over-treating (hyperglycemia is harmful too) — target 100-180 mg/dL perioperatively<br>• After treatment, give complex carbs/meal to prevent rebound hypoglycemia (if patient able to eat)</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
         </div>
 
         <!-- Footer -->
@@ -11101,203 +10790,112 @@ CRISIS_HTML = """<!DOCTYPE html>
             <div class="footer-inner">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <svg width="36" height="36" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
                     </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                    <p class="footer-text">© 2025 gasconsult.ai — Evidence-based anesthesiology</p>
                 </div>
                 <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/evidence" class="footer-link">Evidence Base</a>
                 </div>
             </div>
         </footer>
-
     </div>
 
     <script>
-        // Mobile menu toggle
         function toggleMobileMenu() {
-            const btn = document.querySelector('.mobile-menu-btn');
             const menu = document.getElementById('mobileMenu');
-            btn.classList.toggle('active');
+            const btn = document.querySelector('.mobile-menu-btn');
             menu.classList.toggle('active');
+            btn.classList.toggle('active');
         }
 
-        // Protocol card expansion
-        document.addEventListener('DOMContentLoaded', function() {
-            const protocolCards = document.querySelectorAll('.protocol-card');
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+        }
 
-            protocolCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Don't toggle if clicking on a link inside the card
-                    if (e.target.tagName === 'A') return;
-
-                    // Close all other cards first
-                    protocolCards.forEach(c => {
-                        if (c !== this) c.classList.remove('expanded');
-                    });
-
-                    // Then toggle this card
-                    this.classList.toggle('expanded');
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.nav-dropdown-toggle')) {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
                 });
-            });
-
-            // Search input clear button visibility
-            const searchInput = document.getElementById('searchInput');
-            const clearBtn = document.getElementById('clearBtn');
-
-            searchInput.addEventListener('input', function() {
-                if (this.value.length > 0) {
-                    clearBtn.classList.add('visible');
-                } else {
-                    clearBtn.classList.remove('visible');
-                }
-            });
+            }
         });
 
-        // Search/filter functionality
-        function filterProtocols() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const cards = document.querySelectorAll('.protocol-card');
-            const sections = document.querySelectorAll('.category-section');
+        function toggleProtocol(card) {
+            const wasExpanded = card.classList.contains('expanded');
 
-            let visibleCount = 0;
+            // Close all other protocol cards
+            document.querySelectorAll('.protocol-card').forEach(c => {
+                if (c !== card) {
+                    c.classList.remove('expanded');
+                }
+            });
+
+            // Toggle clicked card
+            card.classList.toggle('expanded');
+        }
+
+        function toggleReferences(button) {
+            button.classList.toggle('expanded');
+            const refList = button.nextElementSibling;
+            refList.classList.toggle('show');
+        }
+
+        function filterProtocols() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const clearBtn = document.getElementById('clearBtn');
+            const cards = document.querySelectorAll('.protocol-card');
+            const categories = document.querySelectorAll('.category-section');
+
+            // Show/hide clear button
+            if (filter.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
+            }
+
+            // Filter protocol cards
+            let hasVisibleCards = new Set();
 
             cards.forEach(card => {
-                const keywords = card.getAttribute('data-keywords').toLowerCase();
-                const title = card.querySelector('.protocol-title').textContent.toLowerCase();
-                const summary = card.querySelector('.protocol-summary').textContent.toLowerCase();
+                const keywords = card.getAttribute('data-keywords') || '';
+                const title = card.querySelector('.protocol-title').textContent;
+                const summary = card.querySelector('.protocol-summary').textContent;
 
-                if (keywords.includes(searchTerm) || title.includes(searchTerm) || summary.includes(searchTerm)) {
+                const searchableText = (keywords + ' ' + title + ' ' + summary).toLowerCase();
+
+                if (searchableText.includes(filter) || filter === '') {
                     card.style.display = '';
-                    visibleCount++;
+                    hasVisibleCards.add(card.closest('.category-section'));
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Hide empty categories
-            sections.forEach(section => {
-                const visibleCards = section.querySelectorAll('.protocol-card:not([style*="display: none"])');
-                if (visibleCards.length === 0) {
-                    section.classList.add('hidden');
+            // Show/hide category sections
+            categories.forEach(category => {
+                if (hasVisibleCards.has(category) || filter === '') {
+                    category.style.display = '';
                 } else {
-                    section.classList.remove('hidden');
+                    category.style.display = 'none';
                 }
             });
         }
 
         function clearSearch() {
-            const searchInput = document.getElementById('searchInput');
-            const clearBtn = document.getElementById('clearBtn');
-            searchInput.value = '';
-            clearBtn.classList.remove('visible');
+            document.getElementById('searchInput').value = '';
             filterProtocols();
         }
-
-        // Keyboard shortcut: Press '/' to focus search
-        document.addEventListener('keydown', function(e) {
-            if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
-            }
-            // Press Escape to clear search and collapse all cards
-            if (e.key === 'Escape') {
-                clearSearch();
-                document.querySelectorAll('.protocol-card.expanded').forEach(card => {
-                    card.classList.remove('expanded');
-                });
-            }
-        });
     </script>
-
-    <!-- References & Guidelines Section -->
-    <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
-        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Evidence Base & Guidelines</h2>
-            
-            <p style="color: #475569; line-height: 1.8; margin-bottom: 24px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
-                These crisis protocols are based on evidence-based guidelines from major anesthesiology societies and peer-reviewed literature. All protocols should be adapted to institutional resources and local practice patterns.
-            </p>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 20px; font-weight: 700; color: #334155; margin-bottom: 16px;">Primary Guidelines & Resources</h3>
-                <ol style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px;">
-                    <li><strong>American Society of Anesthesiologists (ASA)</strong> - Practice Guidelines for Management of the Difficult Airway, Perioperative Blood Management, and Malignant Hyperthermia. <a href="https://www.asahq.org/standards-and-guidelines" target="_blank" style="color: #2563EB;">asahq.org/standards-and-guidelines</a></li>
-                    <li><strong>Malignant Hyperthermia Association of the United States (MHAUS)</strong> - Emergency Management Guidelines. <strong>24/7 Hotline: 1-800-644-9737</strong>. <a href="https://www.mhaus.org" target="_blank" style="color: #2563EB;">mhaus.org</a></li>
-                    <li><strong>American Heart Association (AHA)</strong> - Advanced Cardiovascular Life Support (ACLS) Guidelines. 2020 update. <em>Circulation</em>. 2020;142(suppl 2)</li>
-                    <li><strong>Society for Obstetric Anesthesia and Perinatology (SOAP)</strong> - Consensus Statement on Hemorrhage, Local Anesthetic Systemic Toxicity. <a href="https://soap.org" target="_blank" style="color: #2563EB;">soap.org</a></li>
-                    <li><strong>American College of Allergy, Asthma & Immunology</strong> - Anaphylaxis Practice Parameters. <em>Ann Allergy Asthma Immunol</em>. 2020;125(4):346-373</li>
-                    <li><strong>Neurocritical Care Society</strong> - Guidelines for Management of Acute Ischemic Stroke and Intracranial Hemorrhage. <em>Neurocrit Care</em>. 2020;32:647-666</li>
-                </ol>
-            </div>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 20px; font-weight: 700; color: #334155; margin-bottom: 16px;">Key Evidence by Protocol Category</h3>
-                
-                <div style="background: #F8FAFC; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">🔴 Cardiovascular Emergencies</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>Panchal AR, et al. Part 3: Adult Basic and Advanced Life Support. 2020 AHA Guidelines. <em>Circulation</em>. 2020;142(16_suppl_2):S366-S468. PMID: 33081529</li>
-                        <li>Link MS, et al. Part 7: Adult Advanced Cardiovascular Life Support. <em>Circulation</em>. 2015;132(18 Suppl 2):S444-64. PMID: 26472995</li>
-                        <li>Soar J, et al. European Resuscitation Council Guidelines. <em>Resuscitation</em>. 2021;161:98-114. PMID: 33773831</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FEF2F2; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">🟠 Malignant Hyperthermia & Metabolic Crisis</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>Litman RS, Griggs SM, Dowling JJ, et al. Malignant Hyperthermia Susceptibility and Related Diseases. <em>Anesthesiology</em>. 2018;128(1):159-167. PMID: 29200006</li>
-                        <li>Rosenberg H, Pollock N, Schiemann A, et al. Malignant hyperthermia: a review. <em>Orphanet J Rare Dis</em>. 2015;10:93. PMID: 26238698</li>
-                        <li>MHAUS Emergency Therapy for MH (2022 Update). <a href="https://www.mhaus.org/healthcare-professionals/be-prepared/managing-a-crisis/" target="_blank" style="color: #2563EB;">mhaus.org/managing-a-crisis</a></li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFF7ED; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">🟡 Local Anesthetic Systemic Toxicity (LAST)</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>Neal JM, et al. ASRA Practice Advisory on Local Anesthetic Systemic Toxicity. <em>Reg Anesth Pain Med</em>. 2018;43(2):113-123. PMID: 29356773</li>
-                        <li>American Society of Regional Anesthesia and Pain Medicine Checklist for Treatment of Local Anesthetic Systemic Toxicity. <em>Reg Anesth Pain Med</em>. 2012;37(1):16-18</li>
-                        <li>Gitman M, Barrington MJ. Local Anesthetic Systemic Toxicity: A Review of Recent Case Reports. <em>Reg Anesth Pain Med</em>. 2018;43(2):124-130. PMID: 29095244</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFFBEB; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">🫁 Airway & Respiratory Emergencies</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>Apfelbaum JL, et al. 2022 ASA Practice Guidelines for Management of the Difficult Airway. <em>Anesthesiology</em>. 2022;136(1):31-81. PMID: 34762729</li>
-                        <li>Berkow LC, et al. Management of the Difficult Airway: A Closed Claims Analysis. <em>Anesthesiology</em>. 2009;111(5):1031-1038. PMID: 19809283</li>
-                        <li>Vascular Events In Noncardiac Surgery Patients Cohort Evaluation (VISION) Study. <em>Anesthesiology</em>. 2013;118(6):1332-1340</li>
-                    </ul>
-                </div>
-
-                <div style="background: #F0FDF4; padding: 20px; border-radius: 12px; margin-bottom: 16px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">🩸 Massive Hemorrhage & Transfusion</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>ASA Practice Guidelines for Perioperative Blood Management. <em>Anesthesiology</em>. 2015;122(2):241-275. PMID: 25545654</li>
-                        <li>Spahn DR, et al. The European Guideline on Management of Major Bleeding. <em>Crit Care</em>. 2019;23(1):98. PMID: 30917843</li>
-                        <li>Holcomb JB, et al. Transfusion of plasma, platelets, and red blood cells in a 1:1:1 vs 1:1:2 ratio. <em>JAMA</em>. 2015;313(5):471-482. PMID: 25647203</li>
-                    </ul>
-                </div>
-
-                <div style="background: #EFF6FF; padding: 20px; border-radius: 12px;">
-                    <h4 style="font-size: 17px; font-weight: 600; color: #1E293B; margin-bottom: 12px;">⚠️ Anaphylaxis & Allergic Reactions</h4>
-                    <ul style="color: #475569; line-height: 1.9; padding-left: 24px; font-size: 14px;">
-                        <li>Shaker MS, et al. Anaphylaxis: A 2020 Practice Parameter Update. <em>Ann Allergy Asthma Immunol</em>. 2020;125(4):346-373. PMID: 32846301</li>
-                        <li>Dewachter P, et al. Perioperative Anaphylaxis. <em>Anesthesiology</em>. 2009;111(5):1141-1150. PMID: 19858877</li>
-                        <li>Mertes PM, et al. Reducing the Risk of Anaphylaxis During Anesthesia. <em>J Allergy Clin Immunol Pract</em>. 2020;8(8):2544-2555. PMID: 32505781</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 20px; border-radius: 8px; margin-top: 32px;">
-                <p style="color: #78350F; font-size: 14px; line-height: 1.8; margin: 0;">
-                    <strong>⚠️ Important:</strong> These protocols are educational resources and should be used in conjunction with institutional policies, local resources, and clinical judgment. Guidelines are updated regularly - verify current recommendations from primary sources. In an emergency, activate your institutional emergency response system and utilize available resources including subspecialty consultants.
-                </p>
-            </div>
-        </div>
-    </div>
 
 </body>
 </html>
