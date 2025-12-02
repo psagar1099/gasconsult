@@ -6562,7 +6562,7 @@ TERMS_HTML = """<!DOCTYPE html>
         <main class="main-content">
             <div class="content-card">
                 <h1>Terms of Service</h1>
-                <p class="last-updated">Last Updated: January 2025</p>
+                <p class="last-updated">Last Updated: December 2025</p>
 
                 <div class="notice-box">
                     <h3>CRITICAL MEDICAL DISCLAIMER</h3>
@@ -7497,7 +7497,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         <main class="main-content">
             <div class="content-card">
                 <h1>Privacy Policy</h1>
-                <p class="last-updated">Last Updated: January 2025</p>
+                <p class="last-updated">Last Updated: December 2025</p>
 
                 <div class="highlight-box">
                     <strong>CRITICAL NOTICE:</strong> DO NOT enter any Protected Health Information (PHI) or personally identifiable patient data.
