@@ -10527,6 +10527,12 @@ CRISIS_HTML = """<!DOCTYPE html>
                     // Don't toggle if clicking on a link inside the card
                     if (e.target.tagName === 'A') return;
 
+                    // Close all other cards first
+                    protocolCards.forEach(c => {
+                        if (c !== this) c.classList.remove('expanded');
+                    });
+
+                    // Then toggle this card
                     this.classList.toggle('expanded');
                 });
             });
@@ -16353,15 +16359,15 @@ def index():
             # Customize search based on question type
             if is_followup:
                 # Broader search for follow-ups
-                search_term = f'({q}) AND ("2005/01/01"[PDAT] : "3000"[PDAT])'
+                search_term = f'({q}) AND ("2010/01/01"[PDAT] : "3000"[PDAT])'
             else:
-                # Customize search filters based on question type
+                # Customize search filters based on question type with tighter date ranges
                 if question_type == 'dosing':
                     # Prioritize guidelines and reviews for dosing questions
                     search_term = (
                         f'({q}) AND '
                         f'(guideline[pt] OR "practice guideline"[pt] OR review[pt] OR meta-analysis[pt]) AND '
-                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
                     )
                 elif question_type == 'safety':
                     # Include adverse effects and safety studies
@@ -16369,7 +16375,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'guideline[pt] OR "adverse effects"[sh] OR safety[ti]) AND '
-                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
                     )
                 elif question_type == 'comparison':
                     # Prioritize comparative studies
@@ -16377,7 +16383,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"comparative study"[pt]) AND '
-                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
                     )
                 else:
                     # Default search (general, mechanism, management)
@@ -16385,7 +16391,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                        f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
                     )
 
             # Add negation modifier if detected
@@ -16407,12 +16413,14 @@ def index():
             is_established_topic = any(topic in query_lower for topic in well_established_topics)
 
             # Adjust date range for established topics (go back further for classic evidence)
-            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2015/01/01"[PDAT] : "3000"[PDAT])'
+            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
 
-            # Tier 1: Broader search WITHOUT anesthesiology restriction first (better recall)
+            # Tier 1: Search WITH anesthesiology context from the start for better precision
             try:
-                print(f"[DEBUG] Tier 1: Searching PubMed (broad, high-quality filters)...")
-                handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=25, sort="relevance")
+                print(f"[DEBUG] Tier 1: Searching PubMed with anesthesiology context...")
+                # Add anesthesiology-related terms to improve relevance
+                anesth_context = '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR perioperative[tiab])'
+                handle = Entrez.esearch(db="pubmed", term=f'{search_term} AND {anesth_context}', retmax=20, sort="relevance")
                 result = Entrez.read(handle)
                 ids = result.get("IdList", [])
                 print(f"[DEBUG] Tier 1 found {len(ids)} papers")
@@ -16420,11 +16428,11 @@ def index():
                 print(f"[ERROR] Tier 1 search failed: {e}")
                 ids = []
 
-            # Tier 2: Add anesthesiology MeSH if we got too few results
+            # Tier 2: Broaden to remove anesthesiology restriction if needed
             if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 2: Adding anesthesiology MeSH refinement...")
-                    handle = Entrez.esearch(db="pubmed", term=f'anesthesiology[MeSH Terms] AND {search_term}', retmax=25, sort="relevance")
+                    print(f"[DEBUG] Tier 2: Broadening without anesthesiology restriction...")
+                    handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=20, sort="relevance")
                     result = Entrez.read(handle)
                     tier2_ids = result.get("IdList", [])
                     # Combine and deduplicate
@@ -16433,12 +16441,16 @@ def index():
                 except Exception as e:
                     print(f"[ERROR] Tier 2 search failed: {e}")
 
-            # Tier 3: Further broaden if still insufficient (remove publication type restrictions)
+            # Tier 3: Controlled broadening - keep high-quality study filters but extend date range
             if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: Broadening to all publication types...")
-                    broader_term = f'({q}) AND {date_range}'
-                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=25, sort="relevance")
+                    print(f"[DEBUG] Tier 3: Extending date range while maintaining quality filters...")
+                    broader_term = (
+                        f'({q}) AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR guideline[pt]) AND '
+                        f'("2010/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                    handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=15, sort="relevance")
                     result = Entrez.read(handle)
                     tier3_ids = result.get("IdList", [])
                     # Combine and deduplicate
@@ -16447,12 +16459,16 @@ def index():
                 except Exception as e:
                     print(f"[ERROR] Tier 3 search failed: {e}")
 
-            # Tier 4: Last resort - very broad search with anesthesia-related terms
+            # Tier 4: Last resort - broader search but still maintain date filter and prefer review articles
             if len(ids) < 3 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 4: Very broad search with anesthesia terms...")
-                    anesthesia_boost = f'({q}) AND (anesthesia OR anesthetic OR perioperative OR intraoperative)'
-                    handle = Entrez.esearch(db="pubmed", term=anesthesia_boost, retmax=20, sort="relevance")
+                    print(f"[DEBUG] Tier 4: Broader search with anesthesia context, extended date range...")
+                    anesthesia_boost = (
+                        f'({q}) AND (anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab]) AND '
+                        f'(review[pt] OR "randomized controlled trial"[pt] OR "clinical trial"[pt]) AND '
+                        f'("2005/01/01"[PDAT] : "3000"[PDAT])'
+                    )
+                    handle = Entrez.esearch(db="pubmed", term=anesthesia_boost, retmax=15, sort="relevance")
                     result = Entrez.read(handle)
                     tier4_ids = result.get("IdList", [])
                     # Combine and deduplicate
