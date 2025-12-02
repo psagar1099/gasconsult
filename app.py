@@ -997,6 +997,52 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -1638,9 +1684,14 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -1959,6 +2010,20 @@ PREOP_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
 
         // Radio button selection handler
         document.querySelectorAll('.radio-option').forEach(option => {
@@ -2566,6 +2631,52 @@ HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -3727,9 +3838,14 @@ HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -4027,6 +4143,20 @@ HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
 
         // Scroll to bottom of messages
         function scrollToBottom() {
@@ -4418,6 +4548,52 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -5073,9 +5249,14 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -5138,6 +5319,20 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
         </main>
     </div>
@@ -5344,6 +5539,52 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -5999,9 +6240,14 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -6248,6 +6494,52 @@ TERMS_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -6537,9 +6829,14 @@ TERMS_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -6978,6 +7275,20 @@ TERMS_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
 </body>
 </html>
@@ -7180,6 +7491,52 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -7472,9 +7829,14 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -7816,6 +8178,20 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
 </body>
 </html>
@@ -8027,6 +8403,52 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -8477,9 +8899,14 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
@@ -8740,6 +9167,102 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 7. Confidence Badge: High (15 RCTs + 3 meta-analyses found)
                     </code>
                 </div>
+            </div>
+
+            <!-- AI Self-Verification Protocol -->
+            <div class="content-card">
+                <h2>AI Self-Verification & Quality Assurance</h2>
+                <p>
+                    To minimize errors and ensure clinical accuracy, every AI-generated response undergoes a rigorous internal self-verification protocol before being presented. This multi-layered quality control system operates transparently within each answer generation process.
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon-box green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="12" y1="18" x2="12" y2="12"></line>
+                                <line x1="9" y1="15" x2="15" y2="15"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>1. Dosing Accuracy Verification</h3>
+                            <p>All drug doses are cross-checked against ASA guidelines, FDA package inserts, and major anesthesiology textbooks (Miller's, Barash, Stoelting's). Out-of-range doses trigger automatic correction.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>2. Contraindication & Safety Check</h3>
+                            <p>Before finalizing answers, the AI explicitly verifies that absolute contraindications are mentioned and critical safety warnings are not omitted. Missing warnings trigger revision.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                <line x1="9" y1="10" x2="15" y2="10"></line>
+                                <line x1="9" y1="14" x2="15" y2="14"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>3. Citation Verification Protocol</h3>
+                            <p>Each cited paper's abstract is verified to ACTUALLY support the specific claim made. Citations that don't directly support statements are automatically removed to prevent misleading references.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box amber">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>4. Guideline Consistency Check</h3>
+                            <p>Answers are cross-referenced against current ASA, ESA, and specialty society guidelines. Conflicts with established practice guidelines trigger clarification or revision.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>5. Self-Questioning Protocol</h3>
+                            <p>The AI asks itself "How do I know this is correct?" before each answer. Uncertain claims are either verified against provided papers or explicitly acknowledged as uncertain.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <path d="m9 11 3 3L22 4"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>6. Completeness Validation</h3>
+                            <p>For dosing questions: verified inclusion of route, typical range, and maximum doses. For safety questions: confirmed coverage of both common and serious risks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="margin-top: 1.5rem;">
+                    <strong>Dynamic Precision Control:</strong> The AI's response temperature (creativity vs. precision) is automatically adjusted based on query type. Dosing questions use ultra-low temperature (0.05) for exact accuracy, while safety questions use 0.1 for factual rigor. This ensures clinical precision where it matters most.
+                </p>
             </div>
 
             <!-- Limitations -->
@@ -9009,6 +9532,52 @@ CRISIS_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -9672,9 +10241,14 @@ CRISIS_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link active">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
 
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -10928,6 +11502,52 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -12009,9 +12629,14 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -12680,6 +13305,20 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
         </main>
     </div>
@@ -13000,6 +13639,52 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn {
@@ -13684,9 +14369,14 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
-                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
-                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -14727,6 +15417,52 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -15488,6 +16224,52 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -16035,7 +16817,14 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <a href="/hypotension" class="nav-link active">IOH Predictor</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link" style="color: var(--blue-600); font-weight: 600;">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
@@ -16364,6 +17153,20 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
 </body>
 </html>
@@ -16940,6 +17743,20 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
 </body>
 </html>
