@@ -11277,52 +11277,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -12375,6 +12329,228 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             color: var(--gray-600);
         }
 
+        /* Reference Button & Modal Styles */
+        .ref-btn {
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border: 1px solid var(--blue-200);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            margin-left: 12px;
+        }
+
+        .ref-btn:hover {
+            background: var(--blue-100);
+            border-color: var(--blue-300);
+            transform: translateY(-1px);
+        }
+
+        .ref-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 28px 32px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .modal-close {
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-200);
+            transform: rotate(90deg);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            color: var(--gray-600);
+        }
+
+        .modal-body {
+            padding: 24px 32px 32px;
+        }
+
+        .ref-section {
+            margin-bottom: 28px;
+        }
+
+        .ref-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ref-section-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--blue-600);
+        }
+
+        .ref-item {
+            background: var(--gray-50);
+            border-left: 3px solid var(--blue-500);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .ref-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-item strong {
+            color: var(--gray-900);
+        }
+
+        .ref-item a {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .ref-item a:hover {
+            text-decoration: underline;
+        }
+
+        .pmid-badge {
+            background: var(--blue-100);
+            color: var(--blue-700);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-height: 90vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .modal-header {
+                padding: 20px 20px 16px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-title {
+                font-size: 19px;
+            }
+
+            .ref-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+                margin-left: 8px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -12404,14 +12580,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -12468,7 +12639,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Propofol</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('propofol')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Diprivan</div>
                         </div>
                         <div class="concentration-badge">10 mg/mL</div>
@@ -12504,7 +12675,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Etomidate</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('etomidate')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Amidate</div>
                         </div>
                         <div class="concentration-badge">2 mg/mL</div>
@@ -12540,7 +12711,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Ketamine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('ketamine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Ketalar</div>
                         </div>
                         <div class="concentration-badge">50/100 mg/mL</div>
@@ -12591,7 +12762,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Fentanyl</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('fentanyl')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Sublimaze</div>
                         </div>
                         <div class="concentration-badge">50 mcg/mL</div>
@@ -12642,7 +12813,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Succinylcholine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('succinylcholine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Anectine</div>
                         </div>
                         <div class="concentration-badge">20 mg/mL</div>
@@ -12678,7 +12849,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Rocuronium</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('rocuronium')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Zemuron</div>
                         </div>
                         <div class="concentration-badge">10 mg/mL</div>
@@ -12729,7 +12900,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Phenylephrine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('phenylephrine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Neo-Synephrine</div>
                         </div>
                         <div class="concentration-badge">100 mcg/mL</div>
@@ -12765,7 +12936,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Ephedrine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('ephedrine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">—</div>
                         </div>
                         <div class="concentration-badge">5 mg/mL</div>
@@ -12816,7 +12987,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Sugammadex</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('sugammadex')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Bridion</div>
                         </div>
                         <div class="concentration-badge">100 mg/mL</div>
@@ -12867,7 +13038,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Lidocaine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('lidocaine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Xylocaine</div>
                         </div>
                         <div class="concentration-badge">1% = 10 mg/mL</div>
@@ -12941,6 +13112,13 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
+        <!-- Subtle References Note -->
+        <div style="max-width: 1200px; margin: 16px auto 24px; padding: 0 20px; text-align: center;">
+            <p style="color: #64748B; font-size: 13px; line-height: 1.6;">
+                Dosing based on FDA package inserts and Miller's Anesthesia 9th ed, Barash Clinical Anesthesia 8th ed, Stoelting's Pharmacology 5th ed.
+            </p>
+        </div>
+
     </main>
 
     <!-- Glassmorphism Footer -->
@@ -12982,7 +13160,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <div class="crisis-modal-content">
                 <div class="protocol-grid">
                     <button class="protocol-btn">
-                        <div class="protocol-title">Malignant Hyperthermia</div>
+                        <div class="protocol-title">Malignant Hyperthermia</div><button class="ref-btn" onclick="openCrisisRefModal('malignant-hyperthermia')" title="View evidence & guidelines" style="margin-top: 8px;"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>Evidence</button>
                         <div class="protocol-desc">Dantrolene 2.5 mg/kg, call MH hotline</div>
                     </button>
                     <button class="protocol-btn">
@@ -12990,7 +13168,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         <div class="protocol-desc">20% Intralipid bolus + infusion</div>
                     </button>
                     <button class="protocol-btn">
-                        <div class="protocol-title">Anaphylaxis</div>
+                        <div class="protocol-title">Anaphylaxis</div><button class="ref-btn" onclick="openCrisisRefModal('anaphylaxis')" title="View evidence & guidelines" style="margin-top: 8px;"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>Evidence</button>
                         <div class="protocol-desc">Epinephrine, fluids, steroids</div>
                     </button>
                     <button class="protocol-btn">
@@ -13080,20 +13258,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
     </script>
         </main>
     </div>
@@ -16837,9 +17001,19 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             {% endif %}
 
             <!-- Methodology & References Section -->
-            <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px;">
-                    <h2 style="font-size: 24px; font-weight: 700; color: #1E293B; margin-bottom: 24px; text-align: center;">📊 Algorithm Methodology & Evidence Base</h2>
+            <details style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+                <summary style="background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+                    <svg style="width: 24px; height: 24px; color: #2563EB; flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span style="font-size: 18px; font-weight: 700; color: #1E293B; flex: 1;">Algorithm Methodology & Evidence Base</span>
+                    <svg style="width: 20px; height: 20px; color: #64748B; transition: transform 0.3s ease;" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 12px;">
 
                     <div style="margin-bottom: 28px;">
                         <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Data Sources & Development</h3>
@@ -16897,7 +17071,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </ol>
                     </div>
                 </div>
-            </div>
+            </details>
 
         </main>
 
