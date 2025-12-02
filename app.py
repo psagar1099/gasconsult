@@ -13562,6 +13562,41 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
+    </script>
+
+    <!-- Dosing References & Evidence Base -->
+    <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
+        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Dosing References & Guidelines</h2>
+            
+            <p style="color: #475569; line-height: 1.8; margin-bottom: 32px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
+                All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors, comorbidities, and clinical context.
+            </p>
+
+            <div style="margin-bottom: 32px;">
+                <h3 style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;">Primary References by Drug Class</h3>
+                
+                <div style="background: #F8FAFC; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #3B82F6;">
+                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💉 Induction Agents</h4>
+                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
+                        <li><strong>Propofol:</strong> Diprivan® Package Insert. Fresenius Kabi. 2022. Initial dose: 1.5-2.5 mg/kg IV; elderly/ASA 3-4: reduce by 25-50%</li>
+                        <li><strong>Etomidate:</strong> Amidate® Package Insert. Hospira. 2021. Initial dose: 0.2-0.4 mg/kg IV over 30-60 seconds</li>
+                        <li><strong>Ketamine:</strong> Ketalar® Package Insert. Par Pharmaceutical. 2022. Induction: 1-2 mg/kg IV, 4-5 mg/kg IM</li>
+                        <li>Barash PG, et al. <em>Clinical Anesthesia</em>. 8th ed. Wolters Kluwer; 2017:Chapter 25</li>
+                        <li>Miller RD, et al. <em>Miller's Anesthesia</em>. 9th ed. Elsevier; 2020:Chapter 30 (Intravenous Anesthetics)</li>
+                    </ul>
+                </div>
+
+                <div style="background: #FEF2F2; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #EF4444;">
+                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💊 Opioids</h4>
+                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
+                        <li><strong>Fentanyl:</strong> Sublimaze® Package Insert. Akorn. 2022. Moderate dose: 2-20 mcg/kg; high dose: 20-50 mcg/kg</li>
+                        <li><strong>Sufentanil:</strong> Sufenta® Package Insert. Janssen. 2019. Induction supplement: 0.5-30 mcg/kg</li>
+                        <li><strong>Remifentanil:</strong> Ultiva® Package Insert. GlaxoSmithKline. 2021. Induction: 0.5-1 mcg/kg over 30-60 sec</li>
+                        <li><strong>Morphine:</strong> Morphine Sulfate Package Insert. Multiple manufacturers. Titrate 2-10 mg IV q2-4h PRN</li>
+                        <li>Stoelting RK, Hillier SC. <em>Pharmacology & Physiology in Anesthetic Practice</em>. 5th ed. Wolters Kluwer; 2015:Chapter 3</li>
+                    </ul>
+                </div>
 
         // Drug References Database
         const drugReferences = {
@@ -13720,6 +13755,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             }
         });
     </script>
+        </main>
+    </div>
+
         </main>
     </div>
 
