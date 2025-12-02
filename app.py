@@ -16070,6 +16070,582 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
+DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Difficult Airway Predictor — gasconsult.ai</title>
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
+            --green-50: #F0FDF4;
+            --green-500: #22C55E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-back:hover {
+            background: var(--blue-50);
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--blue-100);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 14px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .checkbox-option:hover {
+            border-color: var(--blue-300);
+            background: var(--blue-50);
+        }
+
+        .checkbox-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 32px;
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .risk-level {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+
+        .risk-score {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .risk-description {
+            font-size: 18px;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+
+        .risk-factors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .risk-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .recommendation-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .recommendation-card h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .recommendation-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendation-card li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            color: var(--gray-700);
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .recommendation-card li:last-child {
+            border-bottom: none;
+        }
+
+        .checkmark {
+            color: var(--green-500);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .disclaimer {
+            background: var(--amber-50);
+            border-left: 4px solid var(--amber-500);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-top: 24px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid var(--gray-200);
+            border-top: 3px solid var(--blue-600);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/?clear=1" class="nav-back">← Back to Home</a>
+
+        <div class="header">
+            <h1>🔍 Difficult Airway Predictor</h1>
+            <p>AI-powered risk assessment based on validated airway evaluation criteria</p>
+        </div>
+
+        {% if prediction %}
+        <div class="result-card">
+            <div class="risk-level">{{ prediction.risk_category }}</div>
+            <div class="risk-score">{{ prediction.risk_score }}/100</div>
+            <div class="risk-description">{{ prediction.risk_label }}</div>
+            <div class="risk-factors">
+                {% for factor in prediction.factors %}
+                <span class="risk-badge">{{ factor }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="recommendation-card">
+            <h3>🎯 AI-Powered Airway Management Plan</h3>
+            {{ prediction.ai_explanation|safe }}
+        </div>
+
+        <div class="recommendation-card">
+            <h3>📋 Suggested Equipment & Preparation</h3>
+            <ul>
+                {% for item in prediction.equipment %}
+                <li><span class="checkmark">✓</span>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="recommendation-card">
+            <h3>🔄 Backup Plan Recommendations</h3>
+            <ul>
+                {% for item in prediction.backup_plan %}
+                <li><span class="checkmark">✓</span>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/difficult-airway">
+            <div class="card">
+                <div class="section-title">
+                    <span class="section-icon">1</span>
+                    Basic Demographics
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" required min="0" max="120" value="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="sex">Sex</label>
+                        <select id="sex" name="sex" required>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" required min="20" max="300" value="70">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" required min="100" max="250" value="170">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span class="section-icon">2</span>
+                    Airway Assessment Scores
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="mallampati">Mallampati Score</label>
+                        <select id="mallampati" name="mallampati" required>
+                            <option value="1">Class 1 - Soft palate, fauces, uvula, pillars visible</option>
+                            <option value="2" selected>Class 2 - Soft palate, fauces, uvula visible</option>
+                            <option value="3">Class 3 - Soft palate, base of uvula visible</option>
+                            <option value="4">Class 4 - Hard palate only visible</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="thyromental_distance">Thyromental Distance</label>
+                        <select id="thyromental_distance" name="thyromental_distance" required>
+                            <option value=">6.5">Normal (>6.5 cm)</option>
+                            <option value="6-6.5">Borderline (6-6.5 cm)</option>
+                            <option value="<6">Reduced (<6 cm)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mouth_opening">Mouth Opening (Interincisor Distance)</label>
+                        <select id="mouth_opening" name="mouth_opening" required>
+                            <option value=">4">Normal (>4 cm)</option>
+                            <option value="3-4">Reduced (3-4 cm)</option>
+                            <option value="<3">Severely reduced (<3 cm)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="neck_extension">Neck Extension/Mobility</label>
+                        <select id="neck_extension" name="neck_extension" required>
+                            <option value="normal">Normal (>90°)</option>
+                            <option value="reduced">Reduced (35-90°)</option>
+                            <option value="severely_reduced">Severely reduced (<35°)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="neck_circumference">Neck Circumference (cm)</label>
+                        <input type="number" id="neck_circumference" name="neck_circumference" min="20" max="80" step="0.5" placeholder="e.g., 40">
+                        <span class="help-text">Optional. >43cm (M) or >41cm (F) concerning</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span class="section-icon">3</span>
+                    Anatomical Features
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="receding_mandible">
+                        <span>Receding mandible or micrognathia</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="prominent_teeth">
+                        <span>Prominent upper incisors or buck teeth</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="beard">
+                        <span>Significant facial hair / beard</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="macroglossia">
+                        <span>Large tongue (macroglossia)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="short_neck">
+                        <span>Short, thick neck</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="cervical_spine">
+                        <span>Cervical spine disease or limited mobility</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="features" value="airway_mass">
+                        <span>Airway mass, tumor, or abscess</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="section-title">
+                    <span class="section-icon">4</span>
+                    Clinical History
+                </div>
+                <div class="form-group full-width">
+                    <label for="previous_difficult">Previous Difficult Intubation?</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="previous_difficult" value="no" checked>
+                            <span>No</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="previous_difficult" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="previous_difficult" value="unknown">
+                            <span>Unknown</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group full-width" style="margin-top: 16px;">
+                    <label for="osa_risk">Obstructive Sleep Apnea (OSA) Risk</label>
+                    <select id="osa_risk" name="osa_risk" required>
+                        <option value="low">Low risk - No symptoms</option>
+                        <option value="moderate">Moderate - Some STOP-BANG criteria</option>
+                        <option value="high">High - Known OSA or 3+ STOP-BANG criteria</option>
+                    </select>
+                    <span class="help-text">STOP-BANG: Snoring, Tired, Observed apnea, BP, BMI>35, Age>50, Neck>40cm, Gender-male</span>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Calculate Airway Risk & Get AI Recommendations</button>
+        </form>
+
+        <div class="disclaimer">
+            <strong>⚠️ Educational Tool Only:</strong> This predictor is for educational purposes and clinical guidance. It does not replace comprehensive airway assessment and clinical judgment. Always prepare for difficult airway management regardless of predicted risk.
+        </div>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+    </script>
+</body>
+</html>
+"""
+
 @app.route("/stream")
 @csrf.exempt  # SSE endpoint uses GET requests, CSRF not applicable
 def stream():
@@ -16817,6 +17393,244 @@ def clear_chat():
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
+@app.route("/difficult-airway", methods=["GET", "POST"])
+def difficult_airway():
+    """AI-Powered Difficult Airway Risk Predictor"""
+    if request.method == "GET":
+        return render_template_string(DIFFICULT_AIRWAY_HTML, prediction=None)
+
+    # Collect form data
+    age = int(request.form.get("age", 0))
+    sex = sanitize_user_query(request.form.get("sex", ""))
+    weight = float(request.form.get("weight", 0))
+    height = float(request.form.get("height", 0))
+    mallampati = int(request.form.get("mallampati", 2))
+    thyromental_distance = sanitize_user_query(request.form.get("thyromental_distance", ""))
+    mouth_opening = sanitize_user_query(request.form.get("mouth_opening", ""))
+    neck_extension = sanitize_user_query(request.form.get("neck_extension", ""))
+    neck_circumference_input = request.form.get("neck_circumference", "")
+    neck_circumference = float(neck_circumference_input) if neck_circumference_input else None
+    features = request.form.getlist("features")
+    previous_difficult = sanitize_user_query(request.form.get("previous_difficult", "no"))
+    osa_risk = sanitize_user_query(request.form.get("osa_risk", "low"))
+
+    # Calculate BMI
+    bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else 0
+
+    # Comprehensive Risk Scoring System (0-100 scale)
+    # Based on validated predictors: LEMON, Wilson, El-Ganzouri, STOP-BANG
+    risk_score = 0
+    risk_factors = []
+
+    # 1. Mallampati Score (0-25 points)
+    mallampati_scores = {1: 0, 2: 8, 3: 17, 4: 25}
+    risk_score += mallampati_scores.get(mallampati, 0)
+    if mallampati >= 3:
+        risk_factors.append(f"Mallampati {mallampati}")
+
+    # 2. Thyromental Distance (0-20 points)
+    if "<6" in thyromental_distance:
+        risk_score += 20
+        risk_factors.append("Short thyromental distance")
+    elif "6-6.5" in thyromental_distance:
+        risk_score += 10
+        risk_factors.append("Borderline thyromental distance")
+
+    # 3. Mouth Opening (0-15 points)
+    if "<3" in mouth_opening:
+        risk_score += 15
+        risk_factors.append("Limited mouth opening")
+    elif "3-4" in mouth_opening:
+        risk_score += 8
+        risk_factors.append("Reduced mouth opening")
+
+    # 4. Neck Extension/Mobility (0-15 points)
+    if "severely_reduced" in neck_extension:
+        risk_score += 15
+        risk_factors.append("Severely limited neck mobility")
+    elif "reduced" in neck_extension:
+        risk_score += 8
+        risk_factors.append("Limited neck extension")
+
+    # 5. BMI/Obesity (0-10 points)
+    if bmi >= 35:
+        risk_score += 10
+        risk_factors.append(f"Obesity (BMI {bmi})")
+    elif bmi >= 30:
+        risk_score += 5
+        risk_factors.append(f"Overweight (BMI {bmi})")
+
+    # 6. Neck Circumference (0-8 points)
+    if neck_circumference:
+        if (sex == "male" and neck_circumference > 43) or (sex == "female" and neck_circumference > 41):
+            risk_score += 8
+            risk_factors.append(f"Large neck ({neck_circumference}cm)")
+
+    # 7. Anatomical Features (3-10 points each)
+    feature_scores = {
+        "receding_mandible": (10, "Receding mandible"),
+        "prominent_teeth": (8, "Prominent incisors"),
+        "beard": (3, "Beard present"),
+        "macroglossia": (8, "Macroglossia"),
+        "short_neck": (7, "Short neck"),
+        "cervical_spine": (12, "Cervical spine limitation"),
+        "airway_mass": (15, "Airway mass/tumor")
+    }
+    for feature in features:
+        score, label = feature_scores.get(feature, (0, ""))
+        risk_score += score
+        risk_factors.append(label)
+
+    # 8. Previous Difficult Intubation (0-15 points) - MOST IMPORTANT PREDICTOR
+    if previous_difficult == "yes":
+        risk_score += 15
+        risk_factors.append("Previous difficult intubation")
+    elif previous_difficult == "unknown":
+        risk_score += 5
+
+    # 9. OSA Risk (0-10 points)
+    osa_scores = {"low": 0, "moderate": 5, "high": 10}
+    osa_score = osa_scores.get(osa_risk, 0)
+    risk_score += osa_score
+    if osa_risk == "high":
+        risk_factors.append("High OSA risk")
+    elif osa_risk == "moderate":
+        risk_factors.append("Moderate OSA risk")
+
+    # 10. Age factor (0-5 points)
+    if age > 55:
+        risk_score += 5
+        risk_factors.append("Age >55")
+
+    # Cap risk score at 100
+    risk_score = min(risk_score, 100)
+
+    # Categorize risk level
+    if risk_score < 20:
+        risk_category = "LOW RISK"
+        risk_label = "Likely Normal Intubation"
+        risk_color = "#22C55E"
+    elif risk_score < 40:
+        risk_category = "MODERATE RISK"
+        risk_label = "Potentially Difficult - Prepare Equipment"
+        risk_color = "#F59E0B"
+    elif risk_score < 60:
+        risk_category = "HIGH RISK"
+        risk_label = "Likely Difficult - Advanced Planning Required"
+        risk_color = "#EF4444"
+    else:
+        risk_category = "VERY HIGH RISK"
+        risk_label = "Very Difficult - Consider Awake Technique"
+        risk_color = "#DC2626"
+
+    # Generate equipment recommendations based on risk
+    equipment = [
+        "Standard direct laryngoscope (Mac/Miller blades)",
+        "Video laryngoscope (GlideScope, C-MAC, or equivalent)"
+    ]
+
+    if risk_score >= 30:
+        equipment.extend([
+            "Bougie or stylet immediately available",
+            "Supraglottic airway device (LMA) at bedside",
+            "Smaller endotracheal tubes (6.0, 6.5, 7.0)"
+        ])
+
+    if risk_score >= 50:
+        equipment.extend([
+            "Fiberoptic bronchoscope prepared and tested",
+            "Difficult airway cart immediately available",
+            "Emergency cricothyrotomy kit at bedside"
+        ])
+
+    if "airway_mass" in features or "cervical_spine" in features:
+        equipment.append("Consider ENT/surgery backup for emergency airway access")
+
+    # Generate backup plan recommendations
+    backup_plan = [
+        "Review ASA Difficult Airway Algorithm with team",
+        "Ensure adequate preoxygenation (target EtO2 >90%)"
+    ]
+
+    if risk_score >= 30:
+        backup_plan.extend([
+            "Prepare for fiberoptic intubation if direct laryngoscopy fails",
+            "Have supraglottic airway immediately available",
+            "Designate team member to call for help early",
+            "Consider THRIVE or apneic oxygenation technique"
+        ])
+
+    if risk_score >= 50:
+        backup_plan.extend([
+            "Strongly consider awake fiberoptic intubation",
+            "Two experienced providers in room for induction",
+            "Have surgeon/ENT available for emergency cricothyrotomy",
+            "Consider regional anesthesia as alternative if feasible"
+        ])
+
+    if previous_difficult == "yes":
+        backup_plan.insert(0, "OBTAIN PREVIOUS ANESTHESIA RECORDS - Review what worked before")
+
+    # Generate AI explanation using GPT-4o
+    try:
+        patient_summary = f"""Patient airway assessment:
+- Demographics: {age}yo {sex}, BMI {bmi}
+- Mallampati: Class {mallampati}
+- Thyromental distance: {thyromental_distance}
+- Mouth opening: {mouth_opening}
+- Neck mobility: {neck_extension}
+- Neck circumference: {neck_circumference if neck_circumference else 'Not measured'}cm
+- Anatomical concerns: {', '.join([f.replace('_', ' ') for f in features]) if features else 'None'}
+- Previous difficult intubation: {previous_difficult}
+- OSA risk: {osa_risk}
+- Calculated risk score: {risk_score}/100 ({risk_category})
+
+Key risk factors identified: {', '.join(risk_factors) if risk_factors else 'Minimal risk factors'}"""
+
+        prompt = f"""You are an expert anesthesiologist providing airway management guidance.
+
+{patient_summary}
+
+Please provide a concise, evidence-based airway management plan including:
+1. Brief interpretation of the risk score and key factors
+2. Specific intubation strategy recommendation (e.g., video laryngoscopy first-line, awake fiberoptic, etc.)
+3. Patient positioning tips for this specific case
+4. One key clinical pearl for managing this patient's airway
+
+Format your response in clear paragraphs with <strong> tags for key points. Keep it under 200 words and clinically actionable."""
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=400
+        )
+
+        ai_explanation = response.choices[0].message.content.strip()
+
+    except Exception as e:
+        print(f"[ERROR] AI explanation generation failed: {e}")
+        ai_explanation = f"""<p><strong>Risk Assessment:</strong> This patient has a calculated risk score of {risk_score}/100, classified as <strong>{risk_category}</strong>.</p>
+
+<p><strong>Primary Strategy:</strong> {"Awake fiberoptic intubation should be strongly considered" if risk_score >= 60 else "Video laryngoscopy as first-line approach" if risk_score >= 30 else "Standard direct laryngoscopy with video backup immediately available"}.</p>
+
+<p><strong>Key Factors:</strong> {', '.join(risk_factors[:3]) if len(risk_factors) >= 3 else ', '.join(risk_factors) if risk_factors else 'Minimal risk factors identified'}.</p>
+
+<p><strong>Clinical Pearl:</strong> Always have a backup plan and prepare for the difficult airway - even low-risk patients can surprise you.</p>"""
+
+    prediction = {
+        "risk_score": risk_score,
+        "risk_category": risk_category,
+        "risk_label": risk_label,
+        "risk_color": risk_color,
+        "factors": risk_factors,
+        "equipment": equipment,
+        "backup_plan": backup_plan,
+        "ai_explanation": ai_explanation
+    }
+
+    return render_template_string(DIFFICULT_AIRWAY_HTML, prediction=prediction)
 
 @app.route("/terms")
 def terms():
