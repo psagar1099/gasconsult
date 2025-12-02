@@ -16646,6 +16646,243 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 </html>
 """
 
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent Generator — gasconsult.ai</title>
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-500: #64748B;
+            --gray-700: #334155;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-top: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: var(--gray-500);
+        }
+
+        .nav-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .nav-back:hover {
+            background: var(--blue-50);
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .result {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 24px;
+        }
+
+        .result h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--blue-600);
+        }
+
+        .result h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 24px 0 12px;
+            color: var(--gray-900);
+        }
+
+        .result p, .result li {
+            color: var(--gray-700);
+            line-height: 1.8;
+            margin-bottom: 12px;
+        }
+
+        .result ul {
+            padding-left: 24px;
+        }
+
+        .disclaimer {
+            background: var(--amber-50);
+            border-left: 4px solid var(--amber-500);
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/?clear=1" class="nav-back">← Back to Home</a>
+
+        <div class="header">
+            <h1>📋 Informed Consent Generator</h1>
+            <p>AI-powered evidence-based informed consent discussions</p>
+        </div>
+
+        {% if consent %}
+        <div class="result">
+            {{ consent.content|safe }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/informed-consent">
+            <div class="card">
+                <div class="form-group">
+                    <label for="procedure">Procedure Type</label>
+                    <select id="procedure" name="procedure" required>
+                        <option value="">-- Select Procedure --</option>
+                        <option value="general_anesthesia">General Anesthesia</option>
+                        <option value="spinal_anesthesia">Spinal Anesthesia</option>
+                        <option value="epidural">Epidural Anesthesia</option>
+                        <option value="regional_block">Regional Nerve Block</option>
+                        <option value="mac_sedation">MAC/Sedation</option>
+                        <option value="cesarean">Cesarean Section (Anesthesia)</option>
+                        <option value="labor_epidural">Labor Epidural</option>
+                        <option value="cardiac_surgery">Cardiac Surgery (Anesthesia)</option>
+                        <option value="neurosurgery">Neurosurgery (Anesthesia)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient_factors">Patient-Specific Factors (Optional)</label>
+                    <textarea id="patient_factors" name="patient_factors" placeholder="e.g., Age 65, diabetes, on aspirin, previous back surgery, BMI 35..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="surgical_procedure">Surgical Procedure Details (Optional)</label>
+                    <input type="text" id="surgical_procedure" name="surgical_procedure" placeholder="e.g., Total knee replacement, Laparoscopic cholecystectomy...">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Generate Informed Consent Discussion</button>
+        </form>
+
+        <div class="disclaimer">
+            <strong>⚠️ Educational Tool Only:</strong> This tool generates educational content for informed consent discussions. Always tailor consent to individual patient needs, institutional requirements, and current evidence. Not a replacement for thorough physician-patient communication.
+        </div>
+    </div>
+</body>
+</html>
+"""
+
 @app.route("/stream")
 @csrf.exempt  # SSE endpoint uses GET requests, CSRF not applicable
 def stream():
@@ -17631,6 +17868,99 @@ Format your response in clear paragraphs with <strong> tags for key points. Keep
     }
 
     return render_template_string(DIFFICULT_AIRWAY_HTML, prediction=prediction)
+
+@app.route("/informed-consent", methods=["GET", "POST"])
+def informed_consent():
+    """AI-Powered Informed Consent Generator"""
+    if request.method == "GET":
+        return render_template_string(INFORMED_CONSENT_HTML, consent=None)
+
+    # Collect form data
+    procedure = sanitize_user_query(request.form.get("procedure", ""))
+    patient_factors = sanitize_user_query(request.form.get("patient_factors", ""))
+    surgical_procedure = sanitize_user_query(request.form.get("surgical_procedure", ""))
+
+    # Map procedure types to readable names
+    procedure_names = {
+        "general_anesthesia": "General Anesthesia",
+        "spinal_anesthesia": "Spinal Anesthesia",
+        "epidural": "Epidural Anesthesia",
+        "regional_block": "Regional Nerve Block",
+        "mac_sedation": "Monitored Anesthesia Care (MAC)/Sedation",
+        "cesarean": "Cesarean Section Anesthesia",
+        "labor_epidural": "Labor Epidural",
+        "cardiac_surgery": "Cardiac Surgery Anesthesia",
+        "neurosurgery": "Neurosurgery Anesthesia"
+    }
+
+    procedure_name = procedure_names.get(procedure, procedure.replace("_", " ").title())
+
+    # Generate AI-powered informed consent using GPT-4o
+    try:
+        context = f"""Anesthesia Type: {procedure_name}
+Patient Factors: {patient_factors if patient_factors else 'Not specified'}
+Surgical Procedure: {surgical_procedure if surgical_procedure else 'Not specified'}"""
+
+        prompt = f"""You are an expert anesthesiologist preparing an informed consent discussion. Generate a comprehensive, evidence-based informed consent document for:
+
+{context}
+
+Structure your response with the following sections using HTML formatting:
+
+<h2>Informed Consent Discussion: {procedure_name}</h2>
+
+<h3>1. What Will Happen (Procedure Overview)</h3>
+<p>Brief explanation of the anesthesia procedure in patient-friendly language</p>
+
+<h3>2. Benefits of This Anesthesia</h3>
+<ul>
+<li>Key benefits specific to this anesthesia type</li>
+</ul>
+
+<h3>3. Common Risks & Side Effects</h3>
+<ul>
+<li>List common risks with approximate frequencies (e.g., nausea 1 in 3 patients)</li>
+<li>Include both common minor risks and rare but serious risks</li>
+</ul>
+
+<h3>4. Alternatives</h3>
+<ul>
+<li>Alternative anesthesia techniques if applicable</li>
+</ul>
+
+<h3>5. Patient-Specific Considerations</h3>
+<p>Address any specific patient factors mentioned, if provided</p>
+
+<h3>6. Questions to Ask Your Anesthesiologist</h3>
+<ul>
+<li>Suggested questions patients should ask</li>
+</ul>
+
+Keep language professional but patient-friendly. Include specific risk frequencies where appropriate. Be thorough but concise (aim for 300-400 words total)."""
+
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.2,
+            max_tokens=800
+        )
+
+        content = response.choices[0].message.content.strip()
+
+    except Exception as e:
+        print(f"[ERROR] Informed consent generation failed: {e}")
+        content = f"""<h2>Informed Consent Discussion: {procedure_name}</h2>
+
+<p><strong>Error:</strong> Unable to generate AI-powered consent at this time. Please consult with your anesthesiologist for a comprehensive informed consent discussion.</p>
+
+<h3>General Information</h3>
+<p>Your anesthesiologist will discuss the risks, benefits, and alternatives specific to your procedure and medical condition.</p>"""
+
+    consent_data = {
+        "content": content
+    }
+
+    return render_template_string(INFORMED_CONSENT_HTML, consent=consent_data)
 
 @app.route("/terms")
 def terms():
