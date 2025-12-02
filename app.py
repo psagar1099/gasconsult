@@ -5278,7 +5278,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
 
         <main class="main-content">
 <main>
-        <h1>📚 My Library</h1>
+        <h1><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> My Library</h1>
 
         {% if not bookmarks %}
         <div class="empty-state">
@@ -10470,7 +10470,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             <div class="demo-note">
                 <div class="demo-note-title">✨ Enhanced Design Preview</div>
                 <div class="demo-note-text">
-                    Showing 3 protocols with the new reference system: reference count badges 📚, inline citation numbers, collapsible references, and improved hover effects. Click any protocol to see the enhancements!
+                    Showing 3 protocols with the new reference system: reference count badges <svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg>, inline citation numbers, collapsible references, and improved hover effects. Click any protocol to see the enhancements!
                 </div>
             </div>
 
@@ -10492,7 +10492,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <div>
                                 <h3 class="protocol-title">
                                     Malignant Hyperthermia
-                                    <span class="protocol-ref-count">📚 5 refs</span>
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 5 refs</span>
                                 </h3>
                             </div>
                             <div class="expand-icon">
@@ -10590,7 +10590,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <div>
                                 <h3 class="protocol-title">
                                     Cardiac Arrest (ACLS)
-                                    <span class="protocol-ref-count">📚 4 refs</span>
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
                                 </h3>
                             </div>
                             <div class="expand-icon">
@@ -10694,7 +10694,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <div>
                                 <h3 class="protocol-title">
                                     Anaphylaxis
-                                    <span class="protocol-ref-count">📚 4 refs</span>
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
                                 </h3>
                             </div>
                             <div class="expand-icon">
@@ -12924,7 +12924,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <!-- Dosing References & Evidence Base -->
     <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
         <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Dosing References & Guidelines</h2>
+            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> Dosing References & Guidelines</h2>
             
             <p style="color: #475569; line-height: 1.8; margin-bottom: 32px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
                 All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors, comorbidities, and clinical context.
