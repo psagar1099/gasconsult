@@ -8565,17 +8565,23 @@ CRISIS_HTML = """<!DOCTYPE html>
         .footer-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .footer-logo svg {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
         }
 
         .footer-text {
             font-size: 13px;
-            color: var(--gray-600);
+            color: var(--gray-500);
         }
 
         .footer-links {
@@ -8585,13 +8591,13 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         .footer-link {
             font-size: 13px;
-            color: var(--gray-600);
+            color: var(--gray-500);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--gray-900);
+            color: var(--gray-700);
         }
 
         @media (min-width: 768px) {
@@ -8615,6 +8621,13 @@ CRISIS_HTML = """<!DOCTYPE html>
             .protocols-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
         }
 
         @media (min-width: 1024px) {
@@ -12007,9 +12020,23 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
             .calc-card.large {
                 grid-column: span 2;
             }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
         }
 
         .calc-header {
@@ -12316,26 +12343,31 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
         /* Footer */
         .footer {
-            padding: 40px 20px;
+            padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.5);
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            flex-wrap: wrap;
             gap: 20px;
+            text-align: center;
         }
 
         .footer-brand {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .footer-logo svg {
@@ -12344,8 +12376,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         .footer-text {
-            font-size: 14px;
-            color: var(--gray-600);
+            font-size: 13px;
+            color: var(--gray-500);
         }
 
         .footer-links {
@@ -12354,15 +12386,14 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         }
 
         .footer-link {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
+            font-size: 13px;
+            color: var(--gray-500);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--blue-600);
+            color: var(--gray-700);
         }
 
         /* Medical Disclaimer */
