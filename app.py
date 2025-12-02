@@ -13315,7 +13315,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IOH Predictor — gasconsult.ai</title>
+    <title>IOH Risk Predictor — gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -13323,9 +13323,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-
         :root {
             --white: #FFFFFF;
             --gray-50: #F8FAFC;
@@ -13346,6 +13345,15 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
+            --orange-50: #FFF7ED;
+            --orange-500: #F97316;
+            --orange-600: #EA580C;
+            --green-50: #ECFDF5;
+            --green-500: #10B981;
+            --green-600: #059669;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -14175,6 +14183,618 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             margin: 0;
         }
 
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 100px 16px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--blue-600);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--gray-500);
+            max-width: 600px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        /* Disclaimer Box */
+        .disclaimer {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.08) 100%);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .disclaimer-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--red-600);
+            margin-bottom: 10px;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            margin-bottom: 32px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .section-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: white;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            letter-spacing: -0.5px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            letter-spacing: 0.2px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            font-family: inherit;
+            color: var(--gray-900);
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            margin-top: 32px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results Section */
+        .results-container {
+            margin-top: 48px;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .results-header h2 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .results-header p {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .risk-display {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 48px 32px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
+            margin-bottom: 32px;
+        }
+
+        .risk-percentage {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .risk-percentage.low { color: var(--green-600); }
+        .risk-percentage.moderate { color: var(--orange-600); }
+        .risk-percentage.high { color: var(--red-600); }
+
+        .risk-label {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-label.low {
+            background: var(--green-50);
+            color: var(--green-600);
+            border: 1px solid var(--green-200);
+        }
+
+        .risk-label.moderate {
+            background: var(--orange-50);
+            color: var(--orange-600);
+            border: 1px solid var(--orange-200);
+        }
+
+        .risk-label.high {
+            background: var(--red-50);
+            color: var(--red-600);
+            border: 1px solid var(--red-200);
+        }
+
+        .risk-description {
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--gray-600);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .factors-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .factor-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .factor-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .factor-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .factor-icon.positive {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--red-600);
+        }
+
+        .factor-icon.neutral {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--gray-600);
+        }
+
+        .factor-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
+
+        /* Responsive Styles */
+        @media (min-width: 640px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .factors-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
+            .main-content { padding: 120px 32px 60px; }
+
+            .hero-title { font-size: 48px; }
+            .hero-subtitle { font-size: 17px; }
+
+            .form-card { padding: 40px; }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .main-content { padding: 140px 40px 80px; }
+        }
     </style>
 </head>
 <body>
@@ -14186,6 +14806,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
                 <a href="/?clear=1" class="logo">
@@ -14206,13 +14827,14 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link active">IOH Predictor</a>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
@@ -14222,255 +14844,216 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
         </div>
 
+        <!-- Main Content -->
         <main class="main-content">
-            <!-- Educational Warning Banner -->
-            <div class="edu-warning">
-                <div class="edu-warning-icon">⚠️</div>
-                <div class="edu-warning-content">
-                    <h3>EDUCATIONAL USE ONLY - NOT FOR CLINICAL DECISION MAKING</h3>
-                    <p>This tool is for educational demonstration purposes only. It is NOT validated for clinical use, NOT FDA-approved, and should NEVER be used to make actual patient care decisions.</p>
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <div class="hero-badge-dot"></div>
+                    <span>Predictive Tool</span>
                 </div>
-            </div>
-
-            <!-- Page Header -->
-            <div class="page-header">
-                <h1>Intraoperative Hypotension Predictor</h1>
-                <p>Educational simulator for predicting intraoperative hypotension risk based on patient and procedural factors</p>
-                <span class="edu-badge">Educational Demo Only</span>
-            </div>
-
-            <!-- Legal Disclaimer -->
-            <div class="disclaimer-box">
-                <h3>Legal Disclaimer</h3>
-                <p><strong>This Intraoperative Hypotension Predictor is a LEARNING TOOL designed for educational purposes only.</strong> It is not a medical device, has not been validated in clinical settings, and is not approved by the FDA or any regulatory body.</p>
-                <p><strong>DO NOT use this tool to make clinical decisions.</strong> Predictions may be inaccurate and should never replace clinical judgment, monitoring, or standard anesthesia care protocols.</p>
-                <p>By using this tool, you acknowledge that:</p>
-                <ul>
-                    <li>This is for EDUCATIONAL DEMONSTRATION only</li>
-                    <li>Predictions are hypothetical and may be incorrect</li>
-                    <li>No patient data should be entered</li>
-                    <li>You will not rely on outputs for any clinical decisions</li>
-                    <li>The creators assume no liability for any use of this tool</li>
-                </ul>
-            </div>
-
-            <!-- Model Performance Metrics -->
-            <div class="metrics-box">
-                <h3>📊 Model Performance Metrics</h3>
-                <p class="metrics-intro">
-                    This educational model demonstrates hypotension prediction capabilities based on published research.
-                    Below are typical performance metrics from validated intraoperative hypotension prediction models in the literature.
-                    Understanding these metrics helps interpret the model's reliability and limitations.
+                <h1 class="hero-title">
+                    <span class="gradient">IOH</span> Risk Predictor
+                </h1>
+                <p class="hero-subtitle">
+                    Assess intraoperative hypotension risk using real-time patient and procedural data
                 </p>
+            </div>
 
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-label">AUC-ROC</div>
-                        <div class="metric-value">0.84</div>
-                        <div class="metric-description">Overall discrimination ability</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Sensitivity</div>
-                        <div class="metric-value">78%</div>
-                        <div class="metric-description">True positive rate</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">Specificity</div>
-                        <div class="metric-value">76%</div>
-                        <div class="metric-description">True negative rate</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">PPV</div>
-                        <div class="metric-value">68%</div>
-                        <div class="metric-description">Positive predictive value</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-label">NPV</div>
-                        <div class="metric-value">84%</div>
-                        <div class="metric-description">Negative predictive value</div>
-                    </div>
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <div class="disclaimer-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    Educational Tool Only
                 </div>
-
-                <div class="metrics-explanation">
-                    <h4>What These Metrics Mean:</h4>
-                    <ul>
-                        <li><span class="metric-term">AUC-ROC (0.84):</span> Area Under the Receiver Operating Characteristic curve. Ranges from 0.5 (random) to 1.0 (perfect). 0.84 indicates good discrimination between patients who will/won't develop hypotension.</li>
-                        <li><span class="metric-term">Sensitivity (78%):</span> Of patients who actually develop hypotension, the model correctly predicts 78% of them. Higher is better for avoiding missed cases.</li>
-                        <li><span class="metric-term">Specificity (76%):</span> Of patients who don't develop hypotension, the model correctly identifies 76% as low-risk. Higher reduces false alarms.</li>
-                        <li><span class="metric-term">PPV (68%):</span> When the model predicts hypotension, there's a 68% chance it will actually occur. Depends on baseline hypotension prevalence.</li>
-                        <li><span class="metric-term">NPV (84%):</span> When the model predicts no hypotension, there's an 84% chance the prediction is correct. Useful for reassurance in low-risk cases.</li>
-                    </ul>
+                <div class="disclaimer-text">
+                    <strong>This is an educational demonstration, not a clinical decision tool.</strong> Predictions are for learning purposes only and should never be used for actual patient care. Always follow institutional protocols and use validated monitoring equipment.
                 </div>
             </div>
 
             <!-- Input Form -->
-            <div class="content-card">
-                <form method="POST" action="/hypotension">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <form method="POST" action="/hypotension" class="form-card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                    <div class="form-section">
-                        <h2>Patient Demographics</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="age">Age (years)</label>
-                                <input type="number" id="age" name="age" min="1" max="120" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="sex">Sex</label>
-                                <select id="sex" name="sex" required>
-                                    <option value="">Select...</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="weight">Weight (kg)</label>
-                                <input type="number" id="weight" name="weight" min="1" max="300" step="0.1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="height">Height (cm)</label>
-                                <input type="number" id="height" name="height" min="50" max="250" step="0.1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="asa">ASA Classification</label>
-                                <select id="asa" name="asa" required>
-                                    <option value="">Select...</option>
-                                    <option value="1">ASA I - Healthy</option>
-                                    <option value="2">ASA II - Mild systemic disease</option>
-                                    <option value="3">ASA III - Severe systemic disease</option>
-                                    <option value="4">ASA IV - Life-threatening disease</option>
-                                </select>
-                            </div>
+                <!-- Patient Demographics -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Patient Demographics</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="age">Age (years)</label>
+                            <input type="number" id="age" name="age" class="form-input" min="1" max="120" required placeholder="65">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sex">Sex</label>
+                            <select id="sex" name="sex" class="form-select" required>
+                                <option value="">Select sex...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" class="form-input" min="1" max="300" step="0.1" required placeholder="70">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="height">Height (cm)</label>
+                            <input type="number" id="height" name="height" class="form-input" min="50" max="250" step="0.1" required placeholder="170">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="asa">ASA Classification</label>
+                            <select id="asa" name="asa" class="form-select" required>
+                                <option value="">Select ASA...</option>
+                                <option value="1">ASA I - Healthy</option>
+                                <option value="2">ASA II - Mild systemic disease</option>
+                                <option value="3">ASA III - Severe systemic disease</option>
+                                <option value="4">ASA IV - Life-threatening disease</option>
+                            </select>
                         </div>
                     </div>
-
-                    <div class="form-section">
-                        <h2>Baseline Vitals</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="baseline_map">Baseline MAP (mmHg)</label>
-                                <input type="number" id="baseline_map" name="baseline_map" min="40" max="150" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="baseline_hr">Baseline Heart Rate (bpm)</label>
-                                <input type="number" id="baseline_hr" name="baseline_hr" min="30" max="200" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-section">
-                        <h2>Current Intraoperative State</h2>
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="current_map">Current MAP (mmHg)</label>
-                                <input type="number" id="current_map" name="current_map" min="40" max="150" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="map_5min">MAP 5 min ago (mmHg)</label>
-                                <input type="number" id="map_5min" name="map_5min" min="40" max="150" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="map_10min">MAP 10 min ago (mmHg)</label>
-                                <input type="number" id="map_10min" name="map_10min" min="40" max="150" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="surgery_duration">Surgery Duration (min)</label>
-                                <input type="number" id="surgery_duration" name="surgery_duration" min="0" max="1000" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="vasopressor">Vasopressor Use</label>
-                                <select id="vasopressor" name="vasopressor" required>
-                                    <option value="none">None</option>
-                                    <option value="phenylephrine">Phenylephrine</option>
-                                    <option value="ephedrine">Ephedrine</option>
-                                    <option value="norepinephrine">Norepinephrine</option>
-                                    <option value="epinephrine">Epinephrine</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="surgery_type">Surgery Type</label>
-                                <select id="surgery_type" name="surgery_type" required>
-                                    <option value="">Select...</option>
-                                    <option value="cardiac">Cardiac Surgery</option>
-                                    <option value="major_abdominal">Major Abdominal</option>
-                                    <option value="spine">Spine Surgery</option>
-                                    <option value="orthopedic">Orthopedic</option>
-                                    <option value="neuro">Neurosurgery</option>
-                                    <option value="vascular">Vascular</option>
-                                    <option value="thoracic">Thoracic</option>
-                                    <option value="minor">Minor/Superficial</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="induction_agent">Induction Agent</label>
-                                <select id="induction_agent" name="induction_agent" required>
-                                    <option value="">Select...</option>
-                                    <option value="propofol">Propofol</option>
-                                    <option value="etomidate">Etomidate</option>
-                                    <option value="ketamine">Ketamine</option>
-                                    <option value="thiopental">Thiopental</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="emergency">Emergency Status</label>
-                                <select id="emergency" name="emergency" required>
-                                    <option value="no">Elective</option>
-                                    <option value="yes">Emergency</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Calculate Hypotension Risk</button>
-                </form>
-            </div>
-
-            {% if prediction %}
-            <!-- Results Section -->
-            <div style="margin-top: 48px;">
-                <div class="results-warning">
-                    <p>⚠️ SIMULATION ONLY - These predictions are for educational purposes and may not reflect actual clinical outcomes. Always follow institutional protocols and use validated monitoring.</p>
                 </div>
 
-                <!-- Risk Gauges -->
-                <div class="risk-gauges">
-                    <div class="risk-gauge">
-                        <h3>5-Minute Risk</h3>
-                        <div class="risk-value {{ prediction.risk_5min_class }}">{{ prediction.prob_5min }}%</div>
-                        <span class="risk-label {{ prediction.risk_5min_label }}">{{ prediction.risk_5min_text }}</span>
+                <!-- Baseline Vitals -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Baseline Vitals</h2>
                     </div>
-                    <div class="risk-gauge">
-                        <h3>10-Minute Risk</h3>
-                        <div class="risk-value {{ prediction.risk_10min_class }}">{{ prediction.prob_10min }}%</div>
-                        <span class="risk-label {{ prediction.risk_10min_label }}">{{ prediction.risk_10min_text }}</span>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="baseline_map">Baseline MAP (mmHg)</label>
+                            <input type="number" id="baseline_map" name="baseline_map" class="form-input" min="40" max="150" required placeholder="90">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="baseline_hr">Baseline Heart Rate (bpm)</label>
+                            <input type="number" id="baseline_hr" name="baseline_hr" class="form-input" min="30" max="200" required placeholder="75">
+                        </div>
                     </div>
-                    <div class="risk-gauge">
-                        <h3>20-Minute Risk</h3>
-                        <div class="risk-value {{ prediction.risk_20min_class }}">{{ prediction.prob_20min }}%</div>
-                        <span class="risk-label {{ prediction.risk_20min_label }}">{{ prediction.risk_20min_text }}</span>
+                </div>
+
+                <!-- Intraoperative Data -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Current Intraoperative State</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="current_map">Current MAP (mmHg)</label>
+                            <input type="number" id="current_map" name="current_map" class="form-input" min="40" max="150" required placeholder="65">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="map_5min">MAP 5 min ago (mmHg)</label>
+                            <input type="number" id="map_5min" name="map_5min" class="form-input" min="40" max="150" required placeholder="68">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="map_10min">MAP 10 min ago (mmHg)</label>
+                            <input type="number" id="map_10min" name="map_10min" class="form-input" min="40" max="150" required placeholder="72">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="surgery_duration">Surgery Duration (min)</label>
+                            <input type="number" id="surgery_duration" name="surgery_duration" class="form-input" min="0" max="1000" required placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="vasopressor">Vasopressor Use</label>
+                            <select id="vasopressor" name="vasopressor" class="form-select" required>
+                                <option value="none">None</option>
+                                <option value="phenylephrine">Phenylephrine</option>
+                                <option value="ephedrine">Ephedrine</option>
+                                <option value="norepinephrine">Norepinephrine</option>
+                                <option value="epinephrine">Epinephrine</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="surgery_type">Surgery Type</label>
+                            <select id="surgery_type" name="surgery_type" class="form-select" required>
+                                <option value="">Select surgery...</option>
+                                <option value="cardiac">Cardiac Surgery</option>
+                                <option value="major_abdominal">Major Abdominal</option>
+                                <option value="spine">Spine Surgery</option>
+                                <option value="orthopedic">Orthopedic</option>
+                                <option value="neuro">Neurosurgery</option>
+                                <option value="vascular">Vascular</option>
+                                <option value="thoracic">Thoracic</option>
+                                <option value="minor">Minor/Superficial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="induction_agent">Induction Agent</label>
+                            <select id="induction_agent" name="induction_agent" class="form-select" required>
+                                <option value="">Select agent...</option>
+                                <option value="propofol">Propofol</option>
+                                <option value="etomidate">Etomidate</option>
+                                <option value="ketamine">Ketamine</option>
+                                <option value="thiopental">Thiopental</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="emergency">Emergency Status</label>
+                            <select id="emergency" name="emergency" class="form-select" required>
+                                <option value="no">Elective</option>
+                                <option value="yes">Emergency</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Calculate Risk</button>
+            </form>
+
+            {% if prediction %}
+            <!-- Results -->
+            <div class="results-container">
+                <div class="results-header">
+                    <h2>Risk Assessment Results</h2>
+                    <p>Educational simulation only — not for clinical use</p>
+                </div>
+
+                <!-- Risk Display -->
+                <div class="risk-display">
+                    <div class="risk-percentage {{ prediction.risk_category }}">
+                        {{ prediction.risk_percentage }}%
+                    </div>
+                    <div class="risk-label {{ prediction.risk_category }}">
+                        {{ prediction.risk_label }}
+                    </div>
+                    <div class="risk-description">
+                        {{ prediction.description }}
                     </div>
                 </div>
 
                 <!-- Contributing Factors -->
-                <div class="factors-section">
-                    <h2>Top Contributing Factors</h2>
+                <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 20px; text-align: center; color: var(--gray-900);">Contributing Factors</h3>
+                <div class="factors-grid">
                     {% for factor in prediction.factors %}
-                    <div class="factor-item">
-                        <strong>{{ factor.name }}:</strong> {{ factor.description }}
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <!-- Suggested Interventions -->
-                <div class="interventions-section">
-                    <h2>Evidence-Based Intervention Suggestions</h2>
-                    {% for intervention in prediction.interventions %}
-                    <div class="intervention-item">
-                        <div class="intervention-rank">#{{ loop.index }}</div>
-                        <div class="intervention-content">
-                            <h3>{{ intervention.name }}</h3>
-                            <p>{{ intervention.description }}</p>
-                        </div>
+                    <div class="factor-card">
+                        <h3>
+                            <span class="factor-icon {{ factor.impact }}">
+                                {% if factor.impact == 'positive' %}↑{% else %}→{% endif %}
+                            </span>
+                            {{ factor.title }}
+                        </h3>
+                        <p class="factor-text">{{ factor.description }}</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -14478,23 +15061,19 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             {% endif %}
         </main>
 
-        <!-- Glassmorphism Footer -->
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <div class="footer-brand">
                     <div class="footer-logo">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     </div>
                     <span class="footer-text">© 2025 GasConsult.ai</span>
                 </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="#" class="footer-link">Contact</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
