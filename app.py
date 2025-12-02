@@ -12746,6 +12746,266 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         }
 
         /* Quick Dose Specific Styles */
+
+        /* Search Section */
+        .search-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 56px 16px 52px;
+            font-size: 16px;
+            font-family: inherit;
+            font-weight: 500;
+            color: var(--gray-900);
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search:hover {
+            background: var(--gray-200);
+        }
+
+        .clear-search.show {
+            display: flex;
+        }
+
+        .search-stats {
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--gray-500);
+            text-align: center;
+            display: none;
+        }
+
+        /* Reference Modal */
+        .ref-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .ref-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .ref-modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 24px 80px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .ref-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 32px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .ref-modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ref-modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+        }
+
+        .ref-modal-close:hover {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--gray-700);
+        }
+
+        .ref-modal-body {
+            padding: 32px;
+            overflow-y: auto;
+            max-height: calc(90vh - 100px);
+        }
+
+        .ref-section {
+            margin-bottom: 28px;
+        }
+
+        .ref-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ref-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .ref-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: rgba(248, 250, 252, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .ref-item:hover {
+            background: rgba(241, 245, 249, 0.9);
+            border-color: rgba(203, 213, 225, 0.8);
+            transform: translateX(4px);
+        }
+
+        .ref-item a {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .ref-item a:hover {
+            color: var(--blue-700);
+            text-decoration: underline;
+        }
+
+        .ref-icon {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+        }
+
+        .ref-citation {
+            color: var(--gray-600);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .ref-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--blue-700);
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-left: 8px;
+        }
+
         .weight-section {
             background: rgba(255,255,255,0.8);
             backdrop-filter: blur(20px) saturate(180%);
@@ -13450,6 +13710,24 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
+        <!-- Search Bar -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search drugs by name, category, or indication..." oninput="filterDrugs()">
+                <button class="clear-search" id="clearSearch" onclick="clearSearch()">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="search-stats" id="searchStats"></div>
+        </div>
+
         <!-- Weight Input Section -->
         <div class="weight-section">
             <div class="weight-label">Patient Weight</div>
@@ -13475,7 +13753,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="color-indicator" style="background: #F59E0B;"></div>
                 <div class="category-info">
                     <div class="category-title">Induction Agents</div>
-                    <div class="category-subtitle">Propofol, Etomidate, Ketamine</div>
+                    <div class="category-subtitle">Propofol, Etomidate, Ketamine, Midazolam, Dexmedetomidine</div>
                 </div>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -13589,6 +13867,78 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         <div class="pearl-text">Maintains airway reflexes & BP. Great for asthma, hypovolemia. Avoid in CAD, elevated ICP (relative). Expect emergence reactions.</div>
                     </div>
                 </div>
+
+                <!-- Midazolam -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Midazolam<button class="ref-btn" onclick="openRefModal('midazolam')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Versed</div>
+                        </div>
+                        <div class="concentration-badge">1 mg/mL or 5 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Sedation</div>
+                            <div class="dose-value"><span data-calc="0.02">1.4</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.02 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Premedication</div>
+                            <div class="dose-value"><span data-calc="0.05">3.5</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.05 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Induction</div>
+                            <div class="dose-value"><span data-calc="0.2">14</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.2 mg/kg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Synergistic with opioids - reduce doses. Paradoxical agitation in elderly. Onset 1-2 min IV, duration 30-60 min. Reversible with flumazenil.</div>
+                    </div>
+                </div>
+
+                <!-- Dexmedetomidine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Dexmedetomidine<button class="ref-btn" onclick="openRefModal('dexmedetomidine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Precedex</div>
+                        </div>
+                        <div class="concentration-badge">100 mcg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Loading</div>
+                            <div class="dose-value"><span data-calc="1">70</span> <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">0.5-1 mcg/kg over 10min</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance Low</div>
+                            <div class="dose-value">0.2-0.4 <span class="dose-unit">mcg/kg/hr</span></div>
+                            <div class="dose-range">Light sedation</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance High</div>
+                            <div class="dose-value">0.6-0.7 <span class="dose-unit">mcg/kg/hr</span></div>
+                            <div class="dose-range">Deep sedation</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Alpha-2 agonist with sedative, anxiolytic, analgesic properties. Minimal respiratory depression. May cause bradycardia & hypotension. Useful for awake fiberoptic intubation.</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -13598,7 +13948,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="color-indicator" style="background: #2563EB;"></div>
                 <div class="category-info">
                     <div class="category-title">Opioids</div>
-                    <div class="category-subtitle">Fentanyl</div>
+                    <div class="category-subtitle">Fentanyl, Remifentanil, Morphine, Hydromorphone</div>
                 </div>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -13640,6 +13990,114 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         <div class="pearl-text">Onset 2-3 min IV, duration 30-60 min. Blunts laryngoscopy response at 3-5 mcg/kg. Watch for chest wall rigidity at high doses.</div>
                     </div>
                 </div>
+
+                <!-- Remifentanil -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Remifentanil<button class="ref-btn" onclick="openRefModal('remifentanil')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Ultiva</div>
+                        </div>
+                        <div class="concentration-badge">Reconstitute</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Induction</div>
+                            <div class="dose-value"><span data-calc="1">70</span> <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">0.5-1 mcg/kg over 30-60s</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance Low</div>
+                            <div class="dose-value">0.05-0.1 <span class="dose-unit">mcg/kg/min</span></div>
+                            <div class="dose-range">Light analgesia</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance High</div>
+                            <div class="dose-value">0.1-0.2 <span class="dose-unit">mcg/kg/min</span></div>
+                            <div class="dose-range">Deep analgesia</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Ultra-short acting (context-sensitive half-time ~3-4 min). Metabolized by plasma esterases. Ideal for rapid awakening. Profound respiratory depression - secure airway.</div>
+                    </div>
+                </div>
+
+                <!-- Morphine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Morphine<button class="ref-btn" onclick="openRefModal('morphine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Multiple brands</div>
+                        </div>
+                        <div class="concentration-badge">Variable (1-10 mg/mL)</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value"><span data-calc="0.05">3.5</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.05 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="0.1">7</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.1 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Incremental</div>
+                            <div class="dose-value">2-4 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">q10-15 min PRN</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Slow onset (10-15 min), long duration (3-4 hrs). Histamine release possible. Active metabolite accumulation in renal failure. Gold standard opioid for comparison.</div>
+                    </div>
+                </div>
+
+                <!-- Hydromorphone -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Hydromorphone<button class="ref-btn" onclick="openRefModal('hydromorphone')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Dilaudid</div>
+                        </div>
+                        <div class="concentration-badge">1 mg/mL or 2 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Low</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.2 mg IV</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value">0.5 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.4-0.6 mg IV</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Incremental</div>
+                            <div class="dose-value">0.2-0.4 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">q15-20min PRN</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">5-7x more potent than morphine. Less histamine release. Onset 5-10 min, duration 3-4 hrs. Preferred in renal failure (no active metabolites).</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -13649,7 +14107,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="color-indicator" style="background: #EF4444;"></div>
                 <div class="category-info">
                     <div class="category-title">Neuromuscular Blockers</div>
-                    <div class="category-subtitle">Succinylcholine, Rocuronium</div>
+                    <div class="category-subtitle">Succinylcholine, Rocuronium, Vecuronium, Cisatracurium</div>
                 </div>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -13725,6 +14183,204 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                             <line x1="8" y1="5" x2="8.01" y2="5"></line>
                         </svg>
                         <div class="pearl-text">Onset 60-90s (standard), 45-60s (RSI dose). Duration 30-45 min. Reversible with sugammadex 16 mg/kg for immediate reversal.</div>
+                    </div>
+                </div>
+
+                <!-- Vecuronium -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Vecuronium<button class="ref-btn" onclick="openRefModal('vecuronium')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Norcuron</div>
+                        </div>
+                        <div class="concentration-badge">Reconstitute to 1 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Intubating</div>
+                            <div class="dose-value"><span data-calc="0.1">7</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.08-0.1 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance</div>
+                            <div class="dose-value"><span data-calc="0.01">0.7</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.01-0.02 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Infusion</div>
+                            <div class="dose-value">1-2 <span class="dose-unit">mcg/kg/min</span></div>
+                            <div class="dose-range">Titrate to effect</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Onset 2-3 min, duration 30-40 min. Minimal cardiovascular effects. Reversible with neostigmine or sugammadex. Hepatic metabolism - prolonged in liver disease.</div>
+                    </div>
+                </div>
+
+                <!-- Cisatracurium -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Cisatracurium<button class="ref-btn" onclick="openRefModal('cisatracurium')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Nimbex</div>
+                        </div>
+                        <div class="concentration-badge">2 mg/mL or 10 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Intubating</div>
+                            <div class="dose-value"><span data-calc="0.15">10.5</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.15-0.2 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Maintenance</div>
+                            <div class="dose-value"><span data-calc="0.03">2.1</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.03 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Infusion</div>
+                            <div class="dose-value">1-2 <span class="dose-unit">mcg/kg/min</span></div>
+                            <div class="dose-range">Titrate to TOF</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Hofmann elimination (organ-independent). Ideal for renal/hepatic failure. Onset 3-5 min, duration 40-60 min. No histamine release. Reversible with neostigmine or sugammadex.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REVERSAL AGENTS (Teal) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #14B8A6;"></div>
+                <div class="category-info">
+                    <div class="category-title">Reversal Agents</div>
+                    <div class="category-subtitle">Neostigmine, Naloxone, Flumazenil</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Neostigmine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Neostigmine</h3>
+                            <button class="ref-btn" onclick="openRefModal('neostigmine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Bloxiverz, Prostigmin</div>
+                        </div>
+                        <div class="concentration-badge">1 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value"><span data-calc="0.04">2.8</span> <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.04 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Max Dose</div>
+                            <div class="dose-value">5 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Total max</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">With Glyco</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.2 mg glyco per 1 mg neo</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Acetylcholinesterase inhibitor for NMB reversal. Always give with glycopyrrolate or atropine. Wait for TOF ≥2 twitches. Onset 7-10 min. Duration 30-60 min.</div>
+                    </div>
+                </div>
+
+                <!-- Naloxone -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Naloxone</h3>
+                            <button class="ref-btn" onclick="openRefModal('naloxone')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Narcan</div>
+                        </div>
+                        <div class="concentration-badge">0.4 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Titrated</div>
+                            <div class="dose-value">40 <span class="dose-unit">mcg</span></div>
+                            <div class="dose-range">40 mcg q2min</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Respiratory Depression</div>
+                            <div class="dose-value">0.1-0.4 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Repeat PRN</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Emergency</div>
+                            <div class="dose-value">0.4-2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV/IM/IN</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Competitive μ-opioid antagonist. Rapid onset (1-2 min). Duration 30-90 min — monitor for re-sedation. Titrate carefully to avoid pain, hypertension, tachycardia, pulmonary edema.</div>
+                    </div>
+                </div>
+
+                <!-- Flumazenil -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Flumazenil</h3>
+                            <button class="ref-btn" onclick="openRefModal('flumazenil')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Romazicon</div>
+                        </div>
+                        <div class="concentration-badge">0.1 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Initial</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Over 15 sec</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Repeat</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">q1min PRN</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Max Dose</div>
+                            <div class="dose-value">1 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Total max (5 doses)</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Benzodiazepine antagonist. CONTRAINDICATED: seizure history, chronic benzo use (risk of withdrawal seizures). Duration 20-45 min — monitor for re-sedation. Risk of seizures in TCA/cocaine OD.</div>
                     </div>
                 </div>
             </div>
@@ -13823,7 +14479,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="color-indicator" style="background: #10B981;"></div>
                 <div class="category-info">
                     <div class="category-title">Reversal & Anticholinergics</div>
-                    <div class="category-subtitle">Sugammadex</div>
+                    <div class="category-subtitle">Sugammadex, Glycopyrrolate, Atropine</div>
                 </div>
                 <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -13863,6 +14519,206 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                             <line x1="8" y1="5" x2="8.01" y2="5"></line>
                         </svg>
                         <div class="pearl-text">Encapsulates rocuronium/vecuronium. 16 mg/kg for 'can't intubate, can't oxygenate' after RSI with roc. May reduce efficacy of hormonal contraceptives.</div>
+                    </div>
+                </div>
+
+                <!-- Glycopyrrolate -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Glycopyrrolate</h3>
+                            <button class="ref-btn" onclick="openRefModal('glycopyrrolate')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Robinul</div>
+                        </div>
+                        <div class="concentration-badge">0.2 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">With Neostigmine</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">per 1 mg neo</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Antisialagogue</div>
+                            <div class="dose-value">0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.004 mg/kg</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Bradycardia</div>
+                            <div class="dose-value">0.1-0.2 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Incremental IV</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Quaternary amine (doesn't cross BBB) — preferred in elderly. Less tachycardia than atropine. Standard anticholinergic with neostigmine. Onset 2-3 min, duration 2-4 hrs.</div>
+                    </div>
+                </div>
+
+                <!-- Atropine -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Atropine</h3>
+                            <button class="ref-btn" onclick="openRefModal('atropine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">—</div>
+                        </div>
+                        <div class="concentration-badge">0.4 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Bradycardia</div>
+                            <div class="dose-value">0.4-0.6 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">0.5-1 mg IV</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">ACLS Dose</div>
+                            <div class="dose-value">1 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">q3-5min (max 3 mg)</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Pediatric</div>
+                            <div class="dose-value">0.02 <span class="dose-unit">mg/kg</span></div>
+                            <div class="dose-range">Min 0.1 mg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Tertiary amine (crosses BBB) — may cause CNS effects in elderly. Faster onset than glycopyrrolate. Paradoxical bradycardia with doses <0.5 mg. Tachycardia with therapeutic doses.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANTIEMETICS (Pink) -->
+        <div class="drug-category">
+            <div class="category-header" onclick="toggleCategory(this)">
+                <div class="color-indicator" style="background: #EC4899;"></div>
+                <div class="category-info">
+                    <div class="category-title">Antiemetics</div>
+                    <div class="category-subtitle">Ondansetron, Dexamethasone, Metoclopramide</div>
+                </div>
+                <svg class="chevron" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="category-content">
+                <!-- Ondansetron -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Ondansetron</h3>
+                            <button class="ref-btn" onclick="openRefModal('ondansetron')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Zofran</div>
+                        </div>
+                        <div class="concentration-badge">2 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">Standard</div>
+                            <div class="dose-value">4 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV/PO</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">High Risk PONV</div>
+                            <div class="dose-value">8 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV/PO</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Pediatric</div>
+                            <div class="dose-value">0.1 <span class="dose-unit">mg/kg</span></div>
+                            <div class="dose-range">Max 4 mg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">5-HT3 antagonist. Most effective if given at end of surgery. May prolong QT interval (caution with long QT syndrome). More effective for prevention than treatment of PONV.</div>
+                    </div>
+                </div>
+
+                <!-- Dexamethasone -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Dexamethasone</h3>
+                            <button class="ref-btn" onclick="openRefModal('dexamethasone')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Decadron</div>
+                        </div>
+                        <div class="concentration-badge">4 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">PONV Prophylaxis</div>
+                            <div class="dose-value">4-8 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV at induction</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Airway Edema</div>
+                            <div class="dose-value">8-10 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Pediatric PONV</div>
+                            <div class="dose-value">0.15 <span class="dose-unit">mg/kg</span></div>
+                            <div class="dose-range">Max 8 mg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Corticosteroid. Give early (induction) for PONV prophylaxis — peak effect 2-3 hrs. Single dose safe even in diabetics (minimal glucose effect). Reduces pain, inflammation, and opioid requirements.</div>
+                    </div>
+                </div>
+
+                <!-- Metoclopramide -->
+                <div class="drug-card">
+                    <div class="drug-header">
+                        <div class="drug-name-section">
+                            <h3>Metoclopramide</h3>
+                            <button class="ref-btn" onclick="openRefModal('metoclopramide')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
+                            <div class="drug-subtitle">Reglan</div>
+                        </div>
+                        <div class="concentration-badge">5 mg/mL</div>
+                    </div>
+                    <div class="dose-grid">
+                        <div class="dose-item">
+                            <div class="dose-label">PONV</div>
+                            <div class="dose-value">10 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">IV</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Gastric Emptying</div>
+                            <div class="dose-value">10-20 <span class="dose-unit">mg</span></div>
+                            <div class="dose-range">Pre-induction</div>
+                        </div>
+                        <div class="dose-item">
+                            <div class="dose-label">Pediatric</div>
+                            <div class="dose-value">0.15 <span class="dose-unit">mg/kg</span></div>
+                            <div class="dose-range">Max 10 mg</div>
+                        </div>
+                    </div>
+                    <div class="clinical-pearl">
+                        <svg class="pearl-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="8" r="7"></circle>
+                            <line x1="8" y1="12" x2="8" y2="8"></line>
+                            <line x1="8" y1="5" x2="8.01" y2="5"></line>
+                        </svg>
+                        <div class="pearl-text">Dopamine antagonist + prokinetic. Increases LES tone and gastric emptying. Risk of extrapyramidal symptoms (especially <30 yr). Less effective antiemetic than ondansetron or dexamethasone.</div>
                     </div>
                 </div>
             </div>
@@ -13964,6 +14820,24 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <p style="color: #64748B; font-size: 13px; line-height: 1.6;">
                 Dosing based on FDA package inserts and Miller's Anesthesia 9th ed, Barash Clinical Anesthesia 8th ed, Stoelting's Pharmacology 5th ed.
             </p>
+        </div>
+
+        <!-- Reference Modal -->
+        <div id="refModal" class="ref-modal">
+            <div class="ref-modal-content">
+                <div class="ref-modal-header">
+                    <h2 id="refModalTitle">Drug References</h2>
+                    <button class="ref-modal-close" onclick="closeRefModal()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ref-modal-body" id="refModalBody">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
         </div>
 
     </main>
@@ -14130,6 +15004,357 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
+
+        // Search and filter drugs
+        function filterDrugs() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const clearBtn = document.getElementById('clearSearch');
+            const categories = document.querySelectorAll('.drug-category');
+            const searchStats = document.getElementById('searchStats');
+            let visibleCount = 0;
+            let totalCount = 0;
+
+            // Show/hide clear button
+            if (searchTerm) {
+                clearBtn.classList.add('show');
+            } else {
+                clearBtn.classList.remove('show');
+            }
+
+            categories.forEach(category => {
+                const cards = category.querySelectorAll('.drug-card');
+                let categoryHasVisible = false;
+
+                cards.forEach(card => {
+                    totalCount++;
+                    const cardText = card.textContent.toLowerCase();
+
+                    if (!searchTerm || cardText.includes(searchTerm)) {
+                        card.style.display = '';
+                        categoryHasVisible = true;
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Show/hide category
+                if (categoryHasVisible) {
+                    category.style.display = '';
+                    if (searchTerm) {
+                        category.classList.add('open');
+                    }
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+
+            // Update search stats
+            if (searchTerm) {
+                searchStats.textContent = `Showing ${visibleCount} of ${totalCount} drugs`;
+                searchStats.style.display = 'block';
+            } else {
+                searchStats.style.display = 'none';
+            }
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            filterDrugs();
+        }
+
+        // Drug references database
+        const drugReferences = {
+            'propofol': {
+                name: 'Propofol',
+                packageInsert: 'Diprivan® Package Insert. Fresenius Kabi. 2022.',
+                pubmed: [
+                    { title: 'Propofol pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/8256626/', pmid: '8256626' },
+                    { title: 'Propofol infusion syndrome: An update', url: 'https://pubmed.ncbi.nlm.nih.gov/30500716/', pmid: '30500716' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 30', 'Barash Clinical Anesthesia 8th ed: Chapter 25']
+            },
+            'etomidate': {
+                name: 'Etomidate',
+                packageInsert: 'Amidate® Package Insert. Hospira. 2021.',
+                pubmed: [
+                    { title: 'Etomidate: A review of its pharmacological properties', url: 'https://pubmed.ncbi.nlm.nih.gov/24105789/', pmid: '24105789' },
+                    { title: 'Adrenal suppression with etomidate', url: 'https://pubmed.ncbi.nlm.nih.gov/16844843/', pmid: '16844843' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 30', 'Stoelting\'s Pharmacology 5th ed: Chapter 8']
+            },
+            'ketamine': {
+                name: 'Ketamine',
+                packageInsert: 'Ketalar® Package Insert. Par Pharmaceutical. 2022.',
+                pubmed: [
+                    { title: 'Ketamine for perioperative pain management', url: 'https://pubmed.ncbi.nlm.nih.gov/29283798/', pmid: '29283798' },
+                    { title: 'Ketamine: NMDA receptors and beyond', url: 'https://pubmed.ncbi.nlm.nih.gov/26114983/', pmid: '26114983' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 30', 'Barash Clinical Anesthesia 8th ed: Chapter 25']
+            },
+            'midazolam': {
+                name: 'Midazolam',
+                packageInsert: 'Versed® Package Insert. Akorn. 2021.',
+                pubmed: [
+                    { title: 'Midazolam: A review of its use in intravenous sedation', url: 'https://pubmed.ncbi.nlm.nih.gov/2890489/', pmid: '2890489' },
+                    { title: 'Midazolam pharmacokinetics in critically ill patients', url: 'https://pubmed.ncbi.nlm.nih.gov/25412816/', pmid: '25412816' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 31', 'Stoelting\'s Pharmacology 5th ed: Chapter 6']
+            },
+            'dexmedetomidine': {
+                name: 'Dexmedetomidine',
+                packageInsert: 'Precedex® Package Insert. Pfizer. 2023.',
+                pubmed: [
+                    { title: 'Dexmedetomidine: A review of its use in anesthesia and intensive care', url: 'https://pubmed.ncbi.nlm.nih.gov/30809592/', pmid: '30809592' },
+                    { title: 'Dexmedetomidine reduces emergence delirium', url: 'https://pubmed.ncbi.nlm.nih.gov/23571773/', pmid: '23571773' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 31', 'Barash Clinical Anesthesia 8th ed: Chapter 21']
+            },
+            'fentanyl': {
+                name: 'Fentanyl',
+                packageInsert: 'Sublimaze® Package Insert. Akorn. 2022.',
+                pubmed: [
+                    { title: 'Fentanyl pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/16681375/', pmid: '16681375' },
+                    { title: 'Fentanyl-induced chest wall rigidity', url: 'https://pubmed.ncbi.nlm.nih.gov/28288037/', pmid: '28288037' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 29', 'Stoelting\'s Pharmacology 5th ed: Chapter 3']
+            },
+            'remifentanil': {
+                name: 'Remifentanil',
+                packageInsert: 'Ultiva® Package Insert. GlaxoSmithKline. 2021.',
+                pubmed: [
+                    { title: 'Remifentanil: An updated review of its use in anaesthesia', url: 'https://pubmed.ncbi.nlm.nih.gov/17645234/', pmid: '17645234' },
+                    { title: 'Context-sensitive half-time of remifentanil', url: 'https://pubmed.ncbi.nlm.nih.gov/8809081/', pmid: '8809081' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 29', 'Barash Clinical Anesthesia 8th ed: Chapter 20']
+            },
+            'morphine': {
+                name: 'Morphine',
+                packageInsert: 'Morphine Sulfate Package Insert. Multiple manufacturers. 2022.',
+                pubmed: [
+                    { title: 'Morphine pharmacokinetics and metabolism', url: 'https://pubmed.ncbi.nlm.nih.gov/12873087/', pmid: '12873087' },
+                    { title: 'Morphine-6-glucuronide: Clinical implications', url: 'https://pubmed.ncbi.nlm.nih.gov/15656704/', pmid: '15656704' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 29', 'Stoelting\'s Pharmacology 5th ed: Chapter 3']
+            },
+            'hydromorphone': {
+                name: 'Hydromorphone',
+                packageInsert: 'Dilaudid® Package Insert. Pfizer. 2021.',
+                pubmed: [
+                    { title: 'Hydromorphone: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/24809685/', pmid: '24809685' },
+                    { title: 'Hydromorphone in acute pain management', url: 'https://pubmed.ncbi.nlm.nih.gov/21878057/', pmid: '21878057' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 29', 'Stoelting\'s Pharmacology 5th ed: Chapter 3']
+            },
+            'succinylcholine': {
+                name: 'Succinylcholine',
+                packageInsert: 'Anectine® Package Insert. Sandoz. 2022.',
+                pubmed: [
+                    { title: 'Succinylcholine-induced hyperkalemia', url: 'https://pubmed.ncbi.nlm.nih.gov/16685249/', pmid: '16685249' },
+                    { title: 'Malignant hyperthermia and succinylcholine', url: 'https://pubmed.ncbi.nlm.nih.gov/28486386/', pmid: '28486386' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Stoelting\'s Pharmacology 5th ed: Chapter 9']
+            },
+            'rocuronium': {
+                name: 'Rocuronium',
+                packageInsert: 'Zemuron® Package Insert. Merck. 2022.',
+                pubmed: [
+                    { title: 'Rocuronium: A review of its use in facilitation of rapid sequence intubation', url: 'https://pubmed.ncbi.nlm.nih.gov/10904749/', pmid: '10904749' },
+                    { title: 'Sugammadex for reversal of rocuronium', url: 'https://pubmed.ncbi.nlm.nih.gov/25851390/', pmid: '25851390' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Barash Clinical Anesthesia 8th ed: Chapter 20']
+            },
+            'vecuronium': {
+                name: 'Vecuronium',
+                packageInsert: 'Norcuron® Package Insert. Organon. 2020.',
+                pubmed: [
+                    { title: 'Vecuronium pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/6362045/', pmid: '6362045' },
+                    { title: 'Vecuronium in critically ill patients', url: 'https://pubmed.ncbi.nlm.nih.gov/1542130/', pmid: '1542130' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Stoelting\'s Pharmacology 5th ed: Chapter 9']
+            },
+            'cisatracurium': {
+                name: 'Cisatracurium',
+                packageInsert: 'Nimbex® Package Insert. AbbVie. 2021.',
+                pubmed: [
+                    { title: 'Cisatracurium: A review of its use in anaesthesia', url: 'https://pubmed.ncbi.nlm.nih.gov/11681547/', pmid: '11681547' },
+                    { title: 'Hofmann elimination and organ-independent clearance', url: 'https://pubmed.ncbi.nlm.nih.gov/8988779/', pmid: '8988779' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Barash Clinical Anesthesia 8th ed: Chapter 20']
+            },
+            'neostigmine': {
+                name: 'Neostigmine',
+                packageInsert: 'Bloxiverz® Package Insert. Eclat. 2021.',
+                pubmed: [
+                    { title: 'Neostigmine for reversal of neuromuscular blockade', url: 'https://pubmed.ncbi.nlm.nih.gov/25851387/', pmid: '25851387' },
+                    { title: 'Residual neuromuscular blockade and critical respiratory events', url: 'https://pubmed.ncbi.nlm.nih.gov/29200077/', pmid: '29200077' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Stoelting\'s Pharmacology 5th ed: Chapter 9']
+            },
+            'naloxone': {
+                name: 'Naloxone',
+                packageInsert: 'Narcan® Package Insert. Emergent BioSolutions. 2023.',
+                pubmed: [
+                    { title: 'Naloxone for opioid overdose', url: 'https://pubmed.ncbi.nlm.nih.gov/22385071/', pmid: '22385071' },
+                    { title: 'Naloxone pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/31239114/', pmid: '31239114' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 29', 'Stoelting\'s Pharmacology 5th ed: Chapter 3']
+            },
+            'flumazenil': {
+                name: 'Flumazenil',
+                packageInsert: 'Romazicon® Package Insert. Fresenius Kabi. 2021.',
+                pubmed: [
+                    { title: 'Flumazenil: A review of its pharmacology and use', url: 'https://pubmed.ncbi.nlm.nih.gov/1648578/', pmid: '1648578' },
+                    { title: 'Flumazenil and seizures: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/22153017/', pmid: '22153017' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 31', 'Stoelting\'s Pharmacology 5th ed: Chapter 6']
+            },
+            'glycopyrrolate': {
+                name: 'Glycopyrrolate',
+                packageInsert: 'Robinul® Package Insert. Accord Healthcare. 2022.',
+                pubmed: [
+                    { title: 'Glycopyrrolate: A comparative review', url: 'https://pubmed.ncbi.nlm.nih.gov/6136564/', pmid: '6136564' },
+                    { title: 'Glycopyrrolate versus atropine with neostigmine', url: 'https://pubmed.ncbi.nlm.nih.gov/26618267/', pmid: '26618267' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 34', 'Stoelting\'s Pharmacology 5th ed: Chapter 9']
+            },
+            'atropine': {
+                name: 'Atropine',
+                packageInsert: 'Atropine Sulfate Package Insert. Multiple manufacturers. 2022.',
+                pubmed: [
+                    { title: 'Atropine for bradycardia: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/23774828/', pmid: '23774828' },
+                    { title: 'Paradoxical bradycardia with low-dose atropine', url: 'https://pubmed.ncbi.nlm.nih.gov/17115847/', pmid: '17115847' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 16', 'Stoelting\'s Pharmacology 5th ed: Chapter 9']
+            },
+            'ondansetron': {
+                name: 'Ondansetron',
+                packageInsert: 'Zofran® Package Insert. GlaxoSmithKline. 2022.',
+                pubmed: [
+                    { title: 'Ondansetron for PONV prophylaxis: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/23700330/', pmid: '23700330' },
+                    { title: 'QTc prolongation with ondansetron', url: 'https://pubmed.ncbi.nlm.nih.gov/23027738/', pmid: '23027738' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 87', 'Barash Clinical Anesthesia 8th ed: Chapter 56']
+            },
+            'dexamethasone': {
+                name: 'Dexamethasone',
+                packageInsert: 'Decadron® Package Insert. Hikma. 2022.',
+                pubmed: [
+                    { title: 'Dexamethasone for PONV prevention: A meta-analysis', url: 'https://pubmed.ncbi.nlm.nih.gov/23756170/', pmid: '23756170' },
+                    { title: 'Perioperative dexamethasone and surgical site infection', url: 'https://pubmed.ncbi.nlm.nih.gov/29664888/', pmid: '29664888' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 87', 'Barash Clinical Anesthesia 8th ed: Chapter 56']
+            },
+            'metoclopramide': {
+                name: 'Metoclopramide',
+                packageInsert: 'Reglan® Package Insert. ANI Pharmaceuticals. 2021.',
+                pubmed: [
+                    { title: 'Metoclopramide for PONV: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/15681908/', pmid: '15681908' },
+                    { title: 'Extrapyramidal symptoms with metoclopramide', url: 'https://pubmed.ncbi.nlm.nih.gov/21029015/', pmid: '21029015' }
+                ],
+                textbooks: ['Miller\'s Anesthesia 9th ed: Chapter 87', 'Stoelting\'s Pharmacology 5th ed: Chapter 27']
+            }
+        };
+
+        // Open reference modal
+        function openRefModal(drug) {
+            const modal = document.getElementById('refModal');
+            const title = document.getElementById('refModalTitle');
+            const body = document.getElementById('refModalBody');
+
+            const refs = drugReferences[drug];
+            if (!refs) {
+                body.innerHTML = '<p style="color: #64748B;">References are being compiled. Check back soon.</p>';
+                title.textContent = 'Drug References';
+            } else {
+                title.innerHTML = `<svg class="ref-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg> ${refs.name} References`;
+
+                let html = '';
+
+                // Package Insert
+                if (refs.packageInsert) {
+                    html += `
+                        <div class="ref-section">
+                            <div class="ref-section-title">📋 Package Insert</div>
+                            <div class="ref-citation">${refs.packageInsert}</div>
+                        </div>
+                    `;
+                }
+
+                // PubMed Articles
+                if (refs.pubmed && refs.pubmed.length > 0) {
+                    html += `
+                        <div class="ref-section">
+                            <div class="ref-section-title">🔬 PubMed Research</div>
+                            <ul class="ref-list">
+                    `;
+                    refs.pubmed.forEach(article => {
+                        html += `
+                            <li class="ref-item">
+                                <a href="${article.url}" target="_blank" rel="noopener noreferrer">
+                                    <svg class="ref-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                    <span>${article.title} <span class="ref-badge">PMID: ${article.pmid}</span></span>
+                                </a>
+                            </li>
+                        `;
+                    });
+                    html += `
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                // Textbooks
+                if (refs.textbooks && refs.textbooks.length > 0) {
+                    html += `
+                        <div class="ref-section">
+                            <div class="ref-section-title">📚 Textbook References</div>
+                            <ul class="ref-list">
+                    `;
+                    refs.textbooks.forEach(textbook => {
+                        html += `
+                            <li class="ref-item">
+                                <div class="ref-citation">${textbook}</div>
+                            </li>
+                        `;
+                    });
+                    html += `
+                            </ul>
+                        </div>
+                    `;
+                }
+
+                body.innerHTML = html;
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close reference modal
+        function closeRefModal() {
+            const modal = document.getElementById('refModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(event) {
+            const modal = document.getElementById('refModal');
+            if (event.target === modal) {
+                closeRefModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeRefModal();
+            }
+        });
     </script>
         </main>
     </div>
