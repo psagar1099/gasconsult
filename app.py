@@ -1639,6 +1639,8 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -1654,6 +1656,8 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Main Content -->
@@ -3724,6 +3728,8 @@ HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -3739,6 +3745,8 @@ HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         {% if messages and messages|length > 0 %}
@@ -5066,6 +5074,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -5081,6 +5091,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <main class="main-content">
@@ -5988,6 +6000,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -6003,6 +6017,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <main class="main-content">
@@ -6522,6 +6538,8 @@ TERMS_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -6537,6 +6555,8 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <main class="main-content">
@@ -7453,6 +7473,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -7468,6 +7490,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <main class="main-content">
@@ -8454,6 +8478,8 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
@@ -8470,6 +8496,8 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Main Content -->
@@ -9645,6 +9673,8 @@ CRISIS_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link active">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
 
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -9662,6 +9692,8 @@ CRISIS_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Hero -->
@@ -11890,6 +11922,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -11905,6 +11939,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <main class="main-content">
@@ -13456,6 +13492,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -13473,6 +13511,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Hero -->
@@ -15819,6 +15859,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Main Content -->
