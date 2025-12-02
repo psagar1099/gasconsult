@@ -11100,52 +11100,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -12198,6 +12152,228 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             color: var(--gray-600);
         }
 
+        /* Reference Button & Modal Styles */
+        .ref-btn {
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border: 1px solid var(--blue-200);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            margin-left: 12px;
+        }
+
+        .ref-btn:hover {
+            background: var(--blue-100);
+            border-color: var(--blue-300);
+            transform: translateY(-1px);
+        }
+
+        .ref-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 28px 32px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .modal-close {
+            background: var(--gray-100);
+            border: none;
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 16px;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-200);
+            transform: rotate(90deg);
+        }
+
+        .modal-close svg {
+            width: 20px;
+            height: 20px;
+            color: var(--gray-600);
+        }
+
+        .modal-body {
+            padding: 24px 32px 32px;
+        }
+
+        .ref-section {
+            margin-bottom: 28px;
+        }
+
+        .ref-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ref-section-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--blue-600);
+        }
+
+        .ref-item {
+            background: var(--gray-50);
+            border-left: 3px solid var(--blue-500);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .ref-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .ref-item strong {
+            color: var(--gray-900);
+        }
+
+        .ref-item a {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .ref-item a:hover {
+            text-decoration: underline;
+        }
+
+        .pmid-badge {
+            background: var(--blue-100);
+            color: var(--blue-700);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                max-height: 90vh;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .modal-header {
+                padding: 20px 20px 16px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-title {
+                font-size: 19px;
+            }
+
+            .ref-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+                margin-left: 8px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -12227,14 +12403,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -12291,7 +12462,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Propofol</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('propofol')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Diprivan</div>
                         </div>
                         <div class="concentration-badge">10 mg/mL</div>
@@ -12327,7 +12498,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Etomidate</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('etomidate')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Amidate</div>
                         </div>
                         <div class="concentration-badge">2 mg/mL</div>
@@ -12363,7 +12534,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Ketamine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('ketamine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Ketalar</div>
                         </div>
                         <div class="concentration-badge">50/100 mg/mL</div>
@@ -12414,7 +12585,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Fentanyl</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('fentanyl')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Sublimaze</div>
                         </div>
                         <div class="concentration-badge">50 mcg/mL</div>
@@ -12465,7 +12636,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Succinylcholine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('succinylcholine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Anectine</div>
                         </div>
                         <div class="concentration-badge">20 mg/mL</div>
@@ -12501,7 +12672,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Rocuronium</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('rocuronium')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Zemuron</div>
                         </div>
                         <div class="concentration-badge">10 mg/mL</div>
@@ -12552,7 +12723,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Phenylephrine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('phenylephrine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Neo-Synephrine</div>
                         </div>
                         <div class="concentration-badge">100 mcg/mL</div>
@@ -12588,7 +12759,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Ephedrine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('ephedrine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">—</div>
                         </div>
                         <div class="concentration-badge">5 mg/mL</div>
@@ -12639,7 +12810,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Sugammadex</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('sugammadex')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Bridion</div>
                         </div>
                         <div class="concentration-badge">100 mg/mL</div>
@@ -12690,7 +12861,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 <div class="drug-card">
                     <div class="drug-header">
                         <div class="drug-name-section">
-                            <h3>Lidocaine</h3>
+                            <h3>\1<button class="ref-btn" onclick="openRefModal('lidocaine')" title="View references"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>Refs</button>
                             <div class="drug-subtitle">Xylocaine</div>
                         </div>
                         <div class="concentration-badge">1% = 10 mg/mL</div>
@@ -12764,6 +12935,13 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
+        <!-- Subtle References Note -->
+        <div style="max-width: 1200px; margin: 16px auto 24px; padding: 0 20px; text-align: center;">
+            <p style="color: #64748B; font-size: 13px; line-height: 1.6;">
+                Dosing based on FDA package inserts and Miller's Anesthesia 9th ed, Barash Clinical Anesthesia 8th ed, Stoelting's Pharmacology 5th ed.
+            </p>
+        </div>
+
     </main>
 
     <!-- Glassmorphism Footer -->
@@ -12805,7 +12983,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <div class="crisis-modal-content">
                 <div class="protocol-grid">
                     <button class="protocol-btn">
-                        <div class="protocol-title">Malignant Hyperthermia</div>
+                        <div class="protocol-title">Malignant Hyperthermia</div><button class="ref-btn" onclick="openCrisisRefModal('malignant-hyperthermia')" title="View evidence & guidelines" style="margin-top: 8px;"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>Evidence</button>
                         <div class="protocol-desc">Dantrolene 2.5 mg/kg, call MH hotline</div>
                     </button>
                     <button class="protocol-btn">
@@ -12813,7 +12991,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         <div class="protocol-desc">20% Intralipid bolus + infusion</div>
                     </button>
                     <button class="protocol-btn">
-                        <div class="protocol-title">Anaphylaxis</div>
+                        <div class="protocol-title">Anaphylaxis</div><button class="ref-btn" onclick="openCrisisRefModal('anaphylaxis')" title="View evidence & guidelines" style="margin-top: 8px;"><svg fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>Evidence</button>
                         <div class="protocol-desc">Epinephrine, fluids, steroids</div>
                     </button>
                     <button class="protocol-btn">
@@ -12903,128 +13081,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
     </script>
         </main>
     </div>
-
-    <!-- Dosing References & Evidence Base -->
-    <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
-        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Dosing References & Guidelines</h2>
-            
-            <p style="color: #475569; line-height: 1.8; margin-bottom: 32px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
-                All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors, comorbidities, and clinical context.
-            </p>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;">Primary References by Drug Class</h3>
-                
-                <div style="background: #F8FAFC; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #3B82F6;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💉 Induction Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Propofol:</strong> Diprivan® Package Insert. Fresenius Kabi. 2022. Initial dose: 1.5-2.5 mg/kg IV; elderly/ASA 3-4: reduce by 25-50%</li>
-                        <li><strong>Etomidate:</strong> Amidate® Package Insert. Hospira. 2021. Initial dose: 0.2-0.4 mg/kg IV over 30-60 seconds</li>
-                        <li><strong>Ketamine:</strong> Ketalar® Package Insert. Par Pharmaceutical. 2022. Induction: 1-2 mg/kg IV, 4-5 mg/kg IM</li>
-                        <li>Barash PG, et al. <em>Clinical Anesthesia</em>. 8th ed. Wolters Kluwer; 2017:Chapter 25</li>
-                        <li>Miller RD, et al. <em>Miller's Anesthesia</em>. 9th ed. Elsevier; 2020:Chapter 30 (Intravenous Anesthetics)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FEF2F2; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #EF4444;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💊 Opioids</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Fentanyl:</strong> Sublimaze® Package Insert. Akorn. 2022. Moderate dose: 2-20 mcg/kg; high dose: 20-50 mcg/kg</li>
-                        <li><strong>Sufentanil:</strong> Sufenta® Package Insert. Janssen. 2019. Induction supplement: 0.5-30 mcg/kg</li>
-                        <li><strong>Remifentanil:</strong> Ultiva® Package Insert. GlaxoSmithKline. 2021. Induction: 0.5-1 mcg/kg over 30-60 sec</li>
-                        <li><strong>Morphine:</strong> Morphine Sulfate Package Insert. Multiple manufacturers. Titrate 2-10 mg IV q2-4h PRN</li>
-                        <li>Stoelting RK, Hillier SC. <em>Pharmacology & Physiology in Anesthetic Practice</em>. 5th ed. Wolters Kluwer; 2015:Chapter 3</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFF7ED; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">🔄 Neuromuscular Blocking Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Succinylcholine:</strong> Quelicin® Package Insert. Hospira. 2021. RSI: 1-1.5 mg/kg IV; IM: 4 mg/kg (max 150 mg)</li>
-                        <li><strong>Rocuronium:</strong> Zemuron® Package Insert. Merck. 2022. Intubating: 0.6 mg/kg; RSI: 1.2 mg/kg</li>
-                        <li><strong>Vecuronium:</strong> Norcuron® Package Insert. Multiple manufacturers. Intubating: 0.08-0.1 mg/kg</li>
-                        <li><strong>Cisatracurium:</strong> Nimbex® Package Insert. AbbVie. 2020. Intubating: 0.15-0.2 mg/kg</li>
-                        <li>Naguib M, et al. Consensus Statement on Perioperative Use of Neuromuscular Monitoring. <em>Anesth Analg</em>. 2018;127(1):71-80. PMID: 29200077</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFFBEB; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #84CC16;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">↩️ Reversal Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Sugammadex:</strong> Bridion® Package Insert. Merck. 2023. Routine reversal (rocuronium/vecuronium): 2 mg/kg at reappearance of T2; Deep block: 4 mg/kg at 1-2 post-tetanic counts; Immediate reversal: 16 mg/kg (3 minutes after rocuronium 1.2 mg/kg)</li>
-                        <li><strong>Neostigmine:</strong> Multiple manufacturers. 0.04-0.07 mg/kg (max 5 mg) with glycopyrrolate 0.01 mg/kg or atropine 0.02 mg/kg</li>
-                        <li><strong>Naloxone:</strong> Narcan® Package Insert. Adapt. 2022. Opioid reversal: 0.04-0.4 mg IV q2-3min titrated to effect</li>
-                        <li><strong>Flumazenil:</strong> Romazicon® Package Insert. Fresenius Kabi. Initial: 0.2 mg IV over 15 sec, then 0.2 mg q60sec PRN (max 1 mg total)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #F0FDF4; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #22C55E;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💉 Vasopressors & Inotropes</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Phenylephrine:</strong> Package Insert. Multiple manufacturers. Bolus: 50-200 mcg IV; Infusion: 10-200 mcg/min (0.15-3 mcg/kg/min)</li>
-                        <li><strong>Ephedrine:</strong> Package Insert. Multiple manufacturers. Bolus: 5-10 mg IV q5-10min PRN (max 50 mg)</li>
-                        <li><strong>Norepinephrine:</strong> Levophed® Package Insert. Hospira. Infusion: 0.01-3 mcg/kg/min, titrate to MAP >65 mmHg</li>
-                        <li><strong>Epinephrine:</strong> Adrenalin® Package Insert. Par Pharmaceutical. Cardiac arrest: 1 mg IV/IO q3-5min; Infusion: 0.01-0.5 mcg/kg/min; Anaphylaxis: 0.3-0.5 mg IM</li>
-                        <li><strong>Vasopressin:</strong> Vasostrict® Package Insert. Par Pharmaceutical. Vasodilatory shock: 0.03 units/min (range 0.01-0.07)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #EFF6FF; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #3B82F6;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">🩺 Local Anesthetics</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Lidocaine:</strong> Xylocaine® Package Insert. AstraZeneca. 2021. Max dose: 4.5 mg/kg plain (300 mg); 7 mg/kg with epinephrine (500 mg). IV antiarrhythmic: 1-1.5 mg/kg bolus</li>
-                        <li><strong>Bupivacaine:</strong> Marcaine® Package Insert. Hospira. Max dose: 2.5 mg/kg plain (175 mg); 3 mg/kg with epinephrine (225 mg). Use 0.25% or 0.5% for epidural; 0.5% or 0.75% for peripheral nerve blocks (0.75% contraindicated in obstetrics)</li>
-                        <li><strong>Ropivacaine:</strong> Naropin® Package Insert. AstraZeneca. Max dose: 3 mg/kg (200-250 mg). Epidural: 0.2% infusion 6-14 mL/h</li>
-                        <li>Neal JM, et al. ASRA Practice Advisory on Local Anesthetic Systemic Toxicity. <em>Reg Anesth Pain Med</em>. 2018;43(2):113-123. PMID: 29356773</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;">Authoritative Textbook References</h3>
-                <ol style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px;">
-                    <li>Miller RD, Cohen NH, Eriksson LI, et al. <em>Miller's Anesthesia</em>. 9th Edition. Philadelphia: Elsevier; 2020.</li>
-                    <li>Barash PG, Cullen BF, Stoelting RK, et al. <em>Clinical Anesthesia</em>. 8th Edition. Philadelphia: Wolters Kluwer; 2017.</li>
-                    <li>Stoelting RK, Hillier SC. <em>Stoelting's Pharmacology & Physiology in Anesthetic Practice</em>. 5th Edition. Philadelphia: Wolters Kluwer; 2015.</li>
-                    <li>Hemmings HC, Egan TD. <em>Pharmacology and Physiology for Anesthesia: Foundations and Clinical Application</em>. 2nd Edition. Philadelphia: Elsevier; 2019.</li>
-                    <li>Butterworth JF, Mackey DC, Wasnick JD. <em>Morgan & Mikhail's Clinical Anesthesiology</em>. 6th Edition. New York: McGraw-Hill; 2018.</li>
-                </ol>
-            </div>
-
-            <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 20px; border-radius: 8px;">
-                <p style="color: #78350F; font-size: 14px; line-height: 1.8; margin-bottom: 12px;">
-                    <strong>⚠️ Important Clinical Considerations:</strong>
-                </p>
-                <ul style="color: #78350F; font-size: 14px; line-height: 1.8; padding-left: 24px; margin: 0;">
-                    <li><strong>Individualize dosing:</strong> Adjust for age, weight, comorbidities, renal/hepatic function, drug interactions</li>
-                    <li><strong>Elderly patients:</strong> Reduce induction agent doses by 25-50%; increased sensitivity to opioids and benzodiazepines</li>
-                    <li><strong>Obesity:</strong> Dose induction agents on lean body weight; NMBAs on total body weight (except succinylcholine on total body weight)</li>
-                    <li><strong>Renal/Hepatic impairment:</strong> May require dose reduction and prolonged monitoring for drugs with hepatic/renal clearance</li>
-                    <li><strong>Pediatric dosing:</strong> Refer to pediatric-specific resources (doses listed here are for adults ≥18 years)</li>
-                    <li><strong>Always verify:</strong> Check current package insert, institutional protocols, and drug interactions before administration</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
 </body>
 </html>
 """
@@ -16660,9 +16719,19 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             {% endif %}
 
             <!-- Methodology & References Section -->
-            <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px;">
-                    <h2 style="font-size: 24px; font-weight: 700; color: #1E293B; margin-bottom: 24px; text-align: center;">📊 Algorithm Methodology & Evidence Base</h2>
+            <details style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+                <summary style="background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+                    <svg style="width: 24px; height: 24px; color: #2563EB; flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span style="font-size: 18px; font-weight: 700; color: #1E293B; flex: 1;">Algorithm Methodology & Evidence Base</span>
+                    <svg style="width: 20px; height: 20px; color: #64748B; transition: transform 0.3s ease;" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 12px;">
 
                     <div style="margin-bottom: 28px;">
                         <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Data Sources & Development</h3>
@@ -16720,7 +16789,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </ol>
                     </div>
                 </div>
-            </div>
+            </details>
 
         </main>
 
