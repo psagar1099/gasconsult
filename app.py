@@ -11502,52 +11502,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -12629,14 +12583,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-link">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-link">Informed Consent</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -13305,129 +13254,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 btn.classList.toggle('active');
             }
         }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
     </script>
-
-    <!-- Dosing References & Evidence Base -->
-    <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
-        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Dosing References & Guidelines</h2>
-            
-            <p style="color: #475569; line-height: 1.8; margin-bottom: 32px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
-                All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors, comorbidities, and clinical context.
-            </p>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;">Primary References by Drug Class</h3>
-                
-                <div style="background: #F8FAFC; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #3B82F6;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💉 Induction Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Propofol:</strong> Diprivan® Package Insert. Fresenius Kabi. 2022. Initial dose: 1.5-2.5 mg/kg IV; elderly/ASA 3-4: reduce by 25-50%</li>
-                        <li><strong>Etomidate:</strong> Amidate® Package Insert. Hospira. 2021. Initial dose: 0.2-0.4 mg/kg IV over 30-60 seconds</li>
-                        <li><strong>Ketamine:</strong> Ketalar® Package Insert. Par Pharmaceutical. 2022. Induction: 1-2 mg/kg IV, 4-5 mg/kg IM</li>
-                        <li>Barash PG, et al. <em>Clinical Anesthesia</em>. 8th ed. Wolters Kluwer; 2017:Chapter 25</li>
-                        <li>Miller RD, et al. <em>Miller's Anesthesia</em>. 9th ed. Elsevier; 2020:Chapter 30 (Intravenous Anesthetics)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FEF2F2; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #EF4444;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💊 Opioids</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Fentanyl:</strong> Sublimaze® Package Insert. Akorn. 2022. Moderate dose: 2-20 mcg/kg; high dose: 20-50 mcg/kg</li>
-                        <li><strong>Sufentanil:</strong> Sufenta® Package Insert. Janssen. 2019. Induction supplement: 0.5-30 mcg/kg</li>
-                        <li><strong>Remifentanil:</strong> Ultiva® Package Insert. GlaxoSmithKline. 2021. Induction: 0.5-1 mcg/kg over 30-60 sec</li>
-                        <li><strong>Morphine:</strong> Morphine Sulfate Package Insert. Multiple manufacturers. Titrate 2-10 mg IV q2-4h PRN</li>
-                        <li>Stoelting RK, Hillier SC. <em>Pharmacology & Physiology in Anesthetic Practice</em>. 5th ed. Wolters Kluwer; 2015:Chapter 3</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFF7ED; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">🔄 Neuromuscular Blocking Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Succinylcholine:</strong> Quelicin® Package Insert. Hospira. 2021. RSI: 1-1.5 mg/kg IV; IM: 4 mg/kg (max 150 mg)</li>
-                        <li><strong>Rocuronium:</strong> Zemuron® Package Insert. Merck. 2022. Intubating: 0.6 mg/kg; RSI: 1.2 mg/kg</li>
-                        <li><strong>Vecuronium:</strong> Norcuron® Package Insert. Multiple manufacturers. Intubating: 0.08-0.1 mg/kg</li>
-                        <li><strong>Cisatracurium:</strong> Nimbex® Package Insert. AbbVie. 2020. Intubating: 0.15-0.2 mg/kg</li>
-                        <li>Naguib M, et al. Consensus Statement on Perioperative Use of Neuromuscular Monitoring. <em>Anesth Analg</em>. 2018;127(1):71-80. PMID: 29200077</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FFFBEB; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #84CC16;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">↩️ Reversal Agents</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Sugammadex:</strong> Bridion® Package Insert. Merck. 2023. Routine reversal (rocuronium/vecuronium): 2 mg/kg at reappearance of T2; Deep block: 4 mg/kg at 1-2 post-tetanic counts; Immediate reversal: 16 mg/kg (3 minutes after rocuronium 1.2 mg/kg)</li>
-                        <li><strong>Neostigmine:</strong> Multiple manufacturers. 0.04-0.07 mg/kg (max 5 mg) with glycopyrrolate 0.01 mg/kg or atropine 0.02 mg/kg</li>
-                        <li><strong>Naloxone:</strong> Narcan® Package Insert. Adapt. 2022. Opioid reversal: 0.04-0.4 mg IV q2-3min titrated to effect</li>
-                        <li><strong>Flumazenil:</strong> Romazicon® Package Insert. Fresenius Kabi. Initial: 0.2 mg IV over 15 sec, then 0.2 mg q60sec PRN (max 1 mg total)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #F0FDF4; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #22C55E;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">💉 Vasopressors & Inotropes</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Phenylephrine:</strong> Package Insert. Multiple manufacturers. Bolus: 50-200 mcg IV; Infusion: 10-200 mcg/min (0.15-3 mcg/kg/min)</li>
-                        <li><strong>Ephedrine:</strong> Package Insert. Multiple manufacturers. Bolus: 5-10 mg IV q5-10min PRN (max 50 mg)</li>
-                        <li><strong>Norepinephrine:</strong> Levophed® Package Insert. Hospira. Infusion: 0.01-3 mcg/kg/min, titrate to MAP >65 mmHg</li>
-                        <li><strong>Epinephrine:</strong> Adrenalin® Package Insert. Par Pharmaceutical. Cardiac arrest: 1 mg IV/IO q3-5min; Infusion: 0.01-0.5 mcg/kg/min; Anaphylaxis: 0.3-0.5 mg IM</li>
-                        <li><strong>Vasopressin:</strong> Vasostrict® Package Insert. Par Pharmaceutical. Vasodilatory shock: 0.03 units/min (range 0.01-0.07)</li>
-                    </ul>
-                </div>
-
-                <div style="background: #EFF6FF; padding: 24px; border-radius: 12px; margin-bottom: 20px; border-left: 4px solid #3B82F6;">
-                    <h4 style="font-size: 18px; font-weight: 600; color: #1E293B; margin-bottom: 14px;">🩺 Local Anesthetics</h4>
-                    <ul style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px; margin: 0;">
-                        <li><strong>Lidocaine:</strong> Xylocaine® Package Insert. AstraZeneca. 2021. Max dose: 4.5 mg/kg plain (300 mg); 7 mg/kg with epinephrine (500 mg). IV antiarrhythmic: 1-1.5 mg/kg bolus</li>
-                        <li><strong>Bupivacaine:</strong> Marcaine® Package Insert. Hospira. Max dose: 2.5 mg/kg plain (175 mg); 3 mg/kg with epinephrine (225 mg). Use 0.25% or 0.5% for epidural; 0.5% or 0.75% for peripheral nerve blocks (0.75% contraindicated in obstetrics)</li>
-                        <li><strong>Ropivacaine:</strong> Naropin® Package Insert. AstraZeneca. Max dose: 3 mg/kg (200-250 mg). Epidural: 0.2% infusion 6-14 mL/h</li>
-                        <li>Neal JM, et al. ASRA Practice Advisory on Local Anesthetic Systemic Toxicity. <em>Reg Anesth Pain Med</em>. 2018;43(2):113-123. PMID: 29356773</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 32px;">
-                <h3 style="font-size: 22px; font-weight: 700; color: #334155; margin-bottom: 20px;">Authoritative Textbook References</h3>
-                <ol style="color: #475569; line-height: 2; padding-left: 24px; font-size: 15px;">
-                    <li>Miller RD, Cohen NH, Eriksson LI, et al. <em>Miller's Anesthesia</em>. 9th Edition. Philadelphia: Elsevier; 2020.</li>
-                    <li>Barash PG, Cullen BF, Stoelting RK, et al. <em>Clinical Anesthesia</em>. 8th Edition. Philadelphia: Wolters Kluwer; 2017.</li>
-                    <li>Stoelting RK, Hillier SC. <em>Stoelting's Pharmacology & Physiology in Anesthetic Practice</em>. 5th Edition. Philadelphia: Wolters Kluwer; 2015.</li>
-                    <li>Hemmings HC, Egan TD. <em>Pharmacology and Physiology for Anesthesia: Foundations and Clinical Application</em>. 2nd Edition. Philadelphia: Elsevier; 2019.</li>
-                    <li>Butterworth JF, Mackey DC, Wasnick JD. <em>Morgan & Mikhail's Clinical Anesthesiology</em>. 6th Edition. New York: McGraw-Hill; 2018.</li>
-                </ol>
-            </div>
-
-            <div style="background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 20px; border-radius: 8px;">
-                <p style="color: #78350F; font-size: 14px; line-height: 1.8; margin-bottom: 12px;">
-                    <strong>⚠️ Important Clinical Considerations:</strong>
-                </p>
-                <ul style="color: #78350F; font-size: 14px; line-height: 1.8; padding-left: 24px; margin: 0;">
-                    <li><strong>Individualize dosing:</strong> Adjust for age, weight, comorbidities, renal/hepatic function, drug interactions</li>
-                    <li><strong>Elderly patients:</strong> Reduce induction agent doses by 25-50%; increased sensitivity to opioids and benzodiazepines</li>
-                    <li><strong>Obesity:</strong> Dose induction agents on lean body weight; NMBAs on total body weight (except succinylcholine on total body weight)</li>
-                    <li><strong>Renal/Hepatic impairment:</strong> May require dose reduction and prolonged monitoring for drugs with hepatic/renal clearance</li>
-                    <li><strong>Pediatric dosing:</strong> Refer to pediatric-specific resources (doses listed here are for adults ≥18 years)</li>
-                    <li><strong>Always verify:</strong> Check current package insert, institutional protocols, and drug interactions before administration</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-
         </main>
     </div>
-
 </body>
 </html>
 """
