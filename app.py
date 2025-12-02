@@ -13320,8 +13320,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
     </script>
-        </main>
-    </div>
 
     <!-- Dosing References & Evidence Base -->
     <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
@@ -13425,6 +13423,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 </ul>
             </div>
         </div>
+    </div>
+
+        </main>
     </div>
 
 </body>
