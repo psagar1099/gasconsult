@@ -3947,7 +3947,7 @@ HTML = """<!DOCTYPE html>
                     </div>
                     <h3 class="feature-title">Crisis Protocols</h3>
                     <p class="feature-desc">One-tap access to emergency protocols for MH, LAST, anaphylaxis, and more.</p>
-                    <a href="/" class="feature-link">View protocols <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    <a href="/crisis" class="feature-link">View protocols <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon cyan">
@@ -3955,7 +3955,7 @@ HTML = """<!DOCTYPE html>
                     </div>
                     <h3 class="feature-title">PubMed Integration</h3>
                     <p class="feature-desc">Every answer is backed by real citations from peer-reviewed medical literature.</p>
-                    <a href="/" class="feature-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    <a href="/evidence" class="feature-link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>
             </div>
         </section>
@@ -7791,6 +7791,977 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 menu.classList.toggle('active');
                 btn.classList.toggle('active');
             }
+        }
+    </script>
+</body>
+</html>
+"""
+
+EVIDENCE_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evidence-Based Methodology — gasconsult.ai</title>
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --green-50: #ECFDF5;
+            --green-500: #10B981;
+            --green-600: #059669;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
+            --amber-600: #D97706;
+            --purple-50: #FAF5FF;
+            --purple-500: #A855F7;
+            --purple-600: #9333EA;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 100px 16px 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .hero-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 15px;
+            color: var(--gray-500);
+            max-width: 700px;
+            margin: 0 auto 28px;
+            line-height: 1.6;
+        }
+
+        /* Content Cards */
+        .content-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            margin-bottom: 24px;
+        }
+
+        .content-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .content-card p {
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .content-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Study Hierarchy */
+        .hierarchy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .hierarchy-item {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .hierarchy-item:hover {
+            background: rgba(255,255,255,0.9);
+            border-color: var(--gray-300);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .hierarchy-rank {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .hierarchy-rank.gold {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .hierarchy-rank.silver {
+            background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+        }
+
+        .hierarchy-rank.bronze {
+            background: linear-gradient(135deg, #CD7F32 0%, #8B5A2B 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(205, 127, 50, 0.3);
+        }
+
+        .hierarchy-rank.standard {
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .hierarchy-content h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+        }
+
+        .hierarchy-content p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .feature-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .feature-icon-box.blue {
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .feature-icon-box.green {
+            background: linear-gradient(135deg, var(--green-500) 0%, var(--green-600) 100%);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .feature-icon-box.purple {
+            background: linear-gradient(135deg, var(--purple-500) 0%, var(--purple-600) 100%);
+            box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+        }
+
+        .feature-icon-box.amber {
+            background: linear-gradient(135deg, var(--amber-500) 0%, var(--amber-600) 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .feature-icon-box svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+        }
+
+        .feature-box-content h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .feature-box-content p {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--gray-900);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            color: #93C5FD;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
+
+        /* Responsive */
+        @media (min-width: 640px) {
+            .hierarchy-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
+            .main-content { padding: 120px 32px 60px; }
+
+            .hero-title { font-size: 48px; }
+            .hero-subtitle { font-size: 17px; }
+
+            .content-card { padding: 40px; }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .main-content { padding: 140px 40px 80px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <a href="/hypotension" class="nav-link">IOH Predictor</a>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <line x1="8" y1="7" x2="16" y2="7"></line>
+                        <line x1="8" y1="11" x2="16" y2="11"></line>
+                    </svg>
+                    <span>Evidence-Based</span>
+                </div>
+                <h1 class="hero-title">
+                    Our <span class="gradient">Methodology</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Every answer on GasConsult.ai is backed by peer-reviewed medical literature from PubMed, stratified by study quality and research strength
+                </p>
+            </div>
+
+            <!-- PubMed Integration -->
+            <div class="content-card">
+                <h2>PubMed Integration: How It Works</h2>
+                <p>
+                    When you ask a clinical question, GasConsult.ai doesn't rely on pre-trained knowledge or outdated information. Instead, we perform real-time searches of PubMed's database of over 35 million biomedical citations to find the most relevant, high-quality evidence.
+                </p>
+                <p>
+                    Our intelligent search algorithm automatically expands medical abbreviations, applies anesthesia-specific filters, and prioritizes the highest levels of evidence to ensure you receive answers grounded in current, peer-reviewed research.
+                </p>
+            </div>
+
+            <!-- Study Quality Hierarchy -->
+            <div class="content-card">
+                <h2>Evidence Hierarchy: How We Rank Studies</h2>
+                <p>
+                    Not all medical evidence is created equal. We stratify search results using the established evidence pyramid, prioritizing study designs with the highest methodological rigor and least susceptibility to bias.
+                </p>
+
+                <div class="hierarchy-grid">
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank gold">1</div>
+                        <div class="hierarchy-content">
+                            <h3>Systematic Reviews & Meta-Analyses</h3>
+                            <p>Comprehensive synthesis of multiple studies with statistical pooling. Highest level of evidence for clinical questions.</p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank gold">2</div>
+                        <div class="hierarchy-content">
+                            <h3>Cochrane Reviews</h3>
+                            <p>Gold-standard systematic reviews with rigorous methodology and regular updates to reflect new evidence.</p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank silver">3</div>
+                        <div class="hierarchy-content">
+                            <h3>Randomized Controlled Trials (RCTs)</h3>
+                            <p>Prospective studies with randomization and control groups. Minimizes bias and establishes causality.</p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank bronze">4</div>
+                        <div class="hierarchy-content">
+                            <h3>Clinical Practice Guidelines</h3>
+                            <p>Evidence-based recommendations from professional societies (ASA, ESA, etc.) synthesizing best practices.</p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank standard">5</div>
+                        <div class="hierarchy-content">
+                            <h3>Cohort & Case-Control Studies</h3>
+                            <p>Observational studies that analyze associations and outcomes in patient populations.</p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-item">
+                        <div class="hierarchy-rank standard">6</div>
+                        <div class="hierarchy-content">
+                            <h3>Case Series & Expert Reviews</h3>
+                            <p>Descriptive studies and expert opinion. Useful when higher-quality evidence is unavailable.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Strategy -->
+            <div class="content-card">
+                <h2>Intelligent Search Strategy</h2>
+                <p>
+                    Our PubMed search employs sophisticated filtering to maximize relevance and evidence quality:
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon-box blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.35-4.35"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Anesthesia-First Filtering</h3>
+                            <p>Searches prioritize anesthesiology-specific MeSH terms and journals before expanding to general medicine.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Study Type Prioritization</h3>
+                            <p>Filters for systematic reviews, meta-analyses, RCTs, and Cochrane reviews before other study types.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Recency Weighting (2015+)</h3>
+                            <p>Focuses on studies published since 2015 to ensure recommendations reflect current medical practice.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box amber">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="7.5 4.21 12 6.81 16.5 4.21"></polyline>
+                                <polyline points="7.5 19.79 7.5 14.6 3 12"></polyline>
+                                <polyline points="21 12 16.5 14.6 16.5 19.79"></polyline>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Synonym Expansion</h3>
+                            <p>Automatically expands medical abbreviations (e.g., "roc" → rocuronium, "TXA" → tranexamic acid) for comprehensive results.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Citation Quality -->
+            <div class="content-card">
+                <h2>Citation Transparency & Quality Indicators</h2>
+                <p>
+                    Every answer includes full citations with direct PubMed links, allowing you to verify sources instantly. We display confidence badges based on the quantity and quality of retrieved evidence:
+                </p>
+
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <div class="feature-icon-box green">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>High Confidence</h3>
+                            <p>10+ high-quality papers including systematic reviews or meta-analyses. Evidence is robust and well-established.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box amber">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M12 8v4"></path>
+                                <path d="M12 16h.01"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Moderate Confidence</h3>
+                            <p>5-10 papers with mixed study types. Evidence exists but may be less conclusive or require clinical judgment.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box blue">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Low Confidence</h3>
+                            <p>Fewer than 5 papers or limited study types. Evidence is emerging or question is poorly studied. Use with caution.</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-box">
+                        <div class="feature-icon-box purple">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-box-content">
+                            <h3>Full Reference List</h3>
+                            <p>Each answer displays complete citations with title, authors, journal, year, and clickable PubMed ID for verification.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example Search -->
+            <div class="content-card">
+                <h2>Example: Real-Time PubMed Query</h2>
+                <p>
+                    When you ask "What's the evidence for TXA in spine surgery?", here's what happens:
+                </p>
+                <div class="code-block">
+                    <code>
+1. Query Expansion: "TXA" → "tranexamic acid"<br>
+2. PubMed Search Filters:<br>
+   - Study types: Systematic Review, Meta-Analysis, RCT<br>
+   - Field: anesthesiology, spine surgery<br>
+   - Date range: 2015-2025<br>
+3. Retrieve Top 20 Results<br>
+4. Extract Metadata: Title, Authors, PMID, Year, Abstract<br>
+5. GPT-4o Synthesis: Analyze papers, synthesize answer<br>
+6. Output: Evidence-based answer + Full citations<br>
+7. Confidence Badge: High (15 RCTs + 3 meta-analyses found)
+                    </code>
+                </div>
+            </div>
+
+            <!-- Limitations -->
+            <div class="content-card">
+                <h2>Limitations & Responsible Use</h2>
+                <p>
+                    While our methodology maximizes evidence quality, users should be aware of important limitations:
+                </p>
+                <p>
+                    <strong>• Not a substitute for clinical judgment:</strong> Evidence-based answers inform, but never replace, individualized patient assessment and decision-making.
+                </p>
+                <p>
+                    <strong>• Publication bias:</strong> Published literature may overrepresent positive findings and underrepresent negative or null results.
+                </p>
+                <p>
+                    <strong>• AI synthesis limitations:</strong> GPT-4o may occasionally misinterpret nuanced findings or fail to capture context that experts would recognize.
+                </p>
+                <p>
+                    <strong>• Rapidly evolving field:</strong> New evidence emerges constantly. Always verify critical decisions with the latest guidelines and institutional protocols.
+                </p>
+                <p>
+                    <strong>• Educational tool only:</strong> GasConsult.ai is designed for learning and clinical decision support, not as a diagnostic or treatment tool.
+                </p>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
         }
     </script>
 </body>
@@ -15845,6 +16816,11 @@ def privacy():
 def calculators():
     """Clinical Calculators Hub - IBW, MABL, BSA, QTc, Fluids, PONV, ASA"""
     return render_template_string(CALCULATORS_HTML)
+
+@app.route("/evidence")
+def evidence():
+    """Evidence-Based Methodology - How PubMed integration works"""
+    return render_template_string(EVIDENCE_HTML)
 
 @app.route("/crisis")
 def crisis_protocols():
