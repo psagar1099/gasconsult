@@ -17355,6 +17355,14 @@ Previous conversation:
 
 Current follow-up question: {raw_query}
 
+CRITICAL: SELF-VERIFICATION PROTOCOL (Apply BEFORE finalizing your answer):
+Before providing your answer, internally verify:
+1. **Dosing Accuracy**: Are all drug doses within standard ranges? Cross-check against ASA guidelines and major textbooks
+2. **Contraindication Check**: Have you mentioned absolute contraindications and safety warnings?
+3. **Consistency Check**: Does your answer align with current ASA/ESA guidelines and standard practice?
+4. **Self-Questioning**: Ask yourself "How do I know this is correct?" Acknowledge uncertainty where appropriate.
+5. **Completeness**: For dosing questions, include route, typical range, and maximum doses. For safety questions, cover both common and serious risks.
+
 Provide a comprehensive, evidence-based answer that:
 1. Builds naturally on the previous discussion
 2. Includes specific clinical details (dosages, indications, contraindications, side effects)
@@ -17504,6 +17512,15 @@ Research papers (cite as [1], [2], etc.):
 
 Paper details:
 {context}
+
+CRITICAL: SELF-VERIFICATION PROTOCOL (Apply BEFORE finalizing your answer):
+Before providing your answer, internally verify:
+1. **Dosing Accuracy**: Are all drug doses within standard ranges? Cross-check against ASA guidelines, package inserts, and major textbooks (Miller's, Barash, Stoelting's)
+2. **Contraindication Check**: Have you mentioned absolute contraindications? Are there missing safety warnings?
+3. **Citation Verification**: Does each cited paper's abstract ACTUALLY support the specific claim? Remove citations that don't directly support the statement.
+4. **Consistency Check**: Does your answer align with current ASA/ESA guidelines and standard practice?
+5. **Self-Questioning**: Ask yourself "How do I know this is correct?" If uncertain about any specific claim, either verify it against the provided papers or acknowledge uncertainty.
+6. **Completeness**: For dosing questions, have you included route, typical range, and maximum doses? For safety questions, have you covered both common and serious risks?
 
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
@@ -17871,6 +17888,13 @@ Key risk factors identified: {', '.join(risk_factors) if risk_factors else 'Mini
 
 {patient_summary}
 
+SELF-VERIFICATION CHECKLIST (verify before answering):
+- Are recommendations consistent with ASA Difficult Airway Algorithm?
+- Have you considered all risk factors in your strategy?
+- Are equipment recommendations appropriate for the risk level?
+- Does positioning advice account for patient-specific factors (obesity, neck mobility, etc.)?
+- Is the backup plan clearly defined?
+
 Please provide a concise, evidence-based airway management plan including:
 1. Brief interpretation of the risk score and key factors
 2. Specific intubation strategy recommendation (e.g., video laryngoscopy first-line, awake fiberoptic, etc.)
@@ -17946,6 +17970,14 @@ Surgical Procedure: {surgical_procedure if surgical_procedure else 'Not specifie
         prompt = f"""You are an expert anesthesiologist preparing an informed consent discussion. Generate a comprehensive, evidence-based informed consent document for:
 
 {context}
+
+SELF-VERIFICATION CHECKLIST (verify before answering):
+- Are risk frequencies accurate and evidence-based (not exaggerated or minimized)?
+- Have you included both common risks AND rare but serious complications?
+- Are alternatives appropriate and clinically relevant for this procedure type?
+- Is the language patient-friendly without being overly simplistic?
+- Have you avoided giving false reassurance while being appropriately informative?
+- Are procedure-specific considerations accurately described?
 
 Structure your response with the following sections using HTML formatting:
 
@@ -18249,6 +18281,15 @@ Available Evidence (use numbered citations [1], [2], etc.):
 
 Paper Details:
 {all_context}
+
+CRITICAL: PATIENT-SPECIFIC ASSESSMENT PROTOCOL
+This is NOT a template - tailor EVERY recommendation to THIS specific patient. Before finalizing:
+1. **Individualize Risk Assessment**: Don't use generic statements. Calculate actual RCRI score, cite specific comorbidities.
+2. **Personalize Medication Recommendations**: Base timing on THIS patient's medications, procedures, and comorbidities - not general lists.
+3. **Specific Risk Quantification**: Provide actual risk percentages for THIS patient (cardiac event, respiratory complication, AKI) using RCRI/NSQIP framework.
+4. **Airway Individualization**: Address THIS patient's airway (BMI, OSA, age, Mallampati if mentioned, previous anesthesia).
+5. **Cross-Check**: Are all recommendations consistent with THIS patient's labs, EF, creatinine, comorbidities?
+6. **Avoid Generic Advice**: Don't say "consider monitoring" - specify WHICH monitors for THIS patient and WHY.
 
 Generate a comprehensive pre-operative assessment including:
 
