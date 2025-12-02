@@ -13115,6 +13115,42 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
+        <!-- References Section -->
+        <details style="margin: 24px auto; max-width: 1200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <summary style="font-size: 18px; font-weight: 700; color: #1E293B; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px;">
+                <span style="color: #2563EB;">📚</span> References & Guidelines
+                <svg style="width: 16px; height: 16px; color: #64748B; margin-left: auto;" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </summary>
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #E2E8F0;">
+                <p style="color: #64748B; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+                    All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors.
+                </p>
+
+                <div style="background: #F8FAFC; padding: 16px; border-radius: 8px; border-left: 3px solid #3B82F6; margin-bottom: 12px;">
+                    <h4 style="font-size: 15px; font-weight: 600; color: #1E293B; margin: 0 0 8px 0;">Key Textbook References</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 14px; line-height: 1.8;">
+                        <li>Miller RD, et al. <em>Miller's Anesthesia</em>. 9th ed. Elsevier; 2020</li>
+                        <li>Barash PG, et al. <em>Clinical Anesthesia</em>. 8th ed. Wolters Kluwer; 2017</li>
+                        <li>Stoelting RK, Hillier SC. <em>Pharmacology & Physiology in Anesthetic Practice</em>. 5th ed. 2015</li>
+                    </ul>
+                </div>
+
+                <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border-left: 3px solid #EF4444; margin-bottom: 12px;">
+                    <h4 style="font-size: 15px; font-weight: 600; color: #1E293B; margin: 0 0 8px 0;">FDA Package Inserts</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 14px; line-height: 1.8;">
+                        <li>Propofol: Diprivan® (Fresenius Kabi, 2022)</li>
+                        <li>Rocuronium: Zemuron® (Merck, 2022)</li>
+                        <li>Sugammadex: Bridion® (Merck, 2023)</li>
+                        <li>Fentanyl: Sublimaze® (Akorn, 2022)</li>
+                    </ul>
+                </div>
+
+                <p style="color: #64748B; font-size: 13px; margin-top: 16px; font-style: italic;">
+                    Always verify current package insert and institutional protocols before administration.
+                </p>
+            </div>
+        </details>
+
     </main>
 
     <!-- Glassmorphism Footer -->
