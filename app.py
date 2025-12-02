@@ -16928,9 +16928,19 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             {% endif %}
 
             <!-- Methodology & References Section -->
-            <div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 24px;">
-                    <h2 style="font-size: 24px; font-weight: 700; color: #1E293B; margin-bottom: 24px; text-align: center;">📊 Algorithm Methodology & Evidence Base</h2>
+            <details style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+                <summary style="background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+                    <svg style="width: 24px; height: 24px; color: #2563EB; flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span style="font-size: 18px; font-weight: 700; color: #1E293B; flex: 1;">Algorithm Methodology & Evidence Base</span>
+                    <svg style="width: 20px; height: 20px; color: #64748B; transition: transform 0.3s ease;" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </summary>
+                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 12px;">
 
                     <div style="margin-bottom: 28px;">
                         <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Data Sources & Development</h3>
@@ -16988,7 +16998,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </ol>
                     </div>
                 </div>
-            </div>
+            </details>
 
         </main>
 
