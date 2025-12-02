@@ -11213,9 +11213,18 @@ CRISIS_HTML = """<!DOCTYPE html>
     </script>
 
     <!-- References & Guidelines Section -->
-    <div style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
-        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h2 style="font-size: 28px; font-weight: 800; color: #1E293B; margin-bottom: 28px; text-align: center;">📚 Evidence Base & Guidelines</h2>
+    <details style="max-width: 1200px; margin: 60px auto 40px; padding: 0 20px;">
+        <summary style="background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
+            <svg style="width: 24px; height: 24px; color: #2563EB; flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+            <span style="font-size: 18px; font-weight: 700; color: #1E293B; flex: 1;">Evidence Base & Guidelines</span>
+            <svg style="width: 20px; height: 20px; color: #64748B; transition: transform 0.3s ease;" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+        </summary>
+        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 12px;">
             
             <p style="color: #475569; line-height: 1.8; margin-bottom: 24px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;">
                 These crisis protocols are based on evidence-based guidelines from major anesthesiology societies and peer-reviewed literature. All protocols should be adapted to institutional resources and local practice patterns.
@@ -11297,7 +11306,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                 </p>
             </div>
         </div>
-    </div>
+    </details>
 
 </body>
 </html>
@@ -13115,41 +13124,12 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <strong>Disclaimer:</strong> This tool is for educational and reference purposes only. Always verify doses against institutional protocols and consider patient-specific factors. Not a substitute for clinical judgment.
         </div>
 
-        <!-- References Section -->
-        <details style="margin: 24px auto; max-width: 1200px; background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <summary style="font-size: 18px; font-weight: 700; color: #1E293B; cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 8px;">
-                <span style="color: #2563EB;">📚</span> References & Guidelines
-                <svg style="width: 16px; height: 16px; color: #64748B; margin-left: auto;" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </summary>
-            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #E2E8F0;">
-                <p style="color: #64748B; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-                    All dosing information is derived from FDA-approved package inserts, ASA guidelines, and authoritative anesthesiology textbooks. Doses represent typical adult ranges and must be individualized based on patient factors.
-                </p>
-
-                <div style="background: #F8FAFC; padding: 16px; border-radius: 8px; border-left: 3px solid #3B82F6; margin-bottom: 12px;">
-                    <h4 style="font-size: 15px; font-weight: 600; color: #1E293B; margin: 0 0 8px 0;">Key Textbook References</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 14px; line-height: 1.8;">
-                        <li>Miller RD, et al. <em>Miller's Anesthesia</em>. 9th ed. Elsevier; 2020</li>
-                        <li>Barash PG, et al. <em>Clinical Anesthesia</em>. 8th ed. Wolters Kluwer; 2017</li>
-                        <li>Stoelting RK, Hillier SC. <em>Pharmacology & Physiology in Anesthetic Practice</em>. 5th ed. 2015</li>
-                    </ul>
-                </div>
-
-                <div style="background: #FEF2F2; padding: 16px; border-radius: 8px; border-left: 3px solid #EF4444; margin-bottom: 12px;">
-                    <h4 style="font-size: 15px; font-weight: 600; color: #1E293B; margin: 0 0 8px 0;">FDA Package Inserts</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #475569; font-size: 14px; line-height: 1.8;">
-                        <li>Propofol: Diprivan® (Fresenius Kabi, 2022)</li>
-                        <li>Rocuronium: Zemuron® (Merck, 2022)</li>
-                        <li>Sugammadex: Bridion® (Merck, 2023)</li>
-                        <li>Fentanyl: Sublimaze® (Akorn, 2022)</li>
-                    </ul>
-                </div>
-
-                <p style="color: #64748B; font-size: 13px; margin-top: 16px; font-style: italic;">
-                    Always verify current package insert and institutional protocols before administration.
-                </p>
-            </div>
-        </details>
+        <!-- Subtle References Note -->
+        <div style="max-width: 1200px; margin: 16px auto 24px; padding: 0 20px; text-align: center;">
+            <p style="color: #64748B; font-size: 13px; line-height: 1.6;">
+                Dosing based on FDA package inserts and Miller's Anesthesia 9th ed, Barash Clinical Anesthesia 8th ed, Stoelting's Pharmacology 5th ed.
+            </p>
+        </div>
 
     </main>
 
