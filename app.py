@@ -10872,361 +10872,6 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
-                </div>
-            </div>
-
-            <!-- Airway Emergencies -->
-            <div class="category-section" data-category="airway">
-                <div class="category-header">
-                    <div class="category-icon orange">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>
-                            <path d="M12 12v6"/>
-                            <path d="M6 15c-2.213 -1.246 -3.5 -3.154 -3.5 -5.294 0 -3.314 2.686 -6 6 -6h7c3.314 0 6 2.686 6 6 0 2.14 -1.287 4.048 -3.5 5.294"/>
-                        </svg>
-                    </div>
-                    <h2 class="category-title">Airway Emergencies</h2>
-                </div>
-                <div class="protocols-grid">
-
-                    <!-- CICO (ENHANCED) -->
-                    <div class="protocol-card orange" data-keywords="cico cant intubate oxygenate difficult airway cricothyroidotomy emergency front neck access scalpel bougie" onclick="toggleProtocol(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">
-                                    Can't Intubate, Can't Oxygenate (CICO)
-                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 2 refs</span>
-                                </h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Life-threatening failure to intubate AND ventilate requiring emergency surgical airway</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                            <span class="protocol-tag call-help">Call Help</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions - Scalpel Cricothyroidotomy</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Declare CICO:</strong> Call for help, assign roles<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Position:</strong> Extend neck, palpate cricothyroid membrane</li>
-                                        <li class="protocol-step"><strong>Stab incision:</strong> Horizontal skin incision through cricothyroid membrane with scalpel (blade #10 or #20)<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Bougie:</strong> Insert bougie through membrane into trachea (feel "clicks" of tracheal rings)</li>
-                                        <li class="protocol-step"><strong>Tube:</strong> Railroad 6.0 cuffed ETT or tracheostomy tube over bougie into trachea</li>
-                                        <li class="protocol-step"><strong>Confirm:</strong> Inflate cuff, ventilate, confirm placement with EtCO₂</li>
-                                    </ol>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• Scalpel technique preferred over needle cricothyroidotomy (Seldinger kits have high failure rate)<sup class="ref-num">2</sup><br>• Don't delay - permanent brain damage occurs after 3-5 minutes of hypoxia<br>• If anatomy unclear: Make vertical skin incision, then palpate membrane and make horizontal membrane incision<br>• Post-procedure: Secure tube, get ENT/surgery consult, chest X-ray</div>
-                                </div>
-
-                                <!-- Inline References Section -->
-                                <div class="protocol-references">
-                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                        <span>View References (2)</span>
-                                    </button>
-                                    <div class="references-list">
-                                        <div class="reference-item">
-                                            <span class="reference-num">1</span>
-                                            <span class="reference-citation">Apfelbaum JL, et al. <strong>2022 ASA Practice Guidelines for Management of the Difficult Airway.</strong> <em>Anesthesiology</em>. 2022;136(1):31-81. PMID: 34762729</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">2</span>
-                                            <span class="reference-citation">Frerk C, et al. <strong>Difficult Airway Society Guidelines for Emergency Front-of-Neck Access.</strong> <em>Br J Anaesth</em>. 2015;115(6):827-848. PMID: 26556848</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Laryngospasm (ENHANCED) -->
-                    <div class="protocol-card orange" data-keywords="laryngospasm larynx spasm stridor negative pressure pulmonary edema npppe vocal cord glottic closure" onclick="toggleProtocol(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">
-                                    Laryngospasm
-                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
-                                </h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Reflex glottic closure causing complete or partial airway obstruction</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Remove stimulus:</strong> Stop surgery, suction oropharynx of blood/secretions<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>100% O₂ with positive pressure:</strong> Gentle jaw thrust + CPAP (try 5-10 cm H₂O first)<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> If inadequate depth, give propofol 0.5-1 mg/kg IV<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Larson's maneuver:</strong> Firm pressure on "laryngospasm notch" (posterior to mandible angle, anterior to mastoid) while applying jaw thrust<sup class="ref-num">3</sup></li>
-                                    </ol>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ If Laryngospasm Persists (>30 seconds)</div>
-                                    <div class="warning-detail"><strong>Give succinylcholine:</strong> 0.1-0.5 mg/kg IV (or 2-4 mg/kg IM if no IV access)<sup class="ref-num">2</sup><br>• Prepare to ventilate and intubate if needed<br>• Monitor for bradycardia (especially in children) - have atropine ready</div>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Key Dosing<sup class="ref-num">2</sup></div>
-                                    <div class="dose-detail"><strong>Propofol (deepen):</strong> 0.5-1 mg/kg IV bolus</div>
-                                    <div class="dose-detail"><strong>Succinylcholine (if refractory):</strong> 0.1-0.5 mg/kg IV or 2-4 mg/kg IM</div>
-                                    <div class="dose-detail"><strong>Atropine (if bradycardia):</strong> 0.01-0.02 mg/kg IV (minimum 0.1 mg)</div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🔍 Post-Laryngospasm Management</div>
-                                    <div class="info-detail">• <strong>Monitor for negative-pressure pulmonary edema (NPPE):</strong> Occurs in ~0.1% of laryngospasm cases<sup class="ref-num">4</sup><br>• Signs: Pink frothy sputum, decreased SpO₂, crackles on auscultation<br>• Treatment: Supplemental O₂, PEEP/CPAP, diuretics if needed, rarely intubation<br>• Monitor oxygenation for 1-2 hours post-event</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Prevention Strategies</div>
-                                    <div class="warning-detail">• Extubate <strong>deep</strong> (under anesthesia) or <strong>awake</strong> - avoid "light" stage<sup class="ref-num">1</sup><br>• Suction oropharynx thoroughly before emergence (avoid pharyngeal stimulation during light anesthesia)<br>• Lidocaine 1-1.5 mg/kg IV 2 min before extubation may reduce risk<sup class="ref-num">2</sup><br>• Higher risk: Pediatrics, airway surgery, GERD, recent URI, reactive airway disease</div>
-                                </div>
-
-                                <!-- Inline References Section -->
-                                <div class="protocol-references">
-                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                        <span>View References (4)</span>
-                                    </button>
-                                    <div class="references-list">
-                                        <div class="reference-item">
-                                            <span class="reference-num">1</span>
-                                            <span class="reference-citation">Orliaguet GA, et al. <strong>Management of laryngospasm in children.</strong> <em>Paediatr Anaesth</em>. 2019;29(7):774-780. PMID: 31025445</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">2</span>
-                                            <span class="reference-citation">Visvanathan T, et al. <strong>Laryngospasm in anaesthesia.</strong> <em>Contin Educ Anaesth Crit Care Pain</em>. 2015;15(3):136-141.</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">3</span>
-                                            <span class="reference-citation">Larson CP Jr. <strong>Laryngospasm--the best treatment.</strong> <em>Anesthesiology</em>. 1998;89(5):1293-1294. PMID: 9822034</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">4</span>
-                                            <span class="reference-citation">Bhattacharya M, et al. <strong>Negative Pressure Pulmonary Edema.</strong> <em>Chest</em>. 2016;150(4):927-933. PMID: 27167224</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bronchospasm (ENHANCED) -->
-                    <div class="protocol-card orange" data-keywords="bronchospasm wheezing asthma reactive airway bronchoconstriction albuterol beta agonist" onclick="toggleProtocol(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">
-                                    Bronchospasm
-                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
-                                </h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Acute airway obstruction from smooth muscle constriction and inflammation</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Act Fast</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>100% O₂:</strong> Increase FiO₂ to 1.0, ensure adequate oxygenation<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Increase volatile anesthetic (sevoflurane/isoflurane have bronchodilator effects)<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Rule out mechanical causes:</strong> Check for kinked ETT, mucus plug, endobronchial intubation, pneumothorax<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Beta-2 agonist (first-line):</strong> Albuterol 4-8 puffs via MDI with spacer into circuit (or 2.5-5 mg nebulized)<sup class="ref-num">1</sup></li>
-                                    </ol>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Additional Therapies (if refractory)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Epinephrine:</strong> 10-50 mcg IV boluses (or 0.3 mg IM if severe)<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus (bronchodilator via sympathomimetic effects)<sup class="ref-num">3</sup></li>
-                                        <li class="protocol-step"><strong>Magnesium sulfate:</strong> 2 g IV over 20 min (smooth muscle relaxation)<sup class="ref-num">3</sup></li>
-                                        <li class="protocol-step"><strong>Corticosteroids:</strong> Methylprednisolone 1-2 mg/kg IV or hydrocortisone 2-4 mg/kg IV (delayed onset ~6 hours)<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Anticholinergic:</strong> Ipratropium 0.5 mg nebulized (adjunct to beta-agonist)<sup class="ref-num">1</sup></li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Key Medications<sup class="ref-num">1,2,3</sup></div>
-                                    <div class="dose-detail"><strong>Albuterol (MDI):</strong> 4-8 puffs into circuit with spacer, repeat q20min PRN</div>
-                                    <div class="dose-detail"><strong>Albuterol (nebulized):</strong> 2.5-5 mg in 3 mL NS</div>
-                                    <div class="dose-detail"><strong>Epinephrine:</strong> 10-50 mcg IV boluses (titrate) or 0.3 mg IM if severe</div>
-                                    <div class="dose-detail"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus, then 0.5-1 mg/kg/h infusion</div>
-                                    <div class="dose-detail"><strong>Magnesium sulfate:</strong> 2 g (40 mg/kg peds) IV over 20 minutes</div>
-                                    <div class="dose-detail"><strong>Methylprednisolone:</strong> 1-2 mg/kg IV (or hydrocortisone 2-4 mg/kg)</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Differential Diagnosis</div>
-                                    <div class="warning-detail"><strong>Rule out these mechanical causes first:</strong><br>• Kinked or obstructed ETT<br>• Endobronchial intubation (check bilateral breath sounds)<br>• Mucus plug (consider bronchoscopy/suction)<br>• Tension pneumothorax<br>• Pulmonary edema or aspiration<br>• Anaphylaxis (check for hypotension, urticaria)<sup class="ref-num">2</sup></div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🔍 Ventilation Strategies</div>
-                                    <div class="info-detail">• <strong>Permissive hypercapnia:</strong> Accept higher PaCO₂ to avoid barotrauma<sup class="ref-num">4</sup><br>• <strong>Prolonged expiratory time:</strong> Decrease RR, increase I:E ratio to 1:3 or 1:4<br>• <strong>Avoid high peak pressures:</strong> Use pressure-control if needed, minimize auto-PEEP<br>• <strong>Manual ventilation:</strong> Gives better "feel" for airway resistance and allows slower rates</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Prevention & Risk Factors</div>
-                                    <div class="warning-detail">• <strong>High-risk patients:</strong> Asthma, COPD, smokers, recent URI, reactive airway disease<br>• <strong>Preoperative optimization:</strong> Optimize asthma control, consider preop bronchodilators<br>• <strong>Avoid triggers:</strong> Deep extubation, avoid histamine-releasing drugs (morphine, atracurium), minimize airway instrumentation<br>• <strong>LMA vs ETT:</strong> Consider LMA for low-risk surgery to reduce airway stimulation<sup class="ref-num">1</sup></div>
-                                </div>
-
-                                <!-- Inline References Section -->
-                                <div class="protocol-references">
-                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                        <span>View References (4)</span>
-                                    </button>
-                                    <div class="references-list">
-                                        <div class="reference-item">
-                                            <span class="reference-num">1</span>
-                                            <span class="reference-citation">Woods BD, Sladen RN. <strong>Perioperative considerations for the patient with asthma and bronchospasm.</strong> <em>Br J Anaesth</em>. 2009;103 Suppl 1:i57-65. PMID: 20007991</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">2</span>
-                                            <span class="reference-citation">Mitsuhata H, et al. <strong>Mechanisms and management of intraoperative bronchospasm.</strong> <em>Curr Opin Anaesthesiol</em>. 1996;9(3):238-242.</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">3</span>
-                                            <span class="reference-citation">Rodrigo GJ, et al. <strong>Acute asthma in adults: a review.</strong> <em>Chest</em>. 2004;125(3):1081-1102. PMID: 15006973</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">4</span>
-                                            <span class="reference-citation">Scalese MJ, et al. <strong>Severe Refractory Status Asthmaticus: A Review.</strong> <em>J Intensive Care Med</em>. 2020;35(10):977-988. PMID: 30987529</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Airway Fire (ENHANCED) -->
-                    <div class="protocol-card orange" data-keywords="airway fire operating room fire laser surgery oxygen combustion ett burning thermal injury" onclick="toggleProtocol(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <h3 class="protocol-title">
-                                    Airway Fire
-                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 3 refs</span>
-                                </h3>
-                            </div>
-                            <div class="expand-icon">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <p class="protocol-summary">Combustion in airway from heat source + oxygen-enriched environment + flammable material</p>
-                        <div class="protocol-tags">
-                            <span class="protocol-tag immediate">Immediate</span>
-                            <span class="protocol-tag call-help">Call Help</span>
-                        </div>
-                        <div class="protocol-content">
-                            <div class="protocol-details">
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Immediate Actions (Remember: STOP-DROP-ROLL)</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STOP gas flow:</strong> Immediately disconnect O₂ source and stop ventilation<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>DROP the ETT:</strong> Remove burning endotracheal tube from airway<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>ROLL patient to side:</strong> Pour saline into airway and oropharynx to extinguish fire<sup class="ref-num">1</sup></li>
-                                        <li class="protocol-step"><strong>Mask ventilate with air or 21% O₂:</strong> Resume ventilation with lowest FiO₂ possible<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Reintubate:</strong> Use new ETT (smaller size if edema present), assess damage with laryngoscopy/bronchoscopy<sup class="ref-num">1</sup></li>
-                                    </ol>
-                                </div>
-
-                                <div class="protocol-section">
-                                    <h4 class="protocol-section-title">Secondary Assessment & Management</h4>
-                                    <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>Bronchoscopy:</strong> Assess airway injury severity (mucosal burns, soot, debris)<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Saline lavage:</strong> Irrigate airway to remove debris and carbonized material<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>Steroids:</strong> Consider dexamethasone 0.5 mg/kg IV (controversial, may reduce edema)<sup class="ref-num">2</sup></li>
-                                        <li class="protocol-step"><strong>ICU admission:</strong> Monitor for delayed airway edema (peaks 12-24h), ARDS, pneumonia<sup class="ref-num">3</sup></li>
-                                        <li class="protocol-step"><strong>No extubation:</strong> Keep intubated until edema resolves (typically 3-7 days)<sup class="ref-num">3</sup></li>
-                                    </ol>
-                                </div>
-
-                                <div class="dose-box">
-                                    <div class="dose-box-title">💊 Post-Fire Management</div>
-                                    <div class="dose-detail"><strong>Dexamethasone (controversial):</strong> 0.5 mg/kg IV (may reduce edema)</div>
-                                    <div class="dose-detail"><strong>Bronchodilators:</strong> Albuterol if bronchospasm develops</div>
-                                    <div class="dose-detail"><strong>Antibiotics:</strong> NOT routinely indicated (no benefit for prophylaxis)</div>
-                                    <div class="dose-detail"><strong>Ventilation strategy:</strong> Lung-protective ventilation, lowest FiO₂ maintaining SpO₂ >90%</div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Fire Triangle (All 3 Required for Fire)</div>
-                                    <div class="warning-detail">1. <strong>Oxidizer:</strong> O₂ (>21%), N₂O<br>2. <strong>Fuel:</strong> ETT, surgical drapes, gauze, alcohol prep solutions<br>3. <strong>Ignition source:</strong> Electrocautery, laser, fiberoptic light<br><br><strong>Break one element to prevent fire</strong> - Lower FiO₂ to ≤30% during cautery near airway, use laser-safe ETT, keep flammables wet<sup class="ref-num">1</sup></div>
-                                </div>
-
-                                <div class="info-box">
-                                    <div class="info-box-title">🔍 High-Risk Procedures</div>
-                                    <div class="info-detail">• <strong>Head & neck surgery:</strong> Laser laryngoscopy, tonsillectomy, tracheostomy<br>• <strong>Oral/facial surgery:</strong> Cautery near airway<br>• <strong>ENT procedures:</strong> Any procedure with electrocautery + high FiO₂<br>• <strong>Prevention:</strong> Use lowest safe FiO₂ (≤30%), laser-resistant ETTs, wet sponges around surgical field, pause O₂ during cautery<sup class="ref-num">1</sup></div>
-                                </div>
-
-                                <div class="warning-box">
-                                    <div class="warning-box-title">⚠️ Post-Fire Complications</div>
-                                    <div class="warning-detail">• <strong>Acute:</strong> Airway edema (delayed, peaks 12-24h), ARDS, pneumonia<br>• <strong>Delayed:</strong> Tracheal stenosis, granulation tissue formation<br>• <strong>Monitoring:</strong> Serial bronchoscopies, prolonged intubation (3-7 days typical)<br>• <strong>Tracheostomy:</strong> May be needed if severe injury or prolonged intubation anticipated<sup class="ref-num">3</sup></div>
-                                </div>
-
-                                <!-- Inline References Section -->
-                                <div class="protocol-references">
-                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="6 9 12 15 18 9"></polyline>
-                                        </svg>
-                                        <span>View References (3)</span>
-                                    </button>
-                                    <div class="references-list">
-                                        <div class="reference-item">
-                                            <span class="reference-num">1</span>
-                                            <span class="reference-citation">ASA Task Force on Operating Room Fires. <strong>Practice Advisory for the Prevention and Management of Operating Room Fires.</strong> <em>Anesthesiology</em>. 2013;118(2):271-290. PMID: 23287706</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">2</span>
-                                            <span class="reference-citation">Pruitt BA, Cioffi WG. <strong>Management of burns in the airway and face.</strong> <em>Clin Plast Surg</em>. 2009;36(4):555-567. PMID: 19793552</span>
-                                        </div>
-                                        <div class="reference-item">
-                                            <span class="reference-num">3</span>
-                                            <span class="reference-citation">Worley SL. <strong>Fire safety in the operating room.</strong> <em>AORN J</em>. 2012;95(5):606-618. PMID: 22541771</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- High/Total Spinal (ENHANCED) -->
                     <div class="protocol-card red" data-keywords="high spinal total spinal epidural anesthesia neuraxial hypotension bradycardia respiratory arrest paralysis" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
@@ -11750,6 +11395,362 @@ CRISIS_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
                     </div>
+
+                </div>
+            </div>
+
+            <!-- Airway Emergencies -->
+            <div class="category-section" data-category="airway">
+                <div class="category-header">
+                    <div class="category-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>
+                            <path d="M12 12v6"/>
+                            <path d="M6 15c-2.213 -1.246 -3.5 -3.154 -3.5 -5.294 0 -3.314 2.686 -6 6 -6h7c3.314 0 6 2.686 6 6 0 2.14 -1.287 4.048 -3.5 5.294"/>
+                        </svg>
+                    </div>
+                    <h2 class="category-title">Airway Emergencies</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    <!-- CICO (ENHANCED) -->
+                    <div class="protocol-card orange" data-keywords="cico cant intubate oxygenate difficult airway cricothyroidotomy emergency front neck access scalpel bougie" onclick="toggleProtocol(this)">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">
+                                    Can't Intubate, Can't Oxygenate (CICO)
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 2 refs</span>
+                                </h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Life-threatening failure to intubate AND ventilate requiring emergency surgical airway</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions - Scalpel Cricothyroidotomy</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Declare CICO:</strong> Call for help, assign roles<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Position:</strong> Extend neck, palpate cricothyroid membrane</li>
+                                        <li class="protocol-step"><strong>Stab incision:</strong> Horizontal skin incision through cricothyroid membrane with scalpel (blade #10 or #20)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Bougie:</strong> Insert bougie through membrane into trachea (feel "clicks" of tracheal rings)</li>
+                                        <li class="protocol-step"><strong>Tube:</strong> Railroad 6.0 cuffed ETT or tracheostomy tube over bougie into trachea</li>
+                                        <li class="protocol-step"><strong>Confirm:</strong> Inflate cuff, ventilate, confirm placement with EtCO₂</li>
+                                    </ol>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Points</div>
+                                    <div class="warning-detail">• Scalpel technique preferred over needle cricothyroidotomy (Seldinger kits have high failure rate)<sup class="ref-num">2</sup><br>• Don't delay - permanent brain damage occurs after 3-5 minutes of hypoxia<br>• If anatomy unclear: Make vertical skin incision, then palpate membrane and make horizontal membrane incision<br>• Post-procedure: Secure tube, get ENT/surgery consult, chest X-ray</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (2)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Apfelbaum JL, et al. <strong>2022 ASA Practice Guidelines for Management of the Difficult Airway.</strong> <em>Anesthesiology</em>. 2022;136(1):31-81. PMID: 34762729</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Frerk C, et al. <strong>Difficult Airway Society Guidelines for Emergency Front-of-Neck Access.</strong> <em>Br J Anaesth</em>. 2015;115(6):827-848. PMID: 26556848</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laryngospasm (ENHANCED) -->
+                    <div class="protocol-card orange" data-keywords="laryngospasm larynx spasm stridor negative pressure pulmonary edema npppe vocal cord glottic closure" onclick="toggleProtocol(this)">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">
+                                    Laryngospasm
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
+                                </h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Reflex glottic closure causing complete or partial airway obstruction</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Remove stimulus:</strong> Stop surgery, suction oropharynx of blood/secretions<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>100% O₂ with positive pressure:</strong> Gentle jaw thrust + CPAP (try 5-10 cm H₂O first)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> If inadequate depth, give propofol 0.5-1 mg/kg IV<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Larson's maneuver:</strong> Firm pressure on "laryngospasm notch" (posterior to mandible angle, anterior to mastoid) while applying jaw thrust<sup class="ref-num">3</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ If Laryngospasm Persists (>30 seconds)</div>
+                                    <div class="warning-detail"><strong>Give succinylcholine:</strong> 0.1-0.5 mg/kg IV (or 2-4 mg/kg IM if no IV access)<sup class="ref-num">2</sup><br>• Prepare to ventilate and intubate if needed<br>• Monitor for bradycardia (especially in children) - have atropine ready</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Key Dosing<sup class="ref-num">2</sup></div>
+                                    <div class="dose-detail"><strong>Propofol (deepen):</strong> 0.5-1 mg/kg IV bolus</div>
+                                    <div class="dose-detail"><strong>Succinylcholine (if refractory):</strong> 0.1-0.5 mg/kg IV or 2-4 mg/kg IM</div>
+                                    <div class="dose-detail"><strong>Atropine (if bradycardia):</strong> 0.01-0.02 mg/kg IV (minimum 0.1 mg)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Post-Laryngospasm Management</div>
+                                    <div class="info-detail">• <strong>Monitor for negative-pressure pulmonary edema (NPPE):</strong> Occurs in ~0.1% of laryngospasm cases<sup class="ref-num">4</sup><br>• Signs: Pink frothy sputum, decreased SpO₂, crackles on auscultation<br>• Treatment: Supplemental O₂, PEEP/CPAP, diuretics if needed, rarely intubation<br>• Monitor oxygenation for 1-2 hours post-event</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Prevention Strategies</div>
+                                    <div class="warning-detail">• Extubate <strong>deep</strong> (under anesthesia) or <strong>awake</strong> - avoid "light" stage<sup class="ref-num">1</sup><br>• Suction oropharynx thoroughly before emergence (avoid pharyngeal stimulation during light anesthesia)<br>• Lidocaine 1-1.5 mg/kg IV 2 min before extubation may reduce risk<sup class="ref-num">2</sup><br>• Higher risk: Pediatrics, airway surgery, GERD, recent URI, reactive airway disease</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Orliaguet GA, et al. <strong>Management of laryngospasm in children.</strong> <em>Paediatr Anaesth</em>. 2019;29(7):774-780. PMID: 31025445</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Visvanathan T, et al. <strong>Laryngospasm in anaesthesia.</strong> <em>Contin Educ Anaesth Crit Care Pain</em>. 2015;15(3):136-141.</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Larson CP Jr. <strong>Laryngospasm--the best treatment.</strong> <em>Anesthesiology</em>. 1998;89(5):1293-1294. PMID: 9822034</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Bhattacharya M, et al. <strong>Negative Pressure Pulmonary Edema.</strong> <em>Chest</em>. 2016;150(4):927-933. PMID: 27167224</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bronchospasm (ENHANCED) -->
+                    <div class="protocol-card orange" data-keywords="bronchospasm wheezing asthma reactive airway bronchoconstriction albuterol beta agonist" onclick="toggleProtocol(this)">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">
+                                    Bronchospasm
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 4 refs</span>
+                                </h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Acute airway obstruction from smooth muscle constriction and inflammation</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Act Fast</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>100% O₂:</strong> Increase FiO₂ to 1.0, ensure adequate oxygenation<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Deepen anesthesia:</strong> Increase volatile anesthetic (sevoflurane/isoflurane have bronchodilator effects)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Rule out mechanical causes:</strong> Check for kinked ETT, mucus plug, endobronchial intubation, pneumothorax<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Beta-2 agonist (first-line):</strong> Albuterol 4-8 puffs via MDI with spacer into circuit (or 2.5-5 mg nebulized)<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Additional Therapies (if refractory)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Epinephrine:</strong> 10-50 mcg IV boluses (or 0.3 mg IM if severe)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus (bronchodilator via sympathomimetic effects)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Magnesium sulfate:</strong> 2 g IV over 20 min (smooth muscle relaxation)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Corticosteroids:</strong> Methylprednisolone 1-2 mg/kg IV or hydrocortisone 2-4 mg/kg IV (delayed onset ~6 hours)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Anticholinergic:</strong> Ipratropium 0.5 mg nebulized (adjunct to beta-agonist)<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Key Medications<sup class="ref-num">1,2,3</sup></div>
+                                    <div class="dose-detail"><strong>Albuterol (MDI):</strong> 4-8 puffs into circuit with spacer, repeat q20min PRN</div>
+                                    <div class="dose-detail"><strong>Albuterol (nebulized):</strong> 2.5-5 mg in 3 mL NS</div>
+                                    <div class="dose-detail"><strong>Epinephrine:</strong> 10-50 mcg IV boluses (titrate) or 0.3 mg IM if severe</div>
+                                    <div class="dose-detail"><strong>Ketamine:</strong> 0.5-1 mg/kg IV bolus, then 0.5-1 mg/kg/h infusion</div>
+                                    <div class="dose-detail"><strong>Magnesium sulfate:</strong> 2 g (40 mg/kg peds) IV over 20 minutes</div>
+                                    <div class="dose-detail"><strong>Methylprednisolone:</strong> 1-2 mg/kg IV (or hydrocortisone 2-4 mg/kg)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Differential Diagnosis</div>
+                                    <div class="warning-detail"><strong>Rule out these mechanical causes first:</strong><br>• Kinked or obstructed ETT<br>• Endobronchial intubation (check bilateral breath sounds)<br>• Mucus plug (consider bronchoscopy/suction)<br>• Tension pneumothorax<br>• Pulmonary edema or aspiration<br>• Anaphylaxis (check for hypotension, urticaria)<sup class="ref-num">2</sup></div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Ventilation Strategies</div>
+                                    <div class="info-detail">• <strong>Permissive hypercapnia:</strong> Accept higher PaCO₂ to avoid barotrauma<sup class="ref-num">4</sup><br>• <strong>Prolonged expiratory time:</strong> Decrease RR, increase I:E ratio to 1:3 or 1:4<br>• <strong>Avoid high peak pressures:</strong> Use pressure-control if needed, minimize auto-PEEP<br>• <strong>Manual ventilation:</strong> Gives better "feel" for airway resistance and allows slower rates</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Prevention & Risk Factors</div>
+                                    <div class="warning-detail">• <strong>High-risk patients:</strong> Asthma, COPD, smokers, recent URI, reactive airway disease<br>• <strong>Preoperative optimization:</strong> Optimize asthma control, consider preop bronchodilators<br>• <strong>Avoid triggers:</strong> Deep extubation, avoid histamine-releasing drugs (morphine, atracurium), minimize airway instrumentation<br>• <strong>LMA vs ETT:</strong> Consider LMA for low-risk surgery to reduce airway stimulation<sup class="ref-num">1</sup></div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Woods BD, Sladen RN. <strong>Perioperative considerations for the patient with asthma and bronchospasm.</strong> <em>Br J Anaesth</em>. 2009;103 Suppl 1:i57-65. PMID: 20007991</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Mitsuhata H, et al. <strong>Mechanisms and management of intraoperative bronchospasm.</strong> <em>Curr Opin Anaesthesiol</em>. 1996;9(3):238-242.</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Rodrigo GJ, et al. <strong>Acute asthma in adults: a review.</strong> <em>Chest</em>. 2004;125(3):1081-1102. PMID: 15006973</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Scalese MJ, et al. <strong>Severe Refractory Status Asthmaticus: A Review.</strong> <em>J Intensive Care Med</em>. 2020;35(10):977-988. PMID: 30987529</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Airway Fire (ENHANCED) -->
+                    <div class="protocol-card orange" data-keywords="airway fire operating room fire laser surgery oxygen combustion ett burning thermal injury" onclick="toggleProtocol(this)">
+                        <div class="protocol-header">
+                            <div>
+                                <h3 class="protocol-title">
+                                    Airway Fire
+                                    <span class="protocol-ref-count"><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> 3 refs</span>
+                                </h3>
+                            </div>
+                            <div class="expand-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                        <p class="protocol-summary">Combustion in airway from heat source + oxygen-enriched environment + flammable material</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions (Remember: STOP-DROP-ROLL)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP gas flow:</strong> Immediately disconnect O₂ source and stop ventilation<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>DROP the ETT:</strong> Remove burning endotracheal tube from airway<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>ROLL patient to side:</strong> Pour saline into airway and oropharynx to extinguish fire<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Mask ventilate with air or 21% O₂:</strong> Resume ventilation with lowest FiO₂ possible<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Reintubate:</strong> Use new ETT (smaller size if edema present), assess damage with laryngoscopy/bronchoscopy<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Secondary Assessment & Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Bronchoscopy:</strong> Assess airway injury severity (mucosal burns, soot, debris)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Saline lavage:</strong> Irrigate airway to remove debris and carbonized material<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Steroids:</strong> Consider dexamethasone 0.5 mg/kg IV (controversial, may reduce edema)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>ICU admission:</strong> Monitor for delayed airway edema (peaks 12-24h), ARDS, pneumonia<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>No extubation:</strong> Keep intubated until edema resolves (typically 3-7 days)<sup class="ref-num">3</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Post-Fire Management</div>
+                                    <div class="dose-detail"><strong>Dexamethasone (controversial):</strong> 0.5 mg/kg IV (may reduce edema)</div>
+                                    <div class="dose-detail"><strong>Bronchodilators:</strong> Albuterol if bronchospasm develops</div>
+                                    <div class="dose-detail"><strong>Antibiotics:</strong> NOT routinely indicated (no benefit for prophylaxis)</div>
+                                    <div class="dose-detail"><strong>Ventilation strategy:</strong> Lung-protective ventilation, lowest FiO₂ maintaining SpO₂ >90%</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Fire Triangle (All 3 Required for Fire)</div>
+                                    <div class="warning-detail">1. <strong>Oxidizer:</strong> O₂ (>21%), N₂O<br>2. <strong>Fuel:</strong> ETT, surgical drapes, gauze, alcohol prep solutions<br>3. <strong>Ignition source:</strong> Electrocautery, laser, fiberoptic light<br><br><strong>Break one element to prevent fire</strong> - Lower FiO₂ to ≤30% during cautery near airway, use laser-safe ETT, keep flammables wet<sup class="ref-num">1</sup></div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 High-Risk Procedures</div>
+                                    <div class="info-detail">• <strong>Head & neck surgery:</strong> Laser laryngoscopy, tonsillectomy, tracheostomy<br>• <strong>Oral/facial surgery:</strong> Cautery near airway<br>• <strong>ENT procedures:</strong> Any procedure with electrocautery + high FiO₂<br>• <strong>Prevention:</strong> Use lowest safe FiO₂ (≤30%), laser-resistant ETTs, wet sponges around surgical field, pause O₂ during cautery<sup class="ref-num">1</sup></div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Post-Fire Complications</div>
+                                    <div class="warning-detail">• <strong>Acute:</strong> Airway edema (delayed, peaks 12-24h), ARDS, pneumonia<br>• <strong>Delayed:</strong> Tracheal stenosis, granulation tissue formation<br>• <strong>Monitoring:</strong> Serial bronchoscopies, prolonged intubation (3-7 days typical)<br>• <strong>Tracheostomy:</strong> May be needed if severe injury or prolonged intubation anticipated<sup class="ref-num">3</sup></div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (3)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">ASA Task Force on Operating Room Fires. <strong>Practice Advisory for the Prevention and Management of Operating Room Fires.</strong> <em>Anesthesiology</em>. 2013;118(2):271-290. PMID: 23287706</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Pruitt BA, Cioffi WG. <strong>Management of burns in the airway and face.</strong> <em>Clin Plast Surg</em>. 2009;36(4):555-567. PMID: 19793552</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Worley SL. <strong>Fire safety in the operating room.</strong> <em>AORN J</em>. 2012;95(5):606-618. PMID: 22541771</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
