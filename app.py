@@ -17211,7 +17211,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 
         .evidence-tab:hover {
             color: var(--blue-600);
-            background: rgba(37, 99, 235, 0.05);
+            background: none;
         }
 
         .evidence-tab.active {
@@ -17689,152 +17689,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Input Form -->
-            <form method="POST" action="/hypotension" class="form-card">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-                <!-- Patient Demographics -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="12" cy="7" r="4"></circle>
-                            </svg>
-                        </div>
-                        <h2 class="section-title">Patient Demographics</h2>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="age">Age (years)</label>
-                            <input type="number" id="age" name="age" class="form-input" min="1" max="120" required placeholder="65">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="sex">Sex</label>
-                            <select id="sex" name="sex" class="form-select" required>
-                                <option value="">Select sex...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="weight">Weight (kg)</label>
-                            <input type="number" id="weight" name="weight" class="form-input" min="1" max="300" step="0.1" required placeholder="70">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="height">Height (cm)</label>
-                            <input type="number" id="height" name="height" class="form-input" min="50" max="250" step="0.1" required placeholder="170">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="asa">ASA Classification</label>
-                            <select id="asa" name="asa" class="form-select" required>
-                                <option value="">Select ASA...</option>
-                                <option value="1">ASA I - Healthy</option>
-                                <option value="2">ASA II - Mild systemic disease</option>
-                                <option value="3">ASA III - Severe systemic disease</option>
-                                <option value="4">ASA IV - Life-threatening disease</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Baseline Vitals -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                            </svg>
-                        </div>
-                        <h2 class="section-title">Baseline Vitals</h2>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="baseline_map">Baseline MAP (mmHg)</label>
-                            <input type="number" id="baseline_map" name="baseline_map" class="form-input" min="40" max="150" required placeholder="90">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="baseline_hr">Baseline Heart Rate (bpm)</label>
-                            <input type="number" id="baseline_hr" name="baseline_hr" class="form-input" min="30" max="200" required placeholder="75">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Intraoperative Data -->
-                <div class="form-section">
-                    <div class="section-header">
-                        <div class="section-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                        </div>
-                        <h2 class="section-title">Current Intraoperative State</h2>
-                    </div>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label class="form-label" for="current_map">Current MAP (mmHg)</label>
-                            <input type="number" id="current_map" name="current_map" class="form-input" min="40" max="150" required placeholder="65">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="map_5min">MAP 5 min ago (mmHg)</label>
-                            <input type="number" id="map_5min" name="map_5min" class="form-input" min="40" max="150" required placeholder="68">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="map_10min">MAP 10 min ago (mmHg)</label>
-                            <input type="number" id="map_10min" name="map_10min" class="form-input" min="40" max="150" required placeholder="72">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="surgery_duration">Surgery Duration (min)</label>
-                            <input type="number" id="surgery_duration" name="surgery_duration" class="form-input" min="0" max="1000" required placeholder="45">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="vasopressor">Vasopressor Use</label>
-                            <select id="vasopressor" name="vasopressor" class="form-select" required>
-                                <option value="none">None</option>
-                                <option value="phenylephrine">Phenylephrine</option>
-                                <option value="ephedrine">Ephedrine</option>
-                                <option value="norepinephrine">Norepinephrine</option>
-                                <option value="epinephrine">Epinephrine</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="surgery_type">Surgery Type</label>
-                            <select id="surgery_type" name="surgery_type" class="form-select" required>
-                                <option value="">Select surgery...</option>
-                                <option value="cardiac">Cardiac Surgery</option>
-                                <option value="major_abdominal">Major Abdominal</option>
-                                <option value="spine">Spine Surgery</option>
-                                <option value="orthopedic">Orthopedic</option>
-                                <option value="neuro">Neurosurgery</option>
-                                <option value="vascular">Vascular</option>
-                                <option value="thoracic">Thoracic</option>
-                                <option value="minor">Minor/Superficial</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="induction_agent">Induction Agent</label>
-                            <select id="induction_agent" name="induction_agent" class="form-select" required>
-                                <option value="">Select agent...</option>
-                                <option value="propofol">Propofol</option>
-                                <option value="etomidate">Etomidate</option>
-                                <option value="ketamine">Ketamine</option>
-                                <option value="thiopental">Thiopental</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="emergency">Emergency Status</label>
-                            <select id="emergency" name="emergency" class="form-select" required>
-                                <option value="no">Elective</option>
-                                <option value="yes">Emergency</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">Calculate Risk</button>
-            </form>
-
             <!-- Evidence & Methodology Section -->
             <div class="evidence-section" id="evidenceSection">
                 <div class="evidence-header" onclick="toggleEvidence()">
@@ -18168,6 +18022,152 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     </div>
                 </div>
             </div>
+
+            <!-- Input Form -->
+            <form method="POST" action="/hypotension" class="form-card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Patient Demographics -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Patient Demographics</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="age">Age (years)</label>
+                            <input type="number" id="age" name="age" class="form-input" min="1" max="120" required placeholder="65">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="sex">Sex</label>
+                            <select id="sex" name="sex" class="form-select" required>
+                                <option value="">Select sex...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="weight">Weight (kg)</label>
+                            <input type="number" id="weight" name="weight" class="form-input" min="1" max="300" step="0.1" required placeholder="70">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="height">Height (cm)</label>
+                            <input type="number" id="height" name="height" class="form-input" min="50" max="250" step="0.1" required placeholder="170">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="asa">ASA Classification</label>
+                            <select id="asa" name="asa" class="form-select" required>
+                                <option value="">Select ASA...</option>
+                                <option value="1">ASA I - Healthy</option>
+                                <option value="2">ASA II - Mild systemic disease</option>
+                                <option value="3">ASA III - Severe systemic disease</option>
+                                <option value="4">ASA IV - Life-threatening disease</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Baseline Vitals -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Baseline Vitals</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="baseline_map">Baseline MAP (mmHg)</label>
+                            <input type="number" id="baseline_map" name="baseline_map" class="form-input" min="40" max="150" required placeholder="90">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="baseline_hr">Baseline Heart Rate (bpm)</label>
+                            <input type="number" id="baseline_hr" name="baseline_hr" class="form-input" min="30" max="200" required placeholder="75">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Intraoperative Data -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h2 class="section-title">Current Intraoperative State</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label" for="current_map">Current MAP (mmHg)</label>
+                            <input type="number" id="current_map" name="current_map" class="form-input" min="40" max="150" required placeholder="65">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="map_5min">MAP 5 min ago (mmHg)</label>
+                            <input type="number" id="map_5min" name="map_5min" class="form-input" min="40" max="150" required placeholder="68">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="map_10min">MAP 10 min ago (mmHg)</label>
+                            <input type="number" id="map_10min" name="map_10min" class="form-input" min="40" max="150" required placeholder="72">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="surgery_duration">Surgery Duration (min)</label>
+                            <input type="number" id="surgery_duration" name="surgery_duration" class="form-input" min="0" max="1000" required placeholder="45">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="vasopressor">Vasopressor Use</label>
+                            <select id="vasopressor" name="vasopressor" class="form-select" required>
+                                <option value="none">None</option>
+                                <option value="phenylephrine">Phenylephrine</option>
+                                <option value="ephedrine">Ephedrine</option>
+                                <option value="norepinephrine">Norepinephrine</option>
+                                <option value="epinephrine">Epinephrine</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="surgery_type">Surgery Type</label>
+                            <select id="surgery_type" name="surgery_type" class="form-select" required>
+                                <option value="">Select surgery...</option>
+                                <option value="cardiac">Cardiac Surgery</option>
+                                <option value="major_abdominal">Major Abdominal</option>
+                                <option value="spine">Spine Surgery</option>
+                                <option value="orthopedic">Orthopedic</option>
+                                <option value="neuro">Neurosurgery</option>
+                                <option value="vascular">Vascular</option>
+                                <option value="thoracic">Thoracic</option>
+                                <option value="minor">Minor/Superficial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="induction_agent">Induction Agent</label>
+                            <select id="induction_agent" name="induction_agent" class="form-select" required>
+                                <option value="">Select agent...</option>
+                                <option value="propofol">Propofol</option>
+                                <option value="etomidate">Etomidate</option>
+                                <option value="ketamine">Ketamine</option>
+                                <option value="thiopental">Thiopental</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="emergency">Emergency Status</label>
+                            <select id="emergency" name="emergency" class="form-select" required>
+                                <option value="no">Elective</option>
+                                <option value="yes">Emergency</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Calculate Risk</button>
+            </form>
 
             {% if prediction %}
             <!-- Results -->
