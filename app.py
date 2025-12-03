@@ -18058,7 +18058,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --white: #FFFFFF;
@@ -18087,6 +18087,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --amber-500: #F59E0B;
             --green-50: #F0FDF4;
             --green-500: #22C55E;
+            --green-600: #059669;
+            --purple-50: #FAF5FF;
+            --purple-500: #A855F7;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18174,6 +18177,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
+        /* Navigation - Glassmorphism */
         .nav {
             position: fixed;
             top: 0;
@@ -18367,9 +18371,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             margin-bottom: 48px;
         }
 
-        .header h1 {
-            font-size: 36px;
+        .badge-icon {
+            width: 8px;
+            height: 8px;
+            background: var(--blue-500);
+            border-radius: 50%;
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--blue-700);
+        }
+
+        .hero-title {
+            font-size: 48px;
             font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -2px;
             color: var(--gray-900);
             margin-bottom: 16px;
             line-height: 1.2;
@@ -18383,6 +18402,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             line-height: 1.6;
         }
 
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* Cards */
         .card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px) saturate(180%);
@@ -18392,6 +18419,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding: 32px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .form-section {
@@ -18701,6 +18734,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <div class="info-box">
                 <strong>Clinical Basis:</strong> This tool uses validated predictors including Mallampati classification, thyromental distance, mouth opening, neck mobility, BMI, and anatomical features. Risk scoring is based on LEMON, Wilson, and El-Ganzouri criteria, with recommendations aligned to the <strong>ASA Practice Guidelines for Management of the Difficult Airway (2022)</strong>.
             </div>
+        </nav>
 
             <div class="card">
                 <form method="POST" action="/difficult-airway">
@@ -18975,7 +19009,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --white: #FFFFFF;
@@ -19086,6 +19120,51 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -19279,8 +19358,21 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             margin-bottom: 48px;
         }
 
-        .header h1 {
-            font-size: 36px;
+        .badge-icon {
+            width: 8px;
+            height: 8px;
+            background: var(--green-500);
+            border-radius: 50%;
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .hero-title {
+            font-size: 48px;
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 16px;
@@ -19295,6 +19387,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             line-height: 1.6;
         }
 
+        /* Cards */
         .card {
             background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px) saturate(180%);
@@ -19308,6 +19401,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         .form-section {
             margin-bottom: 24px;
+            border: 1px solid var(--gray-200);
+            transition: all 0.3s ease;
         }
 
         .form-section:last-child {
@@ -19688,6 +19783,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
 
 @app.route("/stream")
 @csrf.exempt  # SSE endpoint uses GET requests, CSRF not applicable
