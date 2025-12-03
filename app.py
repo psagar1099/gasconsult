@@ -18210,24 +18210,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 
         </main>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
-                <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
     <script>
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
@@ -18338,11 +18320,87 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .nav {
@@ -18889,41 +18947,49 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/?clear=1" class="logo">
-                <div class="logo-icon">
-                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                        <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
-                </div>
-                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-            </a>
-            <div class="nav-links">
-                <a href="/?clear=1" class="nav-link">Home</a>
-                <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                <a href="/preop" class="nav-link">Pre-Op</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                <div class="nav-dropdown">
-                    <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
-                    <div class="nav-dropdown-menu">
-                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                        <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
-                        <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
                     </div>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-    <div class="mobile-menu" id="mobileMenu">
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
         <a href="/?clear=1" class="mobile-menu-link">Home</a>
         <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
         <a href="/preop" class="mobile-menu-link">Pre-Op</a>
@@ -19142,6 +19208,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             </div>
         </div>
     </footer>
+    </div>
 
     <script>
         function toggleMobileMenu() {
@@ -19212,11 +19279,87 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .nav {
@@ -19592,48 +19735,56 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/?clear=1" class="logo">
-                <div class="logo-icon">
-                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                        <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
-                </div>
-                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-            </a>
-            <div class="nav-links">
-                <a href="/?clear=1" class="nav-link">Home</a>
-                <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                <a href="/preop" class="nav-link">Pre-Op</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                <div class="nav-dropdown">
-                    <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
-                    <div class="nav-dropdown-menu">
-                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                        <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                        <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                        </div>
                     </div>
                 </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/?clear=1" class="mobile-menu-link">Home</a>
-        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-        <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
         <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
     </div>
 
@@ -19697,6 +19848,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             </div>
         </div>
     </footer>
+    </div>
 
     <script>
         // Mobile menu toggle
