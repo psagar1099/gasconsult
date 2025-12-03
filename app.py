@@ -17421,7 +17421,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informed Consent Generator - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based informed consent discussion generator for anesthesia procedures with procedure-specific risks and patient-centered language.">
+    <meta name="description" content="Evidence-based informed consent discussion generator for anesthesia procedures.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -17453,6 +17453,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             --blue-700: #1D4ED8;
             --green-50: #F0FDF4;
             --green-500: #22C55E;
+            --green-600: #059669;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17467,7 +17468,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
-            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -17494,50 +17494,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
             top: -15%;
             left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .orb-2 {
@@ -17669,6 +17625,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
@@ -17693,7 +17650,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             overflow: hidden;
         }
 
-        .nav-dropdown-menu.show { display: block; }
+        .nav-dropdown-menu.show {
+            display: block;
+        }
 
         .nav-dropdown-link {
             display: block;
@@ -17710,6 +17669,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -17722,7 +17686,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: background 0.2s ease;
         }
 
-        .mobile-menu-btn:hover { background: rgba(0,0,0,0.04); }
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
 
         .mobile-menu-btn span {
             display: block;
@@ -17733,9 +17699,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
-        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
 
         .mobile-menu {
             display: none;
@@ -17774,20 +17748,34 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .container {
+        /* Main Content */
+        .main {
             flex: 1;
+            padding: 100px 20px 60px;
             max-width: 900px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
             width: 100%;
         }
 
-        .header {
+        /* Hero */
+        .hero {
             text-align: center;
             margin-bottom: 48px;
         }
 
-        .badge-icon {
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--green-50) 0%, var(--blue-50) 100%);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.08);
+        }
+
+        .badge-dot {
             width: 8px;
             height: 8px;
             background: var(--green-500);
@@ -17797,60 +17785,66 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         .badge-text {
             font-size: 12px;
             font-weight: 600;
-            color: #059669;
+            color: var(--green-600);
         }
 
         .hero-title {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
             color: var(--gray-900);
             margin-bottom: 16px;
-            line-height: 1.2;
         }
 
-        .header p {
-            font-size: 18px;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--green-500) 0%, var(--blue-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            font-weight: 400;
             line-height: 1.6;
+            color: var(--gray-600);
+            max-width: 680px;
+            margin: 0 auto;
         }
 
-        /* Cards */
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .info-box strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        /* Card */
         .card {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 32px;
+            margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
         }
 
-        .form-section {
-            margin-bottom: 24px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
-        }
-
-        .form-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-section h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-        }
-
+        /* Form */
         .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
+            margin-bottom: 24px;
         }
 
         .form-group label {
@@ -17864,14 +17858,19 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 14px 16px;
             font-size: 15px;
             font-family: inherit;
             border: 1px solid var(--gray-300);
-            border-radius: 10px;
+            border-radius: 12px;
             background: white;
             color: var(--gray-900);
             transition: all 0.2s ease;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
         }
 
         .form-group select:focus,
@@ -17879,12 +17878,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             outline: none;
             border-color: var(--blue-500);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-            line-height: 1.6;
         }
 
         .btn-submit {
@@ -17898,40 +17891,38 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:active {
             transform: translateY(0);
         }
 
-        .results {
+        /* Results */
+        .consent-output {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
             margin-top: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
-        .consent-content {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-
-        .consent-content h2 {
+        .consent-output h2 {
             font-size: 28px;
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 24px;
             padding-bottom: 16px;
-            border-bottom: 2px solid var(--gray-200);
+            border-bottom: 2px solid var(--blue-100);
         }
 
-        .consent-content h3 {
+        .consent-output h3 {
             font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
@@ -17939,64 +17930,52 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             margin-bottom: 16px;
         }
 
-        .consent-content p {
-            font-size: 16px;
-            color: var(--gray-700);
+        .consent-output p {
+            font-size: 15px;
             line-height: 1.8;
+            color: var(--gray-700);
             margin-bottom: 16px;
         }
 
-        .consent-content ul {
+        .consent-output ul {
             list-style: none;
-            padding-left: 0;
-            margin-bottom: 16px;
+            padding: 0;
+            margin-bottom: 20px;
         }
 
-        .consent-content li {
-            font-size: 16px;
+        .consent-output li {
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.7;
             color: var(--gray-700);
-            line-height: 1.8;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-left: 3px solid var(--blue-500);
-            border-radius: 6px;
+            border-bottom: 1px solid var(--gray-100);
         }
 
-        .consent-content li:last-child {
-            margin-bottom: 0;
+        .consent-output li:last-child {
+            border-bottom: none;
         }
 
-        .consent-content strong {
-            color: var(--blue-700);
+        .consent-output li::before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: var(--blue-600);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .consent-output strong {
+            color: var(--gray-900);
             font-weight: 600;
         }
 
-        .divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 24px 0;
-        }
-
-        .info-box {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-
-        .info-box strong {
-            color: var(--blue-700);
-        }
-
+        /* Footer */
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
-            margin-top: auto;
         }
 
         .footer-inner {
@@ -18026,8 +18005,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: color 0.2s ease;
         }
 
-        .footer-link:hover { color: var(--gray-700); }
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
 
+        /* Responsive */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
@@ -18035,7 +18017,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-            .container { padding-top: 120px; }
+            .main { padding: 120px 32px 80px; }
+            .hero-title { font-size: 52px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
             .footer-text { font-size: 14px; }
@@ -18045,37 +18028,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
+            .main { padding: 140px 40px 100px; }
             .footer { padding: 48px 40px; }
-        }
-
-        .print-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--blue-600);
-            background: var(--blue-50);
-            border: 2px solid var(--blue-200);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 24px;
-            text-decoration: none;
-        }
-
-        .print-btn:hover {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
-        }
-
-        @media print {
-            .nav, .mobile-menu, .footer, .print-btn { display: none; }
-            .bg-canvas, .grain { display: none; }
-            .card, .consent-content { box-shadow: none; border: 1px solid var(--gray-300); }
         }
     </style>
 </head>
 <body>
+    <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -18084,17 +18043,20 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
@@ -18107,17 +18069,19 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <div class="nav-dropdown-menu">
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
                         </div>
                     </div>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
@@ -18129,51 +18093,56 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        <div class="container">
-            <div class="header">
-                <h1>Informed Consent Generator</h1>
-                <p>Evidence-based consent discussions for anesthesia procedures with patient-centered language</p>
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <div class="badge-dot"></div>
+                    <span class="badge-text">Patient Education</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient">Informed Consent</span> Generator
+                </h1>
+                <p class="hero-subtitle">
+                    Evidence-based informed consent discussions for anesthesia procedures with procedure-specific risks
+                </p>
             </div>
 
+            <!-- Info Box -->
             <div class="info-box">
-                <strong>Purpose:</strong> This tool generates comprehensive, evidence-based talking points for informed consent discussions. It is designed to supplement (not replace) your clinical judgment and patient interaction. All risk frequencies are based on published literature and current best practices.
+                <strong>Educational Tool:</strong> This AI-powered generator creates patient-friendly informed consent discussions based on evidence-based guidelines. Generated content should be reviewed and personalized by the attending anesthesiologist before use in clinical practice.
             </div>
 
+            <!-- Form -->
             <div class="card">
                 <form method="POST" action="/informed-consent">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                    <div class="form-section">
-                        <h3>Anesthesia Type</h3>
-                        <div class="form-group">
-                            <label for="procedure">Select Procedure/Anesthesia Type</label>
-                            <select id="procedure" name="procedure" required>
-                                <option value="">Select anesthesia type</option>
-                                <option value="general_anesthesia">General Anesthesia</option>
-                                <option value="spinal_anesthesia">Spinal Anesthesia</option>
-                                <option value="epidural">Epidural Anesthesia</option>
-                                <option value="regional_block">Regional Nerve Block</option>
-                                <option value="mac_sedation">Monitored Anesthesia Care (MAC)/Sedation</option>
-                                <option value="cesarean">Cesarean Section Anesthesia</option>
-                                <option value="labor_epidural">Labor Epidural</option>
-                                <option value="cardiac_surgery">Cardiac Surgery Anesthesia</option>
-                                <option value="neurosurgery">Neurosurgery Anesthesia</option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="procedure">Anesthesia Type</label>
+                        <select id="procedure" name="procedure" required>
+                            <option value="">Select anesthesia type...</option>
+                            <option value="general_anesthesia">General Anesthesia</option>
+                            <option value="spinal_anesthesia">Spinal Anesthesia</option>
+                            <option value="epidural">Epidural Anesthesia</option>
+                            <option value="regional_block">Regional Nerve Block</option>
+                            <option value="mac_sedation">Monitored Anesthesia Care (MAC)/Sedation</option>
+                            <option value="cesarean">Cesarean Section Anesthesia</option>
+                            <option value="labor_epidural">Labor Epidural</option>
+                            <option value="cardiac_surgery">Cardiac Surgery Anesthesia</option>
+                            <option value="neurosurgery">Neurosurgery Anesthesia</option>
+                        </select>
                     </div>
 
-                    <div class="divider"></div>
+                    <div class="form-group">
+                        <label for="surgical_procedure">Surgical Procedure (Optional)</label>
+                        <textarea id="surgical_procedure" name="surgical_procedure" placeholder="e.g., laparoscopic cholecystectomy, total knee replacement..."></textarea>
+                    </div>
 
-                    <div class="form-section">
-                        <h3>Patient-Specific Information (Optional)</h3>
-                        <div class="form-group">
-                            <label for="patient_factors">Patient Factors (e.g., age, comorbidities, allergies)</label>
-                            <textarea id="patient_factors" name="patient_factors" placeholder="Example: 65-year-old with diabetes, hypertension, and known difficult airway..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="surgical_procedure">Surgical Procedure</label>
-                            <textarea id="surgical_procedure" name="surgical_procedure" placeholder="Example: Total knee replacement, laparoscopic cholecystectomy, etc."></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label for="patient_factors">Patient-Specific Factors (Optional)</label>
+                        <textarea id="patient_factors" name="patient_factors" placeholder="e.g., history of PONV, difficult airway, obesity, cardiac disease..."></textarea>
                     </div>
 
                     <button type="submit" class="btn-submit">Generate Informed Consent Discussion</button>
@@ -18181,31 +18150,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             </div>
 
             {% if consent %}
-            <div class="results">
-                <div class="consent-content">
-                    {{ consent.content | safe }}
-                    <button class="print-btn" onclick="window.print()">🖨️ Print for Documentation</button>
-                </div>
+            <div class="consent-output">
+                {{ consent.content | safe }}
             </div>
             {% endif %}
+        </main>
 
-            <div class="card" style="margin-top: 32px;">
-                <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">Evidence Base & Best Practices</h3>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Informed Consent Standards:</strong> This tool follows ASA guidelines for informed consent and incorporates evidence-based risk communication strategies from the shared decision-making literature.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Risk Communication:</strong> Fagerlin A, et al. Helping patients decide: ten steps to better risk communication. <em>J Natl Cancer Inst</em>. 2011;103(19):1436-1443.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Anesthesia Consent:</strong> ASA Committee on Ethics. Statement on Informed Consent for Anesthesia Care. 2015. Available at: https://www.asahq.org/standards-and-practice-parameters/statement-on-informed-consent-for-anesthesia-care
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8;">
-                    <strong>Shared Decision-Making:</strong> Elwyn G, et al. Shared decision making: a model for clinical practice. <em>J Gen Intern Med</em>. 2012;27(10):1361-1367.
-                </p>
-            </div>
-        </div>
-
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
@@ -18219,6 +18170,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18228,18 +18180,20 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             }
         }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
+        // Dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
 
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
     </script>
 </body>
 </html>
