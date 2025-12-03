@@ -18048,7 +18048,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difficult Airway Predictor - gasconsult.ai</title>
+    <title>Difficult Airway Predictor - GasConsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -18071,14 +18071,15 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --gray-800: #1E293B;
             --gray-900: #0F172A;
             --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
-            --red-50: #FEF2F2;
-            --red-500: #EF4444;
-            --red-600: #DC2626;
+            --blue-700: #1D4ED8;
             --amber-50: #FFFBEB;
             --amber-500: #F59E0B;
-            --green-50: #F0FDF4;
             --green-500: #22C55E;
         }
 
@@ -18395,10 +18396,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
         }
 
@@ -18590,10 +18594,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .recommendation-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 28px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 20px;
         }
 
@@ -19016,7 +19023,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent Generator - gasconsult.ai</title>
+    <title>Informed Consent Generator - GasConsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -19031,12 +19038,21 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             --gray-50: #F8FAFC;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
             --gray-500: #64748B;
+            --gray-600: #475569;
             --gray-700: #334155;
+            --gray-800: #1E293B;
             --gray-900: #0F172A;
             --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
             --amber-50: #FFFBEB;
             --amber-500: #F59E0B;
         }
@@ -19353,10 +19369,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
         }
 
@@ -19413,10 +19432,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .result {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
         }
 
