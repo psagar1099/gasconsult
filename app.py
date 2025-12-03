@@ -11879,1659 +11879,1333 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quick Dose — gasconsult.ai</title>
-
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#3B82F6">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Dose — GasConsult.ai</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        :root {
-            --gray-50: #F9FAFB;
-            --gray-100: #F3F4F6;
-            --gray-200: #E5E7EB;
-            --gray-300: #D1D5DB;
-            --gray-400: #9CA3AF;
-            --gray-500: #6B7280;
-            --gray-600: #4B5563;
-            --gray-700: #374151;
-            --gray-800: #1F2937;
-            --gray-900: #111827;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
-            --blue-400: #60A5FA;
-            --blue-500: #3B82F6;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-            --blue-800: #1E40AF;
-            --blue-900: #1E3A8A;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
             min-height: 100vh;
-            color: var(--gray-900);
-            overflow-x: hidden;
+            color: #1e293b;
         }
 
-        /* Background Canvas */
-        .bg-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+        /* ISO 26825 Syringe Colors */
+        :root {
+            --color-induction: #FFFFFF;
+            --color-induction-border: #e5e7eb;
+            --color-induction-text: #374151;
 
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation-timing-function: ease-in-out;
-            animation-iteration-count: infinite;
-        }
+            --color-opioid: #89CFF0;
+            --color-opioid-dark: #0EA5E9;
+            --color-opioid-text: #0369a1;
 
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -10%;
-            left: -10%;
-            animation: float 20s infinite;
-        }
+            --color-paralytic: #FF6B6B;
+            --color-paralytic-dark: #DC2626;
+            --color-paralytic-text: #b91c1c;
 
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -10%;
-            animation: float 25s infinite reverse;
-        }
+            --color-reversal: #E5E7EB;
+            --color-reversal-border: #d1d5db;
+            --color-reversal-text: #4b5563;
 
-        .orb-3 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation: float 30s infinite;
-        }
+            --color-vasopressor: #DDA0DD;
+            --color-vasopressor-dark: #A855F7;
+            --color-vasopressor-text: #7c3aed;
 
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -30px) scale(1.05); }
-            50% { transform: translate(-20px, 30px) scale(0.95); }
-            75% { transform: translate(-30px, -20px) scale(1.02); }
-        }
+            --color-hypnotic: #FFA500;
+            --color-hypnotic-dark: #EA580C;
+            --color-hypnotic-text: #c2410c;
 
-        .grain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.4;
-        }
+            --color-benzo: #FFA500;
+            --color-benzo-dark: #EA580C;
+            --color-benzo-text: #c2410c;
 
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            --color-local: #808080;
+            --color-local-dark: #525252;
+            --color-local-text: #404040;
+
+            --color-antiemetic: #E2CFBE;
+            --color-antiemetic-dark: #A78B71;
+            --color-antiemetic-text: #78716c;
+
+            --color-other: #f3f4f6;
+            --color-other-border: #e5e7eb;
+            --color-other-text: #6b7280;
         }
 
         /* Navigation */
         .nav {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 24px;
         }
 
         .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 12px 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            border-radius: 100px;
+            padding: 10px 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 860px;
         }
 
-        .logo {
+        .nav-logo {
             display: flex;
             align-items: center;
             gap: 10px;
             text-decoration: none;
+        }
+
+        .nav-logo svg {
+            width: 40px;
+            height: 14px;
+        }
+
+        .nav-logo-text {
+            font-size: 17px;
             font-weight: 700;
-            font-size: 20px;
+            letter-spacing: -0.5px;
         }
 
-        .logo-icon svg {
-            display: block;
-        }
-
-        .logo-text {
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas {
-            color: var(--blue-600);
-        }
-
-        .logo-text .consult {
-            color: var(--gray-900);
-        }
-
-        .logo-text .ai {
-            color: var(--gray-500);
-        }
+        .nav-logo-text .gas { color: #2563eb; }
+        .nav-logo-text .consult { color: #1e293b; }
+        .nav-logo-text .ai { color: rgba(30, 41, 59, 0.35); }
 
         .nav-links {
-            display: none;
+            display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 2px;
         }
 
-        .nav-link {
+        .nav-links a {
+            color: #64748b;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
             padding: 8px 14px;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            border-radius: 100px;
             transition: all 0.2s;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            white-space: nowrap;
         }
 
-        .nav-link:hover {
-            background: var(--gray-100);
-            color: var(--gray-900);
+        .nav-links a:hover {
+            color: #1e293b;
+            background: rgba(0, 0, 0, 0.04);
         }
 
-        .nav-link.active {
-            background: var(--blue-50);
-            color: var(--blue-700);
+        .nav-links a.active {
+            color: #2563eb;
+            background: rgba(37, 99, 235, 0.08);
         }
 
-        .nav-dropdown {
-            position: relative;
-        }
-
-        .nav-dropdown-toggle {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 4px;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            min-width: 180px;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 10px 16px;
-            color: var(--gray-700);
-            text-decoration: none;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .nav-dropdown-link:hover {
-            background: var(--gray-50);
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .mobile-menu-btn span {
-            width: 20px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-
-        .mobile-menu {
-            display: none;
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: 8px 0;
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        .mobile-menu-link {
-            display: block;
-            padding: 12px 20px;
-            color: var(--gray-700);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-
-        .mobile-menu-link:hover {
-            background: var(--gray-50);
-        }
-
-        @media (min-width: 768px) {
-            .nav-links {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: none;
-            }
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            max-width: 800px;
-            width: 100%;
+        /* Container */
+        .container {
+            max-width: 700px;
             margin: 0 auto;
-            padding: 24px 20px 80px 20px;
+            padding: 32px 24px 100px;
         }
 
-        /* Weight Input Section */
+        /* Weight Section */
         .weight-section {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+            margin-bottom: 48px;
         }
 
-        .weight-section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--gray-600);
-            margin-bottom: 16px;
+        .weight-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 12px;
         }
 
-        .weight-input-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            margin-bottom: 16px;
+        .weight-input-container {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 20px;
         }
 
         .weight-input {
-            width: 100%;
-            padding: 16px 60px 16px 16px;
-            font-size: 24px;
-            font-weight: 700;
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            background: white;
-            color: var(--gray-900);
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid #2563eb;
+            color: #0f172a;
+            font-size: 64px;
+            font-weight: 800;
+            width: 140px;
+            text-align: center;
+            outline: none;
+            letter-spacing: -2px;
+            transition: border-color 0.2s;
         }
 
         .weight-input:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            border-color: #1d4ed8;
         }
 
         .weight-unit {
-            position: absolute;
-            right: 20px;
-            font-size: 16px;
+            font-size: 24px;
             font-weight: 600;
-            color: var(--gray-500);
-            pointer-events: none;
+            color: #94a3b8;
         }
 
         .quick-weights {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            justify-content: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
         .quick-weight-btn {
-            padding: 10px;
-            background: var(--gray-100);
-            color: var(--gray-700);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 13px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .quick-weight-btn:active {
-            transform: scale(0.95);
-            background: var(--blue-50);
-            color: var(--blue-700);
-            border-color: var(--blue-200);
+        .quick-weight-btn:hover {
+            border-color: #cbd5e1;
+            color: #475569;
+            transform: translateY(-1px);
         }
 
-        /* Drug Categories */
-        .category {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 16px;
-            margin-bottom: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        .quick-weight-btn.active {
+            background: #2563eb;
+            border-color: #2563eb;
+            color: white;
+        }
+
+        /* Color Legend */
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+            padding: 16px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .legend-swatch {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .legend-swatch.opioid { background: var(--color-opioid); }
+        .legend-swatch.paralytic { background: var(--color-paralytic); }
+        .legend-swatch.hypnotic { background: var(--color-hypnotic); }
+        .legend-swatch.vasopressor { background: var(--color-vasopressor); }
+        .legend-swatch.reversal { background: var(--color-reversal); border-color: #d1d5db; }
+        .legend-swatch.local { background: var(--color-local); }
+
+        /* Drug Category Section */
+        .category-group {
+            margin-bottom: 32px;
         }
 
         .category-header {
-            padding: 18px 20px;
-            background: var(--gray-50);
-            cursor: pointer;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            user-select: none;
-            transition: background 0.2s;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 0 4px;
         }
 
-        .category-header:active {
-            background: var(--gray-100);
+        .category-swatch {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.1);
         }
+
+        .category-swatch.induction { background: var(--color-hypnotic); }
+        .category-swatch.opioid { background: var(--color-opioid); }
+        .category-swatch.paralytic { background: var(--color-paralytic); }
+        .category-swatch.reversal { background: var(--color-reversal); border-color: #ccc; }
+        .category-swatch.vasopressor { background: var(--color-vasopressor); }
+        .category-swatch.other { background: var(--color-other); border-color: #ddd; }
 
         .category-title {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 700;
-            color: var(--gray-900);
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Drug List */
+        .drug-list {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 8px;
         }
 
-        .category-chevron {
-            font-size: 18px;
-            color: var(--gray-400);
-            transition: transform 0.3s;
-        }
-
-        .category.open .category-chevron {
-            transform: rotate(180deg);
-        }
-
-        .category-content {
-            max-height: 0;
+        /* Drug Item */
+        .drug-item {
+            background: white;
+            border-radius: 14px;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: all 0.25s ease;
+            border: 2px solid #e5e7eb;
         }
 
-        .category.open .category-content {
-            max-height: 10000px;
+        .drug-item.induction { border-left: 4px solid var(--color-hypnotic); }
+        .drug-item.opioid { border-left: 4px solid var(--color-opioid-dark); }
+        .drug-item.paralytic { border-left: 4px solid var(--color-paralytic-dark); }
+        .drug-item.reversal { border-left: 4px solid #9ca3af; }
+        .drug-item.vasopressor { border-left: 4px solid var(--color-vasopressor-dark); }
+        .drug-item.other { border-left: 4px solid #9ca3af; }
+
+        .drug-item:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
         }
 
-        /* Drug Card */
-        .drug-card {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-100);
-        }
-
-        .drug-card:last-child {
-            border-bottom: none;
+        .drug-item.expanded {
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
         }
 
         .drug-header {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .drug-info {
-            flex: 1;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
         }
 
         .drug-name {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .drug-subtitle {
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--gray-500);
-        }
-
-        .ref-btn {
-            padding: 8px 14px;
-            background: var(--blue-50);
-            color: var(--blue-700);
-            border: none;
-            border-radius: 10px;
-            font-size: 13px;
+            font-size: 16px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            flex-shrink: 0;
+            color: #1e293b;
         }
 
-        .ref-btn:active {
-            transform: scale(0.95);
-            background: var(--blue-100);
-        }
-
-        /* Dose Grid */
-        .dose-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-        }
-
-        .dose-item {
-            background: var(--gray-50);
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--gray-100);
-        }
-
-        .dose-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-600);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .dose-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 4px;
-        }
-
-        .dose-range {
-            font-size: 12px;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 10000;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            animation: fadeIn 0.2s;
-        }
-
-        .modal.active {
+        .drug-quick-dose {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 8px;
+        }
+
+        .drug-standard-dose {
+            display: flex;
+            align-items: baseline;
+            gap: 3px;
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .drug-quick-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .drug-quick-unit {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .drug-chevron {
+            color: #94a3b8;
+            transition: transform 0.3s ease;
+        }
+
+        .drug-item.expanded .drug-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Drug Details - Expandable */
+        .drug-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fafafa;
+        }
+
+        .drug-item.expanded .drug-details {
+            max-height: 800px;
+        }
+
+        .drug-details-inner {
+            padding: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Dose Range Cards */
+        .dose-range-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dose-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .dose-card:hover {
+            border-color: #d1d5db;
+        }
+
+        .dose-card.low {
+            border-top: 3px solid #22c55e;
+        }
+
+        .dose-card.standard {
+            border-top: 3px solid #2563eb;
+            background: #f8fafc;
+        }
+
+        .dose-card.high {
+            border-top: 3px solid #f59e0b;
+        }
+
+        .dose-card-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .dose-card.low .dose-card-label { color: #16a34a; }
+        .dose-card.standard .dose-card-label { color: #2563eb; }
+        .dose-card.high .dose-card-label { color: #d97706; }
+
+        .dose-card-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .dose-card-unit {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .dose-card-perkg {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        /* Additional indications */
+        .additional-doses {
+            margin-bottom: 16px;
+        }
+
+        .additional-dose-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .additional-dose-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        .additional-dose-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .additional-dose-unit {
+            font-size: 12px;
+            color: #64748b;
+            margin-left: 3px;
+        }
+
+        .drug-meta {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .meta-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .meta-value {
+            font-size: 13px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .drug-notes {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .drug-reference {
+            font-size: 11px;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Warning */
+        .drug-warning {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-top: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .drug-warning svg {
+            color: #dc2626;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .drug-warning span {
+            font-size: 12px;
+            color: #b91c1c;
+            line-height: 1.5;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            text-align: center;
+            margin-top: 48px;
             padding: 20px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .disclaimer-text {
+            font-size: 12px;
+            color: #94a3b8;
+            line-height: 1.6;
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
+        /* Mobile */
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+
+            .container {
+                padding: 24px 16px 80px;
             }
-        }
 
-        .modal-header {
-            padding: 24px;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+            .weight-input {
+                font-size: 48px;
+                width: 110px;
+            }
 
-        .modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
+            .weight-unit {
+                font-size: 20px;
+            }
 
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--gray-100);
-            border: none;
-            color: var(--gray-700);
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
+            .drug-header {
+                padding: 14px 16px;
+            }
 
-        .modal-close:hover {
-            background: var(--gray-200);
-        }
+            .dose-range-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
 
-        .modal-body {
-            padding: 24px;
-        }
+            .dose-card {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+                padding: 12px 16px;
+            }
 
-        .ref-section {
-            margin-bottom: 24px;
-        }
+            .dose-card-label {
+                margin-bottom: 0;
+            }
 
-        .ref-section:last-child {
-            margin-bottom: 0;
-        }
+            .dose-card-right {
+                display: flex;
+                align-items: baseline;
+                gap: 4px;
+            }
 
-        .ref-section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--gray-700);
-            margin-bottom: 12px;
-        }
+            .dose-card-value {
+                font-size: 20px;
+                margin-bottom: 0;
+            }
 
-        .ref-item {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid var(--gray-100);
-        }
+            .dose-card-perkg {
+                display: none;
+            }
 
-        .ref-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
+            .color-legend {
+                gap: 8px;
+                padding: 12px;
+            }
 
-        .ref-link {
-            color: var(--blue-600);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.5;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .ref-link:hover {
-            text-decoration: underline;
-        }
-
-        .pmid-badge {
-            display: inline-block;
-            background: var(--gray-100);
-            color: var(--gray-600);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-top: 4px;
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(0, 0, 0, 0.06);
-            padding: 24px 20px;
-            margin-top: auto;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .footer-logo svg {
-            width: 24px;
-            height: 24px;
-            color: var(--blue-600);
-        }
-
-        .footer-text {
-            font-size: 14px;
-            color: var(--gray-600);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-link {
-            font-size: 14px;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover {
-            color: var(--blue-600);
+            .legend-item {
+                font-size: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <div class="page">
-        <!-- Navigation -->
-        <nav class="nav">
-            <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
-                    <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-                </a>
-                <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link active">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
-                </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <svg viewBox="0 0 52 18" fill="none">
+                    <circle cx="9" cy="9" r="9" fill="#2563eb"/>
+                    <circle cx="26" cy="9" r="9" fill="#2563eb" fill-opacity="0.5"/>
+                    <circle cx="43" cy="9" r="9" fill="#2563eb" fill-opacity="0.2"/>
+                </svg>
+                <span class="nav-logo-text">
+                    <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                </span>
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/quick-dose" class="active">Quick Dose</a>
+                <a href="/pre-op">Pre-Op</a>
+                <a href="/calculators">Calculators</a>
+                <a href="/protocols">Protocols</a>
             </div>
-        </nav>
-
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
+    </nav>
 
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Weight Input Section -->
-            <div class="weight-section">
-                <div class="weight-section-title">
-                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="width: 18px; height: 18px;">
-                        <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                    </svg>
-                    Patient Weight
-                </div>
-                <div class="weight-input-wrapper">
-                    <input type="number" id="weight" class="weight-input" value="70" min="1" max="300" inputmode="numeric" oninput="updateAllDoses()">
-                    <span class="weight-unit">kg</span>
-                </div>
-                <div class="quick-weights">
-                    <button class="quick-weight-btn" onclick="setWeight(50)">50 kg</button>
-                    <button class="quick-weight-btn" onclick="setWeight(60)">60 kg</button>
-                    <button class="quick-weight-btn" onclick="setWeight(70)">70 kg</button>
-                    <button class="quick-weight-btn" onclick="setWeight(80)">80 kg</button>
-                    <button class="quick-weight-btn" onclick="setWeight(90)">90 kg</button>
-                    <button class="quick-weight-btn" onclick="setWeight(100)">100 kg</button>
-                </div>
+    <div class="container">
+        <!-- Weight Input -->
+        <div class="weight-section">
+            <div class="weight-label">Patient Weight</div>
+            <div class="weight-input-container">
+                <input type="number" id="weight" class="weight-input" placeholder="70" value="70" min="1" max="500">
+                <span class="weight-unit">kg</span>
             </div>
-
-            <!-- Induction Agents -->
-            <div class="category open">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">💉 Induction Agents</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Propofol -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Propofol</div>
-                                <div class="drug-subtitle">IV Sedative-Hypnotic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('propofol')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Induction</div>
-                                <div class="dose-value" data-calc="2" data-unit="mg">140 mg</div>
-                                <div class="dose-range">1.5-2.5 mg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Sedation</div>
-                                <div class="dose-value" data-calc="0.7" data-unit="mg">49 mg</div>
-                                <div class="dose-range">0.5-1 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Etomidate -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Etomidate</div>
-                                <div class="drug-subtitle">IV Hypnotic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('etomidate')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Induction</div>
-                                <div class="dose-value" data-calc="0.3" data-unit="mg">21 mg</div>
-                                <div class="dose-range">0.2-0.4 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Ketamine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Ketamine</div>
-                                <div class="drug-subtitle">Dissociative Anesthetic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('ketamine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Induction</div>
-                                <div class="dose-value" data-calc="1.5" data-unit="mg">105 mg</div>
-                                <div class="dose-range">1-2 mg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Analgesia</div>
-                                <div class="dose-value" data-calc="0.3" data-unit="mg">21 mg</div>
-                                <div class="dose-range">0.2-0.5 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Midazolam -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Midazolam</div>
-                                <div class="drug-subtitle">Benzodiazepine</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('midazolam')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Premedication</div>
-                                <div class="dose-value" data-calc="0.05" data-unit="mg">3.5 mg</div>
-                                <div class="dose-range">0.02-0.1 mg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Sedation</div>
-                                <div class="dose-value" data-calc="0.03" data-unit="mg">2.1 mg</div>
-                                <div class="dose-range">0.02-0.05 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dexmedetomidine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Dexmedetomidine</div>
-                                <div class="drug-subtitle">α2-Agonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('dexmedetomidine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Loading</div>
-                                <div class="dose-value" data-calc="1" data-unit="mcg">70 mcg</div>
-                                <div class="dose-range">0.5-1 mcg/kg over 10min</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Maintenance</div>
-                                <div class="dose-value">0.2-0.7</div>
-                                <div class="dose-range">mcg/kg/hr</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Opioids -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">💊 Opioids</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Fentanyl -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Fentanyl</div>
-                                <div class="drug-subtitle">Synthetic Opioid</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('fentanyl')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Induction</div>
-                                <div class="dose-value" data-calc="2" data-unit="mcg">140 mcg</div>
-                                <div class="dose-range">1-3 mcg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Maintenance</div>
-                                <div class="dose-value" data-calc="0.5" data-unit="mcg">35 mcg</div>
-                                <div class="dose-range">0.5-1 mcg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Remifentanil -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Remifentanil</div>
-                                <div class="drug-subtitle">Ultra-Short Acting Opioid</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('remifentanil')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Bolus</div>
-                                <div class="dose-value" data-calc="1" data-unit="mcg">70 mcg</div>
-                                <div class="dose-range">0.5-1 mcg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Infusion</div>
-                                <div class="dose-value">0.05-0.2</div>
-                                <div class="dose-range">mcg/kg/min</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Morphine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Morphine</div>
-                                <div class="drug-subtitle">Opioid Analgesic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('morphine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">IV Bolus</div>
-                                <div class="dose-value" data-calc="0.1" data-unit="mg">7 mg</div>
-                                <div class="dose-range">0.05-0.15 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hydromorphone -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Hydromorphone</div>
-                                <div class="drug-subtitle">Opioid Analgesic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('hydromorphone')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">IV Bolus</div>
-                                <div class="dose-value" data-calc="0.015" data-unit="mg">1.1 mg</div>
-                                <div class="dose-range">0.01-0.02 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sufentanil -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Sufentanil</div>
-                                <div class="drug-subtitle">Synthetic Opioid</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('sufentanil')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Induction</div>
-                                <div class="dose-value" data-calc="0.25" data-unit="mcg">17.5 mcg</div>
-                                <div class="dose-range">0.1-0.5 mcg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Maintenance</div>
-                                <div class="dose-value" data-calc="0.05" data-unit="mcg">3.5 mcg</div>
-                                <div class="dose-range">0.03-0.1 mcg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Neuromuscular Blockers -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">🔒 Neuromuscular Blockers</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Succinylcholine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Succinylcholine</div>
-                                <div class="drug-subtitle">Depolarizing NMBD</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('succinylcholine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Intubation</div>
-                                <div class="dose-value" data-calc="1.5" data-unit="mg">105 mg</div>
-                                <div class="dose-range">1-1.5 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rocuronium -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Rocuronium</div>
-                                <div class="drug-subtitle">Non-Depolarizing NMBD</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('rocuronium')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Intubation</div>
-                                <div class="dose-value" data-calc="0.6" data-unit="mg">42 mg</div>
-                                <div class="dose-range">0.6-1.2 mg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">RSI</div>
-                                <div class="dose-value" data-calc="1.2" data-unit="mg">84 mg</div>
-                                <div class="dose-range">1.2 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Vecuronium -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Vecuronium</div>
-                                <div class="drug-subtitle">Non-Depolarizing NMBD</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('vecuronium')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Intubation</div>
-                                <div class="dose-value" data-calc="0.1" data-unit="mg">7 mg</div>
-                                <div class="dose-range">0.08-0.12 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cisatracurium -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Cisatracurium</div>
-                                <div class="drug-subtitle">Non-Depolarizing NMBD</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('cisatracurium')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Intubation</div>
-                                <div class="dose-value" data-calc="0.15" data-unit="mg">10.5 mg</div>
-                                <div class="dose-range">0.15-0.2 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reversal Agents -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">↩️ Reversal Agents</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Sugammadex -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Sugammadex</div>
-                                <div class="drug-subtitle">NMBD Reversal</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('sugammadex')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Routine</div>
-                                <div class="dose-value" data-calc="2" data-unit="mg">140 mg</div>
-                                <div class="dose-range">2 mg/kg</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Immediate</div>
-                                <div class="dose-value" data-calc="16" data-unit="mg">1120 mg</div>
-                                <div class="dose-range">16 mg/kg</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Neostigmine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Neostigmine</div>
-                                <div class="drug-subtitle">Acetylcholinesterase Inhibitor</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('neostigmine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Reversal</div>
-                                <div class="dose-value" data-calc="0.05" data-unit="mg">3.5 mg</div>
-                                <div class="dose-range">0.04-0.07 mg/kg (max 5mg)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Naloxone -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Naloxone</div>
-                                <div class="drug-subtitle">Opioid Antagonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('naloxone')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Reversal</div>
-                                <div class="dose-value">0.04-0.4</div>
-                                <div class="dose-range">mg q2-3min</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Flumazenil -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Flumazenil</div>
-                                <div class="drug-subtitle">Benzodiazepine Antagonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('flumazenil')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Reversal</div>
-                                <div class="dose-value">0.2</div>
-                                <div class="dose-range">mg q1min (max 1mg)</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Antiemetics -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">🤢 Antiemetics</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Ondansetron -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Ondansetron</div>
-                                <div class="drug-subtitle">5-HT3 Antagonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('ondansetron')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Prophylaxis</div>
-                                <div class="dose-value">4</div>
-                                <div class="dose-range">mg IV</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Dexamethasone -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Dexamethasone</div>
-                                <div class="drug-subtitle">Corticosteroid</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('dexamethasone')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">PONV</div>
-                                <div class="dose-value">4-8</div>
-                                <div class="dose-range">mg IV</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Metoclopramide -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Metoclopramide</div>
-                                <div class="drug-subtitle">Prokinetic</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('metoclopramide')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">PONV</div>
-                                <div class="dose-value">10</div>
-                                <div class="dose-range">mg IV</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Vasopressors -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <div class="category-title">📈 Vasopressors</div>
-                    <div class="category-chevron">▼</div>
-                </div>
-                <div class="category-content">
-                    <!-- Phenylephrine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Phenylephrine</div>
-                                <div class="drug-subtitle">α1-Agonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('phenylephrine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Bolus</div>
-                                <div class="dose-value">50-200</div>
-                                <div class="dose-range">mcg IV</div>
-                            </div>
-                            <div class="dose-item">
-                                <div class="dose-label">Infusion</div>
-                                <div class="dose-value">0.5-3</div>
-                                <div class="dose-range">mcg/kg/min</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Ephedrine -->
-                    <div class="drug-card">
-                        <div class="drug-header">
-                            <div class="drug-info">
-                                <div class="drug-name">Ephedrine</div>
-                                <div class="drug-subtitle">Mixed Agonist</div>
-                            </div>
-                            <button class="ref-btn" onclick="openModal('ephedrine')">Refs</button>
-                        </div>
-                        <div class="dose-grid">
-                            <div class="dose-item">
-                                <div class="dose-label">Bolus</div>
-                                <div class="dose-value">5-10</div>
-                                <div class="dose-range">mg IV</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="quick-weights">
+                <button class="quick-weight-btn" onclick="setWeight(50)">50 kg</button>
+                <button class="quick-weight-btn active" onclick="setWeight(70)">70 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(80)">80 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(100)">100 kg</button>
+                <button class="quick-weight-btn" onclick="setWeight(120)">120 kg</button>
             </div>
         </div>
 
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none">
-                            <path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
-                <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-                </div>
+        <!-- Color Legend -->
+        <div class="color-legend">
+            <div class="legend-item">
+                <div class="legend-swatch hypnotic" style="background: var(--color-hypnotic);"></div>
+                <span>Induction/Hypnotic</span>
             </div>
-        </footer>
-    </div>
+            <div class="legend-item">
+                <div class="legend-swatch opioid"></div>
+                <span>Opioid</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch paralytic"></div>
+                <span>Paralytic</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch reversal"></div>
+                <span>Reversal</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-swatch vasopressor"></div>
+                <span>Vasopressor</span>
+            </div>
+        </div>
 
-    <!-- Reference Modal -->
-    <div id="refModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title" id="modalTitle">References</div>
-                <button class="modal-close" onclick="closeModal()">✕</button>
+        <!-- Drug Lists by Category -->
+        <div id="drug-categories"></div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <div class="disclaimer-text">
+                For reference only. Verify all doses and adjust for patient-specific factors. Color coding follows ISO 26825 standard.
             </div>
-            <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
     <script>
-        // Drug references database
-        const drugRefs = {
-            'propofol': {
-                name: 'Propofol',
-                refs: [
-                    { title: 'Propofol pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/8256626/', pmid: '8256626' },
-                    { title: 'Propofol infusion syndrome: An update', url: 'https://pubmed.ncbi.nlm.nih.gov/30500716/', pmid: '30500716' }
+        const drugData = {
+            induction: {
+                name: "Induction Agents",
+                color: "hypnotic",
+                drugs: [
+                    {
+                        name: "Propofol",
+                        low: 1.5,
+                        standard: 2,
+                        high: 2.5,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Elderly/Compromised", perKg: 1, unit: "mg" }
+                        ],
+                        onset: "30–45 sec",
+                        duration: "5–10 min",
+                        notes: "Reduce dose 30–50% in elderly, hypovolemic, or hemodynamically unstable. Lidocaine 20–40mg can reduce injection pain.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Etomidate",
+                        low: 0.2,
+                        standard: 0.3,
+                        high: 0.4,
+                        unit: "mg",
+                        onset: "30–60 sec",
+                        duration: "3–5 min",
+                        notes: "Hemodynamically stable. Single-dose adrenal suppression is not clinically significant. Myoclonus common.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Ketamine",
+                        low: 1,
+                        standard: 1.5,
+                        high: 2,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "IM Induction", perKg: 5, unit: "mg", range: "4–6 mg/kg" },
+                            { label: "Analgesic (sub-dissociative)", perKg: 0.25, unit: "mg" }
+                        ],
+                        onset: "IV: 30–60 sec | IM: 3–4 min",
+                        duration: "10–20 min",
+                        notes: "Maintains airway reflexes and hemodynamics. Bronchodilator. Consider midazolam for emergence phenomena.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Midazolam",
+                        low: 0.02,
+                        standard: 0.03,
+                        high: 0.05,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Anxiolysis", fixed: 1, unit: "mg", range: "1–2 mg" }
+                        ],
+                        onset: "1–3 min",
+                        duration: "30–60 min",
+                        notes: "Marked synergy with opioids — reduce both when combined. Anterograde amnesia. Reduce dose in elderly.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    }
                 ]
             },
-            'etomidate': {
-                name: 'Etomidate',
-                refs: [
-                    { title: 'Etomidate: A review of its pharmacological properties', url: 'https://pubmed.ncbi.nlm.nih.gov/24105789/', pmid: '24105789' },
-                    { title: 'Adrenal suppression with etomidate', url: 'https://pubmed.ncbi.nlm.nih.gov/16844843/', pmid: '16844843' }
+            opioid: {
+                name: "Opioids",
+                color: "opioid",
+                drugs: [
+                    {
+                        name: "Fentanyl",
+                        low: 1,
+                        standard: 2,
+                        high: 3,
+                        unit: "mcg",
+                        additionalDoses: [
+                            { label: "High-dose (cardiac)", perKg: 10, unit: "mcg", range: "5–15 mcg/kg" }
+                        ],
+                        onset: "1–2 min",
+                        duration: "30–60 min",
+                        notes: "Chest wall rigidity at high doses (>5 mcg/kg bolus). Context-sensitive half-time increases with prolonged infusion.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Sufentanil",
+                        low: 0.1,
+                        standard: 0.3,
+                        high: 0.5,
+                        unit: "mcg",
+                        additionalDoses: [
+                            { label: "Cardiac anesthesia", perKg: 5, unit: "mcg", range: "2–8 mcg/kg" }
+                        ],
+                        onset: "1–3 min",
+                        duration: "20–45 min",
+                        notes: "~10× potency of fentanyl. Excellent hemodynamic stability for cardiac surgery.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Remifentanil",
+                        low: 0.5,
+                        standard: 1,
+                        high: 1.5,
+                        unit: "mcg",
+                        additionalDoses: [
+                            { label: "Infusion", perKg: 0.15, unit: "mcg/kg/min", range: "0.05–0.2" }
+                        ],
+                        onset: "1–3 min",
+                        duration: "3–5 min",
+                        notes: "Ester hydrolysis — organ-independent. Rapid offset requires transition to longer-acting opioid before emergence.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Hydromorphone",
+                        low: 0.01,
+                        standard: 0.015,
+                        high: 0.02,
+                        unit: "mg",
+                        onset: "5 min",
+                        duration: "3–4 hours",
+                        notes: "5–7× morphine potency. Less histamine release. No active metabolites — preferred in renal impairment.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Morphine",
+                        low: 0.05,
+                        standard: 0.1,
+                        high: 0.15,
+                        unit: "mg",
+                        onset: "5–10 min",
+                        duration: "3–4 hours",
+                        notes: "Histamine release — hypotension, bronchospasm possible. Active metabolite M6G accumulates in renal failure.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    }
                 ]
             },
-            'ketamine': {
-                name: 'Ketamine',
-                refs: [
-                    { title: 'Ketamine for perioperative pain management', url: 'https://pubmed.ncbi.nlm.nih.gov/29283798/', pmid: '29283798' },
-                    { title: 'Ketamine: NMDA receptors and beyond', url: 'https://pubmed.ncbi.nlm.nih.gov/26114983/', pmid: '26114983' }
+            paralytic: {
+                name: "Neuromuscular Blockers",
+                color: "paralytic",
+                drugs: [
+                    {
+                        name: "Succinylcholine",
+                        low: 1,
+                        standard: 1.5,
+                        high: 2,
+                        unit: "mg",
+                        onset: "30–60 sec",
+                        duration: "5–10 min",
+                        notes: "Only depolarizing NMBA. Fasciculations precede paralysis. ~0.5 mEq/L K+ rise in normal patients.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed",
+                        warning: "Contraindicated: hyperkalemia risk (burns >24h, crush injury, denervation, prolonged immobility), MH history, myopathies"
+                    },
+                    {
+                        name: "Rocuronium",
+                        low: 0.6,
+                        standard: 0.9,
+                        high: 1.2,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Maintenance", perKg: 0.15, unit: "mg", range: "0.1–0.2 mg/kg" }
+                        ],
+                        onset: "60–90 sec (high dose: 45–60 sec)",
+                        duration: "30–60 min (dose-dependent)",
+                        notes: "Aminosteroid NMBA. Fully reversible with sugammadex at any depth. RSI alternative to succinylcholine.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Vecuronium",
+                        low: 0.08,
+                        standard: 0.1,
+                        high: 0.15,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Maintenance", perKg: 0.02, unit: "mg" }
+                        ],
+                        onset: "2–3 min",
+                        duration: "25–40 min",
+                        notes: "Aminosteroid. Hepatic elimination — prolonged in liver failure. Reversible with sugammadex.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Cisatracurium",
+                        low: 0.1,
+                        standard: 0.15,
+                        high: 0.2,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Maintenance", perKg: 0.03, unit: "mg" }
+                        ],
+                        onset: "2–3 min",
+                        duration: "40–60 min",
+                        notes: "Hoffman elimination (organ-independent). Ideal for hepatic/renal failure. No histamine release.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    }
                 ]
             },
-            'midazolam': {
-                name: 'Midazolam',
-                refs: [
-                    { title: 'Midazolam: A review of its use in intravenous sedation', url: 'https://pubmed.ncbi.nlm.nih.gov/2890489/', pmid: '2890489' },
-                    { title: 'Midazolam pharmacokinetics in critically ill patients', url: 'https://pubmed.ncbi.nlm.nih.gov/25412816/', pmid: '25412816' }
+            reversal: {
+                name: "Reversal Agents",
+                color: "reversal",
+                drugs: [
+                    {
+                        name: "Sugammadex",
+                        low: 2,
+                        standard: 4,
+                        high: 16,
+                        unit: "mg",
+                        lowLabel: "Moderate Block",
+                        standardLabel: "Deep Block",
+                        highLabel: "Immediate",
+                        onset: "1–3 min",
+                        duration: "N/A",
+                        notes: "Selective relaxant binding agent for rocuronium/vecuronium. May reduce hormonal contraceptive efficacy for 7 days.",
+                        reference: "FDA Package Insert"
+                    },
+                    {
+                        name: "Neostigmine",
+                        low: 0.03,
+                        standard: 0.05,
+                        high: 0.07,
+                        unit: "mg",
+                        max: 5,
+                        additionalDoses: [
+                            { label: "With glycopyrrolate", note: "0.2 mg glyco per 1 mg neo" }
+                        ],
+                        onset: "5–10 min",
+                        duration: "40–60 min",
+                        notes: "Anticholinesterase — MUST co-administer anticholinergic. Only effective at TOF count ≥2.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Glycopyrrolate",
+                        low: 0.006,
+                        standard: 0.01,
+                        high: 0.014,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Antisialagogue", fixed: 0.2, unit: "mg" }
+                        ],
+                        onset: "1 min",
+                        duration: "2–4 hours",
+                        notes: "Quaternary ammonium — does not cross BBB. Less tachycardia than atropine.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Naloxone",
+                        isFixed: true,
+                        low: 0.02,
+                        standard: 0.04,
+                        high: 0.4,
+                        unit: "mg",
+                        lowLabel: "Micro-dose",
+                        standardLabel: "Titrated",
+                        highLabel: "Full Reversal",
+                        onset: "1–2 min",
+                        duration: "30–45 min",
+                        notes: "Opioid antagonist. Duration shorter than most opioids — resedation possible. Titrate to avoid withdrawal.",
+                        reference: "ACLS Guidelines 2020"
+                    },
+                    {
+                        name: "Flumazenil",
+                        isFixed: true,
+                        low: 0.1,
+                        standard: 0.2,
+                        high: 0.5,
+                        unit: "mg",
+                        onset: "1–2 min",
+                        duration: "45–90 min",
+                        notes: "Benzodiazepine antagonist. May precipitate seizures in chronic benzo users. Max total 3–5 mg.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    }
                 ]
             },
-            'dexmedetomidine': {
-                name: 'Dexmedetomidine',
-                refs: [
-                    { title: 'Dexmedetomidine: A review of its use in anesthesia and intensive care', url: 'https://pubmed.ncbi.nlm.nih.gov/30809592/', pmid: '30809592' },
-                    { title: 'Dexmedetomidine reduces emergence delirium', url: 'https://pubmed.ncbi.nlm.nih.gov/23571773/', pmid: '23571773' }
+            vasopressor: {
+                name: "Vasopressors & Inotropes",
+                color: "vasopressor",
+                drugs: [
+                    {
+                        name: "Phenylephrine",
+                        isFixed: true,
+                        low: 50,
+                        standard: 100,
+                        high: 200,
+                        unit: "mcg",
+                        onset: "Immediate",
+                        duration: "5–10 min",
+                        notes: "Pure α₁-agonist. Increases SVR without inotropy. Reflex bradycardia — useful when HR elevated.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Ephedrine",
+                        isFixed: true,
+                        low: 5,
+                        standard: 10,
+                        high: 25,
+                        unit: "mg",
+                        onset: "1–2 min",
+                        duration: "10–15 min",
+                        notes: "Mixed α/β agonist + indirect NE release. Tachyphylaxis with repeated doses.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Epinephrine",
+                        isFixed: true,
+                        low: 5,
+                        standard: 10,
+                        high: 20,
+                        unit: "mcg",
+                        additionalDoses: [
+                            { label: "Cardiac Arrest", fixed: 1, unit: "mg", range: "1 mg q3–5 min" },
+                            { label: "Anaphylaxis IM", fixed: 0.3, unit: "mg", range: "0.3–0.5 mg" }
+                        ],
+                        onset: "Immediate",
+                        duration: "5–10 min",
+                        notes: "α + β agonist. First-line for anaphylaxis and cardiac arrest. Low-dose: β effects; high-dose: α effects.",
+                        reference: "ACLS Guidelines 2020"
+                    },
+                    {
+                        name: "Vasopressin",
+                        isFixed: true,
+                        low: 1,
+                        standard: 2,
+                        high: 4,
+                        unit: "U",
+                        additionalDoses: [
+                            { label: "Infusion (shock)", note: "0.01–0.04 U/min" },
+                            { label: "Cardiac Arrest", fixed: 40, unit: "U" }
+                        ],
+                        onset: "Immediate",
+                        duration: "10–20 min",
+                        notes: "V₁ receptor agonist. Catecholamine-sparing. No tachycardia. May cause splanchnic ischemia.",
+                        reference: "Surviving Sepsis Guidelines 2021"
+                    },
+                    {
+                        name: "Atropine",
+                        isFixed: true,
+                        low: 0.5,
+                        standard: 1,
+                        high: 1.5,
+                        unit: "mg",
+                        onset: "1–2 min",
+                        duration: "30–60 min",
+                        notes: "Anticholinergic. Crosses BBB. Paradoxical bradycardia possible with doses <0.5 mg. Max 3 mg.",
+                        reference: "ACLS Guidelines 2020"
+                    }
                 ]
             },
-            'fentanyl': {
-                name: 'Fentanyl',
-                refs: [
-                    { title: 'Fentanyl pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/16681375/', pmid: '16681375' },
-                    { title: 'Fentanyl-induced chest wall rigidity', url: 'https://pubmed.ncbi.nlm.nih.gov/28288037/', pmid: '28288037' }
-                ]
-            },
-            'remifentanil': {
-                name: 'Remifentanil',
-                refs: [
-                    { title: 'Remifentanil: An updated review of its use in anaesthesia', url: 'https://pubmed.ncbi.nlm.nih.gov/17645234/', pmid: '17645234' },
-                    { title: 'Context-sensitive half-time of remifentanil', url: 'https://pubmed.ncbi.nlm.nih.gov/8809081/', pmid: '8809081' }
-                ]
-            },
-            'morphine': {
-                name: 'Morphine',
-                refs: [
-                    { title: 'Morphine pharmacokinetics and metabolism', url: 'https://pubmed.ncbi.nlm.nih.gov/12873087/', pmid: '12873087' },
-                    { title: 'Morphine-6-glucuronide: Clinical implications', url: 'https://pubmed.ncbi.nlm.nih.gov/15656704/', pmid: '15656704' }
-                ]
-            },
-            'hydromorphone': {
-                name: 'Hydromorphone',
-                refs: [
-                    { title: 'Hydromorphone: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/24809685/', pmid: '24809685' },
-                    { title: 'Hydromorphone in acute pain management', url: 'https://pubmed.ncbi.nlm.nih.gov/21878057/', pmid: '21878057' }
-                ]
-            },
-            'succinylcholine': {
-                name: 'Succinylcholine',
-                refs: [
-                    { title: 'Succinylcholine-induced hyperkalemia', url: 'https://pubmed.ncbi.nlm.nih.gov/16685249/', pmid: '16685249' },
-                    { title: 'Malignant hyperthermia and succinylcholine', url: 'https://pubmed.ncbi.nlm.nih.gov/28486386/', pmid: '28486386' }
-                ]
-            },
-            'rocuronium': {
-                name: 'Rocuronium',
-                refs: [
-                    { title: 'Rocuronium: A review of its use in facilitation of rapid sequence intubation', url: 'https://pubmed.ncbi.nlm.nih.gov/10904749/', pmid: '10904749' },
-                    { title: 'Sugammadex for reversal of rocuronium', url: 'https://pubmed.ncbi.nlm.nih.gov/25851390/', pmid: '25851390' }
-                ]
-            },
-            'vecuronium': {
-                name: 'Vecuronium',
-                refs: [
-                    { title: 'Vecuronium pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/6362045/', pmid: '6362045' },
-                    { title: 'Vecuronium in critically ill patients', url: 'https://pubmed.ncbi.nlm.nih.gov/1542130/', pmid: '1542130' }
-                ]
-            },
-            'cisatracurium': {
-                name: 'Cisatracurium',
-                refs: [
-                    { title: 'Cisatracurium: A review of its use in anaesthesia', url: 'https://pubmed.ncbi.nlm.nih.gov/11681547/', pmid: '11681547' },
-                    { title: 'Hofmann elimination and organ-independent clearance', url: 'https://pubmed.ncbi.nlm.nih.gov/8988779/', pmid: '8988779' }
-                ]
-            },
-            'sugammadex': {
-                name: 'Sugammadex',
-                refs: [
-                    { title: 'Sugammadex: A review of pharmacology and clinical use', url: 'https://pubmed.ncbi.nlm.nih.gov/25851390/', pmid: '25851390' },
-                    { title: 'Sugammadex for immediate reversal of rocuronium', url: 'https://pubmed.ncbi.nlm.nih.gov/23027738/', pmid: '23027738' }
-                ]
-            },
-            'neostigmine': {
-                name: 'Neostigmine',
-                refs: [
-                    { title: 'Neostigmine for reversal of neuromuscular blockade', url: 'https://pubmed.ncbi.nlm.nih.gov/25851387/', pmid: '25851387' },
-                    { title: 'Residual neuromuscular blockade and critical respiratory events', url: 'https://pubmed.ncbi.nlm.nih.gov/29200077/', pmid: '29200077' }
-                ]
-            },
-            'naloxone': {
-                name: 'Naloxone',
-                refs: [
-                    { title: 'Naloxone for opioid overdose', url: 'https://pubmed.ncbi.nlm.nih.gov/22385071/', pmid: '22385071' },
-                    { title: 'Naloxone pharmacokinetics and pharmacodynamics', url: 'https://pubmed.ncbi.nlm.nih.gov/31239114/', pmid: '31239114' }
-                ]
-            },
-            'flumazenil': {
-                name: 'Flumazenil',
-                refs: [
-                    { title: 'Flumazenil: A review of its pharmacology and use', url: 'https://pubmed.ncbi.nlm.nih.gov/1648578/', pmid: '1648578' },
-                    { title: 'Flumazenil and seizures: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/22153017/', pmid: '22153017' }
-                ]
-            },
-            'ondansetron': {
-                name: 'Ondansetron',
-                refs: [
-                    { title: 'Ondansetron for PONV prophylaxis: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/23700330/', pmid: '23700330' },
-                    { title: 'QTc prolongation with ondansetron', url: 'https://pubmed.ncbi.nlm.nih.gov/23027738/', pmid: '23027738' }
-                ]
-            },
-            'dexamethasone': {
-                name: 'Dexamethasone',
-                refs: [
-                    { title: 'Dexamethasone for PONV prevention: A meta-analysis', url: 'https://pubmed.ncbi.nlm.nih.gov/23756170/', pmid: '23756170' },
-                    { title: 'Perioperative dexamethasone and surgical site infection', url: 'https://pubmed.ncbi.nlm.nih.gov/29664888/', pmid: '29664888' }
-                ]
-            },
-            'metoclopramide': {
-                name: 'Metoclopramide',
-                refs: [
-                    { title: 'Metoclopramide for PONV: A systematic review', url: 'https://pubmed.ncbi.nlm.nih.gov/15681908/', pmid: '15681908' },
-                    { title: 'Extrapyramidal symptoms with metoclopramide', url: 'https://pubmed.ncbi.nlm.nih.gov/21029015/', pmid: '21029015' }
-                ]
-            },
-            'phenylephrine': {
-                name: 'Phenylephrine',
-                refs: [
-                    { title: 'Phenylephrine: A systematic review of its use', url: 'https://pubmed.ncbi.nlm.nih.gov/23456822/', pmid: '23456822' },
-                    { title: 'Phenylephrine for spinal-induced hypotension', url: 'https://pubmed.ncbi.nlm.nih.gov/22156859/', pmid: '22156859' }
-                ]
-            },
-            'ephedrine': {
-                name: 'Ephedrine',
-                refs: [
-                    { title: 'Ephedrine versus phenylephrine: A meta-analysis', url: 'https://pubmed.ncbi.nlm.nih.gov/21878668/', pmid: '21878668' },
-                    { title: 'Ephedrine tachyphylaxis', url: 'https://pubmed.ncbi.nlm.nih.gov/19325497/', pmid: '19325497' }
-                ]
-            },
-            'sufentanil': {
-                name: 'Sufentanil',
-                refs: [
-                    { title: 'Sufentanil: A review', url: 'https://pubmed.ncbi.nlm.nih.gov/2891597/', pmid: '2891597' },
-                    { title: 'Sufentanil in cardiac anesthesia', url: 'https://pubmed.ncbi.nlm.nih.gov/3885620/', pmid: '3885620' }
+            other: {
+                name: "Other Agents",
+                color: "other",
+                drugs: [
+                    {
+                        name: "Ondansetron",
+                        isFixed: true,
+                        low: 4,
+                        standard: 4,
+                        high: 8,
+                        unit: "mg",
+                        onset: "5–10 min",
+                        duration: "4–8 hours",
+                        notes: "5-HT₃ antagonist. Give at end of surgery. QTc prolongation — caution with other QT-prolonging drugs.",
+                        reference: "Consensus Guidelines for PONV, 2020"
+                    },
+                    {
+                        name: "Dexamethasone",
+                        isFixed: true,
+                        low: 4,
+                        standard: 8,
+                        high: 10,
+                        unit: "mg",
+                        onset: "1–2 hours (peak)",
+                        duration: "24–72 hours",
+                        notes: "Give at induction for PONV (needs time for effect). Transient hyperglycemia. Perineal burning if rapid IV.",
+                        reference: "Consensus Guidelines for PONV, 2020"
+                    },
+                    {
+                        name: "Tranexamic Acid",
+                        low: 10,
+                        standard: 20,
+                        high: 30,
+                        unit: "mg",
+                        additionalDoses: [
+                            { label: "Maintenance infusion", perKg: 1, unit: "mg/kg/hr", range: "1–5 mg/kg/hr" }
+                        ],
+                        onset: "5–15 min",
+                        duration: "~3 hours",
+                        notes: "Antifibrinolytic. Contraindicated in active thromboembolic disease. Seizure risk at very high doses.",
+                        reference: "CRASH-2 Trial, Lancet 2010"
+                    },
+                    {
+                        name: "Dexmedetomidine",
+                        low: 0.5,
+                        standard: 1,
+                        high: 1,
+                        unit: "mcg",
+                        additionalDoses: [
+                            { label: "Infusion", perKg: 0.5, unit: "mcg/kg/hr", range: "0.2–0.7" }
+                        ],
+                        onset: "5–10 min",
+                        duration: "Infusion-dependent",
+                        notes: "α₂-agonist. Sedation without respiratory depression. Bradycardia and hypotension common — load slowly.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    },
+                    {
+                        name: "Lidocaine IV",
+                        low: 1,
+                        standard: 1.5,
+                        high: 2,
+                        unit: "mg",
+                        onset: "1–2 min",
+                        duration: "10–20 min",
+                        notes: "Blunts airway reflexes, reduces MAC. Max 4.5 mg/kg. CNS toxicity precedes cardiac.",
+                        reference: "Barash Clinical Anesthesia, 8th Ed"
+                    }
                 ]
             }
         };
 
-        // Set weight
-        function setWeight(kg) {
-            document.getElementById('weight').value = kg;
+        let currentWeight = 70;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllCategories();
+
+            document.getElementById('weight').addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                if (val && val > 0) {
+                    currentWeight = val;
+                    updateQuickWeightButtons();
+                    updateAllDoses();
+                }
+            });
+        });
+
+        function setWeight(w) {
+            currentWeight = w;
+            document.getElementById('weight').value = w;
+            updateQuickWeightButtons();
             updateAllDoses();
         }
 
-        // Update all doses based on weight
-        function updateAllDoses() {
-            const weight = parseFloat(document.getElementById('weight').value) || 70;
-            const doseElements = document.querySelectorAll('[data-calc]');
-
-            doseElements.forEach(el => {
-                const calcValue = parseFloat(el.getAttribute('data-calc'));
-                const unit = el.getAttribute('data-unit') || '';
-                const calculated = Math.round(weight * calcValue * 10) / 10;
-
-                if (unit) {
-                    el.textContent = calculated + ' ' + unit;
-                } else {
-                    el.textContent = calculated;
+        function updateQuickWeightButtons() {
+            document.querySelectorAll('.quick-weight-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.textContent) === currentWeight) {
+                    btn.classList.add('active');
                 }
             });
         }
 
-        // Toggle category
-        function toggleCategory(header) {
-            const category = header.parentElement;
-            category.classList.toggle('open');
+        function formatDose(value) {
+            if (value >= 1000) return (value / 1000).toFixed(1);
+            if (value < 0.1) return value.toFixed(3);
+            if (value < 1) return value.toFixed(2);
+            if (value < 10) return value.toFixed(1);
+            return Math.round(value);
         }
 
-        // Open modal
-        function openModal(drug) {
-            const modal = document.getElementById('refModal');
-            const title = document.getElementById('modalTitle');
-            const body = document.getElementById('modalBody');
+        function formatUnit(value, unit) {
+            if (unit === 'mg' && value >= 1000) return 'g';
+            if (unit === 'mcg' && value >= 1000) return 'mg';
+            return unit;
+        }
 
-            const refs = drugRefs[drug];
-            if (!refs) {
-                title.textContent = 'References';
-                body.innerHTML = '<p style="color: var(--gray-500);">References are being compiled.</p>';
-            } else {
-                title.textContent = refs.name + ' — References';
+        function toggleDrug(el) {
+            el.closest('.drug-item').classList.toggle('expanded');
+        }
 
-                let html = '<div class="ref-section">';
-                html += '<div class="ref-section-title">📚 PubMed Research</div>';
+        function updateAllDoses() {
+            Object.entries(drugData).forEach(([catKey, category]) => {
+                category.drugs.forEach(drug => {
+                    const item = document.querySelector(\`.drug-item[data-drug="\${drug.name}"]\`);
+                    if (!item) return;
 
-                refs.refs.forEach(ref => {
-                    html += '<div class="ref-item">';
-                    html += '<a href="' + ref.url + '" target="_blank" rel="noopener" class="ref-link">';
-                    html += ref.title;
-                    html += '</a>';
-                    html += '<span class="pmid-badge">PMID: ' + ref.pmid + '</span>';
-                    html += '</div>';
+                    // Update header quick dose
+                    const standardVal = drug.isFixed ? drug.standard : drug.standard * currentWeight;
+                    item.querySelector('.drug-quick-value').textContent = formatDose(standardVal);
+                    item.querySelector('.drug-quick-unit').textContent = formatUnit(standardVal, drug.unit);
+
+                    // Update dose cards
+                    const lowVal = drug.isFixed ? drug.low : drug.low * currentWeight;
+                    const highVal = drug.isFixed ? drug.high : drug.high * currentWeight;
+
+                    const lowCard = item.querySelector('.dose-card.low .dose-card-value');
+                    const stdCard = item.querySelector('.dose-card.standard .dose-card-value');
+                    const highCard = item.querySelector('.dose-card.high .dose-card-value');
+
+                    if (lowCard) lowCard.textContent = formatDose(lowVal);
+                    if (stdCard) stdCard.textContent = formatDose(standardVal);
+                    if (highCard) highCard.textContent = formatDose(highVal);
+
+                    // Update units
+                    item.querySelectorAll('.dose-card.low .dose-card-unit').forEach(el => el.textContent = formatUnit(lowVal, drug.unit));
+                    item.querySelectorAll('.dose-card.standard .dose-card-unit').forEach(el => el.textContent = formatUnit(standardVal, drug.unit));
+                    item.querySelectorAll('.dose-card.high .dose-card-unit').forEach(el => el.textContent = formatUnit(highVal, drug.unit));
+
+                    // Update additional doses
+                    if (drug.additionalDoses) {
+                        drug.additionalDoses.forEach((dose, i) => {
+                            const row = item.querySelectorAll('.additional-dose-row')[i];
+                            if (row && dose.perKg) {
+                                const val = dose.perKg * currentWeight;
+                                row.querySelector('.additional-dose-value').textContent = formatDose(val);
+                                row.querySelector('.additional-dose-unit').textContent = formatUnit(val, dose.unit);
+                            }
+                        });
+                    }
                 });
-
-                html += '</div>';
-                html += '<div class="ref-section">';
-                html += '<div class="ref-section-title">📖 Textbook References</div>';
-                html += '<div class="ref-item">Miller\'s Anesthesia, 9th ed. (2020)</div>';
-                html += '<div class="ref-item">Barash Clinical Anesthesia, 8th ed. (2017)</div>';
-                html += '<div class="ref-item">Stoelting\'s Pharmacology & Physiology, 5th ed. (2015)</div>';
-                html += '</div>';
-
-                body.innerHTML = html;
-            }
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            });
         }
 
-        // Close modal
-        function closeModal() {
-            const modal = document.getElementById('refModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
+        function renderAllCategories() {
+            const container = document.getElementById('drug-categories');
+
+            container.innerHTML = Object.entries(drugData).map(([catKey, category]) => \`
+                <div class="category-group">
+                    <div class="category-header">
+                        <div class="category-swatch \${catKey}"></div>
+                        <div class="category-title">\${category.name}</div>
+                    </div>
+                    <div class="drug-list">
+                        \${category.drugs.map(drug => {
+                            const standardVal = drug.isFixed ? drug.standard : drug.standard * currentWeight;
+                            const lowVal = drug.isFixed ? drug.low : drug.low * currentWeight;
+                            const highVal = drug.isFixed ? drug.high : drug.high * currentWeight;
+
+                            return \`
+                                <div class="drug-item \${catKey}" data-drug="\${drug.name}" data-category="\${catKey}">
+                                    <div class="drug-header" onclick="toggleDrug(this)">
+                                        <span class="drug-name">\${drug.name}</span>
+                                        <div class="drug-quick-dose">
+                                            <div class="drug-standard-dose">
+                                                <span class="drug-quick-value">\${formatDose(standardVal)}</span>
+                                                <span class="drug-quick-unit">\${formatUnit(standardVal, drug.unit)}</span>
+                                            </div>
+                                            <svg class="drug-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="6 9 12 15 18 9"></polyline>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="drug-details">
+                                        <div class="drug-details-inner">
+                                            <div class="dose-range-grid">
+                                                <div class="dose-card low">
+                                                    <div class="dose-card-label">\${drug.lowLabel || 'Low'}</div>
+                                                    <div class="dose-card-value">\${formatDose(lowVal)}</div>
+                                                    <div class="dose-card-unit">\${formatUnit(lowVal, drug.unit)}</div>
+                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.low} \${drug.unit}/kg</div>\` : ''}
+                                                </div>
+                                                <div class="dose-card standard">
+                                                    <div class="dose-card-label">\${drug.standardLabel || 'Standard'}</div>
+                                                    <div class="dose-card-value">\${formatDose(standardVal)}</div>
+                                                    <div class="dose-card-unit">\${formatUnit(standardVal, drug.unit)}</div>
+                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.standard} \${drug.unit}/kg</div>\` : ''}
+                                                </div>
+                                                <div class="dose-card high">
+                                                    <div class="dose-card-label">\${drug.highLabel || 'High'}</div>
+                                                    <div class="dose-card-value">\${formatDose(highVal)}</div>
+                                                    <div class="dose-card-unit">\${formatUnit(highVal, drug.unit)}</div>
+                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.high} \${drug.unit}/kg</div>\` : ''}
+                                                </div>
+                                            </div>
+
+                                            \${drug.additionalDoses ? \`
+                                                <div class="additional-doses">
+                                                    \${drug.additionalDoses.map(dose => {
+                                                        if (dose.note) {
+                                                            return \`
+                                                                <div class="additional-dose-row">
+                                                                    <span class="additional-dose-label">\${dose.label}</span>
+                                                                    <span style="font-size: 13px; color: #64748b;">\${dose.note}</span>
+                                                                </div>
+                                                            \`;
+                                                        }
+                                                        const val = dose.fixed || dose.perKg * currentWeight;
+                                                        return \`
+                                                            <div class="additional-dose-row">
+                                                                <span class="additional-dose-label">\${dose.label}\${dose.range ? \` (\${dose.range})\` : ''}</span>
+                                                                <div>
+                                                                    <span class="additional-dose-value">\${formatDose(val)}</span>
+                                                                    <span class="additional-dose-unit">\${formatUnit(val, dose.unit)}</span>
+                                                                </div>
+                                                            </div>
+                                                        \`;
+                                                    }).join('')}
+                                                </div>
+                                            \` : ''}
+
+                                            <div class="drug-meta">
+                                                <div class="meta-item">
+                                                    <span class="meta-label">Onset</span>
+                                                    <span class="meta-value">\${drug.onset}</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <span class="meta-label">Duration</span>
+                                                    <span class="meta-value">\${drug.duration}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="drug-notes">\${drug.notes}</div>
+
+                                            <div class="drug-reference">
+                                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                                </svg>
+                                                \${drug.reference}
+                                            </div>
+
+                                            \${drug.warning ? \`
+                                                <div class="drug-warning">
+                                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                                        <line x1="12" y1="9" x2="12" y2="13"/>
+                                                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                                    </svg>
+                                                    <span>\${drug.warning}</span>
+                                                </div>
+                                            \` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            \`;
+                        }).join('')}
+                    </div>
+                </div>
+            \`).join('');
         }
-
-        // Close modal on outside click
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('refModal');
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-
-        // Close modal on Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Navigation functions
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            const dropdowns = document.querySelectorAll('.nav-dropdown-menu.show');
-            dropdowns.forEach(d => d.classList.remove('show'));
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            updateAllDoses();
-        });
     </script>
 </body>
 </html>
