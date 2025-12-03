@@ -16353,7 +16353,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Predictor - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based difficult airway prediction using ASA guidelines and validated clinical predictors (Mallampati, LEMON, Wilson score).">
+    <meta name="description" content="Evidence-based difficult airway prediction using ASA guidelines and validated clinical predictors.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -16390,7 +16390,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --amber-500: #F59E0B;
             --green-50: #F0FDF4;
             --green-500: #22C55E;
-            --green-600: #059669;
             --purple-50: #FAF5FF;
             --purple-500: #A855F7;
         }
@@ -16407,7 +16406,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
-            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -16480,7 +16478,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        /* Navigation - Glassmorphism */
+        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -16565,6 +16563,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
@@ -16589,7 +16588,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             overflow: hidden;
         }
 
-        .nav-dropdown-menu.show { display: block; }
+        .nav-dropdown-menu.show {
+            display: block;
+        }
 
         .nav-dropdown-link {
             display: block;
@@ -16606,6 +16607,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -16618,7 +16624,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             transition: background 0.2s ease;
         }
 
-        .mobile-menu-btn:hover { background: rgba(0,0,0,0.04); }
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
 
         .mobile-menu-btn span {
             display: block;
@@ -16629,9 +16637,17 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
-        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
 
         .mobile-menu {
             display: none;
@@ -16670,111 +16686,132 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .container {
+        /* Main Content */
+        .main {
             flex: 1;
-            max-width: 900px;
+            padding: 100px 20px 60px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
             width: 100%;
         }
 
-        .header {
+        /* Hero */
+        .hero {
             text-align: center;
             margin-bottom: 48px;
         }
 
-        .badge-icon {
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--purple-50) 0%, var(--blue-50) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.08);
+        }
+
+        .badge-dot {
             width: 8px;
             height: 8px;
-            background: var(--blue-500);
+            background: var(--purple-500);
             border-radius: 50%;
         }
 
         .badge-text {
             font-size: 12px;
             font-weight: 600;
-            color: var(--blue-700);
+            color: #9333EA;
         }
 
         .hero-title {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 800;
             line-height: 1.1;
-            letter-spacing: -2px;
+            letter-spacing: -1.5px;
             color: var(--gray-900);
             margin-bottom: 16px;
-            line-height: 1.2;
         }
 
-        .header p {
-            font-size: 18px;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--purple-500) 0%, var(--blue-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            font-weight: 400;
             line-height: 1.6;
-        }
-
-        /* Container */
-        .container {
-            max-width: 900px;
+            color: var(--gray-600);
+            max-width: 680px;
             margin: 0 auto;
-            padding: 0 20px 80px;
         }
 
-        /* Cards */
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .info-box strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        /* Card */
         .card {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
         }
 
-        .card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
+        /* Form Sections */
         .form-section {
             margin-bottom: 32px;
         }
 
-        .form-section:last-child {
-            margin-bottom: 0;
-        }
-
         .form-section h3 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         @media (min-width: 768px) {
-            .form-row { grid-template-columns: repeat(2, 1fr); }
-            .form-row.three-col { grid-template-columns: repeat(3, 1fr); }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .container { padding-top: 120px; }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-row.three-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .form-group label {
+            display: block;
             font-size: 14px;
             font-weight: 600;
             color: var(--gray-700);
@@ -16783,10 +16820,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         .form-group input,
         .form-group select {
+            width: 100%;
             padding: 12px 16px;
             font-size: 15px;
+            font-family: inherit;
             border: 1px solid var(--gray-300);
-            border-radius: 10px;
+            border-radius: 12px;
             background: white;
             color: var(--gray-900);
             transition: all 0.2s ease;
@@ -16802,17 +16841,26 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .checkbox-group {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 14px;
         }
 
         @media (min-width: 768px) {
-            .checkbox-group { grid-template-columns: repeat(2, 1fr); }
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: var(--gray-50);
         }
 
         .checkbox-item input[type="checkbox"] {
@@ -16826,7 +16874,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
-            margin-bottom: 0;
+            margin: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 32px 0;
         }
 
         .btn-submit {
@@ -16840,40 +16894,42 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:active {
             transform: translateY(0);
         }
 
+        /* Results */
         .results {
             margin-top: 32px;
         }
 
         .risk-score-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px 32px;
             text-align: center;
             margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
         .risk-score {
-            font-size: 72px;
+            font-size: 80px;
             font-weight: 800;
             line-height: 1;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
         .risk-category {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -16884,10 +16940,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .results-section {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .results-section h3 {
@@ -16906,46 +16964,54 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .results-section li {
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
-            font-size: 14px;
+            padding: 10px 0;
+            padding-left: 24px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.6;
             color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
         }
 
         .results-section li:last-child {
-            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .results-section li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--blue-600);
+            font-weight: 700;
         }
 
         .ai-explanation {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 16px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
         }
 
         .ai-explanation strong {
-            color: var(--blue-700);
+            color: var(--gray-900);
+            font-weight: 600;
         }
 
         .reference-badge {
             display: inline-block;
-            background: var(--gray-100);
-            color: var(--gray-600);
-            padding: 4px 12px;
-            border-radius: 6px;
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: var(--blue-50);
+            color: var(--blue-700);
+            border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
-            margin-top: 16px;
         }
 
+        /* Footer */
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
-            margin-top: auto;
         }
 
         .footer-inner {
@@ -16975,33 +17041,20 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             transition: color 0.2s ease;
         }
 
-        .footer-link:hover { color: var(--gray-700); }
-
-        .divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 24px 0;
-        }
-
-        .info-box {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
-            font-size: 14px;
+        .footer-link:hover {
             color: var(--gray-700);
         }
 
-        .info-box strong {
-            color: var(--blue-700);
-        }
-
+        /* Responsive */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
             .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            .main { padding: 120px 32px 80px; }
+            .hero-title { font-size: 52px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
             .footer-text { font-size: 14px; }
@@ -17011,11 +17064,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
+            .main { padding: 140px 40px 100px; }
             .footer { padding: 48px 40px; }
         }
     </style>
 </head>
 <body>
+    <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -17024,17 +17079,20 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
@@ -17046,18 +17104,20 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
@@ -17069,17 +17129,28 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        <div class="container">
-            <div class="header">
-                <h1>Difficult Airway Predictor</h1>
-                <p>Evidence-based airway assessment using validated clinical predictors from ASA Difficult Airway Algorithm</p>
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <div class="badge-dot"></div>
+                    <span class="badge-text">ASA Guidelines</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient">Difficult Airway</span> Predictor
+                </h1>
+                <p class="hero-subtitle">
+                    Evidence-based airway assessment using validated clinical predictors from the ASA Difficult Airway Algorithm
+                </p>
             </div>
 
+            <!-- Info Box -->
             <div class="info-box">
                 <strong>Clinical Basis:</strong> This tool uses validated predictors including Mallampati classification, thyromental distance, mouth opening, neck mobility, BMI, and anatomical features. Risk scoring is based on LEMON, Wilson, and El-Ganzouri criteria, with recommendations aligned to the <strong>ASA Practice Guidelines for Management of the Difficult Airway (2022)</strong>.
             </div>
-        </nav>
 
+            <!-- Assessment Form -->
             <div class="card">
                 <form method="POST" action="/difficult-airway">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -17203,7 +17274,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             </div>
                         </div>
 
-                        <div class="form-row" style="margin-top: 16px;">
+                        <div class="form-row" style="margin-top: 20px;">
                             <div class="form-group">
                                 <label for="previous_difficult">Previous Difficult Intubation?</label>
                                 <select id="previous_difficult" name="previous_difficult" required>
@@ -17291,8 +17362,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     <strong>Wilson Score:</strong> Wilson ME, et al. Predicting difficult intubation. <em>Br J Anaesth</em>. 1988;61(2):211-216.
                 </p>
             </div>
-        </div>
+        </main>
 
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
@@ -17306,6 +17378,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -17315,25 +17388,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             }
         }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
+        // Dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
     </script>
 </body>
 </html>
 """
-
-
 INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
