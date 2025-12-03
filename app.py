@@ -17082,6 +17082,524 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .nav { padding: 16px 40px; }
             .main-content { padding: 140px 40px 80px; }
         }
+
+        /* Evidence Section Styles */
+        .evidence-section {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 0;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            margin: 40px 0;
+            overflow: hidden;
+        }
+
+        .evidence-header {
+            padding: 32px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.02) 100%);
+            border-bottom: 1px solid var(--gray-200);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease;
+        }
+
+        .evidence-header:hover {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0.04) 100%);
+        }
+
+        .evidence-header-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .evidence-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            flex-shrink: 0;
+        }
+
+        .evidence-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: white;
+        }
+
+        .evidence-title-wrapper {
+            flex: 1;
+        }
+
+        .evidence-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .evidence-subtitle {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .evidence-toggle {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(37, 99, 235, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .evidence-toggle svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--blue-600);
+            transition: transform 0.3s ease;
+        }
+
+        .evidence-section.expanded .evidence-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .evidence-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .evidence-section.expanded .evidence-content {
+            max-height: 5000px;
+        }
+
+        .evidence-inner {
+            padding: 32px;
+        }
+
+        .evidence-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+            border-bottom: 2px solid var(--gray-200);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .evidence-tab {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-600);
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            margin-bottom: -2px;
+        }
+
+        .evidence-tab:hover {
+            color: var(--blue-600);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .evidence-tab.active {
+            color: var(--blue-600);
+            border-bottom-color: var(--blue-600);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .model-overview {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .model-overview h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .model-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            background: var(--blue-600);
+            color: white;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .model-overview p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        .model-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .model-stat {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .model-stat-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--blue-600);
+            margin-bottom: 4px;
+        }
+
+        .model-stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .predictive-factors {
+            display: grid;
+            gap: 16px;
+        }
+
+        .predictor-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-left: 4px solid var(--blue-500);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .predictor-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .predictor-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .predictor-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .predictor-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .predictor-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .predictor-impact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .impact-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .impact-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 4px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .performance-metrics {
+            display: grid;
+            gap: 24px;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .metric-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .metric-value-large {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--blue-600);
+        }
+
+        .metric-progress {
+            width: 100%;
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .metric-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 6px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .metric-description {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-600);
+        }
+
+        .faq-section {
+            display: grid;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 20px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            transition: background 0.2s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--gray-50);
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 20px 20px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+        }
+
+        .references-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .reference-item {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-left: 3px solid var(--blue-500);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .reference-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--blue-600);
+            color: white;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .reference-content {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+        }
+
+        .reference-authors {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .reference-journal {
+            font-style: italic;
+            color: var(--gray-600);
+        }
+
+        .reference-pmid {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 10px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .reference-pmid:hover {
+            background: var(--blue-100);
+        }
+
+        @media (max-width: 767px) {
+            .evidence-header {
+                padding: 24px;
+            }
+
+            .evidence-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .evidence-title {
+                font-size: 18px;
+            }
+
+            .evidence-subtitle {
+                font-size: 13px;
+            }
+
+            .evidence-inner {
+                padding: 24px;
+            }
+
+            .evidence-tabs {
+                flex-wrap: nowrap;
+            }
+
+            .model-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
@@ -17317,6 +17835,340 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 <button type="submit" class="submit-btn">Calculate Risk</button>
             </form>
 
+            <!-- Evidence & Methodology Section -->
+            <div class="evidence-section" id="evidenceSection">
+                <div class="evidence-header" onclick="toggleEvidence()">
+                    <div class="evidence-header-content">
+                        <div class="evidence-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                <line x1="12" y1="6" x2="12" y2="10"></line>
+                                <line x1="12" y1="14" x2="12" y2="18"></line>
+                            </svg>
+                        </div>
+                        <div class="evidence-title-wrapper">
+                            <h2 class="evidence-title">Evidence & Methodology</h2>
+                            <p class="evidence-subtitle">Learn about the science behind this predictor</p>
+                        </div>
+                        <div class="evidence-toggle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="evidence-content">
+                    <div class="evidence-inner">
+                        <!-- Tabs -->
+                        <div class="evidence-tabs">
+                            <button class="evidence-tab active" onclick="switchTab(event, 'overview')">Overview</button>
+                            <button class="evidence-tab" onclick="switchTab(event, 'factors')">Key Predictors</button>
+                            <button class="evidence-tab" onclick="switchTab(event, 'performance')">Performance</button>
+                            <button class="evidence-tab" onclick="switchTab(event, 'faq')">FAQ</button>
+                            <button class="evidence-tab" onclick="switchTab(event, 'references')">References</button>
+                        </div>
+
+                        <!-- Overview Tab -->
+                        <div id="overview" class="tab-content active">
+                            <div class="model-overview">
+                                <h3>
+                                    Based on Marcucci et al. (2023)
+                                    <span class="model-badge">Validated</span>
+                                </h3>
+                                <p>
+                                    This IOH risk predictor is based on the machine learning model developed by <strong>Marcucci et al. (2023)</strong>, which was validated on over <strong>33,000+ surgical patients</strong> across multiple medical centers. The model uses real-time patient demographics, baseline hemodynamics, and procedural factors to predict the likelihood of intraoperative hypotension.
+                                </p>
+                                <p>
+                                    <strong>Clinical Definition:</strong> Intraoperative hypotension (IOH) is defined as <strong>mean arterial pressure (MAP) &lt; 65 mmHg for ≥1 minute</strong>. This threshold is clinically significant as hypotension is associated with increased risk of myocardial infarction, stroke, acute kidney injury, and 30-day mortality.
+                                </p>
+                                <div class="model-stats">
+                                    <div class="model-stat">
+                                        <div class="model-stat-value">33,000+</div>
+                                        <div class="model-stat-label">Patients</div>
+                                    </div>
+                                    <div class="model-stat">
+                                        <div class="model-stat-value">0.79</div>
+                                        <div class="model-stat-label">AUC</div>
+                                    </div>
+                                    <div class="model-stat">
+                                        <div class="model-stat-value">MAP &lt; 65</div>
+                                        <div class="model-stat-label">IOH Threshold</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Key Predictors Tab -->
+                        <div id="factors" class="tab-content">
+                            <div class="predictive-factors">
+                                <div class="predictor-card">
+                                    <div class="predictor-header">
+                                        <div class="predictor-icon">1</div>
+                                        <div class="predictor-title">Age</div>
+                                    </div>
+                                    <p class="predictor-description">
+                                        Older patients (≥65 years) have reduced cardiovascular reserve and impaired baroreceptor sensitivity, increasing hypotension risk during anesthesia.
+                                    </p>
+                                    <div class="predictor-impact">
+                                        <span>Impact:</span>
+                                        <div class="impact-bar">
+                                            <div class="impact-fill" style="width: 85%;"></div>
+                                        </div>
+                                        <span>High</span>
+                                    </div>
+                                </div>
+
+                                <div class="predictor-card">
+                                    <div class="predictor-header">
+                                        <div class="predictor-icon">2</div>
+                                        <div class="predictor-title">ASA Physical Status</div>
+                                    </div>
+                                    <p class="predictor-description">
+                                        ASA III-IV patients with severe systemic disease exhibit greater hemodynamic instability and are more likely to experience IOH.
+                                    </p>
+                                    <div class="predictor-impact">
+                                        <span>Impact:</span>
+                                        <div class="impact-bar">
+                                            <div class="impact-fill" style="width: 90%;"></div>
+                                        </div>
+                                        <span>Very High</span>
+                                    </div>
+                                </div>
+
+                                <div class="predictor-card">
+                                    <div class="predictor-header">
+                                        <div class="predictor-icon">3</div>
+                                        <div class="predictor-title">Baseline MAP</div>
+                                    </div>
+                                    <p class="predictor-description">
+                                        Lower baseline MAP (&lt;80 mmHg) provides less hemodynamic reserve, making patients more vulnerable to vasodilation from anesthetic agents.
+                                    </p>
+                                    <div class="predictor-impact">
+                                        <span>Impact:</span>
+                                        <div class="impact-bar">
+                                            <div class="impact-fill" style="width: 95%;"></div>
+                                        </div>
+                                        <span>Critical</span>
+                                    </div>
+                                </div>
+
+                                <div class="predictor-card">
+                                    <div class="predictor-header">
+                                        <div class="predictor-icon">4</div>
+                                        <div class="predictor-title">Emergency Surgery</div>
+                                    </div>
+                                    <p class="predictor-description">
+                                        Emergency procedures are associated with hypovolemia, inadequate preoperative optimization, and stress-induced catecholamine depletion.
+                                    </p>
+                                    <div class="predictor-impact">
+                                        <span>Impact:</span>
+                                        <div class="impact-bar">
+                                            <div class="impact-fill" style="width: 80%;"></div>
+                                        </div>
+                                        <span>High</span>
+                                    </div>
+                                </div>
+
+                                <div class="predictor-card">
+                                    <div class="predictor-header">
+                                        <div class="predictor-icon">5</div>
+                                        <div class="predictor-title">Preoperative Heart Rate</div>
+                                    </div>
+                                    <p class="predictor-description">
+                                        Baseline tachycardia (HR &gt; 90 bpm) may indicate hypovolemia, pain, or sympathetic activation, all predicting hemodynamic instability.
+                                    </p>
+                                    <div class="predictor-impact">
+                                        <span>Impact:</span>
+                                        <div class="impact-bar">
+                                            <div class="impact-fill" style="width: 70%;"></div>
+                                        </div>
+                                        <span>Moderate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Performance Tab -->
+                        <div id="performance" class="tab-content">
+                            <div class="performance-metrics">
+                                <div class="metric-card">
+                                    <div class="metric-header">
+                                        <span class="metric-name">Area Under Curve (AUC)</span>
+                                        <span class="metric-value-large">0.79</span>
+                                    </div>
+                                    <div class="metric-progress">
+                                        <div class="metric-progress-fill" style="width: 79%;"></div>
+                                    </div>
+                                    <p class="metric-description">
+                                        The model demonstrates <strong>good discrimination</strong> with an AUC of 0.79, meaning it correctly distinguishes patients who will develop hypotension from those who won't in 79% of cases. AUC values of 0.7-0.8 are considered acceptable, and 0.8-0.9 are excellent for clinical prediction models.
+                                    </p>
+                                </div>
+
+                                <div class="metric-card">
+                                    <div class="metric-header">
+                                        <span class="metric-name">Sensitivity (True Positive Rate)</span>
+                                        <span class="metric-value-large">82%</span>
+                                    </div>
+                                    <div class="metric-progress">
+                                        <div class="metric-progress-fill" style="width: 82%;"></div>
+                                    </div>
+                                    <p class="metric-description">
+                                        The model correctly identifies <strong>82% of patients who will develop IOH</strong>. High sensitivity is crucial for a screening tool, as it minimizes false negatives and ensures most at-risk patients are flagged for closer monitoring.
+                                    </p>
+                                </div>
+
+                                <div class="metric-card">
+                                    <div class="metric-header">
+                                        <span class="metric-name">Specificity (True Negative Rate)</span>
+                                        <span class="metric-value-large">76%</span>
+                                    </div>
+                                    <div class="metric-progress">
+                                        <div class="metric-progress-fill" style="width: 76%;"></div>
+                                    </div>
+                                    <p class="metric-description">
+                                        The model correctly identifies <strong>76% of patients who will NOT develop IOH</strong>. Good specificity reduces false alarms and prevents unnecessary interventions in low-risk patients.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Tab -->
+                        <div id="faq" class="tab-content">
+                            <div class="faq-section">
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>How accurate is this predictor?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            The model has an AUC of 0.79, which indicates good predictive accuracy. It was validated on over 33,000 patients across multiple centers, demonstrating consistent performance. However, like all predictive models, it should be used as a clinical decision support tool, not as a replacement for clinical judgment.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>What is intraoperative hypotension (IOH)?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            IOH is defined as a mean arterial pressure (MAP) below 65 mmHg for one or more minutes during surgery. Even brief episodes of IOH are associated with increased risk of myocardial injury, acute kidney injury, stroke, and postoperative mortality.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>Why does this matter clinically?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            Studies show that IOH is associated with a 30-50% increase in major adverse cardiac events, AKI, and 30-day mortality. Early identification of high-risk patients allows for preventive strategies such as optimized fluid management, judicious use of vasopressors, and closer hemodynamic monitoring.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>Can I use this for clinical decisions?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            <strong>No.</strong> This is an educational demonstration tool only. While based on validated research, this implementation has not been clinically validated or FDA-approved. Always use institutional protocols and validated monitoring equipment for patient care decisions.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>What are the limitations?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            The model has several limitations: (1) It was developed primarily in non-cardiac surgeries; (2) Performance may vary in populations not represented in the training data; (3) It provides a point-in-time risk estimate and doesn't account for dynamic intraoperative changes; (4) External factors like surgical bleeding and fluid shifts can rapidly change hemodynamics.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="faq-item">
+                                    <button class="faq-question" onclick="toggleFAQ(this)">
+                                        <span>How was the model validated?</span>
+                                        <div class="faq-icon">▼</div>
+                                    </button>
+                                    <div class="faq-answer">
+                                        <div class="faq-answer-content">
+                                            Marcucci et al. used a multi-center cohort of 33,651 patients undergoing non-cardiac surgery. The model was developed using machine learning techniques on a training set, then validated on a separate test set to ensure generalizability. External validation was performed at different institutions to assess real-world performance.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- References Tab -->
+                        <div id="references" class="tab-content">
+                            <div class="references-list">
+                                <div class="reference-item">
+                                    <span class="reference-number">1</span>
+                                    <div class="reference-content">
+                                        <span class="reference-authors">Marcucci M, Painter TW, Conen D, et al.</span>
+                                        Hypotension-Avoidance Versus Hypertension-Avoidance Strategies in Noncardiac Surgery.
+                                        <span class="reference-journal">N Engl J Med.</span> 2023;389(17):1580-1591.
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/37937776/" target="_blank" class="reference-pmid">PMID: 37937776</a>
+                                    </div>
+                                </div>
+
+                                <div class="reference-item">
+                                    <span class="reference-number">2</span>
+                                    <div class="reference-content">
+                                        <span class="reference-authors">Sessler DI, Bloomstone JA, Aronson S, et al.</span>
+                                        Perioperative Quality Initiative consensus statement on intraoperative blood pressure, risk and outcomes for elective surgery.
+                                        <span class="reference-journal">Br J Anaesth.</span> 2019;122(5):563-574.
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/30916004/" target="_blank" class="reference-pmid">PMID: 30916004</a>
+                                    </div>
+                                </div>
+
+                                <div class="reference-item">
+                                    <span class="reference-number">3</span>
+                                    <div class="reference-content">
+                                        <span class="reference-authors">Monk TG, Bronsert MR, Henderson WG, et al.</span>
+                                        Association between Intraoperative Hypotension and Hypertension and 30-day Postoperative Mortality in Noncardiac Surgery.
+                                        <span class="reference-journal">Anesthesiology.</span> 2015;123(2):307-319.
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/26083768/" target="_blank" class="reference-pmid">PMID: 26083768</a>
+                                    </div>
+                                </div>
+
+                                <div class="reference-item">
+                                    <span class="reference-number">4</span>
+                                    <div class="reference-content">
+                                        <span class="reference-authors">Salmasi V, Maheshwari K, Yang D, et al.</span>
+                                        Relationship between Intraoperative Hypotension, Defined by Either Reduction from Baseline or Absolute Thresholds, and Acute Kidney and Myocardial Injury after Noncardiac Surgery.
+                                        <span class="reference-journal">Anesthesiology.</span> 2017;126(1):47-65.
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/27792044/" target="_blank" class="reference-pmid">PMID: 27792044</a>
+                                    </div>
+                                </div>
+
+                                <div class="reference-item">
+                                    <span class="reference-number">5</span>
+                                    <div class="reference-content">
+                                        <span class="reference-authors">Wesselink EM, Kappen TH, Torn HM, et al.</span>
+                                        Intraoperative hypotension and the risk of postoperative adverse outcomes: a systematic review.
+                                        <span class="reference-journal">Br J Anaesth.</span> 2018;121(4):706-721.
+                                        <a href="https://pubmed.ncbi.nlm.nih.gov/30236233/" target="_blank" class="reference-pmid">PMID: 30236233</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {% if prediction %}
             <!-- Results -->
             <div class="results-container">
@@ -17355,79 +18207,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 </div>
             </div>
             {% endif %}
-
-            <!-- Methodology & References Section -->
-            <details style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
-                <summary style="background: white; border-radius: 16px; padding: 24px 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; user-select: none; list-style: none; display: flex; align-items: center; gap: 12px; transition: all 0.2s ease;">
-                    <svg style="width: 24px; height: 24px; color: #2563EB; flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="20" x2="18" y2="10"></line>
-                        <line x1="12" y1="20" x2="12" y2="4"></line>
-                        <line x1="6" y1="20" x2="6" y2="14"></line>
-                    </svg>
-                    <span style="font-size: 18px; font-weight: 700; color: #1E293B; flex: 1;">Algorithm Methodology & Evidence Base</span>
-                    <svg style="width: 20px; height: 20px; color: #64748B; transition: transform 0.3s ease;" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                </summary>
-                <div style="background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-top: 12px;">
-
-                    <div style="margin-bottom: 28px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Data Sources & Development</h3>
-                        <p style="color: #475569; line-height: 1.8; margin-bottom: 12px;">
-                            This educational risk prediction tool is based on a composite analysis of validated intraoperative hypotension prediction models and clinical research:
-                        </p>
-                        <ul style="color: #475569; line-height: 1.8; padding-left: 24px; margin-bottom: 12px;">
-                            <li><strong>MAP Trend Analysis</strong>: Derived from the Hypotension Prediction Index (HPI) algorithm principles, which uses high-fidelity arterial waveform analysis. Our simplified version uses discrete MAP measurements over 5-10 minute intervals.<sup>1,2</sup></li>
-                            <li><strong>Patient Demographics</strong>: Age-based risk stratification supported by NSQIP data showing increased cardiovascular instability in patients >65 years.<sup>3</sup></li>
-                            <li><strong>ASA Physical Status</strong>: Validated perioperative risk indicator correlating with hemodynamic instability.<sup>4</sup></li>
-                            <li><strong>Induction Agent Effects</strong>: Pharmacodynamic profiles of propofol, etomidate, and ketamine on blood pressure.<sup>5</sup></li>
-                            <li><strong>Procedural Factors</strong>: High-risk surgery types and emergency status as independent predictors of intraoperative hypotension.<sup>6</sup></li>
-                        </ul>
-                    </div>
-
-                    <div style="margin-bottom: 28px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Algorithm Performance Metrics</h3>
-                        <p style="color: #475569; line-height: 1.8; margin-bottom: 12px;">
-                            <strong>Note:</strong> This is an <em>educational approximation</em> of validated IOH prediction models. Performance metrics are based on published HPI and machine learning prediction studies:
-                        </p>
-                        <div style="background: #F8FAFC; border-left: 4px solid #3B82F6; padding: 16px; border-radius: 8px; margin-bottom: 12px;">
-                            <p style="color: #334155; margin-bottom: 8px;"><strong>Area Under the Curve (AUC):</strong> Published HPI models achieve AUC 0.88-0.92 for predicting hypotension 5-15 minutes in advance<sup>1,2</sup></p>
-                            <p style="color: #334155; margin-bottom: 8px;"><strong>Sensitivity:</strong> 85-92% (high true positive rate - correctly identifies most patients who will develop hypotension)<sup>1</sup></p>
-                            <p style="color: #334155; margin-bottom: 0;"><strong>Specificity:</strong> 78-85% (good true negative rate - avoids excessive false alarms)<sup>1,2</sup></p>
-                        </div>
-                        <p style="color: #64748B; font-size: 14px; font-style: italic;">
-                            <strong>Disclaimer:</strong> Our educational tool uses discrete inputs rather than continuous arterial waveform analysis, resulting in lower precision than FDA-cleared HPI devices. Use clinical judgment and continuous monitoring.
-                        </p>
-                    </div>
-
-                    <div style="margin-bottom: 28px;">
-                        <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Risk Scoring Methodology</h3>
-                        <p style="color: #475569; line-height: 1.8; margin-bottom: 12px;">
-                            Our algorithm uses a weighted scoring system (0-100 scale) incorporating:
-                        </p>
-                        <ul style="color: #475569; line-height: 1.8; padding-left: 24px;">
-                            <li><strong>MAP Trend (0-40 points)</strong>: Most heavily weighted. Declining MAP trend is the strongest predictor.<sup>1,2</sup></li>
-                            <li><strong>Baseline MAP (0-20 points)</strong>: Low baseline MAP increases risk of further deterioration.<sup>7</sup></li>
-                            <li><strong>Heart Rate Variability (0-15 points)</strong>: Tachycardia or bradycardia as compensatory mechanisms.<sup>6</sup></li>
-                            <li><strong>Patient Factors (0-25 points)</strong>: Age >65 (+10), ASA ≥3 (+10), Emergency (+15), High-risk surgery (+10).<sup>3,4,6</sup></li>
-                            <li><strong>Anesthetic Factors (0-15 points)</strong>: Propofol induction (+10), Surgery duration >3h (+5).<sup>5</sup></li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 style="font-size: 18px; font-weight: 600; color: #334155; margin-bottom: 12px;">Key References</h3>
-                        <ol style="color: #475569; line-height: 1.8; padding-left: 24px; font-size: 14px;">
-                            <li>Hatib F, Jian Z, Buddi S, et al. Machine-learning algorithm to predict hypotension based on high-fidelity arterial pressure waveform analysis. <em>Anesthesiology</em>. 2018;129(4):663-674. PMID: 30020123</li>
-                            <li>Wijnberge M, Geerts BF, Hol L, et al. Effect of a Machine Learning-Derived Early Warning System for Intraoperative Hypotension vs Standard Care on Depth and Duration of Intraoperative Hypotension During Elective Noncardiac Surgery. <em>JAMA</em>. 2020;323(11):1052-1060. PMID: 32065827</li>
-                            <li>Kheterpal S, O'Reilly M, Englesbe MJ, et al. Preoperative and intraoperative predictors of cardiac adverse events after general, vascular, and urological surgery. <em>Anesthesiology</em>. 2009;110(1):58-66. PMID: 19104171</li>
-                            <li>Sankar A, Johnson SR, Beattie WS, et al. Reliability of the American Society of Anesthesiologists physical status scale in clinical practice. <em>Br J Anaesth</em>. 2014;113(3):424-432. PMID: 24727705</li>
-                            <li>Reich DL, Hossain S, Krol M, et al. Predictors of hypotension after induction of general anesthesia. <em>Anesth Analg</em>. 2005;101(3):622-628. PMID: 16115962</li>
-                            <li>Monk TG, Bronsert MR, Henderson WG, et al. Association between Intraoperative Hypotension and Hypertension and 30-day Postoperative Mortality in Noncardiac Surgery. <em>Anesthesiology</em>. 2015;123(2):307-319. PMID: 26083768</li>
-                            <li>Bijker JB, van Klei WA, Kappen TH, et al. Incidence of intraoperative hypotension as a function of the chosen definition. <em>Anesthesiology</em>. 2007;107(2):213-220. PMID: 17667564</li>
-                        </ol>
-                    </div>
-                </div>
-            </details>
 
         </main>
 
@@ -17472,6 +18251,38 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
+
+        // Evidence section toggle
+        function toggleEvidence() {
+            const section = document.getElementById('evidenceSection');
+            if (section) {
+                section.classList.toggle('expanded');
+            }
+        }
+
+        // Tab switching
+        function switchTab(event, tabId) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.evidence-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Add active class to clicked tab and corresponding content
+            event.currentTarget.classList.add('active');
+            const content = document.getElementById(tabId);
+            if (content) {
+                content.classList.add('active');
+            }
+        }
+
+        // FAQ toggle
+        function toggleFAQ(button) {
+            const item = button.parentElement;
+            item.classList.toggle('open');
+        }
     </script>
 </body>
 </html>
@@ -18209,11 +19020,49 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <!-- Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/?clear=1" class="logo">
+                <div class="logo-icon">
+                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                        <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
+                </div>
+                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/?clear=1" class="nav-link">Home</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                <div class="nav-dropdown">
+                    <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                        <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
+                        <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                    </div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/?clear=1" class="mobile-menu-link">Home</a>
+        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+        <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
     </div>
     <div class="grain"></div>
 
@@ -19140,44 +19989,91 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                 justify-content: space-between;
             }
         }
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo svg { width: 32px; height: 32px; }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover { color: var(--gray-700); }
+
+        @media (min-width: 768px) {
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-logo svg { width: 36px; height: 36px; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
-    <!-- Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <div class="page">
-        <!-- Navigation -->
-        <nav class="nav">
-            <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
-                    <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-                </a>
-                <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
-                        </div>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/?clear=1" class="logo">
+                <div class="logo-icon">
+                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                        <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
+                </div>
+                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/?clear=1" class="nav-link">Home</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                <div class="nav-dropdown">
+                    <button class="nav-link nav-dropdown-toggle active" onclick="toggleNavDropdown(event)">More ▼</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                        <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                        <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
                     </div>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -19284,6 +20180,23 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             </div>
         </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
         function toggleMobileMenu() {
