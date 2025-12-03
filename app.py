@@ -18048,7 +18048,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difficult Airway Predictor - gasconsult.ai</title>
+    <title>Difficult Airway Predictor - GasConsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -18078,12 +18078,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
-            --red-50: #FEF2F2;
-            --red-500: #EF4444;
-            --red-600: #DC2626;
             --amber-50: #FFFBEB;
             --amber-500: #F59E0B;
-            --green-50: #F0FDF4;
             --green-500: #22C55E;
             --green-600: #059669;
             --purple-50: #FAF5FF;
@@ -18458,10 +18454,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         /* Cards */
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
             border: 1px solid var(--gray-200);
             transition: all 0.3s ease;
@@ -18665,10 +18664,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .recommendation-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 28px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 20px;
             border: 1px solid var(--gray-200);
         }
@@ -19235,7 +19237,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent Generator - gasconsult.ai</title>
+    <title>Informed Consent Generator - GasConsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -19683,10 +19685,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         /* Cards */
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
             border: 1px solid var(--gray-200);
             transition: all 0.3s ease;
@@ -19756,10 +19761,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         /* Result */
         .result {
-            background: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
             border: 1px solid var(--gray-200);
         }
