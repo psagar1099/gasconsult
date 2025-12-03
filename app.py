@@ -12491,95 +12491,133 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 background: rgba(37, 99, 235, 0.08);
             }
 
-            /* Desktop container */
+            /* Desktop container - wider layout */
             .container {
-                padding: 32px 24px 100px;
+                max-width: 900px;
+                padding: 40px 32px 100px;
             }
 
             /* Larger weight input on desktop */
             .weight-section {
-                margin-bottom: 48px;
+                margin-bottom: 56px;
             }
 
             .weight-input {
-                font-size: 64px;
-                width: 140px;
+                font-size: 72px;
+                width: 160px;
             }
 
             .weight-unit {
-                font-size: 24px;
+                font-size: 28px;
             }
 
             /* Desktop: Smaller weight buttons */
             .quick-weight-btn {
-                padding: 8px 18px;
+                padding: 10px 20px;
             }
 
             /* Desktop: More spacing */
             .color-legend {
-                gap: 12px;
-                padding: 16px;
-                margin-bottom: 32px;
+                gap: 16px;
+                padding: 20px 24px;
+                margin-bottom: 40px;
             }
 
             .legend-item {
-                font-size: 11px;
+                font-size: 12px;
             }
 
             /* Desktop: More padding */
             .drug-header {
-                padding: 16px 20px;
+                padding: 18px 24px;
             }
 
-            /* Desktop: 3-column grid */
+            /* Desktop: 3-column grid with more spacing */
             .dose-range-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 10px;
-                margin-bottom: 20px;
+                gap: 12px;
+                margin-bottom: 24px;
             }
 
-            /* Desktop: Centered card layout */
+            /* Desktop: Centered card layout with more breathing room */
             .dose-card {
                 display: block;
                 text-align: center;
-                padding: 14px;
+                padding: 18px 16px;
                 border-left: 1px solid #e5e7eb;
             }
 
             .dose-card.low {
                 border-left: 1px solid #e5e7eb;
-                border-top: 3px solid #22c55e;
+                border-top: 4px solid #22c55e;
             }
 
             .dose-card.standard {
                 border-left: 1px solid #e5e7eb;
-                border-top: 3px solid #2563eb;
+                border-top: 4px solid #2563eb;
             }
 
             .dose-card.high {
                 border-left: 1px solid #e5e7eb;
-                border-top: 3px solid #f59e0b;
+                border-top: 4px solid #f59e0b;
             }
 
             .dose-card-label {
-                margin-bottom: 6px;
+                margin-bottom: 8px;
+                font-size: 11px;
             }
 
             .dose-card-value {
-                font-size: 24px;
-                margin-bottom: 4px;
+                font-size: 28px;
+                margin-bottom: 6px;
+            }
+
+            .dose-card-unit {
+                font-size: 14px;
             }
 
             /* Show per-kg on desktop */
             .dose-card-perkg {
                 display: block;
-                font-size: 10px;
+                font-size: 11px;
                 color: #94a3b8;
-                margin-top: 6px;
+                margin-top: 8px;
             }
 
             .dose-card-right {
                 display: block;
+            }
+
+            /* Desktop: Larger drug details padding */
+            .drug-details-inner {
+                padding: 24px;
+            }
+
+            .additional-dose-row {
+                padding: 14px 18px;
+            }
+
+            .drug-meta {
+                gap: 32px;
+                margin-bottom: 18px;
+                padding-bottom: 18px;
+            }
+
+            .meta-label {
+                font-size: 11px;
+            }
+
+            .meta-value {
+                font-size: 14px;
+            }
+
+            .drug-notes {
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .drug-reference {
+                font-size: 12px;
             }
         }
     </style>
