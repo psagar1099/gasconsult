@@ -810,7 +810,7 @@ PREOP_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Operative Assessment — gasconsult.ai</title>
+    <title>Pre-Operative Assessment - gasconsult.ai</title>
     
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
@@ -1955,7 +1955,7 @@ PREOP_HTML = """<!DOCTYPE html>
                         <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
                             {{ ref.title }}
                         </a>
-                        <div class="reference-meta">{{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}</div>
+                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
                     </div>
                     {% endfor %}
                 </div>
@@ -2440,7 +2440,7 @@ HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GasConsult.ai — AI-Powered Anesthesiology Assistant</title>
+    <title>GasConsult.ai - AI-Powered Anesthesiology Assistant</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -3925,7 +3925,7 @@ HTML = """<!DOCTYPE html>
                                                 {{ ref.title }}
                                             </a>
                                             <div class="reference-meta">
-                                                {{ ref.authors }} — {{ ref.journal }}, {{ ref.year }}
+                                                {{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}
                                             </div>
                                             {% if ref.get('study_badge') and ref.get('study_color') %}
                                             <span class="study-type-badge" style="background-color: {{ ref.study_color }};">
@@ -3996,7 +3996,7 @@ HTML = """<!DOCTYPE html>
                 <span class="badge-text">PubMed-Powered AI</span>
             </div>
             <h1 class="hero-title">The AI copilot for<br><span class="gradient">anesthesiology</span></h1>
-            <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments — all in one place.</p>
+            <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments - all in one place.</p>
 
             <div class="chat-container">
                 <form method="post" action="/" class="chat-card">
@@ -4265,7 +4265,7 @@ HTML = """<!DOCTYPE html>
                                 refsHTML += ref.title;
                                 refsHTML += '</a>';
                                 refsHTML += '<div class="reference-meta">';
-                                refsHTML += ref.authors + ' — ' + ref.journal + ', ' + ref.year;
+                                refsHTML += ref.authors + ' - ' + ref.journal + ', ' + ref.year;
                                 refsHTML += '</div>';
                                 // Add study type badge if available
                                 if (ref.study_badge && ref.study_color) {
@@ -4354,7 +4354,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library — gasconsult.ai</title>
+    <title>Library - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -5345,7 +5345,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shared Response — gasconsult.ai</title>
+    <title>Shared Response - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -6302,7 +6302,7 @@ TERMS_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service — gasconsult.ai</title>
+    <title>Terms of Service - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -6878,7 +6878,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>These Terms supersede any prior agreements, representations, or understandings</li>
                 </ul>
 
-                <h2>2. NOT Medical Advice — Critical Disclaimers</h2>
+                <h2>2. NOT Medical Advice - Critical Disclaimers</h2>
 
                 <h3>2.1 Not Medical Advice, Diagnosis, or Treatment</h3>
                 <p><strong>THE INFORMATION PROVIDED BY GASCONSULT.AI IS STRICTLY FOR EDUCATIONAL AND INFORMATIONAL PURPOSES ONLY.</strong> Under no circumstances should the content generated by this Service be interpreted, construed, or relied upon as:</p>
@@ -6926,7 +6926,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>You must consult with your own qualified healthcare providers for all medical matters</li>
                 </ul>
 
-                <h2>4. Emergency Disclaimer — DO NOT USE FOR EMERGENCIES</h2>
+                <h2>4. Emergency Disclaimer - DO NOT USE FOR EMERGENCIES</h2>
 
                 <div class="notice-box">
                     <h3>EMERGENCY MEDICAL DISCLAIMER</h3>
@@ -6943,7 +6943,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>We are not liable for any harm, injury, or death resulting from failure to seek timely emergency medical care</li>
                 </ul>
 
-                <h2>5. Educational Use Only — Professional Verification Required</h2>
+                <h2>5. Educational Use Only - Professional Verification Required</h2>
                 <p>This Service is intended exclusively for use by licensed, qualified healthcare professionals (physicians, CRNAs, nurse practitioners, physician assistants, medical students, residents, fellows) as an educational supplement.</p>
                 <p><strong>ALL INFORMATION PROVIDED MUST BE INDEPENDENTLY VERIFIED</strong> through:</p>
                 <ul>
@@ -7005,7 +7005,7 @@ TERMS_HTML = """<!DOCTYPE html>
 
                 <p>All citations, references, and source materials must be independently verified through original publications.</p>
 
-                <h2>8. No Warranties — Service Provided "AS IS"</h2>
+                <h2>8. No Warranties - Service Provided "AS IS"</h2>
 
                 <h3>8.1 Disclaimer of All Warranties</h3>
                 <p><strong>TO THE MAXIMUM EXTENT PERMITTED BY LAW, THIS SERVICE IS PROVIDED "AS IS", "AS AVAILABLE", AND "WITH ALL FAULTS" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.</strong></p>
@@ -7034,7 +7034,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>The Service will be available, accessible, or functional at any given time</li>
                 </ul>
 
-                <h2>9. Limitation of Liability — Maximum Legal Protection</h2>
+                <h2>9. Limitation of Liability - Maximum Legal Protection</h2>
 
                 <h3>9.1 No Liability for Any Damages</h3>
                 <p><strong>TO THE FULLEST EXTENT PERMITTED BY APPLICABLE LAW, GASCONSULT.AI, ITS OWNERS, OPERATORS, DEVELOPERS, CONTRIBUTORS, AFFILIATES, LICENSORS, SERVICE PROVIDERS, AND AGENTS (COLLECTIVELY, "RELEASED PARTIES") SHALL NOT BE LIABLE FOR ANY DAMAGES WHATSOEVER, INCLUDING BUT NOT LIMITED TO:</strong></p>
@@ -7079,7 +7079,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>Whether a remedy fails of its essential purpose</li>
                 </ul>
 
-                <h2>10. Indemnification — You Hold Us Harmless</h2>
+                <h2>10. Indemnification - You Hold Us Harmless</h2>
                 <p><strong>YOU AGREE TO INDEMNIFY, DEFEND, AND HOLD HARMLESS THE RELEASED PARTIES FROM AND AGAINST ANY AND ALL:</strong></p>
                 <ul>
                     <li>Claims, demands, actions, suits, or proceedings</li>
@@ -7102,7 +7102,7 @@ TERMS_HTML = """<!DOCTYPE html>
 
                 <p>This indemnification obligation survives termination of your use of the Service.</p>
 
-                <h2>11. Assumption of Risk — You Accept All Risks</h2>
+                <h2>11. Assumption of Risk - You Accept All Risks</h2>
                 <p><strong>BY USING THIS SERVICE, YOU EXPRESSLY ACKNOWLEDGE, UNDERSTAND, AND VOLUNTARILY ASSUME ALL RISKS ASSOCIATED WITH:</strong></p>
                 <ul>
                     <li>Reliance on AI-generated medical information</li>
@@ -7165,7 +7165,7 @@ TERMS_HTML = """<!DOCTYPE html>
                     <li>Any governmental health agency or regulatory body</li>
                 </ul>
 
-                <h2>14. Dispute Resolution — Mandatory Binding Arbitration</h2>
+                <h2>14. Dispute Resolution - Mandatory Binding Arbitration</h2>
 
                 <h3>14.1 Agreement to Arbitrate</h3>
                 <p><strong>YOU AND GASCONSULT.AI AGREE THAT ANY AND ALL DISPUTES, CLAIMS, OR CONTROVERSIES ARISING OUT OF OR RELATING TO THESE TERMS OR YOUR USE OF THE SERVICE SHALL BE RESOLVED EXCLUSIVELY THROUGH FINAL AND BINDING ARBITRATION, RATHER THAN IN COURT.</strong></p>
@@ -7299,7 +7299,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy — gasconsult.ai</title>
+    <title>Privacy Policy - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -8202,7 +8202,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Evidence-Based Methodology — gasconsult.ai</title>
+    <title>Evidence-Based Methodology - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -9324,7 +9324,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crisis Protocols — gasconsult.ai</title>
+    <title>Crisis Protocols - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -10546,7 +10546,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness — prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)<sup class="ref-num">5</sup></div>
+                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness - prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)<sup class="ref-num">5</sup></div>
                                 </div>
 
                                 <!-- Inline References Section -->
@@ -10747,7 +10747,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Considerations</div>
-                                    <div class="warning-detail">• <strong>Common triggers:</strong> NMBs (rocuronium, succinylcholine), antibiotics (cephalosporins, penicillins), latex, chlorhexidine<sup class="ref-num">3</sup><br>• Confirm diagnosis: Send tryptase levels (draw immediately, then 1-2h and 24h later)<sup class="ref-num">4</sup><br>• Biphasic reactions occur in 20% — observe ≥4-6h minimum, admit if severe<sup class="ref-num">2</sup><br>• Document reaction in chart and advise patient to see allergist<br>• Refractory hypotension: Consider methylene blue 1-2 mg/kg for vasoplegia</div>
+                                    <div class="warning-detail">• <strong>Common triggers:</strong> NMBs (rocuronium, succinylcholine), antibiotics (cephalosporins, penicillins), latex, chlorhexidine<sup class="ref-num">3</sup><br>• Confirm diagnosis: Send tryptase levels (draw immediately, then 1-2h and 24h later)<sup class="ref-num">4</sup><br>• Biphasic reactions occur in 20% - observe ≥4-6h minimum, admit if severe<sup class="ref-num">2</sup><br>• Document reaction in chart and advise patient to see allergist<br>• Refractory hypotension: Consider methylene blue 1-2 mg/kg for vasoplegia</div>
                                 </div>
 
                                 <!-- Inline References Section -->
@@ -10809,7 +10809,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                                         <li class="protocol-step"><strong>STOP local anesthetic injection</strong></li>
                                         <li class="protocol-step"><strong>Call for help:</strong> Get lipid emulsion (Intralipid 20%)<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Airway management:</strong> 100% O₂, ventilate if needed, suppress seizures</li>
-                                        <li class="protocol-step"><strong>Give lipid emulsion immediately</strong> (see dosing below) — DO NOT DELAY<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Give lipid emulsion immediately</strong> (see dosing below) - DO NOT DELAY<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>If cardiac arrest:</strong> Start CPR, consider prolonged resuscitation (LAST arrest can require >1h CPR)<sup class="ref-num">2</sup></li>
                                     </ol>
                                 </div>
@@ -10842,7 +10842,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Critical Points</div>
-                                    <div class="warning-detail">• Lipid emulsion is PRIMARY treatment — give early, don't wait for arrest<sup class="ref-num">1</sup><br>• Bupivacaine/ropivacaine are more cardiotoxic than lidocaine/mepivacaine<br>• Max doses: Bupivacaine 2.5 mg/kg plain, 3 mg/kg with epi; Lidocaine 5 mg/kg plain, 7 mg/kg with epi<sup class="ref-num">3</sup><br>• Post-resuscitation: Monitor ≥4-6h (cardiac arrest patients → ICU), watch for pancreatitis from lipid load</div>
+                                    <div class="warning-detail">• Lipid emulsion is PRIMARY treatment - give early, don't wait for arrest<sup class="ref-num">1</sup><br>• Bupivacaine/ropivacaine are more cardiotoxic than lidocaine/mepivacaine<br>• Max doses: Bupivacaine 2.5 mg/kg plain, 3 mg/kg with epi; Lidocaine 5 mg/kg plain, 7 mg/kg with epi<sup class="ref-num">3</sup><br>• Post-resuscitation: Monitor ≥4-6h (cardiac arrest patients → ICU), watch for pancreatitis from lipid load</div>
                                 </div>
 
                                 <!-- Inline References Section -->
@@ -10925,7 +10925,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• Scalpel technique preferred over needle cricothyroidotomy (Seldinger kits have high failure rate)<sup class="ref-num">2</sup><br>• Don't delay — permanent brain damage occurs after 3-5 minutes of hypoxia<br>• If anatomy unclear: Make vertical skin incision, then palpate membrane and make horizontal membrane incision<br>• Post-procedure: Secure tube, get ENT/surgery consult, chest X-ray</div>
+                                    <div class="warning-detail">• Scalpel technique preferred over needle cricothyroidotomy (Seldinger kits have high failure rate)<sup class="ref-num">2</sup><br>• Don't delay - permanent brain damage occurs after 3-5 minutes of hypoxia<br>• If anatomy unclear: Make vertical skin incision, then palpate membrane and make horizontal membrane incision<br>• Post-procedure: Secure tube, get ENT/surgery consult, chest X-ray</div>
                                 </div>
 
                                 <!-- Inline References Section -->
@@ -10984,7 +10984,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ If Laryngospasm Persists (>30 seconds)</div>
-                                    <div class="warning-detail"><strong>Give succinylcholine:</strong> 0.1-0.5 mg/kg IV (or 2-4 mg/kg IM if no IV access)<sup class="ref-num">2</sup><br>• Prepare to ventilate and intubate if needed<br>• Monitor for bradycardia (especially in children) — have atropine ready</div>
+                                    <div class="warning-detail"><strong>Give succinylcholine:</strong> 0.1-0.5 mg/kg IV (or 2-4 mg/kg IM if no IV access)<sup class="ref-num">2</sup><br>• Prepare to ventilate and intubate if needed<br>• Monitor for bradycardia (especially in children) - have atropine ready</div>
                                 </div>
 
                                 <div class="dose-box">
@@ -11001,7 +11001,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Prevention Strategies</div>
-                                    <div class="warning-detail">• Extubate <strong>deep</strong> (under anesthesia) or <strong>awake</strong> — avoid "light" stage<sup class="ref-num">1</sup><br>• Suction oropharynx thoroughly before emergence (avoid pharyngeal stimulation during light anesthesia)<br>• Lidocaine 1-1.5 mg/kg IV 2 min before extubation may reduce risk<sup class="ref-num">2</sup><br>• Higher risk: Pediatrics, airway surgery, GERD, recent URI, reactive airway disease</div>
+                                    <div class="warning-detail">• Extubate <strong>deep</strong> (under anesthesia) or <strong>awake</strong> - avoid "light" stage<sup class="ref-num">1</sup><br>• Suction oropharynx thoroughly before emergence (avoid pharyngeal stimulation during light anesthesia)<br>• Lidocaine 1-1.5 mg/kg IV 2 min before extubation may reduce risk<sup class="ref-num">2</sup><br>• Higher risk: Pediatrics, airway surgery, GERD, recent URI, reactive airway disease</div>
                                 </div>
 
                                 <!-- Inline References Section -->
@@ -11187,7 +11187,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Fire Triangle (All 3 Required for Fire)</div>
-                                    <div class="warning-detail">1. <strong>Oxidizer:</strong> O₂ (>21%), N₂O<br>2. <strong>Fuel:</strong> ETT, surgical drapes, gauze, alcohol prep solutions<br>3. <strong>Ignition source:</strong> Electrocautery, laser, fiberoptic light<br><br><strong>Break one element to prevent fire</strong> — Lower FiO₂ to ≤30% during cautery near airway, use laser-safe ETT, keep flammables wet<sup class="ref-num">1</sup></div>
+                                    <div class="warning-detail">1. <strong>Oxidizer:</strong> O₂ (>21%), N₂O<br>2. <strong>Fuel:</strong> ETT, surgical drapes, gauze, alcohol prep solutions<br>3. <strong>Ignition source:</strong> Electrocautery, laser, fiberoptic light<br><br><strong>Break one element to prevent fire</strong> - Lower FiO₂ to ≤30% during cautery near airway, use laser-safe ETT, keep flammables wet<sup class="ref-num">1</sup></div>
                                 </div>
 
                                 <div class="info-box">
@@ -11291,7 +11291,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• <strong>Self-limited:</strong> Block will spontaneously regress over 1-3 hours<sup class="ref-num">3</sup><br>• <strong>Early intubation:</strong> Don't wait for complete respiratory arrest — intubate early if distress<br>• <strong>Epinephrine early:</strong> Don't hesitate to use epi if severe hypotension/bradycardia<br>• <strong>Avoid sedation:</strong> Patient may already be unconscious from brainstem anesthesia<br>• <strong>Document sensory level:</strong> Check bilateral sensation to assess block height</div>
+                                    <div class="warning-detail">• <strong>Self-limited:</strong> Block will spontaneously regress over 1-3 hours<sup class="ref-num">3</sup><br>• <strong>Early intubation:</strong> Don't wait for complete respiratory arrest - intubate early if distress<br>• <strong>Epinephrine early:</strong> Don't hesitate to use epi if severe hypotension/bradycardia<br>• <strong>Avoid sedation:</strong> Patient may already be unconscious from brainstem anesthesia<br>• <strong>Document sensory level:</strong> Check bilateral sensation to assess block height</div>
                                 </div>
 
                                 <div class="warning-box">
@@ -11465,7 +11465,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="dose-box">
                                     <div class="dose-box-title">💊 Treatment Protocol (K⁺ >6.5 mEq/L or ECG changes)<sup class="ref-num">1</sup></div>
-                                    <div class="dose-detail"><strong>1. Calcium chloride 10%:</strong> 10-20 mL (1-2 g) IV over 2-5 min (onset 1-3 min, duration 30-60 min) — OR —</div>
+                                    <div class="dose-detail"><strong>1. Calcium chloride 10%:</strong> 10-20 mL (1-2 g) IV over 2-5 min (onset 1-3 min, duration 30-60 min) - OR -</div>
                                     <div class="dose-detail"><strong>1. Calcium gluconate 10%:</strong> 30-60 mL (3-6 g) IV over 2-5 min (less tissue necrosis if extravasates)</div>
                                     <div class="dose-detail"><strong>2. Regular insulin:</strong> 10 units IV + <strong>D50W 50 mL</strong> (25 g dextrose) IV push (onset 15-30 min, duration 4-6 h)</div>
                                     <div class="dose-detail"><strong>3. Albuterol:</strong> 10-20 mg (2-4 mL of 0.5% solution) nebulized over 10 min (onset 30 min, lowers K⁺ 0.5-1 mEq/L)</div>
@@ -11488,7 +11488,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Key Points</div>
-                                    <div class="warning-detail">• <strong>Calcium first:</strong> Most important immediate treatment — stabilizes cardiac membrane<br>• <strong>Don't mix calcium with bicarb:</strong> Forms precipitate (give via separate IV)<br>• <strong>Monitor glucose:</strong> After insulin/dextrose therapy (risk of hypoglycemia 4-6h later)<br>• <strong>Repeat labs:</strong> Check K⁺ q2-4h until normalized<br>• <strong>Emergency dialysis:</strong> Consider if K⁺ >7.5 mEq/L, refractory, or cardiac arrest<sup class="ref-num">3</sup><br>• <strong>Avoid succinylcholine:</strong> If hyperkalemia suspected or patient at risk</div>
+                                    <div class="warning-detail">• <strong>Calcium first:</strong> Most important immediate treatment - stabilizes cardiac membrane<br>• <strong>Don't mix calcium with bicarb:</strong> Forms precipitate (give via separate IV)<br>• <strong>Monitor glucose:</strong> After insulin/dextrose therapy (risk of hypoglycemia 4-6h later)<br>• <strong>Repeat labs:</strong> Check K⁺ q2-4h until normalized<br>• <strong>Emergency dialysis:</strong> Consider if K⁺ >7.5 mEq/L, refractory, or cardiac arrest<sup class="ref-num">3</sup><br>• <strong>Avoid succinylcholine:</strong> If hyperkalemia suspected or patient at risk</div>
                                 </div>
 
                                 <div class="info-box">
@@ -11515,7 +11515,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                                         </div>
                                         <div class="reference-item">
                                             <span class="reference-num">3</span>
-                                            <span class="reference-citation">Alfonzo AV, et al. <strong>Potassium disorders—clinical spectrum and emergency management.</strong> <em>Resuscitation</em>. 2006;70(1):10-25. PMID: 16600469</span>
+                                            <span class="reference-citation">Alfonzo AV, et al. <strong>Potassium disorders-clinical spectrum and emergency management.</strong> <em>Resuscitation</em>. 2006;70(1):10-25. PMID: 16600469</span>
                                         </div>
                                     </div>
                                 </div>
@@ -11548,7 +11548,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="protocol-section">
                                     <h4 class="protocol-section-title">Immediate Actions</h4>
                                     <ol class="protocol-steps">
-                                        <li class="protocol-step"><strong>STOP propofol immediately:</strong> Discontinue infusion — this is the MOST important intervention<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>STOP propofol immediately:</strong> Discontinue infusion - this is the MOST important intervention<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Switch sedation:</strong> Use alternative sedative (midazolam, dexmedetomidine, or ketamine)<sup class="ref-num">1</sup></li>
                                         <li class="protocol-step"><strong>Supportive care:</strong> Hemodynamic support with vasopressors/inotropes as needed<sup class="ref-num">2</sup></li>
                                         <li class="protocol-step"><strong>Labs:</strong> ABG, lactate, CK, troponin, lipase, electrolytes (especially K⁺), triglycerides, liver function<sup class="ref-num">1</sup></li>
@@ -11591,7 +11591,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Early Warning Signs (Monitor Daily)</div>
-                                    <div class="warning-detail">• <strong>Unexplained metabolic acidosis</strong> (base deficit >−10, lactate >2 mmol/L)<br>• <strong>↑ Triglycerides</strong> (>400 mg/dL) — lipemic serum<br>• <strong>↑ CK</strong> (>1000 U/L) or myoglobinuria<br>• <strong>New ECG changes:</strong> Bradycardia, Brugada-like pattern, QRS widening, ST elevation<br>• <strong>↑ Troponin</strong> without MI<br>• <strong>Hepatomegaly</strong> or ↑ liver enzymes<br><br><strong>If ANY early signs → strongly consider switching sedation</strong><sup class="ref-num">4</sup></div>
+                                    <div class="warning-detail">• <strong>Unexplained metabolic acidosis</strong> (base deficit >−10, lactate >2 mmol/L)<br>• <strong>↑ Triglycerides</strong> (>400 mg/dL) - lipemic serum<br>• <strong>↑ CK</strong> (>1000 U/L) or myoglobinuria<br>• <strong>New ECG changes:</strong> Bradycardia, Brugada-like pattern, QRS widening, ST elevation<br>• <strong>↑ Troponin</strong> without MI<br>• <strong>Hepatomegaly</strong> or ↑ liver enzymes<br><br><strong>If ANY early signs → strongly consider switching sedation</strong><sup class="ref-num">4</sup></div>
                                 </div>
 
                                 <div class="info-box">
@@ -11703,12 +11703,12 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ The "Lethal Triad" (Trauma Death Spiral)</div>
-                                    <div class="warning-detail">1. <strong>Hypothermia</strong> (<36°C) — worsens coagulopathy, impairs platelet function<br>2. <strong>Acidosis</strong> (pH <7.2) — worsens coagulopathy, impairs hemostasis<br>3. <strong>Coagulopathy</strong> (INR >1.5, platelets <50K) — perpetuates bleeding<sup class="ref-num">2</sup><br><br><strong>Prevention is critical:</strong> Aggressive warming, early balanced transfusion, damage control surgery, permissive hypotension (SBP 80-90 until hemorrhage control)</div>
+                                    <div class="warning-detail">1. <strong>Hypothermia</strong> (<36°C) - worsens coagulopathy, impairs platelet function<br>2. <strong>Acidosis</strong> (pH <7.2) - worsens coagulopathy, impairs hemostasis<br>3. <strong>Coagulopathy</strong> (INR >1.5, platelets <50K) - perpetuates bleeding<sup class="ref-num">2</sup><br><br><strong>Prevention is critical:</strong> Aggressive warming, early balanced transfusion, damage control surgery, permissive hypotension (SBP 80-90 until hemorrhage control)</div>
                                 </div>
 
                                 <div class="warning-box">
                                     <div class="warning-box-title">⚠️ Complications of Massive Transfusion</div>
-                                    <div class="warning-detail">• <strong>TACO (Transfusion-Associated Circulatory Overload):</strong> Pulmonary edema, hypoxia — slow transfusion, diuretics<br>• <strong>TRALI (Transfusion-Related Acute Lung Injury):</strong> Noncardiogenic pulmonary edema within 6h — supportive care<br>• <strong>Citrate toxicity:</strong> Hypocalcemia (tremor, arrhythmias) — give calcium chloride<br>• <strong>Hyperkalemia:</strong> From stored blood (especially old units) — monitor K⁺, treat if >6 mEq/L<br>• <strong>Hypothermia:</strong> Use blood warmers, forced-air warming<br>• <strong>Dilutional coagulopathy:</strong> Prevented by balanced 1:1:1 resuscitation<sup class="ref-num">5</sup></div>
+                                    <div class="warning-detail">• <strong>TACO (Transfusion-Associated Circulatory Overload):</strong> Pulmonary edema, hypoxia - slow transfusion, diuretics<br>• <strong>TRALI (Transfusion-Related Acute Lung Injury):</strong> Noncardiogenic pulmonary edema within 6h - supportive care<br>• <strong>Citrate toxicity:</strong> Hypocalcemia (tremor, arrhythmias) - give calcium chloride<br>• <strong>Hyperkalemia:</strong> From stored blood (especially old units) - monitor K⁺, treat if >6 mEq/L<br>• <strong>Hypothermia:</strong> Use blood warmers, forced-air warming<br>• <strong>Dilutional coagulopathy:</strong> Prevented by balanced 1:1:1 resuscitation<sup class="ref-num">5</sup></div>
                                 </div>
 
                                 <div class="info-box">
@@ -11769,7 +11769,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <p class="footer-text">© 2025 gasconsult.ai — Evidence-based anesthesiology</p>
+                    <p class="footer-text">© 2025 gasconsult.ai - Evidence-based anesthesiology</p>
                 </div>
                 <div class="footer-links">
                     <a href="/terms" class="footer-link">Terms</a>
@@ -11880,7 +11880,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Dose — GasConsult.ai</title>
+    <title>Quick Dose - GasConsult.ai</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
@@ -12599,9 +12599,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         additionalDoses: [
                             { label: "Elderly/Compromised", perKg: 1, unit: "mg" }
                         ],
-                        onset: "30–45 sec",
-                        duration: "5–10 min",
-                        notes: "Reduce dose 30–50% in elderly, hypovolemic, or hemodynamically unstable. Lidocaine 20–40mg can reduce injection pain.",
+                        onset: "30-45 sec",
+                        duration: "5-10 min",
+                        notes: "Reduce dose 30-50% in elderly, hypovolemic, or hemodynamically unstable. Lidocaine 20-40mg can reduce injection pain.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12610,8 +12610,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 0.3,
                         high: 0.4,
                         unit: "mg",
-                        onset: "30–60 sec",
-                        duration: "3–5 min",
+                        onset: "30-60 sec",
+                        duration: "3-5 min",
                         notes: "Hemodynamically stable. Single-dose adrenal suppression is not clinically significant. Myoclonus common.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12622,11 +12622,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 2,
                         unit: "mg",
                         additionalDoses: [
-                            { label: "IM Induction", perKg: 5, unit: "mg", range: "4–6 mg/kg" },
+                            { label: "IM Induction", perKg: 5, unit: "mg", range: "4-6 mg/kg" },
                             { label: "Analgesic (sub-dissociative)", perKg: 0.25, unit: "mg" }
                         ],
-                        onset: "IV: 30–60 sec | IM: 3–4 min",
-                        duration: "10–20 min",
+                        onset: "IV: 30-60 sec | IM: 3-4 min",
+                        duration: "10-20 min",
                         notes: "Maintains airway reflexes and hemodynamics. Bronchodilator. Consider midazolam for emergence phenomena.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12637,11 +12637,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 0.05,
                         unit: "mg",
                         additionalDoses: [
-                            { label: "Anxiolysis", fixed: 1, unit: "mg", range: "1–2 mg" }
+                            { label: "Anxiolysis", fixed: 1, unit: "mg", range: "1-2 mg" }
                         ],
-                        onset: "1–3 min",
-                        duration: "30–60 min",
-                        notes: "Marked synergy with opioids — reduce both when combined. Anterograde amnesia. Reduce dose in elderly.",
+                        onset: "1-3 min",
+                        duration: "30-60 min",
+                        notes: "Marked synergy with opioids - reduce both when combined. Anterograde amnesia. Reduce dose in elderly.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     }
                 ]
@@ -12657,10 +12657,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 3,
                         unit: "mcg",
                         additionalDoses: [
-                            { label: "High-dose (cardiac)", perKg: 10, unit: "mcg", range: "5–15 mcg/kg" }
+                            { label: "High-dose (cardiac)", perKg: 10, unit: "mcg", range: "5-15 mcg/kg" }
                         ],
-                        onset: "1–2 min",
-                        duration: "30–60 min",
+                        onset: "1-2 min",
+                        duration: "30-60 min",
                         notes: "Chest wall rigidity at high doses (>5 mcg/kg bolus). Context-sensitive half-time increases with prolonged infusion.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12671,10 +12671,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 0.5,
                         unit: "mcg",
                         additionalDoses: [
-                            { label: "Cardiac anesthesia", perKg: 5, unit: "mcg", range: "2–8 mcg/kg" }
+                            { label: "Cardiac anesthesia", perKg: 5, unit: "mcg", range: "2-8 mcg/kg" }
                         ],
-                        onset: "1–3 min",
-                        duration: "20–45 min",
+                        onset: "1-3 min",
+                        duration: "20-45 min",
                         notes: "~10× potency of fentanyl. Excellent hemodynamic stability for cardiac surgery.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12685,11 +12685,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 1.5,
                         unit: "mcg",
                         additionalDoses: [
-                            { label: "Infusion", perKg: 0.15, unit: "mcg/kg/min", range: "0.05–0.2" }
+                            { label: "Infusion", perKg: 0.15, unit: "mcg/kg/min", range: "0.05-0.2" }
                         ],
-                        onset: "1–3 min",
-                        duration: "3–5 min",
-                        notes: "Ester hydrolysis — organ-independent. Rapid offset requires transition to longer-acting opioid before emergence.",
+                        onset: "1-3 min",
+                        duration: "3-5 min",
+                        notes: "Ester hydrolysis - organ-independent. Rapid offset requires transition to longer-acting opioid before emergence.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12699,8 +12699,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 0.02,
                         unit: "mg",
                         onset: "5 min",
-                        duration: "3–4 hours",
-                        notes: "5–7× morphine potency. Less histamine release. No active metabolites — preferred in renal impairment.",
+                        duration: "3-4 hours",
+                        notes: "5-7× morphine potency. Less histamine release. No active metabolites - preferred in renal impairment.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12709,9 +12709,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 0.1,
                         high: 0.15,
                         unit: "mg",
-                        onset: "5–10 min",
-                        duration: "3–4 hours",
-                        notes: "Histamine release — hypotension, bronchospasm possible. Active metabolite M6G accumulates in renal failure.",
+                        onset: "5-10 min",
+                        duration: "3-4 hours",
+                        notes: "Histamine release - hypotension, bronchospasm possible. Active metabolite M6G accumulates in renal failure.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     }
                 ]
@@ -12726,8 +12726,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 1.5,
                         high: 2,
                         unit: "mg",
-                        onset: "30–60 sec",
-                        duration: "5–10 min",
+                        onset: "30-60 sec",
+                        duration: "5-10 min",
                         notes: "Only depolarizing NMBA. Fasciculations precede paralysis. ~0.5 mEq/L K+ rise in normal patients.",
                         reference: "Barash Clinical Anesthesia, 8th Ed",
                         warning: "Contraindicated: hyperkalemia risk (burns >24h, crush injury, denervation, prolonged immobility), MH history, myopathies"
@@ -12739,10 +12739,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 1.2,
                         unit: "mg",
                         additionalDoses: [
-                            { label: "Maintenance", perKg: 0.15, unit: "mg", range: "0.1–0.2 mg/kg" }
+                            { label: "Maintenance", perKg: 0.15, unit: "mg", range: "0.1-0.2 mg/kg" }
                         ],
-                        onset: "60–90 sec (high dose: 45–60 sec)",
-                        duration: "30–60 min (dose-dependent)",
+                        onset: "60-90 sec (high dose: 45-60 sec)",
+                        duration: "30-60 min (dose-dependent)",
                         notes: "Aminosteroid NMBA. Fully reversible with sugammadex at any depth. RSI alternative to succinylcholine.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12755,9 +12755,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         additionalDoses: [
                             { label: "Maintenance", perKg: 0.02, unit: "mg" }
                         ],
-                        onset: "2–3 min",
-                        duration: "25–40 min",
-                        notes: "Aminosteroid. Hepatic elimination — prolonged in liver failure. Reversible with sugammadex.",
+                        onset: "2-3 min",
+                        duration: "25-40 min",
+                        notes: "Aminosteroid. Hepatic elimination - prolonged in liver failure. Reversible with sugammadex.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12769,8 +12769,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         additionalDoses: [
                             { label: "Maintenance", perKg: 0.03, unit: "mg" }
                         ],
-                        onset: "2–3 min",
-                        duration: "40–60 min",
+                        onset: "2-3 min",
+                        duration: "40-60 min",
                         notes: "Hoffman elimination (organ-independent). Ideal for hepatic/renal failure. No histamine release.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     }
@@ -12789,7 +12789,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         lowLabel: "Moderate Block",
                         standardLabel: "Deep Block",
                         highLabel: "Immediate",
-                        onset: "1–3 min",
+                        onset: "1-3 min",
                         duration: "N/A",
                         notes: "Selective relaxant binding agent for rocuronium/vecuronium. May reduce hormonal contraceptive efficacy for 7 days.",
                         reference: "FDA Package Insert"
@@ -12804,9 +12804,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         additionalDoses: [
                             { label: "With glycopyrrolate", note: "0.2 mg glyco per 1 mg neo" }
                         ],
-                        onset: "5–10 min",
-                        duration: "40–60 min",
-                        notes: "Anticholinesterase — MUST co-administer anticholinergic. Only effective at TOF count ≥2.",
+                        onset: "5-10 min",
+                        duration: "40-60 min",
+                        notes: "Anticholinesterase - MUST co-administer anticholinergic. Only effective at TOF count ≥2.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12819,8 +12819,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                             { label: "Antisialagogue", fixed: 0.2, unit: "mg" }
                         ],
                         onset: "1 min",
-                        duration: "2–4 hours",
-                        notes: "Quaternary ammonium — does not cross BBB. Less tachycardia than atropine.",
+                        duration: "2-4 hours",
+                        notes: "Quaternary ammonium - does not cross BBB. Less tachycardia than atropine.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12833,9 +12833,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         lowLabel: "Micro-dose",
                         standardLabel: "Titrated",
                         highLabel: "Full Reversal",
-                        onset: "1–2 min",
-                        duration: "30–45 min",
-                        notes: "Opioid antagonist. Duration shorter than most opioids — resedation possible. Titrate to avoid withdrawal.",
+                        onset: "1-2 min",
+                        duration: "30-45 min",
+                        notes: "Opioid antagonist. Duration shorter than most opioids - resedation possible. Titrate to avoid withdrawal.",
                         reference: "ACLS Guidelines 2020"
                     },
                     {
@@ -12845,9 +12845,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 0.2,
                         high: 0.5,
                         unit: "mg",
-                        onset: "1–2 min",
-                        duration: "45–90 min",
-                        notes: "Benzodiazepine antagonist. May precipitate seizures in chronic benzo users. Max total 3–5 mg.",
+                        onset: "1-2 min",
+                        duration: "45-90 min",
+                        notes: "Benzodiazepine antagonist. May precipitate seizures in chronic benzo users. Max total 3-5 mg.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     }
                 ]
@@ -12864,8 +12864,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 200,
                         unit: "mcg",
                         onset: "Immediate",
-                        duration: "5–10 min",
-                        notes: "Pure α₁-agonist. Increases SVR without inotropy. Reflex bradycardia — useful when HR elevated.",
+                        duration: "5-10 min",
+                        notes: "Pure α₁-agonist. Increases SVR without inotropy. Reflex bradycardia - useful when HR elevated.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12875,8 +12875,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 10,
                         high: 25,
                         unit: "mg",
-                        onset: "1–2 min",
-                        duration: "10–15 min",
+                        onset: "1-2 min",
+                        duration: "10-15 min",
                         notes: "Mixed α/β agonist + indirect NE release. Tachyphylaxis with repeated doses.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
@@ -12888,11 +12888,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 20,
                         unit: "mcg",
                         additionalDoses: [
-                            { label: "Cardiac Arrest", fixed: 1, unit: "mg", range: "1 mg q3–5 min" },
-                            { label: "Anaphylaxis IM", fixed: 0.3, unit: "mg", range: "0.3–0.5 mg" }
+                            { label: "Cardiac Arrest", fixed: 1, unit: "mg", range: "1 mg q3-5 min" },
+                            { label: "Anaphylaxis IM", fixed: 0.3, unit: "mg", range: "0.3-0.5 mg" }
                         ],
                         onset: "Immediate",
-                        duration: "5–10 min",
+                        duration: "5-10 min",
                         notes: "α + β agonist. First-line for anaphylaxis and cardiac arrest. Low-dose: β effects; high-dose: α effects.",
                         reference: "ACLS Guidelines 2020"
                     },
@@ -12904,11 +12904,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 4,
                         unit: "U",
                         additionalDoses: [
-                            { label: "Infusion (shock)", note: "0.01–0.04 U/min" },
+                            { label: "Infusion (shock)", note: "0.01-0.04 U/min" },
                             { label: "Cardiac Arrest", fixed: 40, unit: "U" }
                         ],
                         onset: "Immediate",
-                        duration: "10–20 min",
+                        duration: "10-20 min",
                         notes: "V₁ receptor agonist. Catecholamine-sparing. No tachycardia. May cause splanchnic ischemia.",
                         reference: "Surviving Sepsis Guidelines 2021"
                     },
@@ -12919,8 +12919,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 1,
                         high: 1.5,
                         unit: "mg",
-                        onset: "1–2 min",
-                        duration: "30–60 min",
+                        onset: "1-2 min",
+                        duration: "30-60 min",
                         notes: "Anticholinergic. Crosses BBB. Paradoxical bradycardia possible with doses <0.5 mg. Max 3 mg.",
                         reference: "ACLS Guidelines 2020"
                     }
@@ -12937,9 +12937,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 4,
                         high: 8,
                         unit: "mg",
-                        onset: "5–10 min",
-                        duration: "4–8 hours",
-                        notes: "5-HT₃ antagonist. Give at end of surgery. QTc prolongation — caution with other QT-prolonging drugs.",
+                        onset: "5-10 min",
+                        duration: "4-8 hours",
+                        notes: "5-HT₃ antagonist. Give at end of surgery. QTc prolongation - caution with other QT-prolonging drugs.",
                         reference: "Consensus Guidelines for PONV, 2020"
                     },
                     {
@@ -12949,8 +12949,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 8,
                         high: 10,
                         unit: "mg",
-                        onset: "1–2 hours (peak)",
-                        duration: "24–72 hours",
+                        onset: "1-2 hours (peak)",
+                        duration: "24-72 hours",
                         notes: "Give at induction for PONV (needs time for effect). Transient hyperglycemia. Perineal burning if rapid IV.",
                         reference: "Consensus Guidelines for PONV, 2020"
                     },
@@ -12961,9 +12961,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 30,
                         unit: "mg",
                         additionalDoses: [
-                            { label: "Maintenance infusion", perKg: 1, unit: "mg/kg/hr", range: "1–5 mg/kg/hr" }
+                            { label: "Maintenance infusion", perKg: 1, unit: "mg/kg/hr", range: "1-5 mg/kg/hr" }
                         ],
-                        onset: "5–15 min",
+                        onset: "5-15 min",
                         duration: "~3 hours",
                         notes: "Antifibrinolytic. Contraindicated in active thromboembolic disease. Seizure risk at very high doses.",
                         reference: "CRASH-2 Trial, Lancet 2010"
@@ -12975,11 +12975,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         high: 1,
                         unit: "mcg",
                         additionalDoses: [
-                            { label: "Infusion", perKg: 0.5, unit: "mcg/kg/hr", range: "0.2–0.7" }
+                            { label: "Infusion", perKg: 0.5, unit: "mcg/kg/hr", range: "0.2-0.7" }
                         ],
-                        onset: "5–10 min",
+                        onset: "5-10 min",
                         duration: "Infusion-dependent",
-                        notes: "α₂-agonist. Sedation without respiratory depression. Bradycardia and hypotension common — load slowly.",
+                        notes: "α₂-agonist. Sedation without respiratory depression. Bradycardia and hypotension common - load slowly.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     },
                     {
@@ -12988,8 +12988,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         standard: 1.5,
                         high: 2,
                         unit: "mg",
-                        onset: "1–2 min",
-                        duration: "10–20 min",
+                        onset: "1-2 min",
+                        duration: "10-20 min",
                         notes: "Blunts airway reflexes, reduces MAC. Max 4.5 mg/kg. CNS toxicity precedes cardiac.",
                         reference: "Barash Clinical Anesthesia, 8th Ed"
                     }
@@ -13049,7 +13049,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         function updateAllDoses() {
             Object.entries(drugData).forEach(([catKey, category]) => {
                 category.drugs.forEach(drug => {
-                    const item = document.querySelector(\`.drug-item[data-drug="\${drug.name}"]\`);
+                    const item = document.querySelector(`.drug-item[data-drug="${drug.name}"]`);
                     if (!item) return;
 
                     // Update header quick dose
@@ -13092,26 +13092,26 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         function renderAllCategories() {
             const container = document.getElementById('drug-categories');
 
-            container.innerHTML = Object.entries(drugData).map(([catKey, category]) => \`
+            container.innerHTML = Object.entries(drugData).map(([catKey, category]) => `
                 <div class="category-group">
                     <div class="category-header">
-                        <div class="category-swatch \${catKey}"></div>
-                        <div class="category-title">\${category.name}</div>
+                        <div class="category-swatch ${catKey}"></div>
+                        <div class="category-title">${category.name}</div>
                     </div>
                     <div class="drug-list">
-                        \${category.drugs.map(drug => {
+                        ${category.drugs.map(drug => {
                             const standardVal = drug.isFixed ? drug.standard : drug.standard * currentWeight;
                             const lowVal = drug.isFixed ? drug.low : drug.low * currentWeight;
                             const highVal = drug.isFixed ? drug.high : drug.high * currentWeight;
 
-                            return \`
-                                <div class="drug-item \${catKey}" data-drug="\${drug.name}" data-category="\${catKey}">
+                            return `
+                                <div class="drug-item ${catKey}" data-drug="${drug.name}" data-category="${catKey}">
                                     <div class="drug-header" onclick="toggleDrug(this)">
-                                        <span class="drug-name">\${drug.name}</span>
+                                        <span class="drug-name">${drug.name}</span>
                                         <div class="drug-quick-dose">
                                             <div class="drug-standard-dose">
-                                                <span class="drug-quick-value">\${formatDose(standardVal)}</span>
-                                                <span class="drug-quick-unit">\${formatUnit(standardVal, drug.unit)}</span>
+                                                <span class="drug-quick-value">${formatDose(standardVal)}</span>
+                                                <span class="drug-quick-unit">${formatUnit(standardVal, drug.unit)}</span>
                                             </div>
                                             <svg class="drug-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                 <polyline points="6 9 12 15 18 9"></polyline>
@@ -13122,89 +13122,89 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                                         <div class="drug-details-inner">
                                             <div class="dose-range-grid">
                                                 <div class="dose-card low">
-                                                    <div class="dose-card-label">\${drug.lowLabel || 'Low'}</div>
-                                                    <div class="dose-card-value">\${formatDose(lowVal)}</div>
-                                                    <div class="dose-card-unit">\${formatUnit(lowVal, drug.unit)}</div>
-                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.low} \${drug.unit}/kg</div>\` : ''}
+                                                    <div class="dose-card-label">${drug.lowLabel || 'Low'}</div>
+                                                    <div class="dose-card-value">${formatDose(lowVal)}</div>
+                                                    <div class="dose-card-unit">${formatUnit(lowVal, drug.unit)}</div>
+                                                    ${!drug.isFixed ? `<div class="dose-card-perkg">${drug.low} ${drug.unit}/kg</div>` : ''}
                                                 </div>
                                                 <div class="dose-card standard">
-                                                    <div class="dose-card-label">\${drug.standardLabel || 'Standard'}</div>
-                                                    <div class="dose-card-value">\${formatDose(standardVal)}</div>
-                                                    <div class="dose-card-unit">\${formatUnit(standardVal, drug.unit)}</div>
-                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.standard} \${drug.unit}/kg</div>\` : ''}
+                                                    <div class="dose-card-label">${drug.standardLabel || 'Standard'}</div>
+                                                    <div class="dose-card-value">${formatDose(standardVal)}</div>
+                                                    <div class="dose-card-unit">${formatUnit(standardVal, drug.unit)}</div>
+                                                    ${!drug.isFixed ? `<div class="dose-card-perkg">${drug.standard} ${drug.unit}/kg</div>` : ''}
                                                 </div>
                                                 <div class="dose-card high">
-                                                    <div class="dose-card-label">\${drug.highLabel || 'High'}</div>
-                                                    <div class="dose-card-value">\${formatDose(highVal)}</div>
-                                                    <div class="dose-card-unit">\${formatUnit(highVal, drug.unit)}</div>
-                                                    \${!drug.isFixed ? \`<div class="dose-card-perkg">\${drug.high} \${drug.unit}/kg</div>\` : ''}
+                                                    <div class="dose-card-label">${drug.highLabel || 'High'}</div>
+                                                    <div class="dose-card-value">${formatDose(highVal)}</div>
+                                                    <div class="dose-card-unit">${formatUnit(highVal, drug.unit)}</div>
+                                                    ${!drug.isFixed ? `<div class="dose-card-perkg">${drug.high} ${drug.unit}/kg</div>` : ''}
                                                 </div>
                                             </div>
 
-                                            \${drug.additionalDoses ? \`
+                                            ${drug.additionalDoses ? `
                                                 <div class="additional-doses">
-                                                    \${drug.additionalDoses.map(dose => {
+                                                    ${drug.additionalDoses.map(dose => {
                                                         if (dose.note) {
-                                                            return \`
+                                                            return `
                                                                 <div class="additional-dose-row">
-                                                                    <span class="additional-dose-label">\${dose.label}</span>
-                                                                    <span style="font-size: 13px; color: #64748b;">\${dose.note}</span>
+                                                                    <span class="additional-dose-label">${dose.label}</span>
+                                                                    <span style="font-size: 13px; color: #64748b;">${dose.note}</span>
                                                                 </div>
-                                                            \`;
+                                                            `;
                                                         }
                                                         const val = dose.fixed || dose.perKg * currentWeight;
-                                                        return \`
+                                                        return `
                                                             <div class="additional-dose-row">
-                                                                <span class="additional-dose-label">\${dose.label}\${dose.range ? \` (\${dose.range})\` : ''}</span>
+                                                                <span class="additional-dose-label">${dose.label}${dose.range ? ` (${dose.range})` : ''}</span>
                                                                 <div>
-                                                                    <span class="additional-dose-value">\${formatDose(val)}</span>
-                                                                    <span class="additional-dose-unit">\${formatUnit(val, dose.unit)}</span>
+                                                                    <span class="additional-dose-value">${formatDose(val)}</span>
+                                                                    <span class="additional-dose-unit">${formatUnit(val, dose.unit)}</span>
                                                                 </div>
                                                             </div>
-                                                        \`;
+                                                        `;
                                                     }).join('')}
                                                 </div>
-                                            \` : ''}
+                                            ` : ''}
 
                                             <div class="drug-meta">
                                                 <div class="meta-item">
                                                     <span class="meta-label">Onset</span>
-                                                    <span class="meta-value">\${drug.onset}</span>
+                                                    <span class="meta-value">${drug.onset}</span>
                                                 </div>
                                                 <div class="meta-item">
                                                     <span class="meta-label">Duration</span>
-                                                    <span class="meta-value">\${drug.duration}</span>
+                                                    <span class="meta-value">${drug.duration}</span>
                                                 </div>
                                             </div>
 
-                                            <div class="drug-notes">\${drug.notes}</div>
+                                            <div class="drug-notes">${drug.notes}</div>
 
                                             <div class="drug-reference">
                                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                                                 </svg>
-                                                \${drug.reference}
+                                                ${drug.reference}
                                             </div>
 
-                                            \${drug.warning ? \`
+                                            ${drug.warning ? `
                                                 <div class="drug-warning">
                                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                                                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                                                         <line x1="12" y1="9" x2="12" y2="13"/>
                                                         <line x1="12" y1="17" x2="12.01" y2="17"/>
                                                     </svg>
-                                                    <span>\${drug.warning}</span>
+                                                    <span>${drug.warning}</span>
                                                 </div>
-                                            \` : ''}
+                                            ` : ''}
                                         </div>
                                     </div>
                                 </div>
-                            \`;
+                            `;
                         }).join('')}
                     </div>
                 </div>
-            \`).join('');
+            `).join('');
         }
     </script>
 </body>
@@ -13216,7 +13216,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Calculators — gasconsult.ai</title>
+    <title>Clinical Calculators - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -14188,7 +14188,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                 Clinical <span class="gradient">Calculators</span>
             </h1>
             <p class="hero-subtitle">
-                Real-time medical calculations with validated formulas. All results are instant — no submit buttons needed.
+                Real-time medical calculations with validated formulas. All results are instant - no submit buttons needed.
             </p>
         </section>
 
@@ -14622,7 +14622,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                         <div id="opioid-result" class="calc-result yellow">
                             <div class="result-label">Morphine Milligram Equivalent (MME)</div>
                             <div class="result-value"><span id="opioid-value">--</span><span class="result-unit">mg</span></div>
-                            <div class="result-text">Use caution with opioid conversions — consider patient factors and start at lower doses.</div>
+                            <div class="result-text">Use caution with opioid conversions - consider patient factors and start at lower doses.</div>
                         </div>
                         <div class="calc-reference">
                             <a href="https://www.cdc.gov/opioids/data-resources/calculating-mme.html" target="_blank" class="ref-link">
@@ -14995,7 +14995,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IOH Risk Predictor — gasconsult.ai</title>
+    <title>IOH Risk Predictor - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -16807,7 +16807,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <div class="results-container">
                 <div class="results-header">
                     <h2>Risk Assessment Results</h2>
-                    <p>Educational simulation only — not for clinical use</p>
+                    <p>Educational simulation only - not for clinical use</p>
                 </div>
 
                 <!-- Risk Display -->
@@ -16967,7 +16967,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difficult Airway Predictor — gasconsult.ai</title>
+    <title>Difficult Airway Predictor - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -17778,7 +17778,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent Generator — gasconsult.ai</title>
+    <title>Informed Consent Generator - gasconsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
