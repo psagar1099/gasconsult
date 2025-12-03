@@ -11805,15 +11805,15 @@ CRISIS_HTML = """<!DOCTYPE html>
         function toggleProtocol(card) {
             const wasExpanded = card.classList.contains('expanded');
 
-            // Close all other protocol cards
+            // Close ALL protocol cards first
             document.querySelectorAll('.protocol-card').forEach(c => {
-                if (c !== card) {
-                    c.classList.remove('expanded');
-                }
+                c.classList.remove('expanded');
             });
 
-            // Toggle clicked card
-            card.classList.toggle('expanded');
+            // If this card wasn't already open, open it
+            if (!wasExpanded) {
+                card.classList.add('expanded');
+            }
         }
 
         function toggleReferences(button) {
