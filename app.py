@@ -12170,7 +12170,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .container {
             max-width: 700px;
             margin: 0 auto;
-            padding: 100px 16px 80px;
+            padding: 130px 16px 80px;
         }
 
         /* Weight Section - Mobile First */
@@ -12702,7 +12702,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             /* Desktop container - wider layout */
             .container {
                 max-width: 900px;
-                padding: 40px 32px 100px;
+                padding: 140px 32px 100px;
             }
 
             /* Larger weight input on desktop */
