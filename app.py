@@ -1565,17 +1565,6 @@ PREOP_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .footer-logo svg {
-            width: 28px;
-            height: 28px;
-        }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-600);
@@ -1994,12 +1983,7 @@ PREOP_HTML = """<!DOCTYPE html>
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -3121,20 +3105,6 @@ HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -3189,7 +3159,6 @@ HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -4105,12 +4074,7 @@ HTML = """<!DOCTYPE html>
 
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -5045,20 +5009,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -5113,7 +5063,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -6045,20 +5994,6 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -6113,7 +6048,6 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -6775,20 +6709,6 @@ TERMS_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -6822,7 +6742,6 @@ TERMS_HTML = """<!DOCTYPE html>
             h3 { font-size: 19px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -7298,14 +7217,11 @@ TERMS_HTML = """<!DOCTYPE html>
 
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="#" class="footer-link">Contact</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
@@ -7683,20 +7599,6 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -7725,7 +7627,6 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             .mobile-menu-btn { display: none; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -8211,14 +8112,11 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="6" cy="16" r="5" fill="#2563EB"/><circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/><circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/></svg></div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="#" class="footer-link">Contact</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
@@ -8856,23 +8754,6 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg {
-            width: 32px;
-            height: 32px;
-        }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -8922,7 +8803,6 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -9355,12 +9235,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -10358,23 +10233,6 @@ CRISIS_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg {
-            width: 32px;
-            height: 32px;
-        }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -10420,7 +10278,6 @@ CRISIS_HTML = """<!DOCTYPE html>
 
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -11834,20 +11691,11 @@ CRISIS_HTML = """<!DOCTYPE html>
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg width="36" height="36" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <p class="footer-text">© 2025 gasconsult.ai - Evidence-based anesthesiology</p>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
-                    <a href="/terms" class="footer-link">Terms</a>
                     <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/evidence" class="footer-link">Evidence Base</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
@@ -12718,20 +12566,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -12919,11 +12753,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 flex-direction: row;
                 justify-content: space-between;
                 text-align: left;
-            }
-
-            .footer-logo svg {
-                width: 36px;
-                height: 36px;
             }
 
             .footer-text {
@@ -13690,12 +13519,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 
     <footer class="footer">
         <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-            </div>
+            <span class="footer-text">© 2025 GasConsult.ai</span>
             <div class="footer-links">
                 <a href="/privacy" class="footer-link">Privacy</a>
                 <a href="/terms" class="footer-link">Terms</a>
@@ -14210,7 +14034,6 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -14533,23 +14356,6 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             align-items: center;
             gap: 20px;
             text-align: center;
-        }
-
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg {
-            width: 32px;
-            height: 32px;
         }
 
         .footer-text {
@@ -15188,20 +14994,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
-                <div class="footer-brand">
-                    <div class="footer-logo">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                            <circle cx="6" cy="16" r="5" fill="#2563EB"/>
-                            <circle cx="16" cy="16" r="5" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="26" cy="16" r="5" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <span class="footer-text">© 2025 GasConsult.ai</span>
-                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
-                    <a href="#" class="footer-link">Contact</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
                 </div>
             </div>
         </footer>
@@ -15848,20 +15645,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -15890,7 +15673,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .mobile-menu-btn { display: none; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -17006,23 +16788,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg {
-            width: 32px;
-            height: 32px;
-        }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -17072,7 +16837,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
