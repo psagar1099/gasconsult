@@ -12768,6 +12768,10 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 font-size: 14px;
             }
         }
+
+        @media (min-width: 1024px) {
+            .footer { padding: 48px 40px; }
+        }
     </style>
 </head>
 <body>
@@ -14038,6 +14042,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .footer { padding: 48px 40px; }
         }
 
         .calc-header {
