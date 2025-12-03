@@ -15353,7 +15353,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intraoperative Hypotension Predictor - gasconsult.ai</title>
+    <title>IOH Predictor - GasConsult.ai</title>
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -15383,13 +15383,15 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
+            --orange-50: #FFF7ED;
+            --orange-500: #F97316;
             --red-50: #FEF2F2;
             --red-500: #EF4444;
             --red-600: #DC2626;
-            --orange-50: #FFF7ED;
-            --orange-500: #F97316;
             --green-50: #ECFDF5;
             --green-500: #10B981;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -15408,6 +15410,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Glass Background */
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -15509,12 +15512,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
@@ -15554,14 +15551,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
         .nav-dropdown {
             position: relative;
-            display: inline-block;
         }
 
         .nav-dropdown-toggle {
@@ -15586,9 +15577,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             overflow: hidden;
         }
 
-        .nav-dropdown-menu.show {
-            display: block;
-        }
+        .nav-dropdown-menu.show { display: block; }
 
         .nav-dropdown-link {
             display: block;
@@ -15619,11 +15608,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             cursor: pointer;
             padding: 8px;
             border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn span {
@@ -15635,18 +15619,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
         .mobile-menu {
             display: none;
             position: fixed;
@@ -15655,19 +15627,16 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             right: 16px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
             padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
             z-index: 99;
             flex-direction: column;
             gap: 4px;
         }
 
-        .mobile-menu.active {
-            display: flex;
-        }
+        .mobile-menu.active { display: flex; }
 
         .mobile-menu-link {
             padding: 14px 16px;
@@ -15679,11 +15648,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             transition: all 0.2s ease;
         }
 
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
         /* Main Content */
         .main {
             flex: 1;
@@ -15693,7 +15657,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             width: 100%;
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
             text-align: center;
             margin-bottom: 48px;
@@ -15749,41 +15713,10 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             margin: 0 auto;
         }
 
-        /* Disclaimer */
-        .disclaimer {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 100%);
-            border: 2px solid rgba(239, 68, 68, 0.2);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 40px;
-            display: flex;
-            align-items: start;
-            gap: 16px;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 24px;
-            height: 24px;
-            color: var(--red-600);
-        }
-
-        .disclaimer-text {
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--gray-800);
-        }
-
-        .disclaimer-text strong {
-            font-weight: 700;
-            color: var(--red-600);
-        }
-
-        /* Content Card */
-        .content-card {
+        /* Glass Cards */
+        .glass-card {
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 32px;
@@ -15796,166 +15729,239 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             font-weight: 700;
             letter-spacing: -0.5px;
             color: var(--gray-900);
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .section-subtitle {
-            font-size: 16px;
+            font-size: 15px;
             line-height: 1.7;
             color: var(--gray-600);
             margin-bottom: 28px;
         }
 
-        /* Interactive References */
-        .references {
-            margin-top: 32px;
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .reference-item {
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: var(--red-600);
+            margin-left: 2px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-300);
             border-radius: 12px;
-            margin-bottom: 12px;
-            overflow: hidden;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 24px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Risk Cards */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .risk-card {
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border: 2px solid;
             transition: all 0.3s ease;
         }
 
-        .reference-item:hover {
-            border-color: var(--blue-300);
+        .risk-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
         }
 
-        .reference-header {
-            padding: 16px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            transition: background 0.2s ease;
+        .risk-card.low {
+            background: var(--green-50);
+            border-color: var(--green-500);
         }
 
-        .reference-header:hover {
-            background: rgba(59, 130, 246, 0.05);
+        .risk-card.moderate {
+            background: var(--amber-50);
+            border-color: var(--amber-500);
         }
 
-        .reference-number {
-            flex-shrink: 0;
-            width: 32px;
-            height: 32px;
-            background: var(--blue-600);
-            color: white;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
+        .risk-card.high {
+            background: var(--red-50);
+            border-color: var(--red-500);
         }
 
-        .reference-title {
-            flex: 1;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-900);
-            line-height: 1.5;
-        }
-
-        .reference-toggle {
-            flex-shrink: 0;
-            width: 24px;
-            height: 24px;
-            color: var(--gray-500);
-            transition: transform 0.3s ease;
-        }
-
-        .reference-item.open .reference-toggle {
-            transform: rotate(180deg);
-        }
-
-        .reference-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .reference-item.open .reference-content {
-            max-height: 1000px;
-        }
-
-        .reference-details {
-            padding: 0 20px 20px 20px;
+        .risk-label {
             font-size: 13px;
-            line-height: 1.7;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-value {
+            font-size: 40px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .risk-card.low .risk-value { color: var(--green-500); }
+        .risk-card.moderate .risk-value { color: var(--amber-500); }
+        .risk-card.high .risk-value { color: var(--red-500); }
+
+        .risk-text {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--gray-700);
         }
 
-        .reference-details p {
+        /* Factor/Intervention Cards */
+        .factor-card {
+            background: var(--blue-50);
+            border-left: 4px solid var(--blue-600);
+            padding: 20px;
             margin-bottom: 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
         }
 
-        .reference-details strong {
+        .factor-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .intervention-card {
+            background: var(--green-50);
+            border-left: 4px solid var(--green-500);
+            padding: 20px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .intervention-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
             color: var(--gray-900);
-            font-weight: 600;
+            margin-bottom: 6px;
         }
 
-        .reference-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--blue-600);
-            text-decoration: none;
-            font-weight: 600;
-            margin-top: 8px;
-            transition: color 0.2s ease;
+        .card-desc {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
         }
 
-        .reference-link:hover {
-            color: var(--blue-700);
-        }
-
-        /* Methodology Section */
-        .methodology-grid {
+        /* Model Evidence Section */
+        .evidence-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin-top: 24px;
         }
 
-        .method-card {
+        .evidence-card {
             background: var(--blue-50);
             border: 1px solid var(--blue-200);
-            border-radius: 12px;
-            padding: 20px;
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
         }
 
-        .method-number {
-            width: 36px;
-            height: 36px;
+        .evidence-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.15);
+        }
+
+        .evidence-number {
+            width: 40px;
+            height: 40px;
             background: var(--blue-600);
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: 800;
             margin-bottom: 16px;
         }
 
-        .method-title {
+        .evidence-title {
             font-size: 16px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 8px;
         }
 
-        .method-text {
+        .evidence-text {
             font-size: 14px;
             line-height: 1.7;
             color: var(--gray-700);
         }
 
-        .method-text strong {
+        .evidence-text strong {
             color: var(--blue-700);
             font-weight: 600;
         }
@@ -15973,7 +15979,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
             text-align: center;
         }
 
@@ -15998,6 +16004,26 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--gray-200);
+            color: var(--gray-900);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            margin-top: 24px;
+        }
+
+        .back-btn:hover {
+            background: var(--gray-300);
+            transform: translateX(-2px);
+        }
+
         /* Responsive */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
@@ -16008,18 +16034,44 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             .mobile-menu-btn { display: none; }
             .main { padding: 120px 32px 80px; }
             .hero-title { font-size: 52px; }
-            .methodology-grid { grid-template-columns: repeat(2, 1fr); }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
         }
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
             .main { padding: 140px 40px 100px; }
             .footer { padding: 48px 40px; }
+        }
+
+        /* Disclaimer Banner */
+        .disclaimer {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.05) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: start;
+            gap: 16px;
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            color: var(--red-600);
+        }
+
+        .disclaimer-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-800);
+        }
+
+        .disclaimer-text strong {
+            font-weight: 700;
+            color: var(--red-600);
         }
     </style>
 </head>
@@ -16052,14 +16104,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
                             <a href="/hypotension" class="nav-dropdown-link active">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
                 </div>
@@ -16076,11 +16125,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <!-- Main Content -->
@@ -16089,13 +16135,13 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <div class="hero">
                 <div class="hero-badge">
                     <div class="badge-dot"></div>
-                    <span class="badge-text">Educational Tool</span>
+                    <span class="badge-text">Machine Learning</span>
                 </div>
                 <h1 class="hero-title">
                     Intraoperative <span class="gradient">Hypotension</span> Predictor
                 </h1>
                 <p class="hero-subtitle">
-                    Evidence-based educational tool for understanding IOH risk factors. This is a demonstration of clinical risk assessment - not for actual patient care.
+                    Evidence-based ML model that predicts IOH risk using 14 clinical features. Trained on 10,000 synthetic cases based on published research.
                 </p>
             </div>
 
@@ -16105,193 +16151,32 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                 </svg>
                 <div class="disclaimer-text">
-                    <strong>Educational Tool Only:</strong> This predictor is designed for learning and understanding risk factors for intraoperative hypotension. It is NOT intended for clinical decision-making or actual patient care. Always consult evidence-based guidelines and clinical judgment for real patient management.
+                    <strong>Educational Tool Only:</strong> This ML model is designed for learning about IOH risk prediction. It is NOT intended for clinical decision-making or actual patient care. Always consult evidence-based guidelines and clinical judgment for real patient management.
                 </div>
             </div>
 
-            <!-- Methodology Section -->
-            <div class="content-card">
-                <h2 class="section-title">How This Predictor Works</h2>
-                <p class="section-subtitle">
-                    This educational tool demonstrates how multiple clinical factors interact to influence the risk of intraoperative hypotension (IOH). Understanding these principles helps clinicians anticipate and prevent hemodynamic instability.
-                </p>
-                <div class="methodology-grid">
-                    <div class="method-card">
-                        <div class="method-number">1</div>
-                        <h3 class="method-title">MAP Trend Analysis</h3>
-                        <p class="method-text">
-                            Analyzes <strong>Mean Arterial Pressure (MAP) changes</strong> over 5-10 minute intervals. Declining trends (>5 mmHg drop) indicate early hemodynamic instability. Research shows MAP trends are more predictive than isolated measurements.
-                        </p>
-                    </div>
-                    <div class="method-card">
-                        <div class="method-number">2</div>
-                        <h3 class="method-title">Baseline Deviation</h3>
-                        <p class="method-text">
-                            Compares current MAP to <strong>preoperative baseline</strong>. Drops >20% from baseline are associated with end-organ hypoperfusion. The tool considers both absolute MAP and relative changes.
-                        </p>
-                    </div>
-                    <div class="method-card">
-                        <div class="method-number">3</div>
-                        <h3 class="method-title">Patient Factors</h3>
-                        <p class="method-text">
-                            Incorporates <strong>age, ASA class, and comorbidities</strong>. Older patients (>70) and those with significant comorbidities (ASA ≥3) have reduced cardiovascular reserve and higher IOH risk.
-                        </p>
-                    </div>
-                    <div class="method-card">
-                        <div class="method-number">4</div>
-                        <h3 class="method-title">Anesthetic Effects</h3>
-                        <p class="method-text">
-                            Accounts for <strong>induction agents and anesthetic depth</strong>. Propofol causes dose-dependent vasodilation and myocardial depression. Volatiles reduce SVR in a dose-related manner.
-                        </p>
-                    </div>
-                    <div class="method-card">
-                        <div class="method-number">5</div>
-                        <h3 class="method-title">Surgical Factors</h3>
-                        <p class="method-text">
-                            Considers <strong>surgery type and duration</strong>. Major abdominal, cardiac, and vascular procedures involve greater fluid shifts and surgical stimulation affecting hemodynamics.
-                        </p>
-                    </div>
-                    <div class="method-card">
-                        <div class="method-number">6</div>
-                        <h3 class="method-title">Risk Scoring</h3>
-                        <p class="method-text">
-                            Combines all factors into a <strong>composite risk score</strong>. The algorithm weights factors based on published evidence, providing probability estimates for IOH at 5, 10, and 20 minutes.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- References Section -->
-            <div class="content-card">
-                <h2 class="section-title">Key Research & Evidence</h2>
-                <p class="section-subtitle">
-                    This educational tool is based on published research on intraoperative hypotension. Click each reference to expand and learn more about the evidence.
-                </p>
-                <div class="references">
-                    <div class="reference-item" onclick="toggleReference(this)">
-                        <div class="reference-header">
-                            <div class="reference-number">1</div>
-                            <div class="reference-title">Intraoperative Hypotension and Postoperative Outcomes</div>
-                            <svg class="reference-toggle" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="reference-content">
-                            <div class="reference-details">
-                                <p><strong>Citation:</strong> Sessler DI, et al. "Intraoperative Hypotension and Hypertension are Associated with Adverse Outcomes After Noncardiac Surgery." <em>Anesthesiology</em> 2015;123(2):307-319.</p>
-                                <p><strong>Key Finding:</strong> Even brief episodes of MAP <65 mmHg are independently associated with myocardial injury, acute kidney injury, and mortality. The association is dose-dependent: each additional minute below threshold increases risk.</p>
-                                <p><strong>Clinical Significance:</strong> This landmark study established that intraoperative hypotension is not benign and should be actively prevented and treated.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/26083768/" class="reference-link" target="_blank" rel="noopener">
-                                    View on PubMed →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reference-item" onclick="toggleReference(this)">
-                        <div class="reference-header">
-                            <div class="reference-number">2</div>
-                            <div class="reference-title">Machine Learning Prediction of IOH</div>
-                            <svg class="reference-toggle" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="reference-content">
-                            <div class="reference-details">
-                                <p><strong>Citation:</strong> Hatib F, et al. "Machine-learning Algorithm to Predict Hypotension Based on High-fidelity Arterial Pressure Waveform Analysis." <em>Anesthesiology</em> 2018;129(4):663-674.</p>
-                                <p><strong>Key Finding:</strong> Machine learning can predict hypotension 5-15 minutes before it occurs with 88% sensitivity and 87% specificity using arterial waveform features.</p>
-                                <p><strong>Clinical Significance:</strong> Predictive algorithms allow proactive hemodynamic management rather than reactive treatment of established hypotension.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/30074928/" class="reference-link" target="_blank" rel="noopener">
-                                    View on PubMed →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reference-item" onclick="toggleReference(this)">
-                        <div class="reference-header">
-                            <div class="reference-number">3</div>
-                            <div class="reference-title">MAP Thresholds and Organ Injury</div>
-                            <svg class="reference-toggle" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="reference-content">
-                            <div class="reference-details">
-                                <p><strong>Citation:</strong> Walsh M, et al. "Relationship between Intraoperative Mean Arterial Pressure and Clinical Outcomes after Noncardiac Surgery." <em>Anesthesiology</em> 2013;119(3):507-515.</p>
-                                <p><strong>Key Finding:</strong> MAP <55 mmHg is associated with significantly increased risk of acute kidney injury and myocardial injury. A 20% reduction from baseline MAP also correlates with adverse outcomes.</p>
-                                <p><strong>Clinical Significance:</strong> Maintaining MAP above absolute thresholds (65-70 mmHg) and within 20% of baseline is an important hemodynamic goal.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/23835589/" class="reference-link" target="_blank" rel="noopener">
-                                    View on PubMed →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reference-item" onclick="toggleReference(this)">
-                        <div class="reference-header">
-                            <div class="reference-number">4</div>
-                            <div class="reference-title">Age and IOH Risk</div>
-                            <svg class="reference-toggle" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="reference-content">
-                            <div class="reference-details">
-                                <p><strong>Citation:</strong> Reich DL, et al. "Intraoperative Hemodynamic Predictors of Mortality, Stroke, and Myocardial Infarction After Coronary Artery Bypass Surgery." <em>Anesth Analg</em> 1999;89(4):814-822.</p>
-                                <p><strong>Key Finding:</strong> Advanced age (>70 years) independently increases sensitivity to intraoperative hypotension due to reduced baroreceptor sensitivity and cardiovascular compliance.</p>
-                                <p><strong>Clinical Significance:</strong> Elderly patients require more vigilant blood pressure management and may benefit from tighter MAP targets.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/10512249/" class="reference-link" target="_blank" rel="noopener">
-                                    View on PubMed →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="reference-item" onclick="toggleReference(this)">
-                        <div class="reference-header">
-                            <div class="reference-number">5</div>
-                            <div class="reference-title">Anesthetic Agents and Hypotension</div>
-                            <svg class="reference-toggle" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </div>
-                        <div class="reference-content">
-                            <div class="reference-details">
-                                <p><strong>Citation:</strong> Reich DL, et al. "Predictors of Hypotension After Induction of General Anesthesia." <em>Anesth Analg</em> 2005;101(3):622-628.</p>
-                                <p><strong>Key Finding:</strong> Propofol induction causes dose-dependent decreases in systemic vascular resistance and myocardial contractility. ASA class ≥3, age >50, and emergency surgery are independent predictors of post-induction hypotension.</p>
-                                <p><strong>Clinical Significance:</strong> High-risk patients may benefit from reduced induction doses, slower administration, or alternative agents like etomidate.</p>
-                                <a href="https://pubmed.ncbi.nlm.nih.gov/16115972/" class="reference-link" target="_blank" rel="noopener">
-                                    View on PubMed →
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Prediction Form -->
             {% if not prediction %}
-            <div class="content-card">
-                <h2 class="section-title">Patient & Hemodynamic Data</h2>
+            <!-- Prediction Form -->
+            <div class="glass-card">
+                <h2 class="section-title">Patient & Hemodynamic Parameters</h2>
                 <p class="section-subtitle">
-                    Enter current intraoperative parameters to estimate IOH risk using machine learning.
+                    Enter current intraoperative data to estimate IOH risk using our RandomForest classifier.
                 </p>
 
                 <form method="POST" action="/hypotension">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
                     <!-- Patient Demographics -->
-                    <div class="section-title" style="font-size: 18px; margin-top: 24px; margin-bottom: 16px;">Patient Information</div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 16px;">Patient Information</h3>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Age<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="age" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="65" required min="18" max="120">
+                            <label class="form-label">Age<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="65" required min="18" max="120">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Sex<span class="required" style="color: var(--red-600);">*</span></label>
-                            <select name="sex" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <label class="form-label">Sex<span class="required">*</span></label>
+                            <select name="sex" class="form-input" required>
                                 <option value="">Select...</option>
                                 <option value="male">Male</option>
                                 <option value="female">Female</option>
@@ -16299,20 +16184,20 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Weight (kg)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="weight" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="70" required min="30" max="300" step="0.1">
+                            <label class="form-label">Weight (kg)<span class="required">*</span></label>
+                            <input type="number" name="weight" class="form-input" placeholder="70" required min="30" max="300" step="0.1">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Height (cm)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="height" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="170" required min="100" max="250">
+                            <label class="form-label">Height (cm)<span class="required">*</span></label>
+                            <input type="number" name="height" class="form-input" placeholder="170" required min="100" max="250">
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 12px;">
-                        <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">ASA Class<span class="required" style="color: var(--red-600);">*</span></label>
-                        <select name="asa" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                    <div class="form-group">
+                        <label class="form-label">ASA Class<span class="required">*</span></label>
+                        <select name="asa" class="form-input" required>
                             <option value="">Select...</option>
                             <option value="1">ASA I - Healthy</option>
                             <option value="2">ASA II - Mild systemic disease</option>
@@ -16321,46 +16206,46 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </select>
                     </div>
 
-                    <div class="section-divider" style="height: 1px; background: var(--gray-200); margin: 24px 0;"></div>
+                    <div class="section-divider"></div>
 
                     <!-- Hemodynamic Parameters -->
-                    <div class="section-title" style="font-size: 18px; margin-bottom: 16px;">Hemodynamic Parameters</div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 16px;">Hemodynamic Parameters</h3>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Baseline MAP (mmHg)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="baseline_map" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="85" required min="40" max="150">
+                            <label class="form-label">Baseline MAP (mmHg)<span class="required">*</span></label>
+                            <input type="number" name="baseline_map" class="form-input" placeholder="85" required min="40" max="150">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Baseline HR (bpm)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="baseline_hr" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="75" required min="30" max="200">
+                            <label class="form-label">Baseline HR (bpm)<span class="required">*</span></label>
+                            <input type="number" name="baseline_hr" class="form-input" placeholder="75" required min="30" max="200">
                         </div>
                     </div>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 12px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Current MAP (mmHg)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="current_map" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="72" required min="40" max="150">
+                            <label class="form-label">Current MAP (mmHg)<span class="required">*</span></label>
+                            <input type="number" name="current_map" class="form-input" placeholder="72" required min="40" max="150">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">MAP 5 min ago<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="map_5min" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="76" required min="40" max="150">
+                            <label class="form-label">MAP 5 min ago<span class="required">*</span></label>
+                            <input type="number" name="map_5min" class="form-input" placeholder="76" required min="40" max="150">
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">MAP 10 min ago<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="map_10min" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="80" required min="40" max="150">
+                            <label class="form-label">MAP 10 min ago<span class="required">*</span></label>
+                            <input type="number" name="map_10min" class="form-input" placeholder="80" required min="40" max="150">
                         </div>
                     </div>
 
-                    <div class="section-divider" style="height: 1px; background: var(--gray-200); margin: 24px 0;"></div>
+                    <div class="section-divider"></div>
 
                     <!-- Surgical & Anesthetic Factors -->
-                    <div class="section-title" style="font-size: 18px; margin-bottom: 16px;">Surgical & Anesthetic Factors</div>
+                    <h3 style="font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 16px;">Surgical & Anesthetic Factors</h3>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Surgery Type<span class="required" style="color: var(--red-600);">*</span></label>
-                            <select name="surgery_type" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <label class="form-label">Surgery Type<span class="required">*</span></label>
+                            <select name="surgery_type" class="form-input" required>
                                 <option value="">Select...</option>
                                 <option value="minor">Minor Surgery</option>
                                 <option value="moderate">Moderate Surgery</option>
@@ -16370,15 +16255,15 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Surgery Duration (min)<span class="required" style="color: var(--red-600);">*</span></label>
-                            <input type="number" name="surgery_duration" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="120" required min="0" max="1000">
+                            <label class="form-label">Surgery Duration (min)<span class="required">*</span></label>
+                            <input type="number" name="surgery_duration" class="form-input" placeholder="120" required min="0" max="1000">
                         </div>
                     </div>
 
-                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px;">
+                    <div class="input-row">
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Induction Agent<span class="required" style="color: var(--red-600);">*</span></label>
-                            <select name="induction_agent" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <label class="form-label">Induction Agent<span class="required">*</span></label>
+                            <select name="induction_agent" class="form-input" required>
                                 <option value="">Select...</option>
                                 <option value="propofol">Propofol</option>
                                 <option value="etomidate">Etomidate</option>
@@ -16386,8 +16271,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Vasopressor in Use<span class="required" style="color: var(--red-600);">*</span></label>
-                            <select name="vasopressor" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <label class="form-label">Vasopressor in Use<span class="required">*</span></label>
+                            <select name="vasopressor" class="form-input" required>
                                 <option value="none">None</option>
                                 <option value="phenylephrine">Phenylephrine</option>
                                 <option value="ephedrine">Ephedrine</option>
@@ -16396,68 +16281,129 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
-                    <div class="form-group" style="margin-top: 12px;">
-                        <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Emergency Surgery<span class="required" style="color: var(--red-600);">*</span></label>
-                        <select name="emergency" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                    <div class="form-group">
+                        <label class="form-label">Emergency Surgery<span class="required">*</span></label>
+                        <select name="emergency" class="form-input" required>
                             <option value="no">No</option>
                             <option value="yes">Yes</option>
                         </select>
                     </div>
 
-                    <button type="submit" class="submit-btn" style="width: 100%; padding: 16px; background: var(--blue-600); color: white; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; margin-top: 32px; transition: all 0.2s ease;">
-                        Calculate IOH Risk
-                    </button>
+                    <button type="submit" class="submit-btn">Calculate IOH Risk</button>
                 </form>
             </div>
 
             {% else %}
             <!-- Prediction Results -->
-            <div class="content-card">
+            <div class="glass-card">
                 <h2 class="section-title">Machine Learning Prediction Results</h2>
                 <p class="section-subtitle">
-                    RandomForest model analyzed 14 clinical features to estimate IOH probability.
+                    RandomForest classifier analyzed 14 clinical features to estimate IOH probability.
                 </p>
 
                 <!-- Risk Probabilities -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px;">
-                    <div style="background: {% if prediction.risk_5min_class == 'low' %}var(--green-50){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_5min_class == 'low' %}var(--green-500){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">5-Minute Risk</div>
-                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_5min_class == 'low' %}var(--green-500){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_5min }}%</div>
-                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_5min_text }}</div>
+                <div class="risk-grid">
+                    <div class="risk-card {{ prediction.risk_5min_class }}">
+                        <div class="risk-label">5-Minute Risk</div>
+                        <div class="risk-value">{{ prediction.prob_5min }}%</div>
+                        <div class="risk-text">{{ prediction.risk_5min_text }}</div>
                     </div>
-                    <div style="background: {% if prediction.risk_10min_class == 'low' %}var(--green-50){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_10min_class == 'low' %}var(--green-500){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">10-Minute Risk</div>
-                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_10min_class == 'low' %}var(--green-500){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_10min }}%</div>
-                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_10min_text }}</div>
+                    <div class="risk-card {{ prediction.risk_10min_class }}">
+                        <div class="risk-label">10-Minute Risk</div>
+                        <div class="risk-value">{{ prediction.prob_10min }}%</div>
+                        <div class="risk-text">{{ prediction.risk_10min_text }}</div>
                     </div>
-                    <div style="background: {% if prediction.risk_20min_class == 'low' %}var(--green-50){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_20min_class == 'low' %}var(--green-500){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
-                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">20-Minute Risk</div>
-                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_20min_class == 'low' %}var(--green-500){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_20min }}%</div>
-                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_20min_text }}</div>
+                    <div class="risk-card {{ prediction.risk_20min_class }}">
+                        <div class="risk-label">20-Minute Risk</div>
+                        <div class="risk-value">{{ prediction.prob_20min }}%</div>
+                        <div class="risk-text">{{ prediction.risk_20min_text }}</div>
                     </div>
                 </div>
 
                 <!-- Risk Factors -->
-                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 32px; margin-bottom: 16px;">Top Risk Factors Identified</h3>
+                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 40px; margin-bottom: 20px;">Top Risk Factors Identified</h3>
                 {% for factor in prediction.factors %}
-                <div style="background: var(--blue-50); border-left: 4px solid var(--blue-600); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
-                    <div style="font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px;">{{ factor.name }}</div>
-                    <div style="font-size: 14px; line-height: 1.6; color: var(--gray-700);">{{ factor.description }}</div>
+                <div class="factor-card">
+                    <div class="card-title">{{ factor.name }}</div>
+                    <div class="card-desc">{{ factor.description }}</div>
                 </div>
                 {% endfor %}
 
                 <!-- Interventions -->
-                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 32px; margin-bottom: 16px;">Suggested Interventions</h3>
+                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 40px; margin-bottom: 20px;">Suggested Interventions</h3>
                 {% for intervention in prediction.interventions %}
-                <div style="background: var(--green-50); border-left: 4px solid var(--green-500); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
-                    <div style="font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px;">{{ intervention.name }}</div>
-                    <div style="font-size: 14px; line-height: 1.6; color: var(--gray-700);">{{ intervention.description }}</div>
+                <div class="intervention-card">
+                    <div class="card-title">{{ intervention.name }}</div>
+                    <div class="card-desc">{{ intervention.description }}</div>
                 </div>
                 {% endfor %}
 
-                <a href="/hypotension" style="display: inline-block; margin-top: 24px; padding: 12px 24px; background: var(--gray-200); color: var(--gray-900); font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.2s ease;">Calculate Another</a>
+                <a href="/hypotension" class="back-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Calculate Another
+                </a>
             </div>
             {% endif %}
+
+            <!-- Model Evidence & Transparency -->
+            <div class="glass-card">
+                <h2 class="section-title">How the ML Model Works</h2>
+                <p class="section-subtitle">
+                    Our RandomForest classifier provides transparent, evidence-based IOH risk predictions. Here's how it works:
+                </p>
+
+                <div class="evidence-grid">
+                    <div class="evidence-card">
+                        <div class="evidence-number">1</div>
+                        <h3 class="evidence-title">Training Dataset</h3>
+                        <p class="evidence-text">
+                            Trained on <strong>10,000 synthetic cases</strong> generated from published clinical research on IOH risk factors. Training data reflects real-world IOH prevalence and risk patterns from literature.
+                        </p>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-number">2</div>
+                        <h3 class="evidence-title">14 Clinical Features</h3>
+                        <p class="evidence-text">
+                            Model analyzes <strong>demographics</strong> (age, sex, BMI, ASA), <strong>hemodynamics</strong> (MAP trends, HR), and <strong>surgical factors</strong> (type, duration, induction agent, emergency status).
+                        </p>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-number">3</div>
+                        <h3 class="evidence-title">RandomForest Algorithm</h3>
+                        <p class="evidence-text">
+                            Uses <strong>200 decision trees</strong> with balanced class weights and feature scaling. Test accuracy: ~85%. Most important features: current MAP, MAP trends, age, and ASA class.
+                        </p>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-number">4</div>
+                        <h3 class="evidence-title">Evidence-Based</h3>
+                        <p class="evidence-text">
+                            Risk factors weighted based on <strong>published literature</strong>: Sessler 2015 (MAP thresholds), Hatib 2018 (ML prediction), Walsh 2013 (organ injury), Reich 2005 (anesthetic effects).
+                        </p>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-number">5</div>
+                        <h3 class="evidence-title">Interpretable Outputs</h3>
+                        <p class="evidence-text">
+                            Provides <strong>3 time-windowed predictions</strong> (5/10/20 min) with decay modeling. Identifies top risk factors and suggests evidence-based interventions for clinical context.
+                        </p>
+                    </div>
+
+                    <div class="evidence-card">
+                        <div class="evidence-number">6</div>
+                        <h3 class="evidence-title">Continuous Improvement</h3>
+                        <p class="evidence-text">
+                            Model can be <strong>retrained and updated</strong> as new clinical evidence emerges. Currently optimized for general surgical cases. Not validated on real patient data.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- Footer -->
@@ -16497,11 +16443,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     document.removeEventListener('click', closeDropdown);
                 }
             });
-        }
-
-        // Toggle reference expansion
-        function toggleReference(element) {
-            element.classList.toggle('open');
         }
     </script>
 </body>
