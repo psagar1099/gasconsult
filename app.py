@@ -11924,7 +11924,6 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
-            background: transparent;
         }
 
         .nav-inner {
@@ -11997,26 +11996,29 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
             cursor: pointer;
             background: none;
             border: none;
+            font-family: inherit;
         }
 
         .nav-dropdown-menu {
+            display: none;
             position: absolute;
             top: 100%;
             right: 0;
-            margin-top: 8px;
             background: white;
             border: 1px solid var(--gray-200);
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            min-width: 180px;
-            padding: 8px;
-            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
         }
 
         .nav-dropdown-menu.show {
@@ -12778,6 +12780,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
             .footer { padding: 48px 40px; }
         }
     </style>
