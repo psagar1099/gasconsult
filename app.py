@@ -11895,8 +11895,30 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
-        
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
         :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
@@ -11920,63 +11942,340 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+            background: var(--gray-50);
+            color: var(--gray-900);
             min-height: 100vh;
-            padding-bottom: 80px;
-            -webkit-font-smoothing: antialiased;
-            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Background orbs matching site design */
-        body::before {
-            content: '';
+        /* Background Canvas */
+        .bg-canvas {
             position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(80px);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
             top: -15%;
-            left: -10%;
-            z-index: 0;
-            pointer-events: none;
-            animation: float1 20s ease-in-out infinite;
+            left: -20%;
         }
 
-        body::after {
-            content: '';
-            position: fixed;
+        .orb-2 {
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            filter: blur(80px);
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
             top: 30%;
-            right: -10%;
-            z-index: 0;
-            pointer-events: none;
-            animation: float2 25s ease-in-out infinite;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
         }
 
-        @keyframes float1 {
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
         }
 
-        @keyframes float2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(-30px, 40px) scale(1.03); }
-            50% { transform: translate(30px, -30px) scale(0.97); }
-            75% { transform: translate(-20px, -40px) scale(1.01); }
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
-        
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 8px;
+            min-width: 200px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 10px 16px;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .nav-dropdown-link:hover {
+            background: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-7px);
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            transform: translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 99;
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 14px 16px;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.15s;
+        }
+
+        .mobile-menu-link:hover {
+            background: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        @media (min-width: 768px) {
+            .mobile-menu {
+                display: none;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--blue-600);
+        }
+
         /* Header with Weight Input */
         .header {
             position: sticky;
-            top: 0;
-            z-index: 1000;
+            top: 60px; /* Account for fixed navigation bar */
+            z-index: 100;
             background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -12516,6 +12815,61 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <!-- Background Canvas -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        </div>
+
     <!-- Header with Weight Input -->
     <div class="header">
         <div class="header-content">
@@ -13416,31 +13770,25 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         </div>
     </div>
     
-    <!-- Footer Navigation -->
-    <div class="footer-nav">
-        <div class="footer-nav-content">
-            <a href="/" class="nav-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                </svg>
-                Home
-            </a>
-            <a href="/quick-dose" class="nav-btn active">
-                <svg fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                </svg>
-                Doses
-            </a>
-            <a href="/chat" class="nav-btn">
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                </svg>
-                Chat
-            </a>
-        </div>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </div>
+                    <span class="footer-text">© 2025 GasConsult.ai</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    
+
     <script>
         // Drug references database
         const drugRefs = {
@@ -13735,6 +14083,30 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             updateAllDoses();
+        });
+
+        // Navigation functions
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            const dropdowns = document.querySelectorAll('.nav-dropdown-menu.show');
+            dropdowns.forEach(d => d.classList.remove('show'));
         });
     </script>
 </body>
