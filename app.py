@@ -11881,23 +11881,37 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Dose - GasConsult.ai</title>
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-            min-height: 100vh;
-            color: #1e293b;
-        }
-
-        /* ISO 26825 Syringe Colors */
         :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+
+            /* ISO 26825 Syringe Colors */
             --color-induction: #FFFFFF;
             --color-induction-border: #e5e7eb;
             --color-induction-text: #374151;
@@ -11939,61 +11953,224 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             --color-other-text: #6b7280;
         }
 
-        /* Navigation - Mobile First */
-        .nav {
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
+            flex-direction: column;
+        }
+
+        /* Navigation - Homepage Style */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+            background: transparent;
         }
 
         .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            border-radius: 100px;
-            padding: 10px 16px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-            width: 100%;
-            max-width: 860px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
         }
 
-        .nav-logo {
+        .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 14px;
             text-decoration: none;
-            min-height: 44px;
         }
 
-        .nav-logo svg {
-            width: 36px;
-            height: 12px;
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .nav-logo-text {
-            font-size: 16px;
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
             font-weight: 700;
             letter-spacing: -0.5px;
+            color: var(--gray-900);
         }
 
-        .nav-logo-text .gas { color: #2563eb; }
-        .nav-logo-text .consult { color: #1e293b; }
-        .nav-logo-text .ai { color: rgba(30, 41, 59, 0.35); }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
-        /* Hide desktop nav on mobile */
         .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-width: 180px;
+            padding: 8px;
             display: none;
         }
 
-        /* Container - Mobile First */
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 10px 14px;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            background: var(--gray-50);
+            color: var(--gray-900);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            z-index: 99;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 12px 16px;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            background: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        /* Content Area - With top padding for fixed nav */
         .container {
             max-width: 700px;
             margin: 0 auto;
-            padding: 24px 16px 80px;
+            padding: 100px 16px 80px;
         }
 
         /* Weight Section - Mobile First */
@@ -12441,54 +12618,85 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             line-height: 1.6;
         }
 
+        /* Footer - Homepage Style */
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo svg { width: 32px; height: 32px; }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover { color: var(--gray-700); }
+
         /* Desktop Styles - Scale up from mobile */
-        @media (min-width: 641px) {
+        @media (min-width: 768px) {
             /* Desktop nav */
             .nav {
-                padding: 20px 24px;
+                padding: 16px 32px;
             }
 
             .nav-inner {
-                padding: 10px 20px;
+                height: 64px;
+                padding: 0 24px;
+                border-radius: 20px;
             }
 
-            .nav-logo {
-                gap: 10px;
+            .logo-icon svg {
+                width: 42px;
+                height: 15px;
             }
 
-            .nav-logo svg {
-                width: 40px;
-                height: 14px;
-            }
-
-            .nav-logo-text {
-                font-size: 17px;
+            .logo-text {
+                font-size: 20px;
             }
 
             .nav-links {
                 display: flex;
-                align-items: center;
-                gap: 2px;
             }
 
-            .nav-links a {
-                color: #64748b;
-                text-decoration: none;
-                font-size: 13px;
-                font-weight: 500;
-                padding: 8px 14px;
-                border-radius: 100px;
-                transition: all 0.2s;
-            }
-
-            .nav-links a:hover {
-                color: #1e293b;
-                background: rgba(0, 0, 0, 0.04);
-            }
-
-            .nav-links a.active {
-                color: #2563eb;
-                background: rgba(37, 99, 235, 0.08);
+            .mobile-menu-btn {
+                display: none;
             }
 
             /* Desktop container - wider layout */
@@ -12619,32 +12827,83 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             .drug-reference {
                 font-size: 12px;
             }
+
+            /* Desktop footer */
+            .footer {
+                padding: 40px 32px;
+            }
+
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .footer-logo svg {
+                width: 36px;
+                height: 36px;
+            }
+
+            .footer-text {
+                font-size: 14px;
+            }
+
+            .footer-links {
+                gap: 32px;
+            }
+
+            .footer-link {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/" class="nav-logo">
-                <svg viewBox="0 0 52 18" fill="none">
-                    <circle cx="9" cy="9" r="9" fill="#2563eb"/>
-                    <circle cx="26" cy="9" r="9" fill="#2563eb" fill-opacity="0.5"/>
-                    <circle cx="43" cy="9" r="9" fill="#2563eb" fill-opacity="0.2"/>
-                </svg>
-                <span class="nav-logo-text">
-                    <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
-                </span>
-            </a>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/quick-dose" class="active">Quick Dose</a>
-                <a href="/pre-op">Pre-Op</a>
-                <a href="/calculators">Calculators</a>
-                <a href="/protocols">Protocols</a>
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
-    </nav>
 
     <div class="container">
         <!-- Weight Input -->
@@ -13320,7 +13579,49 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 </div>
             `).join('');
         }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        // Toggle nav dropdown
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+    </div>
 </body>
 </html>
 """
