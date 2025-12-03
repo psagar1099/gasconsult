@@ -16270,23 +16270,194 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 </div>
             </div>
 
-            <!-- Note About Removed Form -->
+            <!-- Prediction Form -->
+            {% if not prediction %}
             <div class="content-card">
-                <h2 class="section-title">Note on Interactive Form</h2>
+                <h2 class="section-title">Patient & Hemodynamic Data</h2>
                 <p class="section-subtitle">
-                    The interactive risk calculation form has been removed as this tool is purely educational. In clinical practice, IOH risk assessment should be based on:
+                    Enter current intraoperative parameters to estimate IOH risk using machine learning.
                 </p>
-                <ul style="font-size: 15px; line-height: 1.8; color: var(--gray-700); margin-left: 24px;">
-                    <li><strong>Continuous arterial blood pressure monitoring</strong> in high-risk patients</li>
-                    <li><strong>Validated risk scores</strong> (ASA class, surgical complexity, patient comorbidities)</li>
-                    <li><strong>Real-time hemodynamic assessment</strong> including MAP trends, heart rate, cardiac output</li>
-                    <li><strong>Clinical judgment</strong> incorporating all patient-specific factors</li>
-                    <li><strong>Institutional protocols</strong> for managing intraoperative hypotension</li>
-                </ul>
-                <p style="margin-top: 20px; font-size: 14px; line-height: 1.7; color: var(--gray-600);">
-                    For actual patient care, consult the latest evidence-based guidelines and work within your institution's established protocols.
-                </p>
+
+                <form method="POST" action="/hypotension">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <!-- Patient Demographics -->
+                    <div class="section-title" style="font-size: 18px; margin-top: 24px; margin-bottom: 16px;">Patient Information</div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Age<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="age" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="65" required min="18" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Sex<span class="required" style="color: var(--red-600);">*</span></label>
+                            <select name="sex" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Weight (kg)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="weight" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="70" required min="30" max="300" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Height (cm)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="height" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="170" required min="100" max="250">
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">ASA Class<span class="required" style="color: var(--red-600);">*</span></label>
+                        <select name="asa" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <option value="">Select...</option>
+                            <option value="1">ASA I - Healthy</option>
+                            <option value="2">ASA II - Mild systemic disease</option>
+                            <option value="3">ASA III - Severe systemic disease</option>
+                            <option value="4">ASA IV - Life-threatening disease</option>
+                        </select>
+                    </div>
+
+                    <div class="section-divider" style="height: 1px; background: var(--gray-200); margin: 24px 0;"></div>
+
+                    <!-- Hemodynamic Parameters -->
+                    <div class="section-title" style="font-size: 18px; margin-bottom: 16px;">Hemodynamic Parameters</div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Baseline MAP (mmHg)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="baseline_map" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="85" required min="40" max="150">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Baseline HR (bpm)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="baseline_hr" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="75" required min="30" max="200">
+                        </div>
+                    </div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-top: 12px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Current MAP (mmHg)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="current_map" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="72" required min="40" max="150">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">MAP 5 min ago<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="map_5min" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="76" required min="40" max="150">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">MAP 10 min ago<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="map_10min" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="80" required min="40" max="150">
+                        </div>
+                    </div>
+
+                    <div class="section-divider" style="height: 1px; background: var(--gray-200); margin: 24px 0;"></div>
+
+                    <!-- Surgical & Anesthetic Factors -->
+                    <div class="section-title" style="font-size: 18px; margin-bottom: 16px;">Surgical & Anesthetic Factors</div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Surgery Type<span class="required" style="color: var(--red-600);">*</span></label>
+                            <select name="surgery_type" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                                <option value="">Select...</option>
+                                <option value="minor">Minor Surgery</option>
+                                <option value="moderate">Moderate Surgery</option>
+                                <option value="major_abdominal">Major Abdominal</option>
+                                <option value="cardiac">Cardiac Surgery</option>
+                                <option value="vascular">Vascular Surgery</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Surgery Duration (min)<span class="required" style="color: var(--red-600);">*</span></label>
+                            <input type="number" name="surgery_duration" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" placeholder="120" required min="0" max="1000">
+                        </div>
+                    </div>
+
+                    <div class="input-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 12px;">
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Induction Agent<span class="required" style="color: var(--red-600);">*</span></label>
+                            <select name="induction_agent" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                                <option value="">Select...</option>
+                                <option value="propofol">Propofol</option>
+                                <option value="etomidate">Etomidate</option>
+                                <option value="ketamine">Ketamine</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Vasopressor in Use<span class="required" style="color: var(--red-600);">*</span></label>
+                            <select name="vasopressor" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                                <option value="none">None</option>
+                                <option value="phenylephrine">Phenylephrine</option>
+                                <option value="ephedrine">Ephedrine</option>
+                                <option value="norepinephrine">Norepinephrine</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label class="form-label" style="display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px;">Emergency Surgery<span class="required" style="color: var(--red-600);">*</span></label>
+                        <select name="emergency" class="form-input" style="width: 100%; padding: 12px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 14px;" required>
+                            <option value="no">No</option>
+                            <option value="yes">Yes</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="width: 100%; padding: 16px; background: var(--blue-600); color: white; font-size: 16px; font-weight: 600; border: none; border-radius: 12px; cursor: pointer; margin-top: 32px; transition: all 0.2s ease;">
+                        Calculate IOH Risk
+                    </button>
+                </form>
             </div>
+
+            {% else %}
+            <!-- Prediction Results -->
+            <div class="content-card">
+                <h2 class="section-title">Machine Learning Prediction Results</h2>
+                <p class="section-subtitle">
+                    RandomForest model analyzed 14 clinical features to estimate IOH probability.
+                </p>
+
+                <!-- Risk Probabilities -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 24px;">
+                    <div style="background: {% if prediction.risk_5min_class == 'low' %}var(--green-50){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_5min_class == 'low' %}var(--green-500){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">5-Minute Risk</div>
+                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_5min_class == 'low' %}var(--green-500){% elif prediction.risk_5min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_5min }}%</div>
+                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_5min_text }}</div>
+                    </div>
+                    <div style="background: {% if prediction.risk_10min_class == 'low' %}var(--green-50){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_10min_class == 'low' %}var(--green-500){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">10-Minute Risk</div>
+                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_10min_class == 'low' %}var(--green-500){% elif prediction.risk_10min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_10min }}%</div>
+                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_10min_text }}</div>
+                    </div>
+                    <div style="background: {% if prediction.risk_20min_class == 'low' %}var(--green-50){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-50){% else %}var(--red-50){% endif %}; border: 2px solid {% if prediction.risk_20min_class == 'low' %}var(--green-500){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; border-radius: 12px; padding: 20px; text-align: center;">
+                        <div style="font-size: 14px; font-weight: 600; color: var(--gray-600); margin-bottom: 8px;">20-Minute Risk</div>
+                        <div style="font-size: 32px; font-weight: 800; color: {% if prediction.risk_20min_class == 'low' %}var(--green-500){% elif prediction.risk_20min_class == 'moderate' %}var(--amber-500){% else %}var(--red-500){% endif %}; margin-bottom: 4px;">{{ prediction.prob_20min }}%</div>
+                        <div style="font-size: 13px; font-weight: 600; color: var(--gray-700);">{{ prediction.risk_20min_text }}</div>
+                    </div>
+                </div>
+
+                <!-- Risk Factors -->
+                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 32px; margin-bottom: 16px;">Top Risk Factors Identified</h3>
+                {% for factor in prediction.factors %}
+                <div style="background: var(--blue-50); border-left: 4px solid var(--blue-600); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
+                    <div style="font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px;">{{ factor.name }}</div>
+                    <div style="font-size: 14px; line-height: 1.6; color: var(--gray-700);">{{ factor.description }}</div>
+                </div>
+                {% endfor %}
+
+                <!-- Interventions -->
+                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 32px; margin-bottom: 16px;">Suggested Interventions</h3>
+                {% for intervention in prediction.interventions %}
+                <div style="background: var(--green-50); border-left: 4px solid var(--green-500); padding: 16px; margin-bottom: 12px; border-radius: 8px;">
+                    <div style="font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px;">{{ intervention.name }}</div>
+                    <div style="font-size: 14px; line-height: 1.6; color: var(--gray-700);">{{ intervention.description }}</div>
+                </div>
+                {% endfor %}
+
+                <a href="/hypotension" style="display: inline-block; margin-top: 24px; padding: 12px 24px; background: var(--gray-200); color: var(--gray-900); font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px; transition: all 0.2s ease;">Calculate Another</a>
+            </div>
+            {% endif %}
         </main>
 
         <!-- Footer -->
@@ -19638,152 +19809,165 @@ def hypotension_predictor():
     # Calculate BMI
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else 0
 
-    # Educational Rule-Based Risk Scoring System
-    # Based on research findings: MAP trend, age, ASA status are key predictors
+    # Machine Learning-Based Prediction System
+    # Load trained RandomForest model and make prediction
 
-    risk_score = 0
-    factors = []
+    try:
+        import pickle
+        import numpy as np
 
-    # 1. MAP Trend Analysis (Most Important)
-    map_change_5min = current_map - map_5min
-    map_change_10min = current_map - map_10min
-    map_trend = (map_change_5min + map_change_10min) / 2
+        # Load model and scaler
+        with open('ioh_model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        with open('ioh_scaler.pkl', 'rb') as f:
+            scaler = pickle.load(f)
 
-    if map_trend < -10:
-        risk_score += 30
-        factors.append({
-            "name": "Declining MAP Trend",
-            "description": f"MAP decreased by {abs(int(map_trend))} mmHg over last 10 minutes, indicating hemodynamic instability"
-        })
-    elif map_trend < -5:
-        risk_score += 15
-        factors.append({
-            "name": "Moderate MAP Decline",
-            "description": f"MAP decreased by {abs(int(map_trend))} mmHg, suggesting early hemodynamic changes"
-        })
+        # Encode categorical variables
+        sex_encoded = 1 if sex == "male" else 0
 
-    # 2. Current MAP vs Baseline
-    map_drop_from_baseline = ((baseline_map - current_map) / baseline_map) * 100
-    if map_drop_from_baseline > 20:
-        risk_score += 25
-        factors.append({
-            "name": "Significant MAP Drop from Baseline",
-            "description": f"{int(map_drop_from_baseline)}% decrease from baseline MAP, exceeding critical threshold"
-        })
-    elif map_drop_from_baseline > 10:
-        risk_score += 12
+        vasopressor_map = {"none": 0, "phenylephrine": 1, "ephedrine": 2, "norepinephrine": 3}
+        vasopressor_encoded = vasopressor_map.get(vasopressor, 0)
 
-    # 3. Absolute MAP Level
-    if current_map < 70:
-        risk_score += 20
-        factors.append({
-            "name": "Low Current MAP",
-            "description": f"Current MAP of {current_map} mmHg is approaching hypotension threshold (65 mmHg)"
-        })
-    elif current_map < 75:
-        risk_score += 10
+        surgery_type_map = {"minor": 0, "moderate": 1, "major_abdominal": 2, "cardiac": 3, "vascular": 4}
+        surgery_type_encoded = surgery_type_map.get(surgery_type, 0)
 
-    # 4. Age Risk (Older age = higher risk)
-    if age > 70:
-        risk_score += 15
-        factors.append({
-            "name": "Advanced Age",
-            "description": f"Age {age} years associated with increased cardiovascular lability and hypotension risk"
-        })
-    elif age > 60:
-        risk_score += 8
+        induction_agent_map = {"propofol": 0, "etomidate": 1, "ketamine": 2}
+        induction_agent_encoded = induction_agent_map.get(induction_agent, 0)
 
-    # 5. ASA Class (Higher ASA = higher risk)
-    if asa >= 3:
-        risk_score += 15
-        factors.append({
-            "name": "High ASA Classification",
-            "description": f"ASA {asa} indicates significant comorbidities affecting hemodynamic stability"
-        })
-    elif asa == 2:
-        risk_score += 5
+        emergency_encoded = 1 if emergency == "yes" else 0
 
-    # 6. Surgery Type
-    high_risk_surgeries = ["cardiac", "major_abdominal", "vascular"]
-    if surgery_type in high_risk_surgeries:
-        risk_score += 12
-        factors.append({
-            "name": "High-Risk Surgery Type",
-            "description": f"{surgery_type.replace('_', ' ').title()} surgery associated with greater fluid shifts and hemodynamic instability"
-        })
+        # Prepare features in same order as training
+        # Features: age, sex, bmi, asa, baseline_map, baseline_hr, current_map, map_5min, map_10min,
+        #           surgery_duration, vasopressor, surgery_type, induction_agent, emergency
+        features = np.array([[
+            age, sex_encoded, bmi, asa, baseline_map, baseline_hr,
+            current_map, map_5min, map_10min, surgery_duration,
+            vasopressor_encoded, surgery_type_encoded, induction_agent_encoded, emergency_encoded
+        ]])
 
-    # 7. Emergency Surgery
-    if emergency == "yes":
-        risk_score += 10
-        factors.append({
-            "name": "Emergency Surgery",
-            "description": "Emergency procedures have higher hypotension risk due to reduced optimization time"
-        })
+        # Scale features
+        features_scaled = scaler.transform(features)
 
-    # 8. Induction Agent
-    if induction_agent == "propofol":
-        risk_score += 8
-        factors.append({
-            "name": "Propofol Induction",
-            "description": "Propofol associated with dose-dependent vasodilation and myocardial depression"
-        })
+        # Get prediction probability
+        ioh_prob = model.predict_proba(features_scaled)[0][1]  # Probability of IOH
 
-    # 9. Vasopressor Use (Paradoxically indicates ongoing instability)
-    if vasopressor != "none":
-        risk_score += 10
-        factors.append({
-            "name": "Current Vasopressor Requirement",
-            "description": f"Ongoing {vasopressor} use indicates hemodynamic instability requiring support"
-        })
+        # Convert to percentage
+        prob_5min = int(ioh_prob * 100)
 
-    # 10. Surgery Duration (Longer = more risk)
-    if surgery_duration > 180:
-        risk_score += 8
-        factors.append({
-            "name": "Prolonged Surgery",
-            "description": f"{surgery_duration} minutes of surgery increases cumulative fluid shifts and anesthetic depth effects"
-        })
+        # Estimate probabilities for 10 and 20 minute windows (with decay)
+        prob_10min = int(ioh_prob * 0.85 * 100)
+        prob_20min = int(ioh_prob * 0.70 * 100)
 
-    # Convert risk score to probabilities (simplified logistic-like function)
-    # 5-minute prediction (highest confidence)
-    base_prob_5min = min(95, max(5, risk_score * 0.9))
+        # Classify risk levels
+        def classify_risk(prob):
+            if prob < 30:
+                return "low", "risk-low", "Low Risk"
+            elif prob < 60:
+                return "moderate", "risk-moderate", "Moderate Risk"
+            else:
+                return "high", "risk-high", "High Risk"
 
-    # 10-minute prediction (moderate decay)
-    base_prob_10min = min(90, max(5, risk_score * 0.75))
+        risk_5min_class, risk_5min_label, risk_5min_text = classify_risk(prob_5min)
+        risk_10min_class, risk_10min_label, risk_10min_text = classify_risk(prob_10min)
+        risk_20min_class, risk_20min_label, risk_20min_text = classify_risk(prob_20min)
 
-    # 20-minute prediction (further decay)
-    base_prob_20min = min(85, max(5, risk_score * 0.6))
+        # Identify top risk factors based on feature analysis
+        factors = []
 
-    # Add some realistic variance
-    import random
-    random.seed(age + current_map)  # Deterministic but appears random
+        # MAP trend analysis
+        map_trend = (current_map - map_5min) + (current_map - map_10min) / 2
+        if map_trend < -10:
+            factors.append({
+                "name": "Declining MAP Trend",
+                "description": f"MAP decreased by {abs(int(map_trend))} mmHg over last 10 minutes, indicating hemodynamic instability"
+            })
+        elif map_trend < -5:
+            factors.append({
+                "name": "Moderate MAP Decline",
+                "description": f"MAP decreased by {abs(int(map_trend))} mmHg, suggesting early hemodynamic changes"
+            })
 
-    prob_5min = int(base_prob_5min + random.randint(-3, 3))
-    prob_10min = int(base_prob_10min + random.randint(-3, 3))
-    prob_20min = int(base_prob_20min + random.randint(-3, 3))
+        # Current MAP level
+        if current_map < 70:
+            factors.append({
+                "name": "Low Current MAP",
+                "description": f"Current MAP of {current_map} mmHg is approaching hypotension threshold (65 mmHg)"
+            })
 
-    # Classify risk levels
-    def classify_risk(prob):
-        if prob < 30:
-            return "low", "risk-low", "Low Risk"
-        elif prob < 60:
-            return "moderate", "risk-moderate", "Moderate Risk"
-        else:
-            return "high", "risk-high", "High Risk"
+        # Baseline deviation
+        map_drop_pct = ((baseline_map - current_map) / baseline_map) * 100 if baseline_map > 0 else 0
+        if map_drop_pct > 20:
+            factors.append({
+                "name": "Significant MAP Drop from Baseline",
+                "description": f"{int(map_drop_pct)}% decrease from baseline MAP, exceeding critical threshold"
+            })
 
-    risk_5min_class, risk_5min_label, risk_5min_text = classify_risk(prob_5min)
-    risk_10min_class, risk_10min_label, risk_10min_text = classify_risk(prob_10min)
-    risk_20min_class, risk_20min_label, risk_20min_text = classify_risk(prob_20min)
+        # Age risk
+        if age > 70:
+            factors.append({
+                "name": "Advanced Age",
+                "description": f"Age {age} years associated with increased cardiovascular lability"
+            })
 
-    # Sort factors by importance (keep top 3)
-    factors = factors[:3] if len(factors) > 3 else factors
+        # ASA class
+        if asa >= 3:
+            factors.append({
+                "name": "High ASA Classification",
+                "description": f"ASA {asa} indicates significant comorbidities affecting hemodynamic stability"
+            })
 
-    # If no factors identified, add default
-    if not factors:
-        factors.append({
-            "name": "Stable Hemodynamics",
-            "description": "No major risk factors identified based on current parameters"
-        })
+        # Surgery type
+        high_risk_surgeries = ["cardiac", "major_abdominal", "vascular"]
+        if surgery_type in high_risk_surgeries:
+            factors.append({
+                "name": "High-Risk Surgery Type",
+                "description": f"{surgery_type.replace('_', ' ').title()} surgery associated with greater fluid shifts"
+            })
+
+        # Emergency
+        if emergency == "yes":
+            factors.append({
+                "name": "Emergency Surgery",
+                "description": "Emergency procedures have higher hypotension risk"
+            })
+
+        # Induction agent
+        if induction_agent == "propofol":
+            factors.append({
+                "name": "Propofol Induction",
+                "description": "Propofol associated with dose-dependent vasodilation"
+            })
+
+        # Vasopressor use
+        if vasopressor != "none":
+            factors.append({
+                "name": "Current Vasopressor Requirement",
+                "description": f"Ongoing {vasopressor} use indicates hemodynamic instability"
+            })
+
+        # Keep top 3 factors
+        factors = factors[:3] if len(factors) > 3 else factors
+
+        # If no factors, add default
+        if not factors:
+            factors.append({
+                "name": "Stable Hemodynamics",
+                "description": "No major risk factors identified based on current parameters"
+            })
+
+    except Exception as e:
+        logger.error(f"ML model prediction error: {str(e)}")
+        # Fallback to simple heuristic if model fails
+        prob_5min = 30
+        prob_10min = 25
+        prob_20min = 20
+        risk_5min_class, risk_5min_label, risk_5min_text = "moderate", "risk-moderate", "Moderate Risk"
+        risk_10min_class, risk_10min_label, risk_10min_text = "low", "risk-low", "Low Risk"
+        risk_20min_class, risk_20min_label, risk_20min_text = "low", "risk-low", "Low Risk"
+        factors = [{
+            "name": "Model Unavailable",
+            "description": "ML model could not be loaded. Using fallback estimation."
+        }]
 
     # Evidence-Based Intervention Suggestions
     interventions = []
