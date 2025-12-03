@@ -16353,7 +16353,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Predictor - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based difficult airway prediction using ASA guidelines and validated clinical predictors (Mallampati, LEMON, Wilson score).">
+    <meta name="description" content="Evidence-based difficult airway prediction using ASA guidelines and validated clinical predictors.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -16390,7 +16390,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --amber-500: #F59E0B;
             --green-50: #F0FDF4;
             --green-500: #22C55E;
-            --green-600: #059669;
             --purple-50: #FAF5FF;
             --purple-500: #A855F7;
         }
@@ -16407,7 +16406,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
-            line-height: 1.6;
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -16434,1038 +16432,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
             top: -15%;
             left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Navigation - Glassmorphism */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show { display: block; }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover { background: rgba(0,0,0,0.04); }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
-        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .container {
-            flex: 1;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 100px 20px 40px;
-            width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .badge-icon {
-            width: 8px;
-            height: 8px;
-            background: var(--blue-500);
-            border-radius: 50%;
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--blue-700);
-        }
-
-        .hero-title {
-            font-size: 48px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -2px;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-            line-height: 1.2;
-        }
-
-        .header p {
-            font-size: 18px;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        /* Container */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 0 20px 80px;
-        }
-
-        /* Cards */
-        .card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .form-section {
-            margin-bottom: 32px;
-        }
-
-        .form-section:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-section h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        @media (min-width: 768px) {
-            .form-row { grid-template-columns: repeat(2, 1fr); }
-            .form-row.three-col { grid-template-columns: repeat(3, 1fr); }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .container { padding-top: 120px; }
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 12px 16px;
-            font-size: 15px;
-            border: 1px solid var(--gray-300);
-            border-radius: 10px;
-            background: white;
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        @media (min-width: 768px) {
-            .checkbox-group { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-700);
-            cursor: pointer;
-            margin-bottom: 0;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        .results {
-            margin-top: 32px;
-        }
-
-        .risk-score-card {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            text-align: center;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-
-        .risk-score {
-            font-size: 72px;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 12px;
-        }
-
-        .risk-category {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .risk-label {
-            font-size: 16px;
-            color: var(--gray-600);
-        }
-
-        .results-section {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 16px;
-        }
-
-        .results-section h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .results-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .results-section li {
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-
-        .results-section li:last-child {
-            margin-bottom: 0;
-        }
-
-        .ai-explanation {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 16px;
-        }
-
-        .ai-explanation strong {
-            color: var(--blue-700);
-        }
-
-        .reference-badge {
-            display: inline-block;
-            background: var(--gray-100);
-            color: var(--gray-600);
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 16px;
-        }
-
-        .footer {
-            padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
-            margin-top: auto;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover { color: var(--gray-700); }
-
-        .divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 24px 0;
-        }
-
-        .info-box {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-
-        .info-box strong {
-            color: var(--blue-700);
-        }
-
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            .footer { padding: 48px 40px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <div class="page">
-        <nav class="nav">
-            <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
-                    <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-                </a>
-                <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
-                </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </nav>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-        </div>
-
-        <div class="container">
-            <div class="header">
-                <h1>Difficult Airway Predictor</h1>
-                <p>Evidence-based airway assessment using validated clinical predictors from ASA Difficult Airway Algorithm</p>
-            </div>
-
-            <div class="info-box">
-                <strong>Clinical Basis:</strong> This tool uses validated predictors including Mallampati classification, thyromental distance, mouth opening, neck mobility, BMI, and anatomical features. Risk scoring is based on LEMON, Wilson, and El-Ganzouri criteria, with recommendations aligned to the <strong>ASA Practice Guidelines for Management of the Difficult Airway (2022)</strong>.
-            </div>
-        </nav>
-
-            <div class="card">
-                <form method="POST" action="/difficult-airway">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <div class="form-section">
-                        <h3>Patient Demographics</h3>
-                        <div class="form-row three-col">
-                            <div class="form-group">
-                                <label for="age">Age (years)</label>
-                                <input type="number" id="age" name="age" min="0" max="120" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="sex">Sex</label>
-                                <select id="sex" name="sex" required>
-                                    <option value="">Select</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="weight">Weight (kg)</label>
-                                <input type="number" id="weight" name="weight" min="20" max="300" step="0.1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="height">Height (cm)</label>
-                                <input type="number" id="height" name="height" min="100" max="250" step="0.1" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <h3>Airway Assessment (Validated Predictors)</h3>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="mallampati">Mallampati Class</label>
-                                <select id="mallampati" name="mallampati" required>
-                                    <option value="">Select</option>
-                                    <option value="1">Class I - Full visibility of soft palate, uvula, pillars</option>
-                                    <option value="2">Class II - Soft palate, uvula visible</option>
-                                    <option value="3">Class III - Only soft palate and base of uvula visible</option>
-                                    <option value="4">Class IV - Only hard palate visible</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="thyromental_distance">Thyromental Distance</label>
-                                <select id="thyromental_distance" name="thyromental_distance" required>
-                                    <option value="">Select</option>
-                                    <option value=">6.5cm">>6.5 cm (Normal)</option>
-                                    <option value="6-6.5cm">6-6.5 cm (Borderline)</option>
-                                    <option value="<6cm"><6 cm (Short - Difficult)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="mouth_opening">Mouth Opening (Interincisor Distance)</label>
-                                <select id="mouth_opening" name="mouth_opening" required>
-                                    <option value="">Select</option>
-                                    <option value=">4cm">>4 cm (Normal)</option>
-                                    <option value="3-4cm">3-4 cm (Reduced)</option>
-                                    <option value="<3cm"><3 cm (Severely Limited)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="neck_extension">Neck Extension/Mobility</label>
-                                <select id="neck_extension" name="neck_extension" required>
-                                    <option value="">Select</option>
-                                    <option value="normal">Normal (>35°)</option>
-                                    <option value="reduced">Reduced (15-35°)</option>
-                                    <option value="severely_reduced">Severely Reduced (<15°)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="neck_circumference">Neck Circumference (cm) - Optional</label>
-                                <input type="number" id="neck_circumference" name="neck_circumference" min="20" max="70" step="0.1" placeholder="Optional">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <h3>Additional Risk Factors</h3>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="receding_mandible" name="features" value="receding_mandible">
-                                <label for="receding_mandible">Receding mandible/retrognathia</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="prominent_teeth" name="features" value="prominent_teeth">
-                                <label for="prominent_teeth">Prominent incisors/buck teeth</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="beard" name="features" value="beard">
-                                <label for="beard">Beard present</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="macroglossia" name="features" value="macroglossia">
-                                <label for="macroglossia">Macroglossia (large tongue)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="short_neck" name="features" value="short_neck">
-                                <label for="short_neck">Short, thick neck</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cervical_spine" name="features" value="cervical_spine">
-                                <label for="cervical_spine">Cervical spine limitation (arthritis, fusion)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="airway_mass" name="features" value="airway_mass">
-                                <label for="airway_mass">Airway mass/tumor</label>
-                            </div>
-                        </div>
-
-                        <div class="form-row" style="margin-top: 16px;">
-                            <div class="form-group">
-                                <label for="previous_difficult">Previous Difficult Intubation?</label>
-                                <select id="previous_difficult" name="previous_difficult" required>
-                                    <option value="no">No</option>
-                                    <option value="yes">Yes (Most important predictor!)</option>
-                                    <option value="unknown">Unknown/No records</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="osa_risk">Obstructive Sleep Apnea Risk</label>
-                                <select id="osa_risk" name="osa_risk" required>
-                                    <option value="low">Low (STOP-BANG 0-2)</option>
-                                    <option value="moderate">Moderate (STOP-BANG 3-4)</option>
-                                    <option value="high">High (STOP-BANG 5-8 or diagnosed OSA)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <button type="submit" class="btn-submit">Calculate Difficult Airway Risk</button>
-                </form>
-            </div>
-
-            {% if prediction %}
-            <div class="results">
-                <div class="risk-score-card">
-                    <div class="risk-score" style="color: {{ prediction.risk_color }};">{{ prediction.risk_score }}</div>
-                    <div class="risk-category" style="color: {{ prediction.risk_color }};">{{ prediction.risk_category }}</div>
-                    <div class="risk-label">{{ prediction.risk_label }}</div>
-                </div>
-
-                {% if prediction.factors %}
-                <div class="results-section">
-                    <h3>🎯 Identified Risk Factors</h3>
-                    <ul>
-                        {% for factor in prediction.factors %}
-                        <li>{{ factor }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-
-                <div class="results-section">
-                    <h3>🔧 Recommended Equipment</h3>
-                    <ul>
-                        {% for item in prediction.equipment %}
-                        <li>{{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="results-section">
-                    <h3>📋 Backup Plan & Strategy</h3>
-                    <ul>
-                        {% for step in prediction.backup_plan %}
-                        <li>{{ step }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-
-                <div class="results-section">
-                    <h3>🤖 AI-Generated Clinical Guidance</h3>
-                    <div class="ai-explanation">
-                        {{ prediction.ai_explanation | safe }}
-                    </div>
-                    <span class="reference-badge">Based on ASA Difficult Airway Algorithm 2022</span>
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="card" style="margin-top: 32px;">
-                <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">Evidence Base & References</h3>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>ASA Practice Guidelines:</strong> Apfelbaum JL, et al. Practice guidelines for management of the difficult airway: an updated report by the ASA Task Force on Management of the Difficult Airway. <em>Anesthesiology</em>. 2022;136(1):31-81.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Mallampati Classification:</strong> Samsoon GL, Young JR. Difficult tracheal intubation: a retrospective study. <em>Anaesthesia</em>. 1987;42(5):487-490.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>LEMON Criteria:</strong> Reed MJ, et al. Can an airway assessment score predict difficulty at intubation in the emergency department? <em>Emerg Med J</em>. 2005;22(2):99-102.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8;">
-                    <strong>Wilson Score:</strong> Wilson ME, et al. Predicting difficult intubation. <em>Br J Anaesth</em>. 1988;61(2):211-216.
-                </p>
-            </div>
-        </div>
-
-        <footer class="footer">
-            <div class="footer-inner">
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-                <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
-    </script>
-</body>
-</html>
-"""
-
-
-INFORMED_CONSENT_HTML = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent Generator - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based informed consent discussion generator for anesthesia procedures with procedure-specific risks and patient-centered language.">
-
-    <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --white: #FFFFFF;
-            --gray-50: #F8FAFC;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
-            --blue-400: #60A5FA;
-            --blue-500: #3B82F6;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-            --green-50: #F0FDF4;
-            --green-500: #22C55E;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
         }
 
         .orb-2 {
@@ -17597,6 +16563,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
@@ -17621,7 +16588,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             overflow: hidden;
         }
 
-        .nav-dropdown-menu.show { display: block; }
+        .nav-dropdown-menu.show {
+            display: block;
+        }
 
         .nav-dropdown-link {
             display: block;
@@ -17638,6 +16607,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -17650,7 +16624,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: background 0.2s ease;
         }
 
-        .mobile-menu-btn:hover { background: rgba(0,0,0,0.04); }
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
 
         .mobile-menu-btn span {
             display: block;
@@ -17661,9 +16637,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
-        .mobile-menu-btn.active span:nth-child(2) { opacity: 0; }
-        .mobile-menu-btn.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
 
         .mobile-menu {
             display: none;
@@ -17702,83 +16686,128 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .container {
+        /* Main Content */
+        .main {
             flex: 1;
-            max-width: 900px;
+            padding: 100px 20px 60px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
             width: 100%;
         }
 
-        .header {
+        /* Hero */
+        .hero {
             text-align: center;
             margin-bottom: 48px;
         }
 
-        .badge-icon {
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--purple-50) 0%, var(--blue-50) 100%);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.08);
+        }
+
+        .badge-dot {
             width: 8px;
             height: 8px;
-            background: var(--green-500);
+            background: var(--purple-500);
             border-radius: 50%;
         }
 
         .badge-text {
             font-size: 12px;
             font-weight: 600;
-            color: #059669;
+            color: #9333EA;
         }
 
         .hero-title {
-            font-size: 48px;
+            font-size: 42px;
             font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
             color: var(--gray-900);
             margin-bottom: 16px;
-            line-height: 1.2;
         }
 
-        .header p {
-            font-size: 18px;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--purple-500) 0%, var(--blue-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            font-weight: 400;
             line-height: 1.6;
+            color: var(--gray-600);
+            max-width: 680px;
+            margin: 0 auto;
         }
 
-        /* Cards */
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .info-box strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        /* Card */
         .card {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 20px;
             padding: 32px;
+            margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
         }
 
+        /* Form Sections */
         .form-section {
-            margin-bottom: 24px;
-            border: 1px solid var(--gray-200);
-            transition: all 0.3s ease;
-        }
-
-        .form-section:last-child {
-            margin-bottom: 0;
+            margin-bottom: 32px;
         }
 
         .form-section h3 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
         }
 
-        .form-group {
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
             margin-bottom: 20px;
         }
 
-        .form-group:last-child {
-            margin-bottom: 0;
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-row.three-col {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .form-group label {
@@ -17789,30 +16818,69 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             margin-bottom: 8px;
         }
 
-        .form-group select,
-        .form-group textarea {
+        .form-group input,
+        .form-group select {
             width: 100%;
             padding: 12px 16px;
             font-size: 15px;
             font-family: inherit;
             border: 1px solid var(--gray-300);
-            border-radius: 10px;
+            border-radius: 12px;
             background: white;
             color: var(--gray-900);
             transition: all 0.2s ease;
         }
 
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--blue-500);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-            line-height: 1.6;
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        @media (min-width: 768px) {
+            .checkbox-group {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            background: var(--gray-50);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 32px 0;
         }
 
         .btn-submit {
@@ -17826,105 +16894,124 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-            margin-top: 24px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
         }
 
         .btn-submit:active {
             transform: translateY(0);
         }
 
+        /* Results */
         .results {
             margin-top: 32px;
         }
 
-        .consent-content {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }
-
-        .consent-content h2 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--gray-900);
+        .risk-score-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
             margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--gray-200);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
-        .consent-content h3 {
-            font-size: 20px;
+        .risk-score {
+            font-size: 80px;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .risk-category {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .risk-label {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .results-section {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .results-section h3 {
+            font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
-            margin-top: 32px;
             margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .consent-content p {
-            font-size: 16px;
-            color: var(--gray-700);
-            line-height: 1.8;
-            margin-bottom: 16px;
-        }
-
-        .consent-content ul {
+        .results-section ul {
             list-style: none;
-            padding-left: 0;
-            margin-bottom: 16px;
+            padding: 0;
         }
 
-        .consent-content li {
-            font-size: 16px;
+        .results-section li {
+            padding: 10px 0;
+            padding-left: 24px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.6;
             color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .results-section li:last-child {
+            border-bottom: none;
+        }
+
+        .results-section li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+
+        .ai-explanation {
+            font-size: 15px;
             line-height: 1.8;
-            padding: 12px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-left: 3px solid var(--blue-500);
-            border-radius: 6px;
+            color: var(--gray-700);
         }
 
-        .consent-content li:last-child {
-            margin-bottom: 0;
-        }
-
-        .consent-content strong {
-            color: var(--blue-700);
+        .ai-explanation strong {
+            color: var(--gray-900);
             font-weight: 600;
         }
 
-        .divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 24px 0;
-        }
-
-        .info-box {
+        .reference-badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 8px 16px;
             background: var(--blue-50);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            color: var(--gray-700);
-        }
-
-        .info-box strong {
             color: var(--blue-700);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
         }
 
+        /* Footer */
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
-            margin-top: auto;
         }
 
         .footer-inner {
@@ -17954,8 +17041,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             transition: color 0.2s ease;
         }
 
-        .footer-link:hover { color: var(--gray-700); }
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
 
+        /* Responsive */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
@@ -17963,7 +17053,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-            .container { padding-top: 120px; }
+            .main { padding: 120px 32px 80px; }
+            .hero-title { font-size: 52px; }
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
             .footer-text { font-size: 14px; }
@@ -17973,37 +17064,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
+            .main { padding: 140px 40px 100px; }
             .footer { padding: 48px 40px; }
-        }
-
-        .print-btn {
-            display: inline-block;
-            padding: 12px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--blue-600);
-            background: var(--blue-50);
-            border: 2px solid var(--blue-200);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 24px;
-            text-decoration: none;
-        }
-
-        .print-btn:hover {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
-        }
-
-        @media print {
-            .nav, .mobile-menu, .footer, .print-btn { display: none; }
-            .bg-canvas, .grain { display: none; }
-            .card, .consent-content { box-shadow: none; border: 1px solid var(--gray-300); }
         }
     </style>
 </head>
 <body>
+    <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -18012,17 +17079,20 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
+        <!-- Navigation -->
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
@@ -18034,18 +17104,20 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
@@ -18057,83 +17129,242 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        <div class="container">
-            <div class="header">
-                <h1>Informed Consent Generator</h1>
-                <p>Evidence-based consent discussions for anesthesia procedures with patient-centered language</p>
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <div class="badge-dot"></div>
+                    <span class="badge-text">ASA Guidelines</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient">Difficult Airway</span> Predictor
+                </h1>
+                <p class="hero-subtitle">
+                    Evidence-based airway assessment using validated clinical predictors from the ASA Difficult Airway Algorithm
+                </p>
             </div>
 
+            <!-- Info Box -->
             <div class="info-box">
-                <strong>Purpose:</strong> This tool generates comprehensive, evidence-based talking points for informed consent discussions. It is designed to supplement (not replace) your clinical judgment and patient interaction. All risk frequencies are based on published literature and current best practices.
+                <strong>Clinical Basis:</strong> This tool uses validated predictors including Mallampati classification, thyromental distance, mouth opening, neck mobility, BMI, and anatomical features. Risk scoring is based on LEMON, Wilson, and El-Ganzouri criteria, with recommendations aligned to the <strong>ASA Practice Guidelines for Management of the Difficult Airway (2022)</strong>.
             </div>
 
+            <!-- Assessment Form -->
             <div class="card">
-                <form method="POST" action="/informed-consent">
+                <form method="POST" action="/difficult-airway">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                     <div class="form-section">
-                        <h3>Anesthesia Type</h3>
-                        <div class="form-group">
-                            <label for="procedure">Select Procedure/Anesthesia Type</label>
-                            <select id="procedure" name="procedure" required>
-                                <option value="">Select anesthesia type</option>
-                                <option value="general_anesthesia">General Anesthesia</option>
-                                <option value="spinal_anesthesia">Spinal Anesthesia</option>
-                                <option value="epidural">Epidural Anesthesia</option>
-                                <option value="regional_block">Regional Nerve Block</option>
-                                <option value="mac_sedation">Monitored Anesthesia Care (MAC)/Sedation</option>
-                                <option value="cesarean">Cesarean Section Anesthesia</option>
-                                <option value="labor_epidural">Labor Epidural</option>
-                                <option value="cardiac_surgery">Cardiac Surgery Anesthesia</option>
-                                <option value="neurosurgery">Neurosurgery Anesthesia</option>
-                            </select>
+                        <h3>Patient Demographics</h3>
+                        <div class="form-row three-col">
+                            <div class="form-group">
+                                <label for="age">Age (years)</label>
+                                <input type="number" id="age" name="age" min="0" max="120" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sex">Sex</label>
+                                <select id="sex" name="sex" required>
+                                    <option value="">Select</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" id="weight" name="weight" min="20" max="300" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" id="height" name="height" min="100" max="250" step="0.1" required>
+                            </div>
                         </div>
                     </div>
 
                     <div class="divider"></div>
 
                     <div class="form-section">
-                        <h3>Patient-Specific Information (Optional)</h3>
-                        <div class="form-group">
-                            <label for="patient_factors">Patient Factors (e.g., age, comorbidities, allergies)</label>
-                            <textarea id="patient_factors" name="patient_factors" placeholder="Example: 65-year-old with diabetes, hypertension, and known difficult airway..."></textarea>
+                        <h3>Airway Assessment (Validated Predictors)</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mallampati">Mallampati Class</label>
+                                <select id="mallampati" name="mallampati" required>
+                                    <option value="">Select</option>
+                                    <option value="1">Class I - Full visibility of soft palate, uvula, pillars</option>
+                                    <option value="2">Class II - Soft palate, uvula visible</option>
+                                    <option value="3">Class III - Only soft palate and base of uvula visible</option>
+                                    <option value="4">Class IV - Only hard palate visible</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="thyromental_distance">Thyromental Distance</label>
+                                <select id="thyromental_distance" name="thyromental_distance" required>
+                                    <option value="">Select</option>
+                                    <option value=">6.5cm">>6.5 cm (Normal)</option>
+                                    <option value="6-6.5cm">6-6.5 cm (Borderline)</option>
+                                    <option value="<6cm"><6 cm (Short - Difficult)</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="surgical_procedure">Surgical Procedure</label>
-                            <textarea id="surgical_procedure" name="surgical_procedure" placeholder="Example: Total knee replacement, laparoscopic cholecystectomy, etc."></textarea>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mouth_opening">Mouth Opening (Interincisor Distance)</label>
+                                <select id="mouth_opening" name="mouth_opening" required>
+                                    <option value="">Select</option>
+                                    <option value=">4cm">>4 cm (Normal)</option>
+                                    <option value="3-4cm">3-4 cm (Reduced)</option>
+                                    <option value="<3cm"><3 cm (Severely Limited)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="neck_extension">Neck Extension/Mobility</label>
+                                <select id="neck_extension" name="neck_extension" required>
+                                    <option value="">Select</option>
+                                    <option value="normal">Normal (>35°)</option>
+                                    <option value="reduced">Reduced (15-35°)</option>
+                                    <option value="severely_reduced">Severely Reduced (<15°)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="neck_circumference">Neck Circumference (cm) - Optional</label>
+                                <input type="number" id="neck_circumference" name="neck_circumference" min="20" max="70" step="0.1" placeholder="Optional">
+                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn-submit">Generate Informed Consent Discussion</button>
+                    <div class="divider"></div>
+
+                    <div class="form-section">
+                        <h3>Additional Risk Factors</h3>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="receding_mandible" name="features" value="receding_mandible">
+                                <label for="receding_mandible">Receding mandible/retrognathia</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="prominent_teeth" name="features" value="prominent_teeth">
+                                <label for="prominent_teeth">Prominent incisors/buck teeth</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="beard" name="features" value="beard">
+                                <label for="beard">Beard present</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="macroglossia" name="features" value="macroglossia">
+                                <label for="macroglossia">Macroglossia (large tongue)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="short_neck" name="features" value="short_neck">
+                                <label for="short_neck">Short, thick neck</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cervical_spine" name="features" value="cervical_spine">
+                                <label for="cervical_spine">Cervical spine limitation (arthritis, fusion)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="airway_mass" name="features" value="airway_mass">
+                                <label for="airway_mass">Airway mass/tumor</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row" style="margin-top: 20px;">
+                            <div class="form-group">
+                                <label for="previous_difficult">Previous Difficult Intubation?</label>
+                                <select id="previous_difficult" name="previous_difficult" required>
+                                    <option value="no">No</option>
+                                    <option value="yes">Yes (Most important predictor!)</option>
+                                    <option value="unknown">Unknown/No records</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="osa_risk">Obstructive Sleep Apnea Risk</label>
+                                <select id="osa_risk" name="osa_risk" required>
+                                    <option value="low">Low (STOP-BANG 0-2)</option>
+                                    <option value="moderate">Moderate (STOP-BANG 3-4)</option>
+                                    <option value="high">High (STOP-BANG 5-8 or diagnosed OSA)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button type="submit" class="btn-submit">Calculate Difficult Airway Risk</button>
                 </form>
             </div>
 
-            {% if consent %}
+            {% if prediction %}
             <div class="results">
-                <div class="consent-content">
-                    {{ consent.content | safe }}
-                    <button class="print-btn" onclick="window.print()">🖨️ Print for Documentation</button>
+                <div class="risk-score-card">
+                    <div class="risk-score" style="color: {{ prediction.risk_color }};">{{ prediction.risk_score }}</div>
+                    <div class="risk-category" style="color: {{ prediction.risk_color }};">{{ prediction.risk_category }}</div>
+                    <div class="risk-label">{{ prediction.risk_label }}</div>
+                </div>
+
+                {% if prediction.factors %}
+                <div class="results-section">
+                    <h3>🎯 Identified Risk Factors</h3>
+                    <ul>
+                        {% for factor in prediction.factors %}
+                        <li>{{ factor }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+
+                <div class="results-section">
+                    <h3>🔧 Recommended Equipment</h3>
+                    <ul>
+                        {% for item in prediction.equipment %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="results-section">
+                    <h3>📋 Backup Plan & Strategy</h3>
+                    <ul>
+                        {% for step in prediction.backup_plan %}
+                        <li>{{ step }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="results-section">
+                    <h3>🤖 AI-Generated Clinical Guidance</h3>
+                    <div class="ai-explanation">
+                        {{ prediction.ai_explanation | safe }}
+                    </div>
+                    <span class="reference-badge">Based on ASA Difficult Airway Algorithm 2022</span>
                 </div>
             </div>
             {% endif %}
 
             <div class="card" style="margin-top: 32px;">
-                <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">Evidence Base & Best Practices</h3>
+                <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">Evidence Base & References</h3>
                 <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Informed Consent Standards:</strong> This tool follows ASA guidelines for informed consent and incorporates evidence-based risk communication strategies from the shared decision-making literature.
+                    <strong>ASA Practice Guidelines:</strong> Apfelbaum JL, et al. Practice guidelines for management of the difficult airway: an updated report by the ASA Task Force on Management of the Difficult Airway. <em>Anesthesiology</em>. 2022;136(1):31-81.
                 </p>
                 <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Risk Communication:</strong> Fagerlin A, et al. Helping patients decide: ten steps to better risk communication. <em>J Natl Cancer Inst</em>. 2011;103(19):1436-1443.
+                    <strong>Mallampati Classification:</strong> Samsoon GL, Young JR. Difficult tracheal intubation: a retrospective study. <em>Anaesthesia</em>. 1987;42(5):487-490.
                 </p>
                 <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Anesthesia Consent:</strong> ASA Committee on Ethics. Statement on Informed Consent for Anesthesia Care. 2015. Available at: https://www.asahq.org/standards-and-practice-parameters/statement-on-informed-consent-for-anesthesia-care
+                    <strong>LEMON Criteria:</strong> Reed MJ, et al. Can an airway assessment score predict difficulty at intubation in the emergency department? <em>Emerg Med J</em>. 2005;22(2):99-102.
                 </p>
                 <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8;">
-                    <strong>Shared Decision-Making:</strong> Elwyn G, et al. Shared decision making: a model for clinical practice. <em>J Gen Intern Med</em>. 2012;27(10):1361-1367.
+                    <strong>Wilson Score:</strong> Wilson ME, et al. Predicting difficult intubation. <em>Br J Anaesth</em>. 1988;61(2):211-216.
                 </p>
             </div>
-        </div>
+        </main>
 
+        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
@@ -18147,6 +17378,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18156,18 +17388,812 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             }
         }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
+        // Dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+"""
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-01NZYD1DPP');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent Generator - GasConsult.ai</title>
+    <meta name="description" content="Evidence-based informed consent discussion generator for anesthesia procedures.">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --green-50: #F0FDF4;
+            --green-500: #22C55E;
+            --green-600: #059669;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 100px 20px 60px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--green-50) 0%, var(--blue-50) 100%);
+            border: 1px solid rgba(5, 150, 105, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.08);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green-500);
+            border-radius: 50%;
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--green-600);
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--green-500) 0%, var(--blue-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--gray-600);
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 32px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .info-box strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 15px;
+            font-family: inherit;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            background: white;
+            color: var(--gray-900);
+            transition: all 0.2s ease;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Results */
+        .consent-output {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 32px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .consent-output h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .consent-output h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        .consent-output p {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        .consent-output ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .consent-output li {
+            padding: 10px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .consent-output li:last-child {
+            border-bottom: none;
+        }
+
+        .consent-output li::before {
+            content: "•";
+            position: absolute;
+            left: 10px;
+            color: var(--blue-600);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .consent-output strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            .main { padding: 120px 32px 80px; }
+            .hero-title { font-size: 52px; }
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .main { padding: 140px 40px 100px; }
+            .footer { padding: 48px 40px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Hero -->
+            <div class="hero">
+                <div class="hero-badge">
+                    <div class="badge-dot"></div>
+                    <span class="badge-text">Patient Education</span>
+                </div>
+                <h1 class="hero-title">
+                    <span class="gradient">Informed Consent</span> Generator
+                </h1>
+                <p class="hero-subtitle">
+                    Evidence-based informed consent discussions for anesthesia procedures with procedure-specific risks
+                </p>
+            </div>
+
+            <!-- Info Box -->
+            <div class="info-box">
+                <strong>Educational Tool:</strong> This AI-powered generator creates patient-friendly informed consent discussions based on evidence-based guidelines. Generated content should be reviewed and personalized by the attending anesthesiologist before use in clinical practice.
+            </div>
+
+            <!-- Form -->
+            <div class="card">
+                <form method="POST" action="/informed-consent">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                    <div class="form-group">
+                        <label for="procedure">Anesthesia Type</label>
+                        <select id="procedure" name="procedure" required>
+                            <option value="">Select anesthesia type...</option>
+                            <option value="general_anesthesia">General Anesthesia</option>
+                            <option value="spinal_anesthesia">Spinal Anesthesia</option>
+                            <option value="epidural">Epidural Anesthesia</option>
+                            <option value="regional_block">Regional Nerve Block</option>
+                            <option value="mac_sedation">Monitored Anesthesia Care (MAC)/Sedation</option>
+                            <option value="cesarean">Cesarean Section Anesthesia</option>
+                            <option value="labor_epidural">Labor Epidural</option>
+                            <option value="cardiac_surgery">Cardiac Surgery Anesthesia</option>
+                            <option value="neurosurgery">Neurosurgery Anesthesia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="surgical_procedure">Surgical Procedure (Optional)</label>
+                        <textarea id="surgical_procedure" name="surgical_procedure" placeholder="e.g., laparoscopic cholecystectomy, total knee replacement..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="patient_factors">Patient-Specific Factors (Optional)</label>
+                        <textarea id="patient_factors" name="patient_factors" placeholder="e.g., history of PONV, difficult airway, obesity, cardiac disease..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Generate Informed Consent Discussion</button>
+                </form>
+            </div>
+
+            {% if consent %}
+            <div class="consent-output">
+                {{ consent.content | safe }}
+            </div>
+            {% endif %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
             }
         }
 
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+        // Dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
     </script>
 </body>
 </html>
