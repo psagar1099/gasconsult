@@ -11920,10 +11920,56 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
             min-height: 100vh;
             padding-bottom: 80px;
             -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* Background orbs matching site design */
+        body::before {
+            content: '';
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            top: -15%;
+            left: -10%;
+            z-index: 0;
+            pointer-events: none;
+            animation: float1 20s ease-in-out infinite;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            top: 30%;
+            right: -10%;
+            z-index: 0;
+            pointer-events: none;
+            animation: float2 25s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(-30px, 40px) scale(1.03); }
+            50% { transform: translate(30px, -30px) scale(0.97); }
+            75% { transform: translate(-20px, -40px) scale(1.01); }
         }
         
         /* Header with Weight Input */
@@ -11931,11 +11977,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
         }
         
         .header-content {
@@ -12075,6 +12121,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         /* Drug Category */
