@@ -1012,6 +1012,11 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -2638,6 +2643,11 @@ HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -4546,6 +4556,11 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -5531,6 +5546,11 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -6478,6 +6498,11 @@ TERMS_HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -7470,6 +7495,11 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -8356,6 +8386,11 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -9471,6 +9506,11 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -11981,6 +12021,11 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -13754,6 +13799,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -15504,6 +15554,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -16499,6 +16554,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -17526,6 +17586,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
