@@ -968,6 +968,12 @@ PREOP_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
@@ -10290,6 +10296,8 @@ CRISIS_HTML = """<!DOCTYPE html>
             .protocols-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+
+            .footer { padding: 48px 40px; }
         }
 
         .hidden {
@@ -18214,6 +18222,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
@@ -18334,19 +18348,22 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
             z-index: 99;
-            padding: 12px;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .mobile-menu.show { display: block; }
+        .mobile-menu.active {
+            display: flex;
+        }
 
         .mobile-menu-link {
-            display: block;
             padding: 14px 16px;
             font-size: 15px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             text-decoration: none;
             border-radius: 12px;
             transition: all 0.2s ease;
@@ -18355,11 +18372,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .mobile-menu-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
         }
 
         .container {
@@ -18605,22 +18617,40 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .footer {
-            margin-top: auto;
             padding: 32px 20px;
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 14px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+            margin-top: auto;
         }
 
-        .footer a {
-            color: var(--blue-600);
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
-        .footer a:hover {
-            color: var(--blue-700);
-        }
+        .footer-link:hover { color: var(--gray-700); }
 
         .divider {
             height: 1px;
@@ -18641,6 +18671,18 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .info-box strong {
             color: var(--blue-700);
         }
+
+        @media (min-width: 768px) {
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .footer { padding: 48px 40px; }
+        }
     </style>
 </head>
 <body>
@@ -18654,50 +18696,47 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 100 33" fill="none"><rect width="33" height="33" rx="8" fill="#2563EB"/><rect x="67" width="33" height="33" rx="8" fill="#60A5FA" opacity="0.6"/><rect x="33.5" width="33" height="33" rx="8" fill="#3B82F6" opacity="0.8"/></svg>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
                     </div>
-                    <div class="logo-text">
-                        <span class="gas">Gas</span><span class="consult">Consult</span><span class="ai">.ai</span>
-                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
-
                 <div class="nav-links">
-                    <a href="/chat" class="nav-link">Chat</a>
-                    <a href="/evidence" class="nav-link">Evidence</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleDropdown(event)">
-                            Tools ▾
-                        </button>
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
-                            <a href="/calculators" class="nav-dropdown-link">Calculators</a>
-                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
-                            <a href="/preop" class="nav-dropdown-link">Pre-op Assessment</a>
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                         </div>
                     </div>
                 </div>
-
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
-
-        <div class="mobile-menu">
-            <a href="/chat" class="mobile-menu-link">Chat</a>
-            <a href="/evidence" class="mobile-menu-link">Evidence</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/preop" class="mobile-menu-link">Pre-op Assessment</a>
-            <a href="/difficult-airway" class="mobile-menu-link active">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <div class="container">
@@ -18924,33 +18963,37 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         </div>
 
         <footer class="footer">
-            <p>Evidence-based clinical guidance • Not a substitute for clinical judgment</p>
-            <p style="margin-top: 8px;">
-                <a href="/terms">Terms</a> •
-                <a href="/privacy">Privacy</a> •
-                © 2024 GasConsult.ai
-            </p>
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
         </footer>
     </div>
 
     <script>
         function toggleMobileMenu() {
-            const menu = document.querySelector('.mobile-menu');
+            const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('show');
-            btn.classList.toggle('active');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
         }
 
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            const allMenus = document.querySelectorAll('.nav-dropdown-menu');
-            allMenus.forEach(m => {
-                if (m !== menu) m.classList.remove('show');
-            });
-            menu.classList.toggle('show');
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
         }
 
+        // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
@@ -19126,6 +19169,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
@@ -19246,19 +19295,22 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
             z-index: 99;
-            padding: 12px;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .mobile-menu.show { display: block; }
+        .mobile-menu.active {
+            display: flex;
+        }
 
         .mobile-menu-link {
-            display: block;
             padding: 14px 16px;
             font-size: 15px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             text-decoration: none;
             border-radius: 12px;
             transition: all 0.2s ease;
@@ -19267,11 +19319,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         .mobile-menu-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
         }
 
         .container {
@@ -19477,27 +19524,54 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .footer {
-            margin-top: auto;
             padding: 32px 20px;
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 14px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+            margin-top: auto;
         }
 
-        .footer a {
-            color: var(--blue-600);
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
-        .footer a:hover {
-            color: var(--blue-700);
-        }
+        .footer-link:hover { color: var(--gray-700); }
 
         @media (min-width: 768px) {
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             .container { padding-top: 120px; }
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .footer { padding: 48px 40px; }
         }
 
         .print-btn {
@@ -19538,50 +19612,47 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <div class="page">
         <nav class="nav">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 100 33" fill="none"><rect width="33" height="33" rx="8" fill="#2563EB"/><rect x="67" width="33" height="33" rx="8" fill="#60A5FA" opacity="0.6"/><rect x="33.5" width="33" height="33" rx="8" fill="#3B82F6" opacity="0.8"/></svg>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
                     </div>
-                    <div class="logo-text">
-                        <span class="gas">Gas</span><span class="consult">Consult</span><span class="ai">.ai</span>
-                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
-
                 <div class="nav-links">
-                    <a href="/chat" class="nav-link">Chat</a>
-                    <a href="/evidence" class="nav-link">Evidence</a>
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleDropdown(event)">
-                            Tools ▾
-                        </button>
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
-                            <a href="/calculators" class="nav-dropdown-link">Calculators</a>
-                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
-                            <a href="/preop" class="nav-dropdown-link">Pre-op Assessment</a>
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                         </div>
                     </div>
                 </div>
-
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
-
-        <div class="mobile-menu">
-            <a href="/chat" class="mobile-menu-link">Chat</a>
-            <a href="/evidence" class="mobile-menu-link">Evidence</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/preop" class="mobile-menu-link">Pre-op Assessment</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link active">Informed Consent</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
         <div class="container">
@@ -19662,31 +19733,34 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         </div>
 
         <footer class="footer">
-            <p>Evidence-based clinical guidance • Not a substitute for clinical judgment</p>
-            <p style="margin-top: 8px;">
-                <a href="/terms">Terms</a> •
-                <a href="/privacy">Privacy</a> •
-                © 2024 GasConsult.ai
-            </p>
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
         </footer>
     </div>
 
     <script>
         function toggleMobileMenu() {
-            const menu = document.querySelector('.mobile-menu');
+            const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('show');
-            btn.classList.toggle('active');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
         }
 
-        function toggleDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            const allMenus = document.querySelectorAll('.nav-dropdown-menu');
-            allMenus.forEach(m => {
-                if (m !== menu) m.classList.remove('show');
-            });
-            menu.classList.toggle('show');
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
         }
 
         document.addEventListener('click', function() {
