@@ -18626,6 +18626,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
         }
@@ -19017,6 +19020,49 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 justify-content: space-between;
             }
         }
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover { color: var(--gray-700); }
+
+        @media (min-width: 768px) {
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
@@ -19377,6 +19423,18 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             </div>
         </footer>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-text">© 2025 GasConsult.ai</span>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
         function toggleMobileMenu() {
@@ -19739,6 +19797,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
         }
@@ -20006,20 +20067,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             text-align: center;
         }
 
-        .footer-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .footer-logo svg { width: 32px; height: 32px; }
-
         .footer-text {
             font-size: 13px;
             color: var(--gray-500);
@@ -20042,7 +20089,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         @media (min-width: 768px) {
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-logo svg { width: 36px; height: 36px; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
@@ -20184,12 +20230,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-inner">
-            <div class="footer-brand">
-                <div class="footer-logo">
-                    <svg viewBox="0 0 32 32" fill="none"><path d="M4 16 L9 16 L11 10 L14 22 L16 4 L18 28 L21 10 L23 16 L28 16" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </div>
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-            </div>
+            <span class="footer-text">© 2025 GasConsult.ai</span>
             <div class="footer-links">
                 <a href="/privacy" class="footer-link">Privacy</a>
                 <a href="/terms" class="footer-link">Terms</a>
