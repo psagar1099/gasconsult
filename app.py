@@ -13594,7 +13594,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clinical Calculators - gasconsult.ai</title>
+    <title>Clinical Calculators - GasConsult.ai</title>
+    <meta name="description" content="Evidence-based anesthesiology clinical calculators: IBW, BSA, MABL, QTc, PONV, RCRI, and more with validated formulas and references.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -14026,12 +14027,111 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             margin: 0 auto;
         }
 
+        /* Category Filters */
+        .category-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 40px;
+            padding: 0 4px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.25s forwards;
+            opacity: 0;
+        }
+
+        .filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 14px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 8px 16px rgba(0,0,0,0.06);
+            border-color: var(--blue-300);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            border-color: var(--blue-600);
+            color: white;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2), 0 8px 16px rgba(37, 99, 235, 0.15);
+        }
+
+        .filter-btn svg {
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
+
+        .filter-btn.active svg {
+            opacity: 1;
+        }
+
+        .filter-btn span:first-of-type {
+            white-space: nowrap;
+        }
+
+        .filter-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 8px;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        .filter-btn.active .filter-count {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        @media (max-width: 767px) {
+            .filter-btn {
+                flex: 1 1 calc(50% - 6px);
+                min-width: 0;
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .filter-btn span:first-of-type {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .category-filters {
+                gap: 8px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1199px) {
+            .filter-btn {
+                flex: 1 1 calc(33.333% - 8px);
+            }
+        }
+
         /* Calculator Grid */
         .calc-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 24px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.35s forwards;
             opacity: 0;
         }
 
@@ -14049,6 +14149,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .calc-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
+        }
+
+        /* Hide filtered calculators */
+        .calc-card.hidden {
+            display: none;
         }
 
         /* Calculator Card */
@@ -14545,7 +14650,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                 Clinical <span class="gradient">Calculators</span>
             </h1>
             <p class="hero-subtitle">
-                Real-time medical calculations with validated formulas. All results are instant - no submit buttons needed.
+                Evidence-based medical calculations organized by specialty. All results are instant - no submit buttons needed.
             </p>
         </section>
 
@@ -14564,10 +14669,50 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <!-- Main Content -->
         <main class="main">
             <div class="container">
+                <!-- Category Filters -->
+                <div class="category-filters">
+                    <button class="filter-btn active" onclick="filterCalculators('all')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <span>All Calculators</span>
+                        <span class="filter-count">10</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterCalculators('dosing')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 008 10.172V5L7 4z"></path>
+                        </svg>
+                        <span>Dosing & Pharmacology</span>
+                        <span class="filter-count">3</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterCalculators('risk')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                        <span>Perioperative Risk</span>
+                        <span class="filter-count">3</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterCalculators('fluids')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                        </svg>
+                        <span>Hemodynamics & Fluids</span>
+                        <span class="filter-count">3</span>
+                    </button>
+                    <button class="filter-btn" onclick="filterCalculators('cardiac')">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        <span>Cardiac & Monitoring</span>
+                        <span class="filter-count">1</span>
+                    </button>
+                </div>
+
+                <!-- Calculator Grid -->
                 <div class="calc-grid">
 
                     <!-- IDEAL BODY WEIGHT -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="dosing">
                         <div class="calc-header">
                             <h3 class="calc-title">Ideal Body Weight (IBW)</h3>
                             <p class="calc-desc">Devine formula for anesthesia dosing</p>
@@ -14615,7 +14760,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- BODY SURFACE AREA -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="fluids">
                         <div class="calc-header">
                             <h3 class="calc-title">Body Surface Area (BSA)</h3>
                             <p class="calc-desc">Mosteller, DuBois & Haycock formulas</p>
@@ -14663,7 +14808,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- MAXIMUM ALLOWABLE BLOOD LOSS -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="fluids">
                         <div class="calc-header">
                             <h3 class="calc-title">Maximum Allowable Blood Loss</h3>
                             <p class="calc-desc">Estimated blood volume & transfusion threshold</p>
@@ -14716,7 +14861,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- QTc INTERVAL -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="cardiac">
                         <div class="calc-header">
                             <h3 class="calc-title">QTc Interval (Bazett)</h3>
                             <p class="calc-desc">Corrected QT interval for cardiac risk</p>
@@ -14761,7 +14906,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- MAINTENANCE FLUIDS -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="fluids">
                         <div class="calc-header">
                             <h3 class="calc-title">Maintenance Fluids (4-2-1 Rule)</h3>
                             <p class="calc-desc">Holliday-Segar method for pediatrics</p>
@@ -14791,7 +14936,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- PONV RISK (APFEL SCORE) -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="risk">
                         <div class="calc-header">
                             <h3 class="calc-title">PONV Risk (Apfel Score)</h3>
                             <p class="calc-desc">Postoperative nausea & vomiting prediction</p>
@@ -14832,7 +14977,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- RCRI (CARDIAC RISK INDEX) -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="risk">
                         <div class="calc-header">
                             <h3 class="calc-title">RCRI (Revised Cardiac Risk Index)</h3>
                             <p class="calc-desc">Perioperative cardiac event prediction</p>
@@ -14881,7 +15026,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- ASA PHYSICAL STATUS -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="risk">
                         <div class="calc-header">
                             <h3 class="calc-title">ASA Physical Status</h3>
                             <p class="calc-desc">Classification of patient health status</p>
@@ -14948,7 +15093,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- OPIOID CONVERSION -->
-                    <div class="calc-card large">
+                    <div class="calc-card large" data-category="dosing">
                         <div class="calc-header">
                             <h3 class="calc-title">Opioid Conversion Calculator</h3>
                             <p class="calc-desc">Convert to morphine milligram equivalents (MME)</p>
@@ -14992,7 +15137,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     </div>
 
                     <!-- LOCAL ANESTHETIC MAX DOSE -->
-                    <div class="calc-card">
+                    <div class="calc-card" data-category="dosing">
                         <div class="calc-header">
                             <h3 class="calc-title">Local Anesthetic Max Dose</h3>
                             <p class="calc-desc">Maximum safe dosing to prevent LAST</p>
@@ -15056,6 +15201,48 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             const btn = document.querySelector('.mobile-menu-btn');
             menu.classList.toggle('active');
             btn.classList.toggle('active');
+        }
+
+        // Toggle Navigation Dropdown
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const dropdown = event.target.closest('.nav-dropdown');
+            const menu = dropdown.querySelector('.nav-dropdown-menu');
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.nav-dropdown-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
+
+        // Filter Calculators by Category
+        function filterCalculators(category) {
+            const cards = document.querySelectorAll('.calc-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // Update button active states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.filter-btn').classList.add('active');
+
+            // Filter cards with smooth transition
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                    // Smooth fade-in
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(10px)';
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 10);
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
         }
 
         // IDEAL BODY WEIGHT
