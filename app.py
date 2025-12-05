@@ -4384,14 +4384,23 @@ HTML = """<!DOCTYPE html>
         {% endif %}
 
         // Parse markdown in existing messages on page load
+        // IMPORTANT: Only parse if content is plain text/markdown, not already HTML
         window.addEventListener('DOMContentLoaded', function() {
             if (typeof marked !== 'undefined') {
                 // Find all message-content divs that contain markdown
                 const messageContents = document.querySelectorAll('.ai-message .message-content');
                 messageContents.forEach(function(element) {
-                    // Get the text content (markdown)
+                    // Check if content is already HTML (from session) or plain text/markdown
+                    const html = element.innerHTML.trim();
+
+                    // Skip if already contains HTML tags (loaded from session)
+                    // Messages from session already have HTML, don't re-parse!
+                    if (html.includes('<h') || html.includes('<p') || html.includes('<ul') || html.includes('<strong')) {
+                        return;  // Already HTML, skip parsing
+                    }
+
+                    // Get the text content (markdown) for plain text messages
                     const markdownText = element.textContent;
-                    // Parse and replace with HTML
                     if (markdownText && markdownText.trim()) {
                         element.innerHTML = marked.parse(markdownText);
                     }
