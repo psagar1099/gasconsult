@@ -19629,25 +19629,35 @@ def index():
             # Adjust date range for established topics (go back further for classic evidence)
             date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
 
-            # Tier 1: Search WITH strict anesthesiology context for maximum precision
-            # Expanded anesthesia context to catch more relevant papers while excluding non-anesthesia topics
-            anesth_context = (
+            # Tier 1: Broad perioperative/critical care context (inclusive of related specialties)
+            # Anesthesia is closely tied to critical care, ICU, surgery, emergency medicine, and pain
+            # Be INCLUSIVE of related fields while excluding obviously unrelated specialties
+            periop_context = (
                 '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR '
-                'perioperative[tiab] OR intraoperative[tiab] OR postoperative[tiab] OR '
+                'perioperative[tiab] OR intraoperative[tiab] OR postoperative[tiab] OR preoperative[tiab] OR '
+                '"critical care"[MeSH Terms] OR "intensive care"[tiab] OR "ICU"[tiab] OR "critical illness"[tiab] OR '
                 '"surgical anesthesia"[tiab] OR "anesthetic management"[tiab] OR '
-                '"critical care"[MeSH Terms] OR "intensive care"[tiab])'
+                'surgery[MeSH Subheading] OR surgical[tiab] OR "operating room"[tiab] OR '
+                '"emergency medicine"[MeSH Terms] OR resuscitation[MeSH Terms] OR "trauma"[tiab] OR '
+                '"pain management"[tiab] OR "acute pain"[tiab] OR "pain medicine"[tiab] OR '
+                'airway[tiab] OR "airway management"[tiab] OR ventilation[tiab] OR hemodynamic[tiab] OR '
+                '"fluid management"[tiab] OR "blood transfusion"[tiab] OR shock[tiab])'
             )
 
-            # Optional: Boost papers from major anesthesia journals for even better precision
-            # This is applied as an OR condition, not a filter, so we don't miss papers in other journals
-            anesth_journals = (
+            # Include papers from major related journals (anesthesia, critical care, surgery, emergency, general medical)
+            # This is an OR boost, not a filter - papers in other journals are NOT excluded
+            related_journals = (
                 '("Anesthesiology"[Journal] OR "Anesthesia and Analgesia"[Journal] OR '
                 '"British Journal of Anaesthesia"[Journal] OR "Anaesthesia"[Journal] OR '
-                '"European Journal of Anaesthesiology"[Journal] OR "Canadian Journal of Anaesthesia"[Journal] OR '
-                '"Paediatric Anaesthesia"[Journal] OR "Regional Anesthesia and Pain Medicine"[Journal])'
+                '"Critical Care Medicine"[Journal] OR "Intensive Care Medicine"[Journal] OR '
+                '"Critical Care"[Journal] OR "Shock"[Journal] OR '
+                '"JAMA Surgery"[Journal] OR "Annals of Surgery"[Journal] OR "Surgery"[Journal] OR '
+                '"New England Journal of Medicine"[Journal] OR "JAMA"[Journal] OR '
+                '"Lancet"[Journal] OR "Chest"[Journal] OR "Circulation"[Journal] OR '
+                '"Emergency Medicine Journal"[Journal] OR "Academic Emergency Medicine"[Journal])'
             )
 
-            tier1_search_term = f'{search_term} AND ({anesth_context} OR {anesth_journals})'
+            tier1_search_term = f'{search_term} AND ({periop_context} OR {related_journals})'
             cached_result = get_cached_pubmed_results(tier1_search_term, retmax=20)
 
             if cached_result:
@@ -19666,16 +19676,21 @@ def index():
                     print(f"[ERROR] Tier 1 search failed: {e}")
                     ids = []
 
-            # Tier 2: Slightly broader anesthesia context (STILL ANESTHESIA-FOCUSED!)
-            # Uses text words instead of strict MeSH, but maintains anesthesia requirement
+            # Tier 2: Even broader perioperative/critical care context (very inclusive)
+            # Uses text words instead of MeSH for more flexibility
+            # Includes critical care, ICU, surgical, emergency - all relevant to anesthesia practice
             if len(ids) < 5 and not is_followup:
-                # Broader anesthesia context using text words (more flexible but still restricted)
-                broader_anesth = (
+                broader_periop = (
                     '(anesthesia[tiab] OR anesthesiology[tiab] OR anesthetic[tiab] OR '
-                    'anaesthesia[tiab] OR anaesthetic[tiab] OR perioperative[tiab] OR '
-                    'intraoperative[tiab] OR surgical[tiab])'
+                    'anaesthesia[tiab] OR anaesthetic[tiab] OR '
+                    'perioperative[tiab] OR intraoperative[tiab] OR postoperative[tiab] OR '
+                    'critical[tiab] OR ICU[tiab] OR intensive[tiab] OR '
+                    'surgical[tiab] OR surgery[tiab] OR operative[tiab] OR '
+                    'emergency[tiab] OR resuscitation[tiab] OR trauma[tiab] OR '
+                    'airway[tiab] OR ventilat[tiab] OR hemodynamic[tiab] OR '
+                    'pain[tiab] OR sedation[tiab])'
                 )
-                tier2_search_term = f'{search_term} AND {broader_anesth}'
+                tier2_search_term = f'{search_term} AND {broader_periop}'
 
                 # Check cache first
                 cached_result = get_cached_pubmed_results(tier2_search_term, retmax=20)
@@ -19698,14 +19713,18 @@ def index():
                     except Exception as e:
                         print(f"[ERROR] Tier 2 search failed: {e}")
 
-            # Tier 3: High-quality studies with anesthesia context and extended date range
+            # Tier 3: High-quality studies with broad perioperative context and extended date range
             if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: High-quality studies with anesthesia context...")
-                    # CRITICAL: Maintain anesthesia context even in Tier 3!
-                    tier3_anesth = '(anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR surgical[tiab])'
+                    print(f"[DEBUG] Tier 3: High-quality studies with broad perioperative context...")
+                    # Maintain perioperative/critical care context - inclusive of related fields
+                    tier3_periop = (
+                        '(anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR '
+                        'surgical[tiab] OR critical[tiab] OR ICU[tiab] OR intensive[tiab] OR '
+                        'emergency[tiab] OR resuscitation[tiab])'
+                    )
                     broader_term = (
-                        f'({q}) AND {tier3_anesth} AND '
+                        f'({q}) AND {tier3_periop} AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR guideline[pt] OR review[pt]) AND '
                         f'("2010/01/01"[PDAT] : "3000"[PDAT])'
                     )
@@ -19718,16 +19737,18 @@ def index():
                 except Exception as e:
                     print(f"[ERROR] Tier 3 search failed: {e}")
 
-            # Tier 4: Last resort - broader search but still maintain date filter and prefer review articles
+            # Tier 4: Last resort - very broad perioperative context, extended date range
             if len(ids) < 3 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 4: Broader search with anesthesia context, extended date range...")
-                    anesthesia_boost = (
-                        f'({q}) AND (anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab]) AND '
+                    print(f"[DEBUG] Tier 4: Very broad perioperative context, extended date range...")
+                    # Most inclusive - captures anesthesia, critical care, surgical, emergency, ICU
+                    tier4_periop = (
+                        f'({q}) AND (anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR '
+                        f'critical[tiab] OR ICU[tiab] OR surgical[tiab] OR emergency[tiab]) AND '
                         f'(review[pt] OR "randomized controlled trial"[pt] OR "clinical trial"[pt]) AND '
                         f'("2005/01/01"[PDAT] : "3000"[PDAT])'
                     )
-                    handle = Entrez.esearch(db="pubmed", term=anesthesia_boost, retmax=15, sort="relevance")
+                    handle = Entrez.esearch(db="pubmed", term=tier4_periop, retmax=15, sort="relevance")
                     result = Entrez.read(handle)
                     tier4_ids = result.get("IdList", [])
                     # Combine and deduplicate
