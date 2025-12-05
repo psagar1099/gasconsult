@@ -16259,6 +16259,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             75% { transform: translate(-40px, 20px) scale(1.02); }
         }
 
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .grain {
             position: fixed;
             inset: 0;
@@ -16519,6 +16524,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         .section-title {
@@ -17390,6 +17397,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
@@ -17712,6 +17724,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         /* Form Sections */
@@ -18471,6 +18485,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
@@ -18793,6 +18812,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         /* Form */
