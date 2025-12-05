@@ -18647,6 +18647,10 @@ def stream():
             cleaned_response = strip_markdown_code_fences(full_response)
 
             # Save complete response to session
+            print(f"[DEBUG] [STREAM] Before saving - session has {len(session.get('messages', []))} messages")
+            for i, msg in enumerate(session.get('messages', [])):
+                print(f"[DEBUG] [STREAM]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
+
             # Check if last message is an empty assistant placeholder (from homepage redirect)
             # If so, update it instead of appending a new one
             if (session.get('messages') and
@@ -18661,7 +18665,7 @@ def stream():
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
                 }
-                print(f"[DEBUG] Updated existing placeholder assistant message")
+                print(f"[DEBUG] [STREAM] Updated existing placeholder assistant message")
             else:
                 # Append new message (for AJAX submissions from chat page)
                 session['messages'].append({
@@ -18671,7 +18675,9 @@ def stream():
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
                 })
-                print(f"[DEBUG] Appended new assistant message")
+                print(f"[DEBUG] [STREAM] Appended new assistant message")
+
+            print(f"[DEBUG] [STREAM] After saving - session has {len(session.get('messages', []))} messages")
             session.modified = True
 
             # Send references with evidence strength
@@ -19234,6 +19240,9 @@ Respond with maximum clinical utility:"""
 
             # For regular form submissions (not AJAX), redirect to index page
             print(f"[DEBUG] Redirecting to index page")
+            print(f"[DEBUG] Session messages before redirect: {len(session.get('messages', []))} messages")
+            for i, msg in enumerate(session.get('messages', [])):
+                print(f"[DEBUG]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
             return redirect(url_for('index'))
 
         except Exception as e:
@@ -19271,6 +19280,9 @@ Respond with maximum clinical utility:"""
 
     print(f"[DEBUG] GET / - pending_stream = {pending_stream}")
     print(f"[DEBUG] GET / - num messages = {len(session.get('messages', []))}")
+    print(f"[DEBUG] GET / - Session messages detail:")
+    for i, msg in enumerate(session.get('messages', [])):
+        print(f"[DEBUG]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}, has_refs={len(msg.get('references', []))}")
 
     # Get and clear any error message from session
     error_message = session.pop('error_message', None)
