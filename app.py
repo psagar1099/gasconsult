@@ -18686,6 +18686,18 @@ def stream():
             session['messages'] = messages
             session.modified = True
 
+            # CRITICAL: Force immediate session save for SSE responses
+            # Flask's session only auto-saves at end of request, but SSE streams
+            # are long-lived connections, so we must manually save here
+            try:
+                # Get the session interface and force a save
+                session_interface = app.session_interface
+                response_class = app.response_class()
+                session_interface.save_session(app, session, response_class)
+                print(f"[DEBUG] [STREAM] Forced session save to disk")
+            except Exception as e:
+                print(f"[ERROR] [STREAM] Failed to force session save: {e}")
+
             print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
