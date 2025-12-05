@@ -20427,7 +20427,7 @@ Structure your response with the following sections using HTML formatting:
 
 Keep language professional but patient-friendly. Include specific risk frequencies where appropriate. Be thorough but concise (aim for 300-400 words total)."""
 
-        response = client.chat.completions.create(
+        response = openai_client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
