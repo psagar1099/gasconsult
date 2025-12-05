@@ -19629,10 +19629,25 @@ def index():
             # Adjust date range for established topics (go back further for classic evidence)
             date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
 
-            # Tier 1: Search WITH anesthesiology context from the start for better precision
-            # Check cache first
-            anesth_context = '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR perioperative[tiab])'
-            tier1_search_term = f'{search_term} AND {anesth_context}'
+            # Tier 1: Search WITH strict anesthesiology context for maximum precision
+            # Expanded anesthesia context to catch more relevant papers while excluding non-anesthesia topics
+            anesth_context = (
+                '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR '
+                'perioperative[tiab] OR intraoperative[tiab] OR postoperative[tiab] OR '
+                '"surgical anesthesia"[tiab] OR "anesthetic management"[tiab] OR '
+                '"critical care"[MeSH Terms] OR "intensive care"[tiab])'
+            )
+
+            # Optional: Boost papers from major anesthesia journals for even better precision
+            # This is applied as an OR condition, not a filter, so we don't miss papers in other journals
+            anesth_journals = (
+                '("Anesthesiology"[Journal] OR "Anesthesia and Analgesia"[Journal] OR '
+                '"British Journal of Anaesthesia"[Journal] OR "Anaesthesia"[Journal] OR '
+                '"European Journal of Anaesthesiology"[Journal] OR "Canadian Journal of Anaesthesia"[Journal] OR '
+                '"Paediatric Anaesthesia"[Journal] OR "Regional Anesthesia and Pain Medicine"[Journal])'
+            )
+
+            tier1_search_term = f'{search_term} AND ({anesth_context} OR {anesth_journals})'
             cached_result = get_cached_pubmed_results(tier1_search_term, retmax=20)
 
             if cached_result:
@@ -19651,10 +19666,19 @@ def index():
                     print(f"[ERROR] Tier 1 search failed: {e}")
                     ids = []
 
-            # Tier 2: Broaden to remove anesthesiology restriction if needed
+            # Tier 2: Slightly broader anesthesia context (STILL ANESTHESIA-FOCUSED!)
+            # Uses text words instead of strict MeSH, but maintains anesthesia requirement
             if len(ids) < 5 and not is_followup:
+                # Broader anesthesia context using text words (more flexible but still restricted)
+                broader_anesth = (
+                    '(anesthesia[tiab] OR anesthesiology[tiab] OR anesthetic[tiab] OR '
+                    'anaesthesia[tiab] OR anaesthetic[tiab] OR perioperative[tiab] OR '
+                    'intraoperative[tiab] OR surgical[tiab])'
+                )
+                tier2_search_term = f'{search_term} AND {broader_anesth}'
+
                 # Check cache first
-                cached_result = get_cached_pubmed_results(search_term, retmax=20)
+                cached_result = get_cached_pubmed_results(tier2_search_term, retmax=20)
 
                 if cached_result:
                     tier2_ids = cached_result.get('ids', [])
@@ -19662,25 +19686,27 @@ def index():
                     print(f"[DEBUG] Tier 2 (CACHED): Found {len(tier2_ids)} papers, total unique: {len(ids)}")
                 else:
                     try:
-                        print(f"[DEBUG] Tier 2: Broadening without anesthesiology restriction...")
-                        handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=20, sort="relevance")
+                        print(f"[DEBUG] Tier 2: Broader anesthesia context (still anesthesia-focused)...")
+                        handle = Entrez.esearch(db="pubmed", term=tier2_search_term, retmax=20, sort="relevance")
                         result = Entrez.read(handle)
                         tier2_ids = result.get("IdList", [])
                         # Combine and deduplicate
                         ids = list(set(ids + tier2_ids))
                         print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
                         # Cache the results
-                        cache_pubmed_results(search_term, tier2_ids, retmax=20)
+                        cache_pubmed_results(tier2_search_term, tier2_ids, retmax=20)
                     except Exception as e:
                         print(f"[ERROR] Tier 2 search failed: {e}")
 
-            # Tier 3: Controlled broadening - keep high-quality study filters but extend date range
+            # Tier 3: High-quality studies with anesthesia context and extended date range
             if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: Extending date range while maintaining quality filters...")
+                    print(f"[DEBUG] Tier 3: High-quality studies with anesthesia context...")
+                    # CRITICAL: Maintain anesthesia context even in Tier 3!
+                    tier3_anesth = '(anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR surgical[tiab])'
                     broader_term = (
-                        f'({q}) AND '
-                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR guideline[pt]) AND '
+                        f'({q}) AND {tier3_anesth} AND '
+                        f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR guideline[pt] OR review[pt]) AND '
                         f'("2010/01/01"[PDAT] : "3000"[PDAT])'
                     )
                     handle = Entrez.esearch(db="pubmed", term=broader_term, retmax=15, sort="relevance")
