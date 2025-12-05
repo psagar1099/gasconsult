@@ -606,11 +606,12 @@ def expand_medical_abbreviations(query):
     # PRIS - use word boundary (less likely to be a common word)
     q = re.sub(r'\bpris\b', '("propofol infusion syndrome" OR PRIS)', q, flags=re.IGNORECASE)
     q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
-    # MH - FIXED: Expand abbreviation to malignant hyperthermia AND exclude psychiatric papers
+    # MH - Expand abbreviation to malignant hyperthermia AND exclude psychiatric papers
     # Use word boundary to avoid matching "smith" or other words containing "mh"
-    q = re.sub(r'\bmh\b', '(("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis" OR "hyperthermia emergency") NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
-    q = q.replace("malignant hyperthermia", '("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis")')
-    q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis") ')  # Catch " MH " with spaces
+    # SIMPLIFIED: Use MeSH term only with exclusions - don't add synonyms that complicate the query
+    q = re.sub(r'\bmh\b', '("malignant hyperthermia"[MeSH Terms] NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
+    # Expand full term "malignant hyperthermia" to use MeSH for better indexing
+    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms]')
 
     # Common scenarios
     q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
@@ -635,9 +636,9 @@ def expand_medical_abbreviations(query):
     # MAC - anesthesia context (both meanings are anesthesia-related, so just expand)
     q = re.sub(r'\bmac\b', '("monitored anesthesia care" OR "minimum alveolar concentration" OR MAC)', q, flags=re.IGNORECASE)
 
-    # Anesthesia-specific terms that need context
-    q = q.replace("protocol", '"protocol"[ti] OR guideline OR algorithm OR management')
-    q = q.replace("crisis", '"crisis management" OR emergency OR "acute management"')
+    # NOTE: DO NOT expand common words like "protocol", "crisis", "management"
+    # These generic expansions create overly broad queries that return wrong papers
+    # Let them remain as-is so PubMed can properly combine them with the medical terms
 
     return q
 
@@ -19581,7 +19582,7 @@ def index():
                     search_term = (
                         f'({q}) AND '
                         f'(guideline[pt] OR "practice guideline"[pt] OR review[pt] OR meta-analysis[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 elif question_type == 'safety':
                     # Include adverse effects and safety studies
@@ -19589,7 +19590,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'guideline[pt] OR "adverse effects"[sh] OR safety[ti]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 elif question_type == 'comparison':
                     # Prioritize comparative studies
@@ -19597,7 +19598,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"comparative study"[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 else:
                     # Default search (general, mechanism, management)
@@ -19605,7 +19606,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
 
             # Add negation modifier if detected
