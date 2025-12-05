@@ -2341,20 +2341,24 @@ def get_evidence_strength(num_papers, references):
         # Check for guidelines/consensus (highest quality)
         if any(keyword in title or keyword in journal for keyword in
                ['guideline', 'guidelines', 'consensus', 'recommendation', 'practice parameter',
-                'practice guideline', 'clinical practice', 'society statement']):
+                'practice guideline', 'clinical practice', 'society statement', 'expert consensus',
+                'position statement', 'standards of care', 'best practice', 'clinical pathway']):
             guideline_count += 1
             quality_score += 4
 
         # Check for meta-analysis
         if any(keyword in title or keyword in journal for keyword in
                ['meta-analysis', 'metaanalysis', 'meta analysis', 'pooled analysis',
-                'network meta-analysis', 'meta-regression']):
+                'network meta-analysis', 'meta-regression', 'systematic review and meta-analysis',
+                'quantitative synthesis', 'evidence synthesis']):
             meta_analysis_count += 1
             quality_score += 3
 
         # Check for systematic review (separate from meta-analysis)
         elif any(keyword in title or keyword in journal for keyword in
-                 ['systematic review', 'cochrane review', 'systematic literature review']):
+                 ['systematic review', 'cochrane review', 'systematic literature review',
+                  'evidence-based review', 'integrative review', 'scoping review',
+                  'umbrella review', 'critical review']):
             systematic_review_count += 1
             quality_score += 2.5
 
@@ -2380,10 +2384,11 @@ def get_evidence_strength(num_papers, references):
             case_report_count += 1
             quality_score += 0.5
 
-        # Check for review articles (general)
-        elif 'review' in title:
+        # Check for review articles (general) - increased value since they're clinically useful
+        elif any(keyword in title for keyword in ['review', 'update', 'overview', 'state of the art',
+                                                   'current concepts', 'advances in', 'recent advances']):
             review_count += 1
-            quality_score += 1
+            quality_score += 1.5  # Increased from 1.0 since reviews are still valuable
 
     # Add recency bonus (5% boost for recent evidence)
     recency_bonus = (recent_count / num_papers) * 0.5 if num_papers > 0 else 0
@@ -2404,10 +2409,14 @@ def get_evidence_strength(num_papers, references):
 
     # Determine confidence level based on refined criteria
     # HIGH CONFIDENCE: Strong evidence from multiple high-quality sources
-    if (total_score >= 8 or
+    # Adjusted thresholds to be more realistic while maintaining quality standards
+    if (total_score >= 6 or  # Lowered from 8 (e.g., 1 guideline + 1 systematic review)
         meta_analysis_count >= 2 or
         (guideline_count >= 1 and meta_analysis_count >= 1) or
-        (guideline_count >= 1 and rct_count >= 2)):
+        (guideline_count >= 1 and rct_count >= 2) or
+        (systematic_review_count >= 2 and num_papers >= 5) or  # 2+ systematic reviews with good paper count
+        (meta_analysis_count >= 1 and systematic_review_count >= 1) or  # 1 meta + 1 systematic
+        (num_papers >= 8 and total_score >= 4)):  # Many papers with decent quality
 
         # Build description highlighting strongest evidence
         desc_parts = []
@@ -2431,11 +2440,14 @@ def get_evidence_strength(num_papers, references):
         }
 
     # MODERATE CONFIDENCE: Some high-quality evidence or multiple moderate-quality sources
-    elif (total_score >= 4 or
+    # More lenient thresholds to avoid "Low Confidence" for good answers
+    elif (total_score >= 2.5 or  # Lowered from 4 (e.g., 1 systematic review OR 1 RCT + 1 observational)
           meta_analysis_count >= 1 or
           systematic_review_count >= 1 or
           rct_count >= 2 or
-          guideline_count >= 1):
+          rct_count >= 1 and num_papers >= 4 or  # 1 RCT + multiple supporting papers
+          guideline_count >= 1 or
+          num_papers >= 5 and total_score >= 1.5):  # 5+ papers with some quality
 
         # Build description
         desc_parts = []
