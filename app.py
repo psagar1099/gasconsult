@@ -606,8 +606,11 @@ def expand_medical_abbreviations(query):
     # PRIS - use word boundary (less likely to be a common word)
     q = re.sub(r'\bpris\b', '("propofol infusion syndrome" OR PRIS)', q, flags=re.IGNORECASE)
     q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
-    # Remove ambiguous "MH" abbreviation - it matches "Mental Health" in PubMed
-    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis"')
+    # MH - FIXED: Expand abbreviation to malignant hyperthermia AND exclude psychiatric papers
+    # Use word boundary to avoid matching "smith" or other words containing "mh"
+    q = re.sub(r'\bmh\b', '(("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis" OR "hyperthermia emergency") NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
+    q = q.replace("malignant hyperthermia", '("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis")')
+    q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis") ')  # Catch " MH " with spaces
 
     # Common scenarios
     q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
@@ -618,6 +621,23 @@ def expand_medical_abbreviations(query):
     q = q.replace("nerve block", '"nerve block"[MeSH Terms] OR "regional anesthesia" OR "peripheral nerve block"')
     q = q.replace("epidural", '"epidural"[MeSH Terms] OR "epidural anesthesia" OR "neuraxial"')
     q = q.replace("spinal", '"spinal anesthesia"[MeSH Terms] OR "subarachnoid" OR "neuraxial"')
+
+    # Other common anesthesia abbreviations that might be ambiguous
+    q = re.sub(r'\bosa\b', '("obstructive sleep apnea" OR OSA OR "sleep apnea")', q, flags=re.IGNORECASE)
+    q = re.sub(r'\bcopd\b', '("chronic obstructive pulmonary disease" OR COPD OR "obstructive lung disease")', q, flags=re.IGNORECASE)
+    q = re.sub(r'\bchf\b', '("congestive heart failure" OR CHF OR "heart failure")', q, flags=re.IGNORECASE)
+    q = re.sub(r'\bcad\b', '("coronary artery disease" OR CAD OR "ischemic heart disease")', q, flags=re.IGNORECASE)
+    q = re.sub(r'\bckd\b', '("chronic kidney disease" OR CKD OR "renal insufficiency")', q, flags=re.IGNORECASE)
+    # PE - exclude physical exam papers
+    q = re.sub(r'\bpe\b', '(("pulmonary embolism"[MeSH Terms] OR "pulmonary embolus" OR thromboembolic) NOT "physical exam"[ti])', q, flags=re.IGNORECASE)
+    # GA - general anesthesia (exclude genetic analysis)
+    q = re.sub(r'\bga\b', '(("general anesthesia"[MeSH Terms] OR "general anaesthesia") NOT genetic[ti])', q, flags=re.IGNORECASE)
+    # MAC - anesthesia context (both meanings are anesthesia-related, so just expand)
+    q = re.sub(r'\bmac\b', '("monitored anesthesia care" OR "minimum alveolar concentration" OR MAC)', q, flags=re.IGNORECASE)
+
+    # Anesthesia-specific terms that need context
+    q = q.replace("protocol", '"protocol"[ti] OR guideline OR algorithm OR management')
+    q = q.replace("crisis", '"crisis management" OR emergency OR "acute management"')
 
     return q
 
