@@ -3237,41 +3237,71 @@ HTML = """<!DOCTYPE html>
         }
 
         .message {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             animation: fade-up 0.4s ease;
         }
 
+        /* User Message - Clean, No Bubble Design */
         .user-message {
             display: flex;
-            justify-content: flex-end;
+            flex-direction: column;
+            align-items: flex-end;
+            width: 100%;
         }
 
         .user-message .message-bubble {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: white;
-            padding: 16px 20px;
-            border-radius: 20px 20px 4px 20px;
-            max-width: 80%;
+            background: transparent;
+            color: var(--gray-900);
+            padding: 0 0 20px 0;
+            border-radius: 0;
+            max-width: 100%;
             font-size: 15px;
-            line-height: 1.5;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.2), 0 8px 24px rgba(37,99,235,0.15);
-            word-wrap: break-word;
+            line-height: 1.6;
+            box-shadow: none;
+            position: relative;
+            width: 100%;
+            text-align: right;
         }
 
+        .user-message .message-bubble::before {
+            content: 'You';
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+            margin-bottom: 8px;
+        }
+
+        .user-message .message-bubble::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+            margin-top: 16px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        /* AI Message - Full Width Glass Card, No Bubble */
         .ai-message {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: stretch;
+            width: 100%;
         }
 
         .ai-message .message-bubble {
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.7);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
-            padding: 20px 24px;
-            border-radius: 20px 20px 20px 4px;
-            max-width: 85%;
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 100%;
             font-size: 15px;
             line-height: 1.7;
             color: var(--gray-800);
@@ -3610,19 +3640,18 @@ HTML = """<!DOCTYPE html>
             }
 
             .message {
-                margin-bottom: 32px;
+                margin-bottom: 40px;
             }
 
             .user-message .message-bubble {
-                padding: 18px 24px;
+                padding: 0 0 24px 0;
                 font-size: 16px;
-                border-radius: 24px 24px 6px 24px;
             }
 
             .ai-message .message-bubble {
-                padding: 24px 28px;
+                padding: 28px 32px;
                 font-size: 16px;
-                border-radius: 24px 24px 24px 6px;
+                border-radius: 14px;
             }
 
             .chat-input-area {
@@ -3638,6 +3667,20 @@ HTML = """<!DOCTYPE html>
         @media (min-width: 1024px) {
             .messages-container {
                 padding: 40px 32px 60px;
+            }
+
+            .message {
+                margin-bottom: 48px;
+            }
+
+            .user-message .message-bubble {
+                font-size: 17px;
+            }
+
+            .ai-message .message-bubble {
+                padding: 32px 36px;
+                font-size: 17px;
+                border-radius: 16px;
             }
 
             .chat-input-area {
