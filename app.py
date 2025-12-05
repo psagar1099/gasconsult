@@ -18651,14 +18651,19 @@ def stream():
             for i, msg in enumerate(session.get('messages', [])):
                 print(f"[DEBUG] [STREAM]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
 
+            # CRITICAL FIX: Get a copy of messages list to force Flask session change detection
+            # Modifying nested list items directly (session['messages'][-1] = ...) doesn't
+            # properly trigger Flask's filesystem session backend to persist changes
+            messages = list(session.get('messages', []))
+
             # Check if last message is an empty assistant placeholder (from homepage redirect)
             # If so, update it instead of appending a new one
-            if (session.get('messages') and
-                len(session['messages']) > 0 and
-                session['messages'][-1].get('role') == 'assistant' and
-                session['messages'][-1].get('content') == ''):
+            if (messages and
+                len(messages) > 0 and
+                messages[-1].get('role') == 'assistant' and
+                messages[-1].get('content') == ''):
                 # Update the placeholder
-                session['messages'][-1] = {
+                messages[-1] = {
                     "role": "assistant",
                     "content": cleaned_response,
                     "references": refs,
@@ -18668,7 +18673,7 @@ def stream():
                 print(f"[DEBUG] [STREAM] Updated existing placeholder assistant message")
             else:
                 # Append new message (for AJAX submissions from chat page)
-                session['messages'].append({
+                messages.append({
                     "role": "assistant",
                     "content": cleaned_response,
                     "references": refs,
@@ -18677,8 +18682,12 @@ def stream():
                 })
                 print(f"[DEBUG] [STREAM] Appended new assistant message")
 
-            print(f"[DEBUG] [STREAM] After saving - session has {len(session.get('messages', []))} messages")
+            # Reassign entire list to trigger Flask session change detection
+            session['messages'] = messages
             session.modified = True
+
+            print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
+            print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
             # Send references with evidence strength
             yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
