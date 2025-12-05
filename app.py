@@ -1447,10 +1447,11 @@ PREOP_HTML = """<!DOCTYPE html>
 
         .results-header {
             text-align: center;
-            padding: 32px 24px;
+            padding: 40px 32px;
             background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-            border-radius: 20px;
-            margin-bottom: 24px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(37,99,235,0.08);
         }
 
         .results-icon {
@@ -1484,37 +1485,167 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .results-card {
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.85);
             backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 24px;
+            padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-        }
-
-        .results-card h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 16px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .results-content {
             font-size: 15px;
-            line-height: 1.7;
+            line-height: 1.8;
             color: var(--gray-700);
+        }
+
+        /* Assessment Content Typography */
+        .results-content h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .results-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .results-content h3::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .results-content h4 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin-top: 24px;
+            margin-bottom: 12px;
+            letter-spacing: -0.3px;
+        }
+
+        .results-content p {
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .results-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .results-content strong {
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .results-content ul,
+        .results-content ol {
+            margin: 16px 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .results-content ul li,
+        .results-content ol li {
+            position: relative;
+            padding-left: 32px;
+            margin-bottom: 12px;
+            line-height: 1.8;
+        }
+
+        .results-content ul li::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 11px;
+            width: 6px;
+            height: 6px;
+            background: var(--blue-500);
+            border-radius: 50%;
+        }
+
+        .results-content ol {
+            counter-reset: item;
+        }
+
+        .results-content ol li {
+            counter-increment: item;
+        }
+
+        .results-content ol li::before {
+            content: counter(item);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Info boxes within assessment */
+        .results-content blockquote {
+            margin: 20px 0;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--blue-50) 0%, rgba(239, 246, 255, 0.5) 100%);
+            border-left: 4px solid var(--blue-500);
+            border-radius: 12px;
+            font-style: normal;
+        }
+
+        /* Citation styling */
+        .results-content a {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .results-content a:hover {
+            color: var(--blue-700);
+            text-decoration: underline;
+        }
+
+        /* Code/monospace elements */
+        .results-content code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            color: var(--gray-800);
         }
 
         /* References */
         .references-card {
-            background: rgba(255,255,255,0.8);
+            background: rgba(255,255,255,0.85);
             backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 24px;
+            border-radius: 24px;
+            padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .references-title {
@@ -1721,8 +1852,40 @@ PREOP_HTML = """<!DOCTYPE html>
                 font-size: 42px;
             }
 
-            .form-card {
+            .form-card,
+            .results-card,
+            .references-card {
                 padding: 40px;
+            }
+
+            .results-header {
+                padding: 48px 40px;
+            }
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 639px) {
+            .results-card,
+            .references-card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            .results-header {
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+
+            .results-content h3 {
+                font-size: 18px;
+            }
+
+            .results-content h4 {
+                font-size: 16px;
+            }
+
+            .results-title {
+                font-size: 20px;
             }
         }
     </style>
