@@ -165,6 +165,7 @@ The original synonym expansion is now part of the comprehensive medical abbrevia
 | `OPENAI_API_KEY` | Yes | OpenAI API key for GPT-4o access |
 | `ENTREZ_EMAIL` | Yes | Email for NCBI Entrez API |
 | `ENTREZ_API_KEY` | Recommended | NCBI API key (increases rate limit) |
+| `REDIS_URL` | Recommended | Redis connection URL for sessions (default: redis://localhost:6379) |
 | `FLASK_SECRET_KEY` | Recommended | Secret key for session management |
 | `FLASK_ENV` | Optional | `development` or `production` (default: production) |
 | `LOG_LEVEL` | Optional | Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL |
@@ -172,6 +173,11 @@ The original synonym expansion is now part of the comprehensive medical abbrevia
 | `RATE_LIMIT` | Optional | Rate limit (default: "60 per minute") |
 
 **Setup:** Copy `.env.example` to `.env` and fill in your values.
+
+**Redis Setup:**
+- **Local Development:** Install Redis locally (`brew install redis` on Mac, `apt-get install redis` on Linux, or use Docker: `docker run -d -p 6379:6379 redis:7-alpine`)
+- **Production (Render):** Create a Redis instance in Render dashboard and use the Internal Redis URL
+- **Fallback:** App automatically falls back to filesystem sessions if Redis is unavailable (not recommended for production)
 
 ## Development Commands
 
@@ -266,8 +272,10 @@ except Exception as e:
    - Exempt endpoints: `/health`, `/api/status`
 
 4. **Session Security**
-   - Server-side filesystem storage
+   - Server-side Redis storage (production-grade, multi-worker safe)
+   - Automatic fallback to filesystem for local development
    - Signed sessions
+   - TTL-based expiration (1 hour)
    - Temporary conversation history only
 
 ### Testing Queries
