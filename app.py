@@ -606,11 +606,12 @@ def expand_medical_abbreviations(query):
     # PRIS - use word boundary (less likely to be a common word)
     q = re.sub(r'\bpris\b', '("propofol infusion syndrome" OR PRIS)', q, flags=re.IGNORECASE)
     q = q.replace("propofol infusion syndrome", '"propofol infusion syndrome" OR PRIS')
-    # MH - FIXED: Expand abbreviation to malignant hyperthermia AND exclude psychiatric papers
+    # MH - Expand abbreviation to malignant hyperthermia AND exclude psychiatric papers
     # Use word boundary to avoid matching "smith" or other words containing "mh"
-    q = re.sub(r'\bmh\b', '(("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis" OR "hyperthermia emergency") NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
-    q = q.replace("malignant hyperthermia", '("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis")')
-    q = q.replace(" mh ", ' ("malignant hyperthermia"[MeSH Terms] OR dantrolene OR "MH crisis") ')  # Catch " MH " with spaces
+    # SIMPLIFIED: Use MeSH term only with exclusions - don't add synonyms that complicate the query
+    q = re.sub(r'\bmh\b', '("malignant hyperthermia"[MeSH Terms] NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
+    # Expand full term "malignant hyperthermia" to use MeSH for better indexing
+    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms]')
 
     # Common scenarios
     q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
@@ -635,9 +636,9 @@ def expand_medical_abbreviations(query):
     # MAC - anesthesia context (both meanings are anesthesia-related, so just expand)
     q = re.sub(r'\bmac\b', '("monitored anesthesia care" OR "minimum alveolar concentration" OR MAC)', q, flags=re.IGNORECASE)
 
-    # Anesthesia-specific terms that need context
-    q = q.replace("protocol", '"protocol"[ti] OR guideline OR algorithm OR management')
-    q = q.replace("crisis", '"crisis management" OR emergency OR "acute management"')
+    # NOTE: DO NOT expand common words like "protocol", "crisis", "management"
+    # These generic expansions create overly broad queries that return wrong papers
+    # Let them remain as-is so PubMed can properly combine them with the medical terms
 
     return q
 
@@ -2958,58 +2959,6 @@ HTML = """<!DOCTYPE html>
 
         .hero-title .gradient { color: var(--blue-600); }
 
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
-
         .hero-subtitle {
             font-size: 16px;
             font-weight: 400;
@@ -4157,22 +4106,6 @@ HTML = """<!DOCTYPE html>
         {% if messages and messages|length > 0 %}
         <!-- Chat Interface -->
         <section class="chat-view" id="main-content">
-            <!-- Medical Disclaimer Banner for Chat -->
-            <div class="disclaimer-banner" style="max-width: 720px; margin: 0 auto 20px; animation-delay: 0s;">
-                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <div class="disclaimer-content">
-                    <div class="disclaimer-title">Medical Disclaimer</div>
-                    <div class="disclaimer-text">
-                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
-                        All information must be verified by qualified healthcare professionals before clinical use.
-                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
-                    </div>
-                </div>
-            </div>
             <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Conversation history">
                 {% if error_message %}
                 <div class="error-message" role="alert">{{ error_message|safe }}</div>
@@ -4315,23 +4248,6 @@ HTML = """<!DOCTYPE html>
             </div>
             <h1 class="hero-title">The AI copilot for<br><span class="gradient">anesthesiology</span></h1>
             <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments - all in one place.</p>
-
-            <!-- Medical Disclaimer Banner -->
-            <div class="disclaimer-banner">
-                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <div class="disclaimer-content">
-                    <div class="disclaimer-title">Medical Disclaimer</div>
-                    <div class="disclaimer-text">
-                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
-                        All information must be verified by qualified healthcare professionals before clinical use.
-                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
-                    </div>
-                </div>
-            </div>
 
             <div class="chat-container">
                 <form method="post" action="/" class="chat-card" role="search" aria-label="Ask anesthesiology question">
@@ -5153,58 +5069,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
-
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -6215,58 +6079,6 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
-
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -19581,7 +19393,7 @@ def index():
                     search_term = (
                         f'({q}) AND '
                         f'(guideline[pt] OR "practice guideline"[pt] OR review[pt] OR meta-analysis[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 elif question_type == 'safety':
                     # Include adverse effects and safety studies
@@ -19589,7 +19401,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'guideline[pt] OR "adverse effects"[sh] OR safety[ti]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 elif question_type == 'comparison':
                     # Prioritize comparative studies
@@ -19597,7 +19409,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"comparative study"[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
                 else:
                     # Default search (general, mechanism, management)
@@ -19605,7 +19417,7 @@ def index():
                         f'({q}) AND '
                         f'(systematic review[pt] OR meta-analysis[pt] OR "randomized controlled trial"[pt] OR '
                         f'"Cochrane Database Syst Rev"[ta] OR guideline[pt]) AND '
-                        f'("2018/01/01"[PDAT] : "3000"[PDAT])'
+                        f'{date_range}'
                     )
 
             # Add negation modifier if detected
