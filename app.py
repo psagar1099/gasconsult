@@ -18704,9 +18704,21 @@ def stream():
                 print(f"[DEBUG] [STREAM] Appended new assistant message")
 
             # Reassign entire list to trigger Flask session change detection
-            # With Redis, this change is persisted immediately (atomic operation)
             session['messages'] = messages
             session.modified = True
+
+            # CRITICAL: Explicitly save session for SSE streaming responses
+            # Even with Redis, generator functions need manual session save because
+            # Flask only auto-saves at the end of the request, but generators
+            # are still yielding data. We must force the save NOW before continuing.
+            try:
+                # Create a mock response object for save_session
+                from werkzeug.wrappers import Response as WerkzeugResponse
+                mock_response = WerkzeugResponse()
+                app.session_interface.save_session(app, session, mock_response)
+                print(f"[DEBUG] [STREAM] Explicitly saved session to Redis")
+            except Exception as e:
+                print(f"[ERROR] [STREAM] Failed to explicitly save session: {e}")
 
             print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
