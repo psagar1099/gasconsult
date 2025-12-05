@@ -4410,9 +4410,22 @@ HTML = """<!DOCTYPE html>
 
         // Auto-scroll to bottom on page load (for chat view)
         {% if messages and messages|length > 0 %}
+        // Scroll immediately when DOM is ready
+        window.addEventListener('DOMContentLoaded', function() {
+            scrollToBottom();
+        });
+
+        // Scroll again after everything loads (images, etc)
         window.addEventListener('load', function() {
             scrollToBottom();
         });
+
+        // Scroll one more time after a brief delay to ensure pending stream is visible
+        {% if pending_stream %}
+        setTimeout(function() {
+            scrollToBottom();
+        }, 100);
+        {% endif %}
         {% endif %}
     </script>
 </body>
