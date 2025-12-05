@@ -4245,14 +4245,27 @@ HTML = """<!DOCTYPE html>
 
             console.log('[SSE] Starting stream for request_id:', requestId);
 
+            // CRITICAL: Scroll to bottom immediately when streaming starts
+            // This ensures user sees the "Thinking..." indicator right away
+            scrollToBottom();
+
             const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
             let accumulatedMarkdown = ''; // Accumulate markdown during streaming
+
+            // Aggressive auto-scroll: Keep scrolling during streaming to ensure user sees new content
+            // This runs every 100ms to aggressively follow the streaming content
+            const scrollInterval = setInterval(function() {
+                scrollToBottom();
+            }, 100);
 
             eventSource.addEventListener('message', function(e) {
                 try {
                     const event = JSON.parse(e.data);
 
-                    if (event.type === 'content') {
+                    if (event.type === 'connected') {
+                        // Initial connection established - scroll to show we're ready
+                        scrollToBottom();
+                    } else if (event.type === 'content') {
                         // Stream content chunks
                         if (event.data) {
                             // Show content div on first content chunk
@@ -4266,6 +4279,7 @@ HTML = """<!DOCTYPE html>
                             } else {
                                 streamingContent.textContent = accumulatedMarkdown;
                             }
+                            // Scroll after each content chunk to keep new text visible
                             scrollToBottom();
                         }
                     } else if (event.type === 'references') {
@@ -4352,6 +4366,9 @@ HTML = """<!DOCTYPE html>
                             streamingIndicator.style.display = 'none';
                         }
 
+                        // Stop the aggressive auto-scroll interval
+                        clearInterval(scrollInterval);
+
                         eventSource.close();
                         scrollToBottom();
                     } else if (event.type === 'error') {
@@ -4360,6 +4377,9 @@ HTML = """<!DOCTYPE html>
                         if (streamingIndicator) {
                             streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error: ' + (event.message || 'Unknown error') + '</span>';
                         }
+
+                        // Stop the aggressive auto-scroll interval
+                        clearInterval(scrollInterval);
 
                         eventSource.close();
                     }
@@ -4374,6 +4394,9 @@ HTML = """<!DOCTYPE html>
                 if (streamingIndicator) {
                     streamingIndicator.innerHTML = '<span style="color: #DC2626;">Connection error - please refresh and try again</span>';
                 }
+
+                // Stop the aggressive auto-scroll interval
+                clearInterval(scrollInterval);
 
                 eventSource.close();
             });
