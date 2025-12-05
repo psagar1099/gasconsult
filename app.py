@@ -13,6 +13,8 @@ import uuid
 import json
 import bleach
 import redis
+import hashlib
+import datetime
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -841,7 +843,24 @@ PREOP_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pre-Operative Assessment - gasconsult.ai</title>
-    
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="AI-powered pre-operative assessment tool combining evidence-based protocols with patient-specific factors for comprehensive anesthesia planning.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gasconsult.ai/preop">
+    <meta property="og:title" content="Pre-Operative Assessment - gasconsult.ai">
+    <meta property="og:description" content="AI-powered pre-operative assessment tool for comprehensive anesthesia planning.">
+    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gasconsult.ai/preop">
+    <meta property="twitter:title" content="Pre-Operative Assessment - gasconsult.ai">
+    <meta property="twitter:description" content="AI-powered pre-operative assessment tool for comprehensive anesthesia planning.">
+    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
+
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
@@ -1688,6 +1707,7 @@ PREOP_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -1697,9 +1717,9 @@ PREOP_HTML = """<!DOCTYPE html>
 
     <div class="page">
         <!-- Navigation -->
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -2477,6 +2497,24 @@ HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GasConsult.ai - AI-Powered Anesthesiology Assistant</title>
 
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o for hallucination-free, citation-backed clinical answers.">
+    <meta name="keywords" content="anesthesiology, anesthesia, medical AI, PubMed, clinical guidelines, evidence-based medicine, GPT-4o, systematic reviews">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gasconsult.ai/">
+    <meta property="og:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
+    <meta property="og:description" content="Get hallucination-free anesthesiology answers backed by PubMed research. GPT-4o + systematic reviews, RCTs, and clinical guidelines.">
+    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gasconsult.ai/">
+    <meta property="twitter:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
+    <meta property="twitter:description" content="Get hallucination-free anesthesiology answers backed by PubMed research.">
+    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
+
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
@@ -2484,6 +2522,22 @@ HTML = """<!DOCTYPE html>
     <meta name="theme-color" content="#2563EB">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": "GasConsult.ai",
+      "description": "Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o",
+      "specialty": "Anesthesiology",
+      "audience": {
+        "@type": "MedicalAudience",
+        "audienceType": "Healthcare Professional"
+      }
+    }
+    </script>
+
     <style>
         :root {
             --white: #FFFFFF;
@@ -2521,6 +2575,25 @@ HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
         }
 
         .bg-canvas {
@@ -2852,6 +2925,58 @@ HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
+
+        /* Medical Disclaimer Banner */
+        .disclaimer-banner {
+            max-width: 800px;
+            margin: 0 auto 32px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
+            border: 1.5px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
+            opacity: 0;
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: #dc2626;
+            margin-top: 2px;
+        }
+
+        .disclaimer-content {
+            flex: 1;
+        }
+
+        .disclaimer-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #7f1d1d;
+        }
+
+        .disclaimer-text a {
+            color: #991b1b;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .disclaimer-text a:hover {
+            color: #7f1d1d;
+        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -3596,6 +3721,60 @@ HTML = """<!DOCTYPE html>
             40% { opacity: 1; transform: scale(1); }
         }
 
+        /* Skeleton Loader */
+        .skeleton-loader {
+            padding: 24px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 12px;
+            margin-bottom: 12px;
+        }
+
+        .skeleton-line {
+            height: 14px;
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+            background-size: 200% 100%;
+            border-radius: 4px;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-line:last-child {
+            margin-bottom: 0;
+            width: 70%;
+        }
+
+        @keyframes skeleton-pulse {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .progress-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-top: 12px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-indicator .progress-icon {
+            width: 14px;
+            height: 14px;
+            border: 2px solid var(--blue-600);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         .chat-input-area {
             position: sticky;
             bottom: 0;
@@ -3880,6 +4059,7 @@ HTML = """<!DOCTYPE html>
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -3888,9 +4068,9 @@ HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -3935,10 +4115,26 @@ HTML = """<!DOCTYPE html>
 
         {% if messages and messages|length > 0 %}
         <!-- Chat Interface -->
-        <section class="chat-view">
-            <div class="messages-container" id="messagesContainer">
+        <section class="chat-view" id="main-content">
+            <!-- Medical Disclaimer Banner for Chat -->
+            <div class="disclaimer-banner" style="max-width: 720px; margin: 0 auto 20px; animation-delay: 0s;">
+                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div class="disclaimer-content">
+                    <div class="disclaimer-title">Medical Disclaimer</div>
+                    <div class="disclaimer-text">
+                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
+                        All information must be verified by qualified healthcare professionals before clinical use.
+                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
+                    </div>
+                </div>
+            </div>
+            <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Conversation history">
                 {% if error_message %}
-                <div class="error-message">{{ error_message|safe }}</div>
+                <div class="error-message" role="alert">{{ error_message|safe }}</div>
                 {% endif %}
 
                 {% for message in messages %}
@@ -4016,6 +4212,12 @@ HTML = """<!DOCTYPE html>
                 <div class="message ai-message" id="streamingMessage">
                     <div class="message-bubble">
                         <div id="streamingEvidenceBadge" style="display: none;"></div>
+                        <div id="skeletonLoader" class="skeleton-loader">
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                        </div>
                         <div class="message-content" id="streamingContent" style="display: none;"></div>
                         <div class="streaming-indicator">
                             <div class="streaming-dots">
@@ -4023,7 +4225,7 @@ HTML = """<!DOCTYPE html>
                                 <span></span>
                                 <span></span>
                             </div>
-                            Thinking...
+                            <span id="progressText">Searching PubMed...</span>
                         </div>
                         <div class="references-section" id="streamingReferences" style="display: none;"></div>
                     </div>
@@ -4033,20 +4235,26 @@ HTML = """<!DOCTYPE html>
 
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
-                    <form method="post" action="/" id="chat-form" class="chat-card">
+                    <form method="post" action="/" id="chat-form" class="chat-card" role="form" aria-label="Follow-up question form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <div class="chat-inner">
-                            <textarea name="query" class="chat-input" placeholder="Ask a follow-up question..." rows="1" required></textarea>
-                            <button type="submit" class="chat-send">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <textarea name="query"
+                                      id="chat-query-input"
+                                      class="chat-input"
+                                      placeholder="Ask a follow-up question..."
+                                      rows="1"
+                                      required
+                                      aria-label="Ask a follow-up question"></textarea>
+                            <button type="submit" class="chat-send" aria-label="Submit follow-up question">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                     <line x1="12" y1="19" x2="12" y2="5"></line>
                                     <polyline points="5 12 12 5 19 12"></polyline>
                                 </svg>
                             </button>
                         </div>
                     </form>
-                    <a href="/clear" class="new-chat-btn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <a href="/clear" class="new-chat-btn" aria-label="Start a new chat conversation">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <polyline points="1 4 1 10 7 10"></polyline>
                             <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
                         </svg>
@@ -4058,7 +4266,7 @@ HTML = """<!DOCTYPE html>
 
         {% else %}
         <!-- Homepage Hero -->
-        <section class="hero">
+        <section class="hero" id="main-content">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
                 <span class="badge-text">PubMed-Powered AI</span>
@@ -4066,13 +4274,37 @@ HTML = """<!DOCTYPE html>
             <h1 class="hero-title">The AI copilot for<br><span class="gradient">anesthesiology</span></h1>
             <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments - all in one place.</p>
 
+            <!-- Medical Disclaimer Banner -->
+            <div class="disclaimer-banner">
+                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <div class="disclaimer-content">
+                    <div class="disclaimer-title">Medical Disclaimer</div>
+                    <div class="disclaimer-text">
+                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
+                        All information must be verified by qualified healthcare professionals before clinical use.
+                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
+                    </div>
+                </div>
+            </div>
+
             <div class="chat-container">
-                <form method="post" action="/" class="chat-card">
+                <form method="post" action="/" class="chat-card" role="search" aria-label="Ask anesthesiology question">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="chat-inner">
-                        <textarea name="query" class="chat-input" placeholder="Ask anything about anesthesiology..." rows="1" required></textarea>
-                        <button type="submit" class="chat-send">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <textarea name="query"
+                                  id="query-input"
+                                  class="chat-input"
+                                  placeholder="Ask anything about anesthesiology..."
+                                  rows="1"
+                                  required
+                                  aria-label="Ask your anesthesiology question"
+                                  aria-describedby="search-hint"></textarea>
+                        <button type="submit" class="chat-send" aria-label="Submit question">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                 <line x1="12" y1="19" x2="12" y2="5"></line>
                                 <polyline points="5 12 12 5 19 12"></polyline>
                             </svg>
@@ -4264,10 +4496,19 @@ HTML = """<!DOCTYPE html>
 
                     if (event.type === 'connected') {
                         // Initial connection established - scroll to show we're ready
+                        const progressText = document.getElementById('progressText');
+                        if (progressText) progressText.textContent = 'Analyzing evidence...';
                         scrollToBottom();
                     } else if (event.type === 'content') {
                         // Stream content chunks
                         if (event.data) {
+                            // Hide skeleton loader and show content on first chunk
+                            const skeletonLoader = document.getElementById('skeletonLoader');
+                            if (skeletonLoader && skeletonLoader.style.display !== 'none') {
+                                skeletonLoader.style.display = 'none';
+                                const progressText = document.getElementById('progressText');
+                                if (progressText) progressText.textContent = 'Streaming answer...';
+                            }
                             // Show content div on first content chunk
                             if (streamingContent.style.display === 'none') {
                                 streamingContent.style.display = 'block';
@@ -4520,6 +4761,25 @@ LIBRARY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -4849,6 +5109,58 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
+
+        /* Medical Disclaimer Banner */
+        .disclaimer-banner {
+            max-width: 800px;
+            margin: 0 auto 32px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
+            border: 1.5px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
+            opacity: 0;
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: #dc2626;
+            margin-top: 2px;
+        }
+
+        .disclaimer-content {
+            flex: 1;
+        }
+
+        .disclaimer-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #7f1d1d;
+        }
+
+        .disclaimer-text a {
+            color: #991b1b;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .disclaimer-text a:hover {
+            color: #7f1d1d;
+        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -5330,6 +5642,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -5338,9 +5651,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -5510,6 +5823,25 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -5839,6 +6171,58 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
+
+        /* Medical Disclaimer Banner */
+        .disclaimer-banner {
+            max-width: 800px;
+            margin: 0 auto 32px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
+            border: 1.5px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
+            opacity: 0;
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: #dc2626;
+            margin-top: 2px;
+        }
+
+        .disclaimer-content {
+            flex: 1;
+        }
+
+        .disclaimer-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #991b1b;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #7f1d1d;
+        }
+
+        .disclaimer-text a {
+            color: #991b1b;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+
+        .disclaimer-text a:hover {
+            color: #7f1d1d;
+        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -6320,6 +6704,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -6328,9 +6713,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -6464,6 +6849,25 @@ TERMS_HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
         }
 
         .bg-canvas {
@@ -6908,6 +7312,7 @@ TERMS_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -6916,9 +7321,9 @@ TERMS_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -7459,6 +7864,25 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -7891,6 +8315,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -7899,9 +8324,9 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -8351,6 +8776,25 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
         }
 
         .bg-canvas {
@@ -8953,6 +9397,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -8962,9 +9407,9 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 
     <div class="page">
         <!-- Navigation -->
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -9472,6 +9917,25 @@ CRISIS_HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             min-height: 100vh;
             overflow-x: hidden;
+        }
+
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
         }
 
         .bg-canvas {
@@ -10443,6 +10907,7 @@ CRISIS_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -10452,9 +10917,9 @@ CRISIS_HTML = """<!DOCTYPE html>
 
     <div class="page">
         <!-- Navigation -->
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -11957,6 +12422,23 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Dose - GasConsult.ai</title>
 
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Fast drug dosing reference for anesthesia: induction agents, opioids, neuromuscular blockers, vasopressors, and emergency medications with evidence-based dosing.">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gasconsult.ai/quick-dose">
+    <meta property="og:title" content="Quick Dose - GasConsult.ai">
+    <meta property="og:description" content="Fast drug dosing reference for anesthesia with evidence-based dosing guidelines.">
+    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gasconsult.ai/quick-dose">
+    <meta property="twitter:title" content="Quick Dose - GasConsult.ai">
+    <meta property="twitter:description" content="Fast drug dosing reference for anesthesia with evidence-based dosing guidelines.">
+    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
+
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
@@ -12928,9 +13410,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 </head>
 <body>
     <div class="page">
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -16824,6 +17306,25 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -17886,6 +18387,25 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -18784,6 +19304,84 @@ def stream():
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
+# ============================================================================
+# PubMed Query Caching Functions
+# ============================================================================
+
+def generate_cache_key(search_term, retmax=20):
+    """Generate a cache key for PubMed queries"""
+    key_string = f"pubmed:{search_term}:{retmax}"
+    return f"pubmed_query:{hashlib.md5(key_string.encode()).hexdigest()}"
+
+def get_cached_pubmed_results(search_term, retmax=20):
+    """Retrieve cached PubMed search results"""
+    if not redis_client:
+        return None
+
+    try:
+        cache_key = generate_cache_key(search_term, retmax)
+        cached = redis_client.get(cache_key)
+        if cached:
+            print(f"[CACHE HIT] Found cached results for query: {search_term[:50]}")
+            return json.loads(cached)
+        print(f"[CACHE MISS] No cached results for query: {search_term[:50]}")
+        return None
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to retrieve from cache: {e}")
+        return None
+
+def cache_pubmed_results(search_term, ids, retmax=20, ttl=86400):
+    """Cache PubMed search results (default TTL: 24 hours)"""
+    if not redis_client:
+        return False
+
+    try:
+        cache_key = generate_cache_key(search_term, retmax)
+        cache_data = {
+            'ids': ids,
+            'search_term': search_term,
+            'timestamp': str(datetime.datetime.now()),
+            'count': len(ids)
+        }
+        redis_client.setex(cache_key, ttl, json.dumps(cache_data))
+        print(f"[CACHE SAVE] Cached {len(ids)} results for query: {search_term[:50]}")
+        return True
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to save to cache: {e}")
+        return False
+
+def get_cached_paper_metadata(pmid):
+    """Retrieve cached paper metadata"""
+    if not redis_client:
+        return None
+
+    try:
+        cache_key = f"pubmed_paper:{pmid}"
+        cached = redis_client.get(cache_key)
+        if cached:
+            return json.loads(cached)
+        return None
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to retrieve paper {pmid} from cache: {e}")
+        return None
+
+def cache_paper_metadata(pmid, metadata, ttl=604800):
+    """Cache paper metadata (default TTL: 7 days)"""
+    if not redis_client:
+        return False
+
+    try:
+        cache_key = f"pubmed_paper:{pmid}"
+        redis_client.setex(cache_key, ttl, json.dumps(metadata))
+        return True
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to cache paper {pmid}: {e}")
+        return False
+
+# ============================================================================
+# Main Route
+# ============================================================================
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     """Homepage - handles both welcome screen and chat"""
@@ -18988,30 +19586,49 @@ def index():
             date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
 
             # Tier 1: Search WITH anesthesiology context from the start for better precision
-            try:
-                print(f"[DEBUG] Tier 1: Searching PubMed with anesthesiology context...")
-                # Add anesthesiology-related terms to improve relevance
-                anesth_context = '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR perioperative[tiab])'
-                handle = Entrez.esearch(db="pubmed", term=f'{search_term} AND {anesth_context}', retmax=20, sort="relevance")
-                result = Entrez.read(handle)
-                ids = result.get("IdList", [])
-                print(f"[DEBUG] Tier 1 found {len(ids)} papers")
-            except Exception as e:
-                print(f"[ERROR] Tier 1 search failed: {e}")
-                ids = []
+            # Check cache first
+            anesth_context = '(anesthesia[MeSH Terms] OR anesthesiology[MeSH Terms] OR anesthetics[MeSH Terms] OR perioperative[tiab])'
+            tier1_search_term = f'{search_term} AND {anesth_context}'
+            cached_result = get_cached_pubmed_results(tier1_search_term, retmax=20)
+
+            if cached_result:
+                ids = cached_result.get('ids', [])
+                print(f"[DEBUG] Tier 1 (CACHED): Found {len(ids)} papers")
+            else:
+                try:
+                    print(f"[DEBUG] Tier 1: Searching PubMed with anesthesiology context...")
+                    handle = Entrez.esearch(db="pubmed", term=tier1_search_term, retmax=20, sort="relevance")
+                    result = Entrez.read(handle)
+                    ids = result.get("IdList", [])
+                    print(f"[DEBUG] Tier 1 found {len(ids)} papers")
+                    # Cache the results
+                    cache_pubmed_results(tier1_search_term, ids, retmax=20)
+                except Exception as e:
+                    print(f"[ERROR] Tier 1 search failed: {e}")
+                    ids = []
 
             # Tier 2: Broaden to remove anesthesiology restriction if needed
             if len(ids) < 5 and not is_followup:
-                try:
-                    print(f"[DEBUG] Tier 2: Broadening without anesthesiology restriction...")
-                    handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=20, sort="relevance")
-                    result = Entrez.read(handle)
-                    tier2_ids = result.get("IdList", [])
-                    # Combine and deduplicate
+                # Check cache first
+                cached_result = get_cached_pubmed_results(search_term, retmax=20)
+
+                if cached_result:
+                    tier2_ids = cached_result.get('ids', [])
                     ids = list(set(ids + tier2_ids))
-                    print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
-                except Exception as e:
-                    print(f"[ERROR] Tier 2 search failed: {e}")
+                    print(f"[DEBUG] Tier 2 (CACHED): Found {len(tier2_ids)} papers, total unique: {len(ids)}")
+                else:
+                    try:
+                        print(f"[DEBUG] Tier 2: Broadening without anesthesiology restriction...")
+                        handle = Entrez.esearch(db="pubmed", term=f'{search_term}', retmax=20, sort="relevance")
+                        result = Entrez.read(handle)
+                        tier2_ids = result.get("IdList", [])
+                        # Combine and deduplicate
+                        ids = list(set(ids + tier2_ids))
+                        print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
+                        # Cache the results
+                        cache_pubmed_results(search_term, tier2_ids, retmax=20)
+                    except Exception as e:
+                        print(f"[ERROR] Tier 2 search failed: {e}")
 
             # Tier 3: Controlled broadening - keep high-quality study filters but extend date range
             if len(ids) < 5 and not is_followup:
