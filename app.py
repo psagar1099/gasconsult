@@ -2959,58 +2959,6 @@ HTML = """<!DOCTYPE html>
 
         .hero-title .gradient { color: var(--blue-600); }
 
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
-
         .hero-subtitle {
             font-size: 16px;
             font-weight: 400;
@@ -4158,22 +4106,6 @@ HTML = """<!DOCTYPE html>
         {% if messages and messages|length > 0 %}
         <!-- Chat Interface -->
         <section class="chat-view" id="main-content">
-            <!-- Medical Disclaimer Banner for Chat -->
-            <div class="disclaimer-banner" style="max-width: 720px; margin: 0 auto 20px; animation-delay: 0s;">
-                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <div class="disclaimer-content">
-                    <div class="disclaimer-title">Medical Disclaimer</div>
-                    <div class="disclaimer-text">
-                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
-                        All information must be verified by qualified healthcare professionals before clinical use.
-                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
-                    </div>
-                </div>
-            </div>
             <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Conversation history">
                 {% if error_message %}
                 <div class="error-message" role="alert">{{ error_message|safe }}</div>
@@ -4316,23 +4248,6 @@ HTML = """<!DOCTYPE html>
             </div>
             <h1 class="hero-title">The AI copilot for<br><span class="gradient">anesthesiology</span></h1>
             <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments - all in one place.</p>
-
-            <!-- Medical Disclaimer Banner -->
-            <div class="disclaimer-banner">
-                <svg class="disclaimer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="12" y1="8" x2="12" y2="12"></line>
-                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <div class="disclaimer-content">
-                    <div class="disclaimer-title">Medical Disclaimer</div>
-                    <div class="disclaimer-text">
-                        This service provides <strong>educational information only</strong> and is <strong>not medical advice</strong>.
-                        All information must be verified by qualified healthcare professionals before clinical use.
-                        For emergencies, call 911. <a href="/terms" target="_blank">View full terms</a>
-                    </div>
-                </div>
-            </div>
 
             <div class="chat-container">
                 <form method="post" action="/" class="chat-card" role="search" aria-label="Ask anesthesiology question">
@@ -5154,58 +5069,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
-
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
 
         .hero-subtitle {
             font-size: 16px;
@@ -6216,58 +6079,6 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .hero-title .gradient { color: var(--blue-600); }
-
-        /* Medical Disclaimer Banner */
-        .disclaimer-banner {
-            max-width: 800px;
-            margin: 0 auto 32px;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.12) 100%);
-            border: 1.5px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.05s forwards;
-            opacity: 0;
-        }
-
-        .disclaimer-icon {
-            flex-shrink: 0;
-            width: 20px;
-            height: 20px;
-            color: #dc2626;
-            margin-top: 2px;
-        }
-
-        .disclaimer-content {
-            flex: 1;
-        }
-
-        .disclaimer-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #991b1b;
-            margin-bottom: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .disclaimer-text {
-            font-size: 13px;
-            line-height: 1.5;
-            color: #7f1d1d;
-        }
-
-        .disclaimer-text a {
-            color: #991b1b;
-            text-decoration: underline;
-            font-weight: 600;
-        }
-
-        .disclaimer-text a:hover {
-            color: #7f1d1d;
-        }
 
         .hero-subtitle {
             font-size: 16px;
