@@ -9,10 +9,10 @@ import openai
 import os
 import re
 import secrets
-import tempfile
 import uuid
 import json
 import bleach
+import redis
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -21,15 +21,36 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 
-# Configure server-side sessions (stores sessions in filesystem instead of cookies)
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
+# Configure server-side sessions with Redis backend (production-grade, multi-worker safe)
+# Falls back to localhost Redis if REDIS_URL not set (for local development)
+redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
+try:
+    # Initialize Redis connection
+    redis_client = redis.from_url(
+        redis_url,
+        decode_responses=False,  # Keep binary for Flask-Session compatibility
+        socket_connect_timeout=5,
+        socket_keepalive=True,
+        health_check_interval=30
+    )
+    # Test connection
+    redis_client.ping()
+    print(f"[REDIS] Successfully connected to Redis at {redis_url.split('@')[-1]}")  # Hide credentials in logs
+
+    app.config['SESSION_TYPE'] = 'redis'
+    app.config['SESSION_REDIS'] = redis_client
+except (redis.ConnectionError, redis.TimeoutError) as e:
+    print(f"[WARNING] Redis connection failed: {e}")
+    print(f"[WARNING] Falling back to filesystem sessions (not recommended for production)")
+    # Fallback to filesystem sessions for development
+    app.config['SESSION_TYPE'] = 'filesystem'
+    app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
+
 app.config['SESSION_PERMANENT'] = True
 app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 hour
 app.config['SESSION_USE_SIGNER'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-# Only require HTTPS cookies if explicitly enabled (Render uses reverse proxy)
 app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production' and os.getenv('FORCE_HTTPS', 'false').lower() == 'true'
 Session(app)
 
@@ -18683,20 +18704,9 @@ def stream():
                 print(f"[DEBUG] [STREAM] Appended new assistant message")
 
             # Reassign entire list to trigger Flask session change detection
+            # With Redis, this change is persisted immediately (atomic operation)
             session['messages'] = messages
             session.modified = True
-
-            # CRITICAL: Force immediate session save for SSE responses
-            # Flask's session only auto-saves at end of request, but SSE streams
-            # are long-lived connections, so we must manually save here
-            try:
-                # Get the session interface and force a save
-                session_interface = app.session_interface
-                response_class = app.response_class()
-                session_interface.save_session(app, session, response_class)
-                print(f"[DEBUG] [STREAM] Forced session save to disk")
-            except Exception as e:
-                print(f"[ERROR] [STREAM] Failed to force session save: {e}")
 
             print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")

@@ -1,6 +1,7 @@
 Flask==3.0.3
 Flask-Session==0.8.0
 Flask-WTF==1.2.1
+redis==5.0.1
 biopython==1.83
 openai==1.53.0
 gunicorn==22.0.0
