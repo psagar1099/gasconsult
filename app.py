@@ -16259,6 +16259,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             75% { transform: translate(-40px, 20px) scale(1.02); }
         }
 
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .grain {
             position: fixed;
             inset: 0;
@@ -16519,6 +16524,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         .section-title {
@@ -17390,6 +17397,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
@@ -17712,6 +17724,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         /* Form Sections */
@@ -18471,6 +18485,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
@@ -18793,6 +18812,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             padding: 32px;
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         /* Form */
@@ -20427,7 +20448,7 @@ Structure your response with the following sections using HTML formatting:
 
 Keep language professional but patient-friendly. Include specific risk frequencies where appropriate. Be thorough but concise (aim for 300-400 words total)."""
 
-        response = client.chat.completions.create(
+        response = openai_client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.2,
@@ -20733,13 +20754,13 @@ Generate a comprehensive pre-operative assessment including:
    - Postoperative disposition (PACU vs ICU)
    - Risk mitigation strategies
 
-5. **Evidence-Based Citations**: Use [1], [2], [3] format referencing the papers provided above
-
 Use HTML formatting:
 - <h3>Section Headers</h3>
 - <p>Paragraphs</p>
 - <strong>Bold for emphasis</strong>
 - <br><br> for spacing
+
+IMPORTANT: Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above. Do NOT create a separate "Evidence-Based Citations" or "References" section - the references will be displayed separately below your assessment.
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. When discussing risk, reference the ACS NSQIP risk calculator framework and provide estimated risk percentages for major complications when relevant based on the patient's profile."""
 
