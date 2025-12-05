@@ -20733,13 +20733,13 @@ Generate a comprehensive pre-operative assessment including:
    - Postoperative disposition (PACU vs ICU)
    - Risk mitigation strategies
 
-5. **Evidence-Based Citations**: Use [1], [2], [3] format referencing the papers provided above
-
 Use HTML formatting:
 - <h3>Section Headers</h3>
 - <p>Paragraphs</p>
 - <strong>Bold for emphasis</strong>
 - <br><br> for spacing
+
+IMPORTANT: Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above. Do NOT create a separate "Evidence-Based Citations" or "References" section - the references will be displayed separately below your assessment.
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. When discussing risk, reference the ACS NSQIP risk calculator framework and provide estimated risk percentages for major complications when relevant based on the patient's profile."""
 
