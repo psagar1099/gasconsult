@@ -3702,6 +3702,15 @@ HTML = """<!DOCTYPE html>
             flex: 1;
         }
 
+        .reference-number {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--blue-600);
+            min-width: 32px;
+            flex-shrink: 0;
+            padding-top: 1px;
+        }
+
         .streaming-indicator {
             display: inline-flex;
             align-items: center;
@@ -4196,6 +4205,7 @@ HTML = """<!DOCTYPE html>
                                 {% for ref in message.references %}
                                 <div class="reference-item">
                                     <div class="reference-header">
+                                        <div class="reference-number">[{{ loop.index }}]</div>
                                         <div class="reference-link-container">
                                             <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
                                                 {{ ref.title }}
@@ -4588,9 +4598,11 @@ HTML = """<!DOCTYPE html>
                             refsHTML += 'References (' + event.data.length + ')';
                             refsHTML += '</div>';
 
-                            event.data.forEach(function(ref) {
+                            event.data.forEach(function(ref, index) {
                                 refsHTML += '<div class="reference-item">';
-                                refsHTML += '<div class="reference-header"><div class="reference-link-container">';
+                                refsHTML += '<div class="reference-header">';
+                                refsHTML += '<div class="reference-number">[' + (index + 1) + ']</div>';
+                                refsHTML += '<div class="reference-link-container">';
                                 refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
                                 refsHTML += ref.title;
                                 refsHTML += '</a>';
@@ -19818,9 +19830,9 @@ Answer as if you're a colleague continuing the conversation:"""
                         "study_badge": study_classification['badge_text'],
                         "study_color": study_classification['badge_color'],
                         "study_score": study_classification['score'],
-                        "sort_priority": study_classification['sort_priority']
+                        "sort_priority": study_classification['sort_priority'],
+                        "abstract": abstract  # Store abstract for numbered context
                     })
-                    context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
                 except:
                     continue
 
@@ -19838,6 +19850,11 @@ Answer as if you're a colleague continuing the conversation:"""
             ref_list = ""
             for i, ref in enumerate(refs, 1):
                 ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+            # Build numbered context with full details (helps GPT understand which paper is which)
+            context = ""
+            for i, ref in enumerate(refs, 1):
+                context += f"Paper [{i}]:\nTitle: {ref['title']}\nAbstract: {ref.get('abstract', 'No abstract available')}\nAuthors: {ref['authors']}\nJournal: {ref['journal']} ({ref['year']})\nPMID: {ref['pmid']}\n\n"
 
             # Log papers being used for debugging
             print(f"\n[DEBUG] ===== PAPERS RETURNED FOR QUERY: '{raw_query}' =====")
@@ -19873,37 +19890,39 @@ Before providing your answer, internally verify:
 INSTRUCTIONS:
 1. Include specific dosages (mg/kg), contraindications, side effects, and monitoring when relevant
 2. For acute situations, provide step-by-step protocols with drugs and doses
-3. **CITATION ACCURACY (CRITICAL):**
+3. **IN-TEXT CITATIONS (CRITICAL):**
+   - Use numbered citations [1], [2], [3] etc. corresponding to the numbered papers above
    - ONLY cite a paper [N] if that SPECIFIC paper's abstract directly supports the exact claim you're making
-   - Verify each citation: Does the abstract contain this specific fact/dose/finding?
+   - Verify each citation: Does Paper [N]'s abstract contain this specific fact/dose/finding?
    - If a claim is from your general knowledge but NOT explicitly in the provided abstracts, DO NOT add a citation
    - Better to have NO citation than an INACCURATE citation
    - When citing: use [1], [2], etc. - NO author names in text
    - Multiple papers can support one claim: "X is effective [1][2][3]"
+   - Place citations immediately after the claim: "TXA reduces blood loss [1][2]."
    - If papers discuss a topic generally but don't support your specific claim, omit the citation
 4. Be conversational but clinically complete - like talking to a colleague
 5. HTML format: <h3> for sections, <p> for paragraphs, <strong> for emphasis, <ul><li> for lists
 6. CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)
 
 CITATION VERIFICATION CHECKLIST (Check EACH citation before adding):
-   ❌ WRONG: "Propofol 2-3 mg/kg is recommended [1]" when abstract says "induction agents" generally
-   ❌ WRONG: "TXA reduces blood loss by 30% [2]" when abstract doesn't give specific percentage
-   ❌ WRONG: "Common side effects include nausea [3]" when abstract doesn't mention side effects
-   ✅ CORRECT: "TXA reduces blood loss in spine surgery [1][2]" when both abstracts explicitly state this
-   ✅ CORRECT: "Standard monitoring includes pulse oximetry" (NO citation - general knowledge)
+   ❌ WRONG: "Propofol 2-3 mg/kg is recommended [1]" when Paper [1]'s abstract says "induction agents" generally
+   ❌ WRONG: "TXA reduces blood loss by 30% [2]" when Paper [2]'s abstract doesn't give specific percentage
+   ❌ WRONG: "Common side effects include nausea [3]" when Paper [3]'s abstract doesn't mention side effects
+   ✅ CORRECT: "TXA reduces blood loss in spine surgery [1][2]" when both Paper [1] and [2] abstracts explicitly state this
+   ✅ CORRECT: "Standard monitoring includes pulse oximetry" (NO citation - general knowledge not from papers)
 
-IMPORTANT: Use the provided research papers to inform your answer. Only cite papers when their abstracts directly support the specific claim. If a claim is general knowledge or not supported by the abstracts, omit the citation.
+IMPORTANT: Use numbered citations [1], [2], [3] throughout your answer to reference the specific papers above. Only cite when the paper's abstract directly supports the specific claim. If a claim is general knowledge or not supported by the abstracts, omit the citation.
 
-Example with proper conservative citation:
+Example with proper numbered citations:
 "<h3>Acute Bronchospasm Management</h3>
 <p><strong>Immediate Actions:</strong><br>
 100% oxygen and hand-ventilate to assess compliance. Deepen anesthesia with propofol or increase volatile agent to 2+ MAC.</p>
 <p><strong>Bronchodilators:</strong><br>
-Inhaled beta-2 agonists are first-line treatment [1][2]. Response typically seen within minutes. Severe cases may require IV epinephrine.</p>
+Inhaled beta-2 agonists are first-line treatment for acute bronchospasm [1][2]. Response typically seen within minutes. Severe cases may require IV epinephrine [3].</p>
 <p><strong>Monitoring:</strong><br>
 Watch for auto-PEEP, pneumothorax, and cardiovascular compromise from high airway pressures.</p>"
 
-NOTE: Only cite when abstracts explicitly support claims. Generic principles have NO citations as they're standard knowledge.
+NOTE: Numbers [1], [2], [3] must correspond to Paper [1], Paper [2], Paper [3] listed above. Only cite when abstracts explicitly support claims.
 
 Respond with maximum clinical utility:"""
 
