@@ -11024,14 +11024,6 @@ CRISIS_HTML = """<!DOCTYPE html>
         <!-- Protocols -->
         <div class="protocols-container">
 
-            <!-- Demo Note -->
-            <div class="demo-note">
-                <div class="demo-note-title">✨ Enhanced Design - Work in Progress</div>
-                <div class="demo-note-text">
-                    Currently showing 5 enhanced protocols (MH, Cardiac Arrest, Anaphylaxis, LAST, CICO) with the new reference system: custom SVG icons, inline citation numbers, collapsible references, and improved hover effects. Remaining 6 protocols coming next!
-                </div>
-            </div>
-
             <!-- Life-Threatening / Cardiac -->
             <div class="category-section" data-category="cardiac">
                 <div class="category-header">
@@ -12545,6 +12537,72 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Background Canvas */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
         .page {
             position: relative;
             z-index: 2;
@@ -12760,6 +12818,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         .weight-section {
             text-align: center;
             margin-bottom: 32px;
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         .weight-label {
@@ -12879,6 +12939,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         /* Drug Category Section */
         .category-group {
             margin-bottom: 32px;
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         .category-header {
@@ -12925,6 +12987,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             overflow: hidden;
             transition: all 0.25s ease;
             border: 2px solid #e5e7eb;
+            animation: fade-up 0.6s ease forwards;
+            opacity: 0;
         }
 
         .drug-item.induction { border-left: 4px solid var(--color-hypnotic); }
@@ -13428,6 +13492,13 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
