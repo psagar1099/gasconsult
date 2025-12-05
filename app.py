@@ -19108,14 +19108,16 @@ Answer as if you're a colleague continuing the conversation:"""
             for p in papers[:15]:
                 try:
                     art = p["MedlineCitation"]["Article"]
-                    title = art.get("ArticleTitle", "No title")
+                    # CRITICAL: Convert all Biopython StringElement objects to plain Python strings
+                    # for Redis serialization compatibility
+                    title = str(art.get("ArticleTitle", "No title"))
                     # Truncate abstracts to 1200 chars for better citation accuracy
                     abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
                     abstract = abstract[:1200] + "..." if len(abstract) > 1200 else abstract
-                    authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
-                    journal = art["Journal"].get("Title", "Unknown")
-                    year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
-                    pmid = p["MedlineCitation"]["PMID"]
+                    authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])  # Reduced to 3 authors
+                    journal = str(art["Journal"].get("Title", "Unknown"))
+                    year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                    pmid = str(p["MedlineCitation"]["PMID"])
 
                     # Classify study type for quality indicators
                     study_classification = classify_study_type(title, journal)
@@ -19852,12 +19854,14 @@ def preop_assessment():
                 for p in papers:
                     try:
                         art = p["MedlineCitation"]["Article"]
-                        title = art.get("ArticleTitle", "No title")
+                        # CRITICAL: Convert all Biopython StringElement objects to plain Python strings
+                        # for Redis serialization compatibility
+                        title = str(art.get("ArticleTitle", "No title"))
                         abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                        authors = ", ".join([a.get("LastName","") + " " + (a.get("ForeName","")[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
-                        journal = art["Journal"].get("Title", "Unknown")
-                        year = art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A")
-                        pmid = p["MedlineCitation"]["PMID"]
+                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                        journal = str(art["Journal"].get("Title", "Unknown"))
+                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                        pmid = str(p["MedlineCitation"]["PMID"])
 
                         # Classify study type for quality indicators
                         study_classification = classify_study_type(title, journal)
