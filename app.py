@@ -19200,6 +19200,18 @@ def index():
 
             print(f"[DEBUG] Expanded query: '{q}'")
 
+            # Detect well-established topics that should have lots of evidence
+            well_established_topics = [
+                'malignant hyperthermia', 'difficult airway', 'aspiration', 'local anesthetic systemic toxicity',
+                'last', 'propofol infusion syndrome', 'pris', 'anaphylaxis', 'tranexamic acid', 'txa',
+                'postoperative nausea', 'ponv', 'rapid sequence', 'rsi', 'spinal anesthesia', 'epidural',
+                'general anesthesia', 'blood transfusion', 'massive transfusion', 'coagulopathy'
+            ]
+            is_established_topic = any(topic in query_lower for topic in well_established_topics)
+
+            # Adjust date range for established topics (go back further for classic evidence)
+            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
+
             # Customize search based on question type
             if is_followup:
                 # Broader search for follow-ups
@@ -19246,18 +19258,6 @@ def index():
 
             # Multi-tier search strategy to find relevant papers
             ids = []
-
-            # Detect well-established topics that should have lots of evidence
-            well_established_topics = [
-                'malignant hyperthermia', 'difficult airway', 'aspiration', 'local anesthetic systemic toxicity',
-                'last', 'propofol infusion syndrome', 'pris', 'anaphylaxis', 'tranexamic acid', 'txa',
-                'postoperative nausea', 'ponv', 'rapid sequence', 'rsi', 'spinal anesthesia', 'epidural',
-                'general anesthesia', 'blood transfusion', 'massive transfusion', 'coagulopathy'
-            ]
-            is_established_topic = any(topic in query_lower for topic in well_established_topics)
-
-            # Adjust date range for established topics (go back further for classic evidence)
-            date_range = '("2010/01/01"[PDAT] : "3000"[PDAT])' if is_established_topic else '("2018/01/01"[PDAT] : "3000"[PDAT])'
 
             # Tier 1: Broad perioperative/critical care context (inclusive of related specialties)
             # Anesthesia is closely tied to critical care, ICU, surgery, emergency medicine, and pain
