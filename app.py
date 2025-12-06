@@ -17330,6 +17330,721 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-01NZYD1DPP');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent for Anesthesia - GasConsult.ai</title>
+    <meta name="description" content="Evidence-based informed consent guide for anesthesia procedures with comprehensive risk discussion.">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --green-50: #F0FDF4;
+            --green-500: #22C55E;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+            opacity: 0;
+        }
+
+        .header-title {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+            opacity: 0;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-700);
+            margin-bottom: 24px;
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .risk-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        .risk-list li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--blue-500);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
+        }
+
+        .risk-list li strong {
+            color: var(--gray-900);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .info-box {
+            background: var(--blue-50);
+            border: 1px solid var(--blue-200);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin: 0;
+        }
+
+        .references {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .references-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .references-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .references-list li {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-600);
+        }
+
+        .references-list li:last-child {
+            border-bottom: none;
+        }
+
+        .references-list strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .references-list em {
+            color: var(--gray-700);
+        }
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--gray-700);
+        }
+
+        @media (min-width: 768px) {
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            .header-title { font-size: 48px; }
+            .content-card { padding: 48px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <!-- Navigation -->
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1 class="header-title"><span class="gradient">Informed Consent</span> for Anesthesia</h1>
+                <p class="header-subtitle">Evidence-based guide to anesthesia risks and benefits</p>
+            </div>
+
+            <div class="content-card">
+                <div class="section-title">Overview</div>
+                <div class="section-content">
+                    <p>Anesthesia is essential for surgery and procedures, allowing you to be comfortable and pain-free. While modern anesthesia is very safe, it's important to understand the types, benefits, and potential risks before your procedure.</p>
+                    <p><strong>Types of Anesthesia:</strong></p>
+                    <ul class="risk-list">
+                        <li><strong>General Anesthesia</strong> - You are completely unconscious and unaware during the procedure. A breathing tube or airway device is typically used.</li>
+                        <li><strong>Regional Anesthesia</strong> - Numbs a large part of the body (e.g., spinal or epidural for lower body surgery).</li>
+                        <li><strong>Local Anesthesia</strong> - Numbs only a small area where the procedure will be performed.</li>
+                        <li><strong>Monitored Anesthesia Care (MAC)</strong> - Sedation with local anesthesia, allowing you to be relaxed or lightly asleep.</li>
+                    </ul>
+                </div>
+
+                <div class="section-title">Common Side Effects</div>
+                <div class="section-content">
+                    <p>Most patients experience minor, temporary side effects from anesthesia:</p>
+                    <ul class="risk-list">
+                        <li><strong>Nausea and Vomiting</strong> - Occurs in 20-30% of patients. Anti-nausea medications can be given.</li>
+                        <li><strong>Sore Throat</strong> - From the breathing tube (general anesthesia). Usually resolves within 48 hours.</li>
+                        <li><strong>Drowsiness and Confusion</strong> - Common immediately after anesthesia, typically clears within hours.</li>
+                        <li><strong>Shivering</strong> - Body temperature regulation is affected; warming measures are used.</li>
+                        <li><strong>Muscle Aches</strong> - May occur after certain muscle relaxants are used.</li>
+                    </ul>
+                </div>
+
+                <div class="section-title">Serious but Rare Risks</div>
+                <div class="section-content">
+                    <p>Serious complications from anesthesia are rare in healthy patients. Risk increases with emergency surgery, significant medical conditions, and advanced age:</p>
+                    <ul class="risk-list">
+                        <li><strong>Aspiration</strong> - Stomach contents entering the lungs (1 in 2,000-3,000 cases). We take precautions including fasting guidelines.</li>
+                        <li><strong>Dental Damage</strong> - Rare injury to teeth during airway management (1 in 4,500). Pre-existing dental issues increase risk.</li>
+                        <li><strong>Allergic Reactions</strong> - Severe reactions to anesthesia drugs are extremely rare (1 in 10,000-20,000).</li>
+                        <li><strong>Awareness Under Anesthesia</strong> - Becoming conscious during surgery (1 in 19,000 for general surgery, higher for cardiac/trauma).</li>
+                        <li><strong>Nerve Damage</strong> - From positioning or regional anesthesia (typically temporary; permanent injury is rare).</li>
+                        <li><strong>Cardiovascular Complications</strong> - Heart attack or stroke (risk depends on pre-existing conditions and surgery type).</li>
+                        <li><strong>Death</strong> - Extremely rare in healthy patients (approximately 1 in 100,000-200,000). Risk is higher with emergency surgery and significant medical conditions.</li>
+                    </ul>
+                </div>
+
+                <div class="section-title">Special Considerations</div>
+                <div class="section-content">
+                    <ul class="risk-list">
+                        <li><strong>Malignant Hyperthermia</strong> - A rare genetic condition triggered by certain anesthetics (1 in 50,000-100,000). Inform your anesthesiologist of any family history.</li>
+                        <li><strong>Postoperative Cognitive Dysfunction</strong> - Temporary confusion or memory issues, more common in elderly patients. Usually improves over weeks to months.</li>
+                        <li><strong>Pregnancy</strong> - Inform your anesthesiologist if you are or might be pregnant, as some medications may affect the fetus.</li>
+                        <li><strong>Obstructive Sleep Apnea</strong> - Increases risk of airway complications. CPAP machines should be brought to the hospital.</li>
+                    </ul>
+                </div>
+
+                <div class="info-box">
+                    <p><strong>Important:</strong> Your anesthesiologist will review your complete medical history, medications, and allergies to create the safest anesthetic plan for you. Please disclose all medical conditions, previous anesthesia experiences, drug allergies, and use of medications, supplements, or herbal products. Do not hesitate to ask questions—we are here to ensure your safety and comfort.</p>
+                </div>
+            </div>
+
+            <div class="references">
+                <div class="references-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    References
+                </div>
+                <ol class="references-list">
+                    <li>American Society of Anesthesiologists. <strong>Practice Advisory for Preanesthesia Evaluation: An Updated Report.</strong> <em>Anesthesiology</em>. 2012;116(3):522-538. PMID: 22273990</li>
+                    <li>Bainbridge D, et al. <strong>Perioperative and anaesthetic-related mortality in developed and developing countries: a systematic review and meta-analysis.</strong> <em>Lancet</em>. 2012;380(9847):1075-1081. PMID: 22998717</li>
+                    <li>Cook TM, et al. <strong>Major complications of airway management in the UK: results of the Fourth National Audit Project.</strong> <em>Br J Anaesth</em>. 2011;106(5):617-631. PMID: 21447488</li>
+                    <li>Apfel CC, et al. <strong>Evidence-based analysis of risk factors for postoperative nausea and vomiting.</strong> <em>Br J Anaesth</em>. 2012;109(5):742-753. PMID: 23035051</li>
+                    <li>Sebel PS, et al. <strong>The incidence of awareness during anesthesia: a multicenter United States study.</strong> <em>Anesth Analg</em>. 2004;99(3):833-839. PMID: 15333419</li>
+                    <li>Rosenberg H, et al. <strong>Malignant hyperthermia: a review.</strong> <em>Orphanet J Rare Dis</em>. 2015;10:93. PMID: 26238698</li>
+                    <li>Evered L, et al. <strong>Recommendations for the nomenclature of cognitive change associated with anaesthesia and surgery—2018.</strong> <em>Anesthesiology</em>. 2018;129(5):872-879. PMID: 30325806</li>
+                    <li>Warner DO. <strong>Preventing postoperative pulmonary complications: the role of the anesthesiologist.</strong> <em>Anesthesiology</em>. 2000;92(5):1467-1472. PMID: 10781292</li>
+                </ol>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+    </script>
+</body>
+</html>
+"""
 
 DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -17345,8 +18060,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difficult Airway Predictor - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based difficult airway prediction using ASA guidelines and validated clinical predictors.">
+    <title>Difficult Airway Assessment - GasConsult.ai</title>
+    <meta name="description" content="Evidence-based difficult airway prediction and management strategies.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -17378,13 +18093,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --blue-700: #1D4ED8;
             --red-50: #FEF2F2;
             --red-500: #EF4444;
-            --red-600: #DC2626;
             --amber-50: #FFFBEB;
             --amber-500: #F59E0B;
             --green-50: #F0FDF4;
             --green-500: #22C55E;
-            --purple-50: #FAF5FF;
-            --purple-500: #A855F7;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -17401,25 +18113,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        /* Skip to Content Link for Accessibility */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--blue-600);
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 0 0 4px 0;
-            z-index: 1000;
-            font-weight: 600;
-            transition: top 0.2s;
-        }
-
-        .skip-to-content:focus {
-            top: 0;
         }
 
         .bg-canvas {
@@ -17468,11 +18161,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
             25% { transform: translate(40px, -40px) scale(1.05); }
             50% { transform: translate(20px, 40px) scale(0.95); }
             75% { transform: translate(-40px, 20px) scale(1.02); }
@@ -17495,7 +18183,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -17526,12 +18213,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             align-items: center;
             gap: 14px;
             text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .logo-icon svg { width: 36px; height: 12px; }
@@ -17573,14 +18254,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
         .nav-dropdown {
             position: relative;
             display: inline-block;
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
         }
 
         .nav-dropdown-toggle {
@@ -17622,11 +18303,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .nav-dropdown-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
         }
 
         .mobile-menu-btn {
@@ -17703,330 +18379,220 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        /* Main Content */
-        .main {
+        .main-content {
             flex: 1;
-            padding: 100px 20px 60px;
-            max-width: 1000px;
-            margin: 0 auto;
+            padding: 100px 20px 40px;
+            max-width: 900px;
             width: 100%;
+            margin: 0 auto;
         }
 
-        /* Hero */
-        .hero {
+        .header {
             text-align: center;
             margin-bottom: 48px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+            opacity: 0;
         }
 
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--purple-50) 0%, var(--blue-50) 100%);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(168, 85, 247, 0.08);
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--purple-500);
-            border-radius: 50%;
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: #9333EA;
-        }
-
-        .hero-title {
-            font-size: 42px;
+        .header-title {
+            font-size: 36px;
             font-weight: 800;
-            line-height: 1.1;
             letter-spacing: -1.5px;
             color: var(--gray-900);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
-        .hero-title .gradient {
-            background: linear-gradient(135deg, var(--purple-500) 0%, var(--blue-600) 100%);
+        .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .hero-subtitle {
-            font-size: 17px;
-            font-weight: 400;
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--gray-500);
             line-height: 1.6;
-            color: var(--gray-600);
-            max-width: 680px;
-            margin: 0 auto;
         }
 
-        /* Info Box */
-        .info-box {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
-            border: 2px solid rgba(59, 130, 246, 0.2);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 32px;
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--gray-800);
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .info-box strong {
-            color: var(--blue-700);
-            font-weight: 700;
-        }
-
-        /* Card */
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+        .content-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
             border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            animation: fade-up 0.6s ease forwards;
+            padding: 40px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
             opacity: 0;
+            margin-bottom: 24px;
         }
 
-        /* Form Sections */
-        .form-section {
-            margin-bottom: 32px;
-        }
-
-        .form-section h3 {
+        .section-title {
             font-size: 20px;
             font-weight: 700;
             color: var(--gray-900);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             padding-bottom: 12px;
             border-bottom: 2px solid var(--blue-100);
         }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 768px) {
-            .form-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .form-row.three-col {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px 16px;
+        .section-content {
             font-size: 15px;
-            font-family: inherit;
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            background: white;
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 14px;
-        }
-
-        @media (min-width: 768px) {
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .checkbox-item:hover {
-            background: var(--gray-50);
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-
-        .checkbox-item label {
-            font-size: 14px;
-            font-weight: 500;
+            line-height: 1.8;
             color: var(--gray-700);
-            cursor: pointer;
-            margin: 0;
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 32px 0;
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        /* Results */
-        .results {
-            margin-top: 32px;
-        }
-
-        .risk-score-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px 32px;
-            text-align: center;
             margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
-        .risk-score {
-            font-size: 80px;
-            font-weight: 800;
-            line-height: 1;
+        .section-content p {
             margin-bottom: 16px;
         }
 
-        .risk-category {
-            font-size: 24px;
-            font-weight: 700;
+        .section-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        .predictor-list {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0;
+        }
+
+        .predictor-list li {
+            padding: 12px 16px;
             margin-bottom: 8px;
+            background: var(--gray-50);
+            border-left: 3px solid var(--blue-500);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-700);
         }
 
-        .risk-label {
-            font-size: 16px;
-            color: var(--gray-600);
+        .predictor-list li strong {
+            color: var(--gray-900);
+            display: block;
+            margin-bottom: 4px;
         }
 
-        .results-section {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 28px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        .algorithm-box {
+            background: var(--blue-50);
+            border: 2px solid var(--blue-200);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
         }
 
-        .results-section h3 {
+        .algorithm-box h3 {
             font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 16px;
+        }
+
+        .algorithm-steps {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .algorithm-steps li {
+            padding: 12px 16px 12px 40px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+            position: relative;
+        }
+
+        .algorithm-steps li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            width: 20px;
+            height: 20px;
+            background: var(--blue-500);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .info-box {
+            background: var(--amber-50);
+            border: 1px solid var(--amber-500);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 24px 0;
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin: 0;
+        }
+
+        .references {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        .references-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .results-section ul {
+        .references-list {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
 
-        .results-section li {
-            padding: 10px 0;
-            padding-left: 24px;
-            position: relative;
-            font-size: 15px;
-            line-height: 1.6;
-            color: var(--gray-700);
+        .references-list li {
+            padding: 16px 0;
             border-bottom: 1px solid var(--gray-100);
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-600);
         }
 
-        .results-section li:last-child {
+        .references-list li:last-child {
             border-bottom: none;
         }
 
-        .results-section li::before {
-            content: "•";
-            position: absolute;
-            left: 8px;
-            color: var(--blue-600);
-            font-weight: 700;
-        }
-
-        .ai-explanation {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--gray-700);
-        }
-
-        .ai-explanation strong {
+        .references-list strong {
             color: var(--gray-900);
             font-weight: 600;
         }
 
-        .reference-badge {
-            display: inline-block;
-            margin-top: 16px;
-            padding: 8px 16px;
-            background: var(--blue-50);
-            color: var(--blue-700);
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
+        .references-list em {
+            color: var(--gray-700);
         }
 
-        /* Footer */
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
@@ -18064,32 +18630,16 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
-        /* Responsive */
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-            .main { padding: 120px 32px 80px; }
-            .hero-title { font-size: 52px; }
-            .footer { padding: 40px 32px; }
+            .header-title { font-size: 48px; }
+            .content-card { padding: 48px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            .main { padding: 140px 40px 100px; }
-            .footer { padding: 48px 40px; }
         }
     </style>
 </head>
 <body>
-    <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -18099,19 +18649,17 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
     <div class="page">
         <!-- Navigation -->
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
-                    <div class="logo-text">
-                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
-                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
@@ -18128,15 +18676,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
-
-        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
@@ -18149,241 +18695,79 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         </div>
 
         <!-- Main Content -->
-        <main class="main">
-            <!-- Hero -->
-            <div class="hero">
-                <div class="hero-badge">
-                    <div class="badge-dot"></div>
-                    <span class="badge-text">ASA Guidelines</span>
-                </div>
-                <h1 class="hero-title">
-                    <span class="gradient">Difficult Airway</span> Predictor
-                </h1>
-                <p class="hero-subtitle">
-                    Evidence-based airway assessment using validated clinical predictors from the ASA Difficult Airway Algorithm
-                </p>
+        <main class="main-content">
+            <div class="header">
+                <h1 class="header-title"><span class="gradient">Difficult Airway</span> Assessment</h1>
+                <p class="header-subtitle">Evidence-based predictors and management strategies</p>
             </div>
 
-            <!-- Info Box -->
-            <div class="info-box">
-                <strong>Clinical Basis:</strong> This tool uses validated predictors including Mallampati classification, thyromental distance, mouth opening, neck mobility, BMI, and anatomical features. Risk scoring is based on LEMON, Wilson, and El-Ganzouri criteria, with recommendations aligned to the <strong>ASA Practice Guidelines for Management of the Difficult Airway (2022)</strong>.
-            </div>
-
-            <!-- Assessment Form -->
-            <div class="card">
-                <form method="POST" action="/difficult-airway">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <div class="form-section">
-                        <h3>Patient Demographics</h3>
-                        <div class="form-row three-col">
-                            <div class="form-group">
-                                <label for="age">Age (years)</label>
-                                <input type="number" id="age" name="age" min="0" max="120" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="sex">Sex</label>
-                                <select id="sex" name="sex" required>
-                                    <option value="">Select</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="weight">Weight (kg)</label>
-                                <input type="number" id="weight" name="weight" min="20" max="300" step="0.1" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="height">Height (cm)</label>
-                                <input type="number" id="height" name="height" min="100" max="250" step="0.1" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <h3>Airway Assessment (Validated Predictors)</h3>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="mallampati">Mallampati Class</label>
-                                <select id="mallampati" name="mallampati" required>
-                                    <option value="">Select</option>
-                                    <option value="1">Class I - Full visibility of soft palate, uvula, pillars</option>
-                                    <option value="2">Class II - Soft palate, uvula visible</option>
-                                    <option value="3">Class III - Only soft palate and base of uvula visible</option>
-                                    <option value="4">Class IV - Only hard palate visible</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="thyromental_distance">Thyromental Distance</label>
-                                <select id="thyromental_distance" name="thyromental_distance" required>
-                                    <option value="">Select</option>
-                                    <option value=">6.5cm">>6.5 cm (Normal)</option>
-                                    <option value="6-6.5cm">6-6.5 cm (Borderline)</option>
-                                    <option value="<6cm"><6 cm (Short - Difficult)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="mouth_opening">Mouth Opening (Interincisor Distance)</label>
-                                <select id="mouth_opening" name="mouth_opening" required>
-                                    <option value="">Select</option>
-                                    <option value=">4cm">>4 cm (Normal)</option>
-                                    <option value="3-4cm">3-4 cm (Reduced)</option>
-                                    <option value="<3cm"><3 cm (Severely Limited)</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="neck_extension">Neck Extension/Mobility</label>
-                                <select id="neck_extension" name="neck_extension" required>
-                                    <option value="">Select</option>
-                                    <option value="normal">Normal (>35°)</option>
-                                    <option value="reduced">Reduced (15-35°)</option>
-                                    <option value="severely_reduced">Severely Reduced (<15°)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="neck_circumference">Neck Circumference (cm) - Optional</label>
-                                <input type="number" id="neck_circumference" name="neck_circumference" min="20" max="70" step="0.1" placeholder="Optional">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <h3>Additional Risk Factors</h3>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="receding_mandible" name="features" value="receding_mandible">
-                                <label for="receding_mandible">Receding mandible/retrognathia</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="prominent_teeth" name="features" value="prominent_teeth">
-                                <label for="prominent_teeth">Prominent incisors/buck teeth</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="beard" name="features" value="beard">
-                                <label for="beard">Beard present</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="macroglossia" name="features" value="macroglossia">
-                                <label for="macroglossia">Macroglossia (large tongue)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="short_neck" name="features" value="short_neck">
-                                <label for="short_neck">Short, thick neck</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="cervical_spine" name="features" value="cervical_spine">
-                                <label for="cervical_spine">Cervical spine limitation (arthritis, fusion)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="airway_mass" name="features" value="airway_mass">
-                                <label for="airway_mass">Airway mass/tumor</label>
-                            </div>
-                        </div>
-
-                        <div class="form-row" style="margin-top: 20px;">
-                            <div class="form-group">
-                                <label for="previous_difficult">Previous Difficult Intubation?</label>
-                                <select id="previous_difficult" name="previous_difficult" required>
-                                    <option value="no">No</option>
-                                    <option value="yes">Yes (Most important predictor!)</option>
-                                    <option value="unknown">Unknown/No records</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="osa_risk">Obstructive Sleep Apnea Risk</label>
-                                <select id="osa_risk" name="osa_risk" required>
-                                    <option value="low">Low (STOP-BANG 0-2)</option>
-                                    <option value="moderate">Moderate (STOP-BANG 3-4)</option>
-                                    <option value="high">High (STOP-BANG 5-8 or diagnosed OSA)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <button type="submit" class="btn-submit">Calculate Difficult Airway Risk</button>
-                </form>
-            </div>
-
-            {% if prediction %}
-            <div class="results">
-                <div class="risk-score-card">
-                    <div class="risk-score" style="color: {{ prediction.risk_color }};">{{ prediction.risk_score }}</div>
-                    <div class="risk-category" style="color: {{ prediction.risk_color }};">{{ prediction.risk_category }}</div>
-                    <div class="risk-label">{{ prediction.risk_label }}</div>
-                </div>
-
-                {% if prediction.factors %}
-                <div class="results-section">
-                    <h3>🎯 Identified Risk Factors</h3>
-                    <ul>
-                        {% for factor in prediction.factors %}
-                        <li>{{ factor }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-
-                <div class="results-section">
-                    <h3>🔧 Recommended Equipment</h3>
-                    <ul>
-                        {% for item in prediction.equipment %}
-                        <li>{{ item }}</li>
-                        {% endfor %}
+            <div class="content-card">
+                <div class="section-title">Clinical Predictors of Difficult Airway</div>
+                <div class="section-content">
+                    <p>Identifying patients at risk for difficult airway management is essential for safe anesthesia practice. The following validated clinical predictors help assess risk:</p>
+                    <ul class="predictor-list">
+                        <li><strong>Mallampati Classification (Class III-IV)</strong> - Limited view of pharyngeal structures correlates with difficult laryngoscopy.</li>
+                        <li><strong>Thyromental Distance < 6 cm</strong> - Reduced distance limits laryngoscope maneuverability.</li>
+                        <li><strong>Mouth Opening < 3 cm</strong> - Restricted access for laryngoscope blade insertion.</li>
+                        <li><strong>Limited Neck Mobility</strong> - Inability to extend at atlanto-occipital joint impairs laryngeal visualization.</li>
+                        <li><strong>Obesity (BMI > 35 kg/m²)</strong> - Increases risk of difficult mask ventilation and intubation.</li>
+                        <li><strong>Obstructive Sleep Apnea (OSA)</strong> - Associated with pharyngeal soft tissue redundancy and obstruction.</li>
+                        <li><strong>Previous Difficult Intubation</strong> - Strong predictor; always review prior anesthesia records.</li>
+                        <li><strong>Anatomical Features</strong> - Short neck, large tongue, receding mandible, prominent incisors, high arched palate, or facial trauma.</li>
                     </ul>
                 </div>
 
-                <div class="results-section">
-                    <h3>📋 Backup Plan & Strategy</h3>
-                    <ul>
-                        {% for step in prediction.backup_plan %}
-                        <li>{{ step }}</li>
-                        {% endfor %}
+                <div class="section-title">ASA Difficult Airway Algorithm 2022</div>
+                <div class="algorithm-box">
+                    <h3>Approach to the Difficult Airway</h3>
+                    <ol class="algorithm-steps">
+                        <li data-step="1"><strong>Assess Likelihood of Difficulty:</strong> Evaluate for difficult mask ventilation, supraglottic airway use, laryngoscopy, intubation, and front-of-neck access.</li>
+                        <li data-step="2"><strong>Prepare Equipment & Personnel:</strong> Ensure availability of difficult airway cart, video laryngoscopy, supraglottic airways, and backup personnel.</li>
+                        <li data-step="3"><strong>Optimize Patient Positioning:</strong> Head-elevated laryngoscopy position (HELP) improves glottic view in obese patients.</li>
+                        <li data-step="4"><strong>Pre-oxygenate Adequately:</strong> Aim for EtO₂ > 90% to extend safe apnea time. Consider apneic oxygenation via nasal cannula.</li>
+                        <li data-step="5"><strong>Initial Intubation Attempt:</strong> Use video laryngoscopy as first-line (improves first-pass success). Limit attempts to preserve airway anatomy.</li>
+                        <li data-step="6"><strong>If Intubation Fails - Call for Help:</strong> Activate difficult airway protocol. Ensure oxygenation via mask or supraglottic airway.</li>
+                        <li data-step="7"><strong>Awaken Patient vs. Emergency Pathway:</strong> If surgery is elective and patient is stable, awaken and consider awake intubation. If cannot intubate/cannot oxygenate → Emergency front-of-neck access (cricothyrotomy).</li>
+                    </ol>
+                </div>
+
+                <div class="section-title">Management Strategies</div>
+                <div class="section-content">
+                    <ul class="predictor-list">
+                        <li><strong>Video Laryngoscopy</strong> - Improves first-pass success and should be considered first-line for anticipated difficult airways.</li>
+                        <li><strong>Awake Fiberoptic Intubation</strong> - Gold standard for known difficult airways. Requires topical anesthesia and patient cooperation.</li>
+                        <li><strong>Supraglottic Airways (LMA)</strong> - Rescue device for failed intubation; can serve as conduit for fiberoptic intubation.</li>
+                        <li><strong>Bougie/Gum Elastic Stylet</strong> - Increases success rate when only epiglottis is visualized.</li>
+                        <li><strong>Emergency Front-of-Neck Access</strong> - Life-saving procedure for "cannot intubate, cannot oxygenate" scenarios. Requires scalpel cricothyrotomy training.</li>
                     </ul>
                 </div>
 
-                <div class="results-section">
-                    <h3>🤖 AI-Generated Clinical Guidance</h3>
-                    <div class="ai-explanation">
-                        {{ prediction.ai_explanation | safe }}
-                    </div>
-                    <span class="reference-badge">Based on ASA Difficult Airway Algorithm 2022</span>
+                <div class="info-box">
+                    <p><strong>Key Principle:</strong> Always have a backup plan. The most important decision is recognizing when to stop attempts at intubation, maintain oxygenation, and escalate to advanced techniques or emergency airway access. Early preparation and communication with the surgical team are critical for patient safety.</p>
                 </div>
             </div>
-            {% endif %}
 
-            <div class="card" style="margin-top: 32px;">
-                <h3 style="font-size: 18px; margin-bottom: 16px; color: var(--gray-900);">Evidence Base & References</h3>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>ASA Practice Guidelines:</strong> Apfelbaum JL, et al. Practice guidelines for management of the difficult airway: an updated report by the ASA Task Force on Management of the Difficult Airway. <em>Anesthesiology</em>. 2022;136(1):31-81.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>Mallampati Classification:</strong> Samsoon GL, Young JR. Difficult tracheal intubation: a retrospective study. <em>Anaesthesia</em>. 1987;42(5):487-490.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8; margin-bottom: 12px;">
-                    <strong>LEMON Criteria:</strong> Reed MJ, et al. Can an airway assessment score predict difficulty at intubation in the emergency department? <em>Emerg Med J</em>. 2005;22(2):99-102.
-                </p>
-                <p style="font-size: 14px; color: var(--gray-600); line-height: 1.8;">
-                    <strong>Wilson Score:</strong> Wilson ME, et al. Predicting difficult intubation. <em>Br J Anaesth</em>. 1988;61(2):211-216.
-                </p>
+            <div class="references">
+                <div class="references-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    References
+                </div>
+                <ol class="references-list">
+                    <li>Apfelbaum JL, et al. <strong>2022 American Society of Anesthesiologists Practice Guidelines for Management of the Difficult Airway.</strong> <em>Anesthesiology</em>. 2022;136(1):31-81. PMID: 34762729</li>
+                    <li>Cook TM, et al. <strong>Major complications of airway management in the UK: results of the Fourth National Audit Project (NAP4).</strong> <em>Br J Anaesth</em>. 2011;106(5):617-631. PMID: 21447488</li>
+                    <li>Frerk C, et al. <strong>Difficult Airway Society 2015 guidelines for management of unanticipated difficult intubation in adults.</strong> <em>Br J Anaesth</em>. 2015;115(6):827-848. PMID: 26556848</li>
+                    <li>Shiga T, et al. <strong>Predicting difficult intubation in apparently normal patients: a meta-analysis of bedside screening test performance.</strong> <em>Anesthesiology</em>. 2005;103(2):429-437. PMID: 16052126</li>
+                    <li>Aziz MF, et al. <strong>Routine clinical practice effectiveness of the Glidescope in difficult airway management: an analysis of 2,004 Glidescope intubations.</strong> <em>Anesth Analg</em>. 2011;112(3):578-582. PMID: 21224234</li>
+                    <li>Chrimes N. <strong>The Vortex: a universal 'high-acuity implementation tool' for emergency airway management.</strong> <em>Br J Anaesth</em>. 2016;117(suppl 1):i20-i27. PMID: 27566802</li>
+                    <li>Levitan RM, et al. <strong>Head-elevated laryngoscopy position: improving laryngeal exposure during laryngoscopy by increasing head elevation.</strong> <em>Ann Emerg Med</em>. 2003;41(3):322-330. PMID: 12605196</li>
+                    <li>Law JA, et al. <strong>Canadian Airway Focus Group updated consensus-based recommendations for management of the difficult airway: part 1.</strong> <em>Can J Anaesth</em>. 2021;68(9):1373-1404. PMID: 34251647</li>
+                </ol>
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
@@ -18397,7 +18781,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18407,838 +18790,18 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             }
         }
 
-        // Dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.target.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
-    </script>
-</body>
-</html>
-"""
-INFORMED_CONSENT_HTML = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent Generator - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based informed consent discussion generator for anesthesia procedures.">
-
-    <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --white: #FFFFFF;
-            --gray-50: #F8FAFC;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
-            --blue-400: #60A5FA;
-            --blue-500: #3B82F6;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-            --green-50: #F0FDF4;
-            --green-500: #22C55E;
-            --green-600: #059669;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Skip to Content Link for Accessibility */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--blue-600);
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 0 0 4px 0;
-            z-index: 1000;
-            font-weight: 600;
-            transition: top 0.2s;
-        }
-
-        .skip-to-content:focus {
-            top: 0;
-        }
-
-        .bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        /* Main Content */
-        .main {
-            flex: 1;
-            padding: 100px 20px 60px;
-            max-width: 900px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Hero */
-        .hero {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--green-50) 0%, var(--blue-50) 100%);
-            border: 1px solid rgba(5, 150, 105, 0.2);
-            border-radius: 100px;
-            padding: 8px 16px 8px 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(5, 150, 105, 0.08);
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--green-500);
-            border-radius: 50%;
-        }
-
-        .badge-text {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--green-600);
-        }
-
-        .hero-title {
-            font-size: 42px;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1.5px;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-        }
-
-        .hero-title .gradient {
-            background: linear-gradient(135deg, var(--green-500) 0%, var(--blue-600) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 17px;
-            font-weight: 400;
-            line-height: 1.6;
-            color: var(--gray-600);
-            max-width: 680px;
-            margin: 0 auto;
-        }
-
-        /* Info Box */
-        .info-box {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 197, 253, 0.05) 100%);
-            border: 2px solid rgba(59, 130, 246, 0.2);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin-bottom: 32px;
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--gray-800);
-        }
-
-        .info-box strong {
-            color: var(--blue-700);
-            font-weight: 700;
-        }
-
-        /* Card */
-        .card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            animation: fade-up 0.6s ease forwards;
-            opacity: 0;
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 15px;
-            font-family: inherit;
-            border: 1px solid var(--gray-300);
-            border-radius: 12px;
-            background: white;
-            color: var(--gray-900);
-            transition: all 0.2s ease;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px 32px;
-            font-size: 16px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-
-        /* Results */
-        .consent-output {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-top: 32px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .consent-output h2 {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--blue-100);
-        }
-
-        .consent-output h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-top: 32px;
-            margin-bottom: 16px;
-        }
-
-        .consent-output p {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--gray-700);
-            margin-bottom: 16px;
-        }
-
-        .consent-output ul {
-            list-style: none;
-            padding: 0;
-            margin-bottom: 20px;
-        }
-
-        .consent-output li {
-            padding: 10px 0;
-            padding-left: 28px;
-            position: relative;
-            font-size: 15px;
-            line-height: 1.7;
-            color: var(--gray-700);
-            border-bottom: 1px solid var(--gray-100);
-        }
-
-        .consent-output li:last-child {
-            border-bottom: none;
-        }
-
-        .consent-output li::before {
-            content: "•";
-            position: absolute;
-            left: 10px;
-            color: var(--blue-600);
-            font-weight: 700;
-            font-size: 18px;
-        }
-
-        .consent-output strong {
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        /* Footer */
-        .footer {
-            padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--gray-700);
-        }
-
-        /* Responsive */
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .main { padding: 120px 32px 80px; }
-            .hero-title { font-size: 52px; }
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            .main { padding: 140px 40px 100px; }
-            .footer { padding: 48px 40px; }
-        }
-    </style>
-</head>
-<body>
-    <!-- Background -->
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
-    <div class="grain"></div>
-
-    <div class="page">
-        <!-- Navigation -->
-        <nav class="nav">
-            <div class="nav-inner">
-                <a href="/" class="logo">
-                    <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <div class="logo-text">
-                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
-                    </div>
-                </a>
-                <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
-                        </div>
-                    </div>
-                </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
-        </nav>
-
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-        </div>
-
-        <!-- Main Content -->
-        <main class="main">
-            <!-- Hero -->
-            <div class="hero">
-                <div class="hero-badge">
-                    <div class="badge-dot"></div>
-                    <span class="badge-text">Patient Education</span>
-                </div>
-                <h1 class="hero-title">
-                    <span class="gradient">Informed Consent</span> Generator
-                </h1>
-                <p class="hero-subtitle">
-                    Evidence-based informed consent discussions for anesthesia procedures with procedure-specific risks
-                </p>
-            </div>
-
-            <!-- Info Box -->
-            <div class="info-box">
-                <strong>Educational Tool:</strong> This AI-powered generator creates patient-friendly informed consent discussions based on evidence-based guidelines. Generated content should be reviewed and personalized by the attending anesthesiologist before use in clinical practice.
-            </div>
-
-            <!-- Form -->
-            <div class="card">
-                <form method="POST" action="/informed-consent">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-
-                    <div class="form-group">
-                        <label for="procedure">Anesthesia Type</label>
-                        <select id="procedure" name="procedure" required>
-                            <option value="">Select anesthesia type...</option>
-                            <option value="general_anesthesia">General Anesthesia</option>
-                            <option value="spinal_anesthesia">Spinal Anesthesia</option>
-                            <option value="epidural">Epidural Anesthesia</option>
-                            <option value="regional_block">Regional Nerve Block</option>
-                            <option value="mac_sedation">Monitored Anesthesia Care (MAC)/Sedation</option>
-                            <option value="cesarean">Cesarean Section Anesthesia</option>
-                            <option value="labor_epidural">Labor Epidural</option>
-                            <option value="cardiac_surgery">Cardiac Surgery Anesthesia</option>
-                            <option value="neurosurgery">Neurosurgery Anesthesia</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="surgical_procedure">Surgical Procedure (Optional)</label>
-                        <textarea id="surgical_procedure" name="surgical_procedure" placeholder="e.g., laparoscopic cholecystectomy, total knee replacement..."></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="patient_factors">Patient-Specific Factors (Optional)</label>
-                        <textarea id="patient_factors" name="patient_factors" placeholder="e.g., history of PONV, difficult airway, obesity, cardiac disease..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-submit">Generate Informed Consent Discussion</button>
-                </form>
-            </div>
-
-            {% if consent %}
-            <div class="consent-output">
-                {{ consent.content | safe }}
-            </div>
-            {% endif %}
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-inner">
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-                <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </footer>
-    </div>
-
-    <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
             }
         }
 
-        // Dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.target.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
     </script>
 </body>
 </html>
@@ -20197,352 +19760,6 @@ def clear_chat():
     response.headers['Expires'] = '0'
     return response
 
-@app.route("/difficult-airway", methods=["GET", "POST"])
-def difficult_airway():
-    """AI-Powered Difficult Airway Risk Predictor"""
-    if request.method == "GET":
-        return render_template_string(DIFFICULT_AIRWAY_HTML, prediction=None)
-
-    # Collect form data
-    age = int(request.form.get("age", 0))
-    sex = sanitize_user_query(request.form.get("sex", ""))
-    weight = float(request.form.get("weight", 0))
-    height = float(request.form.get("height", 0))
-    mallampati = int(request.form.get("mallampati", 2))
-    thyromental_distance = sanitize_user_query(request.form.get("thyromental_distance", ""))
-    mouth_opening = sanitize_user_query(request.form.get("mouth_opening", ""))
-    neck_extension = sanitize_user_query(request.form.get("neck_extension", ""))
-    neck_circumference_input = request.form.get("neck_circumference", "")
-    neck_circumference = float(neck_circumference_input) if neck_circumference_input else None
-    features = request.form.getlist("features")
-    previous_difficult = sanitize_user_query(request.form.get("previous_difficult", "no"))
-    osa_risk = sanitize_user_query(request.form.get("osa_risk", "low"))
-
-    # Calculate BMI
-    bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else 0
-
-    # Comprehensive Risk Scoring System (0-100 scale)
-    # Based on validated predictors: LEMON, Wilson, El-Ganzouri, STOP-BANG
-    risk_score = 0
-    risk_factors = []
-
-    # 1. Mallampati Score (0-25 points)
-    mallampati_scores = {1: 0, 2: 8, 3: 17, 4: 25}
-    risk_score += mallampati_scores.get(mallampati, 0)
-    if mallampati >= 3:
-        risk_factors.append(f"Mallampati {mallampati}")
-
-    # 2. Thyromental Distance (0-20 points)
-    if "<6" in thyromental_distance:
-        risk_score += 20
-        risk_factors.append("Short thyromental distance")
-    elif "6-6.5" in thyromental_distance:
-        risk_score += 10
-        risk_factors.append("Borderline thyromental distance")
-
-    # 3. Mouth Opening (0-15 points)
-    if "<3" in mouth_opening:
-        risk_score += 15
-        risk_factors.append("Limited mouth opening")
-    elif "3-4" in mouth_opening:
-        risk_score += 8
-        risk_factors.append("Reduced mouth opening")
-
-    # 4. Neck Extension/Mobility (0-15 points)
-    if "severely_reduced" in neck_extension:
-        risk_score += 15
-        risk_factors.append("Severely limited neck mobility")
-    elif "reduced" in neck_extension:
-        risk_score += 8
-        risk_factors.append("Limited neck extension")
-
-    # 5. BMI/Obesity (0-10 points)
-    if bmi >= 35:
-        risk_score += 10
-        risk_factors.append(f"Obesity (BMI {bmi})")
-    elif bmi >= 30:
-        risk_score += 5
-        risk_factors.append(f"Overweight (BMI {bmi})")
-
-    # 6. Neck Circumference (0-8 points)
-    if neck_circumference:
-        if (sex == "male" and neck_circumference > 43) or (sex == "female" and neck_circumference > 41):
-            risk_score += 8
-            risk_factors.append(f"Large neck ({neck_circumference}cm)")
-
-    # 7. Anatomical Features (3-10 points each)
-    feature_scores = {
-        "receding_mandible": (10, "Receding mandible"),
-        "prominent_teeth": (8, "Prominent incisors"),
-        "beard": (3, "Beard present"),
-        "macroglossia": (8, "Macroglossia"),
-        "short_neck": (7, "Short neck"),
-        "cervical_spine": (12, "Cervical spine limitation"),
-        "airway_mass": (15, "Airway mass/tumor")
-    }
-    for feature in features:
-        score, label = feature_scores.get(feature, (0, ""))
-        risk_score += score
-        risk_factors.append(label)
-
-    # 8. Previous Difficult Intubation (0-15 points) - MOST IMPORTANT PREDICTOR
-    if previous_difficult == "yes":
-        risk_score += 15
-        risk_factors.append("Previous difficult intubation")
-    elif previous_difficult == "unknown":
-        risk_score += 5
-
-    # 9. OSA Risk (0-10 points)
-    osa_scores = {"low": 0, "moderate": 5, "high": 10}
-    osa_score = osa_scores.get(osa_risk, 0)
-    risk_score += osa_score
-    if osa_risk == "high":
-        risk_factors.append("High OSA risk")
-    elif osa_risk == "moderate":
-        risk_factors.append("Moderate OSA risk")
-
-    # 10. Age factor (0-5 points)
-    if age > 55:
-        risk_score += 5
-        risk_factors.append("Age >55")
-
-    # Cap risk score at 100
-    risk_score = min(risk_score, 100)
-
-    # Categorize risk level
-    if risk_score < 20:
-        risk_category = "LOW RISK"
-        risk_label = "Likely Normal Intubation"
-        risk_color = "#22C55E"
-    elif risk_score < 40:
-        risk_category = "MODERATE RISK"
-        risk_label = "Potentially Difficult - Prepare Equipment"
-        risk_color = "#F59E0B"
-    elif risk_score < 60:
-        risk_category = "HIGH RISK"
-        risk_label = "Likely Difficult - Advanced Planning Required"
-        risk_color = "#EF4444"
-    else:
-        risk_category = "VERY HIGH RISK"
-        risk_label = "Very Difficult - Consider Awake Technique"
-        risk_color = "#DC2626"
-
-    # Generate equipment recommendations based on risk
-    equipment = [
-        "Standard direct laryngoscope (Mac/Miller blades)",
-        "Video laryngoscope (GlideScope, C-MAC, or equivalent)"
-    ]
-
-    if risk_score >= 30:
-        equipment.extend([
-            "Bougie or stylet immediately available",
-            "Supraglottic airway device (LMA) at bedside",
-            "Smaller endotracheal tubes (6.0, 6.5, 7.0)"
-        ])
-
-    if risk_score >= 50:
-        equipment.extend([
-            "Fiberoptic bronchoscope prepared and tested",
-            "Difficult airway cart immediately available",
-            "Emergency cricothyrotomy kit at bedside"
-        ])
-
-    if "airway_mass" in features or "cervical_spine" in features:
-        equipment.append("Consider ENT/surgery backup for emergency airway access")
-
-    # Generate backup plan recommendations
-    backup_plan = [
-        "Review ASA Difficult Airway Algorithm with team",
-        "Ensure adequate preoxygenation (target EtO2 >90%)"
-    ]
-
-    if risk_score >= 30:
-        backup_plan.extend([
-            "Prepare for fiberoptic intubation if direct laryngoscopy fails",
-            "Have supraglottic airway immediately available",
-            "Designate team member to call for help early",
-            "Consider THRIVE or apneic oxygenation technique"
-        ])
-
-    if risk_score >= 50:
-        backup_plan.extend([
-            "Strongly consider awake fiberoptic intubation",
-            "Two experienced providers in room for induction",
-            "Have surgeon/ENT available for emergency cricothyrotomy",
-            "Consider regional anesthesia as alternative if feasible"
-        ])
-
-    if previous_difficult == "yes":
-        backup_plan.insert(0, "OBTAIN PREVIOUS ANESTHESIA RECORDS - Review what worked before")
-
-    # Generate AI explanation using GPT-4o
-    try:
-        patient_summary = f"""Patient airway assessment:
-- Demographics: {age}yo {sex}, BMI {bmi}
-- Mallampati: Class {mallampati}
-- Thyromental distance: {thyromental_distance}
-- Mouth opening: {mouth_opening}
-- Neck mobility: {neck_extension}
-- Neck circumference: {neck_circumference if neck_circumference else 'Not measured'}cm
-- Anatomical concerns: {', '.join([f.replace('_', ' ') for f in features]) if features else 'None'}
-- Previous difficult intubation: {previous_difficult}
-- OSA risk: {osa_risk}
-- Calculated risk score: {risk_score}/100 ({risk_category})
-
-Key risk factors identified: {', '.join(risk_factors) if risk_factors else 'Minimal risk factors'}"""
-
-        prompt = f"""You are an expert anesthesiologist providing airway management guidance.
-
-{patient_summary}
-
-SELF-VERIFICATION CHECKLIST (verify before answering):
-- Are recommendations consistent with ASA Difficult Airway Algorithm?
-- Have you considered all risk factors in your strategy?
-- Are equipment recommendations appropriate for the risk level?
-- Does positioning advice account for patient-specific factors (obesity, neck mobility, etc.)?
-- Is the backup plan clearly defined?
-
-Please provide a concise, evidence-based airway management plan including:
-1. Brief interpretation of the risk score and key factors
-2. Specific intubation strategy recommendation (e.g., video laryngoscopy first-line, awake fiberoptic, etc.)
-3. Patient positioning tips for this specific case
-4. One key clinical pearl for managing this patient's airway
-
-Format your response in clear paragraphs with <strong> tags for key points. Keep it under 200 words and clinically actionable."""
-
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.3,
-            max_tokens=400
-        )
-
-        ai_explanation = response.choices[0].message.content.strip()
-
-    except Exception as e:
-        print(f"[ERROR] AI explanation generation failed: {e}")
-        ai_explanation = f"""<p><strong>Risk Assessment:</strong> This patient has a calculated risk score of {risk_score}/100, classified as <strong>{risk_category}</strong>.</p>
-
-<p><strong>Primary Strategy:</strong> {"Awake fiberoptic intubation should be strongly considered" if risk_score >= 60 else "Video laryngoscopy as first-line approach" if risk_score >= 30 else "Standard direct laryngoscopy with video backup immediately available"}.</p>
-
-<p><strong>Key Factors:</strong> {', '.join(risk_factors[:3]) if len(risk_factors) >= 3 else ', '.join(risk_factors) if risk_factors else 'Minimal risk factors identified'}.</p>
-
-<p><strong>Clinical Pearl:</strong> Always have a backup plan and prepare for the difficult airway - even low-risk patients can surprise you.</p>"""
-
-    prediction = {
-        "risk_score": risk_score,
-        "risk_category": risk_category,
-        "risk_label": risk_label,
-        "risk_color": risk_color,
-        "factors": risk_factors,
-        "equipment": equipment,
-        "backup_plan": backup_plan,
-        "ai_explanation": ai_explanation
-    }
-
-    return render_template_string(DIFFICULT_AIRWAY_HTML, prediction=prediction)
-
-@app.route("/informed-consent", methods=["GET", "POST"])
-def informed_consent():
-    """AI-Powered Informed Consent Generator"""
-    if request.method == "GET":
-        return render_template_string(INFORMED_CONSENT_HTML, consent=None)
-
-    # Collect form data
-    procedure = sanitize_user_query(request.form.get("procedure", ""))
-    patient_factors = sanitize_user_query(request.form.get("patient_factors", ""))
-    surgical_procedure = sanitize_user_query(request.form.get("surgical_procedure", ""))
-
-    # Map procedure types to readable names
-    procedure_names = {
-        "general_anesthesia": "General Anesthesia",
-        "spinal_anesthesia": "Spinal Anesthesia",
-        "epidural": "Epidural Anesthesia",
-        "regional_block": "Regional Nerve Block",
-        "mac_sedation": "Monitored Anesthesia Care (MAC)/Sedation",
-        "cesarean": "Cesarean Section Anesthesia",
-        "labor_epidural": "Labor Epidural",
-        "cardiac_surgery": "Cardiac Surgery Anesthesia",
-        "neurosurgery": "Neurosurgery Anesthesia"
-    }
-
-    procedure_name = procedure_names.get(procedure, procedure.replace("_", " ").title())
-
-    # Generate AI-powered informed consent using GPT-4o
-    try:
-        context = f"""Anesthesia Type: {procedure_name}
-Patient Factors: {patient_factors if patient_factors else 'Not specified'}
-Surgical Procedure: {surgical_procedure if surgical_procedure else 'Not specified'}"""
-
-        prompt = f"""You are an expert anesthesiologist preparing an informed consent discussion. Generate a comprehensive, evidence-based informed consent document for:
-
-{context}
-
-SELF-VERIFICATION CHECKLIST (verify before answering):
-- Are risk frequencies accurate and evidence-based (not exaggerated or minimized)?
-- Have you included both common risks AND rare but serious complications?
-- Are alternatives appropriate and clinically relevant for this procedure type?
-- Is the language patient-friendly without being overly simplistic?
-- Have you avoided giving false reassurance while being appropriately informative?
-- Are procedure-specific considerations accurately described?
-
-Structure your response with the following sections using HTML formatting:
-
-<h2>Informed Consent Discussion: {procedure_name}</h2>
-
-<h3>1. What Will Happen (Procedure Overview)</h3>
-<p>Brief explanation of the anesthesia procedure in patient-friendly language</p>
-
-<h3>2. Benefits of This Anesthesia</h3>
-<ul>
-<li>Key benefits specific to this anesthesia type</li>
-</ul>
-
-<h3>3. Common Risks & Side Effects</h3>
-<ul>
-<li>List common risks with approximate frequencies (e.g., nausea 1 in 3 patients)</li>
-<li>Include both common minor risks and rare but serious risks</li>
-</ul>
-
-<h3>4. Alternatives</h3>
-<ul>
-<li>Alternative anesthesia techniques if applicable</li>
-</ul>
-
-<h3>5. Patient-Specific Considerations</h3>
-<p>Address any specific patient factors mentioned, if provided</p>
-
-<h3>6. Questions to Ask Your Anesthesiologist</h3>
-<ul>
-<li>Suggested questions patients should ask</li>
-</ul>
-
-Keep language professional but patient-friendly. Include specific risk frequencies where appropriate. Be thorough but concise (aim for 300-400 words total)."""
-
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.2,
-            max_tokens=800
-        )
-
-        content = response.choices[0].message.content.strip()
-
-    except Exception as e:
-        print(f"[ERROR] Informed consent generation failed: {e}")
-        content = f"""<h2>Informed Consent Discussion: {procedure_name}</h2>
-
-<p><strong>Error:</strong> Unable to generate AI-powered consent at this time. Please consult with your anesthesiologist for a comprehensive informed consent discussion.</p>
-
-<h3>General Information</h3>
-<p>Your anesthesiologist will discuss the risks, benefits, and alternatives specific to your procedure and medical condition.</p>"""
-
-    consent_data = {
-        "content": content
-    }
-
-    return render_template_string(INFORMED_CONSENT_HTML, consent=consent_data)
-
 @app.route("/terms")
 def terms():
     """Terms of Service page"""
@@ -20845,6 +20062,16 @@ Provide maximum clinical utility with specific, actionable recommendations backe
         response = f"<p>Error generating assessment: {str(e)}</p>"
 
     return render_template_string(PREOP_HTML, summary=response, references=unique_refs)
+
+@app.route("/informed-consent")
+def informed_consent():
+    """Informed Consent for Anesthesia educational page"""
+    return render_template_string(INFORMED_CONSENT_HTML)
+
+@app.route("/difficult-airway")
+def difficult_airway():
+    """Difficult Airway Assessment educational page"""
+    return render_template_string(DIFFICULT_AIRWAY_HTML)
 
 @app.route("/hypotension", methods=["GET", "POST"])
 def hypotension_predictor():
