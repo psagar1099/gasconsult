@@ -2679,13 +2679,15 @@ PREOP_HTML = """<!DOCTYPE html>
                     `;
                 }).join('');
 
-                // Note: Phase 4 will add click handlers to load conversations
-                // For now, clicking does nothing (view-only mode)
+                // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
                     item.addEventListener('click', function() {
-                        // Phase 4: Will implement conversation loading here
-                        console.log('Loading conversation:', this.dataset.conversationId);
-                        alert('Phase 4: This will load the conversation. Coming soon!');
+                        const conversationId = this.dataset.conversationId;
+                        console.log('Loading conversation:', conversationId);
+
+                        // Navigate to load-conversation route
+                        // This will safely clear session and load the conversation
+                        window.location.href = '/load-conversation/' + conversationId;
                     });
                 });
             }
@@ -5534,13 +5536,15 @@ HTML = """<!DOCTYPE html>
                     `;
                 }).join('');
 
-                // Note: Phase 4 will add click handlers to load conversations
-                // For now, clicking does nothing (view-only mode)
+                // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
                     item.addEventListener('click', function() {
-                        // Phase 4: Will implement conversation loading here
-                        console.log('Loading conversation:', this.dataset.conversationId);
-                        alert('Phase 4: This will load the conversation. Coming soon!');
+                        const conversationId = this.dataset.conversationId;
+                        console.log('Loading conversation:', conversationId);
+
+                        // Navigate to load-conversation route
+                        // This will safely clear session and load the conversation
+                        window.location.href = '/load-conversation/' + conversationId;
                     });
                 });
             }
@@ -21900,6 +21904,83 @@ def api_conversations():
             'conversations': [],
             'error': 'Failed to fetch conversations'
         }), 500
+
+@app.route("/load-conversation/<conversation_id>")
+def load_conversation(conversation_id):
+    """
+    Load a previous conversation from the database.
+    Safely clears current session and loads the selected conversation.
+
+    **CRITICAL SAFETY FEATURES:**
+    - Validates conversation exists and belongs to current user
+    - Safely clears session state before loading
+    - Handles errors gracefully without breaking chat
+    - Redirects to homepage to display loaded conversation
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        print(f"[CHAT_HISTORY] Load conversation requested but feature disabled")
+        return redirect(url_for('index'))
+
+    try:
+        print(f"[CHAT_HISTORY] Loading conversation: {conversation_id}")
+
+        # Get conversation from database
+        conversation = database.get_conversation(conversation_id)
+
+        if not conversation:
+            print(f"[CHAT_HISTORY] Conversation {conversation_id} not found")
+            return redirect(url_for('index'))
+
+        # Security: Verify conversation belongs to this user
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+        if conversation.get('user_session_id') != user_session_id:
+            print(f"[CHAT_HISTORY] Unauthorized access attempt to conversation {conversation_id}")
+            return redirect(url_for('index'))
+
+        # SAFELY clear current session state
+        # Remove all chat-related session data
+        session.pop('messages', None)
+        session.pop('conversation_topic', None)
+        session.pop('chat_active', None)
+
+        # Clear any stream data (important!)
+        stream_keys = [k for k in session.keys() if k.startswith('stream_data_')]
+        for key in stream_keys:
+            session.pop(key, None)
+
+        # Load conversation into session
+        session['messages'] = conversation.get('messages', [])
+        session['conversation_id'] = conversation_id
+        session['chat_active'] = True  # Set chat mode
+        session.modified = True
+
+        # Extract conversation topic from first message (if available)
+        messages = conversation.get('messages', [])
+        if messages and len(messages) > 0:
+            first_user_msg = next((m for m in messages if m.get('role') == 'user'), None)
+            if first_user_msg:
+                # Simple topic extraction from first query
+                query = first_user_msg.get('content', '')
+                topic_words = []
+                for word in query.lower().split():
+                    if len(word) >= 4 and word not in ['what', 'about', 'when', 'where', 'which', 'that', 'this', 'with', 'from', 'have', 'been', 'does', 'should', 'would', 'could']:
+                        topic_words.append(word)
+                if topic_words:
+                    session['conversation_topic'] = ' '.join(topic_words[:3])
+
+        print(f"[CHAT_HISTORY] Successfully loaded conversation {conversation_id} with {len(messages)} messages")
+
+        # Redirect to homepage - it will display the loaded conversation
+        response = redirect(url_for('index'))
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error loading conversation {conversation_id}: {e}")
+        # On error, redirect to homepage without breaking chat
+        return redirect(url_for('index'))
 
 # ====== Premium Features Routes ======
 
