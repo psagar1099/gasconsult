@@ -1994,10 +1994,205 @@ PREOP_HTML = """<!DOCTYPE html>
                 font-size: 20px;
             }
         }
+
+        /* ====== Chat History Sidebar (Phase 3) ====== */
+        .history-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--white);
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .history-toggle:hover {
+            background: var(--gray-50);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .history-toggle svg {
+            width: 24px;
+            height: 24px;
+            color: var(--gray-700);
+        }
+
+        .history-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100vh;
+            background: var(--white);
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .history-sidebar.open {
+            transform: translateX(0);
+        }
+
+        .history-sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .history-close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .history-close-btn:hover {
+            color: var(--gray-700);
+        }
+
+        .history-conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .history-conversation-item {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            background: var(--gray-50);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .history-conversation-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .history-conversation-item.active {
+            background: var(--blue-100);
+            border-color: var(--blue-300);
+        }
+
+        .history-conversation-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-conversation-meta {
+            font-size: 12px;
+            color: var(--gray-500);
+            display: flex;
+            gap: 12px;
+        }
+
+        .history-empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--gray-500);
+        }
+
+        .history-empty-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            opacity: 0.5;
+        }
+
+        .history-loading {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--gray-500);
+        }
+
+        /* Overlay when sidebar is open */
+        .history-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .history-overlay.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .history-sidebar {
+                width: 280px;
+            }
+
+            .history-toggle {
+                top: 16px;
+                left: 16px;
+            }
+        }
     </style>
 </head>
 <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- [PHASE 3] Chat History Sidebar -->
+    <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </button>
+
+    <div class="history-overlay" id="historyOverlay"></div>
+
+    <aside class="history-sidebar" id="historySidebar" role="complementary" aria-label="Chat history">
+        <div class="history-sidebar-header">
+            <h2 class="history-sidebar-title">Chat History</h2>
+            <button class="history-close-btn" id="historyClose" aria-label="Close history">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="history-conversations-list" id="conversationsList">
+            <div class="history-loading">Loading conversations...</div>
+        </div>
+    </aside>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -2387,6 +2582,133 @@ PREOP_HTML = """<!DOCTYPE html>
                 submitBtn.disabled = true;
             }
         });
+
+        // ====== Chat History Sidebar (Phase 3) ======
+        (function() {
+            const historyToggle = document.getElementById('historyToggle');
+            const historySidebar = document.getElementById('historySidebar');
+            const historyOverlay = document.getElementById('historyOverlay');
+            const historyClose = document.getElementById('historyClose');
+            const conversationsList = document.getElementById('conversationsList');
+
+            if (!historyToggle || !historySidebar) return; // Elements not present in this template
+
+            let conversationsData = [];
+            let currentConversationId = null;
+
+            // Toggle sidebar
+            function openSidebar() {
+                historySidebar.classList.add('open');
+                historyOverlay.classList.add('visible');
+                loadConversations();
+            }
+
+            function closeSidebar() {
+                historySidebar.classList.remove('open');
+                historyOverlay.classList.remove('visible');
+            }
+
+            historyToggle.addEventListener('click', openSidebar);
+            historyClose.addEventListener('click', closeSidebar);
+            historyOverlay.addEventListener('click', closeSidebar);
+
+            // Load conversations from API
+            async function loadConversations() {
+                conversationsList.innerHTML = '<div class="history-loading">Loading conversations...</div>';
+
+                try {
+                    const response = await fetch('/api/conversations');
+                    const data = await response.json();
+
+                    if (!data.enabled) {
+                        conversationsList.innerHTML = `
+                            <div class="history-empty-state">
+                                <div class="history-empty-icon">📝</div>
+                                <p>Chat history is disabled</p>
+                                <p style="font-size: 11px; margin-top: 8px;">Enable ENABLE_CHAT_HISTORY in settings</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    conversationsData = data.conversations || [];
+                    currentConversationId = data.current_conversation_id;
+
+                    if (conversationsData.length === 0) {
+                        conversationsList.innerHTML = `
+                            <div class="history-empty-state">
+                                <div class="history-empty-icon">💬</div>
+                                <p>No conversations yet</p>
+                                <p style="font-size: 11px; margin-top: 8px;">Start chatting to build your history</p>
+                            </div>
+                        `;
+                        return;
+                    }
+
+                    renderConversations();
+                } catch (error) {
+                    console.error('Failed to load conversations:', error);
+                    conversationsList.innerHTML = `
+                        <div class="history-empty-state">
+                            <p>Failed to load conversations</p>
+                            <p style="font-size: 11px; margin-top: 8px; color: var(--gray-400);">${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
+
+            // Render conversations list
+            function renderConversations() {
+                conversationsList.innerHTML = conversationsData.map(conv => {
+                    const isActive = conv.id === currentConversationId;
+                    const date = new Date(conv.updated_at || conv.created_at);
+                    const timeAgo = formatTimeAgo(date);
+
+                    return `
+                        <div class="history-conversation-item ${isActive ? 'active' : ''}"
+                             data-conversation-id="${conv.id}"
+                             role="button"
+                             tabindex="0"
+                             aria-label="Load conversation: ${conv.title}">
+                            <div class="history-conversation-title">${escapeHtml(conv.title)}</div>
+                            <div class="history-conversation-meta">
+                                <span>${timeAgo}</span>
+                                <span>${conv.message_count || 0} messages</span>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Note: Phase 4 will add click handlers to load conversations
+                // For now, clicking does nothing (view-only mode)
+                conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        // Phase 4: Will implement conversation loading here
+                        console.log('Loading conversation:', this.dataset.conversationId);
+                        alert('Phase 4: This will load the conversation. Coming soon!');
+                    });
+                });
+            }
+
+            // Format time ago
+            function formatTimeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+
+                if (seconds < 60) return 'Just now';
+                if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+                if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+                if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
+
+                return date.toLocaleDateString();
+            }
+
+            // Escape HTML to prevent XSS
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+        })();
     </script>
 </body>
 </html>
@@ -9523,6 +9845,30 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 </head>
 <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- [PHASE 3] Chat History Sidebar -->
+    <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </button>
+
+    <div class="history-overlay" id="historyOverlay"></div>
+
+    <aside class="history-sidebar" id="historySidebar" role="complementary" aria-label="Chat history">
+        <div class="history-sidebar-header">
+            <h2 class="history-sidebar-title">Chat History</h2>
+            <button class="history-close-btn" id="historyClose" aria-label="Close history">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="history-conversations-list" id="conversationsList">
+            <div class="history-loading">Loading conversations...</div>
+        </div>
+    </aside>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -11033,6 +11379,30 @@ CRISIS_HTML = """<!DOCTYPE html>
 </head>
 <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- [PHASE 3] Chat History Sidebar -->
+    <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+    </button>
+
+    <div class="history-overlay" id="historyOverlay"></div>
+
+    <aside class="history-sidebar" id="historySidebar" role="complementary" aria-label="Chat history">
+        <div class="history-sidebar-header">
+            <h2 class="history-sidebar-title">Chat History</h2>
+            <button class="history-close-btn" id="historyClose" aria-label="Close history">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="history-conversations-list" id="conversationsList">
+            <div class="history-loading">Loading conversations...</div>
+        </div>
+    </aside>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -21156,6 +21526,58 @@ def api_status():
         },
         "rate_limit": os.getenv("RATE_LIMIT", "60 per minute")
     }), 200
+
+# ====== Chat History API (Phase 3) ======
+
+@app.route("/api/conversations")
+@csrf.exempt  # GET endpoint, no state changes
+def api_conversations():
+    """
+    Get list of user's conversations.
+    Returns conversations ordered by most recently updated.
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return jsonify({
+            'enabled': False,
+            'conversations': [],
+            'message': 'Chat history feature is disabled'
+        }), 200
+
+    try:
+        # Get pagination parameters
+        limit = request.args.get('limit', 50, type=int)
+        offset = request.args.get('offset', 0, type=int)
+
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Fetch conversations from database
+        conversations = database.get_conversations(
+            user_session_id=user_session_id,
+            limit=min(limit, 100),  # Cap at 100 for safety
+            offset=offset
+        )
+
+        # Format timestamps for display
+        for conv in conversations:
+            # Convert to human-readable format if needed
+            if 'updated_at' in conv:
+                conv['updated_at_display'] = conv['updated_at']
+
+        return jsonify({
+            'enabled': True,
+            'conversations': conversations,
+            'current_conversation_id': session.get('conversation_id'),
+            'count': len(conversations)
+        }), 200
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error fetching conversations: {e}")
+        return jsonify({
+            'enabled': True,
+            'conversations': [],
+            'error': 'Failed to fetch conversations'
+        }), 500
 
 # ====== Premium Features Routes ======
 
