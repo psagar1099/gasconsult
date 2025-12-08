@@ -17331,14 +17331,22 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
-# Placeholder templates - Full interactive forms coming soon
 DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Difficult Airway - GasConsult.ai</title>
-    <style>
+    <title>Informed Consent Assessment - GasConsult.ai</title>
+    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies.">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --white: #FFFFFF;
@@ -17378,7 +17386,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
-        /* Background Canvas */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -17447,7 +17472,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -17575,6 +17599,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -17629,57 +17658,58 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
-            padding: 88px 16px 32px;
-            max-width: 800px;
+            padding: 100px 20px 40px;
+            max-width: 900px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 32px;
-            animation: fade-up 0.6s ease forwards;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 40px;
         }
 
         .header-title {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 800;
+            margin-bottom: 12px;
             letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 8px;
         }
 
-        .header-title .blue { color: var(--blue-600); }
+        .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .header-subtitle {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--gray-500);
             line-height: 1.6;
         }
 
-        /* Form Card */
-        .form-card {
+        .form-card, .results-card {
             background: rgba(255,255,255,0.8);
             backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 24px;
-            padding: 24px;
+            padding: 32px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
-            animation: fade-up 0.6s 0.1s ease forwards;
-            opacity: 0;
+            margin-bottom: 24px;
         }
 
-        /* Form Groups */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
         .form-group {
             margin-bottom: 24px;
         }
@@ -17692,459 +17722,226 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             margin-bottom: 8px;
         }
 
-        .form-label .required {
-            color: #EF4444;
-            margin-left: 2px;
+        .required {
+            color: var(--blue-600);
+            margin-left: 4px;
         }
 
-        /* Input Styles */
-        .form-input {
+        .form-input, select {
             width: 100%;
             padding: 12px 16px;
             font-size: 15px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            border: 1.5px solid var(--gray-300);
             border-radius: 12px;
             transition: all 0.2s ease;
+            font-family: inherit;
+            background: white;
         }
 
-        .form-input:focus {
+        .form-input:focus, select:focus {
             outline: none;
             border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .form-input::placeholder {
-            color: var(--gray-400);
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
         }
 
-        /* Input Row for Multiple Fields */
         .input-row {
             display: grid;
-            gap: 12px;
             grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        /* Radio Buttons */
-        .radio-group {
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .radio-option {
-            position: relative;
+        .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
             padding: 14px 16px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            border: 1.5px solid var(--gray-300);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-        }
-
-        .radio-option:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
-        }
-
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-visual {
-            background: var(--blue-600);
-            border-color: var(--blue-600);
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-visual::after {
-            opacity: 1;
-        }
-
-        .radio-option input[type="radio"]:checked ~ .radio-label {
-            font-weight: 600;
-            color: var(--blue-600);
-        }
-
-        .radio-option.selected {
-            background: var(--blue-50);
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-        }
-
-        .radio-visual {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gray-300);
-            border-radius: 50%;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.2s ease;
-            margin-right: 12px;
-        }
-
-        .radio-visual::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
             background: white;
-            opacity: 0;
-            transition: opacity 0.2s ease;
         }
 
-        .radio-label {
-            font-size: 14px;
-            color: var(--gray-700);
-            flex: 1;
-            transition: all 0.2s ease;
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
         }
 
-        /* Checkboxes */
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .checkbox-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 14px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-option:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
-        }
-
+        .radio-option input[type="radio"],
         .checkbox-option input[type="checkbox"] {
+            margin-right: 12px;
             width: 18px;
             height: 18px;
-            margin-right: 10px;
             cursor: pointer;
-            accent-color: var(--blue-600);
         }
 
-        .checkbox-label {
-            font-size: 14px;
+        .radio-label, .checkbox-label {
+            font-size: 15px;
+            font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
-            flex: 1;
         }
 
-        /* Textarea */
-        textarea.form-input {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Section Divider */
         .section-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+            background: var(--gray-200);
             margin: 32px 0;
         }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-800);
-            margin-bottom: 16px;
-        }
-
-        /* Submit Button */
         .submit-btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 24px;
             font-size: 16px;
             font-weight: 600;
             color: white;
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3), 0 8px 24px rgba(37,99,235,0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4), 0 12px 32px rgba(37,99,235,0.25);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Results State */
-        .results-container {
-            animation: fade-up 0.6s ease forwards;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .results-header {
-            text-align: center;
-            padding: 40px 32px;
             background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
             border-radius: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(37,99,235,0.08);
+            padding: 40px 32px;
+            text-align: center;
+            margin-bottom: 24px;
         }
 
         .results-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 16px;
+            width: 64px;
+            height: 64px;
             background: var(--blue-600);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 20px;
         }
 
         .results-icon svg {
-            width: 28px;
-            height: 28px;
-            stroke: white;
+            width: 32px;
+            height: 32px;
+            color: white;
         }
 
         .results-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
-            color: var(--gray-900);
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
 
         .results-subtitle {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--gray-600);
-        }
-
-        .results-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .results-content {
             font-size: 15px;
             line-height: 1.8;
-            color: var(--gray-700);
+            color: var(--gray-800);
         }
 
-        /* Assessment Content Typography */
         .results-content h3 {
             font-size: 20px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-top: 32px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--blue-100);
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .results-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .results-content h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .results-content h4 {
-            font-size: 17px;
             font-weight: 700;
-            color: var(--gray-800);
+            color: var(--gray-900);
             margin-top: 24px;
             margin-bottom: 12px;
-            letter-spacing: -0.3px;
         }
 
         .results-content p {
             margin-bottom: 16px;
-            line-height: 1.8;
         }
 
-        .results-content p:last-child {
-            margin-bottom: 0;
+        .results-content ul {
+            margin: 12px 0 16px 20px;
         }
 
-        .results-content strong {
-            font-weight: 700;
-            color: var(--gray-900);
+        .results-content li {
+            margin-bottom: 8px;
         }
 
-        .results-content ul,
-        .results-content ol {
-            margin: 16px 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .results-content ul li,
-        .results-content ol li {
-            position: relative;
-            padding-left: 32px;
-            margin-bottom: 12px;
-            line-height: 1.8;
-        }
-
-        .results-content ul li::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 11px;
-            width: 6px;
-            height: 6px;
-            background: var(--blue-500);
-            border-radius: 50%;
-        }
-
-        .results-content ol {
-            counter-reset: item;
-        }
-
-        .results-content ol li {
-            counter-increment: item;
-        }
-
-        .results-content ol li::before {
-            content: counter(item);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Info boxes within assessment */
-        .results-content blockquote {
-            margin: 20px 0;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--blue-50) 0%, rgba(239, 246, 255, 0.5) 100%);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 12px;
-            font-style: normal;
-        }
-
-        /* Citation styling */
-        .results-content a {
-            color: var(--blue-600);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .results-content a:hover {
-            color: var(--blue-700);
-            text-decoration: underline;
-        }
-
-        /* Code/monospace elements */
-        .results-content code {
-            background: var(--gray-100);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--gray-800);
-        }
-
-        /* References */
         .references-card {
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.8);
             backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 24px;
             padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .references-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
             font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .references-title svg {
             width: 20px;
             height: 20px;
-            stroke: var(--blue-600);
+            color: var(--blue-600);
         }
 
         .reference-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
         }
 
-        .reference-item:last-child {
-            border-bottom: none;
+        .reference-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
         }
 
         .reference-number {
             display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border-radius: 8px;
-            text-align: center;
-            line-height: 32px;
-            font-size: 13px;
+            background: var(--blue-600);
+            color: white;
+            font-size: 12px;
             font-weight: 700;
-            margin-right: 12px;
-            flex-shrink: 0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-right: 8px;
         }
 
         .reference-link {
             color: var(--blue-600);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 1.5;
+            font-weight: 500;
+            font-size: 15px;
         }
 
         .reference-link:hover {
@@ -18154,47 +17951,51 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .reference-meta {
             font-size: 13px;
             color: var(--gray-600);
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
-            flex-direction: column;
             gap: 12px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+            }
         }
 
         .btn {
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            flex: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            background: var(--blue-600);
             color: white;
             border: none;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+            background: var(--blue-700);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
             background: white;
             color: var(--gray-700);
-            border: 2px solid var(--gray-300);
+            border: 1.5px solid var(--gray-300);
         }
 
         .btn-secondary:hover {
@@ -18202,11 +18003,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border-color: var(--gray-400);
         }
 
-        /* Footer */
         .footer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
             padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+            margin-top: auto;
         }
 
         .footer-inner {
@@ -18214,14 +18016,30 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             margin: 0 auto;
             display: flex;
             flex-direction: column;
+            gap: 16px;
             align-items: center;
-            gap: 20px;
             text-align: center;
         }
 
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
         .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
+            font-size: 14px;
+            color: var(--gray-600);
         }
 
         .footer-links {
@@ -18230,119 +18048,19 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
+            font-size: 14px;
+            color: var(--gray-600);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--gray-700);
+            color: var(--blue-600);
         }
-
-        /* Tablet & Desktop */
-        @media (min-width: 640px) {
-            .input-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .radio-group {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .radio-option {
-                flex: 1;
-                min-width: calc(50% - 5px);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-
-            .main-content {
-                padding: 108px 32px 48px;
-            }
-
-            .header-title {
-                font-size: 36px;
-            }
-
-            .form-card {
-                padding: 32px;
-            }
-
-            .action-buttons {
-                flex-direction: row;
-            }
-
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-
-            .main-content {
-                max-width: 900px;
-            }
-
-            .header-title {
-                font-size: 42px;
-            }
-
-            .form-card,
-            .results-card,
-            .references-card {
-                padding: 40px;
-            }
-
-            .results-header {
-                padding: 48px 40px;
-            }
-        }
-
-        /* Mobile-specific adjustments */
-        @media (max-width: 639px) {
-            .results-card,
-            .references-card {
-                padding: 20px;
-                border-radius: 20px;
-            }
-
-            .results-header {
-                padding: 24px 20px;
-                border-radius: 20px;
-            }
-
-            .results-content h3 {
-                font-size: 18px;
-            }
-
-            .results-content h4 {
-                font-size: 16px;
-            }
-
-            .results-title {
-                font-size: 20px;
-            }
-        }
-    </style>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -18351,7 +18069,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <!-- Navigation -->
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
                 <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
@@ -18374,8 +18091,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
                 </div>
@@ -18393,24 +18110,21 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        <!-- Main Content -->
         <main class="main-content" id="main-content">
             <div class="header">
-                <h1 class="header-title"><span class="gradient">Informed Consent</span> Generator</h1>
-                <p class="header-subtitle">AI-powered patient-specific consent discussion guide</p>
+                <h1 class="header-title"><span class="gradient">Informed Consent</span> Assessment</h1>
+                <p class="header-subtitle">Patient-specific consent discussion with evidence-based risk information</p>
             </div>
 
             {% if not summary %}
-            <!-- Form State -->
             <div class="form-card">
                 <form method="POST" action="/informed-consent">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                    <!-- Patient Demographics -->
                     <div class="section-title">Patient Information</div>
                     <div class="input-row">
                         <div class="form-group">
@@ -18432,30 +18146,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Anesthesia Details -->
                     <div class="section-title">Anesthesia & Procedure</div>
-
                     <div class="form-group">
                         <label class="form-label">Anesthesia Type<span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="anesthesia_type" value="General" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">General</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="anesthesia_type" value="Regional/Neuraxial" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Regional/Neuraxial</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="anesthesia_type" value="Sedation/MAC" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Sedation/MAC</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="anesthesia_type" value="Local" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Local</span>
                             </label>
                         </div>
@@ -18468,7 +18176,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Comorbidities -->
                     <div class="section-title">Medical History</div>
                     <div class="form-group">
                         <label class="form-label">Comorbidities (select all that apply)</label>
@@ -18506,7 +18213,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Special Considerations -->
                     <div class="section-title">Special Considerations</div>
                     <div class="form-group">
                         <label class="form-label">Select all that apply</label>
@@ -18548,63 +18254,60 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             </div>
 
             {% else %}
-            <!-- Results State -->
-            <div class="results-container">
-                <div class="results-header">
-                    <div class="results-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                    <h1 class="results-title"><span style="color: var(--blue-600);">Informed Consent</span> Discussion Guide</h1>
-                    <p class="results-subtitle">Patient-specific consent discussion with evidence-based risk information</p>
+            <div class="results-header">
+                <div class="results-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
                 </div>
+                <h1 class="results-title"><span class="gradient">Informed Consent</span> Assessment Complete</h1>
+                <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
+            </div>
 
-                <div class="results-card">
-                    <div class="results-content">
-                        {{ summary|safe }}
-                    </div>
+            <div class="results-card">
+                <div class="results-content">
+                    {{ summary|safe }}
                 </div>
+            </div>
 
-                {% if references %}
-                <div class="references-card">
-                    <div class="references-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                        <span>Evidence-Based References</span>
-                    </div>
-                    {% for ref in references %}
-                    <div class="reference-item">
-                        <span class="reference-number">[{{ loop.index }}]</span>
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                            {{ ref.title }}
-                        </a>
-                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
-                    </div>
-                    {% endfor %}
+            {% if references %}
+            <div class="references-card">
+                <div class="references-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Evidence-Based References</span>
                 </div>
-                {% endif %}
-
-                <div class="action-buttons">
-                    <a href="/informed-consent" class="btn btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        New Consent
+                {% for ref in references %}
+                <div class="reference-item">
+                    <span class="reference-number">[{{ loop.index }}]</span>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                        {{ ref.title }}
                     </a>
-                    <button onclick="window.print()" class="btn btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                            <rect x="6" y="14" width="12" height="8"></rect>
-                        </svg>
-                        Print/Save PDF
-                    </button>
+                    <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
                 </div>
+                {% endfor %}
+                 </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/informed-consent" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print/Save PDF
+                </button>
             </div>
             {% endif %}
         </main>
@@ -18622,7 +18325,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18641,43 +18343,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             }
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
-
-        // Radio button selection handler
-        document.querySelectorAll('.radio-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio) {
-                    radio.checked = true;
-                    // Remove selected class from siblings
-                    const name = radio.getAttribute('name');
-                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-                        r.closest('.radio-option').classList.remove('selected');
-                    });
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                }
-            });
-        });
-
-        // Checkbox selection handler
-        document.querySelectorAll('.checkbox-option').forEach(option => {
-            option.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT') {
-                    const checkbox = this.querySelector('input[type="checkbox"]');
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                    }
-                }
-            });
         });
     </script>
 </body>
 </html>
 """
+
 
 DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
@@ -18694,7 +18367,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Assessment - GasConsult.ai</title>
-    <meta name="description" content="AI-powered difficult airway assessment tool combining validated predictors with evidence-based management strategies.">
+    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -18702,8 +18375,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --white: #FFFFFF;
@@ -18743,7 +18416,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
-        /* Background Canvas */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
         .bg-canvas {
             position: fixed;
             inset: 0;
@@ -18812,7 +18502,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -18940,6 +18629,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -18994,57 +18688,58 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
-            padding: 88px 16px 32px;
-            max-width: 800px;
+            padding: 100px 20px 40px;
+            max-width: 900px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 32px;
-            animation: fade-up 0.6s ease forwards;
-        }
-
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 40px;
         }
 
         .header-title {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: 800;
+            margin-bottom: 12px;
             letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 8px;
         }
 
-        .header-title .blue { color: var(--blue-600); }
+        .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .header-subtitle {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--gray-500);
             line-height: 1.6;
         }
 
-        /* Form Card */
-        .form-card {
+        .form-card, .results-card {
             background: rgba(255,255,255,0.8);
             backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 24px;
-            padding: 24px;
+            padding: 32px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
-            animation: fade-up 0.6s 0.1s ease forwards;
-            opacity: 0;
+            margin-bottom: 24px;
         }
 
-        /* Form Groups */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
         .form-group {
             margin-bottom: 24px;
         }
@@ -19057,459 +18752,226 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             margin-bottom: 8px;
         }
 
-        .form-label .required {
-            color: #EF4444;
-            margin-left: 2px;
+        .required {
+            color: var(--blue-600);
+            margin-left: 4px;
         }
 
-        /* Input Styles */
-        .form-input {
+        .form-input, select {
             width: 100%;
             padding: 12px 16px;
             font-size: 15px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            border: 1.5px solid var(--gray-300);
             border-radius: 12px;
             transition: all 0.2s ease;
+            font-family: inherit;
+            background: white;
         }
 
-        .form-input:focus {
+        .form-input:focus, select:focus {
             outline: none;
             border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .form-input::placeholder {
-            color: var(--gray-400);
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
         }
 
-        /* Input Row for Multiple Fields */
         .input-row {
             display: grid;
-            gap: 12px;
             grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
-        /* Radio Buttons */
-        .radio-group {
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
-        .radio-option {
-            position: relative;
+        .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
             padding: 14px 16px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            border: 1.5px solid var(--gray-300);
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-        }
-
-        .radio-option:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
-        }
-
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-visual {
-            background: var(--blue-600);
-            border-color: var(--blue-600);
-        }
-
-        .radio-option input[type="radio"]:checked + .radio-visual::after {
-            opacity: 1;
-        }
-
-        .radio-option input[type="radio"]:checked ~ .radio-label {
-            font-weight: 600;
-            color: var(--blue-600);
-        }
-
-        .radio-option.selected {
-            background: var(--blue-50);
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-        }
-
-        .radio-visual {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gray-300);
-            border-radius: 50%;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.2s ease;
-            margin-right: 12px;
-        }
-
-        .radio-visual::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
             background: white;
-            opacity: 0;
-            transition: opacity 0.2s ease;
         }
 
-        .radio-label {
-            font-size: 14px;
-            color: var(--gray-700);
-            flex: 1;
-            transition: all 0.2s ease;
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
         }
 
-        /* Checkboxes */
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .checkbox-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 14px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-option:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
-        }
-
+        .radio-option input[type="radio"],
         .checkbox-option input[type="checkbox"] {
+            margin-right: 12px;
             width: 18px;
             height: 18px;
-            margin-right: 10px;
             cursor: pointer;
-            accent-color: var(--blue-600);
         }
 
-        .checkbox-label {
-            font-size: 14px;
+        .radio-label, .checkbox-label {
+            font-size: 15px;
+            font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
-            flex: 1;
         }
 
-        /* Textarea */
-        textarea.form-input {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Section Divider */
         .section-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
+            background: var(--gray-200);
             margin: 32px 0;
         }
 
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-800);
-            margin-bottom: 16px;
-        }
-
-        /* Submit Button */
         .submit-btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 24px;
             font-size: 16px;
             font-weight: 600;
             color: white;
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3), 0 8px 24px rgba(37,99,235,0.2);
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4), 0 12px 32px rgba(37,99,235,0.25);
-        }
-
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Results State */
-        .results-container {
-            animation: fade-up 0.6s ease forwards;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .results-header {
-            text-align: center;
-            padding: 40px 32px;
             background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
             border-radius: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(37,99,235,0.08);
+            padding: 40px 32px;
+            text-align: center;
+            margin-bottom: 24px;
         }
 
         .results-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 16px;
+            width: 64px;
+            height: 64px;
             background: var(--blue-600);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 20px;
         }
 
         .results-icon svg {
-            width: 28px;
-            height: 28px;
-            stroke: white;
+            width: 32px;
+            height: 32px;
+            color: white;
         }
 
         .results-title {
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 800;
-            color: var(--gray-900);
             margin-bottom: 8px;
-            letter-spacing: -0.5px;
         }
 
         .results-subtitle {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--gray-600);
-        }
-
-        .results-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .results-content {
             font-size: 15px;
             line-height: 1.8;
-            color: var(--gray-700);
+            color: var(--gray-800);
         }
 
-        /* Assessment Content Typography */
         .results-content h3 {
             font-size: 20px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-top: 32px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--blue-100);
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .results-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .results-content h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .results-content h4 {
-            font-size: 17px;
             font-weight: 700;
-            color: var(--gray-800);
+            color: var(--gray-900);
             margin-top: 24px;
             margin-bottom: 12px;
-            letter-spacing: -0.3px;
         }
 
         .results-content p {
             margin-bottom: 16px;
-            line-height: 1.8;
         }
 
-        .results-content p:last-child {
-            margin-bottom: 0;
+        .results-content ul {
+            margin: 12px 0 16px 20px;
         }
 
-        .results-content strong {
-            font-weight: 700;
-            color: var(--gray-900);
+        .results-content li {
+            margin-bottom: 8px;
         }
 
-        .results-content ul,
-        .results-content ol {
-            margin: 16px 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .results-content ul li,
-        .results-content ol li {
-            position: relative;
-            padding-left: 32px;
-            margin-bottom: 12px;
-            line-height: 1.8;
-        }
-
-        .results-content ul li::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 11px;
-            width: 6px;
-            height: 6px;
-            background: var(--blue-500);
-            border-radius: 50%;
-        }
-
-        .results-content ol {
-            counter-reset: item;
-        }
-
-        .results-content ol li {
-            counter-increment: item;
-        }
-
-        .results-content ol li::before {
-            content: counter(item);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Info boxes within assessment */
-        .results-content blockquote {
-            margin: 20px 0;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--blue-50) 0%, rgba(239, 246, 255, 0.5) 100%);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 12px;
-            font-style: normal;
-        }
-
-        /* Citation styling */
-        .results-content a {
-            color: var(--blue-600);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .results-content a:hover {
-            color: var(--blue-700);
-            text-decoration: underline;
-        }
-
-        /* Code/monospace elements */
-        .results-content code {
-            background: var(--gray-100);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--gray-800);
-        }
-
-        /* References */
         .references-card {
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.8);
             backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.9);
             border-radius: 24px;
             padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
         .references-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
             font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .references-title svg {
             width: 20px;
             height: 20px;
-            stroke: var(--blue-600);
+            color: var(--blue-600);
         }
 
         .reference-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
         }
 
-        .reference-item:last-child {
-            border-bottom: none;
+        .reference-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
         }
 
         .reference-number {
             display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border-radius: 8px;
-            text-align: center;
-            line-height: 32px;
-            font-size: 13px;
+            background: var(--blue-600);
+            color: white;
+            font-size: 12px;
             font-weight: 700;
-            margin-right: 12px;
-            flex-shrink: 0;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-right: 8px;
         }
 
         .reference-link {
             color: var(--blue-600);
             text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 1.5;
+            font-weight: 500;
+            font-size: 15px;
         }
 
         .reference-link:hover {
@@ -19519,47 +18981,51 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .reference-meta {
             font-size: 13px;
             color: var(--gray-600);
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
-            flex-direction: column;
             gap: 12px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+            }
         }
 
         .btn {
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            flex: 1;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            background: var(--blue-600);
             color: white;
             border: none;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+            background: var(--blue-700);
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
             background: white;
             color: var(--gray-700);
-            border: 2px solid var(--gray-300);
+            border: 1.5px solid var(--gray-300);
         }
 
         .btn-secondary:hover {
@@ -19567,11 +19033,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border-color: var(--gray-400);
         }
 
-        /* Footer */
         .footer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
             padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+            margin-top: auto;
         }
     </style>
 </head>
@@ -19597,147 +19064,56 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: #F8FAFC;
             color: #0F172A;
             display: flex;
+            flex-direction: column;
+            gap: 16px;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
             text-align: center;
             background: white;
             padding: 60px 40px;
             border-radius: 20px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
-        h1 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--gray-600);
         }
         p {
             color: #64748B;
             line-height: 1.6;
             margin-bottom: 32px;
         }
-        a {
-            display: inline-block;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            color: white;
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--gray-600);
             text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: transform 0.2s;
+            transition: color 0.2s ease;
         }
 
-        /* Tablet & Desktop */
-        @media (min-width: 640px) {
-            .input-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .radio-group {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .radio-option {
-                flex: 1;
-                min-width: calc(50% - 5px);
-            }
+        .footer-link:hover {
+            color: var(--blue-600);
         }
-
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-
-            .main-content {
-                padding: 108px 32px 48px;
-            }
-
-            .header-title {
-                font-size: 36px;
-            }
-
-            .form-card {
-                padding: 32px;
-            }
-
-            .action-buttons {
-                flex-direction: row;
-            }
-
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-
-            .main-content {
-                max-width: 900px;
-            }
-
-            .header-title {
-                font-size: 42px;
-            }
-
-            .form-card,
-            .results-card,
-            .references-card {
-                padding: 40px;
-            }
-
-            .results-header {
-                padding: 48px 40px;
-            }
-        }
-
-        /* Mobile-specific adjustments */
-        @media (max-width: 639px) {
-            .results-card,
-            .references-card {
-                padding: 20px;
-                border-radius: 20px;
-            }
-
-            .results-header {
-                padding: 24px 20px;
-                border-radius: 20px;
-            }
-
-            .results-content h3 {
-                font-size: 18px;
-            }
-
-            .results-content h4 {
-                font-size: 16px;
-            }
-
-            .results-title {
-                font-size: 20px;
-            }
-        }
-    </style>
     </style>
 </head>
 <body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -19746,7 +19122,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <div class="grain"></div>
 
     <div class="page">
-        <!-- Navigation -->
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
                 <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
@@ -19792,20 +19167,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        <!-- Main Content -->
         <main class="main-content" id="main-content">
             <div class="header">
                 <h1 class="header-title"><span class="gradient">Difficult Airway</span> Assessment</h1>
-                <p class="header-subtitle">AI-powered risk stratification and evidence-based management planning</p>
+                <p class="header-subtitle">AI-powered risk stratification with evidence-based management strategies</p>
             </div>
 
             {% if not summary %}
-            <!-- Form State -->
             <div class="form-card">
                 <form method="POST" action="/difficult-airway">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                    <!-- Patient Demographics -->
                     <div class="section-title">Patient Demographics</div>
                     <div class="input-row">
                         <div class="form-group">
@@ -19820,30 +19192,24 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Airway Assessment -->
                     <div class="section-title">Airway Examination</div>
-
                     <div class="form-group">
                         <label class="form-label">Mallampati Classification<span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="mallampati" value="I" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Class I</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="mallampati" value="II" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Class II</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="mallampati" value="III" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Class III</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="mallampati" value="IV" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Class IV</span>
                             </label>
                         </div>
@@ -19854,17 +19220,14 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="thyromental" value="<6cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">&lt;6 cm</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="thyromental" value="6-6.5cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">6-6.5 cm</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="thyromental" value=">6.5cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">&gt;6.5 cm</span>
                             </label>
                         </div>
@@ -19875,17 +19238,14 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="mouth_opening" value="<3cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">&lt;3 cm</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="mouth_opening" value="3-4cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">3-4 cm</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="mouth_opening" value=">4cm" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">&gt;4 cm</span>
                             </label>
                         </div>
@@ -19896,17 +19256,14 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="neck_extension" value="Limited" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Limited</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="neck_extension" value="Moderate" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Moderate</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="neck_extension" value="Normal" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Normal</span>
                             </label>
                         </div>
@@ -19914,7 +19271,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Risk Factors -->
                     <div class="section-title">Risk Factors</div>
                     <div class="form-group">
                         <label class="form-label">Select all that apply</label>
@@ -19956,7 +19312,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
                     <div class="section-divider"></div>
 
-                    <!-- Procedure Details -->
                     <div class="section-title">Procedure Information</div>
                     <div class="form-group">
                         <label class="form-label">Planned Procedure<span class="required">*</span></label>
@@ -19968,17 +19323,14 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="case_type" value="Elective" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Elective</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="case_type" value="Urgent" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Urgent</span>
                             </label>
                             <label class="radio-option">
                                 <input type="radio" name="case_type" value="Emergency" required>
-                                <div class="radio-visual"></div>
                                 <span class="radio-label">Emergency</span>
                             </label>
                         </div>
@@ -19994,63 +19346,60 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             </div>
 
             {% else %}
-            <!-- Results State -->
-            <div class="results-container">
-                <div class="results-header">
-                    <div class="results-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                    <h1 class="results-title"><span style="color: var(--blue-600);">Difficult Airway</span> Assessment Complete</h1>
-                    <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
+            <div class="results-header">
+                <div class="results-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
                 </div>
+                <h1 class="results-title"><span class="gradient">Difficult Airway</span> Assessment Complete</h1>
+                <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
+            </div>
 
-                <div class="results-card">
-                    <div class="results-content">
-                        {{ summary|safe }}
-                    </div>
+            <div class="results-card">
+                <div class="results-content">
+                    {{ summary|safe }}
                 </div>
+            </div>
 
-                {% if references %}
-                <div class="references-card">
-                    <div class="references-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                        <span>Evidence-Based References</span>
-                    </div>
-                    {% for ref in references %}
-                    <div class="reference-item">
-                        <span class="reference-number">[{{ loop.index }}]</span>
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                            {{ ref.title }}
-                        </a>
-                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
-                    </div>
-                    {% endfor %}
+            {% if references %}
+            <div class="references-card">
+                <div class="references-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Evidence-Based References</span>
                 </div>
-                {% endif %}
-
-                <div class="action-buttons">
-                    <a href="/difficult-airway" class="btn btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        New Assessment
+                {% for ref in references %}
+                <div class="reference-item">
+                    <span class="reference-number">[{{ loop.index }}]</span>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                        {{ ref.title }}
                     </a>
-                    <button onclick="window.print()" class="btn btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                            <rect x="6" y="14" width="12" height="8"></rect>
-                        </svg>
-                        Print/Save PDF
-                    </button>
+                    <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
                 </div>
+                {% endfor %}
+                 </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/difficult-airway" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print/Save PDF
+                </button>
             </div>
             {% endif %}
         </main>
@@ -20068,7 +19417,6 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -20087,38 +19435,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             }
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
-
-        // Radio button selection handler
-        document.querySelectorAll('.radio-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio) {
-                    radio.checked = true;
-                    // Remove selected class from siblings
-                    const name = radio.getAttribute('name');
-                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-                        r.closest('.radio-option').classList.remove('selected');
-                    });
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                }
-            });
-        });
-
-        // Checkbox selection handler
-        document.querySelectorAll('.checkbox-option').forEach(option => {
-            option.addEventListener('click', function(e) {
-                if (e.target.tagName !== 'INPUT') {
-                    const checkbox = this.querySelector('input[type="checkbox"]');
-                    if (checkbox) {
-                        checkbox.checked = !checkbox.checked;
-                    }
-                }
-            });
         });
     </script>
 </body>
