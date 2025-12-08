@@ -182,11 +182,22 @@ def safe_db_save_message(conversation_id, role, content, references=None, num_pa
     Returns:
         bool: True if saved successfully, False otherwise
     """
+    print(f"[CHAT_HISTORY] [DEBUG] safe_db_save_message called:")
+    print(f"  - CHAT_HISTORY_ENABLED: {CHAT_HISTORY_ENABLED}")
+    print(f"  - DATABASE_INITIALIZED: {DATABASE_INITIALIZED}")
+    print(f"  - conversation_id: {conversation_id}")
+    print(f"  - role: {role}")
+    print(f"  - content_length: {len(content) if content else 0}")
+    print(f"  - num_papers: {num_papers}")
+    print(f"  - references: {len(references) if references else 0} items")
+    print(f"  - evidence_strength: {evidence_strength}")
+
     if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        print(f"[CHAT_HISTORY] [DEBUG] Skipping save - ENABLED={CHAT_HISTORY_ENABLED}, INITIALIZED={DATABASE_INITIALIZED}")
         return False
 
     try:
-        return database.save_message(
+        result = database.save_message(
             conversation_id=conversation_id,
             role=role,
             content=content,
@@ -194,8 +205,12 @@ def safe_db_save_message(conversation_id, role, content, references=None, num_pa
             num_papers=num_papers,
             evidence_strength=evidence_strength
         )
+        print(f"[CHAT_HISTORY] [DEBUG] database.save_message returned: {result}")
+        return result
     except Exception as e:
         print(f"[CHAT_HISTORY] Failed to save message: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 
@@ -18287,21 +18302,33 @@ def stream():
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
             # [PHASE 2] Save assistant response to database (non-blocking)
+            print(f"[CHAT_HISTORY] [DEBUG] Stream endpoint - preparing to save assistant response")
+            print(f"[CHAT_HISTORY] [DEBUG] Global flags - ENABLED={CHAT_HISTORY_ENABLED}, INITIALIZED={DATABASE_INITIALIZED}")
             conversation_id = session.get('conversation_id')
+            print(f"[CHAT_HISTORY] [DEBUG] conversation_id from session: {conversation_id}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - cleaned_response length: {len(cleaned_response) if cleaned_response else 0}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - refs: {len(refs) if refs else 0} items")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - num_papers: {num_papers}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - evidence_strength: {evidence_strength}")
+
             if conversation_id:
-                if safe_db_save_message(
+                print(f"[CHAT_HISTORY] [DEBUG] Calling safe_db_save_message...")
+                save_result = safe_db_save_message(
                     conversation_id=conversation_id,
                     role="assistant",
                     content=cleaned_response,
                     references=refs,
                     num_papers=num_papers,
                     evidence_strength=evidence_strength
-                ):
-                    print(f"[CHAT_HISTORY] Saved assistant response to database")
+                )
+                print(f"[CHAT_HISTORY] [DEBUG] safe_db_save_message returned: {save_result}")
+                if save_result:
+                    print(f"[CHAT_HISTORY] ✅ Saved assistant response to database")
                 else:
-                    print(f"[CHAT_HISTORY] Assistant response not saved to database (feature disabled or error)")
+                    print(f"[CHAT_HISTORY] ❌ Assistant response not saved to database (feature disabled or error)")
             else:
-                print(f"[CHAT_HISTORY] No conversation_id in session, skipping database save")
+                print(f"[CHAT_HISTORY] ❌ No conversation_id in session, skipping database save")
+                print(f"[CHAT_HISTORY] [DEBUG] Session keys: {list(session.keys())}")
 
             # Send references with evidence strength
             yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
@@ -18485,10 +18512,14 @@ def index():
             print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
 
             # [PHASE 2] Save user message to database (non-blocking)
-            if safe_db_save_message(conversation_id, "user", raw_query):
-                print(f"[CHAT_HISTORY] Saved user message to database")
+            print(f"[CHAT_HISTORY] [DEBUG] Index route - preparing to save user message")
+            print(f"[CHAT_HISTORY] [DEBUG] conversation_id: {conversation_id}")
+            save_user_result = safe_db_save_message(conversation_id, "user", raw_query)
+            print(f"[CHAT_HISTORY] [DEBUG] User message save result: {save_user_result}")
+            if save_user_result:
+                print(f"[CHAT_HISTORY] ✅ Saved user message to database")
             else:
-                print(f"[CHAT_HISTORY] User message not saved to database (feature disabled or error)")
+                print(f"[CHAT_HISTORY] ❌ User message not saved to database (feature disabled or error)")
 
             # Check if this is a calculation request
             context_hint = None
