@@ -189,6 +189,7 @@ def save_message(
     try:
         message_id = str(uuid.uuid4())
         references_json = json.dumps(references) if references else None
+        evidence_strength_json = json.dumps(evidence_strength) if evidence_strength else None
 
         with get_db_connection() as conn:
             # Insert message
@@ -196,7 +197,7 @@ def save_message(
                 INSERT INTO messages
                 (id, conversation_id, role, content, paper_references, num_papers, evidence_strength)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, (message_id, conversation_id, role, content, references_json, num_papers, evidence_strength))
+            """, (message_id, conversation_id, role, content, references_json, num_papers, evidence_strength_json))
 
             # Update conversation metadata
             conn.execute("""
@@ -308,7 +309,7 @@ def get_conversation(conversation_id: str) -> Optional[Dict[str, Any]]:
                     message['references'] = json.loads(msg_row['paper_references']) if msg_row['paper_references'] else []
                     message['num_papers'] = msg_row['num_papers'] or 0
                     if msg_row['evidence_strength']:
-                        message['evidence_strength'] = msg_row['evidence_strength']
+                        message['evidence_strength'] = json.loads(msg_row['evidence_strength'])
 
                 messages.append(message)
 
