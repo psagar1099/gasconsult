@@ -2016,49 +2016,46 @@ PREOP_HTML = """<!DOCTYPE html>
             top: 24px;
             left: 24px;
             z-index: 1001;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
         }
 
         .history-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-        }
-
-        .history-toggle:active {
-            transform: translateY(0);
+            background: var(--gray-50);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .history-toggle svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-            stroke-width: 2.5;
+            width: 20px;
+            height: 20px;
+            color: var(--gray-700);
+            stroke-width: 2;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 360px;
+            width: 340px;
             height: 100vh;
-            background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+            background: var(--white);
+            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            border-right: 1px solid var(--gray-200);
         }
 
         .history-sidebar.open {
@@ -2066,126 +2063,90 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 28px 24px 20px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 20px;
+            background: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: none;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-sidebar-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            letter-spacing: -0.02em;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            letter-spacing: -0.01em;
         }
 
         .history-close-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
             border: none;
             cursor: pointer;
-            padding: 8px;
-            color: white;
+            padding: 6px;
+            color: var(--gray-500);
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 6px;
             transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
         }
 
         .history-close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-close-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2.5;
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 12px;
+            background: var(--gray-50);
         }
 
         .history-conversation-item {
-            padding: 16px 18px;
-            margin-bottom: 10px;
-            background: white;
-            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            background: var(--white);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1.5px solid transparent;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-200);
             position: relative;
-            overflow: hidden;
-        }
-
-        .history-conversation-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s ease;
         }
 
         .history-conversation-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-
-        .history-conversation-item:hover::before {
-            width: 4px;
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
 
         .history-conversation-item.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
-        }
-
-        .history-conversation-item.active::before {
-            width: 4px;
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
         }
 
         .history-conversation-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1a202c;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
             margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            position: relative;
-            padding-left: 0;
-            transition: padding-left 0.3s ease;
-        }
-
-        .history-conversation-item:hover .history-conversation-title {
-            padding-left: 8px;
         }
 
         .history-conversation-meta {
             font-size: 12px;
-            color: #718096;
+            color: var(--gray-500);
             display: flex;
-            gap: 14px;
+            gap: 12px;
             align-items: center;
-            position: relative;
-            padding-left: 0;
-            transition: padding-left 0.3s ease;
-        }
-
-        .history-conversation-item:hover .history-conversation-meta {
-            padding-left: 8px;
         }
 
         .history-conversation-meta span {
@@ -2195,29 +2156,22 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-empty-state {
-            padding: 60px 24px;
+            padding: 48px 20px;
             text-align: center;
-            color: #a0aec0;
-        }
-
-        .history-empty-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            opacity: 0.4;
+            color: var(--gray-400);
         }
 
         .history-empty-state p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #718096;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-500);
         }
 
         .history-loading {
-            padding: 60px 24px;
+            padding: 48px 20px;
             text-align: center;
-            color: #718096;
-            font-size: 15px;
+            color: var(--gray-500);
+            font-size: 14px;
         }
 
         /* Overlay when sidebar is open */
@@ -2227,12 +2181,11 @@ PREOP_HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(2px);
+            background: rgba(0, 0, 0, 0.3);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .history-overlay.visible {
@@ -2250,57 +2203,57 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-conversations-list::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.2);
+            background: var(--gray-300);
             border-radius: 10px;
         }
 
         .history-conversations-list::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.4);
+            background: var(--blue-400);
         }
 
         /* [PHASE 5] Search Bar */
         .history-search-container {
-            padding: 16px;
-            background: white;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-search-input {
             width: 100%;
-            padding: 12px 16px 12px 40px;
-            border: 1.5px solid rgba(102, 126, 234, 0.2);
-            border-radius: 12px;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
             font-size: 14px;
-            color: #1a202c;
-            background: #fafafa;
+            color: var(--gray-900);
+            background: var(--gray-50);
             transition: all 0.2s ease;
             outline: none;
         }
 
         .history-search-input:focus {
-            border-color: rgba(102, 126, 234, 0.5);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--blue-400);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .history-search-input::placeholder {
-            color: #a0aec0;
+            color: var(--gray-400);
         }
 
         .history-search-icon {
             position: absolute;
-            left: 28px;
-            top: 28px;
-            width: 18px;
-            height: 18px;
-            color: #718096;
+            left: 24px;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
             pointer-events: none;
         }
 
         /* [PHASE 5] Conversation Actions */
         .history-conversation-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             margin-top: 8px;
             opacity: 0;
             transition: opacity 0.2s ease;
@@ -2311,48 +2264,49 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-action-btn {
-            padding: 6px 10px;
+            padding: 5px 8px;
             border: none;
-            border-radius: 8px;
-            font-size: 12px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .history-action-btn svg {
-            width: 14px;
-            height: 14px;
+            width: 13px;
+            height: 13px;
         }
 
         .history-action-btn-export {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: var(--blue-50);
+            color: var(--blue-600);
         }
 
         .history-action-btn-export:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: var(--blue-100);
         }
 
         .history-action-btn-copy {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-action-btn-copy:hover {
-            background: rgba(16, 185, 129, 0.2);
+            background: var(--gray-200);
         }
 
         .history-action-btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: transparent;
+            color: var(--gray-400);
         }
 
         .history-action-btn-delete:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
         /* [PHASE 5] Delete Confirmation Modal */
@@ -2361,14 +2315,15 @@ PREOP_HTML = """<!DOCTYPE html>
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 28px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
             z-index: 10000;
             max-width: 400px;
             width: 90%;
             display: none;
+            border: 1px solid var(--gray-200);
         }
 
         .history-delete-modal.visible {
@@ -2381,8 +2336,7 @@ PREOP_HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 9999;
             display: none;
         }
@@ -2392,51 +2346,52 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-delete-modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 10px;
         }
 
         .history-delete-modal-message {
-            font-size: 15px;
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .history-delete-modal-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: flex-end;
         }
 
         .history-modal-btn {
-            padding: 10px 20px;
+            padding: 9px 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .history-modal-btn-cancel {
-            background: #f1f5f9;
-            color: #475569;
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-modal-btn-cancel:hover {
-            background: #e2e8f0;
+            background: var(--gray-200);
         }
 
         .history-modal-btn-confirm {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: #ef4444;
             color: white;
         }
 
         .history-modal-btn-confirm:hover {
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            background: #dc2626;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
         /* Mobile responsive */
@@ -2464,7 +2419,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -5160,49 +5115,46 @@ HTML = """<!DOCTYPE html>
             top: 24px;
             left: 24px;
             z-index: 1001;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
         }
 
         .history-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-        }
-
-        .history-toggle:active {
-            transform: translateY(0);
+            background: var(--gray-50);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .history-toggle svg {
-            width: 24px;
-            height: 24px;
-            color: white;
-            stroke-width: 2.5;
+            width: 20px;
+            height: 20px;
+            color: var(--gray-700);
+            stroke-width: 2;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 360px;
+            width: 340px;
             height: 100vh;
-            background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+            background: var(--white);
+            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            border-right: 1px solid var(--gray-200);
         }
 
         .history-sidebar.open {
@@ -5210,126 +5162,90 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 28px 24px 20px 24px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 20px;
+            background: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: none;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-sidebar-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: white;
-            letter-spacing: -0.02em;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            letter-spacing: -0.01em;
         }
 
         .history-close-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: transparent;
             border: none;
             cursor: pointer;
-            padding: 8px;
-            color: white;
+            padding: 6px;
+            color: var(--gray-500);
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 6px;
             transition: all 0.2s ease;
-            backdrop-filter: blur(10px);
         }
 
         .history-close-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: rotate(90deg);
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-close-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke-width: 2.5;
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
-            padding: 16px;
+            padding: 12px;
+            background: var(--gray-50);
         }
 
         .history-conversation-item {
-            padding: 16px 18px;
-            margin-bottom: 10px;
-            background: white;
-            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            background: var(--white);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1.5px solid transparent;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+            border: 1px solid var(--gray-200);
             position: relative;
-            overflow: hidden;
-        }
-
-        .history-conversation-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 0;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transition: width 0.3s ease;
         }
 
         .history-conversation-item:hover {
-            transform: translateX(4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            border-color: rgba(102, 126, 234, 0.3);
-        }
-
-        .history-conversation-item:hover::before {
-            width: 4px;
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
 
         .history-conversation-item.active {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
-        }
-
-        .history-conversation-item.active::before {
-            width: 4px;
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
         }
 
         .history-conversation-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: #1a202c;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
             margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            position: relative;
-            padding-left: 0;
-            transition: padding-left 0.3s ease;
-        }
-
-        .history-conversation-item:hover .history-conversation-title {
-            padding-left: 8px;
         }
 
         .history-conversation-meta {
             font-size: 12px;
-            color: #718096;
+            color: var(--gray-500);
             display: flex;
-            gap: 14px;
+            gap: 12px;
             align-items: center;
-            position: relative;
-            padding-left: 0;
-            transition: padding-left 0.3s ease;
-        }
-
-        .history-conversation-item:hover .history-conversation-meta {
-            padding-left: 8px;
         }
 
         .history-conversation-meta span {
@@ -5339,29 +5255,22 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-empty-state {
-            padding: 60px 24px;
+            padding: 48px 20px;
             text-align: center;
-            color: #a0aec0;
-        }
-
-        .history-empty-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 16px;
-            opacity: 0.4;
+            color: var(--gray-400);
         }
 
         .history-empty-state p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #718096;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-500);
         }
 
         .history-loading {
-            padding: 60px 24px;
+            padding: 48px 20px;
             text-align: center;
-            color: #718096;
-            font-size: 15px;
+            color: var(--gray-500);
+            font-size: 14px;
         }
 
         /* Overlay when sidebar is open */
@@ -5371,12 +5280,11 @@ HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(2px);
+            background: rgba(0, 0, 0, 0.3);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .history-overlay.visible {
@@ -5394,57 +5302,57 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-conversations-list::-webkit-scrollbar-thumb {
-            background: rgba(102, 126, 234, 0.2);
+            background: var(--gray-300);
             border-radius: 10px;
         }
 
         .history-conversations-list::-webkit-scrollbar-thumb:hover {
-            background: rgba(102, 126, 234, 0.4);
+            background: var(--blue-400);
         }
 
         /* [PHASE 5] Search Bar */
         .history-search-container {
-            padding: 16px;
-            background: white;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 12px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-search-input {
             width: 100%;
-            padding: 12px 16px 12px 40px;
-            border: 1.5px solid rgba(102, 126, 234, 0.2);
-            border-radius: 12px;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
             font-size: 14px;
-            color: #1a202c;
-            background: #fafafa;
+            color: var(--gray-900);
+            background: var(--gray-50);
             transition: all 0.2s ease;
             outline: none;
         }
 
         .history-search-input:focus {
-            border-color: rgba(102, 126, 234, 0.5);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--blue-400);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .history-search-input::placeholder {
-            color: #a0aec0;
+            color: var(--gray-400);
         }
 
         .history-search-icon {
             position: absolute;
-            left: 28px;
-            top: 28px;
-            width: 18px;
-            height: 18px;
-            color: #718096;
+            left: 24px;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
             pointer-events: none;
         }
 
         /* [PHASE 5] Conversation Actions */
         .history-conversation-actions {
             display: flex;
-            gap: 6px;
+            gap: 4px;
             margin-top: 8px;
             opacity: 0;
             transition: opacity 0.2s ease;
@@ -5455,48 +5363,49 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-action-btn {
-            padding: 6px 10px;
+            padding: 5px 8px;
             border: none;
-            border-radius: 8px;
-            font-size: 12px;
+            border-radius: 6px;
+            font-size: 11px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
         }
 
         .history-action-btn svg {
-            width: 14px;
-            height: 14px;
+            width: 13px;
+            height: 13px;
         }
 
         .history-action-btn-export {
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: var(--blue-50);
+            color: var(--blue-600);
         }
 
         .history-action-btn-export:hover {
-            background: rgba(102, 126, 234, 0.2);
+            background: var(--blue-100);
         }
 
         .history-action-btn-copy {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-action-btn-copy:hover {
-            background: rgba(16, 185, 129, 0.2);
+            background: var(--gray-200);
         }
 
         .history-action-btn-delete {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            background: transparent;
+            color: var(--gray-400);
         }
 
         .history-action-btn-delete:hover {
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
 
         /* [PHASE 5] Delete Confirmation Modal */
@@ -5505,14 +5414,15 @@ HTML = """<!DOCTYPE html>
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
-            padding: 28px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
             z-index: 10000;
             max-width: 400px;
             width: 90%;
             display: none;
+            border: 1px solid var(--gray-200);
         }
 
         .history-delete-modal.visible {
@@ -5525,8 +5435,7 @@ HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.4);
             z-index: 9999;
             display: none;
         }
@@ -5536,51 +5445,52 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-delete-modal-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a202c;
-            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 10px;
         }
 
         .history-delete-modal-message {
-            font-size: 15px;
-            color: #718096;
-            line-height: 1.6;
-            margin-bottom: 24px;
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 20px;
         }
 
         .history-delete-modal-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             justify-content: flex-end;
         }
 
         .history-modal-btn {
-            padding: 10px 20px;
+            padding: 9px 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .history-modal-btn-cancel {
-            background: #f1f5f9;
-            color: #475569;
+            background: var(--gray-100);
+            color: var(--gray-700);
         }
 
         .history-modal-btn-cancel:hover {
-            background: #e2e8f0;
+            background: var(--gray-200);
         }
 
         .history-modal-btn-confirm {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: #ef4444;
             color: white;
         }
 
         .history-modal-btn-confirm:hover {
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            background: #dc2626;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
         }
 
         /* Mobile responsive */
@@ -5612,7 +5522,7 @@ HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -11196,7 +11106,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -12758,7 +12668,7 @@ CRISIS_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
