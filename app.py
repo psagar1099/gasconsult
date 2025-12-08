@@ -17331,63 +17331,14 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
-INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+# Placeholder templates - Full interactive forms coming soon
+DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent for Anesthesia - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based informed consent guide for anesthesia procedures with comprehensive risk discussion.">
-
-    <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Difficult Airway - GasConsult.ai</title>
     <style>
-        :root {
-            --white: #FFFFFF;
-            --gray-50: #F8FAFC;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
-            --blue-400: #60A5FA;
-            --blue-500: #3B82F6;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-            --green-50: #F0FDF4;
-            --green-500: #22C55E;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
@@ -18687,117 +18638,107 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .info-box {
-            background: var(--amber-50);
-            border: 1px solid var(--amber-500);
-            border-radius: 12px;
+            min-height: 100vh;
+            margin: 0;
             padding: 20px;
-            margin: 24px 0;
         }
-
-        .info-box p {
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--gray-700);
-            margin: 0;
-        }
-
-        .references {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 20px;
-            padding: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
-            opacity: 0;
-        }
-
-        .references-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .references-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .references-list li {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-100);
-            font-size: 14px;
-            line-height: 1.6;
-            color: var(--gray-600);
-        }
-
-        .references-list li:last-child {
-            border-bottom: none;
-        }
-
-        .references-list strong {
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        .references-list em {
-            color: var(--gray-700);
-        }
-
-        .footer {
-            padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .container {
+            max-width: 600px;
             text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
+        p {
+            color: #64748B;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
-
-        .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
+        a {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
             text-decoration: none;
-            transition: color 0.2s ease;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
         }
-
-        .footer-link:hover {
-            color: var(--gray-700);
+        a:hover {
+            transform: translateY(-2px);
         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚧 Interactive Form Coming Soon</h1>
+        <p>The full interactive Difficult Airway Assessment tool is currently being built. It will include validated clinical predictors, AI-powered risk analysis, and personalized management recommendations.</p>
+        <a href="/?clear=1">← Back to Home</a>
+    </div>
+</body>
+</html>
+"""
 
-        @media (min-width: 768px) {
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            .header-title { font-size: 48px; }
-            .content-card { padding: 48px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent - GasConsult.ai</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            color: #64748B;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+        a {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+        a:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -19188,6 +19129,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
 
 
 @app.route("/stream")
