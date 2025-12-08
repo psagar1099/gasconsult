@@ -2901,7 +2901,6 @@ PREOP_HTML = """<!DOCTYPE html>
                     if (!data.enabled) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">📝</div>
                                 <p>Chat history is disabled</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Enable ENABLE_CHAT_HISTORY in settings</p>
                             </div>
@@ -2915,7 +2914,6 @@ PREOP_HTML = """<!DOCTYPE html>
                     if (conversationsData.length === 0) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">💬</div>
                                 <p>No conversations yet</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Start chatting to build your history</p>
                             </div>
@@ -6220,7 +6218,6 @@ HTML = """<!DOCTYPE html>
                     if (!data.enabled) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">📝</div>
                                 <p>Chat history is disabled</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Enable ENABLE_CHAT_HISTORY in settings</p>
                             </div>
@@ -6234,7 +6231,6 @@ HTML = """<!DOCTYPE html>
                     if (conversationsData.length === 0) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">💬</div>
                                 <p>No conversations yet</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Start chatting to build your history</p>
                             </div>
@@ -6506,7 +6502,7 @@ HTML = """<!DOCTYPE html>
                     alert('Failed to copy conversation');
                 }
             }
-        })();
+        }
     </script>
 </body>
 </html>
