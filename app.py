@@ -611,7 +611,8 @@ def expand_medical_abbreviations(query):
     # SIMPLIFIED: Use MeSH term only with exclusions - don't add synonyms that complicate the query
     q = re.sub(r'\bmh\b', '("malignant hyperthermia"[MeSH Terms] NOT (mental[ti] OR psychiatric[ti] OR psychology[ti] OR depression[ti]))', q, flags=re.IGNORECASE)
     # Expand full term "malignant hyperthermia" to use MeSH for better indexing
-    q = q.replace("malignant hyperthermia", '"malignant hyperthermia"[MeSH Terms]')
+    # Use negative lookbehind/lookahead to avoid double-quoting already expanded terms
+    q = re.sub(r'(?<!")malignant hyperthermia(?!")', '"malignant hyperthermia"[MeSH Terms]', q, flags=re.IGNORECASE)
 
     # Common scenarios
     q = q.replace("full stomach", '"aspiration"[MeSH Terms] OR "rapid sequence" OR RSI OR "aspiration risk"')
@@ -19014,7 +19015,7 @@ def cache_pubmed_results(search_term, ids, retmax=20, ttl=86400):
         cache_data = {
             'ids': ids,
             'search_term': search_term,
-            'timestamp': str(datetime.datetime.now()),
+            'timestamp': str(datetime.now()),
             'count': len(ids)
         }
         redis_client.setex(cache_key, ttl, json.dumps(cache_data))
