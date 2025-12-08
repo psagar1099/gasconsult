@@ -17927,85 +17927,215 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         </div>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <div class="header">
-                <h1 class="header-title"><span class="gradient">Informed Consent</span> for Anesthesia</h1>
-                <p class="header-subtitle">Evidence-based guide to anesthesia risks and benefits</p>
+                <h1 class="header-title"><span class="gradient">Informed Consent</span> Generator</h1>
+                <p class="header-subtitle">AI-powered patient-specific consent discussion guide</p>
             </div>
 
-            <div class="content-card">
-                <div class="section-title">Overview</div>
-                <div class="section-content">
-                    <p>Anesthesia is essential for surgery and procedures, allowing you to be comfortable and pain-free. While modern anesthesia is very safe, it's important to understand the types, benefits, and potential risks before your procedure.</p>
-                    <p><strong>Types of Anesthesia:</strong></p>
-                    <ul class="risk-list">
-                        <li><strong>General Anesthesia</strong> - You are completely unconscious and unaware during the procedure. A breathing tube or airway device is typically used.</li>
-                        <li><strong>Regional Anesthesia</strong> - Numbs a large part of the body (e.g., spinal or epidural for lower body surgery).</li>
-                        <li><strong>Local Anesthesia</strong> - Numbs only a small area where the procedure will be performed.</li>
-                        <li><strong>Monitored Anesthesia Care (MAC)</strong> - Sedation with local anesthesia, allowing you to be relaxed or lightly asleep.</li>
-                    </ul>
-                </div>
+            {% if not summary %}
+            <!-- Form State -->
+            <div class="form-card">
+                <form method="POST" action="/informed-consent">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                <div class="section-title">Common Side Effects</div>
-                <div class="section-content">
-                    <p>Most patients experience minor, temporary side effects from anesthesia:</p>
-                    <ul class="risk-list">
-                        <li><strong>Nausea and Vomiting</strong> - Occurs in 20-30% of patients. Anti-nausea medications can be given.</li>
-                        <li><strong>Sore Throat</strong> - From the breathing tube (general anesthesia). Usually resolves within 48 hours.</li>
-                        <li><strong>Drowsiness and Confusion</strong> - Common immediately after anesthesia, typically clears within hours.</li>
-                        <li><strong>Shivering</strong> - Body temperature regulation is affected; warming measures are used.</li>
-                        <li><strong>Muscle Aches</strong> - May occur after certain muscle relaxants are used.</li>
-                    </ul>
-                </div>
+                    <!-- Patient Demographics -->
+                    <div class="section-title">Patient Information</div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age (years)<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="50" required min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ASA Classification<span class="required">*</span></label>
+                            <select name="asa" class="form-input" required>
+                                <option value="">Select...</option>
+                                <option value="I">ASA I - Healthy</option>
+                                <option value="II">ASA II - Mild systemic disease</option>
+                                <option value="III">ASA III - Severe systemic disease</option>
+                                <option value="IV">ASA IV - Life-threatening disease</option>
+                                <option value="V">ASA V - Moribund</option>
+                            </select>
+                        </div>
+                    </div>
 
-                <div class="section-title">Serious but Rare Risks</div>
-                <div class="section-content">
-                    <p>Serious complications from anesthesia are rare in healthy patients. Risk increases with emergency surgery, significant medical conditions, and advanced age:</p>
-                    <ul class="risk-list">
-                        <li><strong>Aspiration</strong> - Stomach contents entering the lungs (1 in 2,000-3,000 cases). We take precautions including fasting guidelines.</li>
-                        <li><strong>Dental Damage</strong> - Rare injury to teeth during airway management (1 in 4,500). Pre-existing dental issues increase risk.</li>
-                        <li><strong>Allergic Reactions</strong> - Severe reactions to anesthesia drugs are extremely rare (1 in 10,000-20,000).</li>
-                        <li><strong>Awareness Under Anesthesia</strong> - Becoming conscious during surgery (1 in 19,000 for general surgery, higher for cardiac/trauma).</li>
-                        <li><strong>Nerve Damage</strong> - From positioning or regional anesthesia (typically temporary; permanent injury is rare).</li>
-                        <li><strong>Cardiovascular Complications</strong> - Heart attack or stroke (risk depends on pre-existing conditions and surgery type).</li>
-                        <li><strong>Death</strong> - Extremely rare in healthy patients (approximately 1 in 100,000-200,000). Risk is higher with emergency surgery and significant medical conditions.</li>
-                    </ul>
-                </div>
+                    <div class="section-divider"></div>
 
-                <div class="section-title">Special Considerations</div>
-                <div class="section-content">
-                    <ul class="risk-list">
-                        <li><strong>Malignant Hyperthermia</strong> - A rare genetic condition triggered by certain anesthetics (1 in 50,000-100,000). Inform your anesthesiologist of any family history.</li>
-                        <li><strong>Postoperative Cognitive Dysfunction</strong> - Temporary confusion or memory issues, more common in elderly patients. Usually improves over weeks to months.</li>
-                        <li><strong>Pregnancy</strong> - Inform your anesthesiologist if you are or might be pregnant, as some medications may affect the fetus.</li>
-                        <li><strong>Obstructive Sleep Apnea</strong> - Increases risk of airway complications. CPAP machines should be brought to the hospital.</li>
-                    </ul>
-                </div>
+                    <!-- Anesthesia Details -->
+                    <div class="section-title">Anesthesia & Procedure</div>
 
-                <div class="info-box">
-                    <p><strong>Important:</strong> Your anesthesiologist will review your complete medical history, medications, and allergies to create the safest anesthetic plan for you. Please disclose all medical conditions, previous anesthesia experiences, drug allergies, and use of medications, supplements, or herbal products. Do not hesitate to ask questions—we are here to ensure your safety and comfort.</p>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label">Anesthesia Type<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="General" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">General</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Regional/Neuraxial" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Regional/Neuraxial</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Sedation/MAC" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Sedation/MAC</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Local" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Local</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgical Procedure<span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Total knee arthroplasty" required>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Comorbidities -->
+                    <div class="section-title">Medical History</div>
+                    <div class="form-group">
+                        <label class="form-label">Comorbidities (select all that apply)</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Cardiac Disease">
+                                <span class="checkbox-label">Cardiac Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Pulmonary Disease">
+                                <span class="checkbox-label">Pulmonary Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Diabetes">
+                                <span class="checkbox-label">Diabetes</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Renal Disease">
+                                <span class="checkbox-label">Renal Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Hepatic Disease">
+                                <span class="checkbox-label">Hepatic Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="OSA">
+                                <span class="checkbox-label">OSA</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Obesity">
+                                <span class="checkbox-label">Obesity</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Special Considerations -->
+                    <div class="section-title">Special Considerations</div>
+                    <div class="form-group">
+                        <label class="form-label">Select all that apply</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Pregnancy">
+                                <span class="checkbox-label">Pregnancy</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Malignant Hyperthermia History">
+                                <span class="checkbox-label">Malignant Hyperthermia History</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Difficult Airway">
+                                <span class="checkbox-label">Difficult Airway</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Latex Allergy">
+                                <span class="checkbox-label">Latex Allergy</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Chronic Pain">
+                                <span class="checkbox-label">Chronic Pain</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Anticoagulation">
+                                <span class="checkbox-label">Anticoagulation</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea name="notes" class="form-input" placeholder="Any additional patient concerns, questions, or special circumstances..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Generate Consent Discussion</button>
+                </form>
             </div>
 
-            <div class="references">
-                <div class="references-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                    </svg>
-                    References
+            {% else %}
+            <!-- Results State -->
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="results-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h1 class="results-title"><span style="color: var(--blue-600);">Informed Consent</span> Discussion Guide</h1>
+                    <p class="results-subtitle">Patient-specific consent discussion with evidence-based risk information</p>
                 </div>
-                <ol class="references-list">
-                    <li>American Society of Anesthesiologists. <strong>Practice Advisory for Preanesthesia Evaluation: An Updated Report.</strong> <em>Anesthesiology</em>. 2012;116(3):522-538. PMID: 22273990</li>
-                    <li>Bainbridge D, et al. <strong>Perioperative and anaesthetic-related mortality in developed and developing countries: a systematic review and meta-analysis.</strong> <em>Lancet</em>. 2012;380(9847):1075-1081. PMID: 22998717</li>
-                    <li>Cook TM, et al. <strong>Major complications of airway management in the UK: results of the Fourth National Audit Project.</strong> <em>Br J Anaesth</em>. 2011;106(5):617-631. PMID: 21447488</li>
-                    <li>Apfel CC, et al. <strong>Evidence-based analysis of risk factors for postoperative nausea and vomiting.</strong> <em>Br J Anaesth</em>. 2012;109(5):742-753. PMID: 23035051</li>
-                    <li>Sebel PS, et al. <strong>The incidence of awareness during anesthesia: a multicenter United States study.</strong> <em>Anesth Analg</em>. 2004;99(3):833-839. PMID: 15333419</li>
-                    <li>Rosenberg H, et al. <strong>Malignant hyperthermia: a review.</strong> <em>Orphanet J Rare Dis</em>. 2015;10:93. PMID: 26238698</li>
-                    <li>Evered L, et al. <strong>Recommendations for the nomenclature of cognitive change associated with anaesthesia and surgery—2018.</strong> <em>Anesthesiology</em>. 2018;129(5):872-879. PMID: 30325806</li>
-                    <li>Warner DO. <strong>Preventing postoperative pulmonary complications: the role of the anesthesiologist.</strong> <em>Anesthesiology</em>. 2000;92(5):1467-1472. PMID: 10781292</li>
-                </ol>
+
+                <div class="results-card">
+                    <div class="results-content">
+                        {{ summary|safe }}
+                    </div>
+                </div>
+
+                {% if references %}
+                <div class="references-card">
+                    <div class="references-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>Evidence-Based References</span>
+                    </div>
+                    {% for ref in references %}
+                    <div class="reference-item">
+                        <span class="reference-number">[{{ loop.index }}]</span>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                            {{ ref.title }}
+                        </a>
+                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="action-buttons">
+                    <a href="/informed-consent" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Consent
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        Print/Save PDF
+                    </button>
+                </div>
             </div>
+            {% endif %}
         </main>
 
         <footer class="footer">
@@ -18021,6 +18151,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18039,8 +18170,38 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             }
         }
 
+        // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+
+        // Radio button selection handler
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                    // Remove selected class from siblings
+                    const name = radio.getAttribute('name');
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                        r.closest('.radio-option').classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        // Checkbox selection handler
+        document.querySelectorAll('.checkbox-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                }
+            });
         });
     </script>
 </body>
@@ -18062,7 +18223,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Assessment - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based difficult airway prediction and management strategies.">
+    <meta name="description" content="AI-powered difficult airway assessment tool combining validated predictors with evidence-based management strategies.">
 
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
@@ -18696,77 +18857,266 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         </div>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="main-content">
             <div class="header">
                 <h1 class="header-title"><span class="gradient">Difficult Airway</span> Assessment</h1>
-                <p class="header-subtitle">Evidence-based predictors and management strategies</p>
+                <p class="header-subtitle">AI-powered risk stratification and evidence-based management planning</p>
             </div>
 
-            <div class="content-card">
-                <div class="section-title">Clinical Predictors of Difficult Airway</div>
-                <div class="section-content">
-                    <p>Identifying patients at risk for difficult airway management is essential for safe anesthesia practice. The following validated clinical predictors help assess risk:</p>
-                    <ul class="predictor-list">
-                        <li><strong>Mallampati Classification (Class III-IV)</strong> - Limited view of pharyngeal structures correlates with difficult laryngoscopy.</li>
-                        <li><strong>Thyromental Distance < 6 cm</strong> - Reduced distance limits laryngoscope maneuverability.</li>
-                        <li><strong>Mouth Opening < 3 cm</strong> - Restricted access for laryngoscope blade insertion.</li>
-                        <li><strong>Limited Neck Mobility</strong> - Inability to extend at atlanto-occipital joint impairs laryngeal visualization.</li>
-                        <li><strong>Obesity (BMI > 35 kg/m²)</strong> - Increases risk of difficult mask ventilation and intubation.</li>
-                        <li><strong>Obstructive Sleep Apnea (OSA)</strong> - Associated with pharyngeal soft tissue redundancy and obstruction.</li>
-                        <li><strong>Previous Difficult Intubation</strong> - Strong predictor; always review prior anesthesia records.</li>
-                        <li><strong>Anatomical Features</strong> - Short neck, large tongue, receding mandible, prominent incisors, high arched palate, or facial trauma.</li>
-                    </ul>
-                </div>
+            {% if not summary %}
+            <!-- Form State -->
+            <div class="form-card">
+                <form method="POST" action="/difficult-airway">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                <div class="section-title">ASA Difficult Airway Algorithm 2022</div>
-                <div class="algorithm-box">
-                    <h3>Approach to the Difficult Airway</h3>
-                    <ol class="algorithm-steps">
-                        <li data-step="1"><strong>Assess Likelihood of Difficulty:</strong> Evaluate for difficult mask ventilation, supraglottic airway use, laryngoscopy, intubation, and front-of-neck access.</li>
-                        <li data-step="2"><strong>Prepare Equipment & Personnel:</strong> Ensure availability of difficult airway cart, video laryngoscopy, supraglottic airways, and backup personnel.</li>
-                        <li data-step="3"><strong>Optimize Patient Positioning:</strong> Head-elevated laryngoscopy position (HELP) improves glottic view in obese patients.</li>
-                        <li data-step="4"><strong>Pre-oxygenate Adequately:</strong> Aim for EtO₂ > 90% to extend safe apnea time. Consider apneic oxygenation via nasal cannula.</li>
-                        <li data-step="5"><strong>Initial Intubation Attempt:</strong> Use video laryngoscopy as first-line (improves first-pass success). Limit attempts to preserve airway anatomy.</li>
-                        <li data-step="6"><strong>If Intubation Fails - Call for Help:</strong> Activate difficult airway protocol. Ensure oxygenation via mask or supraglottic airway.</li>
-                        <li data-step="7"><strong>Awaken Patient vs. Emergency Pathway:</strong> If surgery is elective and patient is stable, awaken and consider awake intubation. If cannot intubate/cannot oxygenate → Emergency front-of-neck access (cricothyrotomy).</li>
-                    </ol>
-                </div>
+                    <!-- Patient Demographics -->
+                    <div class="section-title">Patient Demographics</div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age (years)<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="50" required min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">BMI (kg/m²)<span class="required">*</span></label>
+                            <input type="number" name="bmi" class="form-input" placeholder="25" required min="10" max="100" step="0.1">
+                        </div>
+                    </div>
 
-                <div class="section-title">Management Strategies</div>
-                <div class="section-content">
-                    <ul class="predictor-list">
-                        <li><strong>Video Laryngoscopy</strong> - Improves first-pass success and should be considered first-line for anticipated difficult airways.</li>
-                        <li><strong>Awake Fiberoptic Intubation</strong> - Gold standard for known difficult airways. Requires topical anesthesia and patient cooperation.</li>
-                        <li><strong>Supraglottic Airways (LMA)</strong> - Rescue device for failed intubation; can serve as conduit for fiberoptic intubation.</li>
-                        <li><strong>Bougie/Gum Elastic Stylet</strong> - Increases success rate when only epiglottis is visualized.</li>
-                        <li><strong>Emergency Front-of-Neck Access</strong> - Life-saving procedure for "cannot intubate, cannot oxygenate" scenarios. Requires scalpel cricothyrotomy training.</li>
-                    </ul>
-                </div>
+                    <div class="section-divider"></div>
 
-                <div class="info-box">
-                    <p><strong>Key Principle:</strong> Always have a backup plan. The most important decision is recognizing when to stop attempts at intubation, maintain oxygenation, and escalate to advanced techniques or emergency airway access. Early preparation and communication with the surgical team are critical for patient safety.</p>
-                </div>
+                    <!-- Airway Assessment -->
+                    <div class="section-title">Airway Examination</div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mallampati Classification<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="I" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Class I</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="II" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Class II</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="III" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Class III</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="IV" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Class IV</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Thyromental Distance<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="<6cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&lt;6 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="6-6.5cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">6-6.5 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value=">6.5cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&gt;6.5 cm</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mouth Opening<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="<3cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&lt;3 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="3-4cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">3-4 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value=">4cm" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">&gt;4 cm</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Neck Extension<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Limited" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Limited</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Moderate" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Moderate</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Normal" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Normal</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Risk Factors -->
+                    <div class="section-title">Risk Factors</div>
+                    <div class="form-group">
+                        <label class="form-label">Select all that apply</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation">
+                                <span class="checkbox-label">Previous Difficult Intubation</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="OSA">
+                                <span class="checkbox-label">OSA</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Beard">
+                                <span class="checkbox-label">Beard</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Prominent Incisors">
+                                <span class="checkbox-label">Prominent Incisors</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Short Neck">
+                                <span class="checkbox-label">Short Neck</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Large Tongue">
+                                <span class="checkbox-label">Large Tongue</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Facial Trauma">
+                                <span class="checkbox-label">Facial Trauma</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="C-Spine Pathology">
+                                <span class="checkbox-label">C-Spine Pathology</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <!-- Procedure Details -->
+                    <div class="section-title">Procedure Information</div>
+                    <div class="form-group">
+                        <label class="form-label">Planned Procedure<span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Laparoscopic cholecystectomy" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Case Type<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Elective" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Elective</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Urgent" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Urgent</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Emergency" required>
+                                <div class="radio-visual"></div>
+                                <span class="radio-label">Emergency</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea name="notes" class="form-input" placeholder="Any additional airway concerns, previous anesthesia complications, or special considerations..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Generate Assessment</button>
+                </form>
             </div>
 
-            <div class="references">
-                <div class="references-title">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                    </svg>
-                    References
+            {% else %}
+            <!-- Results State -->
+            <div class="results-container">
+                <div class="results-header">
+                    <div class="results-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h1 class="results-title"><span style="color: var(--blue-600);">Difficult Airway</span> Assessment Complete</h1>
+                    <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
                 </div>
-                <ol class="references-list">
-                    <li>Apfelbaum JL, et al. <strong>2022 American Society of Anesthesiologists Practice Guidelines for Management of the Difficult Airway.</strong> <em>Anesthesiology</em>. 2022;136(1):31-81. PMID: 34762729</li>
-                    <li>Cook TM, et al. <strong>Major complications of airway management in the UK: results of the Fourth National Audit Project (NAP4).</strong> <em>Br J Anaesth</em>. 2011;106(5):617-631. PMID: 21447488</li>
-                    <li>Frerk C, et al. <strong>Difficult Airway Society 2015 guidelines for management of unanticipated difficult intubation in adults.</strong> <em>Br J Anaesth</em>. 2015;115(6):827-848. PMID: 26556848</li>
-                    <li>Shiga T, et al. <strong>Predicting difficult intubation in apparently normal patients: a meta-analysis of bedside screening test performance.</strong> <em>Anesthesiology</em>. 2005;103(2):429-437. PMID: 16052126</li>
-                    <li>Aziz MF, et al. <strong>Routine clinical practice effectiveness of the Glidescope in difficult airway management: an analysis of 2,004 Glidescope intubations.</strong> <em>Anesth Analg</em>. 2011;112(3):578-582. PMID: 21224234</li>
-                    <li>Chrimes N. <strong>The Vortex: a universal 'high-acuity implementation tool' for emergency airway management.</strong> <em>Br J Anaesth</em>. 2016;117(suppl 1):i20-i27. PMID: 27566802</li>
-                    <li>Levitan RM, et al. <strong>Head-elevated laryngoscopy position: improving laryngeal exposure during laryngoscopy by increasing head elevation.</strong> <em>Ann Emerg Med</em>. 2003;41(3):322-330. PMID: 12605196</li>
-                    <li>Law JA, et al. <strong>Canadian Airway Focus Group updated consensus-based recommendations for management of the difficult airway: part 1.</strong> <em>Can J Anaesth</em>. 2021;68(9):1373-1404. PMID: 34251647</li>
-                </ol>
+
+                <div class="results-card">
+                    <div class="results-content">
+                        {{ summary|safe }}
+                    </div>
+                </div>
+
+                {% if references %}
+                <div class="references-card">
+                    <div class="references-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>Evidence-Based References</span>
+                    </div>
+                    {% for ref in references %}
+                    <div class="reference-item">
+                        <span class="reference-number">[{{ loop.index }}]</span>
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                            {{ ref.title }}
+                        </a>
+                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="action-buttons">
+                    <a href="/difficult-airway" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Assessment
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        Print/Save PDF
+                    </button>
+                </div>
             </div>
+            {% endif %}
         </main>
 
         <footer class="footer">
@@ -18782,6 +19132,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const btn = document.querySelector('.mobile-menu-btn');
@@ -18800,8 +19151,38 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             }
         }
 
+        // Close dropdown when clicking outside
         document.addEventListener('click', function() {
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+
+        // Radio button selection handler
+        document.querySelectorAll('.radio-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                    // Remove selected class from siblings
+                    const name = radio.getAttribute('name');
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                        r.closest('.radio-option').classList.remove('selected');
+                    });
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                }
+            });
+        });
+
+        // Checkbox selection handler
+        document.querySelectorAll('.checkbox-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                if (e.target.tagName !== 'INPUT') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.checked = !checkbox.checked;
+                    }
+                }
+            });
         });
     </script>
 </body>
@@ -20064,15 +20445,516 @@ Provide maximum clinical utility with specific, actionable recommendations backe
 
     return render_template_string(PREOP_HTML, summary=response, references=unique_refs)
 
-@app.route("/informed-consent")
-def informed_consent():
-    """Informed Consent for Anesthesia educational page"""
-    return render_template_string(INFORMED_CONSENT_HTML)
+@app.route("/informed-consent", methods=["GET", "POST"])
+def informed_consent_generator():
+    """Informed Consent Generator with AI-powered patient-specific consent discussion"""
+    if request.method == "GET":
+        response = make_response(render_template_string(INFORMED_CONSENT_HTML, summary=None, references=None))
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
 
-@app.route("/difficult-airway")
-def difficult_airway():
-    """Difficult Airway Assessment educational page"""
-    return render_template_string(DIFFICULT_AIRWAY_HTML)
+    # Collect and sanitize form data
+    age = int(request.form.get("age", 0))
+    asa = sanitize_user_query(request.form.get("asa", ""))
+    anesthesia_type = sanitize_user_query(request.form.get("anesthesia_type", ""))
+    procedure = sanitize_user_query(request.form.get("procedure", ""))
+    comorbidities = request.form.getlist("comorbidities")
+    special_considerations = request.form.getlist("special_considerations")
+    notes = sanitize_user_query(request.form.get("notes", ""))
+
+    # Validate required fields
+    if not procedure or not procedure.strip():
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the surgical procedure before submitting the form.</p>"
+        return render_template_string(INFORMED_CONSENT_HTML, summary=error_message, references=None)
+
+    if not anesthesia_type:
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please select an anesthesia type before submitting the form.</p>"
+        return render_template_string(INFORMED_CONSENT_HTML, summary=error_message, references=None)
+
+    # Build targeted PubMed searches based on patient factors
+    search_queries = []
+
+    # Primary search: procedure-specific anesthesia risks
+    search_queries.append(f"{procedure} anesthesia risks complications consent")
+
+    # Anesthesia type-specific risks
+    if anesthesia_type == "General":
+        search_queries.append("general anesthesia complications informed consent")
+    elif anesthesia_type == "Regional/Neuraxial":
+        search_queries.append("neuraxial anesthesia spinal epidural complications consent")
+    elif anesthesia_type == "Sedation/MAC":
+        search_queries.append("monitored anesthesia care sedation complications")
+
+    # Comorbidity-specific searches
+    if "Cardiac Disease" in comorbidities:
+        search_queries.append(f"{procedure} cardiac disease perioperative risk")
+    if "Pulmonary Disease" in comorbidities:
+        search_queries.append(f"{procedure} pulmonary complications COPD anesthesia")
+    if "Diabetes" in comorbidities:
+        search_queries.append("perioperative diabetes management anesthesia")
+    if "Renal Disease" in comorbidities:
+        search_queries.append("chronic kidney disease anesthesia perioperative")
+    if "OSA" in comorbidities:
+        search_queries.append("obstructive sleep apnea anesthesia perioperative risks")
+
+    # Special considerations
+    if "Pregnancy" in special_considerations:
+        search_queries.append("anesthesia pregnancy safety obstetric")
+    if "Malignant Hyperthermia History" in special_considerations:
+        search_queries.append("malignant hyperthermia anesthesia management")
+    if "Difficult Airway" in special_considerations:
+        search_queries.append("difficult airway management anesthesia consent")
+    if "Chronic Pain" in special_considerations:
+        search_queries.append(f"{procedure} chronic pain postoperative analgesia")
+    if "Anticoagulation" in special_considerations:
+        search_queries.append("anticoagulation perioperative management bleeding risk")
+
+    # Search PubMed for all queries and collect papers
+    all_refs = []
+    all_context = ""
+
+    for query in search_queries[:4]:  # Limit to 4 searches
+        try:
+            q_expanded = query.replace(" ", " AND ")
+            search_term = (
+                f'({q_expanded}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
+                f'"randomized controlled trial"[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            )
+
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+
+            if ids:
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                papers = Entrez.read(handle)["PubmedArticle"]
+
+                for p in papers:
+                    try:
+                        art = p["MedlineCitation"]["Article"]
+                        title = str(art.get("ArticleTitle", "No title"))
+                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                        journal = str(art["Journal"].get("Title", "Unknown"))
+                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                        pmid = str(p["MedlineCitation"]["PMID"])
+
+                        study_classification = classify_study_type(title, journal)
+
+                        all_refs.append({
+                            "title": title,
+                            "authors": authors,
+                            "journal": journal,
+                            "year": year,
+                            "pmid": pmid,
+                            "study_type": study_classification['type'],
+                            "study_badge": study_classification['badge_text'],
+                            "study_color": study_classification['badge_color'],
+                            "study_score": study_classification['score'],
+                            "sort_priority": study_classification['sort_priority']
+                        })
+                        all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                    except:
+                        continue
+        except:
+            continue
+
+    # Remove duplicate references by PMID
+    seen_pmids = set()
+    unique_refs = []
+    for ref in all_refs:
+        if ref['pmid'] not in seen_pmids:
+            seen_pmids.add(ref['pmid'])
+            unique_refs.append(ref)
+
+    # Sort references by quality
+    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
+
+    # Create numbered reference list for GPT
+    ref_list = ""
+    for i, ref in enumerate(unique_refs, 1):
+        ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+    # Build patient summary for GPT
+    all_comorbidities = ', '.join(comorbidities) if comorbidities else 'None'
+    all_special = ', '.join(special_considerations) if special_considerations else 'None'
+
+    patient_data = f"""
+Patient Information:
+- Age: {age} years
+- ASA Classification: ASA {asa}
+
+Planned Anesthesia & Procedure:
+- Anesthesia Type: {anesthesia_type}
+- Surgical Procedure: {procedure}
+
+Medical History:
+- Comorbidities: {all_comorbidities}
+- Special Considerations: {all_special}
+
+Additional Notes: {notes if notes else 'None'}
+"""
+
+    # Generate GPT summary
+    prompt = f"""You are an expert anesthesiologist helping create a comprehensive, patient-specific informed consent discussion guide. Based on the patient's information and evidence-based literature, provide a detailed consent discussion that balances medical accuracy with patient-friendly language.
+
+Patient Information:
+{patient_data}
+
+Available Evidence (use numbered citations [1], [2], etc.):
+{ref_list}
+
+Paper Details:
+{all_context}
+
+CRITICAL: PATIENT-SPECIFIC CONSENT PROTOCOL
+This is NOT a generic template - personalize EVERY section to THIS specific patient. Before finalizing:
+1. **Individualize Risks**: Focus on risks relevant to THIS patient's age ({age}), ASA {asa} status, {anesthesia_type} anesthesia, and comorbidities ({all_comorbidities}).
+2. **Procedure-Specific Information**: Tailor common and serious risks to {procedure} specifically, not general anesthesia.
+3. **Evidence-Based Incidence Rates**: Provide actual risk percentages from literature when available (e.g., "PONV occurs in X% of patients undergoing {procedure}").
+4. **Special Population Considerations**: If patient is elderly, pediatric, pregnant, or has special considerations ({all_special}), address these specifically.
+5. **Cross-Check Comorbidities**: Are all comorbidity-specific risks addressed? (cardiac, pulmonary, renal, etc.)
+
+Generate a comprehensive informed consent discussion guide including:
+
+1. **Procedure Overview & Anesthesia Type**:
+   - Brief explanation of {anesthesia_type} anesthesia for {procedure}
+   - What the patient will experience before, during, and after
+   - Why this anesthesia type is appropriate for their procedure
+
+2. **Common Side Effects** (with frequencies when available):
+   - List 5-7 most common side effects specific to {anesthesia_type} and {procedure}
+   - Include incidence rates (e.g., "Nausea occurs in 20-30% of patients")
+   - Explain duration and management strategies
+   - Use patient-friendly language while maintaining medical accuracy
+
+3. **Serious but Rare Risks** (with incidence rates):
+   - List serious complications relevant to THIS patient's ASA {asa} status and comorbidities
+   - Include specific incidence rates (e.g., "1 in X,XXX patients")
+   - Explain risk factors that increase likelihood (age, comorbidities, procedure type)
+   - Address {anesthesia_type}-specific serious risks (e.g., nerve injury for regional, aspiration for general)
+
+4. **Patient-Specific Risk Factors**:
+   - How THIS patient's comorbidities ({all_comorbidities}) affect anesthesia risks
+   - Special precautions being taken for their conditions
+   - Why their ASA {asa} classification matters
+   - Management of special considerations: {all_special}
+
+5. **Alternative Options**:
+   - Alternative anesthesia techniques available for {procedure}
+   - Pros and cons of each option for THIS patient
+   - Why {anesthesia_type} is recommended
+
+6. **Questions Patients Should Ask**:
+   - 5-7 important questions this patient should discuss with their anesthesiologist
+   - Questions specific to their comorbidities and special considerations
+   - Questions about postoperative pain management, recovery, etc.
+
+7. **What to Expect & Preparation**:
+   - Pre-operative instructions (NPO status, medications to continue/hold)
+   - What happens in the holding area and OR
+   - Recovery room expectations
+   - When they can eat, drink, resume activities
+
+Use HTML formatting:
+- <h3>Section Headers</h3>
+- <p>Paragraphs</p>
+- <strong>Bold for emphasis and risk percentages</strong>
+- <ul><li>Bulleted lists for side effects and risks</li></ul>
+- <br><br> for spacing
+
+IMPORTANT: Use inline citations [1], [2], [3] throughout your discussion to reference the papers provided above. Do NOT create a separate "References" section - the references will be displayed separately below.
+
+Tone: Professional but accessible - explain medical concepts in plain English while maintaining accuracy. The goal is informed consent that patients can truly understand."""
+
+    try:
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1
+        ).choices[0].message.content
+    except Exception as e:
+        response = f"<p>Error generating consent discussion: {str(e)}</p>"
+
+    return render_template_string(INFORMED_CONSENT_HTML, summary=response, references=unique_refs)
+
+@app.route("/difficult-airway", methods=["GET", "POST"])
+def difficult_airway_assessment():
+    """Difficult Airway Assessment with AI-powered risk stratification"""
+    if request.method == "GET":
+        response = make_response(render_template_string(DIFFICULT_AIRWAY_HTML, summary=None, references=None))
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+
+    # Collect and sanitize form data
+    age = int(request.form.get("age", 0))
+    bmi = float(request.form.get("bmi", 0))
+    mallampati = sanitize_user_query(request.form.get("mallampati", ""))
+    thyromental = sanitize_user_query(request.form.get("thyromental", ""))
+    mouth_opening = sanitize_user_query(request.form.get("mouth_opening", ""))
+    neck_extension = sanitize_user_query(request.form.get("neck_extension", ""))
+    risk_factors = request.form.getlist("risk_factors")
+    procedure = sanitize_user_query(request.form.get("procedure", ""))
+    case_type = sanitize_user_query(request.form.get("case_type", ""))
+    notes = sanitize_user_query(request.form.get("notes", ""))
+
+    # Validate required fields
+    if not procedure or not procedure.strip():
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the planned procedure before submitting the form.</p>"
+        return render_template_string(DIFFICULT_AIRWAY_HTML, summary=error_message, references=None)
+
+    # Calculate risk score based on validated predictors
+    risk_score = 0
+    risk_factors_list = []
+
+    # Mallampati III-IV (1 point)
+    if mallampati in ["III", "IV"]:
+        risk_score += 1
+        risk_factors_list.append(f"Mallampati Class {mallampati}")
+
+    # Thyromental distance <6cm (1 point)
+    if thyromental == "<6cm":
+        risk_score += 1
+        risk_factors_list.append("Thyromental distance <6 cm")
+
+    # Mouth opening <3cm (1 point)
+    if mouth_opening == "<3cm":
+        risk_score += 1
+        risk_factors_list.append("Mouth opening <3 cm")
+
+    # Limited neck extension (1 point)
+    if neck_extension == "Limited":
+        risk_score += 1
+        risk_factors_list.append("Limited neck extension")
+
+    # High BMI >35 (1 point)
+    if bmi > 35:
+        risk_score += 1
+        risk_factors_list.append(f"Obesity (BMI {bmi:.1f} kg/m²)")
+
+    # Previous difficult intubation (2 points - strong predictor)
+    if "Previous Difficult Intubation" in risk_factors:
+        risk_score += 2
+        risk_factors_list.append("Previous difficult intubation")
+
+    # OSA (1 point)
+    if "OSA" in risk_factors:
+        risk_score += 1
+        risk_factors_list.append("Obstructive sleep apnea")
+
+    # Other anatomical factors (0.5 points each)
+    for factor in ["Beard", "Prominent Incisors", "Short Neck", "Large Tongue", "Facial Trauma", "C-Spine Pathology"]:
+        if factor in risk_factors:
+            risk_score += 0.5
+            risk_factors_list.append(factor.lower())
+
+    # Determine risk category
+    if risk_score >= 4:
+        risk_category = "High"
+    elif risk_score >= 2:
+        risk_category = "Moderate"
+    else:
+        risk_category = "Low"
+
+    # Build targeted PubMed searches
+    search_queries = []
+
+    # Primary airway management search
+    search_queries.append("difficult airway management guidelines anesthesia")
+
+    # If high risk, search for advanced techniques
+    if risk_category == "High":
+        search_queries.append("awake fiberoptic intubation indications technique")
+        search_queries.append("video laryngoscopy difficult airway")
+
+    # OSA-specific management
+    if "OSA" in risk_factors:
+        search_queries.append("obstructive sleep apnea difficult airway perioperative")
+
+    # Obesity-specific positioning
+    if bmi > 35:
+        search_queries.append("obese patient airway management positioning HELP")
+
+    # Emergency airway if emergency case
+    if case_type == "Emergency":
+        search_queries.append("emergency airway management rapid sequence intubation")
+
+    # Previous difficult intubation
+    if "Previous Difficult Intubation" in risk_factors:
+        search_queries.append("previous difficult intubation management anesthesia")
+
+    # Search PubMed for all queries and collect papers
+    all_refs = []
+    all_context = ""
+
+    for query in search_queries[:4]:  # Limit to 4 searches
+        try:
+            q_expanded = query.replace(" ", " AND ")
+            search_term = (
+                f'({q_expanded}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
+                f'"randomized controlled trial"[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            )
+
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
+            result = Entrez.read(handle)
+            ids = result["IdList"]
+
+            if ids:
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                papers = Entrez.read(handle)["PubmedArticle"]
+
+                for p in papers:
+                    try:
+                        art = p["MedlineCitation"]["Article"]
+                        title = str(art.get("ArticleTitle", "No title"))
+                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                        journal = str(art["Journal"].get("Title", "Unknown"))
+                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                        pmid = str(p["MedlineCitation"]["PMID"])
+
+                        study_classification = classify_study_type(title, journal)
+
+                        all_refs.append({
+                            "title": title,
+                            "authors": authors,
+                            "journal": journal,
+                            "year": year,
+                            "pmid": pmid,
+                            "study_type": study_classification['type'],
+                            "study_badge": study_classification['badge_text'],
+                            "study_color": study_classification['badge_color'],
+                            "study_score": study_classification['score'],
+                            "sort_priority": study_classification['sort_priority']
+                        })
+                        all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                    except:
+                        continue
+        except:
+            continue
+
+    # Remove duplicate references by PMID
+    seen_pmids = set()
+    unique_refs = []
+    for ref in all_refs:
+        if ref['pmid'] not in seen_pmids:
+            seen_pmids.add(ref['pmid'])
+            unique_refs.append(ref)
+
+    # Sort references by quality
+    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
+
+    # Create numbered reference list for GPT
+    ref_list = ""
+    for i, ref in enumerate(unique_refs, 1):
+        ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+    # Build patient summary for GPT
+    all_risk_factors = ', '.join(risk_factors_list) if risk_factors_list else 'None identified'
+
+    patient_data = f"""
+Patient Demographics:
+- Age: {age} years
+- BMI: {bmi:.1f} kg/m²
+
+Airway Assessment:
+- Mallampati Classification: Class {mallampati}
+- Thyromental Distance: {thyromental}
+- Mouth Opening: {mouth_opening}
+- Neck Extension: {neck_extension}
+
+Risk Factors Present: {all_risk_factors}
+
+Risk Score: {risk_score}/7 points
+Risk Category: {risk_category}
+
+Procedure: {procedure}
+Case Type: {case_type}
+
+Additional Notes: {notes if notes else 'None'}
+"""
+
+    # Generate GPT summary
+    prompt = f"""You are an expert anesthesiologist performing a comprehensive difficult airway assessment. Based on validated clinical predictors and recent evidence, provide a detailed risk stratification and management plan.
+
+Patient Information:
+{patient_data}
+
+Available Evidence (use numbered citations [1], [2], etc.):
+{ref_list}
+
+Paper Details:
+{all_context}
+
+CRITICAL: PATIENT-SPECIFIC AIRWAY ASSESSMENT PROTOCOL
+This is NOT a template - tailor EVERY recommendation to THIS specific patient. Before finalizing:
+1. **Individualize Risk Assessment**: Calculate the actual difficult airway risk score based on THIS patient's Mallampati, thyromental distance, mouth opening, neck extension, BMI, and history.
+2. **Specific Management Strategy**: Base airway plan on THIS patient's risk category ({risk_category}), case urgency ({case_type}), and specific anatomical challenges.
+3. **Evidence-Based Equipment Selection**: Recommend specific airway devices and techniques appropriate for THIS patient's risk factors.
+4. **Personalized Positioning**: If patient is obese (BMI {bmi:.1f}), specify HELP position or ramping details.
+5. **Cross-Check Case Urgency**: If {case_type} case, adjust awake vs asleep intubation recommendations accordingly.
+
+Generate a comprehensive difficult airway assessment including:
+
+1. **Risk Stratification Summary**:
+   - Overall risk category ({risk_category}) with justification
+   - Specific predictors identified in this patient
+   - Estimated difficulty level for mask ventilation, supraglottic airway, and intubation
+
+2. **Pre-Intubation Optimization**:
+   - Patient positioning (HELP position if BMI >35, ramping if needed)
+   - Pre-oxygenation strategy (target EtO₂, apneic oxygenation via nasal cannula)
+   - Equipment preparation (specific devices: video laryngoscope type, LMA size, bougie, etc.)
+   - Personnel needs (extra anesthesiologist, surgeon availability, etc.)
+
+3. **Primary Airway Management Plan**:
+   - Recommended primary technique (awake fiberoptic vs video laryngoscopy vs direct laryngoscopy)
+   - Drug selection and dosing if asleep intubation planned
+   - Maximum number of attempts before escalation
+   - Specific technique modifications for this patient's anatomy
+
+4. **Backup Plans (ASA Difficult Airway Algorithm 2022)**:
+   - Plan A: Primary intubation approach
+   - Plan B: Alternative intubation technique if Plan A fails
+   - Plan C: Supraglottic airway rescue (specific device and size)
+   - Plan D: Emergency front-of-neck access preparation (cricothyrotomy kit location)
+   - Decision point: When to awaken patient vs proceed with emergency pathway
+
+5. **Case-Specific Considerations**:
+   - Special considerations for {case_type} case
+   - Management of {', '.join(risk_factors) if risk_factors else 'patient-specific factors'}
+   - Postoperative extubation planning
+   - Communication plan with surgical team
+
+Use HTML formatting:
+- <h3>Section Headers</h3>
+- <p>Paragraphs</p>
+- <strong>Bold for emphasis</strong>
+- <ul><li>Bulleted lists</li></ul>
+- <br><br> for spacing
+
+IMPORTANT: Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above. Do NOT create a separate "References" section - the references will be displayed separately below your assessment.
+
+Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
+
+    try:
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.1
+        ).choices[0].message.content
+    except Exception as e:
+        response = f"<p>Error generating assessment: {str(e)}</p>"
+
+    return render_template_string(DIFFICULT_AIRWAY_HTML, summary=response, references=unique_refs)
 
 @app.route("/hypotension", methods=["GET", "POST"])
 def hypotension_predictor():
