@@ -18840,6 +18840,415 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+    
+        /* Enhanced Glassmorphism */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.02),
+                0 4px 16px rgba(0,0,0,0.04),
+                0 12px 48px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 0 40px rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Staggered Form Group Animations */
+        .form-group {
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.5s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.2s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.3s; }
+        .form-group:nth-child(7) { animation-delay: 0.35s; }
+        .form-group:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Enhanced Interactive Inputs */
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(59, 130, 246, 0.12),
+                0 4px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Animated Labels */
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .form-group:focus-within label {
+            color: #2563EB;
+            transform: translateX(2px);
+        }
+
+        /* Enhanced Radio/Checkbox Options */
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-option::before, .checkbox-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: #3B82F6;
+            background: rgba(239, 246, 255, 0.8);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .radio-option:hover::before, .checkbox-option:hover::before {
+            opacity: 1;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: #3B82F6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.15) 100%);
+            box-shadow:
+                0 4px 20px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: 20px;
+            height: 20px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #3B82F6;
+        }
+
+        /* Animated Section Titles */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            margin-top: 32px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Enhanced Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 20px rgba(37, 99, 235, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 32px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 12px 40px rgba(37, 99, 235, 0.4),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Enhanced Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 26px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .back-btn:hover {
+            border-color: #3B82F6;
+            color: #2563EB;
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(-4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Enhanced Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 17px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphic Results Cards */
+        .results-card, .references-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                0 12px 48px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+            line-height: 1.8;
+        }
+
+        /* Enhanced Mobile-First Responsive */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 90px 16px 32px;
+            }
+
+            .card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-top: 28px;
+            }
+
+            input, select, textarea {
+                padding: 13px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option, .checkbox-option {
+                padding: 14px 16px;
+            }
+
+            .submit-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+                border-radius: 14px;
+            }
+
+            .back-btn {
+                padding: 12px 22px;
+                font-size: 14px;
+            }
+
+            .results-card, .references-card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+        }
+
+        /* Smooth scrolling for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        form:invalid .submit-btn {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        form:valid .submit-btn {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        /* Enhanced checkbox/radio group animations */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-group > *, .checkbox-group > * {
+            animation: fadeSlideUp 0.4s ease-out backwards;
+        }
+
+        .radio-group > *:nth-child(1), .checkbox-group > *:nth-child(1) { animation-delay: 0.05s; }
+        .radio-group > *:nth-child(2), .checkbox-group > *:nth-child(2) { animation-delay: 0.08s; }
+        .radio-group > *:nth-child(3), .checkbox-group > *:nth-child(3) { animation-delay: 0.11s; }
+        .radio-group > *:nth-child(4), .checkbox-group > *:nth-child(4) { animation-delay: 0.14s; }
+        .radio-group > *:nth-child(5), .checkbox-group > *:nth-child(5) { animation-delay: 0.17s; }
+        .radio-group > *:nth-child(6), .checkbox-group > *:nth-child(6) { animation-delay: 0.20s; }
+        .radio-group > *:nth-child(7), .checkbox-group > *:nth-child(7) { animation-delay: 0.23s; }
+        .radio-group > *:nth-child(8), .checkbox-group > *:nth-child(8) { animation-delay: 0.26s; }
+
     </style>
 </head>
 <body>
@@ -19624,6 +20033,415 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+    
+        /* Enhanced Glassmorphism */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.02),
+                0 4px 16px rgba(0,0,0,0.04),
+                0 12px 48px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 0 40px rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Staggered Form Group Animations */
+        .form-group {
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.5s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.2s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.3s; }
+        .form-group:nth-child(7) { animation-delay: 0.35s; }
+        .form-group:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Enhanced Interactive Inputs */
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(59, 130, 246, 0.12),
+                0 4px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Animated Labels */
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .form-group:focus-within label {
+            color: #2563EB;
+            transform: translateX(2px);
+        }
+
+        /* Enhanced Radio/Checkbox Options */
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-option::before, .checkbox-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: #3B82F6;
+            background: rgba(239, 246, 255, 0.8);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .radio-option:hover::before, .checkbox-option:hover::before {
+            opacity: 1;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: #3B82F6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.15) 100%);
+            box-shadow:
+                0 4px 20px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: 20px;
+            height: 20px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #3B82F6;
+        }
+
+        /* Animated Section Titles */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            margin-top: 32px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Enhanced Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 20px rgba(37, 99, 235, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 32px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 12px 40px rgba(37, 99, 235, 0.4),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Enhanced Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 26px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .back-btn:hover {
+            border-color: #3B82F6;
+            color: #2563EB;
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(-4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Enhanced Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 17px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphic Results Cards */
+        .results-card, .references-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                0 12px 48px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+            line-height: 1.8;
+        }
+
+        /* Enhanced Mobile-First Responsive */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 90px 16px 32px;
+            }
+
+            .card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-top: 28px;
+            }
+
+            input, select, textarea {
+                padding: 13px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option, .checkbox-option {
+                padding: 14px 16px;
+            }
+
+            .submit-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+                border-radius: 14px;
+            }
+
+            .back-btn {
+                padding: 12px 22px;
+                font-size: 14px;
+            }
+
+            .results-card, .references-card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+        }
+
+        /* Smooth scrolling for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        form:invalid .submit-btn {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        form:valid .submit-btn {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        /* Enhanced checkbox/radio group animations */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-group > *, .checkbox-group > * {
+            animation: fadeSlideUp 0.4s ease-out backwards;
+        }
+
+        .radio-group > *:nth-child(1), .checkbox-group > *:nth-child(1) { animation-delay: 0.05s; }
+        .radio-group > *:nth-child(2), .checkbox-group > *:nth-child(2) { animation-delay: 0.08s; }
+        .radio-group > *:nth-child(3), .checkbox-group > *:nth-child(3) { animation-delay: 0.11s; }
+        .radio-group > *:nth-child(4), .checkbox-group > *:nth-child(4) { animation-delay: 0.14s; }
+        .radio-group > *:nth-child(5), .checkbox-group > *:nth-child(5) { animation-delay: 0.17s; }
+        .radio-group > *:nth-child(6), .checkbox-group > *:nth-child(6) { animation-delay: 0.20s; }
+        .radio-group > *:nth-child(7), .checkbox-group > *:nth-child(7) { animation-delay: 0.23s; }
+        .radio-group > *:nth-child(8), .checkbox-group > *:nth-child(8) { animation-delay: 0.26s; }
+
     </style>
 </head>
 <body>
