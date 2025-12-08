@@ -2872,16 +2872,22 @@ PREOP_HTML = """<!DOCTYPE html>
 
             // Toggle sidebar
             function openSidebar() {
+                console.log('[SIDEBAR] Opening sidebar...');
+                console.log('[SIDEBAR] historySidebar element:', historySidebar);
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
+                console.log('[SIDEBAR] Classes after open:', historySidebar.className);
                 loadConversations();
             }
 
             function closeSidebar() {
+                console.log('[SIDEBAR] Closing sidebar...');
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
             }
 
+            console.log('[SIDEBAR] Attaching event listeners...');
+            console.log('[SIDEBAR] historyToggle:', historyToggle);
             historyToggle.addEventListener('click', openSidebar);
             historyClose.addEventListener('click', closeSidebar);
             historyOverlay.addEventListener('click', closeSidebar);
@@ -6187,16 +6193,22 @@ HTML = """<!DOCTYPE html>
 
             // Toggle sidebar
             function openSidebar() {
+                console.log('[SIDEBAR] Opening sidebar...');
+                console.log('[SIDEBAR] historySidebar element:', historySidebar);
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
+                console.log('[SIDEBAR] Classes after open:', historySidebar.className);
                 loadConversations();
             }
 
             function closeSidebar() {
+                console.log('[SIDEBAR] Closing sidebar...');
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
             }
 
+            console.log('[SIDEBAR] Attaching event listeners...');
+            console.log('[SIDEBAR] historyToggle:', historyToggle);
             historyToggle.addEventListener('click', openSidebar);
             historyClose.addEventListener('click', closeSidebar);
             historyOverlay.addEventListener('click', closeSidebar);
