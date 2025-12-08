@@ -2858,14 +2858,12 @@ PREOP_HTML = """<!DOCTYPE html>
         });
 
         // ====== Chat History Sidebar (Phase 3) ======
-        (function() {
+        if (document.getElementById('historyToggle') && document.getElementById('historySidebar')) {
             const historyToggle = document.getElementById('historyToggle');
             const historySidebar = document.getElementById('historySidebar');
             const historyOverlay = document.getElementById('historyOverlay');
             const historyClose = document.getElementById('historyClose');
             const conversationsList = document.getElementById('conversationsList');
-
-            if (!historyToggle || !historySidebar) return; // Elements not present in this template
 
             let conversationsData = [];
             let currentConversationId = null;
@@ -3189,7 +3187,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     alert('Failed to copy conversation');
                 }
             }
-        })();
+        }
     </script>
 </body>
 </html>
@@ -6179,14 +6177,12 @@ HTML = """<!DOCTYPE html>
         {% endif %}
 
         // ====== Chat History Sidebar (Phase 3) ======
-        (function() {
+        if (document.getElementById('historyToggle') && document.getElementById('historySidebar')) {
             const historyToggle = document.getElementById('historyToggle');
             const historySidebar = document.getElementById('historySidebar');
             const historyOverlay = document.getElementById('historyOverlay');
             const historyClose = document.getElementById('historyClose');
             const conversationsList = document.getElementById('conversationsList');
-
-            if (!historyToggle || !historySidebar) return; // Elements not present in this template
 
             let conversationsData = [];
             let currentConversationId = null;
