@@ -17331,30 +17331,13 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
-INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+# Placeholder templates - Full interactive forms coming soon
+DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informed Consent for Anesthesia - GasConsult.ai</title>
-    <meta name="description" content="Evidence-based informed consent guide for anesthesia procedures with comprehensive risk discussion.">
-
-    <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Difficult Airway - GasConsult.ai</title>
     <style>
     <style>
         :root {
@@ -19590,36 +19573,66 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚧 Interactive Form Coming Soon</h1>
+        <p>The full interactive Difficult Airway Assessment tool is currently being built. It will include validated clinical predictors, AI-powered risk analysis, and personalized management recommendations.</p>
+        <a href="/?clear=1">← Back to Home</a>
+    </div>
+</body>
+</html>
+"""
 
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent - GasConsult.ai</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
             text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
+        h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
+        p {
+            color: #64748B;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
-
-        .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
+        a {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
             text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .footer-link:hover {
-            color: var(--gray-700);
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.2s;
         }
 
         /* Tablet & Desktop */
@@ -20111,6 +20124,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
 
 
 @app.route("/stream")
