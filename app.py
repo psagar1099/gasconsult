@@ -17331,6 +17331,2033 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 </html>
 """
 
+DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent Assessment - GasConsult.ai</title>
+    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies.">
+
+    if not request_id:
+        logger.error("[STREAM] No request_id provided")
+        error_msg = json.dumps({'type': 'error', 'message': 'No request ID provided'})
+        return Response(f"data: {error_msg}\n\n", mimetype='text/event-stream')
+
+    stream_key = f'stream_data_{request_id}'
+    stream_data = None
+
+    # Try to get from session first
+    logger.info(f"[STREAM] Looking for key: {stream_key}")
+    logger.info(f"[STREAM] Session stream keys: {[k for k in session.keys() if k.startswith('stream_')]}")
+
+    if stream_key in session:
+        stream_data = session[stream_key]
+        logger.info(f"[STREAM] Found stream data in session")
+    else:
+        # Fallback to in-memory cache
+        logger.info(f"[STREAM] Session miss, checking cache...")
+        logger.info(f"[STREAM] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
+        stream_data = get_stream_data(request_id)
+        if stream_data:
+            logger.info(f"[STREAM] Found stream data in cache (session fallback)")
+
+    if not stream_data:
+        logger.error(f"[STREAM] Stream data not found in session or cache for key: {stream_key}")
+        logger.error(f"[STREAM] This usually means the session was not properly shared between requests")
+        logger.error(f"[STREAM] If using multiple workers, consider using Redis for session storage")
+        error_msg = json.dumps({
+            'type': 'error',
+            'message': 'Session expired or not found. This can happen if the server restarted. Please go back and try again.'
+        })
+        return Response(f"data: {error_msg}\n\n", mimetype='text/event-stream')
+
+    # Extract data from stream_data (already retrieved from session or cache)
+    prompt = stream_data['prompt']
+    refs = stream_data['refs']
+    num_papers = stream_data['num_papers']
+    raw_query = stream_data['raw_query']
+
+    def generate():
+        try:
+            # Send initial event to confirm connection
+            yield f"data: {json.dumps({'type': 'connected'})}\n\n"
+
+            # Dynamic temperature based on question type and evidence availability
+            question_type = stream_data.get('question_type', 'general')
+
+            if num_papers == 0:
+                # No papers - use higher temperature for general knowledge
+                temperature = 0.2
+            elif question_type == 'dosing':
+                # Dosing questions need very precise answers
+                temperature = 0.05
+            elif question_type == 'safety':
+                # Safety questions need factual accuracy
+                temperature = 0.1
+            elif question_type == 'mechanism':
+                # Mechanism explanations can be slightly more fluid
+                temperature = 0.15
+            elif question_type == 'comparison':
+                # Comparisons need balanced precision
+                temperature = 0.1
+            else:
+                # Default (general, management)
+                temperature = 0.1
+
+            print(f"[DEBUG] Using temperature {temperature} for question type '{question_type}'")
+
+            # Stream GPT response
+            stream_response = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature,
+                stream=True
+            )
+
+            full_response = ""
+            for chunk in stream_response:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    full_response += content
+                    # Send content chunk - ensure_ascii=False to preserve HTML characters
+                    yield f"data: {json.dumps({'type': 'content', 'data': content}, ensure_ascii=False)}\n\n"
+
+            # Calculate evidence strength
+            evidence_strength = get_evidence_strength(num_papers, refs)
+
+            # Clean markdown code fences from the response
+            cleaned_response = strip_markdown_code_fences(full_response)
+
+            # Save complete response to session
+            print(f"[DEBUG] [STREAM] Before saving - session has {len(session.get('messages', []))} messages")
+            for i, msg in enumerate(session.get('messages', [])):
+                print(f"[DEBUG] [STREAM]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
+
+            # CRITICAL FIX: Get a copy of messages list to force Flask session change detection
+            # Modifying nested list items directly (session['messages'][-1] = ...) doesn't
+            # properly trigger Flask's filesystem session backend to persist changes
+            messages = list(session.get('messages', []))
+
+            # Check if last message is an empty assistant placeholder (from homepage redirect)
+            # If so, update it instead of appending a new one
+            if (messages and
+                len(messages) > 0 and
+                messages[-1].get('role') == 'assistant' and
+                messages[-1].get('content') == ''):
+                # Update the placeholder
+                messages[-1] = {
+                    "role": "assistant",
+                    "content": cleaned_response,
+                    "references": refs,
+                    "num_papers": num_papers,
+                    "evidence_strength": evidence_strength
+                }
+                print(f"[DEBUG] [STREAM] Updated existing placeholder assistant message")
+            else:
+                # Append new message (for AJAX submissions from chat page)
+                messages.append({
+                    "role": "assistant",
+                    "content": cleaned_response,
+                    "references": refs,
+                    "num_papers": num_papers,
+                    "evidence_strength": evidence_strength
+                })
+                print(f"[DEBUG] [STREAM] Appended new assistant message")
+
+            # Reassign entire list to trigger Flask session change detection
+            session['messages'] = messages
+            session.modified = True
+
+            # CRITICAL: Explicitly save session for SSE streaming responses
+            # Even with Redis, generator functions need manual session save because
+            # Flask only auto-saves at the end of the request, but generators
+            # are still yielding data. We must force the save NOW before continuing.
+            try:
+                # Create a mock response object for save_session
+                from werkzeug.wrappers import Response as WerkzeugResponse
+                mock_response = WerkzeugResponse()
+                app.session_interface.save_session(app, session, mock_response)
+                print(f"[DEBUG] [STREAM] Explicitly saved session to Redis")
+            except Exception as e:
+                print(f"[ERROR] [STREAM] Failed to explicitly save session: {e}")
+
+            print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
+            print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
+
+            # Send references with evidence strength
+            yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
+
+            # Send completion event
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+            # Clean up stream data from session
+            session.pop(f'stream_data_{request_id}', None)
+            session.modified = True
+
+        except Exception as e:
+            print(f"[ERROR] Streaming failed: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
+
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
+
+# ============================================================================
+# PubMed Query Caching Functions
+# ============================================================================
+
+def generate_cache_key(search_term, retmax=20):
+    """Generate a cache key for PubMed queries"""
+    key_string = f"pubmed:{search_term}:{retmax}"
+    return f"pubmed_query:{hashlib.md5(key_string.encode()).hexdigest()}"
+
+def get_cached_pubmed_results(search_term, retmax=20):
+    """Retrieve cached PubMed search results"""
+    if not redis_client:
+        return None
+
+    try:
+        cache_key = generate_cache_key(search_term, retmax)
+        cached = redis_client.get(cache_key)
+        if cached:
+            print(f"[CACHE HIT] Found cached results for query: {search_term[:50]}")
+            return json.loads(cached)
+        print(f"[CACHE MISS] No cached results for query: {search_term[:50]}")
+        return None
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to retrieve from cache: {e}")
+        return None
+
+def cache_pubmed_results(search_term, ids, retmax=20, ttl=86400):
+    """Cache PubMed search results (default TTL: 24 hours)"""
+    if not redis_client:
+        return False
+
+    try:
+        cache_key = generate_cache_key(search_term, retmax)
+        cache_data = {
+            'ids': ids,
+            'search_term': search_term,
+            'timestamp': str(datetime.now()),
+            'count': len(ids)
+        }
+        redis_client.setex(cache_key, ttl, json.dumps(cache_data))
+        print(f"[CACHE SAVE] Cached {len(ids)} results for query: {search_term[:50]}")
+        return True
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to save to cache: {e}")
+        return False
+
+def get_cached_paper_metadata(pmid):
+    """Retrieve cached paper metadata"""
+    if not redis_client:
+        return None
+
+    try:
+        cache_key = f"pubmed_paper:{pmid}"
+        cached = redis_client.get(cache_key)
+        if cached:
+            return json.loads(cached)
+        return None
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to retrieve paper {pmid} from cache: {e}")
+        return None
+
+def cache_paper_metadata(pmid, metadata, ttl=604800):
+    """Cache paper metadata (default TTL: 7 days)"""
+    if not redis_client:
+        return False
+
+    try:
+        cache_key = f"pubmed_paper:{pmid}"
+        redis_client.setex(cache_key, ttl, json.dumps(metadata))
+        return True
+    except Exception as e:
+        print(f"[CACHE ERROR] Failed to cache paper {pmid}: {e}")
+        return False
+
+# ============================================================================
+# Main Route
+# ============================================================================
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    """Homepage - handles both welcome screen and chat"""
+    # Check if user wants to clear chat and return to hero state
+    if request.method == "GET" and request.args.get('clear') == '1':
+        session.pop('messages', None)
+        session.pop('chat_active', None)
+        session.pop('conversation_topic', None)
+        session.modified = True
+        return redirect(url_for('index'))
+
+    # Initialize conversation history in session
+    if 'messages' not in session:
+        session['messages'] = []
+
+    # Initialize conversation topic tracking
+    if 'conversation_topic' not in session:
+        session['conversation_topic'] = None
+
+    # Explicitly initialize session to ensure CSRF token is generated
+    if 'initialized' not in session:
+        session['initialized'] = True
+
+    if request.method == "POST":
+        try:
+            # Safely get query from form data and sanitize it
+            raw_query = request.form.get("query", "").strip()
+            print(f"[DEBUG] Form data received: {dict(request.form)}")
+            print(f"[DEBUG] Query field raw value: '{request.form.get('query', 'MISSING')}'")
+            print(f"[DEBUG] Is AJAX: {request.headers.get('X-Requested-With') == 'XMLHttpRequest'}")
+            print(f"[DEBUG] Session messages count: {len(session.get('messages', []))}")
+            raw_query = sanitize_user_query(raw_query)
+
+            # Check if this is an AJAX request
+            is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or request.form.get('modal') == '1'
+
+            # If query is empty, return appropriate response
+            if not raw_query:
+                print(f"[DEBUG] Empty query received - likely issue with form submission")
+                if is_ajax:
+                    return jsonify({'status': 'error', 'message': 'Please enter a question before submitting.'})
+                # Return to homepage with error message in session
+                session['error_message'] = 'Please enter a question before submitting.'
+                session.modified = True
+                return redirect(url_for('index'))
+
+            print(f"\n[DEBUG] ===== NEW REQUEST =====")
+            print(f"[DEBUG] Raw query: '{raw_query}'")
+            print(f"[DEBUG] Session has {len(session['messages'])} messages before")
+
+            # Check if this is the first message (from homepage)
+            is_first_message = len(session['messages']) == 0
+
+            # Set conversation topic on first message (for context in future vague queries)
+            if is_first_message and not session['conversation_topic']:
+                # Extract main topic from first query (simple keyword extraction)
+                topic_words = []
+                for word in raw_query.lower().split():
+                    # Keep medical terms (4+ chars, not common words)
+                    if len(word) >= 4 and word not in ['what', 'about', 'when', 'where', 'which', 'that', 'this', 'with', 'from', 'have', 'been', 'does', 'should', 'would', 'could']:
+                        topic_words.append(word)
+                if topic_words:
+                    session['conversation_topic'] = ' '.join(topic_words[:3])  # First 3 meaningful words
+                    print(f"[DEBUG] Conversation topic set: {session['conversation_topic']}")
+
+            # Add user message to conversation
+            session['messages'].append({"role": "user", "content": raw_query})
+            session['chat_active'] = True  # Set chat mode flag
+            session.modified = True
+            print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
+
+            # Check if this is a calculation request
+            context_hint = None
+            if len(session['messages']) >= 3:
+                last_msgs = session['messages'][-4:]
+                for msg in last_msgs:
+                    content = msg.get('content', '').lower()
+                    if any(term in content for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid', 'ideal body weight', 'body surface']):
+                        for term in ['mabl', 'ibw', 'bsa', 'qtc', 'maintenance fluid']:
+                            if term in content:
+                                context_hint = term
+                                break
+                        break
+
+            calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
+
+            if calc_result:
+                print(f"[DEBUG] Calculator result generated")
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": calc_result,
+                    "references": [],
+                    "num_papers": 0
+                })
+                session.modified = True
+                if is_ajax:
+                    return jsonify({
+                        'status': 'calculation',
+                        'result': calc_result,
+                        'message': 'Calculation complete'
+                    })
+                print(f"[DEBUG] Redirecting after calculation")
+                return redirect(url_for('index'))
+
+            query = clean_query(raw_query)
+            print(f"[DEBUG] Cleaned query: '{query}'")
+
+            is_followup = len(session['messages']) >= 3
+            print(f"[DEBUG] Is follow-up: {is_followup}")
+
+            # Resolve pronouns and references using conversation context
+            query = resolve_references(query, session['messages'][:-1])  # Exclude the just-added user message
+            print(f"[DEBUG] After reference resolution: '{query}'")
+
+            # Detect question type for customized search and temperature
+            question_type = detect_question_type(query)
+            print(f"[DEBUG] Question type: {question_type}")
+
+            # Detect if this is a multi-part question
+            is_multipart = detect_multipart(query)
+            if is_multipart:
+                print(f"[DEBUG] Multi-part question detected")
+
+            # Handle negations (contraindications, when NOT to use, etc.)
+            negation_search_modifier, negation_prompt_modifier = handle_negations(query)
+            if negation_search_modifier:
+                print(f"[DEBUG] Negation detected - will modify search and prompt")
+
+            # Expand medical abbreviations and synonyms
+            q = expand_medical_abbreviations(query)
+
+            # Boost emergency protocol searches
+            query_lower = query.lower()
+            if any(word in query_lower for word in ['protocol', 'checklist', 'crisis', 'emergency', 'management']):
+                # Add protocol/guideline terms to boost relevant results
+                if 'malignant hyperthermia' in query_lower or 'mh' in query_lower:
+                    q = q + ' AND (protocol[ti] OR emergency[ti] OR crisis[ti] OR treatment[ti])'
+                elif any(term in query_lower for term in ['rapid sequence', 'rsi', 'intubation']):
+                    q = q + ' AND (protocol[ti] OR guideline[ti] OR airway[ti])'
+                elif 'last' in query_lower or 'local anesthetic' in query_lower:
+                    q = q + ' AND (protocol[ti] OR treatment[ti] OR resuscitation[ti])'
+
+            print(f"[DEBUG] Expanded query: '{q}'")
+
+            # Detect well-established topics that should have lots of evidence
+            well_established_topics = [
+                'malignant hyperthermia', 'difficult airway', 'aspiration', 'local anesthetic systemic toxicity',
+                'last', 'propofol infusion syndrome', 'pris', 'anaphylaxis', 'tranexamic acid', 'txa',
+                'postoperative nausea', 'ponv', 'rapid sequence', 'rsi', 'spinal anesthesia', 'epidural',
+                'general anesthesia', 'blood transfusion', 'massive transfusion', 'coagulopathy'
+            ]
+            is_established_topic = any(topic in query_lower for topic in well_established_topics)
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+            border-radius: 24px;
+            padding: 40px 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .results-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--blue-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .results-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .results-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .results-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .results-content p {
+            margin-bottom: 16px;
+        }
+
+        .results-content ul {
+            margin: 12px 0 16px 20px;
+        }
+
+        .results-content li {
+            margin-bottom: 8px;
+        }
+
+        .references-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+        }
+
+        .references-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .references-title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--blue-600);
+        }
+
+        .reference-item {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .reference-number {
+            display: inline-block;
+            background: var(--blue-600);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-right: 8px;
+        }
+
+        .reference-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-top: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--blue-600);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 32px 20px;
+            margin-top: auto;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--blue-600);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="header">
+                <h1 class="header-title"><span class="gradient">Informed Consent</span> Assessment</h1>
+                <p class="header-subtitle">Patient-specific consent discussion with evidence-based risk information</p>
+            </div>
+
+            {% if not summary %}
+            <div class="form-card">
+                <form method="POST" action="/informed-consent">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <div class="section-title">Patient Information</div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age (years)<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="50" required min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ASA Classification<span class="required">*</span></label>
+                            <select name="asa" class="form-input" required>
+                                <option value="">Select...</option>
+                                <option value="I">ASA I - Healthy</option>
+                                <option value="II">ASA II - Mild systemic disease</option>
+                                <option value="III">ASA III - Severe systemic disease</option>
+                                <option value="IV">ASA IV - Life-threatening disease</option>
+                                <option value="V">ASA V - Moribund</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Anesthesia & Procedure</div>
+                    <div class="form-group">
+                        <label class="form-label">Anesthesia Type<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="General" required>
+                                <span class="radio-label">General</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Regional/Neuraxial" required>
+                                <span class="radio-label">Regional/Neuraxial</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Sedation/MAC" required>
+                                <span class="radio-label">Sedation/MAC</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="anesthesia_type" value="Local" required>
+                                <span class="radio-label">Local</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgical Procedure<span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Total knee arthroplasty" required>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Medical History</div>
+                    <div class="form-group">
+                        <label class="form-label">Comorbidities (select all that apply)</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Cardiac Disease">
+                                <span class="checkbox-label">Cardiac Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Pulmonary Disease">
+                                <span class="checkbox-label">Pulmonary Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Diabetes">
+                                <span class="checkbox-label">Diabetes</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Renal Disease">
+                                <span class="checkbox-label">Renal Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Hepatic Disease">
+                                <span class="checkbox-label">Hepatic Disease</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="OSA">
+                                <span class="checkbox-label">OSA</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="comorbidities" value="Obesity">
+                                <span class="checkbox-label">Obesity</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Special Considerations</div>
+                    <div class="form-group">
+                        <label class="form-label">Select all that apply</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Pregnancy">
+                                <span class="checkbox-label">Pregnancy</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Malignant Hyperthermia History">
+                                <span class="checkbox-label">Malignant Hyperthermia History</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Difficult Airway">
+                                <span class="checkbox-label">Difficult Airway</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Latex Allergy">
+                                <span class="checkbox-label">Latex Allergy</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Chronic Pain">
+                                <span class="checkbox-label">Chronic Pain</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="special_considerations" value="Anticoagulation">
+                                <span class="checkbox-label">Anticoagulation</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea name="notes" class="form-input" placeholder="Any additional patient concerns, questions, or special circumstances..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Generate Consent Discussion</button>
+                </form>
+            </div>
+
+            {% else %}
+            <div class="results-header">
+                <div class="results-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h1 class="results-title"><span class="gradient">Informed Consent</span> Assessment Complete</h1>
+                <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
+            </div>
+
+            <div class="results-card">
+                <div class="results-content">
+                    {{ summary|safe }}
+                </div>
+            </div>
+
+            {% if references %}
+            <div class="references-card">
+                <div class="references-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Evidence-Based References</span>
+                </div>
+                {% for ref in references %}
+                <div class="reference-item">
+                    <span class="reference-number">[{{ loop.index }}]</span>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                        {{ ref.title }}
+                    </a>
+                    <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                </div>
+                {% endfor %}
+                 </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/informed-consent" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print/Save PDF
+                </button>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+    </script>
+</body>
+</html>
+"""
+
+
+DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-01NZYD1DPP');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Difficult Airway Assessment - GasConsult.ai</title>
+    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies.">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active { display: flex; }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-title {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            font-size: 16px;
+            color: var(--gray-500);
+            line-height: 1.6;
+        }
+
+        .form-card, .results-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: var(--blue-600);
+            margin-left: 4px;
+        }
+
+        .form-input, select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 15px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            background: white;
+        }
+
+        .form-input:focus, select:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .input-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: var(--blue-400);
+            background: var(--blue-50);
+        }
+
+        .radio-option input[type="radio"],
+        .checkbox-option input[type="checkbox"] {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-label, .checkbox-label {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 32px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
+            border-radius: 24px;
+            padding: 40px 32px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .results-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--blue-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .results-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .results-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+        }
+
+        .results-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--gray-800);
+        }
+
+        .results-content h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .results-content p {
+            margin-bottom: 16px;
+        }
+
+        .results-content ul {
+            margin: 12px 0 16px 20px;
+        }
+
+        .results-content li {
+            margin-bottom: 8px;
+        }
+
+        .references-card {
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+        }
+
+        .references-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .references-title svg {
+            width: 20px;
+            height: 20px;
+            color: var(--blue-600);
+        }
+
+        .reference-item {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .reference-item:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-200);
+        }
+
+        .reference-number {
+            display: inline-block;
+            background: var(--blue-600);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-right: 8px;
+        }
+
+        .reference-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-top: 8px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--blue-600);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 1.5px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 32px 20px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚧 Interactive Form Coming Soon</h1>
+        <p>The full interactive Difficult Airway Assessment tool is currently being built. It will include validated clinical predictors, AI-powered risk analysis, and personalized management recommendations.</p>
+        <a href="/?clear=1">← Back to Home</a>
+    </div>
+</body>
+</html>
+"""
+
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent - GasConsult.ai</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        @media (min-width: 768px) {
+            .footer-inner {
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+
+        .footer-text {
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+        p {
+            color: #64748B;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .footer-link {
+            font-size: 14px;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--blue-600);
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="26" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="43" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        </div>
+
+        <main class="main-content" id="main-content">
+            <div class="header">
+                <h1 class="header-title"><span class="gradient">Difficult Airway</span> Assessment</h1>
+                <p class="header-subtitle">AI-powered risk stratification with evidence-based management strategies</p>
+            </div>
+
+            {% if not summary %}
+            <div class="form-card">
+                <form method="POST" action="/difficult-airway">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                    <div class="section-title">Patient Demographics</div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age (years)<span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="50" required min="1" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">BMI (kg/m²)<span class="required">*</span></label>
+                            <input type="number" name="bmi" class="form-input" placeholder="25" required min="10" max="100" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Airway Examination</div>
+                    <div class="form-group">
+                        <label class="form-label">Mallampati Classification<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="I" required>
+                                <span class="radio-label">Class I</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="II" required>
+                                <span class="radio-label">Class II</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="III" required>
+                                <span class="radio-label">Class III</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="IV" required>
+                                <span class="radio-label">Class IV</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Thyromental Distance<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="<6cm" required>
+                                <span class="radio-label">&lt;6 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="6-6.5cm" required>
+                                <span class="radio-label">6-6.5 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value=">6.5cm" required>
+                                <span class="radio-label">&gt;6.5 cm</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Mouth Opening<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="<3cm" required>
+                                <span class="radio-label">&lt;3 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="3-4cm" required>
+                                <span class="radio-label">3-4 cm</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value=">4cm" required>
+                                <span class="radio-label">&gt;4 cm</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Neck Extension<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Limited" required>
+                                <span class="radio-label">Limited</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Moderate" required>
+                                <span class="radio-label">Moderate</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Normal" required>
+                                <span class="radio-label">Normal</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Risk Factors</div>
+                    <div class="form-group">
+                        <label class="form-label">Select all that apply</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation">
+                                <span class="checkbox-label">Previous Difficult Intubation</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="OSA">
+                                <span class="checkbox-label">OSA</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Beard">
+                                <span class="checkbox-label">Beard</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Prominent Incisors">
+                                <span class="checkbox-label">Prominent Incisors</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Short Neck">
+                                <span class="checkbox-label">Short Neck</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Large Tongue">
+                                <span class="checkbox-label">Large Tongue</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="Facial Trauma">
+                                <span class="checkbox-label">Facial Trauma</span>
+                            </label>
+                            <label class="checkbox-option">
+                                <input type="checkbox" name="risk_factors" value="C-Spine Pathology">
+                                <span class="checkbox-label">C-Spine Pathology</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="section-title">Procedure Information</div>
+                    <div class="form-group">
+                        <label class="form-label">Planned Procedure<span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Laparoscopic cholecystectomy" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Case Type<span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Elective" required>
+                                <span class="radio-label">Elective</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Urgent" required>
+                                <span class="radio-label">Urgent</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Emergency" required>
+                                <span class="radio-label">Emergency</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea name="notes" class="form-input" placeholder="Any additional airway concerns, previous anesthesia complications, or special considerations..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Generate Assessment</button>
+                </form>
+            </div>
+
+            {% else %}
+            <div class="results-header">
+                <div class="results-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h1 class="results-title"><span class="gradient">Difficult Airway</span> Assessment Complete</h1>
+                <p class="results-subtitle">Evidence-based risk stratification and management recommendations</p>
+            </div>
+
+            <div class="results-card">
+                <div class="results-content">
+                    {{ summary|safe }}
+                </div>
+            </div>
+
+            {% if references %}
+            <div class="references-card">
+                <div class="references-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Evidence-Based References</span>
+                </div>
+                {% for ref in references %}
+                <div class="reference-item">
+                    <span class="reference-number">[{{ loop.index }}]</span>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                        {{ ref.title }}
+                    </a>
+                    <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                </div>
+                {% endfor %}
+                 </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/difficult-airway" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Assessment
+                </a>
+                <button onclick="window.print()" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
+                    Print/Save PDF
+                </button>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
+        });
+    </script>
+</body>
+</html>
+"""
+
+
+
 @app.route("/stream")
 @csrf.exempt  # SSE endpoint uses GET requests, CSRF not applicable
 def stream():
