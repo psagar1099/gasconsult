@@ -182,11 +182,22 @@ def safe_db_save_message(conversation_id, role, content, references=None, num_pa
     Returns:
         bool: True if saved successfully, False otherwise
     """
+    print(f"[CHAT_HISTORY] [DEBUG] safe_db_save_message called:")
+    print(f"  - CHAT_HISTORY_ENABLED: {CHAT_HISTORY_ENABLED}")
+    print(f"  - DATABASE_INITIALIZED: {DATABASE_INITIALIZED}")
+    print(f"  - conversation_id: {conversation_id}")
+    print(f"  - role: {role}")
+    print(f"  - content_length: {len(content) if content else 0}")
+    print(f"  - num_papers: {num_papers}")
+    print(f"  - references: {len(references) if references else 0} items")
+    print(f"  - evidence_strength: {evidence_strength}")
+
     if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        print(f"[CHAT_HISTORY] [DEBUG] Skipping save - ENABLED={CHAT_HISTORY_ENABLED}, INITIALIZED={DATABASE_INITIALIZED}")
         return False
 
     try:
-        return database.save_message(
+        result = database.save_message(
             conversation_id=conversation_id,
             role=role,
             content=content,
@@ -194,8 +205,12 @@ def safe_db_save_message(conversation_id, role, content, references=None, num_pa
             num_papers=num_papers,
             evidence_strength=evidence_strength
         )
+        print(f"[CHAT_HISTORY] [DEBUG] database.save_message returned: {result}")
+        return result
     except Exception as e:
         print(f"[CHAT_HISTORY] Failed to save message: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 
@@ -1998,46 +2013,49 @@ PREOP_HTML = """<!DOCTYPE html>
         /* ====== Chat History Sidebar (Phase 3) ====== */
         .history-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 1001;
             background: var(--white);
-            border: none;
+            border: 1px solid var(--gray-200);
             width: 44px;
             height: 44px;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transition: all 0.2s ease;
         }
 
         .history-toggle:hover {
             background: var(--gray-50);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .history-toggle svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             color: var(--gray-700);
+            stroke-width: 2;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px;
+            width: 340px;
             height: 100vh;
             background: var(--white);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid var(--gray-200);
         }
 
         .history-sidebar.open {
@@ -2045,65 +2063,79 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 24px 20px;
+            background: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-sidebar-title {
             font-size: 18px;
             font-weight: 600;
             color: var(--gray-900);
+            letter-spacing: -0.01em;
         }
 
         .history-close-btn {
-            background: none;
+            background: transparent;
             border: none;
             cursor: pointer;
-            padding: 4px;
+            padding: 6px;
             color: var(--gray-500);
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
         .history-close-btn:hover {
+            background: var(--gray-100);
             color: var(--gray-700);
+        }
+
+        .history-close-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
             padding: 12px;
+            background: var(--gray-50);
         }
 
         .history-conversation-item {
-            padding: 12px 16px;
+            padding: 14px 16px;
             margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
+            background: var(--white);
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 1px solid transparent;
+            border: 1px solid var(--gray-200);
+            position: relative;
         }
 
         .history-conversation-item:hover {
-            background: var(--blue-50);
-            border-color: var(--blue-200);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
 
         .history-conversation-item.active {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
         }
 
         .history-conversation-title {
             font-size: 14px;
             font-weight: 500;
             color: var(--gray-900);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -2114,25 +2146,32 @@ PREOP_HTML = """<!DOCTYPE html>
             color: var(--gray-500);
             display: flex;
             gap: 12px;
+            align-items: center;
+        }
+
+        .history-conversation-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .history-empty-state {
-            padding: 40px 20px;
+            padding: 48px 20px;
             text-align: center;
-            color: var(--gray-500);
+            color: var(--gray-400);
         }
 
-        .history-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            opacity: 0.5;
+        .history-empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-500);
         }
 
         .history-loading {
-            padding: 40px 20px;
+            padding: 48px 20px;
             text-align: center;
             color: var(--gray-500);
+            font-size: 14px;
         }
 
         /* Overlay when sidebar is open */
@@ -2146,7 +2185,7 @@ PREOP_HTML = """<!DOCTYPE html>
             z-index: 999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .history-overlay.visible {
@@ -2154,15 +2193,222 @@ PREOP_HTML = """<!DOCTYPE html>
             pointer-events: all;
         }
 
+        /* Custom scrollbar for conversation list */
+        .history-conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 10px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb:hover {
+            background: var(--blue-400);
+        }
+
+        /* [PHASE 5] Search Bar */
+        .history-search-container {
+            padding: 12px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .history-search-input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .history-search-input:focus {
+            border-color: var(--blue-400);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .history-search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .history-search-icon {
+            position: absolute;
+            left: 24px;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        /* [PHASE 5] Conversation Actions */
+        .history-conversation-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-actions {
+            opacity: 1;
+        }
+
+        .history-action-btn {
+            padding: 5px 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .history-action-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .history-action-btn-export {
+            background: var(--blue-50);
+            color: var(--blue-600);
+        }
+
+        .history-action-btn-export:hover {
+            background: var(--blue-100);
+        }
+
+        .history-action-btn-copy {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .history-action-btn-copy:hover {
+            background: var(--gray-200);
+        }
+
+        .history-action-btn-delete {
+            background: transparent;
+            color: var(--gray-400);
+        }
+
+        .history-action-btn-delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* [PHASE 5] Delete Confirmation Modal */
+        .history-delete-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            display: none;
+            border: 1px solid var(--gray-200);
+        }
+
+        .history-delete-modal.visible {
+            display: block;
+        }
+
+        .history-delete-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: none;
+        }
+
+        .history-delete-modal-overlay.visible {
+            display: block;
+        }
+
+        .history-delete-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .history-delete-modal-message {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .history-delete-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .history-modal-btn {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .history-modal-btn-cancel {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .history-modal-btn-cancel:hover {
+            background: var(--gray-200);
+        }
+
+        .history-modal-btn-confirm {
+            background: #ef4444;
+            color: white;
+        }
+
+        .history-modal-btn-confirm:hover {
+            background: #dc2626;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
-                width: 280px;
+                width: 320px;
             }
 
             .history-toggle {
-                top: 16px;
-                left: 16px;
+                top: 20px;
+                left: 20px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .history-sidebar-header {
+                padding: 24px 20px 16px 20px;
             }
         }
     </style>
@@ -2173,7 +2419,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -2188,10 +2434,38 @@ PREOP_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -2584,30 +2858,34 @@ PREOP_HTML = """<!DOCTYPE html>
         });
 
         // ====== Chat History Sidebar (Phase 3) ======
-        (function() {
+        if (document.getElementById('historyToggle') && document.getElementById('historySidebar')) {
             const historyToggle = document.getElementById('historyToggle');
             const historySidebar = document.getElementById('historySidebar');
             const historyOverlay = document.getElementById('historyOverlay');
             const historyClose = document.getElementById('historyClose');
             const conversationsList = document.getElementById('conversationsList');
 
-            if (!historyToggle || !historySidebar) return; // Elements not present in this template
-
             let conversationsData = [];
             let currentConversationId = null;
 
             // Toggle sidebar
             function openSidebar() {
+                console.log('[SIDEBAR] Opening sidebar...');
+                console.log('[SIDEBAR] historySidebar element:', historySidebar);
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
+                console.log('[SIDEBAR] Classes after open:', historySidebar.className);
                 loadConversations();
             }
 
             function closeSidebar() {
+                console.log('[SIDEBAR] Closing sidebar...');
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
             }
 
+            console.log('[SIDEBAR] Attaching event listeners...');
+            console.log('[SIDEBAR] historyToggle:', historyToggle);
             historyToggle.addEventListener('click', openSidebar);
             historyClose.addEventListener('click', closeSidebar);
             historyOverlay.addEventListener('click', closeSidebar);
@@ -2623,7 +2901,6 @@ PREOP_HTML = """<!DOCTYPE html>
                     if (!data.enabled) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">📝</div>
                                 <p>Chat history is disabled</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Enable ENABLE_CHAT_HISTORY in settings</p>
                             </div>
@@ -2637,7 +2914,6 @@ PREOP_HTML = """<!DOCTYPE html>
                     if (conversationsData.length === 0) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">💬</div>
                                 <p>No conversations yet</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Start chatting to build your history</p>
                             </div>
@@ -2657,9 +2933,26 @@ PREOP_HTML = """<!DOCTYPE html>
                 }
             }
 
-            // Render conversations list
-            function renderConversations() {
-                conversationsList.innerHTML = conversationsData.map(conv => {
+            // [PHASE 5] Render conversations list with action buttons
+            function renderConversations(filterText = '') {
+                // Filter conversations if search text provided
+                const filtered = conversationsData.filter(conv => {
+                    if (!filterText) return true;
+                    const searchLower = filterText.toLowerCase();
+                    return conv.title.toLowerCase().includes(searchLower);
+                });
+
+                if (filtered.length === 0) {
+                    conversationsList.innerHTML = `
+                        <div class="history-empty-state">
+                            <p>No conversations found</p>
+                            <p style="font-size: 11px; margin-top: 8px;">Try a different search term</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                conversationsList.innerHTML = filtered.map(conv => {
                     const isActive = conv.id === currentConversationId;
                     const date = new Date(conv.updated_at || conv.created_at);
                     const timeAgo = formatTimeAgo(date);
@@ -2675,19 +2968,60 @@ PREOP_HTML = """<!DOCTYPE html>
                                 <span>${timeAgo}</span>
                                 <span>${conv.message_count || 0} messages</span>
                             </div>
+                            <div class="history-conversation-actions">
+                                <button class="history-action-btn history-action-btn-export" data-action="export" data-id="${conv.id}" title="Export">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Export
+                                </button>
+                                <button class="history-action-btn history-action-btn-copy" data-action="copy" data-id="${conv.id}" title="Copy">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    Copy
+                                </button>
+                                <button class="history-action-btn history-action-btn-delete" data-action="delete" data-id="${conv.id}" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     `;
                 }).join('');
 
                 // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
-                    item.addEventListener('click', function() {
+                    item.addEventListener('click', function(e) {
+                        // Don't navigate if clicking on action buttons
+                        if (e.target.closest('.history-action-btn')) {
+                            return;
+                        }
+
                         const conversationId = this.dataset.conversationId;
                         console.log('Loading conversation:', conversationId);
 
                         // Navigate to load-conversation route
-                        // This will safely clear session and load the conversation
                         window.location.href = '/load-conversation/' + conversationId;
+                    });
+                });
+
+                // [PHASE 5] Action button handlers
+                conversationsList.querySelectorAll('.history-action-btn').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const action = this.dataset.action;
+                        const convId = this.dataset.id;
+
+                        if (action === 'export') {
+                            await exportConversation(convId);
+                        } else if (action === 'copy') {
+                            await copyConversation(convId);
+                        } else if (action === 'delete') {
+                            showDeleteConfirmation(convId);
+                        }
                     });
                 });
             }
@@ -2710,7 +3044,148 @@ PREOP_HTML = """<!DOCTYPE html>
                 div.textContent = text;
                 return div.innerHTML;
             }
-        })();
+
+            // [PHASE 5] Search functionality
+            const searchInput = document.getElementById('historySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    renderConversations(e.target.value);
+                });
+            }
+
+            // [PHASE 5] Delete confirmation modal
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+            const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+            const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+            let conversationToDelete = null;
+
+            function showDeleteConfirmation(conversationId) {
+                conversationToDelete = conversationId;
+                deleteModal.classList.add('visible');
+                deleteModalOverlay.classList.add('visible');
+            }
+
+            function hideDeleteConfirmation() {
+                conversationToDelete = null;
+                deleteModal.classList.remove('visible');
+                deleteModalOverlay.classList.remove('visible');
+            }
+
+            if (deleteCancelBtn) {
+                deleteCancelBtn.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteModalOverlay) {
+                deleteModalOverlay.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteConfirmBtn) {
+                deleteConfirmBtn.addEventListener('click', async function() {
+                    if (!conversationToDelete) return;
+
+                    try {
+                        const response = await fetch(`/api/conversations/${conversationToDelete}`, {
+                            method: 'DELETE'
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Remove from local data
+                            conversationsData = conversationsData.filter(c => c.id !== conversationToDelete);
+
+                            // If deleted conversation was current, reload page
+                            if (conversationToDelete === currentConversationId) {
+                                window.location.href = '/?clear=1';
+                            } else {
+                                renderConversations();
+                            }
+
+                            hideDeleteConfirmation();
+                        } else {
+                            alert('Failed to delete conversation: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Failed to delete conversation');
+                    }
+                });
+            }
+
+            // [PHASE 5] Export conversation as JSON
+            async function exportConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const blob = new Blob([JSON.stringify(data.conversation, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `conversation-${data.conversation.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } else {
+                        alert('Failed to export conversation');
+                    }
+                } catch (error) {
+                    console.error('Export error:', error);
+                    alert('Failed to export conversation');
+                }
+            }
+
+            // [PHASE 5] Copy conversation as text
+            async function copyConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const conv = data.conversation;
+                        let text = `# ${conv.title}\n\n`;
+                        text += `Created: ${new Date(conv.created_at).toLocaleString()}\n`;
+                        text += `Messages: ${conv.messages.length}\n\n`;
+                        text += '---\n\n';
+
+                        conv.messages.forEach((msg, idx) => {
+                            text += `## ${msg.role === 'user' ? 'User' : 'Assistant'}:\n\n`;
+                            text += `${msg.content}\n\n`;
+
+                            if (msg.role === 'assistant' && msg.references && msg.references.length > 0) {
+                                text += `**References (${msg.references.length}):**\n`;
+                                msg.references.forEach((ref, refIdx) => {
+                                    text += `${refIdx + 1}. ${ref.title} - ${ref.authors} (${ref.year}) PMID: ${ref.pmid}\n`;
+                                });
+                                text += '\n';
+                            }
+
+                            text += '---\n\n';
+                        });
+
+                        await navigator.clipboard.writeText(text);
+
+                        // Show feedback
+                        const btn = event.target.closest('.history-action-btn-copy');
+                        if (btn) {
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Copied!';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                            }, 2000);
+                        }
+                    } else {
+                        alert('Failed to copy conversation');
+                    }
+                } catch (error) {
+                    console.error('Copy error:', error);
+                    alert('Failed to copy conversation');
+                }
+            }
+        }
     </script>
 </body>
 </html>
@@ -4639,46 +5114,49 @@ HTML = """<!DOCTYPE html>
         /* ====== Chat History Sidebar (Phase 3) ====== */
         .history-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 1001;
             background: var(--white);
-            border: none;
+            border: 1px solid var(--gray-200);
             width: 44px;
             height: 44px;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
             transition: all 0.2s ease;
         }
 
         .history-toggle:hover {
             background: var(--gray-50);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.15);
         }
 
         .history-toggle svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             color: var(--gray-700);
+            stroke-width: 2;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px;
+            width: 340px;
             height: 100vh;
             background: var(--white);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 2px 0 16px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid var(--gray-200);
         }
 
         .history-sidebar.open {
@@ -4686,65 +5164,79 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 24px 20px;
+            background: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         .history-sidebar-title {
             font-size: 18px;
             font-weight: 600;
             color: var(--gray-900);
+            letter-spacing: -0.01em;
         }
 
         .history-close-btn {
-            background: none;
+            background: transparent;
             border: none;
             cursor: pointer;
-            padding: 4px;
+            padding: 6px;
             color: var(--gray-500);
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
         }
 
         .history-close-btn:hover {
+            background: var(--gray-100);
             color: var(--gray-700);
+        }
+
+        .history-close-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
             padding: 12px;
+            background: var(--gray-50);
         }
 
         .history-conversation-item {
-            padding: 12px 16px;
+            padding: 14px 16px;
             margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
+            background: var(--white);
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: 1px solid transparent;
+            border: 1px solid var(--gray-200);
+            position: relative;
         }
 
         .history-conversation-item:hover {
-            background: var(--blue-50);
-            border-color: var(--blue-200);
+            border-color: var(--blue-300);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
         }
 
         .history-conversation-item.active {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
         }
 
         .history-conversation-title {
             font-size: 14px;
             font-weight: 500;
             color: var(--gray-900);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -4755,25 +5247,32 @@ HTML = """<!DOCTYPE html>
             color: var(--gray-500);
             display: flex;
             gap: 12px;
+            align-items: center;
+        }
+
+        .history-conversation-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .history-empty-state {
-            padding: 40px 20px;
+            padding: 48px 20px;
             text-align: center;
-            color: var(--gray-500);
+            color: var(--gray-400);
         }
 
-        .history-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            opacity: 0.5;
+        .history-empty-state p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--gray-500);
         }
 
         .history-loading {
-            padding: 40px 20px;
+            padding: 48px 20px;
             text-align: center;
             color: var(--gray-500);
+            font-size: 14px;
         }
 
         /* Overlay when sidebar is open */
@@ -4787,7 +5286,7 @@ HTML = """<!DOCTYPE html>
             z-index: 999;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease;
         }
 
         .history-overlay.visible {
@@ -4795,15 +5294,222 @@ HTML = """<!DOCTYPE html>
             pointer-events: all;
         }
 
+        /* Custom scrollbar for conversation list */
+        .history-conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb {
+            background: var(--gray-300);
+            border-radius: 10px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb:hover {
+            background: var(--blue-400);
+        }
+
+        /* [PHASE 5] Search Bar */
+        .history-search-container {
+            padding: 12px;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .history-search-input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .history-search-input:focus {
+            border-color: var(--blue-400);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .history-search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .history-search-icon {
+            position: absolute;
+            left: 24px;
+            top: 22px;
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        /* [PHASE 5] Conversation Actions */
+        .history-conversation-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-actions {
+            opacity: 1;
+        }
+
+        .history-action-btn {
+            padding: 5px 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .history-action-btn svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .history-action-btn-export {
+            background: var(--blue-50);
+            color: var(--blue-600);
+        }
+
+        .history-action-btn-export:hover {
+            background: var(--blue-100);
+        }
+
+        .history-action-btn-copy {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .history-action-btn-copy:hover {
+            background: var(--gray-200);
+        }
+
+        .history-action-btn-delete {
+            background: transparent;
+            color: var(--gray-400);
+        }
+
+        .history-action-btn-delete:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* [PHASE 5] Delete Confirmation Modal */
+        .history-delete-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--white);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            display: none;
+            border: 1px solid var(--gray-200);
+        }
+
+        .history-delete-modal.visible {
+            display: block;
+        }
+
+        .history-delete-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            display: none;
+        }
+
+        .history-delete-modal-overlay.visible {
+            display: block;
+        }
+
+        .history-delete-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .history-delete-modal-message {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .history-delete-modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .history-modal-btn {
+            padding: 9px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .history-modal-btn-cancel {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .history-modal-btn-cancel:hover {
+            background: var(--gray-200);
+        }
+
+        .history-modal-btn-confirm {
+            background: #ef4444;
+            color: white;
+        }
+
+        .history-modal-btn-confirm:hover {
+            background: #dc2626;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
-                width: 280px;
+                width: 320px;
             }
 
             .history-toggle {
-                top: 16px;
-                left: 16px;
+                top: 20px;
+                left: 20px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .history-sidebar-header {
+                padding: 24px 20px 16px 20px;
             }
         }
 
@@ -4818,7 +5524,7 @@ HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -4833,10 +5539,38 @@ HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -5441,30 +6175,34 @@ HTML = """<!DOCTYPE html>
         {% endif %}
 
         // ====== Chat History Sidebar (Phase 3) ======
-        (function() {
+        if (document.getElementById('historyToggle') && document.getElementById('historySidebar')) {
             const historyToggle = document.getElementById('historyToggle');
             const historySidebar = document.getElementById('historySidebar');
             const historyOverlay = document.getElementById('historyOverlay');
             const historyClose = document.getElementById('historyClose');
             const conversationsList = document.getElementById('conversationsList');
 
-            if (!historyToggle || !historySidebar) return; // Elements not present in this template
-
             let conversationsData = [];
             let currentConversationId = null;
 
             // Toggle sidebar
             function openSidebar() {
+                console.log('[SIDEBAR] Opening sidebar...');
+                console.log('[SIDEBAR] historySidebar element:', historySidebar);
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
+                console.log('[SIDEBAR] Classes after open:', historySidebar.className);
                 loadConversations();
             }
 
             function closeSidebar() {
+                console.log('[SIDEBAR] Closing sidebar...');
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
             }
 
+            console.log('[SIDEBAR] Attaching event listeners...');
+            console.log('[SIDEBAR] historyToggle:', historyToggle);
             historyToggle.addEventListener('click', openSidebar);
             historyClose.addEventListener('click', closeSidebar);
             historyOverlay.addEventListener('click', closeSidebar);
@@ -5480,7 +6218,6 @@ HTML = """<!DOCTYPE html>
                     if (!data.enabled) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">📝</div>
                                 <p>Chat history is disabled</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Enable ENABLE_CHAT_HISTORY in settings</p>
                             </div>
@@ -5494,7 +6231,6 @@ HTML = """<!DOCTYPE html>
                     if (conversationsData.length === 0) {
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
-                                <div class="history-empty-icon">💬</div>
                                 <p>No conversations yet</p>
                                 <p style="font-size: 11px; margin-top: 8px;">Start chatting to build your history</p>
                             </div>
@@ -5514,9 +6250,26 @@ HTML = """<!DOCTYPE html>
                 }
             }
 
-            // Render conversations list
-            function renderConversations() {
-                conversationsList.innerHTML = conversationsData.map(conv => {
+            // [PHASE 5] Render conversations list with action buttons
+            function renderConversations(filterText = '') {
+                // Filter conversations if search text provided
+                const filtered = conversationsData.filter(conv => {
+                    if (!filterText) return true;
+                    const searchLower = filterText.toLowerCase();
+                    return conv.title.toLowerCase().includes(searchLower);
+                });
+
+                if (filtered.length === 0) {
+                    conversationsList.innerHTML = `
+                        <div class="history-empty-state">
+                            <p>No conversations found</p>
+                            <p style="font-size: 11px; margin-top: 8px;">Try a different search term</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                conversationsList.innerHTML = filtered.map(conv => {
                     const isActive = conv.id === currentConversationId;
                     const date = new Date(conv.updated_at || conv.created_at);
                     const timeAgo = formatTimeAgo(date);
@@ -5532,19 +6285,60 @@ HTML = """<!DOCTYPE html>
                                 <span>${timeAgo}</span>
                                 <span>${conv.message_count || 0} messages</span>
                             </div>
+                            <div class="history-conversation-actions">
+                                <button class="history-action-btn history-action-btn-export" data-action="export" data-id="${conv.id}" title="Export">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Export
+                                </button>
+                                <button class="history-action-btn history-action-btn-copy" data-action="copy" data-id="${conv.id}" title="Copy">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    Copy
+                                </button>
+                                <button class="history-action-btn history-action-btn-delete" data-action="delete" data-id="${conv.id}" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     `;
                 }).join('');
 
                 // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
-                    item.addEventListener('click', function() {
+                    item.addEventListener('click', function(e) {
+                        // Don't navigate if clicking on action buttons
+                        if (e.target.closest('.history-action-btn')) {
+                            return;
+                        }
+
                         const conversationId = this.dataset.conversationId;
                         console.log('Loading conversation:', conversationId);
 
                         // Navigate to load-conversation route
-                        // This will safely clear session and load the conversation
                         window.location.href = '/load-conversation/' + conversationId;
+                    });
+                });
+
+                // [PHASE 5] Action button handlers
+                conversationsList.querySelectorAll('.history-action-btn').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const action = this.dataset.action;
+                        const convId = this.dataset.id;
+
+                        if (action === 'export') {
+                            await exportConversation(convId);
+                        } else if (action === 'copy') {
+                            await copyConversation(convId);
+                        } else if (action === 'delete') {
+                            showDeleteConfirmation(convId);
+                        }
                     });
                 });
             }
@@ -5567,7 +6361,148 @@ HTML = """<!DOCTYPE html>
                 div.textContent = text;
                 return div.innerHTML;
             }
-        })();
+
+            // [PHASE 5] Search functionality
+            const searchInput = document.getElementById('historySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    renderConversations(e.target.value);
+                });
+            }
+
+            // [PHASE 5] Delete confirmation modal
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+            const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+            const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+            let conversationToDelete = null;
+
+            function showDeleteConfirmation(conversationId) {
+                conversationToDelete = conversationId;
+                deleteModal.classList.add('visible');
+                deleteModalOverlay.classList.add('visible');
+            }
+
+            function hideDeleteConfirmation() {
+                conversationToDelete = null;
+                deleteModal.classList.remove('visible');
+                deleteModalOverlay.classList.remove('visible');
+            }
+
+            if (deleteCancelBtn) {
+                deleteCancelBtn.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteModalOverlay) {
+                deleteModalOverlay.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteConfirmBtn) {
+                deleteConfirmBtn.addEventListener('click', async function() {
+                    if (!conversationToDelete) return;
+
+                    try {
+                        const response = await fetch(`/api/conversations/${conversationToDelete}`, {
+                            method: 'DELETE'
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Remove from local data
+                            conversationsData = conversationsData.filter(c => c.id !== conversationToDelete);
+
+                            // If deleted conversation was current, reload page
+                            if (conversationToDelete === currentConversationId) {
+                                window.location.href = '/?clear=1';
+                            } else {
+                                renderConversations();
+                            }
+
+                            hideDeleteConfirmation();
+                        } else {
+                            alert('Failed to delete conversation: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Failed to delete conversation');
+                    }
+                });
+            }
+
+            // [PHASE 5] Export conversation as JSON
+            async function exportConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const blob = new Blob([JSON.stringify(data.conversation, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `conversation-${data.conversation.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } else {
+                        alert('Failed to export conversation');
+                    }
+                } catch (error) {
+                    console.error('Export error:', error);
+                    alert('Failed to export conversation');
+                }
+            }
+
+            // [PHASE 5] Copy conversation as text
+            async function copyConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const conv = data.conversation;
+                        let text = `# ${conv.title}\n\n`;
+                        text += `Created: ${new Date(conv.created_at).toLocaleString()}\n`;
+                        text += `Messages: ${conv.messages.length}\n\n`;
+                        text += '---\n\n';
+
+                        conv.messages.forEach((msg, idx) => {
+                            text += `## ${msg.role === 'user' ? 'User' : 'Assistant'}:\n\n`;
+                            text += `${msg.content}\n\n`;
+
+                            if (msg.role === 'assistant' && msg.references && msg.references.length > 0) {
+                                text += `**References (${msg.references.length}):**\n`;
+                                msg.references.forEach((ref, refIdx) => {
+                                    text += `${refIdx + 1}. ${ref.title} - ${ref.authors} (${ref.year}) PMID: ${ref.pmid}\n`;
+                                });
+                                text += '\n';
+                            }
+
+                            text += '---\n\n';
+                        });
+
+                        await navigator.clipboard.writeText(text);
+
+                        // Show feedback
+                        const btn = event.target.closest('.history-action-btn-copy');
+                        if (btn) {
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Copied!';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                            }, 2000);
+                        }
+                    } else {
+                        alert('Failed to copy conversation');
+                    }
+                } catch (error) {
+                    console.error('Copy error:', error);
+                    alert('Failed to copy conversation');
+                }
+            }
+        }
     </script>
 </body>
 </html>
@@ -10175,7 +11110,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -10190,10 +11125,38 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -11709,7 +12672,7 @@ CRISIS_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18" />
         </svg>
     </button>
 
@@ -11724,10 +12687,38 @@ CRISIS_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -18287,21 +19278,33 @@ def stream():
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
             # [PHASE 2] Save assistant response to database (non-blocking)
+            print(f"[CHAT_HISTORY] [DEBUG] Stream endpoint - preparing to save assistant response")
+            print(f"[CHAT_HISTORY] [DEBUG] Global flags - ENABLED={CHAT_HISTORY_ENABLED}, INITIALIZED={DATABASE_INITIALIZED}")
             conversation_id = session.get('conversation_id')
+            print(f"[CHAT_HISTORY] [DEBUG] conversation_id from session: {conversation_id}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - cleaned_response length: {len(cleaned_response) if cleaned_response else 0}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - refs: {len(refs) if refs else 0} items")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - num_papers: {num_papers}")
+            print(f"[CHAT_HISTORY] [DEBUG] Response data - evidence_strength: {evidence_strength}")
+
             if conversation_id:
-                if safe_db_save_message(
+                print(f"[CHAT_HISTORY] [DEBUG] Calling safe_db_save_message...")
+                save_result = safe_db_save_message(
                     conversation_id=conversation_id,
                     role="assistant",
                     content=cleaned_response,
                     references=refs,
                     num_papers=num_papers,
                     evidence_strength=evidence_strength
-                ):
-                    print(f"[CHAT_HISTORY] Saved assistant response to database")
+                )
+                print(f"[CHAT_HISTORY] [DEBUG] safe_db_save_message returned: {save_result}")
+                if save_result:
+                    print(f"[CHAT_HISTORY] ✅ Saved assistant response to database")
                 else:
-                    print(f"[CHAT_HISTORY] Assistant response not saved to database (feature disabled or error)")
+                    print(f"[CHAT_HISTORY] ❌ Assistant response not saved to database (feature disabled or error)")
             else:
-                print(f"[CHAT_HISTORY] No conversation_id in session, skipping database save")
+                print(f"[CHAT_HISTORY] ❌ No conversation_id in session, skipping database save")
+                print(f"[CHAT_HISTORY] [DEBUG] Session keys: {list(session.keys())}")
 
             # Send references with evidence strength
             yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
@@ -18485,10 +19488,14 @@ def index():
             print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
 
             # [PHASE 2] Save user message to database (non-blocking)
-            if safe_db_save_message(conversation_id, "user", raw_query):
-                print(f"[CHAT_HISTORY] Saved user message to database")
+            print(f"[CHAT_HISTORY] [DEBUG] Index route - preparing to save user message")
+            print(f"[CHAT_HISTORY] [DEBUG] conversation_id: {conversation_id}")
+            save_user_result = safe_db_save_message(conversation_id, "user", raw_query)
+            print(f"[CHAT_HISTORY] [DEBUG] User message save result: {save_user_result}")
+            if save_user_result:
+                print(f"[CHAT_HISTORY] ✅ Saved user message to database")
             else:
-                print(f"[CHAT_HISTORY] User message not saved to database (feature disabled or error)")
+                print(f"[CHAT_HISTORY] ❌ User message not saved to database (feature disabled or error)")
 
             # Check if this is a calculation request
             context_hint = None
@@ -19689,6 +20696,415 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+    
+        /* Enhanced Glassmorphism */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.02),
+                0 4px 16px rgba(0,0,0,0.04),
+                0 12px 48px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 0 40px rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Staggered Form Group Animations */
+        .form-group {
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.5s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.2s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.3s; }
+        .form-group:nth-child(7) { animation-delay: 0.35s; }
+        .form-group:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Enhanced Interactive Inputs */
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(59, 130, 246, 0.12),
+                0 4px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Animated Labels */
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .form-group:focus-within label {
+            color: #2563EB;
+            transform: translateX(2px);
+        }
+
+        /* Enhanced Radio/Checkbox Options */
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-option::before, .checkbox-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: #3B82F6;
+            background: rgba(239, 246, 255, 0.8);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .radio-option:hover::before, .checkbox-option:hover::before {
+            opacity: 1;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: #3B82F6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.15) 100%);
+            box-shadow:
+                0 4px 20px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: 20px;
+            height: 20px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #3B82F6;
+        }
+
+        /* Animated Section Titles */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            margin-top: 32px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Enhanced Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 20px rgba(37, 99, 235, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 32px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 12px 40px rgba(37, 99, 235, 0.4),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Enhanced Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 26px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .back-btn:hover {
+            border-color: #3B82F6;
+            color: #2563EB;
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(-4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Enhanced Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 17px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphic Results Cards */
+        .results-card, .references-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                0 12px 48px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+            line-height: 1.8;
+        }
+
+        /* Enhanced Mobile-First Responsive */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 90px 16px 32px;
+            }
+
+            .card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-top: 28px;
+            }
+
+            input, select, textarea {
+                padding: 13px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option, .checkbox-option {
+                padding: 14px 16px;
+            }
+
+            .submit-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+                border-radius: 14px;
+            }
+
+            .back-btn {
+                padding: 12px 22px;
+                font-size: 14px;
+            }
+
+            .results-card, .references-card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+        }
+
+        /* Smooth scrolling for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        form:invalid .submit-btn {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        form:valid .submit-btn {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        /* Enhanced checkbox/radio group animations */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-group > *, .checkbox-group > * {
+            animation: fadeSlideUp 0.4s ease-out backwards;
+        }
+
+        .radio-group > *:nth-child(1), .checkbox-group > *:nth-child(1) { animation-delay: 0.05s; }
+        .radio-group > *:nth-child(2), .checkbox-group > *:nth-child(2) { animation-delay: 0.08s; }
+        .radio-group > *:nth-child(3), .checkbox-group > *:nth-child(3) { animation-delay: 0.11s; }
+        .radio-group > *:nth-child(4), .checkbox-group > *:nth-child(4) { animation-delay: 0.14s; }
+        .radio-group > *:nth-child(5), .checkbox-group > *:nth-child(5) { animation-delay: 0.17s; }
+        .radio-group > *:nth-child(6), .checkbox-group > *:nth-child(6) { animation-delay: 0.20s; }
+        .radio-group > *:nth-child(7), .checkbox-group > *:nth-child(7) { animation-delay: 0.23s; }
+        .radio-group > *:nth-child(8), .checkbox-group > *:nth-child(8) { animation-delay: 0.26s; }
+
     </style>
 </head>
 <body>
@@ -20473,6 +21889,415 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+    
+        /* Enhanced Glassmorphism */
+        .card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.02),
+                0 4px 16px rgba(0,0,0,0.04),
+                0 12px 48px rgba(0,0,0,0.08),
+                inset 0 1px 0 rgba(255,255,255,0.9),
+                inset 0 0 40px rgba(255,255,255,0.4);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        /* Keyframe Animations */
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* Staggered Form Group Animations */
+        .form-group {
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.5s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.2s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.3s; }
+        .form-group:nth-child(7) { animation-delay: 0.35s; }
+        .form-group:nth-child(8) { animation-delay: 0.4s; }
+
+        /* Enhanced Interactive Inputs */
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 0 4px rgba(59, 130, 246, 0.12),
+                0 4px 20px rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Animated Labels */
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #334155;
+            transition: all 0.2s ease;
+        }
+
+        .form-group:focus-within label {
+            color: #2563EB;
+            transform: translateX(2px);
+        }
+
+        /* Enhanced Radio/Checkbox Options */
+        .radio-option, .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 16px 18px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .radio-option::before, .checkbox-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 197, 253, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .radio-option:hover, .checkbox-option:hover {
+            border-color: #3B82F6;
+            background: rgba(239, 246, 255, 0.8);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.12);
+        }
+
+        .radio-option:hover::before, .checkbox-option:hover::before {
+            opacity: 1;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: #3B82F6;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(147, 197, 253, 0.15) 100%);
+            box-shadow:
+                0 4px 20px rgba(59, 130, 246, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            transform: scale(1.02);
+        }
+
+        .radio-option input, .checkbox-option input {
+            width: 20px;
+            height: 20px;
+            margin-right: 14px;
+            cursor: pointer;
+            accent-color: #3B82F6;
+        }
+
+        /* Animated Section Titles */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            margin-top: 32px;
+            padding-bottom: 14px;
+            border-bottom: 3px solid transparent;
+            background: linear-gradient(90deg, #3B82F6 0%, #60A5FA 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: fadeSlideUp 0.5s ease-out;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #3B82F6 0%, transparent 100%);
+            border-radius: 2px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* Enhanced Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 18px 28px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 20px rgba(37, 99, 235, 0.3),
+                0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 32px;
+            animation: fadeSlideUp 0.6s ease-out;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow:
+                0 12px 40px rgba(37, 99, 235, 0.4),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:hover::before {
+            opacity: 1;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        /* Enhanced Back Button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 26px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .back-btn:hover {
+            border-color: #3B82F6;
+            color: #2563EB;
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(-4px);
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Enhanced Header */
+        .header {
+            text-align: center;
+            margin-bottom: 48px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .gradient {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 50%, #60A5FA 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            color: #64748B;
+            font-size: 17px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Glassmorphic Results Cards */
+        .results-card, .references-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 28px;
+            padding: 32px;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.06),
+                0 12px 48px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            margin-bottom: 24px;
+            animation: fadeSlideUp 0.6s ease-out;
+            line-height: 1.8;
+        }
+
+        /* Enhanced Mobile-First Responsive */
+        @media (max-width: 640px) {
+            .main-content {
+                padding: 90px 16px 32px;
+            }
+
+            .card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+            }
+
+            .section-title {
+                font-size: 18px;
+                margin-top: 28px;
+            }
+
+            input, select, textarea {
+                padding: 13px 16px;
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+
+            .radio-option, .checkbox-option {
+                padding: 14px 16px;
+            }
+
+            .submit-btn {
+                padding: 16px 24px;
+                font-size: 16px;
+                border-radius: 14px;
+            }
+
+            .back-btn {
+                padding: 12px 22px;
+                font-size: 14px;
+            }
+
+            .results-card, .references-card {
+                padding: 24px;
+                border-radius: 24px;
+            }
+        }
+
+        /* Smooth scrolling for the whole page */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading state animation */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        form:invalid .submit-btn {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        form:valid .submit-btn {
+            animation: scaleIn 0.3s ease-out;
+        }
+
+        /* Enhanced checkbox/radio group animations */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-group > *, .checkbox-group > * {
+            animation: fadeSlideUp 0.4s ease-out backwards;
+        }
+
+        .radio-group > *:nth-child(1), .checkbox-group > *:nth-child(1) { animation-delay: 0.05s; }
+        .radio-group > *:nth-child(2), .checkbox-group > *:nth-child(2) { animation-delay: 0.08s; }
+        .radio-group > *:nth-child(3), .checkbox-group > *:nth-child(3) { animation-delay: 0.11s; }
+        .radio-group > *:nth-child(4), .checkbox-group > *:nth-child(4) { animation-delay: 0.14s; }
+        .radio-group > *:nth-child(5), .checkbox-group > *:nth-child(5) { animation-delay: 0.17s; }
+        .radio-group > *:nth-child(6), .checkbox-group > *:nth-child(6) { animation-delay: 0.20s; }
+        .radio-group > *:nth-child(7), .checkbox-group > *:nth-child(7) { animation-delay: 0.23s; }
+        .radio-group > *:nth-child(8), .checkbox-group > *:nth-child(8) { animation-delay: 0.26s; }
+
     </style>
 </head>
 <body>
@@ -21904,6 +23729,105 @@ def api_conversations():
             'conversations': [],
             'error': 'Failed to fetch conversations'
         }), 500
+
+
+# [PHASE 5] Delete conversation endpoint
+@app.route("/api/conversations/<conversation_id>", methods=['DELETE'])
+def delete_conversation(conversation_id):
+    """
+    Delete a conversation permanently.
+    Returns success status.
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return jsonify({
+            'success': False,
+            'error': 'Chat history feature is disabled'
+        }), 400
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Verify ownership before deleting
+        conversation = database.get_conversation(conversation_id)
+        if not conversation:
+            return jsonify({
+                'success': False,
+                'error': 'Conversation not found'
+            }), 404
+
+        if conversation.get('user_session_id') != user_session_id:
+            return jsonify({
+                'success': False,
+                'error': 'Unauthorized'
+            }), 403
+
+        # Delete the conversation
+        if database.delete_conversation(conversation_id, hard_delete=False):
+            print(f"[CHAT_HISTORY] Deleted conversation: {conversation_id}")
+            return jsonify({
+                'success': True,
+                'message': 'Conversation deleted successfully'
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Failed to delete conversation'
+            }), 500
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error deleting conversation: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to delete conversation'
+        }), 500
+
+
+# [PHASE 5] Export conversation endpoint
+@app.route("/api/conversations/<conversation_id>/export")
+@csrf.exempt  # GET endpoint, no state changes
+def export_conversation(conversation_id):
+    """
+    Export a conversation with all messages and references.
+    Returns conversation data in JSON format.
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return jsonify({
+            'success': False,
+            'error': 'Chat history feature is disabled'
+        }), 400
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Fetch conversation
+        conversation = database.get_conversation(conversation_id)
+        if not conversation:
+            return jsonify({
+                'success': False,
+                'error': 'Conversation not found'
+            }), 404
+
+        # Verify ownership
+        if conversation.get('user_session_id') != user_session_id:
+            return jsonify({
+                'success': False,
+                'error': 'Unauthorized'
+            }), 403
+
+        return jsonify({
+            'success': True,
+            'conversation': conversation
+        }), 200
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error exporting conversation: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to export conversation'
+        }), 500
+
 
 @app.route("/load-conversation/<conversation_id>")
 def load_conversation(conversation_id):
