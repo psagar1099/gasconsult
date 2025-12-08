@@ -2013,46 +2013,52 @@ PREOP_HTML = """<!DOCTYPE html>
         /* ====== Chat History Sidebar (Phase 3) ====== */
         .history-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 1001;
-            background: var(--white);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .history-toggle:hover {
-            background: var(--gray-50);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .history-toggle:active {
+            transform: translateY(0);
         }
 
         .history-toggle svg {
             width: 24px;
             height: 24px;
-            color: var(--gray-700);
+            color: white;
+            stroke-width: 2.5;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px;
+            width: 360px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .history-sidebar.open {
@@ -2060,94 +2066,158 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 28px 24px 20px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: none;
         }
 
         .history-sidebar-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--gray-900);
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
         }
 
         .history-close-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             cursor: pointer;
-            padding: 4px;
-            color: var(--gray-500);
+            padding: 8px;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
 
         .history-close-btn:hover {
-            color: var(--gray-700);
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .history-close-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.5;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 16px;
         }
 
         .history-conversation-item {
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1.5px solid transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-conversation-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
         }
 
         .history-conversation-item:hover {
-            background: var(--blue-50);
-            border-color: var(--blue-200);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .history-conversation-item:hover::before {
+            width: 4px;
         }
 
         .history-conversation-item.active {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
+        }
+
+        .history-conversation-item.active::before {
+            width: 4px;
         }
 
         .history-conversation-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-900);
-            margin-bottom: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            position: relative;
+            padding-left: 0;
+            transition: padding-left 0.3s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-title {
+            padding-left: 8px;
         }
 
         .history-conversation-meta {
             font-size: 12px;
-            color: var(--gray-500);
+            color: #718096;
             display: flex;
-            gap: 12px;
+            gap: 14px;
+            align-items: center;
+            position: relative;
+            padding-left: 0;
+            transition: padding-left 0.3s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-meta {
+            padding-left: 8px;
+        }
+
+        .history-conversation-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .history-empty-state {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
-            color: var(--gray-500);
+            color: #a0aec0;
         }
 
         .history-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            opacity: 0.5;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            opacity: 0.4;
+        }
+
+        .history-empty-state p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #718096;
         }
 
         .history-loading {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
-            color: var(--gray-500);
+            color: #718096;
+            font-size: 15px;
         }
 
         /* Overlay when sidebar is open */
@@ -2157,7 +2227,8 @@ PREOP_HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -2169,15 +2240,39 @@ PREOP_HTML = """<!DOCTYPE html>
             pointer-events: all;
         }
 
+        /* Custom scrollbar for conversation list */
+        .history-conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.4);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
-                width: 280px;
+                width: 320px;
             }
 
             .history-toggle {
-                top: 16px;
-                left: 16px;
+                top: 20px;
+                left: 20px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .history-sidebar-header {
+                padding: 24px 20px 16px 20px;
             }
         }
     </style>
@@ -2188,7 +2283,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
         </svg>
     </button>
 
@@ -4654,46 +4749,52 @@ HTML = """<!DOCTYPE html>
         /* ====== Chat History Sidebar (Phase 3) ====== */
         .history-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 24px;
+            left: 24px;
             z-index: 1001;
-            background: var(--white);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .history-toggle:hover {
-            background: var(--gray-50);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        }
+
+        .history-toggle:active {
+            transform: translateY(0);
         }
 
         .history-toggle svg {
             width: 24px;
             height: 24px;
-            color: var(--gray-700);
+            color: white;
+            stroke-width: 2.5;
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px;
+            width: 360px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(to bottom, #fafafa 0%, #ffffff 100%);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .history-sidebar.open {
@@ -4701,94 +4802,158 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 28px 24px 20px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: none;
         }
 
         .history-sidebar-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--gray-900);
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -0.02em;
         }
 
         .history-close-btn {
-            background: none;
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             cursor: pointer;
-            padding: 4px;
-            color: var(--gray-500);
+            padding: 8px;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
         }
 
         .history-close-btn:hover {
-            color: var(--gray-700);
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .history-close-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.5;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 16px;
         }
 
         .history-conversation-item {
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
+            padding: 16px 18px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1.5px solid transparent;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-conversation-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
         }
 
         .history-conversation-item:hover {
-            background: var(--blue-50);
-            border-color: var(--blue-200);
+            transform: translateX(4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .history-conversation-item:hover::before {
+            width: 4px;
         }
 
         .history-conversation-item.active {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.12);
+        }
+
+        .history-conversation-item.active::before {
+            width: 4px;
         }
 
         .history-conversation-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-900);
-            margin-bottom: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a202c;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            position: relative;
+            padding-left: 0;
+            transition: padding-left 0.3s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-title {
+            padding-left: 8px;
         }
 
         .history-conversation-meta {
             font-size: 12px;
-            color: var(--gray-500);
+            color: #718096;
             display: flex;
-            gap: 12px;
+            gap: 14px;
+            align-items: center;
+            position: relative;
+            padding-left: 0;
+            transition: padding-left 0.3s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-meta {
+            padding-left: 8px;
+        }
+
+        .history-conversation-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .history-empty-state {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
-            color: var(--gray-500);
+            color: #a0aec0;
         }
 
         .history-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            opacity: 0.5;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            opacity: 0.4;
+        }
+
+        .history-empty-state p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #718096;
         }
 
         .history-loading {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
-            color: var(--gray-500);
+            color: #718096;
+            font-size: 15px;
         }
 
         /* Overlay when sidebar is open */
@@ -4798,7 +4963,8 @@ HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(2px);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -4810,15 +4976,39 @@ HTML = """<!DOCTYPE html>
             pointer-events: all;
         }
 
+        /* Custom scrollbar for conversation list */
+        .history-conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.2);
+            border-radius: 10px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.4);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
-                width: 280px;
+                width: 320px;
             }
 
             .history-toggle {
-                top: 16px;
-                left: 16px;
+                top: 20px;
+                left: 20px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .history-sidebar-header {
+                padding: 24px 20px 16px 20px;
             }
         }
 
@@ -4833,7 +5023,7 @@ HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
         </svg>
     </button>
 
@@ -10190,7 +10380,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
         </svg>
     </button>
 
@@ -11724,7 +11914,7 @@ CRISIS_HTML = """<!DOCTYPE html>
     <!-- [PHASE 3] Chat History Sidebar -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
         </svg>
     </button>
 
