@@ -154,6 +154,75 @@ def strip_markdown_code_fences(content):
     content = re.sub(r'\n?```\s*$', '', content)
     return content
 
+# ====== Chat History Helper Functions (Phase 2) ======
+
+def safe_db_save_conversation(conversation_id, user_session_id, title):
+    """
+    Safely save a conversation to the database.
+    If database is disabled or save fails, logs error but doesn't break app.
+
+    Returns:
+        bool: True if saved successfully, False otherwise
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return False
+
+    try:
+        return database.save_conversation(conversation_id, user_session_id, title)
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Failed to save conversation: {e}")
+        return False
+
+
+def safe_db_save_message(conversation_id, role, content, references=None, num_papers=0, evidence_strength=None):
+    """
+    Safely save a message to the database.
+    If database is disabled or save fails, logs error but doesn't break app.
+
+    Returns:
+        bool: True if saved successfully, False otherwise
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return False
+
+    try:
+        return database.save_message(
+            conversation_id=conversation_id,
+            role=role,
+            content=content,
+            references=references,
+            num_papers=num_papers,
+            evidence_strength=evidence_strength
+        )
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Failed to save message: {e}")
+        return False
+
+
+def get_or_create_conversation_id():
+    """
+    Get existing conversation ID from session, or create a new one.
+    Also ensures user has a persistent session ID for tracking.
+
+    Returns:
+        tuple: (conversation_id, is_new_conversation)
+    """
+    # Ensure user has a persistent session ID (for associating conversations)
+    if 'persistent_session_id' not in session:
+        session['persistent_session_id'] = str(uuid.uuid4())
+        session.modified = True
+
+    # Check if conversation already exists in session
+    if 'conversation_id' in session:
+        return session['conversation_id'], False
+
+    # Create new conversation ID
+    conversation_id = str(uuid.uuid4())
+    session['conversation_id'] = conversation_id
+    session.modified = True
+
+    return conversation_id, True
+
 from datetime import datetime, timedelta
 
 # ====== Security Functions ======
@@ -17521,6 +17590,23 @@ def stream():
             print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
             print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
+            # [PHASE 2] Save assistant response to database (non-blocking)
+            conversation_id = session.get('conversation_id')
+            if conversation_id:
+                if safe_db_save_message(
+                    conversation_id=conversation_id,
+                    role="assistant",
+                    content=cleaned_response,
+                    references=refs,
+                    num_papers=num_papers,
+                    evidence_strength=evidence_strength
+                ):
+                    print(f"[CHAT_HISTORY] Saved assistant response to database")
+                else:
+                    print(f"[CHAT_HISTORY] Assistant response not saved to database (feature disabled or error)")
+            else:
+                print(f"[CHAT_HISTORY] No conversation_id in session, skipping database save")
+
             # Send references with evidence strength
             yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
 
@@ -17623,6 +17709,8 @@ def index():
         session.pop('messages', None)
         session.pop('chat_active', None)
         session.pop('conversation_topic', None)
+        # [PHASE 2] Clear conversation ID to start a new conversation
+        session.pop('conversation_id', None)
         session.modified = True
         return redirect(url_for('index'))
 
@@ -17668,6 +17756,9 @@ def index():
             # Check if this is the first message (from homepage)
             is_first_message = len(session['messages']) == 0
 
+            # [PHASE 2] Get or create conversation ID for database persistence
+            conversation_id, is_new_conversation = get_or_create_conversation_id()
+
             # Set conversation topic on first message (for context in future vague queries)
             if is_first_message and not session['conversation_topic']:
                 # Extract main topic from first query (simple keyword extraction)
@@ -17680,11 +17771,28 @@ def index():
                     session['conversation_topic'] = ' '.join(topic_words[:3])  # First 3 meaningful words
                     print(f"[DEBUG] Conversation topic set: {session['conversation_topic']}")
 
+            # [PHASE 2] If this is a new conversation, save it to database
+            if is_new_conversation:
+                # Generate conversation title from first query
+                conversation_title = database.generate_conversation_title(raw_query) if DATABASE_AVAILABLE else raw_query[:60]
+                user_session_id = session.get('persistent_session_id', 'anonymous')
+
+                if safe_db_save_conversation(conversation_id, user_session_id, conversation_title):
+                    print(f"[CHAT_HISTORY] Created new conversation in database: {conversation_id}")
+                else:
+                    print(f"[CHAT_HISTORY] Conversation not saved to database (feature disabled or error)")
+
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
             session['chat_active'] = True  # Set chat mode flag
             session.modified = True
             print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
+
+            # [PHASE 2] Save user message to database (non-blocking)
+            if safe_db_save_message(conversation_id, "user", raw_query):
+                print(f"[CHAT_HISTORY] Saved user message to database")
+            else:
+                print(f"[CHAT_HISTORY] User message not saved to database (feature disabled or error)")
 
             # Check if this is a calculation request
             context_hint = None
@@ -17710,6 +17818,11 @@ def index():
                     "num_papers": 0
                 })
                 session.modified = True
+
+                # [PHASE 2] Save calculator result to database (non-blocking)
+                if safe_db_save_message(conversation_id, "assistant", calc_result, references=[], num_papers=0):
+                    print(f"[CHAT_HISTORY] Saved calculator result to database")
+
                 if is_ajax:
                     return jsonify({
                         'status': 'calculation',
@@ -18297,6 +18410,8 @@ def clear():
     session.pop('messages', None)
     session.pop('conversation_topic', None)
     session.pop('chat_active', None)  # Clear chat mode flag
+    # [PHASE 2] Clear conversation ID to start a new conversation
+    session.pop('conversation_id', None)
     session.modified = True  # Ensure session is saved
     response = redirect(url_for('index'))
     # Prevent caching to ensure fresh page load
@@ -18310,6 +18425,8 @@ def clear_chat():
     """Clear conversation messages but stay in active chat interface"""
     session.pop('messages', None)
     session.pop('conversation_topic', None)
+    # [PHASE 2] Clear conversation ID to start a new conversation
+    session.pop('conversation_id', None)
     session['chat_active'] = True  # Keep chat interface active
     session.modified = True  # Ensure session is saved
     response = redirect(url_for('index'))
