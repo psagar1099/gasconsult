@@ -18315,47 +18315,365 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informed Consent Generator - GasConsult.ai</title>
+    <meta name="description" content="AI-powered informed consent generator for anesthesia procedures with patient-specific risk stratification.">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 50%, #FAFBFF 100%);
-            min-height: 100vh;
-            color: #0F172A;
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
         }
-        .container {
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
             max-width: 900px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
+            width: 100%;
         }
+
         .header {
             text-align: center;
             margin-bottom: 40px;
         }
+
         h1 {
             font-size: 36px;
             font-weight: 800;
             margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
+
         .gradient {
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .subtitle {
             color: #64748B;
             font-size: 16px;
         }
+
         .card {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             margin-bottom: 24px;
         }
+
         .section-title {
             font-size: 20px;
             font-weight: 700;
@@ -18363,9 +18681,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             padding-bottom: 12px;
             border-bottom: 2px solid #DBEAFE;
         }
+
         .form-group {
             margin-bottom: 24px;
         }
+
         label {
             display: block;
             font-weight: 600;
@@ -18373,6 +18693,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             font-size: 14px;
             color: #334155;
         }
+
         input, select, textarea {
             width: 100%;
             padding: 12px 16px;
@@ -18382,20 +18703,24 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             font-family: inherit;
             transition: all 0.2s;
         }
+
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3B82F6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
+
         textarea {
             min-height: 100px;
             resize: vertical;
         }
+
         .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+
         .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
@@ -18405,254 +18730,364 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             cursor: pointer;
             transition: all 0.2s;
         }
+
         .radio-option:hover, .checkbox-option:hover {
             border-color: #3B82F6;
             background: #EFF6FF;
         }
+
         .radio-option input, .checkbox-option input {
             width: auto;
             margin-right: 12px;
+            cursor: pointer;
         }
+
         .submit-btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 24px;
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
+
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 10px 30px rgba(37,99,235,0.3);
         }
-        .divider {
-            height: 1px;
-            background: #E2E8F0;
-            margin: 32px 0;
-        }
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .results-header {
-            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-            padding: 40px 32px;
-            border-radius: 24px;
-            text-align: center;
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.9);
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s;
             margin-bottom: 24px;
         }
-        .results-content {
-            line-height: 1.8;
-        }
-        .reference-item {
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-        .reference-link {
+
+        .back-btn:hover {
+            border-color: #3B82F6;
             color: #2563EB;
-            text-decoration: none;
-            font-weight: 500;
+            background: #EFF6FF;
         }
-        .action-buttons {
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            gap: 12px;
-        }
-        .btn {
-            flex: 1;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 600;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
             text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
+            transition: color 0.2s ease;
         }
-        .btn-primary {
-            background: #2563EB;
-            color: white;
-            border: none;
+
+        .footer-link:hover {
+            color: var(--gray-700);
         }
-        .btn-secondary {
-            background: white;
-            color: #334155;
-            border: 1.5px solid #E2E8F0;
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            h1 { font-size: 42px; }
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
         }
-        @media (max-width: 640px) {
-            .input-row {
-                grid-template-columns: 1fr;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .main-content { padding: 140px 40px 80px; }
+            .card { padding: 40px; }
+            .footer { padding: 48px 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><span class="gradient">Informed Consent</span> Generator</h1>
-            <p class="subtitle">Patient-specific consent discussion with evidence-based risk information</p>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        {% if not summary %}
-        <div class="card">
-            <form method="POST" action="/informed-consent">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <main class="main-content">
+            {% if not summary %}
+            <!-- Assessment Form -->
+            <div class="header">
+                <h1><span class="gradient">Informed Consent Generator</span></h1>
+                <p class="subtitle">AI-powered informed consent discussion with patient-specific risk stratification</p>
+            </div>
 
-                <div class="section-title">Patient Information</div>
-                <div class="input-row">
-                    <div class="form-group">
-                        <label>Age (years)*</label>
-                        <input type="number" name="age" placeholder="50" required min="1" max="120">
-                    </div>
-                    <div class="form-group">
-                        <label>ASA Classification*</label>
-                        <select name="asa" required>
-                            <option value="">Select...</option>
-                            <option value="I">ASA I - Healthy</option>
-                            <option value="II">ASA II - Mild systemic disease</option>
-                            <option value="III">ASA III - Severe systemic disease</option>
-                            <option value="IV">ASA IV - Life-threatening disease</option>
-                            <option value="V">ASA V - Moribund</option>
-                        </select>
-                    </div>
-                </div>
+            <form method="POST" class="card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="divider"></div>
+                <div class="section-title">Anesthesia Information</div>
 
-                <div class="section-title">Anesthesia & Procedure</div>
                 <div class="form-group">
-                    <label>Anesthesia Type*</label>
+                    <label for="anesthesia_type">Anesthesia Type</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="anesthesia_type" value="General" required> General
+                            <input type="radio" name="anesthesia_type" value="General" required>
+                            <span>General Anesthesia</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="anesthesia_type" value="Regional/Neuraxial" required> Regional/Neuraxial
+                            <input type="radio" name="anesthesia_type" value="Regional">
+                            <span>Regional (Spinal/Epidural/Nerve Block)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="anesthesia_type" value="Sedation/MAC" required> Sedation/MAC
+                            <input type="radio" name="anesthesia_type" value="Sedation">
+                            <span>Monitored Anesthesia Care (Sedation)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="anesthesia_type" value="Local" required> Local
+                            <input type="radio" name="anesthesia_type" value="Local">
+                            <span>Local Anesthesia</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Surgical Procedure*</label>
-                    <input type="text" name="procedure" placeholder="e.g., Total knee arthroplasty" required>
+                    <label for="procedure">Surgical Procedure</label>
+                    <input type="text" id="procedure" name="procedure" placeholder="e.g., Total knee replacement" required>
                 </div>
 
-                <div class="divider"></div>
+                <div class="section-title">Patient Information</div>
 
-                <div class="section-title">Medical History</div>
                 <div class="form-group">
-                    <label>Comorbidities (select all that apply)</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Cardiac Disease"> Cardiac Disease
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Pulmonary Disease"> Pulmonary Disease
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Diabetes"> Diabetes
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Renal Disease"> Renal Disease
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Hepatic Disease"> Hepatic Disease
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="OSA"> OSA
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="comorbidities" value="Obesity"> Obesity
-                        </label>
-                    </div>
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
                 </div>
 
-                <div class="divider"></div>
+                <div class="form-group">
+                    <label for="asa_class">ASA Physical Status Classification</label>
+                    <select id="asa_class" name="asa_class" required>
+                        <option value="">Select ASA Class</option>
+                        <option value="I">ASA I - Healthy patient</option>
+                        <option value="II">ASA II - Mild systemic disease</option>
+                        <option value="III">ASA III - Severe systemic disease</option>
+                        <option value="IV">ASA IV - Severe disease, constant threat to life</option>
+                        <option value="V">ASA V - Moribund, not expected to survive</option>
+                    </select>
+                </div>
+
+                <div class="section-title">Comorbidities</div>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Cardiac Disease">
+                        <span>Cardiac Disease (CAD, CHF, Arrhythmias)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Pulmonary Disease">
+                        <span>Pulmonary Disease (COPD, Asthma)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Diabetes">
+                        <span>Diabetes Mellitus</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Renal Disease">
+                        <span>Renal Disease (CKD, Dialysis)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Hepatic Disease">
+                        <span>Hepatic Disease (Cirrhosis, Hepatitis)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="OSA">
+                        <span>Obstructive Sleep Apnea (OSA)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="comorbidities" value="Obesity">
+                        <span>Obesity (BMI > 30)</span>
+                    </label>
+                </div>
 
                 <div class="section-title">Special Considerations</div>
-                <div class="form-group">
-                    <label>Select all that apply</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Pregnancy"> Pregnancy
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Malignant Hyperthermia History"> Malignant Hyperthermia History
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Difficult Airway"> Difficult Airway
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Latex Allergy"> Latex Allergy
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Chronic Pain"> Chronic Pain
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="special_considerations" value="Anticoagulation"> Anticoagulation
-                        </label>
-                    </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Pregnancy">
+                        <span>Pregnancy</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Malignant Hyperthermia History">
+                        <span>Personal/Family History of Malignant Hyperthermia</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Difficult Airway">
+                        <span>Known/Suspected Difficult Airway</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Latex Allergy">
+                        <span>Latex Allergy</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Chronic Pain">
+                        <span>Chronic Pain/Opioid Use</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_considerations" value="Anticoagulation">
+                        <span>Anticoagulation Therapy</span>
+                    </label>
                 </div>
 
                 <div class="form-group">
-                    <label>Additional Notes</label>
-                    <textarea name="notes" placeholder="Any additional patient concerns, questions, or special circumstances..."></textarea>
+                    <label for="additional_notes">Additional Notes (Optional)</label>
+                    <textarea id="additional_notes" name="additional_notes" placeholder="Any other relevant information..."></textarea>
                 </div>
 
                 <button type="submit" class="submit-btn">Generate Consent Discussion</button>
             </form>
-        </div>
 
-        {% else %}
-        <div class="results-header">
-            <h2><span class="gradient">Informed Consent</span> Discussion Guide</h2>
-            <p class="subtitle">Patient-specific consent discussion with evidence-based risk information</p>
-        </div>
+            {% else %}
+            <!-- Results -->
+            <a href="/informed-consent" class="back-btn">← New Assessment</a>
 
-        <div class="card">
-            <div class="results-content">
-                {{ summary|safe }}
+            <div class="header">
+                <h1><span class="gradient">Informed Consent Discussion</span></h1>
             </div>
-        </div>
 
-        {% if references %}
-        <div class="card">
-            <div class="section-title">Evidence-Based References</div>
-            {% for ref in references %}
-            <div class="reference-item">
-                <strong>[{{ loop.index }}]</strong>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" class="reference-link">
-                    {{ ref.title }}
-                </a>
-                <div style="font-size: 13px; color: #64748B; margin-top: 8px;">
-                    {{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}
+            <div class="card">
+                <div style="line-height: 1.8; color: #334155;">
+                    {{ summary|safe }}
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
-        <div class="action-buttons">
-            <a href="/informed-consent" class="btn btn-primary">New Consent</a>
-            <button onclick="window.print()" class="btn btn-secondary">Print/Save PDF</button>
-        </div>
-        {% endif %}
+            {% if references %}
+            <div class="card">
+                <div class="section-title">References</div>
+                <div style="line-height: 1.8;">
+                    {{ references|safe }}
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 """
@@ -18664,47 +19099,365 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Assessment - GasConsult.ai</title>
+    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies and ASA guidelines.">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 50%, #FAFBFF 100%);
-            min-height: 100vh;
-            color: #0F172A;
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
         }
-        .container {
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--gray-900);
+        }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .nav-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .nav-dropdown-toggle {
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .nav-dropdown-menu.show {
+            display: block;
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-dropdown-link.active {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .mobile-menu-btn:hover {
+            background: rgba(0,0,0,0.04);
+        }
+
+        .mobile-menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
+            z-index: 99;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu-link {
+            padding: 14px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 100px 20px 40px;
             max-width: 900px;
             margin: 0 auto;
-            padding: 100px 20px 40px;
+            width: 100%;
         }
+
         .header {
             text-align: center;
             margin-bottom: 40px;
         }
+
         h1 {
             font-size: 36px;
             font-weight: 800;
             margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
+
         .gradient {
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+
         .subtitle {
             color: #64748B;
             font-size: 16px;
         }
+
         .card {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             margin-bottom: 24px;
         }
+
         .section-title {
             font-size: 20px;
             font-weight: 700;
@@ -18712,9 +19465,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding-bottom: 12px;
             border-bottom: 2px solid #DBEAFE;
         }
+
         .form-group {
             margin-bottom: 24px;
         }
+
         label {
             display: block;
             font-weight: 600;
@@ -18722,6 +19477,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-size: 14px;
             color: #334155;
         }
+
         input, select, textarea {
             width: 100%;
             padding: 12px 16px;
@@ -18731,20 +19487,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-family: inherit;
             transition: all 0.2s;
         }
+
         input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #3B82F6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
         }
+
         textarea {
             min-height: 100px;
             resize: vertical;
         }
+
         .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
+
         .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
@@ -18754,286 +19514,407 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             cursor: pointer;
             transition: all 0.2s;
         }
+
         .radio-option:hover, .checkbox-option:hover {
             border-color: #3B82F6;
             background: #EFF6FF;
         }
+
         .radio-option input, .checkbox-option input {
             width: auto;
             margin-right: 12px;
+            cursor: pointer;
         }
+
         .submit-btn {
             width: 100%;
-            padding: 16px;
+            padding: 16px 24px;
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
+
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            box-shadow: 0 10px 30px rgba(37,99,235,0.3);
         }
-        .divider {
-            height: 1px;
-            background: #E2E8F0;
-            margin: 32px 0;
-        }
-        .input-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        .results-header {
-            background: linear-gradient(135deg, #EFF6FF, #DBEAFE);
-            padding: 40px 32px;
-            border-radius: 24px;
-            text-align: center;
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.9);
+            border: 1.5px solid #E2E8F0;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s;
             margin-bottom: 24px;
         }
-        .results-content {
-            line-height: 1.8;
-        }
-        .reference-item {
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-        .reference-link {
+
+        .back-btn:hover {
+            border-color: #3B82F6;
             color: #2563EB;
-            text-decoration: none;
-            font-weight: 500;
+            background: #EFF6FF;
         }
-        .action-buttons {
+
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            gap: 12px;
-        }
-        .btn {
-            flex: 1;
-            padding: 14px 24px;
-            border-radius: 12px;
-            font-weight: 600;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
             text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
             text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
+            transition: color 0.2s ease;
         }
-        .btn-primary {
-            background: #2563EB;
-            color: white;
-            border: none;
+
+        .footer-link:hover {
+            color: var(--gray-700);
         }
-        .btn-secondary {
-            background: white;
-            color: #334155;
-            border: 1.5px solid #E2E8F0;
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+            h1 { font-size: 42px; }
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
         }
-        @media (max-width: 640px) {
-            .input-row {
-                grid-template-columns: 1fr;
-            }
-            .action-buttons {
-                flex-direction: column;
-            }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .main-content { padding: 140px 40px 80px; }
+            .card { padding: 40px; }
+            .footer { padding: 48px 40px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><span class="gradient">Difficult Airway</span> Assessment</h1>
-            <p class="subtitle">AI-powered risk stratification with evidence-based management</p>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <div class="page">
+        <nav class="nav">
+            <div class="nav-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg viewBox="0 0 120 40" fill="none">
+                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
+                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
+                    </div>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
         </div>
 
-        {% if not summary %}
-        <div class="card">
-            <form method="POST" action="/difficult-airway">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <main class="main-content">
+            {% if not summary %}
+            <!-- Assessment Form -->
+            <div class="header">
+                <h1><span class="gradient">Difficult Airway Assessment</span></h1>
+                <p class="subtitle">AI-powered difficult airway risk stratification with evidence-based management strategies</p>
+            </div>
 
-                <div class="section-title">Patient Demographics</div>
-                <div class="input-row">
-                    <div class="form-group">
-                        <label>Age (years)*</label>
-                        <input type="number" name="age" placeholder="50" required min="1" max="120">
-                    </div>
-                    <div class="form-group">
-                        <label>BMI (kg/m²)*</label>
-                        <input type="number" name="bmi" placeholder="25" required min="10" max="100" step="0.1">
-                    </div>
-                </div>
+            <form method="POST" class="card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="divider"></div>
+                <div class="section-title">Physical Examination</div>
 
-                <div class="section-title">Airway Examination</div>
                 <div class="form-group">
-                    <label>Mallampati Classification*</label>
+                    <label for="mallampati">Mallampati Classification</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="mallampati" value="I" required> Class I
+                            <input type="radio" name="mallampati" value="I" required>
+                            <span>Class I - Full visibility of tonsils, uvula, soft palate</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="mallampati" value="II" required> Class II
+                            <input type="radio" name="mallampati" value="II">
+                            <span>Class II - Uvula, soft palate visible</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="mallampati" value="III" required> Class III
+                            <input type="radio" name="mallampati" value="III">
+                            <span>Class III - Only soft palate visible</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="mallampati" value="IV" required> Class IV
+                            <input type="radio" name="mallampati" value="IV">
+                            <span>Class IV - Only hard palate visible</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Thyromental Distance*</label>
+                    <label for="thyromental">Thyromental Distance</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="thyromental" value="<6cm" required> &lt;6 cm
+                            <input type="radio" name="thyromental" value=">6.5cm" required>
+                            <span>> 6.5 cm (Normal)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="thyromental" value="6-6.5cm" required> 6-6.5 cm
+                            <input type="radio" name="thyromental" value="6-6.5cm">
+                            <span>6-6.5 cm (Borderline)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="thyromental" value=">6.5cm" required> &gt;6.5 cm
+                            <input type="radio" name="thyromental" value="<6cm">
+                            <span>< 6 cm (Concerning)</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Mouth Opening*</label>
+                    <label for="mouth_opening">Mouth Opening</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value="<3cm" required> &lt;3 cm
+                            <input type="radio" name="mouth_opening" value=">4cm" required>
+                            <span>> 4 cm (Normal)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value="3-4cm" required> 3-4 cm
+                            <input type="radio" name="mouth_opening" value="3-4cm">
+                            <span>3-4 cm (Borderline)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value=">4cm" required> &gt;4 cm
+                            <input type="radio" name="mouth_opening" value="<3cm">
+                            <span>< 3 cm (Limited)</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Neck Extension*</label>
+                    <label for="neck_extension">Neck Extension</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Limited" required> Limited
+                            <input type="radio" name="neck_extension" value="Normal" required>
+                            <span>Normal (> 35°)</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Moderate" required> Moderate
+                            <input type="radio" name="neck_extension" value="Moderate">
+                            <span>Moderate Limitation</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Normal" required> Normal
+                            <input type="radio" name="neck_extension" value="Limited">
+                            <span>Severe Limitation</span>
                         </label>
                     </div>
                 </div>
 
-                <div class="divider"></div>
+                <div class="section-title">Patient Information</div>
+
+                <div class="form-group">
+                    <label for="bmi">BMI (Body Mass Index)</label>
+                    <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="80" placeholder="e.g., 27.5" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
+                </div>
 
                 <div class="section-title">Risk Factors</div>
-                <div class="form-group">
-                    <label>Select all that apply</label>
-                    <div class="checkbox-group">
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation"> Previous Difficult Intubation
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="OSA"> OSA
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Beard"> Beard
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Prominent Incisors"> Prominent Incisors
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Short Neck"> Short Neck
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Large Tongue"> Large Tongue
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="Facial Trauma"> Facial Trauma
-                        </label>
-                        <label class="checkbox-option">
-                            <input type="checkbox" name="risk_factors" value="C-Spine Pathology"> C-Spine Pathology
-                        </label>
-                    </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation">
+                        <span>Previous Difficult Intubation</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="OSA">
+                        <span>Obstructive Sleep Apnea (OSA)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Beard">
+                        <span>Beard/Facial Hair</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Prominent Incisors">
+                        <span>Prominent Incisors/Buck Teeth</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Short Neck">
+                        <span>Short/Thick Neck</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Large Tongue">
+                        <span>Large Tongue (Macroglossia)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="Facial Trauma">
+                        <span>Facial Trauma/Abnormalities</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="risk_factors" value="C-Spine Pathology">
+                        <span>C-Spine Pathology/Limited Mobility</span>
+                    </label>
                 </div>
 
-                <div class="divider"></div>
+                <div class="section-title">Case Details</div>
 
-                <div class="section-title">Procedure Information</div>
                 <div class="form-group">
-                    <label>Planned Procedure*</label>
-                    <input type="text" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
+                    <label for="procedure">Surgical Procedure</label>
+                    <input type="text" id="procedure" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Case Type*</label>
+                    <label for="case_type">Case Type</label>
                     <div class="radio-group">
                         <label class="radio-option">
-                            <input type="radio" name="case_type" value="Elective" required> Elective
+                            <input type="radio" name="case_type" value="Elective" required>
+                            <span>Elective</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="case_type" value="Urgent" required> Urgent
+                            <input type="radio" name="case_type" value="Urgent">
+                            <span>Urgent</span>
                         </label>
                         <label class="radio-option">
-                            <input type="radio" name="case_type" value="Emergency" required> Emergency
+                            <input type="radio" name="case_type" value="Emergency">
+                            <span>Emergency</span>
                         </label>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Additional Notes</label>
-                    <textarea name="notes" placeholder="Any additional airway concerns or special considerations..."></textarea>
+                    <label for="additional_notes">Additional Notes (Optional)</label>
+                    <textarea id="additional_notes" name="additional_notes" placeholder="Any other relevant findings..."></textarea>
                 </div>
 
                 <button type="submit" class="submit-btn">Generate Assessment</button>
             </form>
-        </div>
 
-        {% else %}
-        <div class="results-header">
-            <h2><span class="gradient">Difficult Airway</span> Assessment Complete</h2>
-            <p class="subtitle">Evidence-based risk stratification and management recommendations</p>
-        </div>
+            {% else %}
+            <!-- Results -->
+            <a href="/difficult-airway" class="back-btn">← New Assessment</a>
 
-        <div class="card">
-            <div class="results-content">
-                {{ summary|safe }}
+            <div class="header">
+                <h1><span class="gradient">Difficult Airway Assessment</span></h1>
             </div>
-        </div>
 
-        {% if references %}
-        <div class="card">
-            <div class="section-title">Evidence-Based References</div>
-            {% for ref in references %}
-            <div class="reference-item">
-                <strong>[{{ loop.index }}]</strong>
-                <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" class="reference-link">
-                    {{ ref.title }}
-                </a>
-                <div style="font-size: 13px; color: #64748B; margin-top: 8px;">
-                    {{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}
+            <div class="card">
+                <div style="line-height: 1.8; color: #334155;">
+                    {{ summary|safe }}
                 </div>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
-        <div class="action-buttons">
-            <a href="/difficult-airway" class="btn btn-primary">New Assessment</a>
-            <button onclick="window.print()" class="btn btn-secondary">Print/Save PDF</button>
-        </div>
-        {% endif %}
+            {% if references %}
+            <div class="card">
+                <div class="section-title">References</div>
+                <div style="line-height: 1.8;">
+                    {{ references|safe }}
+                </div>
+            </div>
+            {% endif %}
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
     </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function closeDropdown(e) {
+                if (!event.target.contains(e.target)) {
+                    menu.classList.remove('show');
+                    document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+    </script>
 </body>
 </html>
 """
