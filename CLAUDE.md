@@ -21,24 +21,27 @@
 | HTTP Client | httpx | 0.27.2 |
 | Security | bleach, Flask-WTF, Flask-Limiter | 6.1.0, 1.2.1, 3.5.0 |
 | Configuration | python-dotenv | 1.0.0 |
+| **Persistent Storage** | **SQLite 3** | **Built-in** |
 | Language | Python 3.x | - |
 
 ## Directory Structure
 
 ```
 gasconsult/
-├── app.py                  # Main Flask application (~8450 lines)
-├── requirements.txt        # Python dependencies
-├── .env.example           # Environment variable template
-├── README.md              # Project description
-├── CLAUDE.md              # This file - AI assistant guide
-├── CHANGELOG.md           # Version history and changes
-├── DEPLOYMENT_GUIDE.md    # Production deployment instructions
+├── app.py                             # Main Flask application (~8450 lines)
+├── database.py                        # Chat history database module (NEW - Phase 1)
+├── requirements.txt                   # Python dependencies
+├── .env.example                       # Environment variable template
+├── README.md                          # Project description
+├── CLAUDE.md                          # This file - AI assistant guide
+├── CHANGELOG.md                       # Version history and changes
+├── DEPLOYMENT_GUIDE.md                # Production deployment instructions
+├── CHAT_HISTORY_IMPLEMENTATION_PLAN.md # Chat history implementation plan
 └── static/
-    ├── favicon.svg        # Browser favicon
-    ├── logo.png           # Site logo
-    ├── manifest.json      # PWA manifest
-    └── sw.js             # Service worker
+    ├── favicon.svg                    # Browser favicon
+    ├── logo.png                       # Site logo
+    ├── manifest.json                  # PWA manifest
+    └── sw.js                          # Service worker
 ```
 
 ## Architecture
@@ -171,6 +174,8 @@ The original synonym expansion is now part of the comprehensive medical abbrevia
 | `LOG_LEVEL` | Optional | Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL |
 | `LOG_FILE` | Optional | Path to log file (empty = stdout only) |
 | `RATE_LIMIT` | Optional | Rate limit (default: "60 per minute") |
+| `ENABLE_CHAT_HISTORY` | Optional | Enable persistent chat history (`true`/`false`, default: false) |
+| `GASCONSULT_DB_DIR` | Optional | Database directory (default: /var/lib/gasconsult, fallback: ./) |
 
 **Setup:** Copy `.env.example` to `.env` and fill in your values.
 
@@ -302,17 +307,171 @@ Good test queries for the application:
 | `/health` | GET | Health check endpoint (monitoring) |
 | `/api/status` | GET | API status and endpoints list |
 
+## Chat History (Persistent Storage)
+
+### Overview
+
+**Status:** Phase 1 Complete (Database Setup)
+**Feature Flag:** `ENABLE_CHAT_HISTORY` (default: `false`)
+**Implementation Plan:** See `CHAT_HISTORY_IMPLEMENTATION_PLAN.md`
+
+The chat history feature provides persistent storage for conversations, preparing for future user accounts. The implementation follows a careful, incremental approach to avoid breaking existing chat functionality.
+
+### Architecture
+
+**Dual-Layer Storage:**
+- **Session (Temporary):** Active conversation stored in Redis-backed session (1 hour TTL)
+- **Database (Persistent):** All conversations stored in SQLite for long-term access
+
+**Database Location:**
+- **Production:** `/var/lib/gasconsult/gasconsult.db` (requires directory creation)
+- **Development:** `./gasconsult.db` (automatic fallback)
+
+### Database Schema
+
+**conversations table:**
+```sql
+- id (UUID primary key)
+- user_session_id (session ID, later: user_id)
+- title (auto-generated from first query)
+- created_at, updated_at
+- message_count
+- is_active (soft delete support)
+```
+
+**messages table:**
+```sql
+- id (UUID primary key)
+- conversation_id (foreign key)
+- role (user/assistant)
+- content
+- paper_references (JSON array)
+- num_papers, evidence_strength
+- created_at
+```
+
+### Phase 1: Database Setup (COMPLETED ✅)
+
+**What's Implemented:**
+- ✅ `database.py` module with full CRUD operations
+- ✅ SQLite database initialization with indexes
+- ✅ Feature flag (`ENABLE_CHAT_HISTORY`)
+- ✅ Non-breaking integration (app works if database fails)
+- ✅ Comprehensive error handling
+
+**What's NOT Changed:**
+- ❌ No UI changes (chat works exactly as before)
+- ❌ Data not saved to database yet (session-only for now)
+- ❌ No history viewing features
+
+**Safety Guarantees:**
+- Database failures don't break chat functionality
+- Feature can be disabled via environment variable
+- All database operations are wrapped in try/except
+- Session-based chat continues working independently
+
+### Next Phases (Planned)
+
+**Phase 2:** Silent Data Persistence
+- Save messages to database in background
+- No UI changes yet
+- Verify data integrity
+
+**Phase 3:** History Sidebar UI
+- Add conversation list sidebar
+- Display past conversations
+- Current chat unaffected
+
+**Phase 4:** Load Previous Conversations
+- Click to load old conversations
+- Continue old conversations
+- Careful session management
+
+**Phase 5:** Advanced Features
+- Search conversations
+- Delete/export conversations
+- Share conversations
+
+### Database Module API
+
+**Available Functions in `database.py`:**
+
+```python
+# Initialization
+init_db() -> bool
+
+# Conversations
+save_conversation(id, user_session_id, title) -> bool
+get_conversations(user_session_id, limit, offset) -> List[Dict]
+get_conversation(conversation_id) -> Dict
+delete_conversation(conversation_id, hard_delete=False) -> bool
+update_conversation_title(conversation_id, new_title) -> bool
+search_conversations(user_session_id, search_query) -> List[Dict]
+
+# Messages
+save_message(conversation_id, role, content, references, num_papers, evidence_strength) -> bool
+
+# Utilities
+generate_conversation_title(first_query) -> str
+get_database_stats() -> Dict
+```
+
+### Testing
+
+**Independent Testing:**
+```bash
+# Test database module independently
+python database.py
+```
+
+**Feature Toggle:**
+```bash
+# Enable chat history
+export ENABLE_CHAT_HISTORY=true
+
+# Disable chat history (default)
+export ENABLE_CHAT_HISTORY=false
+```
+
+### Production Deployment
+
+**Database Directory Setup:**
+```bash
+# Create production database directory
+sudo mkdir -p /var/lib/gasconsult
+sudo chown www-data:www-data /var/lib/gasconsult
+sudo chmod 755 /var/lib/gasconsult
+```
+
+**Render Configuration:**
+Set environment variable in Render dashboard:
+```
+ENABLE_CHAT_HISTORY=true
+GASCONSULT_DB_DIR=/var/lib/gasconsult
+```
+
+### Future: User Accounts
+
+When ready to add user accounts, migration is simple:
+1. Add `user_id` column to `conversations` table
+2. Replace `user_session_id` with `current_user.id`
+3. Add authentication (Flask-Login recommended)
+
+The database schema is already designed for this transition.
+
 ### Future Improvements
 
 - ✅ ~~Move Entrez credentials to environment variables~~ (Completed)
 - ✅ ~~Add input sanitization before rendering~~ (Completed)
 - ✅ ~~Add logging for debugging~~ (Completed)
 - ✅ ~~Consider rate limiting~~ (Completed)
+- ✅ ~~Persistent chat history - Phase 1~~ (Completed)
+- ⬜ Persistent chat history - Phase 2-5 (In Progress)
 - ⬜ Implement caching for repeated PubMed queries (Redis)
 - ⬜ Add automated testing suite
 - ⬜ Set up CI/CD pipeline
 - ⬜ Enhanced medical disclaimers with acknowledgment
-- ⬜ User accounts and saved queries (optional)
+- ⬜ User accounts and saved queries
 - ⬜ Mobile app (optional)
 
 ## Git Workflow

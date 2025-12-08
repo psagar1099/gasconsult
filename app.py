@@ -15,7 +15,16 @@ import bleach
 import redis
 import hashlib
 import datetime
+import logging
 from dotenv import load_dotenv
+
+# Import database module for persistent chat history (Phase 1)
+try:
+    import database
+    DATABASE_AVAILABLE = True
+except ImportError as e:
+    DATABASE_AVAILABLE = False
+    print(f"[WARNING] Database module not available: {e}")
 
 # Load environment variables from .env file
 load_dotenv()
@@ -73,6 +82,33 @@ Entrez.email = os.getenv("ENTREZ_EMAIL", "your-email@example.com")
 Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# ====== Chat History Database (Phase 1: Setup Only) ======
+# Initialize persistent chat history database if enabled
+# This is completely non-breaking - if database fails, app continues with session-only storage
+CHAT_HISTORY_ENABLED = os.getenv('ENABLE_CHAT_HISTORY', 'false').lower() == 'true'
+DATABASE_INITIALIZED = False
+
+if CHAT_HISTORY_ENABLED and DATABASE_AVAILABLE:
+    try:
+        print("[CHAT_HISTORY] Feature flag enabled, initializing database...")
+        if database.init_db():
+            DATABASE_INITIALIZED = True
+            print(f"[CHAT_HISTORY] Database initialized successfully at {database.DB_PATH}")
+            # Log database stats
+            stats = database.get_database_stats()
+            print(f"[CHAT_HISTORY] Database stats: {stats.get('total_conversations', 0)} conversations, "
+                  f"{stats.get('total_messages', 0)} messages")
+        else:
+            print("[CHAT_HISTORY] Database initialization failed, continuing with session-only storage")
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Database initialization error: {e}")
+        print("[CHAT_HISTORY] Continuing with session-only storage (no impact on functionality)")
+        DATABASE_INITIALIZED = False
+elif CHAT_HISTORY_ENABLED and not DATABASE_AVAILABLE:
+    print("[CHAT_HISTORY] Feature enabled but database module not available")
+else:
+    print("[CHAT_HISTORY] Feature disabled via ENABLE_CHAT_HISTORY environment variable")
 
 # ====== Data Storage ======
 # Simple in-memory storage for bookmarks and shared links
