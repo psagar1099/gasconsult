@@ -2258,6 +2258,187 @@ PREOP_HTML = """<!DOCTYPE html>
             background: rgba(102, 126, 234, 0.4);
         }
 
+        /* [PHASE 5] Search Bar */
+        .history-search-container {
+            padding: 16px;
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .history-search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1.5px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1a202c;
+            background: #fafafa;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .history-search-input:focus {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .history-search-input::placeholder {
+            color: #a0aec0;
+        }
+
+        .history-search-icon {
+            position: absolute;
+            left: 28px;
+            top: 28px;
+            width: 18px;
+            height: 18px;
+            color: #718096;
+            pointer-events: none;
+        }
+
+        /* [PHASE 5] Conversation Actions */
+        .history-conversation-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-actions {
+            opacity: 1;
+        }
+
+        .history-action-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .history-action-btn-export {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .history-action-btn-export:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .history-action-btn-copy {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .history-action-btn-copy:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .history-action-btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .history-action-btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* [PHASE 5] Delete Confirmation Modal */
+        .history-delete-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            display: none;
+        }
+
+        .history-delete-modal.visible {
+            display: block;
+        }
+
+        .history-delete-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+        }
+
+        .history-delete-modal-overlay.visible {
+            display: block;
+        }
+
+        .history-delete-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+        }
+
+        .history-delete-modal-message {
+            font-size: 15px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .history-delete-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .history-modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .history-modal-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .history-modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .history-modal-btn-confirm {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .history-modal-btn-confirm:hover {
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
@@ -2298,10 +2479,38 @@ PREOP_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -2767,9 +2976,26 @@ PREOP_HTML = """<!DOCTYPE html>
                 }
             }
 
-            // Render conversations list
-            function renderConversations() {
-                conversationsList.innerHTML = conversationsData.map(conv => {
+            // [PHASE 5] Render conversations list with action buttons
+            function renderConversations(filterText = '') {
+                // Filter conversations if search text provided
+                const filtered = conversationsData.filter(conv => {
+                    if (!filterText) return true;
+                    const searchLower = filterText.toLowerCase();
+                    return conv.title.toLowerCase().includes(searchLower);
+                });
+
+                if (filtered.length === 0) {
+                    conversationsList.innerHTML = `
+                        <div class="history-empty-state">
+                            <p>No conversations found</p>
+                            <p style="font-size: 11px; margin-top: 8px;">Try a different search term</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                conversationsList.innerHTML = filtered.map(conv => {
                     const isActive = conv.id === currentConversationId;
                     const date = new Date(conv.updated_at || conv.created_at);
                     const timeAgo = formatTimeAgo(date);
@@ -2785,19 +3011,60 @@ PREOP_HTML = """<!DOCTYPE html>
                                 <span>${timeAgo}</span>
                                 <span>${conv.message_count || 0} messages</span>
                             </div>
+                            <div class="history-conversation-actions">
+                                <button class="history-action-btn history-action-btn-export" data-action="export" data-id="${conv.id}" title="Export">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Export
+                                </button>
+                                <button class="history-action-btn history-action-btn-copy" data-action="copy" data-id="${conv.id}" title="Copy">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    Copy
+                                </button>
+                                <button class="history-action-btn history-action-btn-delete" data-action="delete" data-id="${conv.id}" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     `;
                 }).join('');
 
                 // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
-                    item.addEventListener('click', function() {
+                    item.addEventListener('click', function(e) {
+                        // Don't navigate if clicking on action buttons
+                        if (e.target.closest('.history-action-btn')) {
+                            return;
+                        }
+
                         const conversationId = this.dataset.conversationId;
                         console.log('Loading conversation:', conversationId);
 
                         // Navigate to load-conversation route
-                        // This will safely clear session and load the conversation
                         window.location.href = '/load-conversation/' + conversationId;
+                    });
+                });
+
+                // [PHASE 5] Action button handlers
+                conversationsList.querySelectorAll('.history-action-btn').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const action = this.dataset.action;
+                        const convId = this.dataset.id;
+
+                        if (action === 'export') {
+                            await exportConversation(convId);
+                        } else if (action === 'copy') {
+                            await copyConversation(convId);
+                        } else if (action === 'delete') {
+                            showDeleteConfirmation(convId);
+                        }
                     });
                 });
             }
@@ -2819,6 +3086,147 @@ PREOP_HTML = """<!DOCTYPE html>
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
+            }
+
+            // [PHASE 5] Search functionality
+            const searchInput = document.getElementById('historySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    renderConversations(e.target.value);
+                });
+            }
+
+            // [PHASE 5] Delete confirmation modal
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+            const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+            const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+            let conversationToDelete = null;
+
+            function showDeleteConfirmation(conversationId) {
+                conversationToDelete = conversationId;
+                deleteModal.classList.add('visible');
+                deleteModalOverlay.classList.add('visible');
+            }
+
+            function hideDeleteConfirmation() {
+                conversationToDelete = null;
+                deleteModal.classList.remove('visible');
+                deleteModalOverlay.classList.remove('visible');
+            }
+
+            if (deleteCancelBtn) {
+                deleteCancelBtn.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteModalOverlay) {
+                deleteModalOverlay.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteConfirmBtn) {
+                deleteConfirmBtn.addEventListener('click', async function() {
+                    if (!conversationToDelete) return;
+
+                    try {
+                        const response = await fetch(`/api/conversations/${conversationToDelete}`, {
+                            method: 'DELETE'
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Remove from local data
+                            conversationsData = conversationsData.filter(c => c.id !== conversationToDelete);
+
+                            // If deleted conversation was current, reload page
+                            if (conversationToDelete === currentConversationId) {
+                                window.location.href = '/?clear=1';
+                            } else {
+                                renderConversations();
+                            }
+
+                            hideDeleteConfirmation();
+                        } else {
+                            alert('Failed to delete conversation: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Failed to delete conversation');
+                    }
+                });
+            }
+
+            // [PHASE 5] Export conversation as JSON
+            async function exportConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const blob = new Blob([JSON.stringify(data.conversation, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `conversation-${data.conversation.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } else {
+                        alert('Failed to export conversation');
+                    }
+                } catch (error) {
+                    console.error('Export error:', error);
+                    alert('Failed to export conversation');
+                }
+            }
+
+            // [PHASE 5] Copy conversation as text
+            async function copyConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const conv = data.conversation;
+                        let text = `# ${conv.title}\n\n`;
+                        text += `Created: ${new Date(conv.created_at).toLocaleString()}\n`;
+                        text += `Messages: ${conv.messages.length}\n\n`;
+                        text += '---\n\n';
+
+                        conv.messages.forEach((msg, idx) => {
+                            text += `## ${msg.role === 'user' ? 'User' : 'Assistant'}:\n\n`;
+                            text += `${msg.content}\n\n`;
+
+                            if (msg.role === 'assistant' && msg.references && msg.references.length > 0) {
+                                text += `**References (${msg.references.length}):**\n`;
+                                msg.references.forEach((ref, refIdx) => {
+                                    text += `${refIdx + 1}. ${ref.title} - ${ref.authors} (${ref.year}) PMID: ${ref.pmid}\n`;
+                                });
+                                text += '\n';
+                            }
+
+                            text += '---\n\n';
+                        });
+
+                        await navigator.clipboard.writeText(text);
+
+                        // Show feedback
+                        const btn = event.target.closest('.history-action-btn-copy');
+                        if (btn) {
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Copied!';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                            }, 2000);
+                        }
+                    } else {
+                        alert('Failed to copy conversation');
+                    }
+                } catch (error) {
+                    console.error('Copy error:', error);
+                    alert('Failed to copy conversation');
+                }
             }
         })();
     </script>
@@ -4994,6 +5402,187 @@ HTML = """<!DOCTYPE html>
             background: rgba(102, 126, 234, 0.4);
         }
 
+        /* [PHASE 5] Search Bar */
+        .history-search-container {
+            padding: 16px;
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .history-search-input {
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border: 1.5px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            font-size: 14px;
+            color: #1a202c;
+            background: #fafafa;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .history-search-input:focus {
+            border-color: rgba(102, 126, 234, 0.5);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .history-search-input::placeholder {
+            color: #a0aec0;
+        }
+
+        .history-search-icon {
+            position: absolute;
+            left: 28px;
+            top: 28px;
+            width: 18px;
+            height: 18px;
+            color: #718096;
+            pointer-events: none;
+        }
+
+        /* [PHASE 5] Conversation Actions */
+        .history-conversation-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .history-conversation-item:hover .history-conversation-actions {
+            opacity: 1;
+        }
+
+        .history-action-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .history-action-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .history-action-btn-export {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .history-action-btn-export:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .history-action-btn-copy {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .history-action-btn-copy:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .history-action-btn-delete {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .history-action-btn-delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* [PHASE 5] Delete Confirmation Modal */
+        .history-delete-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            max-width: 400px;
+            width: 90%;
+            display: none;
+        }
+
+        .history-delete-modal.visible {
+            display: block;
+        }
+
+        .history-delete-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+        }
+
+        .history-delete-modal-overlay.visible {
+            display: block;
+        }
+
+        .history-delete-modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+        }
+
+        .history-delete-modal-message {
+            font-size: 15px;
+            color: #718096;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .history-delete-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .history-modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .history-modal-btn-cancel {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .history-modal-btn-cancel:hover {
+            background: #e2e8f0;
+        }
+
+        .history-modal-btn-confirm {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .history-modal-btn-confirm:hover {
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
         /* Mobile responsive */
         @media (max-width: 768px) {
             .history-sidebar {
@@ -5038,10 +5627,38 @@ HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -5719,9 +6336,26 @@ HTML = """<!DOCTYPE html>
                 }
             }
 
-            // Render conversations list
-            function renderConversations() {
-                conversationsList.innerHTML = conversationsData.map(conv => {
+            // [PHASE 5] Render conversations list with action buttons
+            function renderConversations(filterText = '') {
+                // Filter conversations if search text provided
+                const filtered = conversationsData.filter(conv => {
+                    if (!filterText) return true;
+                    const searchLower = filterText.toLowerCase();
+                    return conv.title.toLowerCase().includes(searchLower);
+                });
+
+                if (filtered.length === 0) {
+                    conversationsList.innerHTML = `
+                        <div class="history-empty-state">
+                            <p>No conversations found</p>
+                            <p style="font-size: 11px; margin-top: 8px;">Try a different search term</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                conversationsList.innerHTML = filtered.map(conv => {
                     const isActive = conv.id === currentConversationId;
                     const date = new Date(conv.updated_at || conv.created_at);
                     const timeAgo = formatTimeAgo(date);
@@ -5737,19 +6371,60 @@ HTML = """<!DOCTYPE html>
                                 <span>${timeAgo}</span>
                                 <span>${conv.message_count || 0} messages</span>
                             </div>
+                            <div class="history-conversation-actions">
+                                <button class="history-action-btn history-action-btn-export" data-action="export" data-id="${conv.id}" title="Export">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    Export
+                                </button>
+                                <button class="history-action-btn history-action-btn-copy" data-action="copy" data-id="${conv.id}" title="Copy">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                    </svg>
+                                    Copy
+                                </button>
+                                <button class="history-action-btn history-action-btn-delete" data-action="delete" data-id="${conv.id}" title="Delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     `;
                 }).join('');
 
                 // [PHASE 4] Click handler to load conversations
                 conversationsList.querySelectorAll('.history-conversation-item').forEach(item => {
-                    item.addEventListener('click', function() {
+                    item.addEventListener('click', function(e) {
+                        // Don't navigate if clicking on action buttons
+                        if (e.target.closest('.history-action-btn')) {
+                            return;
+                        }
+
                         const conversationId = this.dataset.conversationId;
                         console.log('Loading conversation:', conversationId);
 
                         // Navigate to load-conversation route
-                        // This will safely clear session and load the conversation
                         window.location.href = '/load-conversation/' + conversationId;
+                    });
+                });
+
+                // [PHASE 5] Action button handlers
+                conversationsList.querySelectorAll('.history-action-btn').forEach(btn => {
+                    btn.addEventListener('click', async function(e) {
+                        e.stopPropagation();
+                        const action = this.dataset.action;
+                        const convId = this.dataset.id;
+
+                        if (action === 'export') {
+                            await exportConversation(convId);
+                        } else if (action === 'copy') {
+                            await copyConversation(convId);
+                        } else if (action === 'delete') {
+                            showDeleteConfirmation(convId);
+                        }
                     });
                 });
             }
@@ -5771,6 +6446,147 @@ HTML = """<!DOCTYPE html>
                 const div = document.createElement('div');
                 div.textContent = text;
                 return div.innerHTML;
+            }
+
+            // [PHASE 5] Search functionality
+            const searchInput = document.getElementById('historySearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function(e) {
+                    renderConversations(e.target.value);
+                });
+            }
+
+            // [PHASE 5] Delete confirmation modal
+            const deleteModal = document.getElementById('deleteModal');
+            const deleteModalOverlay = document.getElementById('deleteModalOverlay');
+            const deleteCancelBtn = document.getElementById('deleteCancelBtn');
+            const deleteConfirmBtn = document.getElementById('deleteConfirmBtn');
+            let conversationToDelete = null;
+
+            function showDeleteConfirmation(conversationId) {
+                conversationToDelete = conversationId;
+                deleteModal.classList.add('visible');
+                deleteModalOverlay.classList.add('visible');
+            }
+
+            function hideDeleteConfirmation() {
+                conversationToDelete = null;
+                deleteModal.classList.remove('visible');
+                deleteModalOverlay.classList.remove('visible');
+            }
+
+            if (deleteCancelBtn) {
+                deleteCancelBtn.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteModalOverlay) {
+                deleteModalOverlay.addEventListener('click', hideDeleteConfirmation);
+            }
+
+            if (deleteConfirmBtn) {
+                deleteConfirmBtn.addEventListener('click', async function() {
+                    if (!conversationToDelete) return;
+
+                    try {
+                        const response = await fetch(`/api/conversations/${conversationToDelete}`, {
+                            method: 'DELETE'
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Remove from local data
+                            conversationsData = conversationsData.filter(c => c.id !== conversationToDelete);
+
+                            // If deleted conversation was current, reload page
+                            if (conversationToDelete === currentConversationId) {
+                                window.location.href = '/?clear=1';
+                            } else {
+                                renderConversations();
+                            }
+
+                            hideDeleteConfirmation();
+                        } else {
+                            alert('Failed to delete conversation: ' + (data.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Delete error:', error);
+                        alert('Failed to delete conversation');
+                    }
+                });
+            }
+
+            // [PHASE 5] Export conversation as JSON
+            async function exportConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const blob = new Blob([JSON.stringify(data.conversation, null, 2)], { type: 'application/json' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `conversation-${data.conversation.title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                    } else {
+                        alert('Failed to export conversation');
+                    }
+                } catch (error) {
+                    console.error('Export error:', error);
+                    alert('Failed to export conversation');
+                }
+            }
+
+            // [PHASE 5] Copy conversation as text
+            async function copyConversation(conversationId) {
+                try {
+                    const response = await fetch(`/api/conversations/${conversationId}/export`);
+                    const data = await response.json();
+
+                    if (data.success) {
+                        const conv = data.conversation;
+                        let text = `# ${conv.title}\n\n`;
+                        text += `Created: ${new Date(conv.created_at).toLocaleString()}\n`;
+                        text += `Messages: ${conv.messages.length}\n\n`;
+                        text += '---\n\n';
+
+                        conv.messages.forEach((msg, idx) => {
+                            text += `## ${msg.role === 'user' ? 'User' : 'Assistant'}:\n\n`;
+                            text += `${msg.content}\n\n`;
+
+                            if (msg.role === 'assistant' && msg.references && msg.references.length > 0) {
+                                text += `**References (${msg.references.length}):**\n`;
+                                msg.references.forEach((ref, refIdx) => {
+                                    text += `${refIdx + 1}. ${ref.title} - ${ref.authors} (${ref.year}) PMID: ${ref.pmid}\n`;
+                                });
+                                text += '\n';
+                            }
+
+                            text += '---\n\n';
+                        });
+
+                        await navigator.clipboard.writeText(text);
+
+                        // Show feedback
+                        const btn = event.target.closest('.history-action-btn-copy');
+                        if (btn) {
+                            const originalText = btn.innerHTML;
+                            btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Copied!';
+                            setTimeout(() => {
+                                btn.innerHTML = originalText;
+                            }, 2000);
+                        }
+                    } else {
+                        alert('Failed to copy conversation');
+                    }
+                } catch (error) {
+                    console.error('Copy error:', error);
+                    alert('Failed to copy conversation');
+                }
             }
         })();
     </script>
@@ -10395,10 +11211,38 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -11929,10 +12773,38 @@ CRISIS_HTML = """<!DOCTYPE html>
                 </svg>
             </button>
         </div>
+
+        <!-- [PHASE 5] Search Bar -->
+        <div class="history-search-container" style="position: relative;">
+            <svg class="history-search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+                type="text"
+                class="history-search-input"
+                id="historySearchInput"
+                placeholder="Search conversations..."
+                aria-label="Search conversations"
+            />
+        </div>
+
         <div class="history-conversations-list" id="conversationsList">
             <div class="history-loading">Loading conversations...</div>
         </div>
     </aside>
+
+    <!-- [PHASE 5] Delete Confirmation Modal -->
+    <div class="history-delete-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="history-delete-modal" id="deleteModal">
+        <h3 class="history-delete-modal-title">Delete Conversation?</h3>
+        <p class="history-delete-modal-message">
+            This conversation will be permanently deleted. This action cannot be undone.
+        </p>
+        <div class="history-delete-modal-actions">
+            <button class="history-modal-btn history-modal-btn-cancel" id="deleteCancelBtn">Cancel</button>
+            <button class="history-modal-btn history-modal-btn-confirm" id="deleteConfirmBtn">Delete</button>
+        </div>
+    </div>
 
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -22943,6 +23815,105 @@ def api_conversations():
             'conversations': [],
             'error': 'Failed to fetch conversations'
         }), 500
+
+
+# [PHASE 5] Delete conversation endpoint
+@app.route("/api/conversations/<conversation_id>", methods=['DELETE'])
+def delete_conversation(conversation_id):
+    """
+    Delete a conversation permanently.
+    Returns success status.
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return jsonify({
+            'success': False,
+            'error': 'Chat history feature is disabled'
+        }), 400
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Verify ownership before deleting
+        conversation = database.get_conversation(conversation_id)
+        if not conversation:
+            return jsonify({
+                'success': False,
+                'error': 'Conversation not found'
+            }), 404
+
+        if conversation.get('user_session_id') != user_session_id:
+            return jsonify({
+                'success': False,
+                'error': 'Unauthorized'
+            }), 403
+
+        # Delete the conversation
+        if database.delete_conversation(conversation_id, hard_delete=False):
+            print(f"[CHAT_HISTORY] Deleted conversation: {conversation_id}")
+            return jsonify({
+                'success': True,
+                'message': 'Conversation deleted successfully'
+            }), 200
+        else:
+            return jsonify({
+                'success': False,
+                'error': 'Failed to delete conversation'
+            }), 500
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error deleting conversation: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to delete conversation'
+        }), 500
+
+
+# [PHASE 5] Export conversation endpoint
+@app.route("/api/conversations/<conversation_id>/export")
+@csrf.exempt  # GET endpoint, no state changes
+def export_conversation(conversation_id):
+    """
+    Export a conversation with all messages and references.
+    Returns conversation data in JSON format.
+    """
+    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+        return jsonify({
+            'success': False,
+            'error': 'Chat history feature is disabled'
+        }), 400
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Fetch conversation
+        conversation = database.get_conversation(conversation_id)
+        if not conversation:
+            return jsonify({
+                'success': False,
+                'error': 'Conversation not found'
+            }), 404
+
+        # Verify ownership
+        if conversation.get('user_session_id') != user_session_id:
+            return jsonify({
+                'success': False,
+                'error': 'Unauthorized'
+            }), 403
+
+        return jsonify({
+            'success': True,
+            'conversation': conversation
+        }), 200
+
+    except Exception as e:
+        print(f"[CHAT_HISTORY] Error exporting conversation: {e}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to export conversation'
+        }), 500
+
 
 @app.route("/load-conversation/<conversation_id>")
 def load_conversation(conversation_id):
