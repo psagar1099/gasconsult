@@ -17334,15 +17334,6 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Informed Consent Assessment - GasConsult.ai</title>
@@ -19049,15 +19040,38 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding: 32px 20px;
             margin-top: auto;
         }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚧 Interactive Form Coming Soon</h1>
+        <p>The full interactive Difficult Airway Assessment tool is currently being built. It will include validated clinical predictors, AI-powered risk analysis, and personalized management recommendations.</p>
+        <a href="/?clear=1">← Back to Home</a>
+    </div>
+</body>
+</html>
+"""
 
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
+INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent - GasConsult.ai</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #F8FAFC;
+            color: #0F172A;
             display: flex;
             flex-direction: column;
             gap: 16px;
             align-items: center;
             text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
         }
 
         @media (min-width: 768px) {
@@ -19080,10 +19094,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-size: 14px;
             color: var(--gray-600);
         }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
+        p {
+            color: #64748B;
+            line-height: 1.6;
+            margin-bottom: 32px;
         }
 
         .footer-link {
@@ -19428,6 +19442,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
 
 
 @app.route("/stream")
