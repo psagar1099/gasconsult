@@ -3284,13 +3284,13 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px 7px 12px;
+            padding: 7px 12px 5px 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 24px;
+            min-height: 20px;
             max-height: 110px;
             line-height: 1.45;
         }
@@ -4060,7 +4060,7 @@ HTML = """<!DOCTYPE html>
         .new-chat-btn {
             position: fixed;
             top: 84px;
-            right: 16px;
+            left: 64px;
             z-index: 1001;
             display: inline-flex;
             align-items: center;
@@ -4101,6 +4101,12 @@ HTML = """<!DOCTYPE html>
 
         .new-chat-btn:hover svg {
             transform: rotate(-15deg);
+        }
+
+        .new-chat-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-20px);
         }
 
         .error-message {
@@ -4148,8 +4154,8 @@ HTML = """<!DOCTYPE html>
 
             .chat-input {
                 font-size: 15px;
-                padding: 9px 14px 8px 14px;
-                min-height: 26px;
+                padding: 8px 14px 6px 14px;
+                min-height: 22px;
             }
 
             .chat-send {
@@ -4207,8 +4213,8 @@ HTML = """<!DOCTYPE html>
 
             .chat-input {
                 font-size: 14.5px;
-                padding: 10px 16px 9px 16px;
-                min-height: 28px;
+                padding: 9px 16px 7px 16px;
+                min-height: 24px;
             }
 
             .chat-send {
@@ -5377,6 +5383,7 @@ HTML = """<!DOCTYPE html>
             const historyClose = document.getElementById('historyClose');
             const historyOverlay = document.getElementById('historyOverlay');
             const conversationsList = document.getElementById('conversationsList');
+            const newChatBtn = document.querySelector('.new-chat-btn');
 
             let conversationsLoaded = false;
 
@@ -5385,6 +5392,7 @@ HTML = """<!DOCTYPE html>
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
                 historyToggle.classList.add('hidden');
+                if (newChatBtn) newChatBtn.classList.add('hidden');
 
                 // Load conversations on first open
                 if (!conversationsLoaded) {
@@ -5396,6 +5404,7 @@ HTML = """<!DOCTYPE html>
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
                 historyToggle.classList.remove('hidden');
+                if (newChatBtn) newChatBtn.classList.remove('hidden');
             }
 
             // Load conversations from API
@@ -5994,13 +6003,13 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px 7px 12px;
+            padding: 7px 12px 5px 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 24px;
+            min-height: 20px;
             max-height: 110px;
             line-height: 1.45;
         }
@@ -7007,13 +7016,13 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px 7px 12px;
+            padding: 7px 12px 5px 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 24px;
+            min-height: 20px;
             max-height: 110px;
             line-height: 1.45;
         }
