@@ -34,6 +34,9 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 
+# Security: Limit request size to prevent DoS attacks (16MB default)
+app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16777216))
+
 # Configure server-side sessions with Redis backend (production-grade, multi-worker safe)
 # Falls back to localhost Redis if REDIS_URL not set (for local development)
 redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379')
@@ -74,12 +77,29 @@ csrf = CSRFProtect(app)
 app.config['WTF_CSRF_TIME_LIMIT'] = None  # Don't expire CSRF tokens
 app.config['WTF_CSRF_SSL_STRICT'] = False  # Allow CSRF on HTTP (behind reverse proxy)
 
-# Initialize rate limiter
+# Initialize rate limiter with Redis backend (multi-worker safe)
+# Falls back to memory if Redis unavailable
+try:
+    limiter_storage_uri = redis_url if 'redis_client' in locals() and redis_client else "memory://"
+    # If we successfully connected to Redis earlier, use it for rate limiting
+    if app.config.get('SESSION_TYPE') == 'redis':
+        limiter_storage_uri = redis_url
+        import logging
+        logging.info("Rate limiter using Redis backend (multi-worker safe)")
+    else:
+        limiter_storage_uri = "memory://"
+        import logging
+        logging.warning("Rate limiter using in-memory storage (not recommended for multiple workers)")
+except Exception as e:
+    limiter_storage_uri = "memory://"
+    import logging
+    logging.warning(f"Rate limiter falling back to in-memory storage: {e}")
+
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
     default_limits=[os.getenv("RATE_LIMIT", "60 per minute")],
-    storage_uri="memory://"
+    storage_uri=limiter_storage_uri
 )
 
 Entrez.email = os.getenv("ENTREZ_EMAIL", "your-email@example.com")
@@ -333,6 +353,41 @@ logger.info(f"Log Level: {os.getenv('LOG_LEVEL', 'INFO')}")
 logger.info(f"Rate Limit: {os.getenv('RATE_LIMIT', '60 per minute')}")
 logger.info("=" * 60)
 
+# ====== Optional: Sentry Error Tracking ======
+# Uncomment and configure if you want error monitoring
+# To enable: pip install sentry-sdk[flask] and set SENTRY_DSN environment variable
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+if SENTRY_DSN:
+    try:
+        import sentry_sdk
+        from sentry_sdk.integrations.flask import FlaskIntegration
+        from sentry_sdk.integrations.logging import LoggingIntegration
+
+        sentry_sdk.init(
+            dsn=SENTRY_DSN,
+            integrations=[
+                FlaskIntegration(),
+                LoggingIntegration(
+                    level=logging.INFO,        # Capture info and above as breadcrumbs
+                    event_level=logging.ERROR  # Send errors as events
+                ),
+            ],
+            environment=os.getenv('FLASK_ENV', 'production'),
+            # Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
+            # Adjust this value in production to reduce overhead
+            traces_sample_rate=float(os.getenv('SENTRY_TRACES_SAMPLE_RATE', '0.1')),
+            # Set profiles_sample_rate to 1.0 to profile 100% of sampled transactions.
+            # Adjust this value in production
+            profiles_sample_rate=float(os.getenv('SENTRY_PROFILES_SAMPLE_RATE', '0.1')),
+        )
+        logger.info("Sentry error tracking initialized")
+    except ImportError:
+        logger.warning("SENTRY_DSN set but sentry-sdk not installed. Install with: pip install sentry-sdk[flask]")
+    except Exception as e:
+        logger.error(f"Failed to initialize Sentry: {e}")
+else:
+    logger.info("Sentry error tracking disabled (SENTRY_DSN not set)")
+
 # Request logging middleware
 @app.before_request
 def log_request():
@@ -343,6 +398,39 @@ def log_request():
 def log_response(response):
     """Log outgoing responses"""
     logger.info(f"{request.method} {request.path} - Status: {response.status_code}")
+    return response
+
+@app.after_request
+def add_security_headers(response):
+    """Add security headers to all responses"""
+    # Content Security Policy - helps prevent XSS attacks
+    # Note: 'unsafe-inline' is needed for inline styles in our single-file app
+    # In production, consider moving to external CSS and removing 'unsafe-inline'
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https:; "
+        "connect-src 'self'; "
+        "frame-ancestors 'none';"
+    )
+
+    # Prevent clickjacking
+    response.headers['X-Frame-Options'] = 'DENY'
+
+    # Prevent MIME type sniffing
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+
+    # Enable browser XSS protection
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+
+    # Referrer policy - don't leak URLs to external sites
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+
+    # Permissions policy - restrict access to sensitive features
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+
     return response
 
 @app.errorhandler(CSRFError)
