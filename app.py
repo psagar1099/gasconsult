@@ -3284,20 +3284,20 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 5px 12px;
+            padding: 0 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            height: 36px;
             max-height: 110px;
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-input::placeholder {
             color: var(--gray-400);
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-send {
@@ -4062,25 +4062,26 @@ HTML = """<!DOCTYPE html>
             top: 84px;
             left: 68px;
             z-index: 1001;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            height: 40px;
-            padding: 0 12px;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            height: 40px;
+            padding: 0 12px;
             border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             color: var(--blue-600);
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
             line-height: 1;
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1),
                         0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .new-chat-btn:hover {
@@ -4157,8 +4158,13 @@ HTML = """<!DOCTYPE html>
 
             .chat-input {
                 font-size: 15px;
-                padding: 6px 14px;
-                min-height: 34px;
+                padding: 0 14px;
+                height: 38px;
+                line-height: 38px;
+            }
+
+            .chat-input::placeholder {
+                line-height: 38px;
             }
 
             .chat-send {
@@ -4216,8 +4222,13 @@ HTML = """<!DOCTYPE html>
 
             .chat-input {
                 font-size: 14.5px;
-                padding: 7px 16px;
-                min-height: 36px;
+                padding: 0 16px;
+                height: 40px;
+                line-height: 40px;
+            }
+
+            .chat-input::placeholder {
+                line-height: 40px;
             }
 
             .chat-send {
@@ -6006,20 +6017,20 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 5px 12px;
+            padding: 0 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            height: 36px;
             max-height: 110px;
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-input::placeholder {
             color: var(--gray-400);
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-send {
@@ -7019,20 +7030,20 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 5px 12px;
+            padding: 0 12px;
             font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            height: 36px;
             max-height: 110px;
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-input::placeholder {
             color: var(--gray-400);
-            line-height: 1.47;
+            line-height: 36px;
         }
 
         .chat-send {
