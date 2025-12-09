@@ -3284,25 +3284,30 @@ HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px;
-            font-size: 16px;
+            padding: 6px 12px;
+            font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            min-height: 24px;
             max-height: 110px;
-            line-height: 1.5;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
         }
 
-        .chat-input::placeholder { color: var(--gray-400); }
+        .chat-input::placeholder {
+            color: var(--gray-400);
+            line-height: 1.4;
+        }
 
         .chat-send {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--blue-600);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--white);
             cursor: pointer;
             display: flex;
@@ -3311,7 +3316,7 @@ HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 4px;
+            margin: 3px;
         }
 
         .chat-send:hover {
@@ -3321,7 +3326,7 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
+        .chat-send svg { width: 18px; height: 18px; }
 
         .chat-hints {
             display: flex;
@@ -4055,33 +4060,49 @@ HTML = """<!DOCTYPE html>
         }
 
         .new-chat-btn {
+            position: fixed;
+            top: 84px;
+            right: 16px;
+            z-index: 1001;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 14px;
-            background: rgba(255,255,255,0.8);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
+            padding: 7px 12px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
             color: var(--gray-700);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
-            align-self: flex-start;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1),
+                        0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .new-chat-btn:hover {
-            background: white;
-            border-color: var(--blue-200);
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(37, 99, 235, 0.2);
             color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15),
+                        0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .new-chat-btn:active {
+            transform: translateY(0);
         }
 
         .new-chat-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .new-chat-btn:hover svg {
+            transform: rotate(-15deg);
         }
 
         .error-message {
@@ -4129,12 +4150,18 @@ HTML = """<!DOCTYPE html>
 
             .chat-input {
                 font-size: 15px;
-                padding: 10px 14px;
+                padding: 7px 14px;
+                min-height: 26px;
             }
 
             .chat-send {
-                width: 44px;
-                height: 44px;
+                width: 38px;
+                height: 38px;
+            }
+
+            .chat-send svg {
+                width: 19px;
+                height: 19px;
             }
 
             .new-chat-btn {
@@ -4181,14 +4208,19 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input {
-                font-size: 15px;
-                padding: 10px 16px;
-                min-height: 42px;
+                font-size: 14.5px;
+                padding: 8px 16px;
+                min-height: 28px;
             }
 
             .chat-send {
-                width: 46px;
-                height: 46px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .chat-send svg {
+                width: 19px;
+                height: 19px;
             }
         }
 
@@ -4914,13 +4946,6 @@ HTML = """<!DOCTYPE html>
                             </button>
                         </div>
                     </form>
-                    <a href="/clear" class="new-chat-btn" aria-label="Start a new chat conversation">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                            <polyline points="1 4 1 10 7 10"></polyline>
-                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-                        </svg>
-                        New Chat
-                    </a>
                 </div>
             </div>
         </section>
@@ -5962,25 +5987,30 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px;
-            font-size: 16px;
+            padding: 6px 12px;
+            font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            min-height: 24px;
             max-height: 110px;
-            line-height: 1.5;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
         }
 
-        .chat-input::placeholder { color: var(--gray-400); }
+        .chat-input::placeholder {
+            color: var(--gray-400);
+            line-height: 1.4;
+        }
 
         .chat-send {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--blue-600);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--white);
             cursor: pointer;
             display: flex;
@@ -5989,7 +6019,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 4px;
+            margin: 3px;
         }
 
         .chat-send:hover {
@@ -5999,7 +6029,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
+        .chat-send svg { width: 18px; height: 18px; }
 
         .chat-hints {
             display: flex;
@@ -6972,25 +7002,30 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex: 1;
             border: none;
             outline: none;
-            padding: 8px 12px;
-            font-size: 16px;
+            padding: 6px 12px;
+            font-size: 15px;
             font-family: inherit;
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            min-height: 32px;
+            min-height: 24px;
             max-height: 110px;
-            line-height: 1.5;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
         }
 
-        .chat-input::placeholder { color: var(--gray-400); }
+        .chat-input::placeholder {
+            color: var(--gray-400);
+            line-height: 1.4;
+        }
 
         .chat-send {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--blue-600);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             color: var(--white);
             cursor: pointer;
             display: flex;
@@ -6999,7 +7034,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
             box-shadow: 0 1px 2px rgba(37,99,235,0.2), 0 4px 16px rgba(37,99,235,0.2), inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -1px 0 rgba(0,0,0,0.1);
             flex-shrink: 0;
-            margin: 4px;
+            margin: 3px;
         }
 
         .chat-send:hover {
@@ -7009,7 +7044,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .chat-send:active { transform: translateY(0); }
-        .chat-send svg { width: 20px; height: 20px; }
+        .chat-send svg { width: 18px; height: 18px; }
 
         .chat-hints {
             display: flex;
