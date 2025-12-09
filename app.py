@@ -4314,47 +4314,66 @@ HTML = """<!DOCTYPE html>
             margin-bottom: 0;
         }
 
-        /* ====== Chat History Sidebar (Phase 3) ====== */
+        /* ====== Chat History Sidebar (Phase 4 - Glassmorphism) ====== */
         .history-toggle {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 84px;
+            left: 16px;
             z-index: 1001;
-            background: var(--white);
-            border: none;
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1),
+                        0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .history-toggle:hover {
-            background: var(--gray-50);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15),
+                        0 4px 8px rgba(0, 0, 0, 0.08);
+            transform: translateY(-1px);
+            border-color: rgba(37, 99, 235, 0.2);
+        }
+
+        .history-toggle:active {
+            transform: translateY(0);
         }
 
         .history-toggle svg {
-            width: 24px;
-            height: 24px;
-            color: var(--gray-700);
+            width: 20px;
+            height: 20px;
+            color: var(--blue-600);
+            transition: transform 0.3s ease;
+        }
+
+        .history-toggle:hover svg {
+            transform: scale(1.1);
         }
 
         .history-sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 320px;
+            width: 100%;
+            max-width: 360px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
         }
@@ -4364,94 +4383,193 @@ HTML = """<!DOCTYPE html>
         }
 
         .history-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--gray-200);
+            padding: 20px 16px;
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(248, 250, 252, 0.5);
+            backdrop-filter: blur(8px);
         }
 
         .history-sidebar-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--gray-900);
+            letter-spacing: -0.01em;
         }
 
         .history-close-btn {
-            background: none;
-            border: none;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(226, 232, 240, 0.6);
+            border-radius: 8px;
             cursor: pointer;
-            padding: 4px;
-            color: var(--gray-500);
+            padding: 6px;
+            color: var(--gray-600);
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s ease;
         }
 
         .history-close-btn:hover {
-            color: var(--gray-700);
+            background: rgba(248, 250, 252, 1);
+            color: var(--gray-900);
+            border-color: var(--gray-300);
+            transform: rotate(90deg);
+        }
+
+        .history-close-btn svg {
+            width: 16px;
+            height: 16px;
         }
 
         .history-conversations-list {
             flex: 1;
             overflow-y: auto;
             padding: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(203, 213, 225, 0.5) transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb {
+            background: rgba(203, 213, 225, 0.5);
+            border-radius: 3px;
+        }
+
+        .history-conversations-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(203, 213, 225, 0.7);
         }
 
         .history-conversation-item {
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            background: var(--gray-50);
-            border-radius: 8px;
+            padding: 14px 12px;
+            margin-bottom: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 1px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(226, 232, 240, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .history-conversation-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--blue-500), var(--blue-600));
+            opacity: 0;
+            transition: opacity 0.25s ease;
         }
 
         .history-conversation-item:hover {
-            background: var(--blue-50);
-            border-color: var(--blue-200);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(37, 99, 235, 0.3);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .history-conversation-item:hover::before {
+            opacity: 1;
         }
 
         .history-conversation-item.active {
-            background: var(--blue-100);
-            border-color: var(--blue-300);
+            background: rgba(239, 246, 255, 0.8);
+            border-color: rgba(37, 99, 235, 0.4);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .history-conversation-item.active::before {
+            opacity: 1;
         }
 
         .history-conversation-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: var(--gray-900);
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            line-height: 1.4;
+            letter-spacing: -0.01em;
         }
 
         .history-conversation-meta {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--gray-500);
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            align-items: center;
+            font-weight: 400;
+        }
+
+        .history-conversation-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .history-empty-state {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
             color: var(--gray-500);
         }
 
         .history-empty-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            opacity: 0.5;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            opacity: 0.4;
+        }
+
+        .history-empty-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+
+        .history-empty-subtext {
+            font-size: 12px;
+            color: var(--gray-400);
+            line-height: 1.5;
         }
 
         .history-loading {
-            padding: 40px 20px;
+            padding: 60px 24px;
             text-align: center;
             color: var(--gray-500);
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .history-loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(37, 99, 235, 0.1);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Overlay when sidebar is open */
@@ -4461,7 +4579,8 @@ HTML = """<!DOCTYPE html>
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(2px);
             z-index: 999;
             opacity: 0;
             pointer-events: none;
@@ -4473,15 +4592,53 @@ HTML = """<!DOCTYPE html>
             pointer-events: all;
         }
 
-        /* Mobile responsive */
-        @media (max-width: 768px) {
+        /* Mobile-first responsive design */
+        @media (min-width: 480px) {
             .history-sidebar {
-                width: 280px;
+                max-width: 380px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .history-toggle {
+                top: 88px;
+                left: 20px;
+                width: 44px;
+                height: 44px;
             }
 
-            .history-toggle {
-                top: 16px;
-                left: 16px;
+            .history-toggle svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .history-sidebar {
+                max-width: 400px;
+            }
+
+            .history-sidebar-header {
+                padding: 24px 20px;
+            }
+
+            .history-sidebar-title {
+                font-size: 17px;
+            }
+
+            .history-conversations-list {
+                padding: 16px;
+            }
+
+            .history-conversation-item {
+                padding: 16px 14px;
+                margin-bottom: 8px;
+            }
+
+            .history-conversation-title {
+                font-size: 14px;
+            }
+
+            .history-conversation-meta {
+                font-size: 12px;
             }
         }
 
@@ -4493,10 +4650,10 @@ HTML = """<!DOCTYPE html>
 <body>
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
-    <!-- [PHASE 4] Chat History Sidebar -->
+    <!-- [PHASE 4] Chat History Sidebar - Glassmorphism Design -->
     <button class="history-toggle" id="historyToggle" aria-label="Toggle chat history" title="Chat History">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
         </svg>
     </button>
 
@@ -4504,15 +4661,18 @@ HTML = """<!DOCTYPE html>
 
     <aside class="history-sidebar" id="historySidebar" role="complementary" aria-label="Chat history">
         <div class="history-sidebar-header">
-            <h2 class="history-sidebar-title">Chat History</h2>
+            <h2 class="history-sidebar-title">History</h2>
             <button class="history-close-btn" id="historyClose" aria-label="Close history">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
         <div class="history-conversations-list" id="conversationsList">
-            <div class="history-loading">Loading conversations...</div>
+            <div class="history-loading">
+                <div class="history-loading-spinner"></div>
+                <span>Loading...</span>
+            </div>
         </div>
     </aside>
 
@@ -5146,7 +5306,12 @@ HTML = """<!DOCTYPE html>
 
             // Load conversations from API
             function loadConversations() {
-                conversationsList.innerHTML = '<div class="history-loading">Loading conversations...</div>';
+                conversationsList.innerHTML = `
+                    <div class="history-loading">
+                        <div class="history-loading-spinner"></div>
+                        <span>Loading...</span>
+                    </div>
+                `;
 
                 fetch('/api/conversations')
                     .then(response => response.json())
@@ -5154,15 +5319,26 @@ HTML = """<!DOCTYPE html>
                         conversationsLoaded = true;
 
                         if (!data.enabled) {
-                            conversationsList.innerHTML = '<div class="history-empty-state">Chat history is disabled</div>';
+                            conversationsList.innerHTML = `
+                                <div class="history-empty-state">
+                                    <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                    <p class="history-empty-text">History Disabled</p>
+                                    <p class="history-empty-subtext">Enable in settings to track conversations</p>
+                                </div>
+                            `;
                             return;
                         }
 
                         if (data.conversations.length === 0) {
                             conversationsList.innerHTML = `
                                 <div class="history-empty-state">
-                                    <div class="history-empty-icon">💬</div>
-                                    <p>No conversations yet</p>
+                                    <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                    </svg>
+                                    <p class="history-empty-text">No conversations yet</p>
+                                    <p class="history-empty-subtext">Start a conversation to build your history</p>
                                 </div>
                             `;
                             return;
@@ -5197,7 +5373,15 @@ HTML = """<!DOCTYPE html>
                     })
                     .catch(error => {
                         console.error('Failed to load conversations:', error);
-                        conversationsList.innerHTML = '<div class="history-empty-state">Failed to load conversations</div>';
+                        conversationsList.innerHTML = `
+                            <div class="history-empty-state">
+                                <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <p class="history-empty-text">Failed to load</p>
+                                <p class="history-empty-subtext">Please try again later</p>
+                            </div>
+                        `;
                     });
             }
 
