@@ -11198,6 +11198,7 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .protocols-container {
+            flex: 1 0 auto;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px 80px;
@@ -11677,9 +11678,10 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         .footer {
             margin-top: auto;
+            flex-shrink: 0;
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.9);
         }
 
         .footer-inner {
