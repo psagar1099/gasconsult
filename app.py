@@ -20506,9 +20506,269 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Results Section */
+        .results-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .assessment-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .assessment-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .assessment-header svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .assessment-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .assessment-content {
+            line-height: 1.8;
+            color: var(--gray-700);
+        }
+
+        .assessment-content h3 {
+            color: var(--gray-900);
+            font-size: 18px;
+            font-weight: 700;
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .assessment-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .assessment-content p {
+            margin-bottom: 12px;
+        }
+
+        .assessment-content ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+
+        .assessment-content li {
+            margin-bottom: 8px;
+        }
+
+        .assessment-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
+        /* References Card */
+        .references-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .references-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .references-title svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--blue-600);
+        }
+
+        .reference-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            gap: 12px;
+        }
+
+        .reference-item:last-child {
+            border-bottom: none;
+        }
+
+        .reference-number {
+            display: inline-block;
+            min-width: 32px;
+            height: 32px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 32px;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .reference-content {
+            flex: 1;
+        }
+
+        .reference-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Generating Assessment...</div>
+        </div>
+    </div>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -20738,26 +20998,65 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
             {% else %}
             <!-- Results -->
-            <a href="/difficult-airway" class="back-btn">← New Assessment</a>
+            <div class="results-container">
+                <div class="header">
+                    <h1><span class="gradient">Difficult Airway Assessment</span></h1>
+                    <p class="subtitle">Evidence-based risk stratification and management plan</p>
+                </div>
 
-            <div class="header">
-                <h1><span class="gradient">Difficult Airway Assessment</span></h1>
-            </div>
+                <div class="assessment-card">
+                    <div class="assessment-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                        </svg>
+                        <div class="assessment-title">Clinical Assessment & Management Plan</div>
+                    </div>
+                    <div class="assessment-content">
+                        {{ summary|safe }}
+                    </div>
+                </div>
 
-            <div class="card">
-                <div style="line-height: 1.8; color: #334155;">
-                    {{ summary|safe }}
+                {% if references %}
+                <div class="references-card">
+                    <div class="references-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>Evidence-Based References</span>
+                    </div>
+                    {% for ref in references %}
+                    <div class="reference-item">
+                        <span class="reference-number">[{{ loop.index }}]</span>
+                        <div class="reference-content">
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                                {{ ref.title }}
+                            </a>
+                            <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="action-buttons">
+                    <a href="/difficult-airway" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Assessment
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        Print/Save PDF
+                    </button>
                 </div>
             </div>
-
-            {% if references %}
-            <div class="card">
-                <div class="section-title">References</div>
-                <div style="line-height: 1.8;">
-                    {{ references|safe }}
-                </div>
-            </div>
-            {% endif %}
             {% endif %}
         </main>
 
@@ -20796,6 +21095,33 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 }
             });
         }
+
+        // Show loading overlay when form is submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[method="POST"]');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (form && loadingOverlay) {
+                form.addEventListener('submit', function(e) {
+                    // Validate required fields before showing loading
+                    const procedure = document.getElementById('procedure');
+                    const mallampati = document.querySelector('input[name="mallampati"]:checked');
+                    const thyromental = document.querySelector('input[name="thyromental"]:checked');
+                    const mouthOpening = document.querySelector('input[name="mouth_opening"]:checked');
+                    const neckExtension = document.querySelector('input[name="neck_extension"]:checked');
+                    const bmi = document.getElementById('bmi');
+                    const age = document.getElementById('age');
+                    const caseType = document.querySelector('input[name="case_type"]:checked');
+
+                    // Only show loading if all required fields are filled
+                    if (procedure && procedure.value.trim() !== '' &&
+                        mallampati && thyromental && mouthOpening && neckExtension &&
+                        bmi && bmi.value && age && age.value && caseType) {
+                        loadingOverlay.classList.add('active');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
