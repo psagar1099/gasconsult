@@ -16,6 +16,7 @@ import redis
 import hashlib
 import datetime
 import logging
+import tempfile
 from dotenv import load_dotenv
 
 # Import database module for persistent chat history (Phase 1)
@@ -24,7 +25,8 @@ try:
     DATABASE_AVAILABLE = True
 except ImportError as e:
     DATABASE_AVAILABLE = False
-    print(f"[WARNING] Database module not available: {e}")
+    import logging
+    logging.warning(f"Database module not available: {e}")
 
 # Load environment variables from .env file
 load_dotenv()
@@ -46,13 +48,15 @@ try:
     )
     # Test connection
     redis_client.ping()
-    print(f"[REDIS] Successfully connected to Redis at {redis_url.split('@')[-1]}")  # Hide credentials in logs
+    import logging
+    logging.info(f"Successfully connected to Redis at {redis_url.split('@')[-1]}")  # Hide credentials in logs
 
     app.config['SESSION_TYPE'] = 'redis'
     app.config['SESSION_REDIS'] = redis_client
 except (redis.ConnectionError, redis.TimeoutError) as e:
-    print(f"[WARNING] Redis connection failed: {e}")
-    print(f"[WARNING] Falling back to filesystem sessions (not recommended for production)")
+    import logging
+    logging.warning(f"Redis connection failed: {e}")
+    logging.warning("Falling back to filesystem sessions (not recommended for production)")
     # Fallback to filesystem sessions for development
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['SESSION_FILE_DIR'] = tempfile.gettempdir()
@@ -91,24 +95,27 @@ DATABASE_INITIALIZED = False
 
 if CHAT_HISTORY_ENABLED and DATABASE_AVAILABLE:
     try:
-        print("[CHAT_HISTORY] Feature flag enabled, initializing database...")
+        import logging
+        logging.info("Chat history feature flag enabled, initializing database...")
         if database.init_db():
             DATABASE_INITIALIZED = True
-            print(f"[CHAT_HISTORY] Database initialized successfully at {database.DB_PATH}")
+            logging.info(f"Database initialized successfully at {database.DB_PATH}")
             # Log database stats
             stats = database.get_database_stats()
-            print(f"[CHAT_HISTORY] Database stats: {stats.get('total_conversations', 0)} conversations, "
+            logging.info(f"Database stats: {stats.get('total_conversations', 0)} conversations, "
                   f"{stats.get('total_messages', 0)} messages")
         else:
-            print("[CHAT_HISTORY] Database initialization failed, continuing with session-only storage")
+            logging.warning("Database initialization failed, continuing with session-only storage")
     except Exception as e:
-        print(f"[CHAT_HISTORY] Database initialization error: {e}")
-        print("[CHAT_HISTORY] Continuing with session-only storage (no impact on functionality)")
+        logging.error(f"Database initialization error: {e}")
+        logging.info("Continuing with session-only storage (no impact on functionality)")
         DATABASE_INITIALIZED = False
 elif CHAT_HISTORY_ENABLED and not DATABASE_AVAILABLE:
-    print("[CHAT_HISTORY] Feature enabled but database module not available")
+    import logging
+    logging.warning("Chat history feature enabled but database module not available")
 else:
-    print("[CHAT_HISTORY] Feature disabled via ENABLE_CHAT_HISTORY environment variable")
+    import logging
+    logging.info("Chat history feature disabled via ENABLE_CHAT_HISTORY environment variable")
 
 # ====== Data Storage ======
 # Simple in-memory storage for bookmarks and shared links
@@ -170,7 +177,7 @@ def safe_db_save_conversation(conversation_id, user_session_id, title):
     try:
         return database.save_conversation(conversation_id, user_session_id, title)
     except Exception as e:
-        print(f"[CHAT_HISTORY] Failed to save conversation: {e}")
+        logger.error(f"Failed to save conversation to database: {e}")
         return False
 
 
@@ -195,7 +202,7 @@ def safe_db_save_message(conversation_id, role, content, references=None, num_pa
             evidence_strength=evidence_strength
         )
     except Exception as e:
-        print(f"[CHAT_HISTORY] Failed to save message: {e}")
+        logger.error(f"Failed to save message to database: {e}")
         return False
 
 
@@ -546,7 +553,7 @@ def resolve_references(query, conversation_history):
         q = q.replace('the technique', most_recent)
         q = q.replace('the procedure', most_recent)
         q = q.replace('the approach', most_recent)
-        print(f"[DEBUG] Resolved reference: '{query}' → '{q}'")
+        logger.debug(f"Resolved reference: '{query}' → '{q}'")
 
     # Handle "what about..." questions
     if q.startswith('what about') and unique_entities:
@@ -554,14 +561,14 @@ def resolve_references(query, conversation_history):
         modifier = q.replace('what about', '').strip().rstrip('?').strip()
         main_topic = unique_entities[-1]
         q = f'{main_topic} in {modifier}'
-        print(f"[DEBUG] Expanded 'what about': '{query}' → '{q}'")
+        logger.debug(f"Expanded 'what about': '{query}' → '{q}'")
 
     # Handle "how about..." questions similarly
     if q.startswith('how about') and unique_entities:
         modifier = q.replace('how about', '').strip().rstrip('?').strip()
         main_topic = unique_entities[-1]
         q = f'{main_topic} {modifier}'
-        print(f"[DEBUG] Expanded 'how about': '{query}' → '{q}'")
+        logger.debug(f"Expanded 'how about': '{query}' → '{q}'")
 
     # Handle "can you" or "can I" questions that might be follow-ups
     if unique_entities and (q.startswith('can you') or q.startswith('can i') or q.startswith('should i') or q.startswith('should you')):
@@ -571,7 +578,7 @@ def resolve_references(query, conversation_history):
             # Prepend the context topic
             main_topic = unique_entities[-1]
             q = f'{main_topic} {q}'
-            print(f"[DEBUG] Added context to technique question: '{query}' → '{q}'")
+            logger.debug(f"Added context to technique question: '{query}' → '{q}'")
 
     return q if q != query.lower() else query
 
@@ -18142,7 +18149,7 @@ def stream():
                 # Default (general, management)
                 temperature = 0.1
 
-            print(f"[DEBUG] Using temperature {temperature} for question type '{question_type}'")
+            logger.debug(f"Using temperature {temperature} for question type '{question_type}'")
 
             # Stream GPT response
             stream_response = openai_client.chat.completions.create(
@@ -18167,9 +18174,9 @@ def stream():
             cleaned_response = strip_markdown_code_fences(full_response)
 
             # Save complete response to session
-            print(f"[DEBUG] [STREAM] Before saving - session has {len(session.get('messages', []))} messages")
+            logger.debug(f"[STREAM] Before saving - session has {len(session.get('messages', []))} messages")
             for i, msg in enumerate(session.get('messages', [])):
-                print(f"[DEBUG] [STREAM]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
+                logger.debug(f"[STREAM]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
 
             # CRITICAL FIX: Get a copy of messages list to force Flask session change detection
             # Modifying nested list items directly (session['messages'][-1] = ...) doesn't
@@ -18190,7 +18197,7 @@ def stream():
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
                 }
-                print(f"[DEBUG] [STREAM] Updated existing placeholder assistant message")
+                logger.debug("[STREAM] Updated existing placeholder assistant message")
             else:
                 # Append new message (for AJAX submissions from chat page)
                 messages.append({
@@ -18200,7 +18207,7 @@ def stream():
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength
                 })
-                print(f"[DEBUG] [STREAM] Appended new assistant message")
+                logger.debug("[STREAM] Appended new assistant message")
 
             # Reassign entire list to trigger Flask session change detection
             session['messages'] = messages
@@ -18215,12 +18222,12 @@ def stream():
                 from werkzeug.wrappers import Response as WerkzeugResponse
                 mock_response = WerkzeugResponse()
                 app.session_interface.save_session(app, session, mock_response)
-                print(f"[DEBUG] [STREAM] Explicitly saved session to Redis")
+                logger.debug("[STREAM] Explicitly saved session to Redis")
             except Exception as e:
-                print(f"[ERROR] [STREAM] Failed to explicitly save session: {e}")
+                logger.error(f"[STREAM] Failed to explicitly save session: {e}")
 
-            print(f"[DEBUG] [STREAM] After saving - session has {len(session['messages'])} messages")
-            print(f"[DEBUG] [STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
+            logger.debug(f"[STREAM] After saving - session has {len(session['messages'])} messages")
+            logger.debug(f"[STREAM] Verified last message content_length: {len(messages[-1].get('content', ''))}")
 
             # [PHASE 2] Save assistant response to database (non-blocking)
             conversation_id = session.get('conversation_id')
@@ -18233,11 +18240,11 @@ def stream():
                     num_papers=num_papers,
                     evidence_strength=evidence_strength
                 ):
-                    print(f"[CHAT_HISTORY] Saved assistant response to database")
+                    logger.info("Saved assistant response to database")
                 else:
-                    print(f"[CHAT_HISTORY] Assistant response not saved to database (feature disabled or error)")
+                    logger.debug("Assistant response not saved to database (feature disabled or error)")
             else:
-                print(f"[CHAT_HISTORY] No conversation_id in session, skipping database save")
+                logger.debug("No conversation_id in session, skipping database save")
 
             # Send references with evidence strength
             yield f"data: {json.dumps({'type': 'references', 'data': refs, 'num_papers': num_papers, 'evidence_strength': evidence_strength}, ensure_ascii=False)}\n\n"
@@ -18250,7 +18257,7 @@ def stream():
             session.modified = True
 
         except Exception as e:
-            print(f"[ERROR] Streaming failed: {e}")
+            logger.error(f"Streaming failed: {e}")
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
 
     return Response(stream_with_context(generate()), mimetype='text/event-stream')
@@ -18273,12 +18280,12 @@ def get_cached_pubmed_results(search_term, retmax=20):
         cache_key = generate_cache_key(search_term, retmax)
         cached = redis_client.get(cache_key)
         if cached:
-            print(f"[CACHE HIT] Found cached results for query: {search_term[:50]}")
+            logger.debug(f"Cache hit for query: {search_term[:50]}")
             return json.loads(cached)
-        print(f"[CACHE MISS] No cached results for query: {search_term[:50]}")
+        logger.debug(f"Cache miss for query: {search_term[:50]}")
         return None
     except Exception as e:
-        print(f"[CACHE ERROR] Failed to retrieve from cache: {e}")
+        logger.error(f"Failed to retrieve from cache: {e}")
         return None
 
 def cache_pubmed_results(search_term, ids, retmax=20, ttl=86400):
@@ -18295,10 +18302,10 @@ def cache_pubmed_results(search_term, ids, retmax=20, ttl=86400):
             'count': len(ids)
         }
         redis_client.setex(cache_key, ttl, json.dumps(cache_data))
-        print(f"[CACHE SAVE] Cached {len(ids)} results for query: {search_term[:50]}")
+        logger.debug(f"Cached {len(ids)} results for query: {search_term[:50]}")
         return True
     except Exception as e:
-        print(f"[CACHE ERROR] Failed to save to cache: {e}")
+        logger.error(f"Failed to save to cache: {e}")
         return False
 
 def get_cached_paper_metadata(pmid):
@@ -18313,7 +18320,7 @@ def get_cached_paper_metadata(pmid):
             return json.loads(cached)
         return None
     except Exception as e:
-        print(f"[CACHE ERROR] Failed to retrieve paper {pmid} from cache: {e}")
+        logger.error(f"Failed to retrieve paper {pmid} from cache: {e}")
         return None
 
 def cache_paper_metadata(pmid, metadata, ttl=604800):
@@ -18326,7 +18333,7 @@ def cache_paper_metadata(pmid, metadata, ttl=604800):
         redis_client.setex(cache_key, ttl, json.dumps(metadata))
         return True
     except Exception as e:
-        print(f"[CACHE ERROR] Failed to cache paper {pmid}: {e}")
+        logger.error(f"Failed to cache paper {pmid}: {e}")
         return False
 
 # ============================================================================
@@ -18362,10 +18369,10 @@ def index():
         try:
             # Safely get query from form data and sanitize it
             raw_query = request.form.get("query", "").strip()
-            print(f"[DEBUG] Form data received: {dict(request.form)}")
-            print(f"[DEBUG] Query field raw value: '{request.form.get('query', 'MISSING')}'")
-            print(f"[DEBUG] Is AJAX: {request.headers.get('X-Requested-With') == 'XMLHttpRequest'}")
-            print(f"[DEBUG] Session messages count: {len(session.get('messages', []))}")
+            logger.debug(f"Form data received: {dict(request.form)}")
+            logger.debug(f"Query field raw value: '{request.form.get('query', 'MISSING')}'")
+            logger.debug(f"Is AJAX: {request.headers.get('X-Requested-With') == 'XMLHttpRequest'}")
+            logger.debug(f"Session messages count: {len(session.get('messages', []))}")
             raw_query = sanitize_user_query(raw_query)
 
             # Check if this is an AJAX request
@@ -18373,7 +18380,7 @@ def index():
 
             # If query is empty, return appropriate response
             if not raw_query:
-                print(f"[DEBUG] Empty query received - likely issue with form submission")
+                logger.debug("Empty query received - likely issue with form submission")
                 if is_ajax:
                     return jsonify({'status': 'error', 'message': 'Please enter a question before submitting.'})
                 # Return to homepage with error message in session
@@ -18381,9 +18388,9 @@ def index():
                 session.modified = True
                 return redirect(url_for('index'))
 
-            print(f"\n[DEBUG] ===== NEW REQUEST =====")
-            print(f"[DEBUG] Raw query: '{raw_query}'")
-            print(f"[DEBUG] Session has {len(session['messages'])} messages before")
+            logger.debug(f"===== NEW REQUEST =====")
+            logger.debug(f"Raw query: '{raw_query}'")
+            logger.debug(f"Session has {len(session['messages'])} messages before")
 
             # Check if this is the first message (from homepage)
             is_first_message = len(session['messages']) == 0
@@ -18401,7 +18408,7 @@ def index():
                         topic_words.append(word)
                 if topic_words:
                     session['conversation_topic'] = ' '.join(topic_words[:3])  # First 3 meaningful words
-                    print(f"[DEBUG] Conversation topic set: {session['conversation_topic']}")
+                    logger.debug(f"Conversation topic set: {session['conversation_topic']}")
 
             # [PHASE 2] If this is a new conversation, save it to database
             if is_new_conversation:
@@ -18410,21 +18417,21 @@ def index():
                 user_session_id = session.get('persistent_session_id', 'anonymous')
 
                 if safe_db_save_conversation(conversation_id, user_session_id, conversation_title):
-                    print(f"[CHAT_HISTORY] Created new conversation in database: {conversation_id}")
+                    logger.info(f"Created new conversation in database: {conversation_id}")
                 else:
-                    print(f"[CHAT_HISTORY] Conversation not saved to database (feature disabled or error)")
+                    logger.info(f"Conversation not saved to database (feature disabled or error)")
 
             # Add user message to conversation
             session['messages'].append({"role": "user", "content": raw_query})
             session['chat_active'] = True  # Set chat mode flag
             session.modified = True
-            print(f"[DEBUG] Added user message, session now has {len(session['messages'])} messages")
+            logger.debug(f"Added user message, session now has {len(session['messages'])} messages")
 
             # [PHASE 2] Save user message to database (non-blocking)
             if safe_db_save_message(conversation_id, "user", raw_query):
-                print(f"[CHAT_HISTORY] Saved user message to database")
+                logger.info(f"Saved user message to database")
             else:
-                print(f"[CHAT_HISTORY] User message not saved to database (feature disabled or error)")
+                logger.info(f"User message not saved to database (feature disabled or error)")
 
             # Check if this is a calculation request
             context_hint = None
@@ -18442,7 +18449,7 @@ def index():
             calc_result = detect_and_calculate(raw_query, context_hint=context_hint)
 
             if calc_result:
-                print(f"[DEBUG] Calculator result generated")
+                logger.debug(f"Calculator result generated")
                 session['messages'].append({
                     "role": "assistant",
                     "content": calc_result,
@@ -18453,7 +18460,7 @@ def index():
 
                 # [PHASE 2] Save calculator result to database (non-blocking)
                 if safe_db_save_message(conversation_id, "assistant", calc_result, references=[], num_papers=0):
-                    print(f"[CHAT_HISTORY] Saved calculator result to database")
+                    logger.info(f"Saved calculator result to database")
 
                 if is_ajax:
                     return jsonify({
@@ -18461,32 +18468,32 @@ def index():
                         'result': calc_result,
                         'message': 'Calculation complete'
                     })
-                print(f"[DEBUG] Redirecting after calculation")
+                logger.debug(f"Redirecting after calculation")
                 return redirect(url_for('index'))
 
             query = clean_query(raw_query)
-            print(f"[DEBUG] Cleaned query: '{query}'")
+            logger.debug(f"Cleaned query: '{query}'")
 
             is_followup = len(session['messages']) >= 3
-            print(f"[DEBUG] Is follow-up: {is_followup}")
+            logger.debug(f"Is follow-up: {is_followup}")
 
             # Resolve pronouns and references using conversation context
             query = resolve_references(query, session['messages'][:-1])  # Exclude the just-added user message
-            print(f"[DEBUG] After reference resolution: '{query}'")
+            logger.debug(f"After reference resolution: '{query}'")
 
             # Detect question type for customized search and temperature
             question_type = detect_question_type(query)
-            print(f"[DEBUG] Question type: {question_type}")
+            logger.debug(f"Question type: {question_type}")
 
             # Detect if this is a multi-part question
             is_multipart = detect_multipart(query)
             if is_multipart:
-                print(f"[DEBUG] Multi-part question detected")
+                logger.debug(f"Multi-part question detected")
 
             # Handle negations (contraindications, when NOT to use, etc.)
             negation_search_modifier, negation_prompt_modifier = handle_negations(query)
             if negation_search_modifier:
-                print(f"[DEBUG] Negation detected - will modify search and prompt")
+                logger.debug(f"Negation detected - will modify search and prompt")
 
             # Expand medical abbreviations and synonyms
             q = expand_medical_abbreviations(query)
@@ -18502,7 +18509,7 @@ def index():
                 elif 'last' in query_lower or 'local anesthetic' in query_lower:
                     q = q + ' AND (protocol[ti] OR treatment[ti] OR resuscitation[ti])'
 
-            print(f"[DEBUG] Expanded query: '{q}'")
+            logger.debug(f"Expanded query: '{q}'")
 
             # Detect well-established topics that should have lots of evidence
             well_established_topics = [
@@ -18558,7 +18565,7 @@ def index():
             if negation_search_modifier:
                 search_term += negation_search_modifier
 
-            print(f"[DEBUG] Search term: '{search_term[:150]}...'")
+            logger.debug(f"Search term: '{search_term[:150]}...'")
 
             # Multi-tier search strategy to find relevant papers
             ids = []
@@ -18596,18 +18603,18 @@ def index():
 
             if cached_result:
                 ids = cached_result.get('ids', [])
-                print(f"[DEBUG] Tier 1 (CACHED): Found {len(ids)} papers")
+                logger.debug(f"Tier 1 (CACHED): Found {len(ids)} papers")
             else:
                 try:
-                    print(f"[DEBUG] Tier 1: Searching PubMed with anesthesiology context...")
+                    logger.debug(f"Tier 1: Searching PubMed with anesthesiology context...")
                     handle = Entrez.esearch(db="pubmed", term=tier1_search_term, retmax=20, sort="relevance")
                     result = Entrez.read(handle)
                     ids = result.get("IdList", [])
-                    print(f"[DEBUG] Tier 1 found {len(ids)} papers")
+                    logger.debug(f"Tier 1 found {len(ids)} papers")
                     # Cache the results
                     cache_pubmed_results(tier1_search_term, ids, retmax=20)
                 except Exception as e:
-                    print(f"[ERROR] Tier 1 search failed: {e}")
+                    logger.error(f"Tier 1 search failed: {e}")
                     ids = []
 
             # Tier 2: Even broader perioperative/critical care context (very inclusive)
@@ -18632,25 +18639,25 @@ def index():
                 if cached_result:
                     tier2_ids = cached_result.get('ids', [])
                     ids = list(set(ids + tier2_ids))
-                    print(f"[DEBUG] Tier 2 (CACHED): Found {len(tier2_ids)} papers, total unique: {len(ids)}")
+                    logger.debug(f"Tier 2 (CACHED): Found {len(tier2_ids)} papers, total unique: {len(ids)}")
                 else:
                     try:
-                        print(f"[DEBUG] Tier 2: Broader anesthesia context (still anesthesia-focused)...")
+                        logger.debug(f"Tier 2: Broader anesthesia context (still anesthesia-focused)...")
                         handle = Entrez.esearch(db="pubmed", term=tier2_search_term, retmax=20, sort="relevance")
                         result = Entrez.read(handle)
                         tier2_ids = result.get("IdList", [])
                         # Combine and deduplicate
                         ids = list(set(ids + tier2_ids))
-                        print(f"[DEBUG] Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
+                        logger.debug(f"Tier 2 found {len(tier2_ids)} papers, total unique: {len(ids)}")
                         # Cache the results
                         cache_pubmed_results(tier2_search_term, tier2_ids, retmax=20)
                     except Exception as e:
-                        print(f"[ERROR] Tier 2 search failed: {e}")
+                        logger.error(f"Tier 2 search failed: {e}")
 
             # Tier 3: High-quality studies with broad perioperative context and extended date range
             if len(ids) < 5 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 3: High-quality studies with broad perioperative context...")
+                    logger.debug(f"Tier 3: High-quality studies with broad perioperative context...")
                     # Maintain perioperative/critical care context - inclusive of related fields
                     tier3_periop = (
                         '(anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR '
@@ -18667,14 +18674,14 @@ def index():
                     tier3_ids = result.get("IdList", [])
                     # Combine and deduplicate
                     ids = list(set(ids + tier3_ids))
-                    print(f"[DEBUG] Tier 3 found {len(tier3_ids)} papers, total unique: {len(ids)}")
+                    logger.debug(f"Tier 3 found {len(tier3_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
-                    print(f"[ERROR] Tier 3 search failed: {e}")
+                    logger.error(f"Tier 3 search failed: {e}")
 
             # Tier 4: Last resort - very broad perioperative context, extended date range
             if len(ids) < 3 and not is_followup:
                 try:
-                    print(f"[DEBUG] Tier 4: Very broad perioperative context, extended date range...")
+                    logger.debug(f"Tier 4: Very broad perioperative context, extended date range...")
                     # Most inclusive - captures anesthesia, critical care, surgical, emergency, ICU
                     tier4_periop = (
                         f'({q}) AND (anesthesia[tiab] OR anesthetic[tiab] OR perioperative[tiab] OR '
@@ -18687,17 +18694,17 @@ def index():
                     tier4_ids = result.get("IdList", [])
                     # Combine and deduplicate
                     ids = list(set(ids + tier4_ids))
-                    print(f"[DEBUG] Tier 4 found {len(tier4_ids)} papers, total unique: {len(ids)}")
+                    logger.debug(f"Tier 4 found {len(tier4_ids)} papers, total unique: {len(ids)}")
                 except Exception as e:
-                    print(f"[ERROR] Tier 4 search failed: {e}")
+                    logger.error(f"Tier 4 search failed: {e}")
 
-            print(f"[DEBUG] Final total: {len(ids)} unique papers found")
+            logger.debug(f"Final total: {len(ids)} unique papers found")
 
             # If no papers found, handle gracefully
             if not ids:
-                print(f"[DEBUG] No papers found")
+                logger.debug(f"No papers found")
                 if is_followup:
-                    print(f"[DEBUG] Generating follow-up response without papers")
+                    logger.debug(f"Generating follow-up response without papers")
                     conversation_context = ""
                     recent_messages = session['messages'][-8:]
                     for msg in recent_messages:
@@ -18732,7 +18739,7 @@ Provide a comprehensive, evidence-based answer that:
 
 Answer as if you're a colleague continuing the conversation:"""
 
-                    print(f"[DEBUG] Preparing streaming for follow-up...")
+                    logger.debug(f"Preparing streaming for follow-up...")
 
                     # Generate unique request ID for this streaming session
                     request_id = str(uuid.uuid4())
@@ -18752,7 +18759,7 @@ Answer as if you're a colleague continuing the conversation:"""
                     # Also store in memory cache as backup
                     store_stream_data(request_id, stream_data)
 
-                    print(f"[DEBUG] Stream data prepared for follow-up, request_id: {request_id}")
+                    logger.debug(f"Stream data prepared for follow-up, request_id: {request_id}")
 
                     # Add placeholder assistant message and set pending_stream
                     # This happens for BOTH AJAX and regular form submissions
@@ -18764,7 +18771,7 @@ Answer as if you're a colleague continuing the conversation:"""
                     })
                     session['pending_stream'] = request_id
                     session.modified = True
-                    print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+                    logger.debug(f"Added placeholder assistant message and set pending_stream")
 
                     # If AJAX request, return JSON (JavaScript will handle redirect)
                     if is_ajax:
@@ -18775,10 +18782,10 @@ Answer as if you're a colleague continuing the conversation:"""
                         })
 
                     # For regular form submissions, redirect to index page
-                    print(f"[DEBUG] Redirecting to index page")
+                    logger.debug(f"Redirecting to index page")
                     return redirect(url_for('index'))
                 else:
-                    print(f"[DEBUG] No results for initial query")
+                    logger.debug(f"No results for initial query")
                     error_msg = "<p>No relevant evidence found in recent literature. Try rephrasing your question or using different medical terms.</p>"
                     session['messages'].append({
                         "role": "assistant",
@@ -18792,13 +18799,13 @@ Answer as if you're a colleague continuing the conversation:"""
                             'status': 'error',
                             'message': error_msg
                         })
-                    print(f"[DEBUG] Error message added, redirecting")
+                    logger.debug(f"Error message added, redirecting")
                     return redirect(url_for('index'))
 
-            print(f"[DEBUG] Fetching {len(ids)} papers from PubMed...")
+            logger.debug(f"Fetching {len(ids)} papers from PubMed...")
             handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
             papers = Entrez.read(handle)["PubmedArticle"]
-            print(f"[DEBUG] Papers fetched successfully")
+            logger.debug(f"Papers fetched successfully")
 
             refs = []
             context = ""
@@ -18841,11 +18848,11 @@ Answer as if you're a colleague continuing the conversation:"""
             refs.sort(key=lambda x: x.get('sort_priority', 99))
 
             num_papers = len(refs)
-            print(f"[DEBUG] Processed {num_papers} paper references")
+            logger.debug(f"Processed {num_papers} paper references")
 
             # Build smart conversation context (includes relevant earlier messages + recent)
             conversation_context = build_smart_context(session['messages'][:-1], raw_query)  # Exclude just-added user message
-            print(f"[DEBUG] Smart context built ({len(conversation_context)} chars)")
+            logger.debug(f"Smart context built ({len(conversation_context)} chars)")
 
             # Create numbered reference list for citation
             ref_list = ""
@@ -18858,10 +18865,10 @@ Answer as if you're a colleague continuing the conversation:"""
                 context += f"Paper [{i}]:\nTitle: {ref['title']}\nAbstract: {ref.get('abstract', 'No abstract available')}\nAuthors: {ref['authors']}\nJournal: {ref['journal']} ({ref['year']})\nPMID: {ref['pmid']}\n\n"
 
             # Log papers being used for debugging
-            print(f"\n[DEBUG] ===== PAPERS RETURNED FOR QUERY: '{raw_query}' =====")
+            logger.debug(f"===== PAPERS RETURNED FOR QUERY: '{raw_query}' =====")
             for i, ref in enumerate(refs[:3], 1):  # Show first 3
-                print(f"[DEBUG] [{i}] {ref['title'][:100]}...")
-            print(f"[DEBUG] ================================================\n")
+                logger.debug(f"[{i}] {ref['title'][:100]}...")
+            logger.debug(f"================================================\n")
 
             prompt = f"""You are a clinical anesthesiologist AI providing evidence-based answers with citations.
 
@@ -18927,7 +18934,7 @@ NOTE: Numbers [1], [2], [3] must correspond to Paper [1], Paper [2], Paper [3] l
 
 Respond with maximum clinical utility:"""
 
-            print(f"[DEBUG] Preparing streaming with {num_papers} papers...")
+            logger.debug(f"Preparing streaming with {num_papers} papers...")
             logger.info(f"[CHAT] Preparing streaming with {num_papers} papers")
 
             # Generate unique request ID for this streaming session
@@ -18955,7 +18962,7 @@ Respond with maximum clinical utility:"""
             logger.info(f"[CHAT] Session keys after storing: {[k for k in session.keys() if k.startswith('stream_')]}")
             logger.info(f"[CHAT] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
 
-            print(f"[DEBUG] Stream data prepared, returning request_id: {request_id}")
+            logger.debug(f"Stream data prepared, returning request_id: {request_id}")
 
             # Add placeholder assistant message for auto-start JavaScript to populate
             # This happens for BOTH AJAX and regular form submissions
@@ -18967,7 +18974,7 @@ Respond with maximum clinical utility:"""
             })
             session['pending_stream'] = request_id
             session.modified = True
-            print(f"[DEBUG] Added placeholder assistant message and set pending_stream")
+            logger.debug(f"Added placeholder assistant message and set pending_stream")
 
             # If AJAX request, return JSON (JavaScript will handle redirect)
             if is_ajax:
@@ -18978,16 +18985,16 @@ Respond with maximum clinical utility:"""
                 })
 
             # For regular form submissions (not AJAX), redirect to index page
-            print(f"[DEBUG] Redirecting to index page")
-            print(f"[DEBUG] Session messages before redirect: {len(session.get('messages', []))} messages")
+            logger.debug(f"Redirecting to index page")
+            logger.debug(f"Session messages before redirect: {len(session.get('messages', []))} messages")
             for i, msg in enumerate(session.get('messages', [])):
-                print(f"[DEBUG]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
+                logger.debug(f"  Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}")
             return redirect(url_for('index'))
 
         except Exception as e:
             # Catch all unhandled errors
-            print(f"\n[ERROR] ===== UNHANDLED EXCEPTION =====")
-            print(f"[ERROR] {type(e).__name__}: {e}")
+            logger.error(f"===== UNHANDLED EXCEPTION =====")
+            logger.error(f"{type(e).__name__}: {e}")
             import traceback
             traceback.print_exc()
 
@@ -19017,11 +19024,11 @@ Respond with maximum clinical utility:"""
     logger.info(f"[INDEX GET] num messages = {len(session.get('messages', []))}")
     logger.info(f"[INDEX GET] stream_data keys = {[k for k in session.keys() if k.startswith('stream_')]}")
 
-    print(f"[DEBUG] GET / - pending_stream = {pending_stream}")
-    print(f"[DEBUG] GET / - num messages = {len(session.get('messages', []))}")
-    print(f"[DEBUG] GET / - Session messages detail:")
+    logger.debug(f"GET / - pending_stream = {pending_stream}")
+    logger.debug(f"GET / - num messages = {len(session.get('messages', []))}")
+    logger.debug(f"GET / - Session messages detail:")
     for i, msg in enumerate(session.get('messages', [])):
-        print(f"[DEBUG]   Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}, has_refs={len(msg.get('references', []))}")
+        logger.debug(f"  Message {i}: role={msg.get('role')}, content_length={len(msg.get('content', ''))}, has_refs={len(msg.get('references', []))}")
 
     # Get and clear any error message from session
     error_message = session.pop('error_message', None)
@@ -21834,7 +21841,7 @@ def api_conversations():
         }), 200
 
     except Exception as e:
-        print(f"[CHAT_HISTORY] Error fetching conversations: {e}")
+        logger.info(f"Error fetching conversations: {e}")
         return jsonify({
             'enabled': True,
             'conversations': [],
@@ -21890,13 +21897,13 @@ def load_conversation(conversation_id):
         session['chat_active'] = True
         session.modified = True
 
-        print(f"[CHAT_HISTORY] Loaded conversation {conversation_id} with {len(messages)} messages")
+        logger.info(f"Loaded conversation {conversation_id} with {len(messages)} messages")
 
         # Redirect to homepage (will show chat interface with loaded messages)
         return redirect(url_for('index'))
 
     except Exception as e:
-        print(f"[CHAT_HISTORY] Error loading conversation: {e}")
+        logger.info(f"Error loading conversation: {e}")
         return jsonify({
             'error': f'Failed to load conversation: {str(e)}'
         }), 500
