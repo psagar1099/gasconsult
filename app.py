@@ -15696,16 +15696,6 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             .calc-card.large {
                 grid-column: span 2;
             }
-
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-        }
-
-        @media (min-width: 1024px) {
-            .footer { padding: 48px 40px; }
         }
 
         .calc-header {
@@ -16046,6 +16036,18 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
         .footer-link:hover {
             color: var(--gray-700);
+        }
+
+        @media (min-width: 768px) {
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .footer { padding: 48px 40px; }
         }
 
         /* Medical Disclaimer */
