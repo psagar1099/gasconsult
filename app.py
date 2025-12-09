@@ -20598,36 +20598,123 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .assessment-content {
             line-height: 1.8;
             color: var(--gray-700);
+            font-size: 15px;
         }
 
         .assessment-content h3 {
             color: var(--gray-900);
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
-            margin-top: 24px;
-            margin-bottom: 12px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .assessment-content h3:first-child {
             margin-top: 0;
         }
 
+        .assessment-content h3::before {
+            content: "▸";
+            color: var(--blue-600);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
         .assessment-content p {
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            line-height: 1.7;
         }
 
         .assessment-content ul {
-            margin-left: 20px;
-            margin-bottom: 12px;
+            margin-left: 0;
+            margin-bottom: 16px;
+            padding-left: 0;
+            list-style: none;
         }
 
         .assessment-content li {
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            padding-left: 28px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .assessment-content li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--blue-600);
+            font-weight: 700;
+            font-size: 16px;
         }
 
         .assessment-content strong {
             color: var(--gray-900);
             font-weight: 600;
+            background: var(--blue-50);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Risk Level Badges */
+        .assessment-content .risk-high,
+        .assessment-content .high-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+            color: #991B1B;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #FCA5A5;
+        }
+
+        .assessment-content .risk-moderate,
+        .assessment-content .moderate-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #92400E;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #FCD34D;
+        }
+
+        .assessment-content .risk-low,
+        .assessment-content .low-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #6EE7B7;
+        }
+
+        /* Info Boxes */
+        .assessment-content blockquote {
+            background: var(--blue-50);
+            border-left: 4px solid var(--blue-600);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-style: normal;
+        }
+
+        /* Subsections */
+        .assessment-content h4 {
+            color: var(--blue-700);
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
         }
 
         /* References Card */
@@ -21894,14 +21981,20 @@ Generate a comprehensive difficult airway assessment including:
    - Postoperative extubation planning
    - Communication plan with surgical team
 
-Use HTML formatting:
-- <h3>Section Headers</h3>
-- <p>Paragraphs</p>
-- <strong>Bold for emphasis</strong>
-- <ul><li>Bulleted lists</li></ul>
-- <br><br> for spacing
+Use HTML formatting with visual enhancements:
+- <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
+- <h4>Subsection Headers</h4> - For sub-topics within sections
+- <p>Paragraphs</p> - Normal text
+- <strong>Key Terms</strong> - Important terms will be highlighted with blue background
+- <ul><li>Bulleted lists</li></ul> - Items will display with checkmark icons
+- Risk levels: Wrap risk categories in spans like <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, or <span class="risk-low">Low Risk</span> for color-coded badges
+- <br><br> for spacing between major sections
 
-IMPORTANT: Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above. Do NOT create a separate "References" section - the references will be displayed separately below your assessment.
+IMPORTANT:
+1. Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above
+2. DO NOT create a separate "References" section - references will be displayed separately below
+3. Use the risk level spans (risk-high, risk-moderate, risk-low) when mentioning risk categories for visual impact
+4. Use <strong> tags for drug names, equipment, and critical decision points
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
 
