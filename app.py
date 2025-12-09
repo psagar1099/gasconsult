@@ -22060,6 +22060,13 @@ Additional Notes: {notes if notes else 'None'}
     # Generate GPT summary
     prompt = f"""You are an expert anesthesiologist helping create a comprehensive, patient-specific informed consent discussion guide. Based on the patient's information and evidence-based literature, provide a detailed consent discussion that balances medical accuracy with patient-friendly language.
 
+IMPORTANT OUTPUT INSTRUCTIONS:
+- Output ONLY the formatted HTML content - NO preamble, NO "Here is..." or "Html", just start directly with the first <h3> tag
+- Use THIRD PERSON language throughout (refer to "the patient" or "this patient", NOT "you" or "your")
+- Write in a neutral, professional tone suitable for medical documentation
+- Example: Use "The patient will experience..." instead of "You will experience..."
+- Example: Use "The patient's risks include..." instead of "Your risks include..."
+
 Patient Information:
 {patient_data}
 
@@ -22082,7 +22089,7 @@ Generate a comprehensive informed consent discussion guide including:
 1. **Procedure Overview & Anesthesia Type**:
    - Brief explanation of {anesthesia_type} anesthesia for {procedure}
    - What the patient will experience before, during, and after
-   - Why this anesthesia type is appropriate for their procedure
+   - Why this anesthesia type is appropriate for the patient's procedure
 
 2. **Common Side Effects** (with frequencies when available):
    - List 5-7 most common side effects specific to {anesthesia_type} and {procedure}
@@ -22098,8 +22105,8 @@ Generate a comprehensive informed consent discussion guide including:
 
 4. **Patient-Specific Risk Factors**:
    - How THIS patient's comorbidities ({all_comorbidities}) affect anesthesia risks
-   - Special precautions being taken for their conditions
-   - Why their ASA {asa} classification matters
+   - Special precautions being taken for the patient's conditions
+   - Why the patient's ASA {asa} classification matters
    - Management of special considerations: {all_special}
 
 5. **Alternative Options**:
@@ -22107,16 +22114,16 @@ Generate a comprehensive informed consent discussion guide including:
    - Pros and cons of each option for THIS patient
    - Why {anesthesia_type} is recommended
 
-6. **Questions Patients Should Ask**:
-   - 5-7 important questions this patient should discuss with their anesthesiologist
-   - Questions specific to their comorbidities and special considerations
+6. **Questions the Patient Should Ask**:
+   - 5-7 important questions this patient should discuss with the anesthesiologist
+   - Questions specific to the patient's comorbidities and special considerations
    - Questions about postoperative pain management, recovery, etc.
 
 7. **What to Expect & Preparation**:
    - Pre-operative instructions (NPO status, medications to continue/hold)
    - What happens in the holding area and OR
    - Recovery room expectations
-   - When they can eat, drink, resume activities
+   - When the patient can eat, drink, resume activities
 
 Use HTML formatting with visual enhancements:
 - <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
@@ -22132,8 +22139,10 @@ IMPORTANT:
 2. DO NOT create a separate "References" section - references will be displayed separately below
 3. Use the risk level spans (risk-high, risk-moderate, risk-low) when mentioning risk percentages for visual impact
 4. Use <strong> tags for drug names, procedures, percentages, and key medical terms
+5. ALWAYS use THIRD PERSON ("the patient", "this patient") - NEVER use second person ("you", "your")
+6. Start output immediately with <h3> - NO introduction, preamble, or "Here is..." text
 
-Tone: Professional but accessible - explain medical concepts in plain English while maintaining accuracy. The goal is informed consent that patients can truly understand."""
+Tone: Professional, neutral, and accessible - explain medical concepts in plain English while maintaining accuracy and objectivity. Write as medical documentation that informs about the patient, not as a conversation with the patient."""
 
     try:
         response = openai_client.chat.completions.create(
