@@ -1990,6 +1990,32 @@ PREOP_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        /* Social Media Icons */
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-icon {
+            color: var(--gray-500);
+            transition: color 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-icon:hover {
+            color: var(--gray-700);
+            transform: translateY(-2px);
+        }
+
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
         /* Tablet & Desktop */
         @media (min-width: 640px) {
             .input-row {
@@ -2036,10 +2062,11 @@ PREOP_HTML = """<!DOCTYPE html>
             }
 
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
@@ -2424,6 +2451,25 @@ PREOP_HTML = """<!DOCTYPE html>
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -3671,10 +3717,11 @@ HTML = """<!DOCTYPE html>
             .feature-title { font-size: 20px; margin-bottom: 12px; }
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
             .orb-1 { width: 600px; height: 600px; left: -10%; }
             .orb-2 { width: 450px; height: 450px; right: -10%; }
             .orb-3 { width: 400px; height: 400px; }
@@ -6404,10 +6451,11 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .feature-title { font-size: 20px; margin-bottom: 12px; }
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
             .orb-1 { width: 600px; height: 600px; left: -10%; }
             .orb-2 { width: 450px; height: 450px; right: -10%; }
             .orb-3 { width: 400px; height: 400px; }
@@ -7417,10 +7465,11 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .feature-title { font-size: 20px; margin-bottom: 12px; }
             .feature-desc { font-size: 15px; line-height: 1.7; margin-bottom: 24px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
             .orb-1 { width: 600px; height: 600px; left: -10%; }
             .orb-2 { width: 450px; height: 450px; right: -10%; }
             .orb-3 { width: 400px; height: 400px; }
@@ -8136,10 +8185,11 @@ TERMS_HTML = """<!DOCTYPE html>
             h2 { font-size: 24px; margin-top: 40px; margin-bottom: 18px; }
             h3 { font-size: 19px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
             .orb-1 { width: 600px; height: 600px; left: -10%; }
             .orb-2 { width: 450px; height: 450px; right: -10%; }
             .orb-3 { width: 400px; height: 400px; }
@@ -10234,10 +10284,11 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             .content-card { padding: 40px; }
 
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
@@ -10670,6 +10721,25 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -11738,10 +11808,11 @@ CRISIS_HTML = """<!DOCTYPE html>
             }
 
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
@@ -13146,6 +13217,25 @@ CRISIS_HTML = """<!DOCTYPE html>
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -16040,10 +16130,11 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
         @media (min-width: 768px) {
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
@@ -16701,6 +16792,25 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -18126,6 +18236,25 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/company/gasconsultai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -19710,10 +19839,11 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .mobile-menu-btn { display: none; }
             h1 { font-size: 42px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
@@ -20905,10 +21035,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             .mobile-menu-btn { display: none; }
             h1 { font-size: 42px; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner { flex-direction: row; justify-content: center; gap: 40px; flex-wrap: wrap; }
             .footer-text { font-size: 14px; }
             .footer-links { gap: 32px; }
             .footer-link { font-size: 14px; }
+            .social-icons { order: -1; flex-basis: 100%; justify-content: center; margin-bottom: 12px; }
         }
 
         @media (min-width: 1024px) {
