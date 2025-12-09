@@ -11676,6 +11676,7 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .footer {
+            margin-top: auto;
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
