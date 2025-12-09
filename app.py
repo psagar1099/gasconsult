@@ -4046,7 +4046,7 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-input-wrapper {
-            max-width: 720px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
@@ -4119,6 +4119,24 @@ HTML = """<!DOCTYPE html>
                 padding: 8px 20px;
             }
 
+            .chat-input-wrapper {
+                max-width: 680px;
+            }
+
+            .chat-card {
+                padding: 5px;
+            }
+
+            .chat-input {
+                font-size: 15px;
+                padding: 10px 14px;
+            }
+
+            .chat-send {
+                width: 44px;
+                height: 44px;
+            }
+
             .new-chat-btn {
                 padding: 10px 18px;
                 font-size: 14px;
@@ -4145,7 +4163,42 @@ HTML = """<!DOCTYPE html>
             }
 
             .chat-input-area {
-                padding: 10px 28px;
+                padding: 10px 32px;
+            }
+
+            .chat-input-wrapper {
+                max-width: 640px;
+            }
+
+            .chat-card {
+                padding: 4px;
+                border-radius: 18px;
+            }
+
+            .chat-inner {
+                border-radius: 13px;
+                padding: 2px;
+            }
+
+            .chat-input {
+                font-size: 15px;
+                padding: 10px 16px;
+                min-height: 42px;
+            }
+
+            .chat-send {
+                width: 46px;
+                height: 46px;
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .chat-input-wrapper {
+                max-width: 600px;
+            }
+
+            .chat-input {
+                font-size: 14.5px;
             }
         }
 
