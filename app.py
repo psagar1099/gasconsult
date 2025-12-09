@@ -4359,6 +4359,13 @@ HTML = """<!DOCTYPE html>
             transform: scale(1.1);
         }
 
+        /* Hide toggle button when sidebar is open */
+        .history-toggle.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(-20px);
+        }
+
         .history-sidebar {
             position: fixed;
             top: 0;
@@ -5292,6 +5299,7 @@ HTML = """<!DOCTYPE html>
             function openSidebar() {
                 historySidebar.classList.add('open');
                 historyOverlay.classList.add('visible');
+                historyToggle.classList.add('hidden');
 
                 // Load conversations on first open
                 if (!conversationsLoaded) {
@@ -5302,6 +5310,7 @@ HTML = """<!DOCTYPE html>
             function closeSidebar() {
                 historySidebar.classList.remove('open');
                 historyOverlay.classList.remove('visible');
+                historyToggle.classList.remove('hidden');
             }
 
             // Load conversations from API
