@@ -13140,9 +13140,6 @@ CRISIS_HTML = """<!DOCTYPE html>
 
                 </div>
             </div>
-
-                </div>
-            </div>
         </div>
 
         <!-- Footer -->
