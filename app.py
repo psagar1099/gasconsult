@@ -19722,9 +19722,355 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .card { padding: 40px; }
             .footer { padding: 48px 40px; }
         }
+
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Results Section */
+        .results-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .consent-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .consent-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .consent-header svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .consent-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .consent-content {
+            line-height: 1.8;
+            color: var(--gray-700);
+            font-size: 15px;
+        }
+
+        .consent-content h3 {
+            color: var(--gray-900);
+            font-size: 17px;
+            font-weight: 700;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .consent-content h3:first-child {
+            margin-top: 0;
+        }
+
+        .consent-content h3::before {
+            content: "▸";
+            color: var(--blue-600);
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .consent-content h4 {
+            color: var(--blue-700);
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .consent-content p {
+            margin-bottom: 14px;
+            line-height: 1.7;
+        }
+
+        .consent-content ul {
+            margin-left: 0;
+            margin-bottom: 16px;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .consent-content li {
+            margin-bottom: 10px;
+            padding-left: 28px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .consent-content li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--blue-600);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .consent-content strong {
+            color: var(--gray-900);
+            font-weight: 600;
+            background: var(--blue-50);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Risk Level Badges */
+        .consent-content .risk-high,
+        .consent-content .high-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+            color: #991B1B;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #FCA5A5;
+        }
+
+        .consent-content .risk-moderate,
+        .consent-content .moderate-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #92400E;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #FCD34D;
+        }
+
+        .consent-content .risk-low,
+        .consent-content .low-risk {
+            display: inline-block;
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: 1px solid #6EE7B7;
+        }
+
+        /* Info Boxes */
+        .consent-content blockquote {
+            background: var(--blue-50);
+            border-left: 4px solid var(--blue-600);
+            padding: 16px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-style: normal;
+        }
+
+        /* References Card */
+        .references-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            margin-bottom: 24px;
+        }
+
+        .references-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .references-title svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--blue-600);
+        }
+
+        .reference-item {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            gap: 12px;
+        }
+
+        .reference-item:last-child {
+            border-bottom: none;
+        }
+
+        .reference-number {
+            display: inline-block;
+            min-width: 32px;
+            height: 32px;
+            background: var(--blue-50);
+            color: var(--blue-600);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 32px;
+            font-size: 13px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .reference-content {
+            flex: 1;
+        }
+
+        .reference-link {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: 1.5;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .reference-link:hover {
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+
+        @media (min-width: 640px) {
+            .action-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Generating Consent Discussion...</div>
+        </div>
+    </div>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -19911,26 +20257,69 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
             {% else %}
             <!-- Results -->
-            <a href="/informed-consent" class="back-btn">← New Assessment</a>
+            <div class="results-container">
+                <div class="header">
+                    <h1><span class="gradient">Informed Consent Discussion</span></h1>
+                    <p class="subtitle">Patient-specific consent information</p>
+                </div>
 
-            <div class="header">
-                <h1><span class="gradient">Informed Consent Discussion</span></h1>
-            </div>
+                <div class="consent-card">
+                    <div class="consent-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <div class="consent-title">Consent Discussion Guide</div>
+                    </div>
+                    <div class="consent-content">
+                        {{ summary|safe }}
+                    </div>
+                </div>
 
-            <div class="card">
-                <div style="line-height: 1.8; color: #334155;">
-                    {{ summary|safe }}
+                {% if references %}
+                <div class="references-card">
+                    <div class="references-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <span>Evidence-Based References</span>
+                    </div>
+                    {% for ref in references %}
+                    <div class="reference-item">
+                        <span class="reference-number">[{{ loop.index }}]</span>
+                        <div class="reference-content">
+                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
+                                {{ ref.title }}
+                            </a>
+                            <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="action-buttons">
+                    <a href="/informed-consent" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        New Consent Discussion
+                    </a>
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                            <rect x="6" y="14" width="12" height="8"></rect>
+                        </svg>
+                        Print/Save PDF
+                    </button>
                 </div>
             </div>
-
-            {% if references %}
-            <div class="card">
-                <div class="section-title">References</div>
-                <div style="line-height: 1.8;">
-                    {{ references|safe }}
-                </div>
-            </div>
-            {% endif %}
             {% endif %}
         </main>
 
@@ -19969,6 +20358,28 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                 }
             });
         }
+
+        // Show loading overlay when form is submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[method="POST"]');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+
+            if (form && loadingOverlay) {
+                form.addEventListener('submit', function(e) {
+                    // Validate required fields before showing loading
+                    const procedure = document.getElementById('procedure');
+                    const age = document.getElementById('age');
+                    const asa = document.querySelector('input[name="asa"]:checked');
+                    const anesthesiaType = document.querySelector('input[name="anesthesia_type"]:checked');
+
+                    // Only show loading if all required fields are filled
+                    if (procedure && procedure.value.trim() !== '' &&
+                        age && age.value && asa && anesthesiaType) {
+                        loadingOverlay.classList.add('active');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
@@ -21707,14 +22118,20 @@ Generate a comprehensive informed consent discussion guide including:
    - Recovery room expectations
    - When they can eat, drink, resume activities
 
-Use HTML formatting:
-- <h3>Section Headers</h3>
-- <p>Paragraphs</p>
-- <strong>Bold for emphasis and risk percentages</strong>
-- <ul><li>Bulleted lists for side effects and risks</li></ul>
-- <br><br> for spacing
+Use HTML formatting with visual enhancements:
+- <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
+- <h4>Subsection Headers</h4> - For sub-topics within sections
+- <p>Paragraphs</p> - Normal text
+- <strong>Key Terms</strong> - Important terms (drug names, procedures, percentages) will be highlighted with blue background
+- <ul><li>Bulleted lists</li></ul> - Items will display with checkmark icons
+- Risk levels: Wrap risk categories in spans like <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, or <span class="risk-low">Low Risk</span> for color-coded badges
+- <br><br> for spacing between major sections
 
-IMPORTANT: Use inline citations [1], [2], [3] throughout your discussion to reference the papers provided above. Do NOT create a separate "References" section - the references will be displayed separately below.
+IMPORTANT:
+1. Use inline citations [1], [2], [3] throughout your discussion to reference the papers provided above
+2. DO NOT create a separate "References" section - references will be displayed separately below
+3. Use the risk level spans (risk-high, risk-moderate, risk-low) when mentioning risk percentages for visual impact
+4. Use <strong> tags for drug names, procedures, percentages, and key medical terms
 
 Tone: Professional but accessible - explain medical concepts in plain English while maintaining accuracy. The goal is informed consent that patients can truly understand."""
 
