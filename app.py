@@ -5223,7 +5223,7 @@ HTML = """<!DOCTYPE html>
                 <span class="badge-text">PubMed-Powered AI</span>
             </div>
             <h1 class="hero-title">The AI copilot for<br><span class="gradient">anesthesiology</span></h1>
-            <p class="hero-subtitle">Evidence-based clinical decision support, instant drug dosing, and intelligent pre-op assessments - all in one place.</p>
+            <p class="hero-subtitle">Smart clinical decision support for the entire perioperative journey - evidence-based, instant, and comprehensive.</p>
 
             <div class="chat-container">
                 <form method="post" action="/" class="chat-card" role="search" aria-label="Ask anesthesiology question">
