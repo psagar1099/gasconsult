@@ -17400,8 +17400,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <div class="logo-icon">
                         <svg viewBox="0 0 120 40" fill="none">
                             <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                            <circle cx="48" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="76" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -19208,8 +19208,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <div class="logo-icon">
                         <svg viewBox="0 0 120 40" fill="none">
                             <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                            <circle cx="48" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="76" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -21610,8 +21610,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                     <div class="logo-icon">
                         <svg viewBox="0 0 120 40" fill="none">
                             <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                            <circle cx="48" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="76" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -22912,8 +22912,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     <div class="logo-icon">
                         <svg viewBox="0 0 120 40" fill="none">
                             <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                            <circle cx="48" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="76" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
