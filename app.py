@@ -17398,10 +17398,10 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -19206,10 +19206,10 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -21608,10 +21608,10 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
@@ -22910,10 +22910,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <div class="nav-inner">
                 <a href="/" class="logo">
                     <div class="logo-icon">
-                        <svg viewBox="0 0 120 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#2563EB"/>
-                            <circle cx="60" cy="20" r="18" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="100" cy="20" r="18" fill="#2563EB" fill-opacity="0.2"/>
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
                         </svg>
                     </div>
                     <div class="logo-text">
