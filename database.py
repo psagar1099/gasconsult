@@ -81,16 +81,39 @@ def init_db():
                 return False
 
         with get_db_connection() as conn:
+            # Create users table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS users (
+                    id TEXT PRIMARY KEY,
+                    email TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    full_name TEXT,
+                    is_verified BOOLEAN DEFAULT 0,
+                    verification_token TEXT,
+                    reset_token TEXT,
+                    reset_token_expires TIMESTAMP,
+                    subscription_tier TEXT DEFAULT 'free' CHECK(subscription_tier IN ('free', 'pro', 'team')),
+                    subscription_status TEXT DEFAULT 'active' CHECK(subscription_status IN ('active', 'cancelled', 'expired')),
+                    stripe_customer_id TEXT,
+                    stripe_subscription_id TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    last_login TIMESTAMP,
+                    is_active BOOLEAN DEFAULT 1
+                )
+            """)
+
             # Create conversations table
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS conversations (
                     id TEXT PRIMARY KEY,
-                    user_session_id TEXT NOT NULL,
+                    user_session_id TEXT,
+                    user_id TEXT,
                     title TEXT NOT NULL,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     message_count INTEGER DEFAULT 0,
-                    is_active BOOLEAN DEFAULT 1
+                    is_active BOOLEAN DEFAULT 1,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 )
             """)
 
@@ -111,8 +134,28 @@ def init_db():
 
             # Create indexes for performance
             conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_users_email
+                ON users(email)
+            """)
+
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_users_verification_token
+                ON users(verification_token)
+            """)
+
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_users_reset_token
+                ON users(reset_token)
+            """)
+
+            conn.execute("""
                 CREATE INDEX IF NOT EXISTS idx_conversations_session
                 ON conversations(user_session_id, created_at DESC)
+            """)
+
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_conversations_user
+                ON conversations(user_id, created_at DESC)
             """)
 
             conn.execute("""
@@ -497,6 +540,330 @@ def generate_conversation_title(first_query: str, max_length: int = 60) -> str:
         title = title[:max_length].rsplit(' ', 1)[0] + '...'
 
     return title
+
+
+# ====== User Management Functions ======
+
+def create_user(email: str, password_hash: str, full_name: Optional[str] = None, verification_token: Optional[str] = None) -> Optional[str]:
+    """
+    Create a new user account.
+
+    Args:
+        email: User's email address
+        password_hash: Bcrypt hashed password
+        full_name: User's full name (optional)
+        verification_token: Email verification token (optional)
+
+    Returns:
+        User ID if successful, None otherwise
+    """
+    try:
+        user_id = str(uuid.uuid4())
+        with get_db_connection() as conn:
+            conn.execute("""
+                INSERT INTO users (id, email, password_hash, full_name, verification_token, is_verified)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (user_id, email.lower(), password_hash, full_name, verification_token, 1 if not verification_token else 0))
+
+        logger.info(f"Created user account: {email}")
+        return user_id
+
+    except sqlite3.IntegrityError:
+        logger.warning(f"User creation failed: email {email} already exists")
+        return None
+    except Exception as e:
+        logger.error(f"Failed to create user {email}: {e}")
+        return None
+
+
+def get_user_by_email(email: str) -> Optional[Dict[str, Any]]:
+    """
+    Get user by email address.
+
+    Args:
+        email: Email address to look up
+
+    Returns:
+        User dictionary or None if not found
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT id, email, password_hash, full_name, is_verified, subscription_tier,
+                       subscription_status, created_at, last_login, is_active
+                FROM users
+                WHERE email = ? AND is_active = 1
+            """, (email.lower(),))
+
+            row = cursor.fetchone()
+            if not row:
+                return None
+
+            return {
+                'id': row['id'],
+                'email': row['email'],
+                'password_hash': row['password_hash'],
+                'full_name': row['full_name'],
+                'is_verified': bool(row['is_verified']),
+                'subscription_tier': row['subscription_tier'],
+                'subscription_status': row['subscription_status'],
+                'created_at': row['created_at'],
+                'last_login': row['last_login'],
+                'is_active': bool(row['is_active'])
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to get user by email {email}: {e}")
+        return None
+
+
+def get_user_by_id(user_id: str) -> Optional[Dict[str, Any]]:
+    """
+    Get user by ID.
+
+    Args:
+        user_id: User ID to look up
+
+    Returns:
+        User dictionary or None if not found
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT id, email, password_hash, full_name, is_verified, subscription_tier,
+                       subscription_status, created_at, last_login, is_active
+                FROM users
+                WHERE id = ? AND is_active = 1
+            """, (user_id,))
+
+            row = cursor.fetchone()
+            if not row:
+                return None
+
+            return {
+                'id': row['id'],
+                'email': row['email'],
+                'password_hash': row['password_hash'],
+                'full_name': row['full_name'],
+                'is_verified': bool(row['is_verified']),
+                'subscription_tier': row['subscription_tier'],
+                'subscription_status': row['subscription_status'],
+                'created_at': row['created_at'],
+                'last_login': row['last_login'],
+                'is_active': bool(row['is_active'])
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to get user by ID {user_id}: {e}")
+        return None
+
+
+def update_user_login(user_id: str) -> bool:
+    """
+    Update user's last login timestamp.
+
+    Args:
+        user_id: User ID
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET last_login = CURRENT_TIMESTAMP
+                WHERE id = ?
+            """, (user_id,))
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to update last login for user {user_id}: {e}")
+        return False
+
+
+def verify_user_email(verification_token: str) -> bool:
+    """
+    Verify a user's email address using verification token.
+
+    Args:
+        verification_token: Email verification token
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET is_verified = 1, verification_token = NULL
+                WHERE verification_token = ?
+            """, (verification_token,))
+
+            # Check if any rows were updated
+            if conn.total_changes > 0:
+                logger.info(f"Email verified successfully")
+                return True
+            else:
+                logger.warning(f"Invalid verification token")
+                return False
+
+    except Exception as e:
+        logger.error(f"Failed to verify email: {e}")
+        return False
+
+
+def update_user_password(user_id: str, new_password_hash: str) -> bool:
+    """
+    Update user's password.
+
+    Args:
+        user_id: User ID
+        new_password_hash: New bcrypt hashed password
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET password_hash = ?
+                WHERE id = ?
+            """, (new_password_hash, user_id))
+
+        logger.info(f"Password updated for user {user_id}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to update password for user {user_id}: {e}")
+        return False
+
+
+def save_password_reset_token(email: str, reset_token: str, expires_at: datetime) -> bool:
+    """
+    Save password reset token for a user.
+
+    Args:
+        email: User's email address
+        reset_token: Password reset token
+        expires_at: Token expiration datetime
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET reset_token = ?, reset_token_expires = ?
+                WHERE email = ?
+            """, (reset_token, expires_at, email.lower()))
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to save reset token for {email}: {e}")
+        return False
+
+
+def get_user_by_reset_token(reset_token: str) -> Optional[Dict[str, Any]]:
+    """
+    Get user by password reset token if not expired.
+
+    Args:
+        reset_token: Password reset token
+
+    Returns:
+        User dictionary or None if not found/expired
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.execute("""
+                SELECT id, email, password_hash, full_name, reset_token_expires
+                FROM users
+                WHERE reset_token = ? AND is_active = 1
+            """, (reset_token,))
+
+            row = cursor.fetchone()
+            if not row:
+                return None
+
+            # Check if token is expired
+            expires_at = datetime.fromisoformat(row['reset_token_expires']) if row['reset_token_expires'] else None
+            if expires_at and expires_at < datetime.now():
+                logger.warning(f"Reset token expired for user {row['email']}")
+                return None
+
+            return {
+                'id': row['id'],
+                'email': row['email'],
+                'password_hash': row['password_hash'],
+                'full_name': row['full_name']
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to get user by reset token: {e}")
+        return None
+
+
+def clear_password_reset_token(user_id: str) -> bool:
+    """
+    Clear password reset token after successful reset.
+
+    Args:
+        user_id: User ID
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET reset_token = NULL, reset_token_expires = NULL
+                WHERE id = ?
+            """, (user_id,))
+
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to clear reset token for user {user_id}: {e}")
+        return False
+
+
+def update_user_subscription(user_id: str, tier: str, status: str, stripe_customer_id: Optional[str] = None, stripe_subscription_id: Optional[str] = None) -> bool:
+    """
+    Update user's subscription information.
+
+    Args:
+        user_id: User ID
+        tier: Subscription tier ('free', 'pro', 'team')
+        status: Subscription status ('active', 'cancelled', 'expired')
+        stripe_customer_id: Stripe customer ID (optional)
+        stripe_subscription_id: Stripe subscription ID (optional)
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET subscription_tier = ?,
+                    subscription_status = ?,
+                    stripe_customer_id = ?,
+                    stripe_subscription_id = ?
+                WHERE id = ?
+            """, (tier, status, stripe_customer_id, stripe_subscription_id, user_id))
+
+        logger.info(f"Updated subscription for user {user_id}: {tier} - {status}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to update subscription for user {user_id}: {e}")
+        return False
 
 
 if __name__ == '__main__':

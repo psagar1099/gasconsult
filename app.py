@@ -1,8 +1,10 @@
-from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify, make_response
+from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify, make_response, flash
 from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect, CSRFError
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import HTTPException, NotFound
 from Bio import Entrez
 import openai
@@ -36,6 +38,16 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', secrets.token_hex(32))
 
 # Security: Limit request size to prevent DoS attacks (16MB default)
 app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16777216))
+
+# Initialize Flask-Bcrypt for password hashing
+bcrypt = Bcrypt(app)
+
+# Initialize Flask-Login for user session management
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Please log in to access this page.'
+login_manager.login_message_category = 'info'
 
 # Configure server-side sessions with Redis backend (production-grade, multi-worker safe)
 # Falls back to localhost Redis if REDIS_URL not set (for local development)
@@ -136,6 +148,124 @@ elif CHAT_HISTORY_ENABLED and not DATABASE_AVAILABLE:
 else:
     import logging
     logging.info("Chat history feature disabled via ENABLE_CHAT_HISTORY environment variable")
+
+# ====== User Authentication (Flask-Login) ======
+
+class User(UserMixin):
+    """
+    User class for Flask-Login.
+    Represents an authenticated user with subscription info.
+    """
+    def __init__(self, user_id, email, full_name=None, subscription_tier='free', subscription_status='active', is_verified=True):
+        self.id = user_id
+        self.email = email
+        self.full_name = full_name
+        self.subscription_tier = subscription_tier
+        self.subscription_status = subscription_status
+        self.is_verified = is_verified
+
+    @property
+    def is_pro_user(self):
+        """Check if user has pro subscription"""
+        return self.subscription_tier in ['pro', 'team'] and self.subscription_status == 'active'
+
+    @property
+    def is_team_user(self):
+        """Check if user has team subscription"""
+        return self.subscription_tier == 'team' and self.subscription_status == 'active'
+
+    @property
+    def display_name(self):
+        """Get user's display name (full name or email)"""
+        return self.full_name if self.full_name else self.email.split('@')[0]
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    """
+    Flask-Login user loader callback.
+    Loads user from database for each request.
+    """
+    if not DATABASE_INITIALIZED:
+        return None
+
+    try:
+        user_data = database.get_user_by_id(user_id)
+        if user_data:
+            return User(
+                user_id=user_data['id'],
+                email=user_data['email'],
+                full_name=user_data.get('full_name'),
+                subscription_tier=user_data.get('subscription_tier', 'free'),
+                subscription_status=user_data.get('subscription_status', 'active'),
+                is_verified=user_data.get('is_verified', True)
+            )
+    except Exception as e:
+        logger.error(f"Error loading user {user_id}: {e}")
+
+    return None
+
+
+def generate_navbar_html(active_page=''):
+    """
+    Generate navbar HTML with user authentication state.
+    Returns HTML string for navbar with login/signup or user dropdown.
+    """
+    # Auth buttons for logged-out users
+    auth_buttons = ''
+    if current_user.is_authenticated:
+        # User dropdown for logged-in users
+        subscription_badge = ''
+        if current_user.is_pro_user:
+            subscription_badge = '<span style="font-size: 10px; background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">PRO</span>'
+        elif current_user.is_team_user:
+            subscription_badge = '<span style="font-size: 10px; background: linear-gradient(135deg, #8B5CF6, #6366F1); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">TEAM</span>'
+
+        auth_buttons = f'''
+            <div class="nav-dropdown user-dropdown">
+                <button class="nav-link nav-dropdown-toggle user-menu-toggle" onclick="toggleNavDropdown(event)">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <div class="user-avatar">{current_user.display_name[0].upper()}</div>
+                        <span>{current_user.display_name}</span>
+                        {subscription_badge}
+                    </div>
+                </button>
+                <div class="nav-dropdown-menu user-dropdown-menu">
+                    <div class="user-dropdown-header">
+                        <div class="user-dropdown-email">{current_user.email}</div>
+                        <div class="user-dropdown-tier">{current_user.subscription_tier.capitalize()} Plan</div>
+                    </div>
+                    <a href="/pricing" class="nav-dropdown-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                        Upgrade Plan
+                    </a>
+                    <a href="/library" class="nav-dropdown-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                        </svg>
+                        My Library
+                    </a>
+                    <div class="nav-dropdown-divider"></div>
+                    <a href="/logout" class="nav-dropdown-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Log Out
+                    </a>
+                </div>
+            </div>
+        '''
+    else:
+        # Login and Sign up buttons for logged-out users
+        auth_buttons = '''
+            <a href="/login" class="nav-link">Log In</a>
+            <a href="/register" class="nav-btn-primary">Sign Up</a>
+        '''
+
+    return auth_buttons
+
 
 # ====== Data Storage ======
 # Simple in-memory storage for bookmarks and shared links
@@ -1325,6 +1455,72 @@ PREOP_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -2232,6 +2428,14 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <!-- Main Content -->
@@ -3303,6 +3507,72 @@ HTML = """<!DOCTYPE html>
         .nav-dropdown-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
+        }
+
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         .mobile-menu-btn {
@@ -5056,6 +5326,8 @@ HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Pricing</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -5073,6 +5345,14 @@ HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         {% if messages and messages|length > 0 %}
@@ -6084,6 +6364,72 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -6780,6 +7126,14 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -7124,6 +7478,72 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -7820,6 +8240,14 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -8128,6 +8556,72 @@ TERMS_HTML = """<!DOCTYPE html>
         .nav-dropdown-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
+        }
+
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         .mobile-menu-btn {
@@ -8455,6 +8949,14 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -9189,6 +9691,72 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -9503,6 +10071,14 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -10149,6 +10725,72 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -10636,6 +11278,14 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <!-- Main Content -->
@@ -11336,6 +11986,72 @@ CRISIS_HTML = """<!DOCTYPE html>
         .nav-dropdown-link:hover {
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
+        }
+
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         .mobile-menu-btn {
@@ -12200,6 +12916,14 @@ CRISIS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <!-- Hero -->
@@ -14803,6 +15527,14 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
     <div class="container">
@@ -15811,6 +16543,72 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -16629,6 +17427,14 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <!-- Hero -->
@@ -18428,6 +19234,14 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <!-- Main Content -->
@@ -20822,6 +21636,14 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -22116,6 +22938,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
 
         <main class="main-content">
@@ -23505,6 +24335,121 @@ def hypotension_predictor():
 
     return render_template_string(HYPOTENSION_HTML, prediction=prediction)
 
+# ====== Authentication Routes ======
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """User registration page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == "POST":
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        full_name = request.form.get('full_name', '').strip()
+
+        # Validate input
+        if not email or not password:
+            flash('Email and password are required', 'error')
+            return redirect(url_for('register'))
+
+        if len(password) < 8:
+            flash('Password must be at least 8 characters long', 'error')
+            return redirect(url_for('register'))
+
+        # Check if user already exists
+        existing_user = database.get_user_by_email(email)
+        if existing_user:
+            flash('An account with this email already exists', 'error')
+            return redirect(url_for('register'))
+
+        # Hash password and create user
+        password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        user_id = database.create_user(email, password_hash, full_name)
+
+        if user_id:
+            # Log the user in immediately
+            user_data = database.get_user_by_email(email)
+            user = User(
+                user_id=user_data['id'],
+                email=user_data['email'],
+                full_name=user_data.get('full_name'),
+                subscription_tier=user_data.get('subscription_tier', 'free'),
+                subscription_status=user_data.get('subscription_status', 'active'),
+                is_verified=user_data.get('is_verified', True)
+            )
+            login_user(user)
+            flash('Account created successfully! Welcome to GasConsult.ai', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Failed to create account. Please try again.', 'error')
+            return redirect(url_for('register'))
+
+    return render_template_string(REGISTER_HTML)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """User login page"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == "POST":
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+
+        # Validate input
+        if not email or not password:
+            flash('Email and password are required', 'error')
+            return redirect(url_for('login'))
+
+        # Get user from database
+        user_data = database.get_user_by_email(email)
+        if not user_data:
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('login'))
+
+        # Check password
+        if not bcrypt.check_password_hash(user_data['password_hash'], password):
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('login'))
+
+        # Create user object and log in
+        user = User(
+            user_id=user_data['id'],
+            email=user_data['email'],
+            full_name=user_data.get('full_name'),
+            subscription_tier=user_data.get('subscription_tier', 'free'),
+            subscription_status=user_data.get('subscription_status', 'active'),
+            is_verified=user_data.get('is_verified', True)
+        )
+        login_user(user, remember=True)
+        database.update_user_login(user.id)
+
+        flash(f'Welcome back, {user.display_name}!', 'success')
+
+        # Redirect to next page or home
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('index'))
+
+    return render_template_string(LOGIN_HTML)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    """Log out the current user"""
+    logout_user()
+    flash('You have been logged out successfully', 'info')
+    return redirect(url_for('index'))
+
+
+@app.route("/pricing")
+def pricing():
+    """Pricing page with subscription tiers"""
+    return render_template_string(PRICING_HTML)
+
+
 @app.route("/health")
 @csrf.exempt  # Health checks don't need CSRF protection
 def health_check():
@@ -23856,6 +24801,242 @@ Keep each question under 60 characters."""
     except Exception as e:
         logger.error(f"Generate followups error: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+# ====== Authentication & Pricing Templates ======
+
+LOGIN_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - GasConsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+        .auth-container{width:100%;max-width:440px;}
+        .auth-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:48px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+        .auth-header{text-align:center;margin-bottom:32px;}
+        .auth-logo{font-size:28px;font-weight:700;color:var(--blue-600);margin-bottom:8px;}
+        .auth-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px;}
+        .auth-subtitle{font-size:14px;color:#64748B;}
+        .auth-subtitle a{color:var(--blue-600);text-decoration:none;}
+        .form-group{margin-bottom:20px;}
+        .form-label{display:block;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:8px;}
+        .form-input{width:100%;padding:12px 16px;border:1px solid #E2E8F0;border-radius:12px;font-size:15px;transition:all 0.2s;}
+        .form-input:focus{outline:none;border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        .btn-primary{width:100%;padding:14px;background:var(--blue-600);color:white;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+        .btn-primary:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);}
+        .flash-message{padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;}
+        .flash-error{background:#FEF2F2;color:#B91C1C;border:1px solid #FEE2E2;}
+        .flash-success{background:#ECFDF5;color:#047857;border:1px solid#D1FAE5;}
+        .flash-info{background:#EFF6FF;color:#1E40AF;border:1px solid #DBEAFE;}
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">GasConsult<span style="opacity:0.4">.ai</span></div>
+                <h1 class="auth-title">Welcome Back</h1>
+                <p class="auth-subtitle">Don't have an account? <a href="/register">Sign up</a></p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="/login">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                </div>
+                <button type="submit" class="btn-primary">Log In</button>
+            </form>
+            <p style="text-align:center;margin-top:24px;font-size:13px;color:#64748B;">
+                <a href="/" style="color:var(--blue-600);text-decoration:none;">← Back to Home</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+REGISTER_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - GasConsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+        .auth-container{width:100%;max-width:440px;}
+        .auth-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:48px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+        .auth-header{text-align:center;margin-bottom:32px;}
+        .auth-logo{font-size:28px;font-weight:700;color:var(--blue-600);margin-bottom:8px;}
+        .auth-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px;}
+        .auth-subtitle{font-size:14px;color:#64748B;}
+        .auth-subtitle a{color:var(--blue-600);text-decoration:none;}
+        .form-group{margin-bottom:20px;}
+        .form-label{display:block;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:8px;}
+        .form-input{width:100%;padding:12px 16px;border:1px solid #E2E8F0;border-radius:12px;font-size:15px;transition:all 0.2s;}
+        .form-input:focus{outline:none;border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+        .btn-primary{width:100%;padding:14px;background:var(--blue-600);color:white;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+        .btn-primary:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);}
+        .flash-message{padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;}
+        .flash-error{background:#FEF2F2;color:#B91C1C;border:1px solid #FEE2E2;}
+        .flash-success{background:#ECFDF5;color:#047857;border:1px solid #D1FAE5;}
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">GasConsult<span style="opacity:0.4">.ai</span></div>
+                <h1 class="auth-title">Create Account</h1>
+                <p class="auth-subtitle">Already have an account? <a href="/login">Log in</a></p>
+            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <form method="POST" action="/register">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <div class="form-group">
+                    <label class="form-label" for="full_name">Full Name (Optional)</label>
+                    <input type="text" id="full_name" name="full_name" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password (min. 8 characters)</label>
+                    <input type="password" id="password" name="password" class="form-input" required minlength="8">
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+            <p style="text-align:center;margin-top:24px;font-size:13px;color:#64748B;">
+                <a href="/" style="color:var(--blue-600);text-decoration:none;">← Back to Home</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+PRICING_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - GasConsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#F0F7FF 0%,var(--gray-50) 50%,#FAFBFF 100%);min-height:100vh;padding:80px 20px;}
+        .pricing-header{text-align:center;margin-bottom:56px;}
+        .pricing-title{font-size:48px;font-weight:800;color:var(--gray-900);margin-bottom:16px;}
+        .pricing-subtitle{font-size:18px;color:#64748B;max-width:600px;margin:0 auto;}
+        .pricing-grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:1200px;margin:0 auto;}
+        @media(min-width:768px){.pricing-grid{grid-template-columns:repeat(3,1fr);}}
+        .pricing-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:40px 32px;transition:all 0.3s;}
+        .pricing-card:hover{transform:translateY(-8px);box-shadow:0 12px 48px rgba(0,0,0,0.12);}
+        .pricing-card.featured{border:2px solid var(--blue-600);box-shadow:0 8px 32px rgba(37,99,235,0.2);}
+        .pricing-tier{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748B;margin-bottom:12px;}
+        .featured .pricing-tier{color:var(--blue-600);}
+        .pricing-price{font-size:56px;font-weight:800;color:var(--gray-900);margin-bottom:8px;}
+        .pricing-price span{font-size:20px;font-weight:500;color:#64748B;}
+        .pricing-period{font-size:14px;color:#64748B;margin-bottom:24px;}
+        .pricing-features{list-style:none;margin-bottom:32px;}
+        .pricing-features li{padding:12px 0;font-size:15px;color:#475569;display:flex;align-items:start;gap:12px;}
+        .pricing-features li:before{content:'✓';color:#10B981;font-weight:700;flex-shrink:0;}
+        .btn-pricing{width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center;border:none;}
+        .btn-secondary{background:#F1F5F9;color:var(--gray-900);}
+        .btn-secondary:hover{background:#E2E8F0;}
+        .btn-primary-pricing{background:var(--blue-600);color:white;}
+        .btn-primary-pricing:hover{background:#1D4ED8;transform:translateY(-1px);}
+        .pricing-badge{display:inline-block;background:linear-gradient(135deg,#3B82F6,#2563EB);color:white;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;margin-bottom:16px;}
+        .nav-simple{position:fixed;top:0;left:0;right:0;padding:16px 32px;background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.8);z-index:100;}
+        .nav-simple-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
+        .logo-simple{font-size:20px;font-weight:700;color:var(--blue-600);text-decoration:none;}
+        .nav-back{color:#64748B;text-decoration:none;font-size:14px;font-weight:500;}
+        .nav-back:hover{color:var(--gray-900);}
+    </style>
+</head>
+<body>
+    <nav class="nav-simple">
+        <div class="nav-simple-inner">
+            <a href="/" class="logo-simple">GasConsult<span style="opacity:0.4">.ai</span></a>
+            <a href="/" class="nav-back">← Back to Home</a>
+        </div>
+    </nav>
+    <div class="pricing-header">
+        <h1 class="pricing-title">Choose Your Plan</h1>
+        <p class="pricing-subtitle">Get started with evidence-based anesthesiology AI. Upgrade anytime.</p>
+    </div>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <div class="pricing-tier">Free</div>
+            <div class="pricing-price">$0<span>/month</span></div>
+            <div class="pricing-period">Perfect for trying out</div>
+            <ul class="pricing-features">
+                <li>10 queries per month</li>
+                <li>PubMed-backed answers</li>
+                <li>Basic clinical tools</li>
+                <li>Crisis protocols</li>
+            </ul>
+            <a href="/register" class="btn-pricing btn-secondary">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+            <div class="pricing-badge">MOST POPULAR</div>
+            <div class="pricing-tier">Pro</div>
+            <div class="pricing-price">$19<span>/month</span></div>
+            <div class="pricing-period">Billed monthly · $193/year (15% off)</div>
+            <ul class="pricing-features">
+                <li>Unlimited queries</li>
+                <li>Advanced calculators</li>
+                <li>IOH predictor</li>
+                <li>Saved responses library</li>
+                <li>Priority support</li>
+            </ul>
+            <a href="/register" class="btn-pricing btn-primary-pricing">Upgrade to Pro</a>
+        </div>
+        <div class="pricing-card">
+            <div class="pricing-tier">Team</div>
+            <div class="pricing-price">$49<span>/month</span></div>
+            <div class="pricing-period">Billed monthly · $500/year (15% off)</div>
+            <ul class="pricing-features">
+                <li>Everything in Pro</li>
+                <li>Team collaboration</li>
+                <li>Shared library</li>
+                <li>Admin dashboard</li>
+                <li>Dedicated support</li>
+            </ul>
+            <a href="/register" class="btn-pricing btn-secondary">Contact Sales</a>
+        </div>
+    </div>
+</body>
+</html>
+"""
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
