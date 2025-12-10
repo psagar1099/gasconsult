@@ -24905,12 +24905,12 @@ LOGIN_HTML = """<!DOCTYPE html>
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            border-radius: 24px;
             border: 1px solid var(--glass-border);
             box-shadow:
                 0 8px 32px var(--glass-shadow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            padding: 48px 40px;
+            padding: 36px 28px;
             position: relative;
             z-index: 1;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -25209,10 +25209,10 @@ LOGIN_HTML = """<!DOCTYPE html>
             border: 1px solid #DBEAFE;
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 481px) {
             .auth-card {
-                padding: 36px 28px;
-                border-radius: 24px;
+                padding: 48px 40px;
+                border-radius: 32px;
             }
         }
     </style>
@@ -25414,12 +25414,12 @@ REGISTER_HTML = """<!DOCTYPE html>
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            border-radius: 24px;
             border: 1px solid var(--glass-border);
             box-shadow:
                 0 8px 32px var(--glass-shadow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            padding: 48px 40px;
+            padding: 36px 28px;
             position: relative;
             z-index: 1;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -25714,10 +25714,10 @@ REGISTER_HTML = """<!DOCTYPE html>
             border: 1px solid #DBEAFE;
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 481px) {
             .auth-card {
-                padding: 36px 28px;
-                border-radius: 24px;
+                padding: 48px 40px;
+                border-radius: 32px;
             }
         }
     </style>
