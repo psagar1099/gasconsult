@@ -2408,15 +2408,16 @@ PREOP_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -2434,7 +2435,7 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -5323,16 +5324,16 @@ HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Pricing</a>
+                    <a href="/pricing" class="nav-link">Plans</a>
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -5351,7 +5352,7 @@ HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -7106,15 +7107,16 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -7132,7 +7134,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -8220,15 +8222,16 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -8246,7 +8249,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -8929,15 +8932,16 @@ TERMS_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -8955,7 +8959,7 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -10051,15 +10055,16 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -10077,7 +10082,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -11257,15 +11262,16 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
@@ -11284,7 +11290,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -12894,15 +12900,16 @@ CRISIS_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link active">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link active">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
 
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -12922,7 +12929,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -15507,15 +15514,16 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link active">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -15533,7 +15541,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -17405,15 +17413,16 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link active">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -17433,7 +17442,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -19240,7 +19249,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -21642,7 +21651,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -22944,7 +22953,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Pricing</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
