@@ -2577,6 +2577,7 @@ PREOP_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -7276,6 +7277,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -8391,6 +8393,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -9101,6 +9104,7 @@ TERMS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -10224,6 +10228,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -11431,6 +11436,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
@@ -13069,6 +13075,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
 
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -15683,6 +15690,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -17582,6 +17590,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
