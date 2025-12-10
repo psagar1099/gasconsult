@@ -2174,7 +2174,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="spinner"></div>
-            <div class="loading-text">Generating Pre-Operative Assessment...</div>
+            <div class="loading-text">Generating Assessment...</div>
         </div>
     </div>
 
@@ -2579,37 +2579,25 @@ PREOP_HTML = """<!DOCTYPE html>
             });
         });
 
-        // Form submission loading state
-        const form = document.querySelector('form');
-        const loadingOverlay = document.getElementById('loadingOverlay');
+        // Show loading overlay when form is submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[method="POST"]');
+            const loadingOverlay = document.getElementById('loadingOverlay');
 
-        if (form && loadingOverlay) {
-            form.addEventListener('submit', function(e) {
-                // Validate required fields
-                const procedure = form.querySelector('input[name="procedure"]');
-                const surgeryRisk = form.querySelector('select[name="surgery_risk"]');
+            if (form && loadingOverlay) {
+                form.addEventListener('submit', function(e) {
+                    // Validate required fields before showing loading
+                    const procedure = form.querySelector('input[name="procedure"]');
+                    const surgeryRisk = form.querySelector('select[name="surgery_risk"]');
 
-                if (!procedure || !procedure.value.trim()) {
-                    e.preventDefault();
-                    return;
-                }
-
-                if (!surgeryRisk || !surgeryRisk.value) {
-                    e.preventDefault();
-                    return;
-                }
-
-                // Show loading overlay
-                loadingOverlay.classList.add('active');
-
-                const submitBtn = this.querySelector('.submit-btn');
-                if (submitBtn) {
-                    submitBtn.textContent = 'Generating Assessment...';
-                    submitBtn.style.opacity = '0.7';
-                    submitBtn.disabled = true;
-                }
-            });
-        }
+                    // Only show loading if all required fields are filled
+                    if (procedure && procedure.value.trim() !== '' &&
+                        surgeryRisk && surgeryRisk.value) {
+                        loadingOverlay.classList.add('active');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
@@ -18391,7 +18379,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="spinner"></div>
-            <div class="loading-text">Calculating IOH Risk Prediction...</div>
+            <div class="loading-text">Generating Assessment...</div>
         </div>
     </div>
 
@@ -18789,23 +18777,18 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             });
         }
 
-        // Form submission loading state
-        const form = document.querySelector('form');
-        const loadingOverlay = document.getElementById('loadingOverlay');
+        // Show loading overlay when form is submitted
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form[method="POST"]');
+            const loadingOverlay = document.getElementById('loadingOverlay');
 
-        if (form && loadingOverlay) {
-            form.addEventListener('submit', function(e) {
-                // Show loading overlay
-                loadingOverlay.classList.add('active');
-
-                const submitBtn = this.querySelector('.submit-btn');
-                if (submitBtn) {
-                    submitBtn.textContent = 'Calculating...';
-                    submitBtn.style.opacity = '0.7';
-                    submitBtn.disabled = true;
-                }
-            });
-        }
+            if (form && loadingOverlay) {
+                form.addEventListener('submit', function(e) {
+                    // Show loading overlay
+                    loadingOverlay.classList.add('active');
+                });
+            }
+        });
     </script>
 </body>
 </html>
@@ -20457,6 +20440,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -20791,7 +20775,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="spinner"></div>
-            <div class="loading-text">Generating Consent Discussion...</div>
+            <div class="loading-text">Generating Assessment...</div>
         </div>
     </div>
 
@@ -21749,6 +21733,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             bottom: 0;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
