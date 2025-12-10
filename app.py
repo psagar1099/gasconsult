@@ -2117,9 +2117,67 @@ PREOP_HTML = """<!DOCTYPE html>
             }
         }
 
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Generating Pre-Operative Assessment...</div>
+        </div>
+    </div>
+
     <a href="#main-content" class="skip-to-content">Skip to main content</a>
 
     <div class="bg-canvas">
@@ -2522,14 +2580,36 @@ PREOP_HTML = """<!DOCTYPE html>
         });
 
         // Form submission loading state
-        document.querySelector('form')?.addEventListener('submit', function(e) {
-            const submitBtn = this.querySelector('.submit-btn');
-            if (submitBtn) {
-                submitBtn.textContent = 'Generating Assessment...';
-                submitBtn.style.opacity = '0.7';
-                submitBtn.disabled = true;
-            }
-        });
+        const form = document.querySelector('form');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        if (form && loadingOverlay) {
+            form.addEventListener('submit', function(e) {
+                // Validate required fields
+                const procedure = form.querySelector('input[name="procedure"]');
+                const surgeryRisk = form.querySelector('select[name="surgery_risk"]');
+
+                if (!procedure || !procedure.value.trim()) {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!surgeryRisk || !surgeryRisk.value) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Show loading overlay
+                loadingOverlay.classList.add('active');
+
+                const submitBtn = this.querySelector('.submit-btn');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Generating Assessment...';
+                    submitBtn.style.opacity = '0.7';
+                    submitBtn.disabled = true;
+                }
+            });
+        }
     </script>
 </body>
 </html>
@@ -18254,9 +18334,67 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             font-weight: 700;
             color: var(--red-600);
         }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Calculating IOH Risk Prediction...</div>
+        </div>
+    </div>
+
     <!-- Background -->
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
@@ -18647,6 +18785,24 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 if (!event.target.contains(e.target)) {
                     menu.classList.remove('show');
                     document.removeEventListener('click', closeDropdown);
+                }
+            });
+        }
+
+        // Form submission loading state
+        const form = document.querySelector('form');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        if (form && loadingOverlay) {
+            form.addEventListener('submit', function(e) {
+                // Show loading overlay
+                loadingOverlay.classList.add('active');
+
+                const submitBtn = this.querySelector('.submit-btn');
+                if (submitBtn) {
+                    submitBtn.textContent = 'Calculating...';
+                    submitBtn.style.opacity = '0.7';
+                    submitBtn.disabled = true;
                 }
             });
         }
