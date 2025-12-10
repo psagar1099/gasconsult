@@ -22975,6 +22975,8 @@ Tone: Professional, neutral, and accessible - explain medical concepts in plain 
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1
         ).choices[0].message.content
+        # Clean markdown code fences from the response
+        response = strip_markdown_code_fences(response)
     except Exception as e:
         response = f"<p>Error generating consent discussion: {str(e)}</p>"
 
