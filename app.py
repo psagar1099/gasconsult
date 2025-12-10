@@ -23276,6 +23276,9 @@ def hypotension_predictor():
     # Calculate BMI
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else 0
 
+    # Calculate MAP trend (needed for interventions regardless of model success)
+    map_trend = (current_map - map_5min) + (current_map - map_10min) / 2
+
     # Machine Learning-Based Prediction System
     # Load trained RandomForest model and make prediction
 
@@ -23341,8 +23344,7 @@ def hypotension_predictor():
         # Identify top risk factors based on feature analysis
         factors = []
 
-        # MAP trend analysis
-        map_trend = (current_map - map_5min) + (current_map - map_10min) / 2
+        # MAP trend analysis (already calculated above)
         if map_trend < -10:
             factors.append({
                 "name": "Declining MAP Trend",
