@@ -267,6 +267,12 @@ def generate_navbar_html(active_page=''):
     return auth_buttons
 
 
+@app.context_processor
+def inject_navbar_html():
+    """Make generate_navbar_html available to all templates"""
+    return dict(generate_navbar_html=generate_navbar_html)
+
+
 # ====== Data Storage ======
 # Simple in-memory storage for bookmarks and shared links
 # In production, replace with database (Redis, PostgreSQL, etc.)
