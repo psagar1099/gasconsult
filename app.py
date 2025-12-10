@@ -26504,453 +26504,486 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - GasConsult.ai</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
+            --green-50: #F0FDF4;
+            --green-500: #10B981;
+            --orange-50: #FFF7ED;
+            --orange-500: #F59E0B;
+            --purple-50: #FAF5FF;
+            --purple-500: #A855F7;
         }
 
-        :root {
-            --primary: #2563eb;
-            --primary-light: #3b82f6;
-            --primary-dark: #1d4ed8;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-            --glass-bg: rgba(255, 255, 255, 0.5);
-            --glass-border: rgba(255, 255, 255, 0.7);
-            --glass-shadow: rgba(37, 99, 235, 0.08);
-
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-
-            --card-bg: rgba(255, 255, 255, 0.6);
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
             min-height: 100vh;
-            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
-            position: relative;
             overflow-x: hidden;
         }
 
-        .bg-glow {
+        .bg-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
+            inset: 0;
             z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
         }
 
-        .glow {
+        .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.25;
+            filter: blur(80px);
+            opacity: 0.5;
             animation: float 20s ease-in-out infinite;
         }
 
-        .glow-1 {
-            width: 600px;
-            height: 600px;
-            background: rgba(59, 130, 246, 0.3);
-            top: -200px;
-            right: -150px;
-        }
-
-        .glow-2 {
+        .orb-1 {
             width: 500px;
             height: 500px;
-            background: rgba(37, 99, 235, 0.25);
-            bottom: -150px;
-            left: -100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+            top: -15%;
+            right: -20%;
+        }
+
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.15) 0%, transparent 70%);
+            bottom: -10%;
+            left: -15%;
             animation-delay: -10s;
         }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
         }
 
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+        }
+
+        /* Header */
         .header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--glass-border);
-            padding: 20px 40px;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 4px 16px var(--glass-shadow);
+            padding: 12px 16px;
+            margin-bottom: 24px;
         }
 
-        .header-content {
-            max-width: 1400px;
+        .header-inner {
+            max-width: 1280px;
             margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             text-decoration: none;
-        }
-
-        .logo-dots {
-            display: flex;
-            align-items: center;
-            position: relative;
-            width: 48px;
-            height: 20px;
-        }
-
-        .logo-dot {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        .logo-dot-1 {
-            background: #2563eb;
-            left: 0;
-            z-index: 3;
-        }
-
-        .logo-dot-2 {
-            background: rgba(37, 99, 235, 0.5);
-            left: 14px;
-            z-index: 2;
-        }
-
-        .logo-dot-3 {
-            background: rgba(37, 99, 235, 0.25);
-            left: 28px;
-            z-index: 1;
         }
 
         .logo-text {
-            font-family: 'Sora', sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
-            color: var(--text-primary);
+            letter-spacing: -0.5px;
         }
+
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: var(--gray-900); }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .admin-badge {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: linear-gradient(135deg, var(--red-500), var(--red-600));
             color: white;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.2);
         }
 
         .btn-back {
-            padding: 10px 20px;
-            background: var(--card-bg);
-            border: 1px solid rgba(203, 213, 225, 0.6);
-            border-radius: 12px;
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
+            padding: 8px 16px;
             font-size: 14px;
-            display: flex;
+            font-weight: 500;
+            color: var(--gray-600);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-back:hover {
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+            color: var(--gray-900);
+            background: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
+        /* Container */
         .container {
-            max-width: 1400px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 40px 40px 80px;
-            position: relative;
-            z-index: 1;
+            padding: 0 24px 80px;
         }
 
-        .page-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            color: var(--text-secondary);
-            font-size: 16px;
+        .page-header {
             margin-bottom: 32px;
         }
 
+        .page-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            font-size: 15px;
+            color: var(--gray-500);
+            font-weight: 400;
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
         .stat-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 4px 16px var(--glass-shadow);
-            transition: all 0.3s ease;
-            animation: slideUp 0.6s ease-out backwards;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.03);
+            transition: all 0.25s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.04);
         }
 
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
+        .stat-header {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start;
+            justify-content: space-between;
             margin-bottom: 16px;
         }
 
-        .stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
-        .stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
 
         .stat-icon svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             color: white;
         }
+
+        .stat-icon.blue { background: linear-gradient(135deg, var(--blue-500), var(--blue-600)); }
+        .stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.orange { background: linear-gradient(135deg, var(--orange-500), #d97706); }
+        .stat-icon.purple { background: linear-gradient(135deg, var(--purple-500), #9333ea); }
 
         .stat-label {
             font-size: 13px;
             font-weight: 500;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
+            color: var(--gray-500);
+            margin-bottom: 6px;
         }
 
         .stat-value {
-            font-family: 'Sora', sans-serif;
             font-size: 32px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 4px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--gray-900);
+            line-height: 1;
+            margin-bottom: 8px;
         }
 
         .stat-change {
-            font-size: 12px;
-            color: var(--text-secondary);
+            font-size: 13px;
+            color: var(--gray-400);
+            font-weight: 500;
         }
 
+        /* Card */
         .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 4px 16px var(--glass-shadow);
-            animation: slideUp 0.6s ease-out 0.5s backwards;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 2px 8px rgba(0,0,0,0.03);
         }
 
         .card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
+            margin-bottom: 20px;
             gap: 16px;
+            flex-wrap: wrap;
         }
 
         .card-title {
-            font-family: 'Sora', sans-serif;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            color: var(--gray-900);
         }
 
+        /* Search */
         .search-box {
             position: relative;
             flex: 1;
-            max-width: 400px;
+            max-width: 320px;
+            min-width: 240px;
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 16px 12px 44px;
-            font-family: 'DM Sans', sans-serif;
+            padding: 10px 16px 10px 40px;
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.7);
-            border: 1px solid rgba(203, 213, 225, 0.6);
-            border-radius: 12px;
+            font-weight: 400;
+            color: var(--gray-900);
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
             outline: none;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .search-input:focus {
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
         }
 
         .search-icon {
             position: absolute;
-            left: 16px;
+            left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            width: 18px;
-            height: 18px;
-            color: var(--text-secondary);
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
+            pointer-events: none;
         }
 
-        .table-container {
+        /* Table */
+        .table-wrapper {
             overflow-x: auto;
-            border-radius: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
         }
 
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            background: white;
         }
 
         thead {
-            background: rgba(241, 245, 249, 0.8);
+            background: var(--gray-50);
         }
 
         th {
-            padding: 14px 16px;
+            padding: 12px 16px;
             text-align: left;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-secondary);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--gray-500);
             text-transform: uppercase;
             letter-spacing: 0.5px;
             white-space: nowrap;
+            border-bottom: 1px solid var(--gray-200);
         }
 
         th:first-child { border-radius: 12px 0 0 0; }
         th:last-child { border-radius: 0 12px 0 0; }
 
         tbody tr {
-            background: rgba(255, 255, 255, 0.4);
-            transition: all 0.2s ease;
+            transition: background-color 0.15s ease;
         }
 
         tbody tr:hover {
-            background: rgba(255, 255, 255, 0.7);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+            background: var(--gray-50);
         }
 
+        tbody tr:last-child td:first-child { border-radius: 0 0 0 12px; }
+        tbody tr:last-child td:last-child { border-radius: 0 0 12px 0; }
+
         td {
-            padding: 16px;
+            padding: 14px 16px;
             font-size: 14px;
-            color: var(--text-primary);
-            border-top: 1px solid rgba(226, 232, 240, 0.5);
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
         }
 
         .user-email {
-            font-weight: 500;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: var(--gray-900);
         }
 
         .user-name {
-            color: var(--text-secondary);
             font-size: 13px;
-            margin-top: 2px;
+            color: var(--gray-500);
         }
 
+        /* Badges */
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 4px 10px;
-            border-radius: 8px;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge svg {
+            width: 12px;
+            height: 12px;
         }
 
         .badge-verified {
-            background: #d1fae5;
-            color: #065f46;
+            background: var(--green-50);
+            color: #047857;
         }
 
         .badge-unverified {
-            background: #fee2e2;
-            color: #991b1b;
+            background: var(--red-50);
+            color: #b91c1c;
         }
 
-        .badge-free { background: #e0e7ff; color: #3730a3; }
-        .badge-pro { background: #dbeafe; color: #1e40af; }
-        .badge-team { background: #ede9fe; color: #5b21b6; }
+        .badge-free {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
 
+        .badge-pro {
+            background: var(--blue-50);
+            color: var(--blue-700);
+        }
+
+        .badge-team {
+            background: var(--purple-50);
+            color: #7e22ce;
+        }
+
+        /* Buttons */
         .btn-action {
             padding: 6px 12px;
             font-size: 13px;
-            font-weight: 500;
-            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            font-weight: 600;
             color: white;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        .btn-action:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-action:active:not(:disabled) {
+            transform: translateY(0);
         }
 
         .btn-action:disabled {
@@ -26960,59 +26993,53 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
 
         .date-text {
             font-size: 13px;
-            color: var(--text-secondary);
+            font-weight: 500;
+            color: var(--gray-500);
         }
 
+        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
         }
 
         .empty-state-icon {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             margin: 0 auto 16px;
-            color: var(--text-muted);
+            color: var(--gray-300);
         }
 
         .empty-state-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+            color: var(--gray-700);
+            margin-bottom: 6px;
         }
 
         .empty-state-text {
             font-size: 14px;
-            color: var(--text-secondary);
+            color: var(--gray-500);
         }
 
+        /* Responsive */
         @media (max-width: 1024px) {
-            .container {
-                padding: 32px 24px 60px;
-            }
-
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
-            .header {
-                padding: 16px 20px;
-            }
-
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
+            .header-inner {
+                padding: 0 16px;
             }
 
             .container {
-                padding: 24px 20px 60px;
+                padding: 0 16px 60px;
             }
 
             .page-title {
-                font-size: 26px;
+                font-size: 24px;
             }
 
             .stats-grid {
@@ -27020,7 +27047,7 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
             }
 
             .card {
-                padding: 24px 20px;
+                padding: 20px 16px;
             }
 
             .card-header {
@@ -27032,7 +27059,7 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
                 max-width: 100%;
             }
 
-            .table-container {
+            .table-wrapper {
                 overflow-x: scroll;
             }
 
@@ -27043,163 +27070,178 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
-    <div class="bg-glow">
-        <div class="glow glow-1"></div>
-        <div class="glow glow-2"></div>
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
     </div>
+    <div class="grain"></div>
 
-    <div class="header">
-        <div class="header-content">
-            <a href="/" class="logo">
-                <div class="logo-dots">
-                    <div class="logo-dot logo-dot-1"></div>
-                    <div class="logo-dot logo-dot-2"></div>
-                    <div class="logo-dot logo-dot-3"></div>
-                </div>
-                <span class="logo-text">GasConsult.ai</span>
-                <span class="admin-badge">Admin</span>
-            </a>
-            <div class="header-actions">
+    <div class="page">
+        <div class="header">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <div class="logo-text">
+                        <span class="gas">Gas</span><span class="consult">Consult</span><span class="ai">.ai</span>
+                    </div>
+                    <span class="admin-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 12px; height: 12px;">
+                            <path fill-rule="evenodd" d="M9.661 2.237a.531.531 0 01.678 0 11.947 11.947 0 007.078 2.749.5.5 0 01.479.425c.069.52.104 1.05.104 1.59 0 5.162-3.26 9.563-7.834 11.256a.48.48 0 01-.332 0C5.26 16.564 2 12.163 2 7c0-.538.035-1.069.104-1.589a.5.5 0 01.48-.425 11.947 11.947 0 007.077-2.75z" clip-rule="evenodd" />
+                        </svg>
+                        Admin
+                    </span>
+                </a>
                 <a href="/" class="btn-back">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                     </svg>
-                    Back to App
+                    Back
                 </a>
             </div>
         </div>
-    </div>
 
-    <div class="container">
-        <h1 class="page-title">User Monitoring</h1>
-        <p class="page-subtitle">Manage registered users and monitor platform activity</p>
+        <div class="container">
+            <div class="page-header">
+                <h1 class="page-title">User Monitoring</h1>
+                <p class="page-subtitle">Monitor registered users and platform activity</p>
+            </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon blue">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon blue">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-label">Total Users</div>
+                    <div class="stat-value">{{ stats.total_users }}</div>
+                    <div class="stat-change">+{{ stats.new_users_24h }} in last 24 hours</div>
                 </div>
-                <div class="stat-label">Total Users</div>
-                <div class="stat-value">{{ stats.total_users }}</div>
-                <div class="stat-change">{{ stats.new_users_24h }} new in last 24h</div>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-icon green">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon green">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-label">Verified</div>
+                    <div class="stat-value">{{ stats.verified_users }}</div>
+                    <div class="stat-change">{{ ((stats.verified_users / stats.total_users * 100) if stats.total_users > 0 else 0)|round(1) }}% of total users</div>
                 </div>
-                <div class="stat-label">Verified Users</div>
-                <div class="stat-value">{{ stats.verified_users }}</div>
-                <div class="stat-change">{{ ((stats.verified_users / stats.total_users * 100) if stats.total_users > 0 else 0)|round(1) }}% of total</div>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-icon orange">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon orange">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-label">Pending</div>
+                    <div class="stat-value">{{ stats.unverified_users }}</div>
+                    <div class="stat-change">Awaiting verification</div>
                 </div>
-                <div class="stat-label">Pending Verification</div>
-                <div class="stat-value">{{ stats.unverified_users }}</div>
-                <div class="stat-change">Awaiting email confirmation</div>
-            </div>
 
-            <div class="stat-card">
-                <div class="stat-icon purple">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon purple">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-label">This Month</div>
+                    <div class="stat-value">{{ stats.new_users_30d }}</div>
+                    <div class="stat-change">+{{ stats.new_users_7d }} this week</div>
                 </div>
-                <div class="stat-label">New This Month</div>
-                <div class="stat-value">{{ stats.new_users_30d }}</div>
-                <div class="stat-change">{{ stats.new_users_7d }} in last 7 days</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h2 class="card-title">All Users</h2>
-                <form class="search-box" method="GET" action="/admin">
-                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                    <input
-                        type="text"
-                        name="search"
-                        class="search-input"
-                        placeholder="Search by email or name..."
-                        value="{{ search_query }}"
-                    >
-                </form>
             </div>
 
-            <div class="table-container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">All Users</h2>
+                    <form class="search-box" method="GET" action="/admin">
+                        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                        <input
+                            type="text"
+                            name="search"
+                            class="search-input"
+                            placeholder="Search by email or name..."
+                            value="{{ search_query }}"
+                        >
+                    </form>
+                </div>
+
                 {% if users %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Status</th>
-                            <th>Plan</th>
-                            <th>Registered</th>
-                            <th>Last Login</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                        <tr data-user-id="{{ user.id }}">
-                            <td>
-                                <div class="user-email">{{ user.email }}</div>
-                                {% if user.full_name %}
-                                <div class="user-name">{{ user.full_name }}</div>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if user.is_verified %}
-                                <span class="badge badge-verified">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                                    </svg>
-                                    Verified
-                                </span>
-                                {% else %}
-                                <span class="badge badge-unverified">Unverified</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="badge badge-{{ user.subscription_tier }}">{{ user.subscription_tier|capitalize }}</span>
-                            </td>
-                            <td>
-                                <span class="date-text">{{ user.created_at[:10] }}</span>
-                            </td>
-                            <td>
-                                <span class="date-text">{{ user.last_login[:10] if user.last_login else 'Never' }}</span>
-                            </td>
-                            <td>
-                                {% if not user.is_verified %}
-                                <button class="btn-action" onclick="verifyUser('{{ user.id }}')">
-                                    Verify Email
-                                </button>
-                                {% else %}
-                                <span style="color: var(--text-muted); font-size: 13px;">—</span>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Status</th>
+                                <th>Plan</th>
+                                <th>Registered</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr data-user-id="{{ user.id }}">
+                                <td>
+                                    <div class="user-info">
+                                        <span class="user-email">{{ user.email }}</span>
+                                        {% if user.full_name %}
+                                        <span class="user-name">{{ user.full_name }}</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if user.is_verified %}
+                                    <span class="badge badge-verified">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        </svg>
+                                        Verified
+                                    </span>
+                                    {% else %}
+                                    <span class="badge badge-unverified">Unverified</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge badge-{{ user.subscription_tier }}">{{ user.subscription_tier|capitalize }}</span>
+                                </td>
+                                <td>
+                                    <span class="date-text">{{ user.created_at[:10] }}</span>
+                                </td>
+                                <td>
+                                    <span class="date-text">{{ user.last_login[:10] if user.last_login else 'Never' }}</span>
+                                </td>
+                                <td>
+                                    {% if not user.is_verified %}
+                                    <button class="btn-action" onclick="verifyUser('{{ user.id }}')">
+                                        Verify
+                                    </button>
+                                    {% else %}
+                                    <span style="color: var(--gray-300); font-size: 13px;">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 {% else %}
                 <div class="empty-state">
-                    <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                     </svg>
                     <div class="empty-state-title">No users found</div>
-                    <div class="empty-state-text">{% if search_query %}Try a different search query{% else %}No registered users yet{% endif %}</div>
+                    <div class="empty-state-text">{% if search_query %}Try a different search term{% else %}No registered users yet{% endif %}</div>
                 </div>
                 {% endif %}
             </div>
@@ -27227,11 +27269,10 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
                 const data = await response.json();
 
                 if (data.success) {
-                    // Update UI to show verified status
                     const statusCell = row.children[1];
                     statusCell.innerHTML = `
                         <span class="badge badge-verified">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                             </svg>
                             Verified
@@ -27239,9 +27280,8 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
                     `;
 
                     const actionCell = row.children[5];
-                    actionCell.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;">—</span>';
+                    actionCell.innerHTML = '<span style="color: var(--gray-300); font-size: 13px;">—</span>';
 
-                    // Show success feedback
                     alert('✓ User verified successfully');
                 } else {
                     alert('Failed to verify user: ' + data.message);
@@ -27255,7 +27295,7 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
             }
         }
 
-        // Auto-submit search on input (debounced)
+        // Debounced search
         let searchTimeout;
         const searchInput = document.querySelector('.search-input');
         if (searchInput) {
