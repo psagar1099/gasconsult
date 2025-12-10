@@ -3751,11 +3751,7 @@ HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -3781,6 +3777,8 @@ HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
             .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
@@ -6532,11 +6530,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -6562,6 +6556,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
             .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
@@ -7574,11 +7570,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -7604,6 +7596,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
             .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
@@ -8343,11 +8337,7 @@ TERMS_HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -8373,6 +8363,8 @@ TERMS_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
             .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
@@ -9306,11 +9298,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        @media (min-width: 768px) {
-            .orb-1 { width: 600px; height: 600px; left: -10%; }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -9336,6 +9324,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        @media (min-width: 768px) {
+            .orb-1 { width: 600px; height: 600px; left: -10%; }
             .orb-2 { width: 450px; height: 450px; right: -10%; }
             .orb-3 { width: 400px; height: 400px; }
         }
@@ -14546,15 +14536,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 
         .footer-link:hover { color: var(--gray-700); }
 
-        /* Desktop Styles - Scale up from mobile */
-        @media (min-width: 768px) {
-            /* Desktop nav */
-            .nav {
-                padding: 16px 32px;
-            }
-
         /* Social Media Icons */
-        
         .social-icons {
             display: flex;
             gap: 20px;
@@ -14580,6 +14562,12 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
+        /* Desktop Styles - Scale up from mobile */
+        @media (min-width: 768px) {
+            /* Desktop nav */
+            .nav {
+                padding: 16px 32px;
+            }
 
             .nav-inner {
                 height: 64px;
