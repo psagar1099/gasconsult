@@ -24824,64 +24824,506 @@ LOGIN_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log In - GasConsult.ai</title>
+    <title>GasConsult.ai - Login</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-        .auth-container{width:100%;max-width:440px;}
-        .auth-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:48px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
-        .auth-header{text-align:center;margin-bottom:32px;}
-        .auth-logo{font-size:28px;font-weight:700;color:var(--blue-600);margin-bottom:8px;}
-        .auth-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px;}
-        .auth-subtitle{font-size:14px;color:#64748B;}
-        .auth-subtitle a{color:var(--blue-600);text-decoration:none;}
-        .form-group{margin-bottom:20px;}
-        .form-label{display:block;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:8px;}
-        .form-input{width:100%;padding:12px 16px;border:1px solid #E2E8F0;border-radius:12px;font-size:15px;transition:all 0.2s;}
-        .form-input:focus{outline:none;border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
-        .btn-primary{width:100%;padding:14px;background:var(--blue-600);color:white;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-        .btn-primary:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);}
-        .flash-message{padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;}
-        .flash-error{background:#FEF2F2;color:#B91C1C;border:1px solid #FEE2E2;}
-        .flash-success{background:#ECFDF5;color:#047857;border:1px solid#D1FAE5;}
-        .flash-info{background:#EFF6FF;color:#1E40AF;border:1px solid #DBEAFE;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: rgba(37, 99, 235, 0.08);
+
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --input-bg: rgba(255, 255, 255, 0.7);
+            --input-border: rgba(203, 213, 225, 0.8);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .glow-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.25);
+            top: -150px;
+            right: -100px;
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(37, 99, 235, 0.2);
+            bottom: -100px;
+            left: -50px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow:
+                0 8px 32px var(--glass-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 48px 40px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 16px 48px rgba(37, 99, 235, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-dots {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 48px;
+            height: 20px;
+        }
+
+        .logo-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .logo-dot-1 {
+            background: #2563eb;
+            left: 0;
+            z-index: 3;
+        }
+
+        .logo-dot-2 {
+            background: rgba(37, 99, 235, 0.5);
+            left: 14px;
+            z-index: 2;
+        }
+
+        .logo-dot-3 {
+            background: rgba(37, 99, 235, 0.25);
+            left: 28px;
+            z-index: 1;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-subtitle a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .auth-subtitle a:hover {
+            color: var(--primary-dark);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--primary-light);
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.1),
+                0 4px 12px rgba(37, 99, 235, 0.06);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .form-input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-secondary);
+        }
+
+        .forgot-link {
+            text-align: right;
+            margin-top: -8px;
+        }
+
+        .forgot-link a {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .forgot-link a:hover {
+            color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 8px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--input-border);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
+        .back-link a svg {
+            transition: transform 0.2s ease;
+        }
+
+        .back-link a:hover svg {
+            transform: translateX(-4px);
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-error {
+            background: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FEE2E2;
+        }
+
+        .flash-success {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #D1FAE5;
+        }
+
+        .flash-info {
+            background: #EFF6FF;
+            color: #1E40AF;
+            border: 1px solid #DBEAFE;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 36px 28px;
+                border-radius: 24px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="auth-logo">GasConsult<span style="opacity:0.4">.ai</span></div>
-                <h1 class="auth-title">Welcome Back</h1>
-                <p class="auth-subtitle">Don't have an account? <a href="/register">Sign up</a></p>
+    <div class="bg-glow">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div class="auth-card">
+        <div class="logo">
+            <div class="logo-dots">
+                <div class="logo-dot logo-dot-1"></div>
+                <div class="logo-dot logo-dot-2"></div>
+                <div class="logo-dot logo-dot-3"></div>
             </div>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form method="POST" action="/login">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-input" required autofocus>
+        </div>
+
+        <div class="auth-header">
+            <h1 class="auth-title">Welcome back</h1>
+            <p class="auth-subtitle">Don't have an account? <a href="/register">Sign up</a></p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form class="auth-form" method="POST" action="/login">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="you@example.com" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password</label>
-                    <input type="password" id="password" name="password" class="form-input" required>
-                </div>
-                <button type="submit" class="btn-primary">Log In</button>
-            </form>
-            <p style="text-align:center;margin-top:24px;font-size:13px;color:#64748B;">
-                <a href="/" style="color:var(--blue-600);text-decoration:none;">← Back to Home</a>
-            </p>
+            </div>
+
+            <div class="forgot-link">
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">Log In</button>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">or</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="social-buttons">
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Google
+                </button>
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 24 24" fill="#000">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    Apple
+                </button>
+            </div>
+        </form>
+
+        <div class="back-link">
+            <a href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Home
+            </a>
         </div>
     </div>
+
+    <script>
+        function togglePassword(button) {
+            const input = button.parentElement.querySelector('input');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+
+            button.innerHTML = type === 'password'
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>`;
+        }
+    </script>
 </body>
 </html>
 """
@@ -24891,67 +25333,506 @@ REGISTER_HTML = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - GasConsult.ai</title>
+    <title>GasConsult.ai - Sign Up</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:var(--gray-50);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
-        .auth-container{width:100%;max-width:440px;}
-        .auth-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:48px 40px;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
-        .auth-header{text-align:center;margin-bottom:32px;}
-        .auth-logo{font-size:28px;font-weight:700;color:var(--blue-600);margin-bottom:8px;}
-        .auth-title{font-size:24px;font-weight:700;color:var(--gray-900);margin-bottom:8px;}
-        .auth-subtitle{font-size:14px;color:#64748B;}
-        .auth-subtitle a{color:var(--blue-600);text-decoration:none;}
-        .form-group{margin-bottom:20px;}
-        .form-label{display:block;font-size:14px;font-weight:500;color:var(--gray-900);margin-bottom:8px;}
-        .form-input{width:100%;padding:12px 16px;border:1px solid #E2E8F0;border-radius:12px;font-size:15px;transition:all 0.2s;}
-        .form-input:focus{outline:none;border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
-        .btn-primary{width:100%;padding:14px;background:var(--blue-600);color:white;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
-        .btn-primary:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 4px 12px rgba(37,99,235,0.3);}
-        .flash-message{padding:12px 16px;border-radius:12px;margin-bottom:20px;font-size:14px;}
-        .flash-error{background:#FEF2F2;color:#B91C1C;border:1px solid #FEE2E2;}
-        .flash-success{background:#ECFDF5;color:#047857;border:1px solid #D1FAE5;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: rgba(37, 99, 235, 0.08);
+
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --input-bg: rgba(255, 255, 255, 0.7);
+            --input-border: rgba(203, 213, 225, 0.8);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .glow-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.25);
+            top: -150px;
+            right: -100px;
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(37, 99, 235, 0.2);
+            bottom: -100px;
+            left: -50px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow:
+                0 8px 32px var(--glass-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 48px 40px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 16px 48px rgba(37, 99, 235, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-dots {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 48px;
+            height: 20px;
+        }
+
+        .logo-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .logo-dot-1 {
+            background: #2563eb;
+            left: 0;
+            z-index: 3;
+        }
+
+        .logo-dot-2 {
+            background: rgba(37, 99, 235, 0.5);
+            left: 14px;
+            z-index: 2;
+        }
+
+        .logo-dot-3 {
+            background: rgba(37, 99, 235, 0.25);
+            left: 28px;
+            z-index: 1;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-subtitle a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .auth-subtitle a:hover {
+            color: var(--primary-dark);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .optional-tag {
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-muted);
+            background: rgba(148, 163, 184, 0.15);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input:focus {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--primary-light);
+            box-shadow:
+                0 0 0 4px rgba(37, 99, 235, 0.1),
+                0 4px 12px rgba(37, 99, 235, 0.06);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .form-input {
+            padding-right: 48px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--text-secondary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+            margin-top: 8px;
+        }
+
+        .submit-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 8px 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: var(--input-border);
+        }
+
+        .divider-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 12px 16px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
+        .back-link a svg {
+            transition: transform 0.2s ease;
+        }
+
+        .back-link a:hover svg {
+            transform: translateX(-4px);
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-error {
+            background: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FEE2E2;
+        }
+
+        .flash-success {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #D1FAE5;
+        }
+
+        .flash-info {
+            background: #EFF6FF;
+            color: #1E40AF;
+            border: 1px solid #DBEAFE;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 36px 28px;
+                border-radius: 24px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card">
-            <div class="auth-header">
-                <div class="auth-logo">GasConsult<span style="opacity:0.4">.ai</span></div>
-                <h1 class="auth-title">Create Account</h1>
-                <p class="auth-subtitle">Already have an account? <a href="/login">Log in</a></p>
+    <div class="bg-glow">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div class="auth-card">
+        <div class="logo">
+            <div class="logo-dots">
+                <div class="logo-dot logo-dot-1"></div>
+                <div class="logo-dot logo-dot-2"></div>
+                <div class="logo-dot logo-dot-3"></div>
             </div>
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            <form method="POST" action="/register">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="form-group">
-                    <label class="form-label" for="full_name">Full Name (Optional)</label>
-                    <input type="text" id="full_name" name="full_name" class="form-input">
+        </div>
+
+        <div class="auth-header">
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Already have an account? <a href="/login">Log in</a></p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form class="auth-form" method="POST" action="/register">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="form-group">
+                <label class="form-label">
+                    Full Name
+                    <span class="optional-tag">Optional</span>
+                </label>
+                <input type="text" name="full_name" class="form-input" placeholder="Dr. Jane Smith">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="you@example.com" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required minlength="8">
+                    <button type="button" class="toggle-password" onclick="togglePassword(this)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="email">Email</label>
-                    <input type="email" id="email" name="email" class="form-input" required autofocus>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">Password (min. 8 characters)</label>
-                    <input type="password" id="password" name="password" class="form-input" required minlength="8">
-                </div>
-                <button type="submit" class="btn-primary">Create Account</button>
-            </form>
-            <p style="text-align:center;margin-top:24px;font-size:13px;color:#64748B;">
-                <a href="/" style="color:var(--blue-600);text-decoration:none;">← Back to Home</a>
-            </p>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+
+            <div class="divider">
+                <div class="divider-line"></div>
+                <span class="divider-text">or</span>
+                <div class="divider-line"></div>
+            </div>
+
+            <div class="social-buttons">
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    Google
+                </button>
+                <button type="button" class="social-btn">
+                    <svg viewBox="0 0 24 24" fill="#000">
+                        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                    </svg>
+                    Apple
+                </button>
+            </div>
+        </form>
+
+        <div class="back-link">
+            <a href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to Home
+            </a>
         </div>
     </div>
+
+    <script>
+        function togglePassword(button) {
+            const input = button.parentElement.querySelector('input');
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+
+            button.innerHTML = type === 'password'
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>`;
+        }
+    </script>
 </body>
 </html>
 """
@@ -24963,92 +25844,633 @@ PRICING_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - GasConsult.ai</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root{--blue-600:#2563EB;--gray-50:#F8FAFC;--gray-900:#0F172A;}
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Inter',sans-serif;background:linear-gradient(180deg,#F0F7FF 0%,var(--gray-50) 50%,#FAFBFF 100%);min-height:100vh;padding:80px 20px;}
-        .pricing-header{text-align:center;margin-bottom:56px;}
-        .pricing-title{font-size:48px;font-weight:800;color:var(--gray-900);margin-bottom:16px;}
-        .pricing-subtitle{font-size:18px;color:#64748B;max-width:600px;margin:0 auto;}
-        .pricing-grid{display:grid;grid-template-columns:1fr;gap:24px;max-width:1200px;margin:0 auto;}
-        @media(min-width:768px){.pricing-grid{grid-template-columns:repeat(3,1fr);}}
-        .pricing-card{background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.8);border-radius:24px;padding:40px 32px;transition:all 0.3s;}
-        .pricing-card:hover{transform:translateY(-8px);box-shadow:0 12px 48px rgba(0,0,0,0.12);}
-        .pricing-card.featured{border:2px solid var(--blue-600);box-shadow:0 8px 32px rgba(37,99,235,0.2);}
-        .pricing-tier{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#64748B;margin-bottom:12px;}
-        .featured .pricing-tier{color:var(--blue-600);}
-        .pricing-price{font-size:56px;font-weight:800;color:var(--gray-900);margin-bottom:8px;}
-        .pricing-price span{font-size:20px;font-weight:500;color:#64748B;}
-        .pricing-period{font-size:14px;color:#64748B;margin-bottom:24px;}
-        .pricing-features{list-style:none;margin-bottom:32px;}
-        .pricing-features li{padding:12px 0;font-size:15px;color:#475569;display:flex;align-items:start;gap:12px;}
-        .pricing-features li:before{content:'✓';color:#10B981;font-weight:700;flex-shrink:0;}
-        .btn-pricing{width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;text-align:center;border:none;}
-        .btn-secondary{background:#F1F5F9;color:var(--gray-900);}
-        .btn-secondary:hover{background:#E2E8F0;}
-        .btn-primary-pricing{background:var(--blue-600);color:white;}
-        .btn-primary-pricing:hover{background:#1D4ED8;transform:translateY(-1px);}
-        .pricing-badge{display:inline-block;background:linear-gradient(135deg,#3B82F6,#2563EB);color:white;padding:4px 12px;border-radius:100px;font-size:11px;font-weight:700;margin-bottom:16px;}
-        .nav-simple{position:fixed;top:0;left:0;right:0;padding:16px 32px;background:rgba(255,255,255,0.7);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.8);z-index:100;}
-        .nav-simple-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;}
-        .logo-simple{font-size:20px;font-weight:700;color:var(--blue-600);text-decoration:none;}
-        .nav-back{color:#64748B;text-decoration:none;font-size:14px;font-weight:500;}
-        .nav-back:hover{color:var(--gray-900);}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-900: #0F172A;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 12px 16px;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .logo-text .gas { color: var(--gray-900); }
+        .logo-text .consult { color: var(--gray-700); }
+        .logo-text .ai { color: var(--gray-600); opacity: 0.7; }
+
+        .nav-links {
+            display: none;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-link {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--blue-600);
+        }
+
+        .nav-link.active {
+            background: rgba(37, 99, 235, 0.12);
+            color: var(--blue-600);
+            font-weight: 600;
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            min-width: 200px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown-link {
+            display: block;
+            padding: 10px 14px;
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-dropdown-link:hover {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--blue-600);
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn span {
+            width: 20px;
+            height: 2px;
+            background: var(--gray-700);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            z-index: 99;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu-link {
+            display: block;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: var(--gray-700);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu-link:hover {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--blue-600);
+        }
+
+        /* Pricing Section */
+        .pricing-container {
+            padding: 48px 20px 80px;
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .pricing-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .pricing-subtitle {
+            font-size: 18px;
+            color: #64748B;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(37, 99, 235, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--blue-600);
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-card.featured:hover {
+            box-shadow: 0 20px 56px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+        }
+
+        .pricing-tier {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #64748B;
+            margin-bottom: 12px;
+        }
+
+        .featured .pricing-tier {
+            color: var(--blue-600);
+        }
+
+        .pricing-price {
+            font-family: 'Sora', sans-serif;
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .pricing-price span {
+            font-size: 20px;
+            font-weight: 500;
+            color: #64748B;
+        }
+
+        .pricing-period {
+            font-size: 14px;
+            color: #64748B;
+            margin-bottom: 32px;
+            min-height: 20px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            font-size: 15px;
+            color: #475569;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .pricing-features li:before {
+            content: '✓';
+            color: #10B981;
+            font-weight: 700;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .btn-pricing {
+            width: 100%;
+            padding: 16px 24px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: rgba(241, 245, 249, 0.8);
+            color: var(--gray-900);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(226, 232, 240, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary-pricing {
+            background: var(--blue-600);
+            color: white;
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-primary-pricing:hover {
+            background: var(--blue-700);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 32px 20px;
+            border-top: 1px solid var(--gray-200);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #64748B;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748B;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .social-icon:hover {
+            background: rgba(37, 99, 235, 0.08);
+            color: var(--blue-600);
+        }
+
+        .social-icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-link {
+            font-size: 13px;
+            color: #64748B;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--blue-600);
+        }
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
+            .pricing-title { font-size: 52px; }
+            .pricing-grid { grid-template-columns: repeat(3, 1fr); }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+        }
+
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+            .pricing-container { padding: 64px 40px 100px; }
+        }
     </style>
 </head>
 <body>
-    <nav class="nav-simple">
-        <div class="nav-simple-inner">
-            <a href="/" class="logo-simple">GasConsult<span style="opacity:0.4">.ai</span></a>
-            <a href="/" class="nav-back">← Back to Home</a>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-inner">
+            <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                <div class="logo-icon">
+                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                        <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
+                </div>
+                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/?clear=1" class="nav-link">Home</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <div class="nav-dropdown">
+                    <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                    <div class="nav-dropdown-menu">
+                        <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
+                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                        <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                        <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                    </div>
+                </div>
+                <a href="/pricing" class="nav-link active">Plans</a>
+                {% if current_user.is_authenticated %}
+                    <a href="/library" class="nav-link">My Library</a>
+                    <a href="/logout" class="nav-link">Log Out</a>
+                {% else %}
+                    <a href="/login" class="nav-link">Log In</a>
+                    <a href="/register" class="nav-link" style="background: var(--blue-600); color: white; font-weight: 600;">Sign Up</a>
+                {% endif %}
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
-    <div class="pricing-header">
-        <h1 class="pricing-title">Choose Your Plan</h1>
-        <p class="pricing-subtitle">Get started with evidence-based anesthesiology AI. Upgrade anytime.</p>
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/?clear=1" class="mobile-menu-link">Home</a>
+        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+        <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+        <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+        <a href="/pricing" class="mobile-menu-link">Plans</a>
+        {% if current_user.is_authenticated %}
+            <a href="/library" class="mobile-menu-link">My Library</a>
+            <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+        {% else %}
+            <a href="/login" class="mobile-menu-link">Log In</a>
+            <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+        {% endif %}
     </div>
-    <div class="pricing-grid">
-        <div class="pricing-card">
-            <div class="pricing-tier">Free</div>
-            <div class="pricing-price">$0<span>/month</span></div>
-            <div class="pricing-period">Perfect for trying out</div>
-            <ul class="pricing-features">
-                <li>10 queries per month</li>
-                <li>PubMed-backed answers</li>
-                <li>Basic clinical tools</li>
-                <li>Crisis protocols</li>
-            </ul>
-            <a href="/register" class="btn-pricing btn-secondary">Get Started</a>
+
+    <div class="pricing-container">
+        <div class="pricing-header">
+            <h1 class="pricing-title">Choose Your Plan</h1>
+            <p class="pricing-subtitle">Get started with evidence-based anesthesiology AI. Upgrade anytime.</p>
         </div>
-        <div class="pricing-card featured">
-            <div class="pricing-badge">MOST POPULAR</div>
-            <div class="pricing-tier">Pro</div>
-            <div class="pricing-price">$19<span>/month</span></div>
-            <div class="pricing-period">Billed monthly · $193/year (15% off)</div>
-            <ul class="pricing-features">
-                <li>Unlimited queries</li>
-                <li>Advanced calculators</li>
-                <li>IOH predictor</li>
-                <li>Saved responses library</li>
-                <li>Priority support</li>
-            </ul>
-            <a href="/register" class="btn-pricing btn-primary-pricing">Upgrade to Pro</a>
-        </div>
-        <div class="pricing-card">
-            <div class="pricing-tier">Team</div>
-            <div class="pricing-price">$49<span>/month</span></div>
-            <div class="pricing-period">Billed monthly · $500/year (15% off)</div>
-            <ul class="pricing-features">
-                <li>Everything in Pro</li>
-                <li>Team collaboration</li>
-                <li>Shared library</li>
-                <li>Admin dashboard</li>
-                <li>Dedicated support</li>
-            </ul>
-            <a href="/register" class="btn-pricing btn-secondary">Contact Sales</a>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Free</div>
+                <div class="pricing-price">$0<span>/month</span></div>
+                <div class="pricing-period">Perfect for trying out</div>
+                <ul class="pricing-features">
+                    <li>10 queries per month</li>
+                    <li>PubMed-backed answers</li>
+                    <li>Basic clinical tools</li>
+                    <li>Crisis protocols</li>
+                </ul>
+                <a href="/register" class="btn-pricing btn-secondary">Get Started</a>
+            </div>
+            <div class="pricing-card featured">
+                <div class="pricing-badge">MOST POPULAR</div>
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price">$19<span>/month</span></div>
+                <div class="pricing-period">Billed monthly · $193/year (15% off)</div>
+                <ul class="pricing-features">
+                    <li>Unlimited queries</li>
+                    <li>Advanced calculators</li>
+                    <li>IOH predictor</li>
+                    <li>Saved responses library</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="/register" class="btn-pricing btn-primary-pricing">Upgrade to Pro</a>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-tier">Team</div>
+                <div class="pricing-price">$49<span>/month</span></div>
+                <div class="pricing-period">Billed monthly · $500/year (15% off)</div>
+                <ul class="pricing-features">
+                    <li>Everything in Pro</li>
+                    <li>Team collaboration</li>
+                    <li>Shared library</li>
+                    <li>Admin dashboard</li>
+                    <li>Dedicated support</li>
+                </ul>
+                <a href="/register" class="btn-pricing btn-secondary">Contact Sales</a>
+            </div>
         </div>
     </div>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-text">© 2025 GasConsult.ai</span>
+            <div class="social-icons">
+                <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            if (menu && btn) {
+                menu.classList.toggle('active');
+                btn.classList.toggle('active');
+            }
+        }
+
+        function toggleNavDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const menu = e.target.nextElementSibling;
+            if (menu) {
+                menu.style.opacity = menu.style.opacity === '1' ? '0' : '1';
+                menu.style.visibility = menu.style.visibility === 'visible' ? 'hidden' : 'visible';
+            }
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+                menu.style.opacity = '0';
+                menu.style.visibility = 'hidden';
+            });
+        });
+    </script>
 </body>
 </html>
 """
