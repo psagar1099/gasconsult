@@ -17745,6 +17745,11 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -20058,63 +20063,104 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
-            color: #334155;
+            color: var(--gray-700);
+            letter-spacing: -0.01em;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 12px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(226, 232, 240, 0.6);
+            border-radius: 14px;
             font-size: 15px;
             font-family: inherit;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            color: var(--gray-900);
+        }
+
+        input::placeholder, select::placeholder, textarea::placeholder {
+            color: var(--gray-400);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: var(--blue-300);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            border-color: var(--blue-500);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            transform: translateY(-1px);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 110px;
             resize: vertical;
         }
 
         .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 12px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(226, 232, 240, 0.6);
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
         }
 
         .radio-option:hover, .checkbox-option:hover {
-            border-color: #3B82F6;
-            background: #EFF6FF;
+            border-color: var(--blue-400);
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+        }
+
+        .radio-option input:checked + span, .checkbox-option input:checked + span {
+            color: var(--blue-600);
+            font-weight: 600;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: var(--blue-500);
+            background: rgba(239, 246, 255, 0.95);
+            box-shadow: 0 2px 12px rgba(59,130,246,0.12);
         }
 
         .radio-option input, .checkbox-option input {
             width: auto;
-            margin-right: 12px;
+            margin-right: 14px;
             cursor: pointer;
+            accent-color: var(--blue-600);
+            transform: scale(1.1);
+        }
+
+        .radio-option span, .checkbox-option span {
+            flex: 1;
         }
 
         .submit-btn {
@@ -21309,63 +21355,104 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-size: 14px;
-            color: #334155;
+            color: var(--gray-700);
+            letter-spacing: -0.01em;
         }
 
         input, select, textarea {
             width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 12px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(226, 232, 240, 0.6);
+            border-radius: 14px;
             font-size: 15px;
             font-family: inherit;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            color: var(--gray-900);
+        }
+
+        input::placeholder, select::placeholder, textarea::placeholder {
+            color: var(--gray-400);
+        }
+
+        input:hover, select:hover, textarea:hover {
+            border-color: var(--blue-300);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #3B82F6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+            border-color: var(--blue-500);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            transform: translateY(-1px);
         }
 
         textarea {
-            min-height: 100px;
+            min-height: 110px;
             resize: vertical;
         }
 
         .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
         }
 
         .radio-option, .checkbox-option {
             display: flex;
             align-items: center;
-            padding: 14px 16px;
-            border: 1.5px solid #E2E8F0;
-            border-radius: 12px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1.5px solid rgba(226, 232, 240, 0.6);
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
         }
 
         .radio-option:hover, .checkbox-option:hover {
-            border-color: #3B82F6;
-            background: #EFF6FF;
+            border-color: var(--blue-400);
+            background: rgba(239, 246, 255, 0.9);
+            transform: translateX(4px);
+            box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+        }
+
+        .radio-option input:checked + span, .checkbox-option input:checked + span {
+            color: var(--blue-600);
+            font-weight: 600;
+        }
+
+        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+            border-color: var(--blue-500);
+            background: rgba(239, 246, 255, 0.95);
+            box-shadow: 0 2px 12px rgba(59,130,246,0.12);
         }
 
         .radio-option input, .checkbox-option input {
             width: auto;
-            margin-right: 12px;
+            margin-right: 14px;
             cursor: pointer;
+            accent-color: var(--blue-600);
+            transform: scale(1.1);
+        }
+
+        .radio-option span, .checkbox-option span {
+            flex: 1;
         }
 
         .submit-btn {
