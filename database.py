@@ -29,9 +29,13 @@ DB_PATH = os.path.join(DB_DIR, DB_NAME)
 # Fallback to current directory if production path doesn't exist
 # (for development/testing)
 if not os.path.exists(DB_DIR):
-    logger.warning(f"Production DB directory {DB_DIR} doesn't exist, using fallback")
+    logger.warning(f"⚠️  Production DB directory {DB_DIR} doesn't exist!")
+    logger.warning(f"⚠️  Using fallback path. Data will NOT persist across redeployments!")
+    logger.warning(f"⚠️  To fix: Add a persistent disk in Render mounted at {DB_DIR}")
     DB_PATH = os.path.join(os.path.dirname(__file__), DB_NAME)
     logger.info(f"Using fallback database path: {DB_PATH}")
+else:
+    logger.info(f"✓ Using persistent database at: {DB_PATH}")
 
 
 @contextmanager

@@ -255,14 +255,14 @@ def generate_navbar_html(active_page=''):
 
         auth_buttons = f'''
             <div class="nav-dropdown user-dropdown">
-                <button class="nav-link nav-dropdown-toggle user-menu-toggle" onclick="toggleNavDropdown(event)">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                <button class="nav-link nav-dropdown-toggle user-menu-toggle" onclick="toggleNavDropdown(event)" style="cursor: pointer;">
+                    <div style="display: flex; align-items: center; gap: 8px; pointer-events: none;">
                         <div class="user-avatar">{current_user.display_name[0].upper()}</div>
                         <span>{current_user.display_name}</span>
                         {subscription_badge}
                     </div>
                 </button>
-                <div class="nav-dropdown-menu user-dropdown-menu">
+                <div class="nav-dropdown-menu user-dropdown-menu" style="pointer-events: auto;">
                     <div class="user-dropdown-header">
                         <div class="user-dropdown-email">{current_user.email}</div>
                         <div class="user-dropdown-tier">{current_user.subscription_tier.capitalize()} Plan</div>
@@ -14462,7 +14462,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         function toggleNavDropdown(event) {
             event.stopPropagation();
-            const menu = event.target.nextElementSibling;
+            const menu = event.currentTarget.nextElementSibling;
             menu.classList.toggle('show');
         }
 
@@ -19741,12 +19741,12 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         // Dropdown toggle
         function toggleNavDropdown(event) {
             event.stopPropagation();
-            const menu = event.target.nextElementSibling;
+            const menu = event.currentTarget.nextElementSibling;
             menu.classList.toggle('show');
 
             // Close dropdown when clicking outside
             document.addEventListener('click', function closeDropdown(e) {
-                if (!event.target.contains(e.target)) {
+                if (!event.currentTarget.contains(e.target)) {
                     menu.classList.remove('show');
                     document.removeEventListener('click', closeDropdown);
                 }
@@ -22058,12 +22058,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         function toggleNavDropdown(event) {
             event.stopPropagation();
-            const menu = event.target.nextElementSibling;
+            const menu = event.currentTarget.nextElementSibling;
             menu.classList.toggle('show');
 
             // Close dropdown when clicking outside
             document.addEventListener('click', function closeDropdown(e) {
-                if (!event.target.contains(e.target)) {
+                if (!event.currentTarget.contains(e.target)) {
                     menu.classList.remove('show');
                     document.removeEventListener('click', closeDropdown);
                 }
@@ -23399,12 +23399,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         function toggleNavDropdown(event) {
             event.stopPropagation();
-            const menu = event.target.nextElementSibling;
+            const menu = event.currentTarget.nextElementSibling;
             menu.classList.toggle('show');
 
             // Close dropdown when clicking outside
             document.addEventListener('click', function closeDropdown(e) {
-                if (!event.target.contains(e.target)) {
+                if (!event.currentTarget.contains(e.target)) {
                     menu.classList.remove('show');
                     document.removeEventListener('click', closeDropdown);
                 }
@@ -27081,7 +27081,7 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
             <div class="header-inner">
                 <a href="/" class="logo">
                     <div class="logo-text">
-                        <span class="gas">Gas</span><span class="consult">Consult</span><span class="ai">.ai</span>
+                        <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
                     </div>
                     <span class="admin-badge">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 12px; height: 12px;">
