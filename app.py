@@ -5,6 +5,7 @@ from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail, Message
 from werkzeug.exceptions import HTTPException, NotFound
 from Bio import Entrez
 import openai
@@ -41,6 +42,21 @@ app.config['MAX_CONTENT_LENGTH'] = int(os.getenv('MAX_CONTENT_LENGTH', 16777216)
 
 # Initialize Flask-Bcrypt for password hashing
 bcrypt = Bcrypt(app)
+
+# Initialize Flask-Mail for email verification
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'true').lower() == 'true'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', '')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', '')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER', os.getenv('MAIL_USERNAME', 'noreply@gasconsult.ai'))
+mail = Mail(app)
+
+# Check if email is configured
+EMAIL_CONFIGURED = bool(os.getenv('MAIL_USERNAME') and os.getenv('MAIL_PASSWORD'))
+if not EMAIL_CONFIGURED:
+    import logging
+    logging.warning("Email not configured - verification emails will not be sent")
 
 # Initialize Flask-Login for user session management
 login_manager = LoginManager()
@@ -221,6 +237,22 @@ def generate_navbar_html(active_page=''):
         elif current_user.is_team_user:
             subscription_badge = '<span style="font-size: 10px; background: linear-gradient(135deg, #8B5CF6, #6366F1); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">TEAM</span>'
 
+        # Check if user is admin
+        admin_emails = os.getenv('ADMIN_EMAILS', '').split(',')
+        admin_emails = [email.strip().lower() for email in admin_emails if email.strip()]
+        is_admin = current_user.email.lower() in admin_emails
+
+        admin_link = ''
+        if is_admin:
+            admin_link = '''
+                <a href="/admin" class="nav-dropdown-link" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1)); border: 1px solid rgba(239, 68, 68, 0.2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px; color: #ef4444;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <span style="color: #ef4444; font-weight: 600;">Admin Dashboard</span>
+                </a>
+            '''
+
         auth_buttons = f'''
             <div class="nav-dropdown user-dropdown">
                 <button class="nav-link nav-dropdown-toggle user-menu-toggle" onclick="toggleNavDropdown(event)">
@@ -247,6 +279,7 @@ def generate_navbar_html(active_page=''):
                         </svg>
                         My Library
                     </a>
+                    {admin_link}
                     <div class="nav-dropdown-divider"></div>
                     <a href="/logout" class="nav-dropdown-link">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
@@ -271,6 +304,132 @@ def generate_navbar_html(active_page=''):
 def inject_navbar_html():
     """Make generate_navbar_html available to all templates"""
     return dict(generate_navbar_html=generate_navbar_html)
+
+
+# ====== Email Verification Helper Functions ======
+def send_verification_email(user_email, user_name, verification_token):
+    """
+    Send email verification link to user.
+    Returns True if sent successfully, False otherwise.
+    """
+    if not EMAIL_CONFIGURED:
+        logger.warning(f"Cannot send verification email to {user_email} - email not configured")
+        return False
+
+    try:
+        verification_url = url_for('verify_email', token=verification_token, _external=True)
+
+        msg = Message(
+            subject='Verify Your GasConsult.ai Account',
+            recipients=[user_email],
+            html=f'''
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1F2937; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 40px 20px; }}
+                    .header {{ text-align: center; margin-bottom: 40px; }}
+                    .logo {{ font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #3B82F6, #2563EB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}
+                    .content {{ background: #F9FAFB; border-radius: 16px; padding: 32px; margin-bottom: 24px; }}
+                    .button {{ display: inline-block; background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 24px 0; }}
+                    .footer {{ text-align: center; color: #6B7280; font-size: 14px; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <div class="logo">GasConsult.ai</div>
+                    </div>
+                    <div class="content">
+                        <h2 style="margin-top: 0; color: #1F2937;">Welcome{', ' + user_name if user_name else ''}!</h2>
+                        <p>Thank you for signing up for GasConsult.ai. To complete your registration and start accessing evidence-based anesthesiology answers, please verify your email address.</p>
+                        <div style="text-align: center;">
+                            <a href="{verification_url}" class="button">Verify Email Address</a>
+                        </div>
+                        <p style="margin-bottom: 0;">This link will expire in 24 hours. If you didn't create an account with GasConsult.ai, you can safely ignore this email.</p>
+                    </div>
+                    <div class="footer">
+                        <p>© 2024 GasConsult.ai - Evidence-Based Anesthesiology</p>
+                        <p>Questions? Contact us at support@gasconsult.ai</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            '''
+        )
+
+        mail.send(msg)
+        logger.info(f"Verification email sent to {user_email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send verification email to {user_email}: {e}")
+        return False
+
+
+def send_password_reset_email(user_email, user_name, reset_token):
+    """
+    Send password reset link to user.
+    Returns True if sent successfully, False otherwise.
+    """
+    if not EMAIL_CONFIGURED:
+        logger.warning(f"Cannot send password reset email to {user_email} - email not configured")
+        return False
+
+    try:
+        reset_url = url_for('reset_password', token=reset_token, _external=True)
+
+        msg = Message(
+            subject='Reset Your GasConsult.ai Password',
+            recipients=[user_email],
+            html=f'''
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body {{ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1F2937; }}
+                    .container {{ max-width: 600px; margin: 0 auto; padding: 40px 20px; }}
+                    .header {{ text-align: center; margin-bottom: 40px; }}
+                    .logo {{ font-size: 32px; font-weight: 800; background: linear-gradient(135deg, #3B82F6, #2563EB); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }}
+                    .content {{ background: #F9FAFB; border-radius: 16px; padding: 32px; margin-bottom: 24px; }}
+                    .button {{ display: inline-block; background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; margin: 24px 0; }}
+                    .footer {{ text-align: center; color: #6B7280; font-size: 14px; }}
+                    .warning {{ background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px; margin: 16px 0; border-radius: 4px; }}
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <div class="logo">GasConsult.ai</div>
+                    </div>
+                    <div class="content">
+                        <h2 style="margin-top: 0; color: #1F2937;">Reset Your Password</h2>
+                        <p>Hi{' ' + user_name if user_name else ''},</p>
+                        <p>We received a request to reset your password for your GasConsult.ai account. Click the button below to create a new password:</p>
+                        <div style="text-align: center;">
+                            <a href="{reset_url}" class="button">Reset Password</a>
+                        </div>
+                        <div class="warning">
+                            <strong>Security Notice:</strong> This link will expire in 1 hour. If you didn't request a password reset, please ignore this email and your password will remain unchanged.
+                        </div>
+                        <p style="margin-bottom: 0;">For security reasons, we recommend using a strong, unique password.</p>
+                    </div>
+                    <div class="footer">
+                        <p>© 2024 GasConsult.ai - Evidence-Based Anesthesiology</p>
+                        <p>Questions? Contact us at support@gasconsult.ai</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            '''
+        )
+
+        mail.send(msg)
+        logger.info(f"Password reset email sent to {user_email}")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to send password reset email to {user_email}: {e}")
+        return False
 
 
 # ====== Data Storage ======
@@ -24378,24 +24537,40 @@ def register():
             flash('An account with this email already exists', 'error')
             return redirect(url_for('register'))
 
+        # Generate verification token
+        verification_token = secrets.token_urlsafe(32)
+
         # Hash password and create user
         password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-        user_id = database.create_user(email, password_hash, full_name)
+        user_id = database.create_user(email, password_hash, full_name, verification_token)
 
         if user_id:
-            # Log the user in immediately
-            user_data = database.get_user_by_email(email)
-            user = User(
-                user_id=user_data['id'],
-                email=user_data['email'],
-                full_name=user_data.get('full_name'),
-                subscription_tier=user_data.get('subscription_tier', 'free'),
-                subscription_status=user_data.get('subscription_status', 'active'),
-                is_verified=user_data.get('is_verified', True)
-            )
-            login_user(user)
-            flash('Account created successfully! Welcome to GasConsult.ai', 'success')
-            return redirect(url_for('index'))
+            # Send verification email
+            if EMAIL_CONFIGURED:
+                email_sent = send_verification_email(email, full_name, verification_token)
+                if email_sent:
+                    flash('Account created! Please check your email to verify your account.', 'success')
+                else:
+                    flash('Account created, but we couldn\'t send the verification email. Please contact support.', 'warning')
+            else:
+                # Email not configured - auto-verify user for development
+                logger.warning(f"Email not configured - auto-verifying user {email}")
+                database.manually_verify_user(user_id)
+                # Log the user in immediately
+                user_data = database.get_user_by_email(email)
+                user = User(
+                    user_id=user_data['id'],
+                    email=user_data['email'],
+                    full_name=user_data.get('full_name'),
+                    subscription_tier=user_data.get('subscription_tier', 'free'),
+                    subscription_status=user_data.get('subscription_status', 'active'),
+                    is_verified=user_data.get('is_verified', True)
+                )
+                login_user(user)
+                flash('Account created successfully! (Email verification skipped - email not configured)', 'success')
+                return redirect(url_for('index'))
+
+            return redirect(url_for('login'))
         else:
             flash('Failed to create account. Please try again.', 'error')
             return redirect(url_for('register'))
@@ -24429,6 +24604,11 @@ def login():
             flash('Invalid email or password', 'error')
             return redirect(url_for('login'))
 
+        # Check if email is verified (only if email is configured)
+        if EMAIL_CONFIGURED and not user_data.get('is_verified', False):
+            flash('Please verify your email before logging in. Check your inbox for the verification link.', 'warning')
+            return redirect(url_for('login'))
+
         # Create user object and log in
         user = User(
             user_id=user_data['id'],
@@ -24457,6 +24637,130 @@ def logout():
     logout_user()
     flash('You have been logged out successfully', 'info')
     return redirect(url_for('index'))
+
+
+@app.route("/verify/<token>")
+def verify_email(token):
+    """Verify user email with token"""
+    if current_user.is_authenticated:
+        flash('Your account is already verified', 'info')
+        return redirect(url_for('index'))
+
+    # Verify the token
+    if database.verify_user_email(token):
+        flash('Email verified successfully! You can now log in.', 'success')
+        return redirect(url_for('login'))
+    else:
+        flash('Invalid or expired verification link. Please request a new one.', 'error')
+        return redirect(url_for('login'))
+
+
+@app.route("/resend-verification", methods=["GET", "POST"])
+def resend_verification():
+    """Resend verification email"""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    if request.method == "POST":
+        email = request.form.get('email', '').strip()
+
+        if not email:
+            flash('Email is required', 'error')
+            return redirect(url_for('resend_verification'))
+
+        # Get user from database
+        user_data = database.get_user_by_email(email)
+        if not user_data:
+            # Don't reveal if email exists or not
+            flash('If an unverified account exists with this email, a new verification link has been sent.', 'info')
+            return redirect(url_for('login'))
+
+        # Check if already verified
+        if user_data.get('is_verified', False):
+            flash('This email is already verified. You can log in.', 'info')
+            return redirect(url_for('login'))
+
+        # Generate new verification token
+        new_token = secrets.token_urlsafe(32)
+
+        # Update user with new token
+        try:
+            with database.get_db_connection() as conn:
+                conn.execute("""
+                    UPDATE users
+                    SET verification_token = ?
+                    WHERE id = ?
+                """, (new_token, user_data['id']))
+        except Exception as e:
+            logger.error(f"Failed to update verification token: {e}")
+            flash('Failed to send verification email. Please try again.', 'error')
+            return redirect(url_for('resend_verification'))
+
+        # Send new verification email
+        if EMAIL_CONFIGURED:
+            email_sent = send_verification_email(
+                user_data['email'],
+                user_data.get('full_name'),
+                new_token
+            )
+            if email_sent:
+                flash('A new verification link has been sent to your email.', 'success')
+            else:
+                flash('Failed to send verification email. Please contact support.', 'error')
+        else:
+            flash('Email verification is not configured. Please contact support.', 'error')
+
+        return redirect(url_for('login'))
+
+    # GET request - show resend form
+    return render_template_string(RESEND_VERIFICATION_HTML)
+
+
+@app.route("/admin")
+@login_required
+def admin_dashboard():
+    """Admin dashboard for user monitoring"""
+    # Check if user is admin (email in ADMIN_EMAILS environment variable)
+    admin_emails = os.getenv('ADMIN_EMAILS', '').split(',')
+    admin_emails = [email.strip().lower() for email in admin_emails if email.strip()]
+
+    if not current_user.email.lower() in admin_emails:
+        flash('Access denied. Admin privileges required.', 'error')
+        return redirect(url_for('index'))
+
+    # Get search query from URL parameters
+    search_query = request.args.get('search', '').strip()
+    page = int(request.args.get('page', 1))
+    per_page = 20
+
+    # Get admin statistics
+    stats = database.get_admin_statistics()
+
+    # Get users list
+    offset = (page - 1) * per_page
+    users = database.get_all_users(limit=per_page, offset=offset, search_query=search_query if search_query else None)
+
+    return render_template_string(ADMIN_DASHBOARD_HTML, stats=stats, users=users, search_query=search_query, page=page)
+
+
+@app.route("/admin/verify-user/<user_id>", methods=["POST"])
+@login_required
+def admin_verify_user(user_id):
+    """Manually verify a user (admin action)"""
+    # Check if user is admin
+    admin_emails = os.getenv('ADMIN_EMAILS', '').split(',')
+    admin_emails = [email.strip().lower() for email in admin_emails if email.strip()]
+
+    if not current_user.email.lower() in admin_emails:
+        return jsonify({'success': False, 'message': 'Access denied'}), 403
+
+    # Verify user
+    success = database.manually_verify_user(user_id)
+
+    if success:
+        return jsonify({'success': True, 'message': 'User verified successfully'})
+    else:
+        return jsonify({'success': False, 'message': 'Failed to verify user'}), 500
 
 
 @app.route("/pricing")
@@ -25831,6 +26135,1136 @@ REGISTER_HTML = """<!DOCTYPE html>
                     <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                     <line x1="1" y1="1" x2="23" y2="23"></line>
                 </svg>`;
+        }
+    </script>
+</body>
+</html>
+"""
+
+RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GasConsult.ai - Resend Verification</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: rgba(37, 99, 235, 0.08);
+
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --input-bg: rgba(255, 255, 255, 0.7);
+            --input-border: rgba(203, 213, 225, 0.8);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+        }
+
+        .glow-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(59, 130, 246, 0.25);
+            top: -150px;
+            right: -100px;
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(37, 99, 235, 0.2);
+            bottom: -100px;
+            left: -50px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow:
+                0 8px 32px var(--glass-shadow),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            padding: 48px 40px;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-4px);
+            box-shadow:
+                0 16px 48px rgba(37, 99, 235, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .logo-dots {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 48px;
+            height: 20px;
+        }
+
+        .logo-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .logo-dot-1 {
+            background: #2563eb;
+            left: 0;
+            z-index: 3;
+        }
+
+        .logo-dot-2 {
+            background: rgba(37, 99, 235, 0.5);
+            left: 14px;
+            z-index: 2;
+        }
+
+        .logo-dot-3 {
+            background: rgba(37, 99, 235, 0.25);
+            left: 28px;
+            z-index: 1;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .auth-subtitle a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .auth-subtitle a:hover {
+            color: var(--primary-dark);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 14px;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px 24px;
+            font-family: 'Sora', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 24px;
+        }
+
+        .back-link a {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--primary);
+        }
+
+        .back-link a svg {
+            transition: transform 0.2s ease;
+        }
+
+        .back-link a:hover svg {
+            transform: translateX(-4px);
+        }
+
+        .flash-message {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .flash-error {
+            background: #FEF2F2;
+            color: #B91C1C;
+            border: 1px solid #FEE2E2;
+        }
+
+        .flash-success {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #D1FAE5;
+        }
+
+        .flash-info {
+            background: #EFF6FF;
+            color: #1E40AF;
+            border: 1px solid #DBEAFE;
+        }
+
+        .flash-warning {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 36px 28px;
+                border-radius: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div class="auth-card">
+        <div class="logo">
+            <div class="logo-dots">
+                <div class="logo-dot logo-dot-1"></div>
+                <div class="logo-dot logo-dot-2"></div>
+                <div class="logo-dot logo-dot-3"></div>
+            </div>
+        </div>
+
+        <div class="auth-header">
+            <h1 class="auth-title">Resend Verification</h1>
+            <p class="auth-subtitle">Enter your email to receive a new verification link</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form class="auth-form" method="POST" action="/resend-verification">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-input" placeholder="you@example.com" required autofocus>
+            </div>
+
+            <button type="submit" class="btn-primary">Resend Verification Email</button>
+        </form>
+
+        <div class="back-link">
+            <a href="/login">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Login
+            </a>
+        </div>
+    </div>
+</body>
+</html>
+"""
+
+ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - GasConsult.ai</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --primary-dark: #1d4ed8;
+
+            --glass-bg: rgba(255, 255, 255, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.7);
+            --glass-shadow: rgba(37, 99, 235, 0.08);
+
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+
+            --card-bg: rgba(255, 255, 255, 0.6);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .bg-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .glow-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(59, 130, 246, 0.3);
+            top: -200px;
+            right: -150px;
+        }
+
+        .glow-2 {
+            width: 500px;
+            height: 500px;
+            background: rgba(37, 99, 235, 0.25);
+            bottom: -150px;
+            left: -100px;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 16px var(--glass-shadow);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-dots {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 48px;
+            height: 20px;
+        }
+
+        .logo-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .logo-dot-1 {
+            background: #2563eb;
+            left: 0;
+            z-index: 3;
+        }
+
+        .logo-dot-2 {
+            background: rgba(37, 99, 235, 0.5);
+            left: 14px;
+            z-index: 2;
+        }
+
+        .logo-dot-3 {
+            background: rgba(37, 99, 235, 0.25);
+            left: 28px;
+            z-index: 1;
+        }
+
+        .logo-text {
+            font-family: 'Sora', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            border-radius: 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 40px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 16px var(--glass-shadow);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+        .stat-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .stat-icon svg {
+            width: 24px;
+            height: 24px;
+            color: white;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 4px 16px var(--glass-shadow);
+            animation: slideUp 0.6s ease-out 0.5s backwards;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .card-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(203, 213, 225, 0.6);
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.25s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: rgba(241, 245, 249, 0.8);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        th:first-child { border-radius: 12px 0 0 0; }
+        th:last-child { border-radius: 0 12px 0 0; }
+
+        tbody tr {
+            background: rgba(255, 255, 255, 0.4);
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+        }
+
+        td {
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            border-top: 1px solid rgba(226, 232, 240, 0.5);
+        }
+
+        .user-email {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .user-name {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-verified {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-unverified {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-free { background: #e0e7ff; color: #3730a3; }
+        .badge-pro { background: #dbeafe; color: #1e40af; }
+        .badge-team { background: #ede9fe; color: #5b21b6; }
+
+        .btn-action {
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .date-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 32px 24px 60px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 24px 20px 60px;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                padding: 24px 20px;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+
+            .table-container {
+                overflow-x: scroll;
+            }
+
+            table {
+                min-width: 800px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <div class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <div class="logo-dots">
+                    <div class="logo-dot logo-dot-1"></div>
+                    <div class="logo-dot logo-dot-2"></div>
+                    <div class="logo-dot logo-dot-3"></div>
+                </div>
+                <span class="logo-text">GasConsult.ai</span>
+                <span class="admin-badge">Admin</span>
+            </a>
+            <div class="header-actions">
+                <a href="/" class="btn-back">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 18px; height: 18px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Back to App
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">User Monitoring</h1>
+        <p class="page-subtitle">Manage registered users and monitor platform activity</p>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value">{{ stats.total_users }}</div>
+                <div class="stat-change">{{ stats.new_users_24h }} new in last 24h</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-label">Verified Users</div>
+                <div class="stat-value">{{ stats.verified_users }}</div>
+                <div class="stat-change">{{ ((stats.verified_users / stats.total_users * 100) if stats.total_users > 0 else 0)|round(1) }}% of total</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <div class="stat-label">Pending Verification</div>
+                <div class="stat-value">{{ stats.unverified_users }}</div>
+                <div class="stat-change">Awaiting email confirmation</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div class="stat-label">New This Month</div>
+                <div class="stat-value">{{ stats.new_users_30d }}</div>
+                <div class="stat-change">{{ stats.new_users_7d }} in last 7 days</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">All Users</h2>
+                <form class="search-box" method="GET" action="/admin">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                        type="text"
+                        name="search"
+                        class="search-input"
+                        placeholder="Search by email or name..."
+                        value="{{ search_query }}"
+                    >
+                </form>
+            </div>
+
+            <div class="table-container">
+                {% if users %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Status</th>
+                            <th>Plan</th>
+                            <th>Registered</th>
+                            <th>Last Login</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr data-user-id="{{ user.id }}">
+                            <td>
+                                <div class="user-email">{{ user.email }}</div>
+                                {% if user.full_name %}
+                                <div class="user-name">{{ user.full_name }}</div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.is_verified %}
+                                <span class="badge badge-verified">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    Verified
+                                </span>
+                                {% else %}
+                                <span class="badge badge-unverified">Unverified</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="badge badge-{{ user.subscription_tier }}">{{ user.subscription_tier|capitalize }}</span>
+                            </td>
+                            <td>
+                                <span class="date-text">{{ user.created_at[:10] }}</span>
+                            </td>
+                            <td>
+                                <span class="date-text">{{ user.last_login[:10] if user.last_login else 'Never' }}</span>
+                            </td>
+                            <td>
+                                {% if not user.is_verified %}
+                                <button class="btn-action" onclick="verifyUser('{{ user.id }}')">
+                                    Verify Email
+                                </button>
+                                {% else %}
+                                <span style="color: var(--text-muted); font-size: 13px;">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <svg class="empty-state-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                    <div class="empty-state-title">No users found</div>
+                    <div class="empty-state-text">{% if search_query %}Try a different search query{% else %}No registered users yet{% endif %}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function verifyUser(userId) {
+            const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+            const btn = row.querySelector('.btn-action');
+            const originalText = btn.textContent;
+
+            btn.disabled = true;
+            btn.textContent = 'Verifying...';
+
+            try {
+                const response = await fetch(`/admin/verify-user/${userId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Update UI to show verified status
+                    const statusCell = row.children[1];
+                    statusCell.innerHTML = `
+                        <span class="badge badge-verified">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 14px; height: 14px;">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                            Verified
+                        </span>
+                    `;
+
+                    const actionCell = row.children[5];
+                    actionCell.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;">—</span>';
+
+                    // Show success feedback
+                    alert('✓ User verified successfully');
+                } else {
+                    alert('Failed to verify user: ' + data.message);
+                    btn.disabled = false;
+                    btn.textContent = originalText;
+                }
+            } catch (error) {
+                alert('Error verifying user: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        // Auto-submit search on input (debounced)
+        let searchTimeout;
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    this.form.submit();
+                }, 500);
+            });
         }
     </script>
 </body>
