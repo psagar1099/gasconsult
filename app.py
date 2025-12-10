@@ -222,8 +222,8 @@ def generate_navbar_html(active_page=''):
             subscription_badge = '<span style="font-size: 10px; background: linear-gradient(135deg, #8B5CF6, #6366F1); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 4px;">TEAM</span>'
 
         auth_buttons = f'''
-            <div class="nav-dropdown user-dropdown">
-                <button class="nav-link nav-dropdown-toggle user-menu-toggle" onclick="toggleNavDropdown(event)">
+            <div class="nav-dropdown user-dropdown" onclick="toggleNavDropdown(event)" style="cursor: pointer;">
+                <button class="nav-link nav-dropdown-toggle user-menu-toggle" style="width: 100%; cursor: pointer;">
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <div class="user-avatar">{current_user.display_name[0].upper()}</div>
                         <span>{current_user.display_name}</span>
@@ -26440,13 +26440,7 @@ PRICING_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
                     <a href="/pricing" class="nav-link active">Plans</a>
-                    {% if current_user.is_authenticated %}
-                        <a href="/library" class="nav-link">My Library</a>
-                        <a href="/logout" class="nav-link">Log Out</a>
-                    {% else %}
-                        <a href="/login" class="nav-link">Log In</a>
-                        <a href="/register" class="nav-btn-primary">Sign Up</a>
-                    {% endif %}
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -26566,9 +26560,21 @@ PRICING_HTML = """<!DOCTYPE html>
         function toggleNavDropdown(e) {
             e.preventDefault();
             e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
+
+            // Find the dropdown container and menu
+            const dropdownContainer = e.target.closest('.nav-dropdown');
+            if (dropdownContainer) {
+                const menu = dropdownContainer.querySelector('.nav-dropdown-menu');
+                if (menu) {
+                    // Close other dropdowns first
+                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => {
+                        if (m !== menu) {
+                            m.classList.remove('show');
+                        }
+                    });
+                    // Toggle this dropdown
+                    menu.classList.toggle('show');
+                }
             }
         }
 
