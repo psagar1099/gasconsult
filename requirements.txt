@@ -3,6 +3,7 @@ Flask-Session==0.8.0
 Flask-WTF==1.2.1
 Flask-Login==0.6.3
 Flask-Bcrypt==1.0.1
+Flask-Mail==0.10.0
 redis==5.0.1
 biopython==1.83
 openai==1.53.0

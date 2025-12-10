@@ -866,6 +866,194 @@ def update_user_subscription(user_id: str, tier: str, status: str, stripe_custom
         return False
 
 
+def get_all_users(limit: int = 100, offset: int = 0, search_query: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Get all users with pagination and optional search.
+
+    Args:
+        limit: Maximum number of users to return
+        offset: Number of users to skip
+        search_query: Optional search string for email or name
+
+    Returns:
+        List of user dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            if search_query:
+                # Search by email or name
+                search_pattern = f"%{search_query}%"
+                cursor = conn.execute("""
+                    SELECT id, email, full_name, is_verified, subscription_tier,
+                           subscription_status, created_at, last_login, is_active
+                    FROM users
+                    WHERE (email LIKE ? OR full_name LIKE ?) AND is_active = 1
+                    ORDER BY created_at DESC
+                    LIMIT ? OFFSET ?
+                """, (search_pattern, search_pattern, limit, offset))
+            else:
+                cursor = conn.execute("""
+                    SELECT id, email, full_name, is_verified, subscription_tier,
+                           subscription_status, created_at, last_login, is_active
+                    FROM users
+                    WHERE is_active = 1
+                    ORDER BY created_at DESC
+                    LIMIT ? OFFSET ?
+                """, (limit, offset))
+
+            users = []
+            for row in cursor.fetchall():
+                users.append({
+                    'id': row['id'],
+                    'email': row['email'],
+                    'full_name': row['full_name'],
+                    'is_verified': bool(row['is_verified']),
+                    'subscription_tier': row['subscription_tier'],
+                    'subscription_status': row['subscription_status'],
+                    'created_at': row['created_at'],
+                    'last_login': row['last_login'],
+                    'is_active': bool(row['is_active'])
+                })
+
+            return users
+
+    except Exception as e:
+        logger.error(f"Failed to get users: {e}")
+        return []
+
+
+def get_admin_statistics() -> Dict[str, Any]:
+    """
+    Get comprehensive admin statistics.
+
+    Returns:
+        Dictionary with user statistics
+    """
+    try:
+        with get_db_connection() as conn:
+            # Total users
+            cursor = conn.execute("SELECT COUNT(*) FROM users WHERE is_active = 1")
+            total_users = cursor.fetchone()[0]
+
+            # Verified users
+            cursor = conn.execute("SELECT COUNT(*) FROM users WHERE is_verified = 1 AND is_active = 1")
+            verified_users = cursor.fetchone()[0]
+
+            # Unverified users
+            cursor = conn.execute("SELECT COUNT(*) FROM users WHERE is_verified = 0 AND is_active = 1")
+            unverified_users = cursor.fetchone()[0]
+
+            # New users in last 24 hours
+            cursor = conn.execute("""
+                SELECT COUNT(*) FROM users
+                WHERE created_at >= datetime('now', '-1 day') AND is_active = 1
+            """)
+            new_users_24h = cursor.fetchone()[0]
+
+            # New users in last 7 days
+            cursor = conn.execute("""
+                SELECT COUNT(*) FROM users
+                WHERE created_at >= datetime('now', '-7 days') AND is_active = 1
+            """)
+            new_users_7d = cursor.fetchone()[0]
+
+            # New users in last 30 days
+            cursor = conn.execute("""
+                SELECT COUNT(*) FROM users
+                WHERE created_at >= datetime('now', '-30 days') AND is_active = 1
+            """)
+            new_users_30d = cursor.fetchone()[0]
+
+            # Users by subscription tier
+            cursor = conn.execute("""
+                SELECT subscription_tier, COUNT(*) as count
+                FROM users
+                WHERE is_active = 1
+                GROUP BY subscription_tier
+            """)
+            users_by_tier = {row['subscription_tier']: row['count'] for row in cursor.fetchall()}
+
+            # Total conversations
+            cursor = conn.execute("SELECT COUNT(*) FROM conversations WHERE is_active = 1")
+            total_conversations = cursor.fetchone()[0]
+
+            # Total messages
+            cursor = conn.execute("SELECT COUNT(*) FROM messages")
+            total_messages = cursor.fetchone()[0]
+
+            # Recent registrations (last 10)
+            cursor = conn.execute("""
+                SELECT email, full_name, created_at, is_verified
+                FROM users
+                WHERE is_active = 1
+                ORDER BY created_at DESC
+                LIMIT 10
+            """)
+            recent_registrations = []
+            for row in cursor.fetchall():
+                recent_registrations.append({
+                    'email': row['email'],
+                    'full_name': row['full_name'],
+                    'created_at': row['created_at'],
+                    'is_verified': bool(row['is_verified'])
+                })
+
+            return {
+                'total_users': total_users,
+                'verified_users': verified_users,
+                'unverified_users': unverified_users,
+                'new_users_24h': new_users_24h,
+                'new_users_7d': new_users_7d,
+                'new_users_30d': new_users_30d,
+                'users_by_tier': users_by_tier,
+                'total_conversations': total_conversations,
+                'total_messages': total_messages,
+                'recent_registrations': recent_registrations
+            }
+
+    except Exception as e:
+        logger.error(f"Failed to get admin statistics: {e}")
+        return {
+            'total_users': 0,
+            'verified_users': 0,
+            'unverified_users': 0,
+            'new_users_24h': 0,
+            'new_users_7d': 0,
+            'new_users_30d': 0,
+            'users_by_tier': {},
+            'total_conversations': 0,
+            'total_messages': 0,
+            'recent_registrations': []
+        }
+
+
+def manually_verify_user(user_id: str) -> bool:
+    """
+    Manually verify a user (admin action).
+
+    Args:
+        user_id: User ID to verify
+
+    Returns:
+        True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("""
+                UPDATE users
+                SET is_verified = 1,
+                    verification_token = NULL
+                WHERE id = ?
+            """, (user_id,))
+
+        logger.info(f"Manually verified user {user_id}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to manually verify user {user_id}: {e}")
+        return False
+
+
 if __name__ == '__main__':
     """
     Test the database module independently.
