@@ -3688,6 +3688,12 @@ HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -6463,6 +6469,12 @@ LIBRARY_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -7499,6 +7511,12 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -8262,6 +8280,12 @@ TERMS_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -9219,6 +9243,12 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -10426,6 +10456,12 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -11976,6 +12012,12 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -14445,6 +14487,12 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -16382,6 +16430,12 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -18100,6 +18154,12 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -20136,6 +20196,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
@@ -21381,6 +21447,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         /* Social Media Icons */
         
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
 
         .social-icon {
             color: var(--gray-500);
