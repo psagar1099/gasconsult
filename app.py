@@ -19950,6 +19950,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         .header {
             text-align: center;
             margin-bottom: 40px;
+            animation: fade-up 0.6s ease forwards;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
@@ -19979,6 +19985,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             padding: 32px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             margin-bottom: 24px;
+            animation: fade-up 0.6s 0.1s ease forwards;
+            opacity: 0;
         }
 
         .section-title {
@@ -21187,6 +21195,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .header {
             text-align: center;
             margin-bottom: 40px;
+            animation: fade-up 0.6s ease forwards;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
@@ -21216,6 +21230,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             padding: 32px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             margin-bottom: 24px;
+            animation: fade-up 0.6s 0.1s ease forwards;
+            opacity: 0;
         }
 
         .section-title {
