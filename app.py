@@ -2588,11 +2588,11 @@ PREOP_HTML = """<!DOCTYPE html>
                 form.addEventListener('submit', function(e) {
                     // Validate required fields before showing loading
                     const procedure = form.querySelector('input[name="procedure"]');
-                    const surgeryRisk = form.querySelector('select[name="surgery_risk"]');
+                    const surgeryRisk = form.querySelector('input[name="surgery_risk"]:checked');
 
                     // Only show loading if all required fields are filled
                     if (procedure && procedure.value.trim() !== '' &&
-                        surgeryRisk && surgeryRisk.value) {
+                        surgeryRisk) {
                         loadingOverlay.classList.add('active');
                     }
                 });
@@ -21096,12 +21096,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                     // Validate required fields before showing loading
                     const procedure = document.getElementById('procedure');
                     const age = document.getElementById('age');
-                    const asa = document.querySelector('input[name="asa"]:checked');
+                    const asa = document.getElementById('asa_class');
                     const anesthesiaType = document.querySelector('input[name="anesthesia_type"]:checked');
 
                     // Only show loading if all required fields are filled
                     if (procedure && procedure.value.trim() !== '' &&
-                        age && age.value && asa && anesthesiaType) {
+                        age && age.value && asa && asa.value && anesthesiaType) {
                         loadingOverlay.classList.add('active');
                     }
                 });
