@@ -25209,12 +25209,12 @@ LOGIN_HTML = """<!DOCTYPE html>
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            border-radius: 24px;
             border: 1px solid var(--glass-border);
             box-shadow:
                 0 8px 32px var(--glass-shadow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            padding: 48px 40px;
+            padding: 36px 28px;
             position: relative;
             z-index: 1;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -25513,10 +25513,10 @@ LOGIN_HTML = """<!DOCTYPE html>
             border: 1px solid #DBEAFE;
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 481px) {
             .auth-card {
-                padding: 36px 28px;
-                border-radius: 24px;
+                padding: 48px 40px;
+                border-radius: 32px;
             }
         }
     </style>
@@ -25718,12 +25718,12 @@ REGISTER_HTML = """<!DOCTYPE html>
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-radius: 32px;
+            border-radius: 24px;
             border: 1px solid var(--glass-border);
             box-shadow:
                 0 8px 32px var(--glass-shadow),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            padding: 48px 40px;
+            padding: 36px 28px;
             position: relative;
             z-index: 1;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -26018,10 +26018,10 @@ REGISTER_HTML = """<!DOCTYPE html>
             border: 1px solid #DBEAFE;
         }
 
-        @media (max-width: 480px) {
+        @media (min-width: 481px) {
             .auth-card {
-                padding: 36px 28px;
-                border-radius: 24px;
+                padding: 48px 40px;
+                border-radius: 32px;
             }
         }
     </style>
@@ -27318,32 +27318,113 @@ PRICING_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing - GasConsult.ai</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
+            --white: #FFFFFF;
             --gray-50: #F8FAFC;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
             --gray-600: #475569;
             --gray-700: #334155;
+            --gray-800: #1E293B;
             --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
             min-height: 100vh;
-            padding-top: 80px;
+            overflow-x: hidden;
+        }
+
+        /* Background Canvas */
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Navigation */
@@ -27369,6 +27450,7 @@ PRICING_HTML = """<!DOCTYPE html>
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
         }
 
         .logo {
@@ -27384,15 +27466,17 @@ PRICING_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
+        .logo-icon svg { width: 36px; height: 12px; }
+
         .logo-text {
             font-size: 18px;
-            font-weight: 600;
-            white-space: nowrap;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        .logo-text .gas { color: var(--gray-900); }
-        .logo-text .consult { color: var(--gray-700); }
-        .logo-text .ai { color: var(--gray-600); opacity: 0.7; }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
             display: none;
@@ -27401,74 +27485,85 @@ PRICING_HTML = """<!DOCTYPE html>
         }
 
         .nav-link {
-            padding: 8px 16px;
-            text-decoration: none;
-            color: var(--gray-700);
+            padding: 10px 18px;
             font-size: 14px;
             font-weight: 500;
-            border-radius: 10px;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-radius: 12px;
             transition: all 0.2s ease;
-            white-space: nowrap;
         }
 
         .nav-link:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: var(--blue-600);
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
         }
 
         .nav-link.active {
-            background: rgba(37, 99, 235, 0.12);
             color: var(--blue-600);
-            font-weight: 600;
+            background: var(--blue-50);
         }
 
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
+            cursor: pointer;
             background: none;
             border: none;
-            cursor: pointer;
+            font-family: inherit;
         }
 
         .nav-dropdown-menu {
+            display: none;
             position: absolute;
-            top: calc(100% + 8px);
-            left: 0;
-            min-width: 200px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--gray-200);
             border-radius: 12px;
-            padding: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-8px);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 200px;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
         }
 
-        .nav-dropdown:hover .nav-dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        .nav-dropdown-menu.show {
+            display: block;
         }
 
         .nav-dropdown-link {
             display: block;
-            padding: 10px 14px;
-            text-decoration: none;
-            color: var(--gray-700);
+            padding: 12px 18px;
             font-size: 14px;
             font-weight: 500;
-            border-radius: 8px;
+            color: var(--gray-600);
+            text-decoration: none;
             transition: all 0.2s ease;
         }
 
         .nav-dropdown-link:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: var(--blue-600);
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .mobile-menu-btn {
@@ -27479,13 +27574,15 @@ PRICING_HTML = """<!DOCTYPE html>
             border: none;
             cursor: pointer;
             padding: 8px;
+            border-radius: 8px;
         }
 
         .mobile-menu-btn span {
-            width: 20px;
+            display: block;
+            width: 22px;
             height: 2px;
             background: var(--gray-700);
-            border-radius: 2px;
+            border-radius: 1px;
             transition: all 0.3s ease;
         }
 
@@ -27496,55 +27593,59 @@ PRICING_HTML = """<!DOCTYPE html>
             left: 16px;
             right: 16px;
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            padding: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
             z-index: 99;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .mobile-menu.active {
-            display: block;
-        }
+        .mobile-menu.active { display: flex; }
 
         .mobile-menu-link {
-            display: block;
-            padding: 12px 16px;
-            text-decoration: none;
-            color: var(--gray-700);
+            padding: 14px 16px;
             font-size: 15px;
             font-weight: 500;
-            border-radius: 10px;
+            color: var(--gray-700);
+            text-decoration: none;
+            border-radius: 12px;
             transition: all 0.2s ease;
         }
 
         .mobile-menu-link:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: var(--blue-600);
+            color: var(--gray-900);
+            background: rgba(0,0,0,0.04);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 88px 16px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         /* Pricing Section */
-        .pricing-container {
-            padding: 48px 20px 80px;
-        }
-
         .pricing-header {
             text-align: center;
             margin-bottom: 56px;
         }
 
         .pricing-title {
-            font-family: 'Sora', sans-serif;
             font-size: 42px;
             font-weight: 800;
             color: var(--gray-900);
             margin-bottom: 16px;
+            letter-spacing: -1px;
         }
 
         .pricing-subtitle {
             font-size: 18px;
-            color: #64748B;
+            color: var(--gray-500);
             max-width: 600px;
             margin: 0 auto;
         }
@@ -27558,33 +27659,33 @@ PRICING_HTML = """<!DOCTYPE html>
         }
 
         .pricing-card {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: 40px 32px;
-            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04), 0 8px 32px rgba(0,0,0,0.06);
             transition: all 0.3s ease;
         }
 
         .pricing-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 16px 48px rgba(37, 99, 235, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 16px 48px rgba(0,0,0,0.10);
         }
 
         .pricing-card.featured {
             border: 2px solid var(--blue-600);
-            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1), 0 8px 32px rgba(37, 99, 235, 0.15);
         }
 
         .pricing-card.featured:hover {
-            box-shadow: 0 20px 56px rgba(37, 99, 235, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.15), 0 16px 48px rgba(37, 99, 235, 0.20);
         }
 
         .pricing-badge {
             display: inline-block;
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
             color: white;
             padding: 6px 14px;
             border-radius: 100px;
@@ -27599,7 +27700,7 @@ PRICING_HTML = """<!DOCTYPE html>
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #64748B;
+            color: var(--gray-500);
             margin-bottom: 12px;
         }
 
@@ -27608,7 +27709,6 @@ PRICING_HTML = """<!DOCTYPE html>
         }
 
         .pricing-price {
-            font-family: 'Sora', sans-serif;
             font-size: 56px;
             font-weight: 800;
             color: var(--gray-900);
@@ -27619,12 +27719,12 @@ PRICING_HTML = """<!DOCTYPE html>
         .pricing-price span {
             font-size: 20px;
             font-weight: 500;
-            color: #64748B;
+            color: var(--gray-500);
         }
 
         .pricing-period {
             font-size: 14px;
-            color: #64748B;
+            color: var(--gray-500);
             margin-bottom: 32px;
             min-height: 20px;
         }
@@ -27637,7 +27737,7 @@ PRICING_HTML = """<!DOCTYPE html>
         .pricing-features li {
             padding: 12px 0;
             font-size: 15px;
-            color: #475569;
+            color: var(--gray-600);
             display: flex;
             align-items: start;
             gap: 12px;
@@ -27666,25 +27766,24 @@ PRICING_HTML = """<!DOCTYPE html>
         }
 
         .btn-secondary {
-            background: rgba(241, 245, 249, 0.8);
+            background: var(--gray-100);
             color: var(--gray-900);
-            border: 1px solid rgba(226, 232, 240, 0.8);
+            border: 1px solid var(--gray-200);
         }
 
         .btn-secondary:hover {
-            background: rgba(226, 232, 240, 0.9);
+            background: var(--gray-200);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .btn-primary-pricing {
-            background: var(--blue-600);
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
             color: white;
             box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
         }
 
         .btn-primary-pricing:hover {
-            background: var(--blue-700);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
         }
@@ -27693,7 +27792,7 @@ PRICING_HTML = """<!DOCTYPE html>
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255,255,255,0.5);
         }
 
         .footer-inner {
@@ -27708,49 +27807,48 @@ PRICING_HTML = """<!DOCTYPE html>
 
         .footer-text {
             font-size: 13px;
-            color: #64748B;
+            color: var(--gray-500);
         }
 
         .social-icons {
             display: flex;
-            gap: 16px;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
         .social-icon {
-            width: 36px;
-            height: 36px;
+            color: var(--gray-500);
+            transition: color 0.2s ease, transform 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #64748B;
-            border-radius: 8px;
-            transition: all 0.2s ease;
         }
 
         .social-icon:hover {
-            background: rgba(37, 99, 235, 0.08);
-            color: var(--blue-600);
+            color: var(--gray-700);
+            transform: translateY(-2px);
         }
 
         .social-icon svg {
-            width: 18px;
-            height: 18px;
+            width: 24px;
+            height: 24px;
         }
 
         .footer-links {
             display: flex;
-            gap: 20px;
+            gap: 24px;
         }
 
         .footer-link {
             font-size: 13px;
-            color: #64748B;
+            color: var(--gray-500);
             text-decoration: none;
             transition: color 0.2s ease;
         }
 
         .footer-link:hover {
-            color: var(--blue-600);
+            color: var(--gray-700);
         }
 
         @media (min-width: 768px) {
@@ -27761,6 +27859,7 @@ PRICING_HTML = """<!DOCTYPE html>
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
 
+            .main-content { padding: 108px 32px 48px; }
             .pricing-title { font-size: 52px; }
             .pricing-grid { grid-template-columns: repeat(3, 1fr); }
 
@@ -27773,78 +27872,82 @@ PRICING_HTML = """<!DOCTYPE html>
 
         @media (min-width: 1024px) {
             .nav { padding: 16px 40px; }
-            .pricing-container { padding: 64px 40px 100px; }
+            .main-content { max-width: 1200px; }
         }
     </style>
 </head>
 <body>
-    <nav class="nav" role="navigation" aria-label="Main navigation">
-        <div class="nav-inner">
-            <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
-                <div class="logo-icon">
-                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                        <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
-                </div>
-                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-            </a>
-            <div class="nav-links">
-                <a href="/?clear=1" class="nav-link">Home</a>
-                <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                <a href="/preop" class="nav-link">Pre-Op</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                <div class="nav-dropdown">
-                    <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                    <div class="nav-dropdown-menu">
-                        <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
-                        <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                        <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                        <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                    </div>
-                </div>
-                <a href="/pricing" class="nav-link active">Plans</a>
-                {% if current_user.is_authenticated %}
-                    <a href="/library" class="nav-link">My Library</a>
-                    <a href="/logout" class="nav-link">Log Out</a>
-                {% else %}
-                    <a href="/login" class="nav-link">Log In</a>
-                    <a href="/register" class="nav-link" style="background: var(--blue-600); color: white; font-weight: 600;">Sign Up</a>
-                {% endif %}
-            </div>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/?clear=1" class="mobile-menu-link">Home</a>
-        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-        <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-        <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-        <a href="/pricing" class="mobile-menu-link">Plans</a>
-        {% if current_user.is_authenticated %}
-            <a href="/library" class="mobile-menu-link">My Library</a>
-            <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
-        {% else %}
-            <a href="/login" class="mobile-menu-link">Log In</a>
-            <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
-        {% endif %}
+    <!-- Background Canvas -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+    <div class="grain"></div>
 
-    <div class="pricing-container">
-        <div class="pricing-header">
-            <h1 class="pricing-title">Choose Your Plan</h1>
-            <p class="pricing-subtitle">Get started with evidence-based anesthesiology AI. Upgrade anytime.</p>
+    <!-- Page Content -->
+    <div class="page">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                    <a href="/pricing" class="nav-link active">Plans</a>
+                    {{ generate_navbar_html()|safe }}
+                </div>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:linear-gradient(135deg, var(--blue-600), #1D4ED8);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
-        <div class="pricing-grid">
+
+        <div class="main-content">
+            <div class="pricing-header">
+                <h1 class="pricing-title">Choose Your Plan</h1>
+                <p class="pricing-subtitle">Get started with evidence-based anesthesiology AI. Upgrade anytime.</p>
+            </div>
+            <div class="pricing-grid">
             <div class="pricing-card">
                 <div class="pricing-tier">Free</div>
                 <div class="pricing-price">$0<span>/month</span></div>
@@ -27885,37 +27988,38 @@ PRICING_HTML = """<!DOCTYPE html>
                 <a href="/register" class="btn-pricing btn-secondary">Contact Sales</a>
             </div>
         </div>
-    </div>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="footer-text">© 2025 GasConsult.ai</span>
-            <div class="social-icons">
-                <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                </a>
-                <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                </a>
-                <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                </a>
-            </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-            </div>
         </div>
-    </footer>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <script>
         function toggleMobileMenu() {
@@ -27930,19 +28034,31 @@ PRICING_HTML = """<!DOCTYPE html>
         function toggleNavDropdown(e) {
             e.preventDefault();
             e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.style.opacity = menu.style.opacity === '1' ? '0' : '1';
-                menu.style.visibility = menu.style.visibility === 'visible' ? 'hidden' : 'visible';
+
+            // Find the dropdown container and menu
+            const dropdownContainer = e.target.closest('.nav-dropdown');
+            if (dropdownContainer) {
+                const menu = dropdownContainer.querySelector('.nav-dropdown-menu');
+                if (menu) {
+                    // Close other dropdowns first
+                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => {
+                        if (m !== menu) {
+                            m.classList.remove('show');
+                        }
+                    });
+                    // Toggle this dropdown
+                    menu.classList.toggle('show');
+                }
             }
         }
 
         // Close dropdowns when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
-                menu.style.opacity = '0';
-                menu.style.visibility = 'hidden';
-            });
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown')) {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
         });
     </script>
 </body>
