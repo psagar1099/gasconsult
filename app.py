@@ -6037,9 +6037,9 @@ HTML = """<!DOCTYPE html>
                 this.style.height = Math.min(this.scrollHeight, 180) + 'px';
             });
 
-            // Cmd/Ctrl + Enter to submit
+            // Enter to submit (Shift+Enter for new line, Cmd/Ctrl+Enter also works)
             textarea.addEventListener('keydown', function(e) {
-                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     const form = this.closest('form');
                     if (form) {
@@ -6089,12 +6089,36 @@ HTML = """<!DOCTYPE html>
             history.scrollRestoration = 'manual';
         }
 
-        // Scroll to bottom of messages
+        // Scroll to bottom of messages (with smooth behavior and forced reflow)
         function scrollToBottom() {
             const container = document.getElementById('messagesContainer');
             if (container) {
-                container.scrollTop = container.scrollHeight;
+                // Force a reflow to ensure height is calculated correctly
+                void container.offsetHeight;
+                // Use requestAnimationFrame to ensure scroll happens after DOM updates
+                requestAnimationFrame(() => {
+                    container.scrollTop = container.scrollHeight;
+                });
             }
+        }
+
+        // Set up MutationObserver to auto-scroll when new content is added
+        const messagesContainer = document.getElementById('messagesContainer');
+        if (messagesContainer) {
+            const observer = new MutationObserver(function() {
+                // Only auto-scroll if user is near the bottom (within 200px)
+                // This prevents annoying scrolling if user is reading earlier messages
+                const isNearBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop - messagesContainer.clientHeight < 200;
+                if (isNearBottom) {
+                    scrollToBottom();
+                }
+            });
+
+            observer.observe(messagesContainer, {
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
         }
 
         // SSE Streaming functionality
@@ -6115,7 +6139,11 @@ HTML = """<!DOCTYPE html>
 
             // CRITICAL: Scroll to bottom immediately when streaming starts
             // This ensures user sees the "Thinking..." indicator right away
+            // Use multiple delayed scrolls to handle late-rendering content
             scrollToBottom();
+            setTimeout(scrollToBottom, 50);
+            setTimeout(scrollToBottom, 100);
+            setTimeout(scrollToBottom, 200);
 
             const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
             let accumulatedMarkdown = ''; // Accumulate markdown during streaming
