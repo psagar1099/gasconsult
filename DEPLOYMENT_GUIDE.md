@@ -99,22 +99,52 @@ gunicorn app:app -b 0.0.0.0:8000 --workers 4 --timeout 120
    - `FLASK_ENV=production`
    - `LOG_LEVEL=INFO`
    - `RATE_LIMIT=60 per minute`
+   - `GASCONSULT_DB_DIR=/var/lib/gasconsult` (for persistent storage)
 
-2. **Configure Build Settings:**
+2. **Configure Persistent Disk (CRITICAL for user data):**
+
+   ⚠️ **WITHOUT THIS, ALL USER REGISTRATIONS WILL BE LOST ON REDEPLOYMENT!**
+
+   **For Render:**
+   - Go to your web service dashboard
+   - Click "Disks" in the left sidebar
+   - Click "Add Disk"
+   - Configure:
+     - **Name:** `gasconsult-data`
+     - **Mount Path:** `/var/lib/gasconsult`
+     - **Size:** 1 GB (minimum, adjust as needed)
+   - Click "Create Disk"
+   - **IMPORTANT:** Redeploy your service after adding the disk
+
+   **Verify Setup:**
+   ```bash
+   # Check if disk is mounted (in Render shell)
+   ls -la /var/lib/gasconsult
+
+   # You should see the database file after first registration
+   ls -la /var/lib/gasconsult/gasconsult.db
+   ```
+
+   **For other platforms:**
+   - **Heroku:** Use persistent dynos or add Postgres database
+   - **AWS:** Mount EBS volume at `/var/lib/gasconsult`
+   - **Docker:** Use named volumes: `-v gasconsult_data:/var/lib/gasconsult`
+
+3. **Configure Build Settings:**
    - Build Command: `pip install -r requirements.txt`
    - Start Command: `gunicorn app:app -b 0.0.0.0:$PORT --workers 4`
 
-3. **Enable HTTPS** (required for production)
+4. **Enable HTTPS** (required for production)
 
-4. **Set up monitoring** using the `/health` endpoint
+5. **Set up monitoring** using the `/health` endpoint
 
-#### 5. Domain & DNS
+#### 6. Domain & DNS
 - [ ] Configure custom domain
 - [ ] Set up SSL/TLS certificate
 - [ ] Configure DNS records
 - [ ] Test domain resolution
 
-#### 6. Error Monitoring (Recommended)
+#### 7. Error Monitoring (Recommended)
 
 **Option A: Sentry (Free tier available)**
 ```bash
@@ -140,31 +170,31 @@ SENTRY_DSN=your-sentry-dsn-here
 
 ### Medium Priority (Recommended)
 
-#### 7. Performance Optimization
+#### 8. Performance Optimization
 - [ ] Enable gzip compression
 - [ ] Add CDN for static assets
 - [ ] Implement PubMed query caching (Redis)
 - [ ] Add database for analytics (optional)
 
-#### 8. User Analytics (Privacy-Respecting)
+#### 9. User Analytics (Privacy-Respecting)
 - [ ] Add privacy-respecting analytics (Plausible, Fathom, or Simple Analytics)
 - [ ] Track page views and feature usage
 - [ ] Monitor error rates
 
-#### 9. Backup & Disaster Recovery
+#### 10. Backup & Disaster Recovery
 - [ ] Set up automated backups
 - [ ] Document recovery procedures
 - [ ] Test restore process
 
 ### Low Priority (Nice to Have)
 
-#### 10. Documentation
+#### 11. Documentation
 - [ ] API documentation
 - [ ] User guide
 - [ ] FAQ page
 - [ ] Video tutorials
 
-#### 11. Additional Features
+#### 12. Additional Features
 - [ ] User accounts (optional)
 - [ ] Saved queries
 - [ ] Export chat history

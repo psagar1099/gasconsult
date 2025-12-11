@@ -24532,8 +24532,8 @@ def register():
         full_name = request.form.get('full_name', '').strip()
 
         # Validate input
-        if not email or not password:
-            flash('Email and password are required', 'error')
+        if not email or not password or not full_name:
+            flash('Name, email, and password are required', 'error')
             return redirect(url_for('register'))
 
         if len(password) < 8:
@@ -26066,11 +26066,8 @@ REGISTER_HTML = """<!DOCTYPE html>
         <form class="auth-form" method="POST" action="/register">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-group">
-                <label class="form-label">
-                    Full Name
-                    <span class="optional-tag">Optional</span>
-                </label>
-                <input type="text" name="full_name" class="form-input" placeholder="Dr. Jane Smith">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-input" placeholder="Dr. Jane Smith" required>
             </div>
 
             <div class="form-group">
