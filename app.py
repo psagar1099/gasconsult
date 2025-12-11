@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail, Message
+from authlib.integrations.flask_client import OAuth
 from werkzeug.exceptions import HTTPException, NotFound
 from Bio import Entrez
 import openai
@@ -57,6 +58,43 @@ EMAIL_CONFIGURED = bool(os.getenv('MAIL_USERNAME') and os.getenv('MAIL_PASSWORD'
 if not EMAIL_CONFIGURED:
     import logging
     logging.warning("Email not configured - verification emails will not be sent")
+
+# Initialize OAuth for Google and Apple Sign In
+oauth = OAuth(app)
+
+# Google OAuth Configuration
+google = oauth.register(
+    name='google',
+    client_id=os.getenv('GOOGLE_CLIENT_ID'),
+    client_secret=os.getenv('GOOGLE_CLIENT_SECRET'),
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    client_kwargs={
+        'scope': 'openid email profile'
+    }
+)
+
+# Apple OAuth Configuration
+apple = oauth.register(
+    name='apple',
+    client_id=os.getenv('APPLE_CLIENT_ID'),
+    client_secret=os.getenv('APPLE_CLIENT_SECRET'),
+    server_metadata_url='https://appleid.apple.com/.well-known/openid-configuration',
+    client_kwargs={
+        'scope': 'name email'
+    }
+)
+
+# Check if OAuth is configured
+GOOGLE_OAUTH_CONFIGURED = bool(os.getenv('GOOGLE_CLIENT_ID') and os.getenv('GOOGLE_CLIENT_SECRET'))
+APPLE_OAUTH_CONFIGURED = bool(os.getenv('APPLE_CLIENT_ID') and os.getenv('APPLE_CLIENT_SECRET'))
+
+if not GOOGLE_OAUTH_CONFIGURED:
+    import logging
+    logging.warning("Google OAuth not configured - Google Sign In will not work")
+
+if not APPLE_OAUTH_CONFIGURED:
+    import logging
+    logging.warning("Apple OAuth not configured - Apple Sign In will not work")
 
 # Initialize Flask-Login for user session management
 login_manager = LoginManager()
@@ -25171,6 +25209,217 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route("/auth/google")
+def google_login():
+    """Initiate Google OAuth login"""
+    if not GOOGLE_OAUTH_CONFIGURED:
+        flash('Google Sign In is not configured. Please use email/password login.', 'error')
+        return redirect(url_for('login'))
+
+    # Store the next URL in session to redirect after OAuth
+    session['oauth_next'] = request.args.get('next') or url_for('index')
+
+    # Generate redirect URI
+    redirect_uri = url_for('google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/google/callback")
+def google_callback():
+    """Handle Google OAuth callback"""
+    if not GOOGLE_OAUTH_CONFIGURED:
+        flash('Google Sign In is not configured.', 'error')
+        return redirect(url_for('login'))
+
+    try:
+        # Get OAuth token
+        token = google.authorize_access_token()
+
+        # Get user info from Google
+        user_info = token.get('userinfo')
+        if not user_info:
+            user_info = google.get('userinfo').json()
+
+        email = user_info.get('email')
+        full_name = user_info.get('name')
+        google_id = user_info.get('sub')  # Google's unique user ID
+
+        if not email or not google_id:
+            flash('Failed to get user information from Google. Please try again.', 'error')
+            return redirect(url_for('login'))
+
+        # Check if user exists by OAuth provider
+        user_data = database.get_user_by_oauth('google', google_id)
+
+        if user_data:
+            # Existing OAuth user - log them in
+            user = User(
+                id=user_data['id'],
+                email=user_data['email'],
+                full_name=user_data['full_name'],
+                is_verified=user_data['is_verified'],
+                subscription_tier=user_data['subscription_tier']
+            )
+            database.update_user_login(user.id)
+            login_user(user, remember=True)
+            flash(f'Welcome back, {user.display_name}!', 'success')
+
+        else:
+            # Check if user exists by email (account linking)
+            existing_user = database.get_user_by_email(email)
+
+            if existing_user:
+                # Link OAuth to existing account
+                database.link_oauth_to_existing_user(existing_user['id'], 'google', google_id)
+                user = User(
+                    id=existing_user['id'],
+                    email=existing_user['email'],
+                    full_name=existing_user['full_name'],
+                    is_verified=True,  # OAuth users are auto-verified
+                    subscription_tier=existing_user['subscription_tier']
+                )
+                database.update_user_login(user.id)
+                login_user(user, remember=True)
+                flash(f'Google account linked successfully! Welcome back, {user.display_name}!', 'success')
+            else:
+                # Create new user via OAuth
+                user_id = database.create_oauth_user(email, full_name, 'google', google_id)
+
+                if user_id:
+                    user = User(
+                        id=user_id,
+                        email=email,
+                        full_name=full_name,
+                        is_verified=True,
+                        subscription_tier='free'
+                    )
+                    database.update_user_login(user.id)
+                    login_user(user, remember=True)
+                    flash(f'Account created successfully! Welcome, {user.display_name}!', 'success')
+                else:
+                    flash('Failed to create account. Please try again.', 'error')
+                    return redirect(url_for('register'))
+
+        # Redirect to the page they were trying to access, or home
+        next_page = session.pop('oauth_next', url_for('index'))
+        return redirect(next_page)
+
+    except Exception as e:
+        logger.error(f"Google OAuth error: {e}")
+        flash('An error occurred during Google Sign In. Please try again.', 'error')
+        return redirect(url_for('login'))
+
+
+@app.route("/auth/apple")
+def apple_login():
+    """Initiate Apple OAuth login"""
+    if not APPLE_OAUTH_CONFIGURED:
+        flash('Apple Sign In is not configured. Please use email/password login.', 'error')
+        return redirect(url_for('login'))
+
+    # Store the next URL in session to redirect after OAuth
+    session['oauth_next'] = request.args.get('next') or url_for('index')
+
+    # Generate redirect URI
+    redirect_uri = url_for('apple_callback', _external=True)
+    return apple.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/apple/callback")
+def apple_callback():
+    """Handle Apple OAuth callback"""
+    if not APPLE_OAUTH_CONFIGURED:
+        flash('Apple Sign In is not configured.', 'error')
+        return redirect(url_for('login'))
+
+    try:
+        # Get OAuth token
+        token = apple.authorize_access_token()
+
+        # Get user info from Apple
+        user_info = token.get('userinfo')
+        if not user_info:
+            # Apple doesn't provide a userinfo endpoint, we get data from ID token
+            id_token = token.get('id_token')
+            user_info = apple.parse_id_token(token)
+
+        email = user_info.get('email')
+        apple_id = user_info.get('sub')  # Apple's unique user ID
+
+        # Apple may not provide name on subsequent logins, only on first authorization
+        full_name = None
+        if 'name' in user_info:
+            name_dict = user_info.get('name', {})
+            first_name = name_dict.get('firstName', '')
+            last_name = name_dict.get('lastName', '')
+            full_name = f"{first_name} {last_name}".strip() if first_name or last_name else None
+
+        if not email or not apple_id:
+            flash('Failed to get user information from Apple. Please try again.', 'error')
+            return redirect(url_for('login'))
+
+        # Check if user exists by OAuth provider
+        user_data = database.get_user_by_oauth('apple', apple_id)
+
+        if user_data:
+            # Existing OAuth user - log them in
+            user = User(
+                id=user_data['id'],
+                email=user_data['email'],
+                full_name=user_data['full_name'],
+                is_verified=user_data['is_verified'],
+                subscription_tier=user_data['subscription_tier']
+            )
+            database.update_user_login(user.id)
+            login_user(user, remember=True)
+            flash(f'Welcome back, {user.display_name}!', 'success')
+
+        else:
+            # Check if user exists by email (account linking)
+            existing_user = database.get_user_by_email(email)
+
+            if existing_user:
+                # Link OAuth to existing account
+                database.link_oauth_to_existing_user(existing_user['id'], 'apple', apple_id)
+                user = User(
+                    id=existing_user['id'],
+                    email=existing_user['email'],
+                    full_name=existing_user['full_name'],
+                    is_verified=True,  # OAuth users are auto-verified
+                    subscription_tier=existing_user['subscription_tier']
+                )
+                database.update_user_login(user.id)
+                login_user(user, remember=True)
+                flash(f'Apple account linked successfully! Welcome back, {user.display_name}!', 'success')
+            else:
+                # Create new user via OAuth
+                user_id = database.create_oauth_user(email, full_name, 'apple', apple_id)
+
+                if user_id:
+                    user = User(
+                        id=user_id,
+                        email=email,
+                        full_name=full_name,
+                        is_verified=True,
+                        subscription_tier='free'
+                    )
+                    database.update_user_login(user.id)
+                    login_user(user, remember=True)
+                    flash(f'Account created successfully! Welcome, {user.display_name}!', 'success')
+                else:
+                    flash('Failed to create account. Please try again.', 'error')
+                    return redirect(url_for('register'))
+
+        # Redirect to the page they were trying to access, or home
+        next_page = session.pop('oauth_next', url_for('index'))
+        return redirect(next_page)
+
+    except Exception as e:
+        logger.error(f"Apple OAuth error: {e}")
+        flash('An error occurred during Apple Sign In. Please try again.', 'error')
+        return redirect(url_for('login'))
+
+
 @app.route("/verify/<token>")
 def verify_email(token):
     """Verify user email with token"""
@@ -26114,7 +26363,7 @@ LOGIN_HTML = """<!DOCTYPE html>
             </div>
 
             <div class="social-buttons">
-                <button type="button" class="social-btn">
+                <a href="/auth/google" class="social-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <svg viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -26122,13 +26371,13 @@ LOGIN_HTML = """<!DOCTYPE html>
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                     Google
-                </button>
-                <button type="button" class="social-btn">
+                </a>
+                <a href="/auth/apple" class="social-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <svg viewBox="0 0 24 24" fill="#000">
                         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
                     Apple
-                </button>
+                </a>
             </div>
         </form>
 
@@ -26620,7 +26869,7 @@ REGISTER_HTML = """<!DOCTYPE html>
             </div>
 
             <div class="social-buttons">
-                <button type="button" class="social-btn">
+                <a href="/auth/google" class="social-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <svg viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                         <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -26628,13 +26877,13 @@ REGISTER_HTML = """<!DOCTYPE html>
                         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                     </svg>
                     Google
-                </button>
-                <button type="button" class="social-btn">
+                </a>
+                <a href="/auth/apple" class="social-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <svg viewBox="0 0 24 24" fill="#000">
                         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                     </svg>
                     Apple
-                </button>
+                </a>
             </div>
         </form>
 
