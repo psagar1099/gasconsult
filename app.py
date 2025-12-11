@@ -25330,8 +25330,13 @@ def register():
         # Check if user already exists
         existing_user = database.get_user_by_email(email)
         if existing_user:
-            flash('An account with this email already exists', 'error')
-            return redirect(url_for('register'))
+            # Check if it's an OAuth-only account
+            if existing_user.get('oauth_provider') and not existing_user.get('password_hash'):
+                oauth_provider = existing_user['oauth_provider'].title()
+                flash(f'An account with this email already exists using {oauth_provider} Sign In. Please use the "{oauth_provider} Sign In" button to log in.', 'error')
+            else:
+                flash('An account with this email already exists. Please log in instead.', 'error')
+            return redirect(url_for('login'))
 
         # Generate verification token
         verification_token = secrets.token_urlsafe(32)
@@ -25399,8 +25404,14 @@ def login():
             flash('Invalid email or password', 'error')
             return redirect(url_for('login'))
 
-        # Check password
-        if not bcrypt.check_password_hash(user_data['password_hash'], password):
+        # Check if this is an OAuth-only user (no password set)
+        if user_data.get('oauth_provider') and not user_data.get('password_hash'):
+            oauth_provider = user_data['oauth_provider'].title()  # Google or Apple
+            flash(f'This account uses {oauth_provider} Sign In. Please use the "{oauth_provider} Sign In" button.', 'error')
+            return redirect(url_for('login'))
+
+        # Check password (for email/password users or linked accounts with password)
+        if not user_data.get('password_hash') or not bcrypt.check_password_hash(user_data['password_hash'], password):
             flash('Invalid email or password', 'error')
             return redirect(url_for('login'))
 
