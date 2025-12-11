@@ -136,12 +136,11 @@ Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ====== Database Initialization ======
-# Initialize database for user accounts and chat history
+# Initialize database for user accounts and chat history (both mandatory)
 # This is completely non-breaking - if database fails, app continues with limited functionality
 DATABASE_INITIALIZED = False
-CHAT_HISTORY_ENABLED = os.getenv('ENABLE_CHAT_HISTORY', 'false').lower() == 'true'
 
-# CRITICAL: Always initialize database if available (needed for user accounts)
+# CRITICAL: Always initialize database if available (needed for user accounts and chat history)
 if DATABASE_AVAILABLE:
     try:
         import logging
@@ -151,24 +150,19 @@ if DATABASE_AVAILABLE:
             logging.info(f"✓ Database initialized successfully at {database.DB_PATH}")
             # Log database stats
             stats = database.get_database_stats()
-            logging.info(f"Database stats: {stats.get('total_conversations', 0)} conversations, "
+            logging.info(f"✓ Database stats: {stats.get('total_conversations', 0)} conversations, "
                   f"{stats.get('total_messages', 0)} messages")
-
-            # Log chat history feature status
-            if CHAT_HISTORY_ENABLED:
-                logging.info("✓ Chat history feature enabled - messages will be saved to database")
-            else:
-                logging.info("Chat history feature disabled - only user accounts will use database")
+            logging.info("✓ Chat history enabled - all messages will be saved to database")
         else:
             logging.error("✗ Database initialization failed!")
-            logging.warning("User registration will not work until database is initialized")
+            logging.warning("User registration and chat history will not work until database is initialized")
     except Exception as e:
         logging.error(f"✗ Database initialization error: {e}")
-        logging.warning("User registration will not work - database unavailable")
+        logging.warning("User registration and chat history unavailable - database error")
         DATABASE_INITIALIZED = False
 else:
     import logging
-    logging.warning("⚠️  Database module not available - user registration disabled")
+    logging.warning("⚠️  Database module not available - user registration and chat history disabled")
 
 # ====== User Authentication (Flask-Login) ======
 
@@ -488,12 +482,12 @@ def strip_markdown_code_fences(content):
 def safe_db_save_conversation(conversation_id, user_session_id, title):
     """
     Safely save a conversation to the database.
-    If database is disabled or save fails, logs error but doesn't break app.
+    If database is not initialized or save fails, logs error but doesn't break app.
 
     Returns:
         bool: True if saved successfully, False otherwise
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return False
 
     try:
@@ -506,12 +500,12 @@ def safe_db_save_conversation(conversation_id, user_session_id, title):
 def safe_db_save_message(conversation_id, role, content, references=None, num_papers=0, evidence_strength=None):
     """
     Safely save a message to the database.
-    If database is disabled or save fails, logs error but doesn't break app.
+    If database is not initialized or save fails, logs error but doesn't break app.
 
     Returns:
         bool: True if saved successfully, False otherwise
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return False
 
     try:
@@ -25358,11 +25352,11 @@ def api_conversations():
     Get list of user's conversations.
     Returns conversations ordered by most recently updated.
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return jsonify({
             'enabled': False,
             'conversations': [],
-            'message': 'Chat history feature is disabled'
+            'message': 'Database not initialized'
         }), 200
 
     try:
@@ -25407,9 +25401,9 @@ def load_conversation(conversation_id):
     Load a previous conversation from database (Phase 4).
     Clears current session and loads messages from database.
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return jsonify({
-            'error': 'Chat history feature is disabled'
+            'error': 'Database not initialized'
         }), 403
 
     try:
