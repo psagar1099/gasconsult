@@ -135,35 +135,40 @@ Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ====== Chat History Database (Phase 1: Setup Only) ======
-# Initialize persistent chat history database if enabled
-# This is completely non-breaking - if database fails, app continues with session-only storage
-CHAT_HISTORY_ENABLED = os.getenv('ENABLE_CHAT_HISTORY', 'false').lower() == 'true'
+# ====== Database Initialization ======
+# Initialize database for user accounts and chat history
+# This is completely non-breaking - if database fails, app continues with limited functionality
 DATABASE_INITIALIZED = False
+CHAT_HISTORY_ENABLED = os.getenv('ENABLE_CHAT_HISTORY', 'false').lower() == 'true'
 
-if CHAT_HISTORY_ENABLED and DATABASE_AVAILABLE:
+# CRITICAL: Always initialize database if available (needed for user accounts)
+if DATABASE_AVAILABLE:
     try:
         import logging
-        logging.info("Chat history feature flag enabled, initializing database...")
+        logging.info("Initializing database for user accounts and chat history...")
         if database.init_db():
             DATABASE_INITIALIZED = True
-            logging.info(f"Database initialized successfully at {database.DB_PATH}")
+            logging.info(f"✓ Database initialized successfully at {database.DB_PATH}")
             # Log database stats
             stats = database.get_database_stats()
             logging.info(f"Database stats: {stats.get('total_conversations', 0)} conversations, "
                   f"{stats.get('total_messages', 0)} messages")
+
+            # Log chat history feature status
+            if CHAT_HISTORY_ENABLED:
+                logging.info("✓ Chat history feature enabled - messages will be saved to database")
+            else:
+                logging.info("Chat history feature disabled - only user accounts will use database")
         else:
-            logging.warning("Database initialization failed, continuing with session-only storage")
+            logging.error("✗ Database initialization failed!")
+            logging.warning("User registration will not work until database is initialized")
     except Exception as e:
-        logging.error(f"Database initialization error: {e}")
-        logging.info("Continuing with session-only storage (no impact on functionality)")
+        logging.error(f"✗ Database initialization error: {e}")
+        logging.warning("User registration will not work - database unavailable")
         DATABASE_INITIALIZED = False
-elif CHAT_HISTORY_ENABLED and not DATABASE_AVAILABLE:
-    import logging
-    logging.warning("Chat history feature enabled but database module not available")
 else:
     import logging
-    logging.info("Chat history feature disabled via ENABLE_CHAT_HISTORY environment variable")
+    logging.warning("⚠️  Database module not available - user registration disabled")
 
 # ====== User Authentication (Flask-Login) ======
 
