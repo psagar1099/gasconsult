@@ -6148,10 +6148,18 @@ HTML = """<!DOCTYPE html>
             const eventSource = new EventSource('/stream?request_id=' + encodeURIComponent(requestId));
             let accumulatedMarkdown = ''; // Accumulate markdown during streaming
 
-            // Aggressive auto-scroll: Keep scrolling during streaming to ensure user sees new content
-            // This runs every 100ms to aggressively follow the streaming content
+            // Smart auto-scroll: Keep scrolling during streaming ONLY if user is near bottom
+            // This runs every 100ms but respects if user has scrolled up to read earlier messages
             const scrollInterval = setInterval(function() {
-                scrollToBottom();
+                const container = document.getElementById('messagesContainer');
+                if (container) {
+                    // Only auto-scroll if user is near the bottom (within 200px) or at the very top (just loaded)
+                    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 200;
+                    const isAtTop = container.scrollTop < 100;
+                    if (isNearBottom || isAtTop) {
+                        scrollToBottom();
+                    }
+                }
             }, 100);
 
             eventSource.addEventListener('message', function(e) {
@@ -6340,29 +6348,25 @@ HTML = """<!DOCTYPE html>
 
         // Auto-scroll to bottom on page load (for chat view)
         {% if messages and messages|length > 0 %}
-        // Scroll immediately on script execution (before DOMContentLoaded)
-        // This prevents the flash of scrolling to top
-        scrollToBottom();
+        // Use multiple delayed scrolls to override browser's default scroll restoration
+        // The browser often scrolls to top AFTER our immediate scroll, so we need delays
+        setTimeout(scrollToBottom, 0);    // Next tick
+        setTimeout(scrollToBottom, 10);   // Early
+        setTimeout(scrollToBottom, 50);   // After browser scroll restoration
+        setTimeout(scrollToBottom, 100);  // Safety net
+        setTimeout(scrollToBottom, 200);  // Final safety net
 
-        // Scroll immediately when DOM is ready
+        // Scroll when DOM is fully ready
         window.addEventListener('DOMContentLoaded', function() {
             scrollToBottom();
+            setTimeout(scrollToBottom, 50);
         });
 
         // Scroll again after everything loads (images, etc)
         window.addEventListener('load', function() {
             scrollToBottom();
+            setTimeout(scrollToBottom, 50);
         });
-
-        // Scroll one more time after a brief delay to ensure pending stream is visible
-        {% if pending_stream %}
-        setTimeout(function() {
-            scrollToBottom();
-        }, 100);
-        setTimeout(function() {
-            scrollToBottom();
-        }, 300);
-        {% endif %}
         {% endif %}
 
         // ====== Chat History Sidebar JavaScript (Phase 4) ======
