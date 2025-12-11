@@ -5272,6 +5272,84 @@ HTML = """<!DOCTYPE html>
             margin-bottom: 0;
         }
 
+        /* Save to Library Button */
+        .save-to-library-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            background: var(--white);
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .save-to-library-btn:hover {
+            color: var(--blue-600);
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            transform: translateY(-1px);
+        }
+
+        .save-to-library-btn.saved {
+            color: var(--blue-600);
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+        }
+
+        .save-to-library-btn.saved svg {
+            fill: var(--blue-600);
+        }
+
+        /* ====== Toast Notifications ====== */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .toast-notification {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 10000;
+            background: var(--white);
+            color: var(--gray-900);
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 350px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid var(--gray-200);
+        }
+
+        .toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast-notification.toast-success {
+            border-left: 4px solid #10B981;
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.05), var(--white));
+        }
+
+        .toast-notification.toast-error {
+            border-left: 4px solid #EF4444;
+            background: linear-gradient(to right, rgba(239, 68, 68, 0.05), var(--white));
+        }
+
+        .toast-notification.toast-info {
+            border-left: 4px solid var(--blue-500);
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.05), var(--white));
+        }
+
         /* ====== Chat History Sidebar (Phase 4 - Glassmorphism) ====== */
         .history-toggle {
             position: fixed;
@@ -5829,6 +5907,17 @@ HTML = """<!DOCTYPE html>
                                 {% endfor %}
                             </div>
                             {% endif %}
+
+                            {% if current_user.is_authenticated %}
+                            <div class="message-actions" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200); display: flex; gap: 8px;">
+                                <button class="save-to-library-btn" onclick="saveToLibrary({{ loop.index0 }})" title="Save to My Library">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                                        <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                    </svg>
+                                    Save to Library
+                                </button>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                     {% endif %}
@@ -6368,6 +6457,76 @@ HTML = """<!DOCTYPE html>
             setTimeout(scrollToBottom, 50);
         });
         {% endif %}
+
+        // ====== Save to Library Function ======
+        async function saveToLibrary(messageIndex) {
+            const button = event.target.closest('.save-to-library-btn');
+
+            // Prevent double-clicking
+            if (button.disabled) return;
+            button.disabled = true;
+
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10"></circle></svg> Saving...';
+
+            try {
+                const response = await fetch('/save-to-library', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ message_index: messageIndex })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    button.classList.add('saved');
+                    button.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg> Saved to Library';
+
+                    // Show success message
+                    if (!data.already_saved) {
+                        showToast('Saved to library successfully!', 'success');
+                    } else {
+                        showToast('Already saved to library', 'info');
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to save');
+                }
+            } catch (error) {
+                console.error('Error saving to library:', error);
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+                showToast(error.message || 'Failed to save to library', 'error');
+            }
+        }
+
+        // Toast notification function
+        function showToast(message, type = 'info') {
+            // Remove any existing toasts
+            const existingToast = document.querySelector('.toast-notification');
+            if (existingToast) {
+                existingToast.remove();
+            }
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification toast-' + type;
+            toast.textContent = message;
+
+            // Add to body
+            document.body.appendChild(toast);
+
+            // Show toast with animation
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
 
         // ====== Chat History Sidebar JavaScript (Phase 4) ======
         (function() {
@@ -26054,6 +26213,81 @@ def library():
     bookmarks = sorted(bookmarks, key=lambda x: x['timestamp'], reverse=True)
 
     return render_template_string(LIBRARY_HTML, bookmarks=bookmarks)
+
+@app.route("/save-to-library", methods=["POST"])
+def save_to_library():
+    """Save a chat response to user's library"""
+    try:
+        # Check if user is authenticated
+        if not current_user.is_authenticated:
+            return jsonify({'error': 'You must be logged in to save to library'}), 401
+
+        data = request.get_json()
+        message_index = data.get('message_index')
+
+        messages = session.get('messages', [])
+
+        # Validate message index
+        if message_index is None or message_index < 0 or message_index >= len(messages):
+            return jsonify({'error': 'Invalid message index'}), 400
+
+        # Get the AI message
+        ai_message = messages[message_index]
+
+        # Get the corresponding user query (previous message)
+        query = messages[message_index - 1]['content'] if message_index > 0 else 'Direct query'
+
+        # Generate unique bookmark ID
+        bookmark_id = str(uuid.uuid4())
+
+        # Create bookmark object
+        bookmark = {
+            'id': bookmark_id,
+            'query': query,
+            'answer': ai_message.get('content', ''),
+            'references': ai_message.get('references', []),
+            'num_papers': ai_message.get('num_papers', 0),
+            'evidence_strength': ai_message.get('evidence_strength'),
+            'timestamp': datetime.now().isoformat()
+        }
+
+        # Get user ID (use session user_id or current_user id)
+        user_id = session.get('user_id') or (current_user.id if current_user.is_authenticated else None)
+
+        if not user_id:
+            return jsonify({'error': 'User not found'}), 401
+
+        # Initialize user's bookmarks if not exists
+        if user_id not in BOOKMARKS_STORAGE:
+            BOOKMARKS_STORAGE[user_id] = []
+
+        # Check if already saved (by comparing query and answer content)
+        existing = any(
+            b['query'] == query and b['answer'] == bookmark['answer']
+            for b in BOOKMARKS_STORAGE[user_id]
+        )
+
+        if existing:
+            return jsonify({
+                'success': True,
+                'message': 'Already saved to library',
+                'already_saved': True
+            })
+
+        # Add to library
+        BOOKMARKS_STORAGE[user_id].append(bookmark)
+
+        logger.info(f"User {user_id} saved message to library: {bookmark_id}")
+
+        return jsonify({
+            'success': True,
+            'message': 'Saved to library',
+            'bookmark_id': bookmark_id
+        })
+
+    except Exception as e:
+        logger.error(f"Error saving to library: {str(e)}")
+        return jsonify({'error': f'Failed to save: {str(e)}'}), 500
 
 @app.route("/share", methods=["POST"])
 def create_share_link():
