@@ -173,35 +173,34 @@ Entrez.api_key = os.getenv("ENTREZ_API_KEY", "")
 
 openai_client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ====== Chat History Database (Phase 1: Setup Only) ======
-# Initialize persistent chat history database if enabled
-# This is completely non-breaking - if database fails, app continues with session-only storage
-CHAT_HISTORY_ENABLED = os.getenv('ENABLE_CHAT_HISTORY', 'false').lower() == 'true'
+# ====== Database Initialization ======
+# Initialize database for user accounts and chat history (both mandatory)
+# This is completely non-breaking - if database fails, app continues with limited functionality
 DATABASE_INITIALIZED = False
 
-if CHAT_HISTORY_ENABLED and DATABASE_AVAILABLE:
+# CRITICAL: Always initialize database if available (needed for user accounts and chat history)
+if DATABASE_AVAILABLE:
     try:
         import logging
-        logging.info("Chat history feature flag enabled, initializing database...")
+        logging.info("Initializing database for user accounts and chat history...")
         if database.init_db():
             DATABASE_INITIALIZED = True
-            logging.info(f"Database initialized successfully at {database.DB_PATH}")
+            logging.info(f"✓ Database initialized successfully at {database.DB_PATH}")
             # Log database stats
             stats = database.get_database_stats()
-            logging.info(f"Database stats: {stats.get('total_conversations', 0)} conversations, "
+            logging.info(f"✓ Database stats: {stats.get('total_conversations', 0)} conversations, "
                   f"{stats.get('total_messages', 0)} messages")
+            logging.info("✓ Chat history enabled - all messages will be saved to database")
         else:
-            logging.warning("Database initialization failed, continuing with session-only storage")
+            logging.error("✗ Database initialization failed!")
+            logging.warning("User registration and chat history will not work until database is initialized")
     except Exception as e:
-        logging.error(f"Database initialization error: {e}")
-        logging.info("Continuing with session-only storage (no impact on functionality)")
+        logging.error(f"✗ Database initialization error: {e}")
+        logging.warning("User registration and chat history unavailable - database error")
         DATABASE_INITIALIZED = False
-elif CHAT_HISTORY_ENABLED and not DATABASE_AVAILABLE:
-    import logging
-    logging.warning("Chat history feature enabled but database module not available")
 else:
     import logging
-    logging.info("Chat history feature disabled via ENABLE_CHAT_HISTORY environment variable")
+    logging.warning("⚠️  Database module not available - user registration and chat history disabled")
 
 # ====== User Authentication (Flask-Login) ======
 
@@ -521,12 +520,12 @@ def strip_markdown_code_fences(content):
 def safe_db_save_conversation(conversation_id, user_session_id, title):
     """
     Safely save a conversation to the database.
-    If database is disabled or save fails, logs error but doesn't break app.
+    If database is not initialized or save fails, logs error but doesn't break app.
 
     Returns:
         bool: True if saved successfully, False otherwise
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return False
 
     try:
@@ -539,12 +538,12 @@ def safe_db_save_conversation(conversation_id, user_session_id, title):
 def safe_db_save_message(conversation_id, role, content, references=None, num_papers=0, evidence_strength=None):
     """
     Safely save a message to the database.
-    If database is disabled or save fails, logs error but doesn't break app.
+    If database is not initialized or save fails, logs error but doesn't break app.
 
     Returns:
         bool: True if saved successfully, False otherwise
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return False
 
     try:
@@ -4973,6 +4972,19 @@ HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .new-chat-btn {
+                height: 44px;
+                left: 72px;
+                top: 88px;
+                padding: 0 16px;
+                font-size: 14px;
+            }
+
+            .new-chat-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
             .messages-container {
                 padding: 32px 24px;
             }
@@ -5023,11 +5035,6 @@ HTML = """<!DOCTYPE html>
             .chat-send svg {
                 width: 19px;
                 height: 19px;
-            }
-
-            .new-chat-btn {
-                padding: 10px 18px;
-                font-size: 14px;
             }
         }
 
@@ -5530,6 +5537,47 @@ HTML = """<!DOCTYPE html>
             to { transform: rotate(360deg); }
         }
 
+        .history-sidebar-footer {
+            margin-top: auto;
+            padding: 16px;
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            background: rgba(248, 250, 252, 0.5);
+            backdrop-filter: blur(8px);
+        }
+
+        .clear-history-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            color: var(--gray-700);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: var(--gray-300);
+            color: var(--gray-900);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .clear-history-btn:active {
+            transform: scale(0.98);
+        }
+
+        .clear-history-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
         /* Overlay when sidebar is open */
         .history-overlay {
             position: fixed;
@@ -5631,6 +5679,14 @@ HTML = """<!DOCTYPE html>
                 <div class="history-loading-spinner"></div>
                 <span>Loading...</span>
             </div>
+        </div>
+        <div class="history-sidebar-footer">
+            <button class="clear-history-btn" id="clearHistoryBtn" aria-label="Clear all chat history">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Clear All History
+            </button>
         </div>
     </aside>
 
@@ -6434,6 +6490,62 @@ HTML = """<!DOCTYPE html>
                     closeSidebar();
                 }
             });
+
+            // Clear history button
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener('click', async function() {
+                    // Confirm before clearing
+                    if (!confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
+                        return;
+                    }
+
+                    try {
+                        // Disable button during request
+                        clearHistoryBtn.disabled = true;
+                        clearHistoryBtn.innerHTML = '<div class="history-loading-spinner" style="width: 16px; height: 16px; border-width: 2px; margin: 0;"></div> Clearing...';
+
+                        const response = await fetch('/clear-history', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token() }}'
+                            }
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Clear the conversations list
+                            conversationsList.innerHTML = `
+                                <div class="history-empty-state">
+                                    <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+                                    </svg>
+                                    <div class="history-empty-text">All history cleared</div>
+                                    <div class="history-empty-subtext">Your conversations have been deleted</div>
+                                </div>
+                            `;
+
+                            // Redirect to home after a short delay
+                            setTimeout(() => {
+                                window.location.href = '/?clear=1';
+                            }, 1500);
+                        } else {
+                            alert('Failed to clear history: ' + (data.error || 'Unknown error'));
+                            // Re-enable button
+                            clearHistoryBtn.disabled = false;
+                            clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
+                        }
+                    } catch (error) {
+                        console.error('Error clearing history:', error);
+                        alert('Failed to clear history. Please try again.');
+                        // Re-enable button
+                        clearHistoryBtn.disabled = false;
+                        clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
+                    }
+                });
+            }
         })();
     </script>
 </body>
@@ -25602,11 +25714,11 @@ def api_conversations():
     Get list of user's conversations.
     Returns conversations ordered by most recently updated.
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return jsonify({
             'enabled': False,
             'conversations': [],
-            'message': 'Chat history feature is disabled'
+            'message': 'Database not initialized'
         }), 200
 
     try:
@@ -25651,9 +25763,9 @@ def load_conversation(conversation_id):
     Load a previous conversation from database (Phase 4).
     Clears current session and loads messages from database.
     """
-    if not CHAT_HISTORY_ENABLED or not DATABASE_INITIALIZED:
+    if not DATABASE_INITIALIZED:
         return jsonify({
-            'error': 'Chat history feature is disabled'
+            'error': 'Database not initialized'
         }), 403
 
     try:
@@ -25703,6 +25815,61 @@ def load_conversation(conversation_id):
         logger.info(f"Error loading conversation: {e}")
         return jsonify({
             'error': f'Failed to load conversation: {str(e)}'
+        }), 500
+
+@app.route("/clear-history", methods=["POST"])
+def clear_history():
+    """
+    Clear all chat history for the current user.
+    Deletes all conversations from database and clears session.
+    """
+    if not DATABASE_INITIALIZED:
+        return jsonify({
+            'error': 'Database not initialized'
+        }), 403
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Get all conversations for this user
+        conversations = database.get_conversations(user_session_id, limit=1000)
+
+        # Delete each conversation (soft delete by default)
+        deleted_count = 0
+        for conv in conversations:
+            if database.delete_conversation(conv['id'], hard_delete=False):
+                deleted_count += 1
+
+        # Clear current session
+        keys_to_clear = [
+            'messages',
+            'conversation_topic',
+            'chat_active',
+            'conversation_id'
+        ]
+        for key in keys_to_clear:
+            session.pop(key, None)
+
+        # Clear any stream data keys
+        stream_keys = [k for k in session.keys() if k.startswith('stream_data_')]
+        for key in stream_keys:
+            session.pop(key, None)
+
+        session.modified = True
+
+        logger.info(f"Cleared {deleted_count} conversations for user {user_session_id}")
+
+        return jsonify({
+            'success': True,
+            'deleted_count': deleted_count,
+            'message': f'Cleared {deleted_count} conversations'
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error clearing history: {e}")
+        return jsonify({
+            'error': f'Failed to clear history: {str(e)}'
         }), 500
 
 # ====== Premium Features Routes ======
