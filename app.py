@@ -312,7 +312,7 @@ def generate_navbar_html(active_page=''):
                         Upgrade Plan
                     </a>
                     -->
-                    <a href="/library" class="nav-dropdown-link">
+                    <a href="/library" class="nav-dropdown-link {'active' if active_page == 'library' else ''}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                         </svg>
@@ -7611,7 +7611,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                     </div>
                     <!-- Soft Launch: Hiding Plans link -->
                     <!-- <a href="/pricing" class="nav-link">Plans</a> -->
-                    {{ generate_navbar_html()|safe }}
+                    {{ generate_navbar_html('library')|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
@@ -7641,36 +7641,126 @@ LIBRARY_HTML = """<!DOCTYPE html>
         </div>
 
         <main class="main-content">
-<main>
-        <h1><svg style="width:14px;height:14px;margin-right:2px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M8 7h8"></path><path d="M8 11h8"></path></svg> My Library</h1>
+            <style>
+                /* Library-specific styles */
+                .library-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+                .library-title { display: flex; align-items: center; gap: 12px; font-size: 32px; font-weight: 800; color: var(--gray-900); letter-spacing: -1px; }
+                .library-title svg { width: 28px; height: 28px; color: var(--blue-600); }
+                .library-stats { font-size: 14px; color: var(--gray-500); font-weight: 500; }
+                /* Fix: Prevent user dropdown toggle from showing active state */
+                .user-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle { color: var(--gray-600) !important; background: transparent !important; }
+                /* Style active library link */
+                .nav-dropdown-link.active { color: var(--blue-600); background: var(--blue-50); }
+                .search-bar { width: 100%; max-width: 400px; padding: 12px 16px 12px 44px; border: 1px solid var(--gray-300); border-radius: 12px; font-family: inherit; font-size: 15px; background: var(--white); color: var(--gray-900); transition: all 0.2s ease; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; background-size: 20px 20px; margin-bottom: 24px; }
+                .search-bar:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+                .bookmark-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+                .bookmark-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.8); border-radius: 20px; padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.8); transition: all 0.3s ease; }
+                .bookmark-card:hover { transform: translateY(-4px); box-shadow: 0 4px 8px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.08), 0 24px 64px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.8); border-color: rgba(59,130,246,0.3); }
+                .bookmark-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; gap: 16px; }
+                .bookmark-query { font-size: 18px; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; letter-spacing: -0.3px; line-height: 1.4; }
+                .bookmark-date { font-size: 13px; color: var(--gray-500); font-weight: 500; }
+                .bookmark-actions { display: flex; gap: 8px; flex-shrink: 0; }
+                .bookmark-btn { padding: 8px 12px; font-size: 13px; font-weight: 600; border-radius: 8px; border: 1px solid var(--gray-300); background: var(--white); color: var(--gray-700); cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+                .bookmark-btn:hover { background: var(--gray-50); border-color: var(--blue-500); color: var(--blue-600); transform: translateY(-1px); }
+                .bookmark-btn.remove-btn:hover { background: #FEF2F2; border-color: #FCA5A5; color: #DC2626; }
+                .bookmark-answer { font-size: 15px; line-height: 1.6; color: var(--gray-700); margin-bottom: 0; }
+                .bookmark-answer p { margin-bottom: 12px; }
+                .bookmark-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--gray-200); flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+                .bookmark-refs { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--blue-600); font-weight: 600; background: var(--blue-50); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--blue-100); }
+                .empty-state { text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.5); border-radius: 20px; border: 2px dashed var(--gray-300); }
+                .empty-state svg { color: var(--gray-300); margin-bottom: 20px; }
+                .empty-state p { font-size: 16px; color: var(--gray-500); margin-bottom: 24px; }
+                .empty-state-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--blue-600); color: var(--white); text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.2); }
+                .empty-state-btn:hover { background: var(--blue-700); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.3); }
+                @media (min-width: 768px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); } }
+                @media (min-width: 1200px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+            </style>
 
-        {% if not bookmarks %}
-        <div class="empty-state">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 16px;">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
-            </svg>
-            <p>No saved responses yet. Bookmark responses in chat to build your library.</p>
-        </div>
-        {% else %}
-            {% for bookmark in bookmarks %}
-            <div class="bookmark-card">
-                <div class="bookmark-header">
-                    <div>
-                        <div class="bookmark-query">{{ bookmark.query }}</div>
-                        <div class="bookmark-date">Saved {{ bookmark.timestamp[:10] }}</div>
-                    </div>
-                    <button class="remove-btn" onclick="removeBookmark('{{ bookmark.id }}')">Remove</button>
+            <div class="library-header">
+                <div class="library-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <path d="M8 7h8"></path>
+                        <path d="M8 11h8"></path>
+                    </svg>
+                    My Library
                 </div>
-                <div class="bookmark-answer">{{ bookmark.answer|safe|truncate(300) }}</div>
-                {% if bookmark.num_papers > 0 %}
-                <div class="bookmark-refs">📊 {{ bookmark.num_papers }} references</div>
+                {% if bookmarks %}
+                <div class="library-stats">{{ bookmarks|length }} saved {{ 'response' if bookmarks|length == 1 else 'responses' }}</div>
                 {% endif %}
             </div>
-            {% endfor %}
-        {% endif %}
+
+            {% if bookmarks %}
+            <input type="text" id="searchBar" class="search-bar" placeholder="Search your library..." onkeyup="filterBookmarks()">
+            {% endif %}
+
+            {% if not bookmarks %}
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"></path>
+                </svg>
+                <p>No saved responses yet. Start building your evidence library!</p>
+                <a href="/?clear=1" class="empty-state-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+                        <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    Start a Conversation
+                </a>
+            </div>
+            {% else %}
+            <div class="bookmark-grid">
+                {% for bookmark in bookmarks %}
+                <div class="bookmark-card" data-query="{{ bookmark.query|lower }}" data-answer="{{ bookmark.answer|striptags|lower }}">
+                    <div class="bookmark-header">
+                        <div style="flex: 1;">
+                            <div class="bookmark-query">{{ bookmark.query }}</div>
+                            <div class="bookmark-date">Saved {{ bookmark.timestamp[:10] }}</div>
+                        </div>
+                        <div class="bookmark-actions">
+                            <button class="bookmark-btn remove-btn" onclick="removeBookmark('{{ bookmark.id }}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;">
+                                    <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bookmark-answer">{{ bookmark.answer|safe|truncate(300) }}</div>
+                    <div class="bookmark-footer">
+                        {% if bookmark.num_papers > 0 %}
+                        <div class="bookmark-refs">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            {{ bookmark.num_papers }} {{ 'reference' if bookmark.num_papers == 1 else 'references' }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
     </main>
 
     <script>
+        // Search/filter bookmarks
+        function filterBookmarks() {
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            const bookmarkCards = document.querySelectorAll('.bookmark-card');
+
+            bookmarkCards.forEach(card => {
+                const query = card.getAttribute('data-query');
+                const answer = card.getAttribute('data-answer');
+
+                if (query.includes(searchTerm) || answer.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
         async function removeBookmark(id) {
             // Implementation for removing bookmarks
             window.location.reload();
