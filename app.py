@@ -26642,6 +26642,14 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
             text-decoration: none;
         }
 
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg { width: 36px; height: 12px; }
+
         .logo-text {
             font-size: 18px;
             font-weight: 700;
@@ -27086,6 +27094,13 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
         <div class="header">
             <div class="header-inner">
                 <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
                     <div class="logo-text">
                         <span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span>
                     </div>
