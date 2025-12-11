@@ -20135,7 +20135,10 @@ def stream():
             # Dynamic temperature based on question type and evidence availability
             question_type = stream_data.get('question_type', 'general')
 
-            if num_papers == 0:
+            if question_type == 'casual':
+                # Casual conversation - natural, friendly temperature
+                temperature = 0.7
+            elif num_papers == 0:
                 # No papers - use higher temperature for general knowledge
                 temperature = 0.2
             elif question_type == 'dosing':
@@ -20172,8 +20175,11 @@ def stream():
                     # Send content chunk - ensure_ascii=False to preserve HTML characters
                     yield f"data: {json.dumps({'type': 'content', 'data': content}, ensure_ascii=False)}\n\n"
 
-            # Calculate evidence strength
-            evidence_strength = get_evidence_strength(num_papers, refs)
+            # Calculate evidence strength (skip for casual conversations)
+            if question_type == 'casual':
+                evidence_strength = None  # No evidence badge for casual chat
+            else:
+                evidence_strength = get_evidence_strength(num_papers, refs)
 
             # Clean markdown code fences from the response
             cleaned_response = strip_markdown_code_fences(full_response)
@@ -20483,36 +20489,75 @@ def index():
             query_intent = detect_query_intent(query)
             logger.debug(f"Query intent: {query_intent}")
 
-            # If casual query, respond without PubMed search
+            # If casual query, respond with streaming (no PubMed search)
             if query_intent == 'casual':
-                logger.debug(f"Handling as casual conversation")
+                logger.debug(f"Handling as casual conversation - preparing streaming")
 
-                casual_response = generate_casual_response(raw_query, session['messages'][:-1])
+                # Build minimal conversation context (last 3 messages)
+                context = ""
+                recent = session['messages'][-4:-1]  # Exclude just-added user message
+                for msg in recent:
+                    if msg['role'] == 'user':
+                        context += f"User: {msg['content']}\n"
+                    else:
+                        # Strip HTML and truncate
+                        content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                        context += f"Assistant: {content_text[:200]}\n"
 
-                # Add to conversation history
+                # Build casual conversation prompt
+                prompt = f"""You are gasconsult.ai, a friendly AI assistant specialized in anesthesiology. The user just sent a casual message (greeting, small talk, or non-medical question).
+
+Previous conversation:
+{context if context else "New conversation."}
+
+User's message: {raw_query}
+
+Respond naturally and warmly as a helpful assistant. Keep it brief (2-3 sentences max). If appropriate, gently remind them that you specialize in anesthesiology questions but are happy to chat.
+
+Use HTML formatting: <p> for paragraphs, <strong> for emphasis.
+
+CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)."""
+
+                # Generate unique request ID for streaming
+                request_id = str(uuid.uuid4())
+
+                # Prepare stream data (casual mode)
+                stream_data = {
+                    'prompt': prompt,
+                    'refs': [],  # No references for casual chat
+                    'num_papers': 0,
+                    'raw_query': raw_query,
+                    'question_type': 'casual'  # Special type for temperature 0.7
+                }
+
+                # Store in session
+                session[f'stream_data_{request_id}'] = stream_data
+                session.modified = True
+
+                # Also store in memory cache as backup
+                store_stream_data(request_id, stream_data)
+
+                logger.debug(f"Casual stream data prepared, request_id: {request_id}")
+
+                # Add placeholder assistant message for streaming to populate
                 session['messages'].append({
                     "role": "assistant",
-                    "content": casual_response,
+                    "content": "",  # Will be populated by streaming
                     "references": [],
-                    "num_papers": 0,
-                    "evidence_strength": "N/A"
+                    "num_papers": 0
                 })
+                session['pending_stream'] = request_id
                 session.modified = True
-                logger.debug(f"Added casual response to session")
-
-                # [PHASE 2] Save to database if enabled
-                if safe_db_save_message(conversation_id, "assistant", casual_response, references=[], num_papers=0, evidence_strength="N/A"):
-                    logger.info(f"Saved casual response to database")
 
                 # Return response
                 if is_ajax:
                     return jsonify({
-                        'status': 'casual',
-                        'response': casual_response,
-                        'message': 'Casual conversation response'
+                        'status': 'ready',
+                        'request_id': request_id,
+                        'raw_query': raw_query
                     })
 
-                logger.debug(f"Redirecting after casual response")
+                logger.debug(f"Redirecting for casual streaming")
                 return redirect(url_for('index'))
 
             # ========== CONTINUE WITH MEDICAL QUERY (existing code) ==========
