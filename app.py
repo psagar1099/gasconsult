@@ -186,6 +186,14 @@ if DATABASE_AVAILABLE:
         if database.init_db():
             DATABASE_INITIALIZED = True
             logging.info(f"✓ Database initialized successfully at {database.DB_PATH}")
+
+            # Run OAuth migration for existing databases
+            logging.info("Running OAuth database migration (if needed)...")
+            if database.migrate_database_for_oauth():
+                logging.info("✓ OAuth migration completed successfully")
+            else:
+                logging.warning("⚠️  OAuth migration failed - some features may not work")
+
             # Log database stats
             stats = database.get_database_stats()
             logging.info(f"✓ Database stats: {stats.get('total_conversations', 0)} conversations, "
