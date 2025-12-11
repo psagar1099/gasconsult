@@ -18795,6 +18795,71 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -19389,15 +19454,17 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link active">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -21054,6 +21121,71 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -21791,15 +21923,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
@@ -22353,6 +22487,71 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .nav-dropdown-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
+        }
+
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
         }
 
         .mobile-menu-btn {
@@ -23093,15 +23292,17 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <a href="/crisis" class="nav-link">Crisis Protocols</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
                             <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
                             <a href="/difficult-airway" class="nav-dropdown-link active">Difficult Airway</a>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
+                    <a href="/pricing" class="nav-link">Plans</a>
+                    {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span></span>
