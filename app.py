@@ -5857,6 +5857,11 @@ HTML = """<!DOCTYPE html>
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
 
+        // Disable browser's automatic scroll restoration to prevent scrolling to top on page reload
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
         // Scroll to bottom of messages
         function scrollToBottom() {
             const container = document.getElementById('messagesContainer');
@@ -6080,6 +6085,10 @@ HTML = """<!DOCTYPE html>
 
         // Auto-scroll to bottom on page load (for chat view)
         {% if messages and messages|length > 0 %}
+        // Scroll immediately on script execution (before DOMContentLoaded)
+        // This prevents the flash of scrolling to top
+        scrollToBottom();
+
         // Scroll immediately when DOM is ready
         window.addEventListener('DOMContentLoaded', function() {
             scrollToBottom();
@@ -6095,6 +6104,9 @@ HTML = """<!DOCTYPE html>
         setTimeout(function() {
             scrollToBottom();
         }, 100);
+        setTimeout(function() {
+            scrollToBottom();
+        }, 300);
         {% endif %}
         {% endif %}
 
