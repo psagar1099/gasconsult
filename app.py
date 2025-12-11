@@ -4934,6 +4934,19 @@ HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            .new-chat-btn {
+                height: 44px;
+                left: 72px;
+                top: 88px;
+                padding: 0 16px;
+                font-size: 14px;
+            }
+
+            .new-chat-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
             .messages-container {
                 padding: 32px 24px;
             }
@@ -4984,11 +4997,6 @@ HTML = """<!DOCTYPE html>
             .chat-send svg {
                 width: 19px;
                 height: 19px;
-            }
-
-            .new-chat-btn {
-                padding: 10px 18px;
-                font-size: 14px;
             }
         }
 
@@ -5491,6 +5499,47 @@ HTML = """<!DOCTYPE html>
             to { transform: rotate(360deg); }
         }
 
+        .history-sidebar-footer {
+            margin-top: auto;
+            padding: 16px;
+            border-top: 1px solid rgba(226, 232, 240, 0.6);
+            background: rgba(248, 250, 252, 0.5);
+            backdrop-filter: blur(8px);
+        }
+
+        .clear-history-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 10px;
+            color: var(--gray-700);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            border-color: var(--gray-300);
+            color: var(--gray-900);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .clear-history-btn:active {
+            transform: scale(0.98);
+        }
+
+        .clear-history-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
         /* Overlay when sidebar is open */
         .history-overlay {
             position: fixed;
@@ -5592,6 +5641,14 @@ HTML = """<!DOCTYPE html>
                 <div class="history-loading-spinner"></div>
                 <span>Loading...</span>
             </div>
+        </div>
+        <div class="history-sidebar-footer">
+            <button class="clear-history-btn" id="clearHistoryBtn" aria-label="Clear all chat history">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Clear All History
+            </button>
         </div>
     </aside>
 
@@ -6395,6 +6452,62 @@ HTML = """<!DOCTYPE html>
                     closeSidebar();
                 }
             });
+
+            // Clear history button
+            const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+            if (clearHistoryBtn) {
+                clearHistoryBtn.addEventListener('click', async function() {
+                    // Confirm before clearing
+                    if (!confirm('Are you sure you want to clear all chat history? This cannot be undone.')) {
+                        return;
+                    }
+
+                    try {
+                        // Disable button during request
+                        clearHistoryBtn.disabled = true;
+                        clearHistoryBtn.innerHTML = '<div class="history-loading-spinner" style="width: 16px; height: 16px; border-width: 2px; margin: 0;"></div> Clearing...';
+
+                        const response = await fetch('/clear-history', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': '{{ csrf_token() }}'
+                            }
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok && data.success) {
+                            // Clear the conversations list
+                            conversationsList.innerHTML = `
+                                <div class="history-empty-state">
+                                    <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z" />
+                                    </svg>
+                                    <div class="history-empty-text">All history cleared</div>
+                                    <div class="history-empty-subtext">Your conversations have been deleted</div>
+                                </div>
+                            `;
+
+                            // Redirect to home after a short delay
+                            setTimeout(() => {
+                                window.location.href = '/?clear=1';
+                            }, 1500);
+                        } else {
+                            alert('Failed to clear history: ' + (data.error || 'Unknown error'));
+                            // Re-enable button
+                            clearHistoryBtn.disabled = false;
+                            clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
+                        }
+                    } catch (error) {
+                        console.error('Error clearing history:', error);
+                        alert('Failed to clear history. Please try again.');
+                        // Re-enable button
+                        clearHistoryBtn.disabled = false;
+                        clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
+                    }
+                });
+            }
         })();
     </script>
 </body>
@@ -25453,6 +25566,61 @@ def load_conversation(conversation_id):
         logger.info(f"Error loading conversation: {e}")
         return jsonify({
             'error': f'Failed to load conversation: {str(e)}'
+        }), 500
+
+@app.route("/clear-history", methods=["POST"])
+def clear_history():
+    """
+    Clear all chat history for the current user.
+    Deletes all conversations from database and clears session.
+    """
+    if not DATABASE_INITIALIZED:
+        return jsonify({
+            'error': 'Database not initialized'
+        }), 403
+
+    try:
+        # Get user's persistent session ID
+        user_session_id = session.get('persistent_session_id', 'anonymous')
+
+        # Get all conversations for this user
+        conversations = database.get_conversations(user_session_id, limit=1000)
+
+        # Delete each conversation (soft delete by default)
+        deleted_count = 0
+        for conv in conversations:
+            if database.delete_conversation(conv['id'], hard_delete=False):
+                deleted_count += 1
+
+        # Clear current session
+        keys_to_clear = [
+            'messages',
+            'conversation_topic',
+            'chat_active',
+            'conversation_id'
+        ]
+        for key in keys_to_clear:
+            session.pop(key, None)
+
+        # Clear any stream data keys
+        stream_keys = [k for k in session.keys() if k.startswith('stream_data_')]
+        for key in stream_keys:
+            session.pop(key, None)
+
+        session.modified = True
+
+        logger.info(f"Cleared {deleted_count} conversations for user {user_session_id}")
+
+        return jsonify({
+            'success': True,
+            'deleted_count': deleted_count,
+            'message': f'Cleared {deleted_count} conversations'
+        }), 200
+
+    except Exception as e:
+        logger.error(f"Error clearing history: {e}")
+        return jsonify({
+            'error': f'Failed to clear history: {str(e)}'
         }), 500
 
 # ====== Premium Features Routes ======
