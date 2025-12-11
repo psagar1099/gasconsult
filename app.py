@@ -1140,6 +1140,139 @@ def expand_medical_abbreviations(query):
 
     return q
 
+def detect_query_intent(query):
+    """
+    Classify query as 'casual' (greetings, small talk) or 'medical' (clinical questions)
+
+    Returns:
+        'casual': Non-medical queries that should get conversational responses without PubMed
+        'medical': Medical/scientific queries that need PubMed-backed answers
+    """
+    query_lower = query.lower().strip()
+
+    # Casual conversation patterns
+    casual_patterns = [
+        # Greetings
+        r'^(hi|hello|hey|greetings|good morning|good afternoon|good evening|howdy)[\s\.,!?]*$',
+        r'^(hi|hello|hey)\s+(there|claude|gpt|ai|assistant)[\s\.,!?]*$',
+
+        # How are you variations
+        r'^(how are you|how\'re you|hows it going|how is it going|whats up|what\'s up)[\s\.,!?]*$',
+        r'^(how do you do|nice to meet you)[\s\.,!?]*$',
+
+        # Gratitude
+        r'^(thanks|thank you|thx|appreciate it)[\s\.,!?]*$',
+
+        # Goodbyes
+        r'^(bye|goodbye|see you|take care|cya|later)[\s\.,!?]*$',
+
+        # Simple acknowledgments
+        r'^(ok|okay|got it|i see|understood|cool|nice|great)[\s\.,!?]*$',
+
+        # Jokes and casual requests
+        r'^(tell me a joke|make me laugh|entertain me|chat with me)[\s\.,!?]*$',
+    ]
+
+    # Check casual patterns
+    for pattern in casual_patterns:
+        if re.match(pattern, query_lower):
+            return 'casual'
+
+    # Medical keywords that indicate a medical query
+    medical_keywords = [
+        # Anesthesia-specific
+        'anesthesia', 'anesthetic', 'intubation', 'airway', 'induction', 'emergence',
+        'propofol', 'sevoflurane', 'desflurane', 'isoflurane', 'etomidate', 'ketamine',
+        'rocuronium', 'vecuronium', 'succinylcholine', 'neostigmine', 'sugammadex',
+        'fentanyl', 'remifentanil', 'sufentanil', 'morphine', 'hydromorphone',
+        'epidural', 'spinal', 'regional', 'nerve block', 'ultrasound guided',
+        'mac', 'asa', 'preoperative', 'postoperative', 'perioperative', 'intraoperative',
+
+        # Medical terms
+        'surgery', 'surgical', 'patient', 'dose', 'dosing', 'medication', 'drug',
+        'treatment', 'therapy', 'protocol', 'guideline', 'contraindication',
+        'side effect', 'adverse', 'complication', 'risk', 'management',
+        'diagnosis', 'symptom', 'condition', 'disease', 'syndrome',
+        'hemodynamic', 'cardiac', 'respiratory', 'blood pressure', 'heart rate',
+        'icu', 'critical care', 'emergency', 'resuscitation', 'trauma',
+
+        # Common abbreviations
+        'rsi', 'ponv', 'last', 'mh', 'txa', 'cabg', 'tavr', 'pris',
+        'bp', 'hr', 'spo2', 'etco2', 'map',
+
+        # Question indicators (medical context)
+        'what is the', 'how do i', 'when should', 'is it safe',
+        'can i use', 'should i give', 'contraindicated',
+        'vs', 'versus', 'compared to', 'better than',
+    ]
+
+    # Check for medical keywords
+    for keyword in medical_keywords:
+        if keyword in query_lower:
+            return 'medical'
+
+    # Question words suggest potentially medical query if not matched casual pattern
+    question_words = ['what', 'how', 'when', 'where', 'why', 'which', 'who', 'can', 'should', 'is', 'are', 'does', 'do']
+    if any(query_lower.startswith(qw) for qw in question_words):
+        # Default to medical for questions unless matched casual pattern above
+        return 'medical'
+
+    # Default: if unclear and short (< 20 chars), treat as casual
+    # If longer and didn't match medical keywords, still treat as potentially medical
+    if len(query) < 20:
+        return 'casual'
+
+    return 'medical'
+
+def generate_casual_response(query, conversation_history):
+    """
+    Generate a friendly, conversational response without PubMed search
+    Uses GPT-4o in casual mode for greetings, small talk, etc.
+    """
+    # Build minimal context (last 3 messages)
+    context = ""
+    if conversation_history:
+        recent = conversation_history[-3:]
+        for msg in recent:
+            if msg['role'] == 'user':
+                context += f"User: {msg['content']}\n"
+            else:
+                # Strip HTML and truncate
+                content_text = re.sub('<[^<]+?>', '', msg.get('content', ''))
+                context += f"Assistant: {content_text[:200]}\n"
+
+    prompt = f"""You are gasconsult.ai, a friendly AI assistant specialized in anesthesiology. The user just sent a casual message (greeting, small talk, or non-medical question).
+
+Previous conversation:
+{context if context else "New conversation."}
+
+User's message: {query}
+
+Respond naturally and warmly as a helpful assistant. Keep it brief (2-3 sentences max). If appropriate, gently remind them that you specialize in anesthesiology questions but are happy to chat.
+
+Use HTML formatting: <p> for paragraphs, <strong> for emphasis.
+
+CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown code fences (```html or ```)."""
+
+    try:
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7,  # Higher temperature for natural conversation
+            max_tokens=200    # Keep responses brief
+        )
+
+        casual_response = response.choices[0].message.content.strip()
+
+        # Clean markdown code fences if GPT added them
+        casual_response = strip_markdown_code_fences(casual_response)
+
+        return casual_response
+
+    except Exception as e:
+        logger.error(f"Failed to generate casual response: {e}")
+        return "<p>Hello! I'm here to help with anesthesiology questions. What would you like to know?</p>"
+
 def detect_and_calculate(query, context_hint=None):
     """Detect calculation requests and perform medical calculations."""
     q = query.lower()
@@ -20345,6 +20478,45 @@ def index():
 
             query = clean_query(raw_query)
             logger.debug(f"Cleaned query: '{query}'")
+
+            # ========== DETECT QUERY INTENT (Casual vs Medical) ==========
+            query_intent = detect_query_intent(query)
+            logger.debug(f"Query intent: {query_intent}")
+
+            # If casual query, respond without PubMed search
+            if query_intent == 'casual':
+                logger.debug(f"Handling as casual conversation")
+
+                casual_response = generate_casual_response(raw_query, session['messages'][:-1])
+
+                # Add to conversation history
+                session['messages'].append({
+                    "role": "assistant",
+                    "content": casual_response,
+                    "references": [],
+                    "num_papers": 0,
+                    "evidence_strength": "N/A"
+                })
+                session.modified = True
+                logger.debug(f"Added casual response to session")
+
+                # [PHASE 2] Save to database if enabled
+                if safe_db_save_message(conversation_id, "assistant", casual_response, references=[], num_papers=0, evidence_strength="N/A"):
+                    logger.info(f"Saved casual response to database")
+
+                # Return response
+                if is_ajax:
+                    return jsonify({
+                        'status': 'casual',
+                        'response': casual_response,
+                        'message': 'Casual conversation response'
+                    })
+
+                logger.debug(f"Redirecting after casual response")
+                return redirect(url_for('index'))
+
+            # ========== CONTINUE WITH MEDICAL QUERY (existing code) ==========
+            logger.debug(f"Handling as medical query - proceeding with PubMed search")
 
             is_followup = len(session['messages']) >= 3
             logger.debug(f"Is follow-up: {is_followup}")
