@@ -265,14 +265,16 @@ def generate_navbar_html(active_page=''):
                 <div class="nav-dropdown-menu user-dropdown-menu" style="pointer-events: auto;">
                     <div class="user-dropdown-header">
                         <div class="user-dropdown-email">{current_user.email}</div>
-                        <div class="user-dropdown-tier">{current_user.subscription_tier.capitalize()} Plan</div>
+                        <div class="user-dropdown-tier">{'Member' if current_user.subscription_tier == 'free' else current_user.subscription_tier.capitalize() + ' Plan'}</div>
                     </div>
+                    <!-- Soft Launch: Hiding Upgrade Plan link
                     <a href="/pricing" class="nav-dropdown-link">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
                         </svg>
                         Upgrade Plan
                     </a>
+                    -->
                     <a href="/library" class="nav-dropdown-link">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 16px; height: 16px;">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
@@ -2576,7 +2578,8 @@ PREOP_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -2595,7 +2598,8 @@ PREOP_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -5493,7 +5497,8 @@ HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -5512,7 +5517,8 @@ HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -7276,7 +7282,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -7295,7 +7302,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -8392,7 +8400,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -8411,7 +8420,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -9103,7 +9113,8 @@ TERMS_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -9122,7 +9133,8 @@ TERMS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -10227,7 +10239,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -10246,7 +10259,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -11435,7 +11449,8 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -11455,7 +11470,8 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -13074,7 +13090,8 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
 
@@ -13095,7 +13112,8 @@ CRISIS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -15754,7 +15772,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
@@ -15773,7 +15792,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -17654,7 +17674,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -17675,7 +17696,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -19528,7 +19550,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -19549,7 +19572,8 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -21997,7 +22021,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link active">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -22018,7 +22043,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -23366,7 +23392,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <a href="/pricing" class="nav-link">Plans</a>
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
@@ -23387,7 +23414,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -28268,7 +28296,8 @@ PRICING_HTML = """<!DOCTYPE html>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <a href="/pricing" class="mobile-menu-link">Plans</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
