@@ -32,6 +32,15 @@ except ImportError as e:
     import logging
     logging.warning(f"Database module not available: {e}")
 
+# Import IOH model classes for pickle deserialization
+try:
+    import ioh_models
+    IOH_MODELS_AVAILABLE = True
+except ImportError as e:
+    IOH_MODELS_AVAILABLE = False
+    import logging
+    logging.warning(f"IOH models module not available: {e}")
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -25412,6 +25421,9 @@ def hypotension_predictor():
     # Calculate MAP trend (needed for interventions regardless of model success)
     map_trend = (current_map - map_5min) + (current_map - map_10min) / 2
 
+    # Define high-risk surgeries (needed for interventions regardless of model success)
+    high_risk_surgeries = ["cardiac", "major_abdominal", "vascular"]
+
     # Machine Learning-Based Prediction System
     # Load trained RandomForest model and make prediction
 
@@ -25519,7 +25531,6 @@ def hypotension_predictor():
             })
 
         # Surgery type
-        high_risk_surgeries = ["cardiac", "major_abdominal", "vascular"]
         if surgery_type in high_risk_surgeries:
             factors.append({
                 "name": "High-Risk Surgery Type",
