@@ -1,0 +1,18 @@
+# VitalDB IOH Model Training Requirements
+# Install with: pip install -r requirements_vitaldb.txt
+
+# Core ML libraries
+scikit-learn==1.5.2
+numpy==1.26.4
+
+# Data processing
+pandas==2.2.0
+
+# Visualization
+matplotlib==3.8.2
+
+# Network requests (for VitalDB API)
+requests==2.32.3
+
+# Already included in main requirements.txt:
+# python-dotenv==1.0.0
