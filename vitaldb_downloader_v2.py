@@ -50,10 +50,26 @@ def download_vitaldb_data(max_cases: int = 100) -> Dict:
     print("=" * 70)
     print()
 
-    # Get list of all cases
+    # Get list of all cases (VitalDB has cases 1-6388)
     print("Loading VitalDB case list...")
-    vf = vitaldb.VitalFile()
-    all_cases = vf.get_cases()
+
+    # Try to get case list from API
+    import requests
+    try:
+        response = requests.get('https://api.vitaldb.net/cases', timeout=30)
+        response.raise_for_status()
+
+        # Parse response (plain CSV)
+        import csv
+        import io
+        csv_data = response.content.decode('utf-8-sig')
+        reader = csv.DictReader(io.StringIO(csv_data))
+        case_data = list(reader)
+        all_cases = [int(row['caseid']) for row in case_data if row.get('caseid')]
+    except Exception as e:
+        print(f"Warning: Could not load case list from API: {e}")
+        print("Using default case range 1-6388")
+        all_cases = list(range(1, 6389))
 
     print(f"✓ Found {len(all_cases)} total cases")
     print(f"Processing first {max_cases} cases...")
@@ -63,28 +79,25 @@ def download_vitaldb_data(max_cases: int = 100) -> Dict:
     ioh_count = 0
     processed_count = 0
 
+    # Store case_data for clinical info lookup
+    # (already loaded above if API call succeeded)
+    if 'case_data' not in locals():
+        case_data = []
+
     for idx, case_id in enumerate(all_cases[:max_cases]):
         print(f"[{idx+1}/{max_cases}] Processing case {case_id}...", end=' ')
 
         try:
-            # Load case data
-            vf = vitaldb.VitalFile(case_id)
+            # Load case data using vitaldb library
+            vf = vitaldb.VitalFile(case_id, track_names=['Solar8000/ART_MBP', 'Solar8000/HR'])
 
-            # Get clinical info
-            clinical_info = vf.get_clinical_info()
+            # Get available tracks
+            track_names = vf.get_track_names()
 
-            # Extract demographics
-            age = clinical_info.get('age', None)
-            sex = 1 if clinical_info.get('sex') == 'M' else 0
-            height = clinical_info.get('height', None)
-            weight = clinical_info.get('weight', None)
-            bmi = weight / ((height / 100) ** 2) if weight and height else None
-            asa = clinical_info.get('asa', None)
-
-            # Get MAP data (try different track names)
+            # Find MAP track
             map_track = None
-            for track_name in ['SNUADC/ART_MBP', 'Solar8000/ART_MBP', 'SNUADC/NIBP_MBP']:
-                if track_name in vf.get_track_names():
+            for track_name in ['Solar8000/ART_MBP', 'SNUADC/ART_MBP', 'NIBP_MBP']:
+                if track_name in track_names:
                     map_track = track_name
                     break
 
@@ -93,24 +106,33 @@ def download_vitaldb_data(max_cases: int = 100) -> Dict:
                 continue
 
             # Load MAP data at 10-second intervals
-            map_data = vf.get_samples(map_track, interval=10)
-
-            if map_data is None or len(map_data) < 90:
+            map_data = vf.to_numpy([map_track], interval=10)
+            if map_data is None or len(map_data) == 0 or len(map_data[0]) < 90:
                 print("(insufficient MAP data)")
                 continue
 
-            # Try to get HR data
-            hr_track = None
-            for track_name in ['SNUADC/ECG_HR', 'Solar8000/HR']:
-                if track_name in vf.get_track_names():
-                    hr_track = track_name
-                    break
+            map_values = map_data[0]  # First track
 
-            hr_data = vf.get_samples(hr_track, interval=10) if hr_track else None
+            # Try to get HR data
+            hr_values = None
+            for hr_track in ['Solar8000/HR', 'SNUADC/ECG_HR']:
+                if hr_track in track_names:
+                    hr_data = vf.to_numpy([hr_track], interval=10)
+                    if hr_data is not None and len(hr_data) > 0:
+                        hr_values = hr_data[0]
+                        break
+
+            # Get clinical info from case_data
+            clinical_info = {}
+            for row in case_data:
+                if int(row.get('caseid', 0)) == case_id:
+                    clinical_info = row
+                    break
 
             # Process this case
             case_features = extract_features_from_case(
-                case_id, clinical_info, map_data, hr_data
+                case_id, clinical_info, map_values.tolist(),
+                hr_values.tolist() if hr_values is not None else None
             )
 
             if case_features:
