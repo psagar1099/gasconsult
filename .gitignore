@@ -30,3 +30,8 @@ Thumbs.db
 *.db
 *.sqlite
 *.sqlite3
+
+# VitalDB data and logs
+vitaldb_ioh_dataset.pkl
+download_log.txt
+*.log
