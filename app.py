@@ -186,6 +186,14 @@ if DATABASE_AVAILABLE:
         if database.init_db():
             DATABASE_INITIALIZED = True
             logging.info(f"✓ Database initialized successfully at {database.DB_PATH}")
+
+            # Run OAuth migration for existing databases
+            logging.info("Running OAuth database migration (if needed)...")
+            if database.migrate_database_for_oauth():
+                logging.info("✓ OAuth migration completed successfully")
+            else:
+                logging.warning("⚠️  OAuth migration failed - some features may not work")
+
             # Log database stats
             stats = database.get_database_stats()
             logging.info(f"✓ Database stats: {stats.get('total_conversations', 0)} conversations, "
@@ -339,10 +347,70 @@ def generate_navbar_html(active_page=''):
     return auth_buttons
 
 
+def generate_verification_banner_html():
+    """
+    Generate verification reminder banner for unverified users.
+    Returns HTML string for verification banner or empty string if user is verified.
+    """
+    if not current_user.is_authenticated:
+        return ''
+
+    if current_user.is_verified:
+        return ''
+
+    # Only show for email/password users (not OAuth users who should be auto-verified)
+    if not EMAIL_CONFIGURED:
+        return ''
+
+    banner_html = '''
+    <div class="verification-banner" id="verificationBanner" style="
+        background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+        border-bottom: 1px solid rgba(251, 191, 36, 0.3);
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        position: relative;
+        z-index: 1000;
+    ">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 20px; height: 20px; color: #f59e0b; flex-shrink: 0;">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+        <div style="flex: 1; max-width: 800px;">
+            <span style="color: #92400e; font-size: 14px;">
+                <strong>Email not verified.</strong> Please check your inbox or
+                <a href="/resend-verification" style="color: #d97706; text-decoration: underline; font-weight: 600;">resend verification email</a>.
+            </span>
+        </div>
+        <button onclick="document.getElementById('verificationBanner').style.display='none'" style="
+            background: transparent;
+            border: none;
+            color: #92400e;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        " onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width: 18px; height: 18px;">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+    '''
+
+    return banner_html
+
+
 @app.context_processor
 def inject_navbar_html():
-    """Make generate_navbar_html available to all templates"""
-    return dict(generate_navbar_html=generate_navbar_html)
+    """Make generate_navbar_html and generate_verification_banner_html available to all templates"""
+    return dict(
+        generate_navbar_html=generate_navbar_html,
+        generate_verification_banner_html=generate_verification_banner_html
+    )
 
 
 # ====== Email Verification Helper Functions ======
@@ -5775,6 +5843,9 @@ HTML = """<!DOCTYPE html>
     </div>
     <div class="grain"></div>
 
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
+
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
@@ -7742,6 +7813,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
     </div>
     <div class="grain"></div>
 
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
+
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
@@ -9014,6 +9088,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
     </div>
     <div class="grain"></div>
 
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
+
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
@@ -9726,6 +9803,9 @@ TERMS_HTML = """<!DOCTYPE html>
         <div class="orb orb-3"></div>
     </div>
     <div class="grain"></div>
+
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
 
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -10867,6 +10947,9 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         <div class="orb orb-3"></div>
     </div>
     <div class="grain"></div>
+
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
 
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -16400,6 +16483,9 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         <div class="orb orb-3"></div>
     </div>
     <div class="grain"></div>
+
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
 
     <div class="page">
         <nav class="nav" role="navigation" aria-label="Main navigation">
@@ -25577,8 +25663,13 @@ def register():
         # Check if user already exists
         existing_user = database.get_user_by_email(email)
         if existing_user:
-            flash('An account with this email already exists', 'error')
-            return redirect(url_for('register'))
+            # Check if it's an OAuth-only account
+            if existing_user.get('oauth_provider') and not existing_user.get('password_hash'):
+                oauth_provider = existing_user['oauth_provider'].title()
+                flash(f'An account with this email already exists using {oauth_provider} Sign In. Please use the "{oauth_provider} Sign In" button to log in.', 'error')
+            else:
+                flash('An account with this email already exists. Please log in instead.', 'error')
+            return redirect(url_for('login'))
 
         # Generate verification token
         verification_token = secrets.token_urlsafe(32)
@@ -25588,32 +25679,36 @@ def register():
         user_id = database.create_user(email, password_hash, full_name, verification_token)
 
         if user_id:
+            # Get user data to log them in
+            user_data = database.get_user_by_email(email)
+
             # Send verification email
             if EMAIL_CONFIGURED:
                 email_sent = send_verification_email(email, full_name, verification_token)
                 if email_sent:
-                    flash('Account created! Please check your email to verify your account.', 'success')
+                    flash('Account created! Please check your email to verify your account.', 'warning')
                 else:
-                    flash('Account created, but we couldn\'t send the verification email. Please contact support.', 'warning')
+                    flash('Account created, but we couldn\'t send the verification email. You can request a new one from your account.', 'warning')
             else:
                 # Email not configured - auto-verify user for development
                 logger.warning(f"Email not configured - auto-verifying user {email}")
                 database.manually_verify_user(user_id)
-                # Log the user in immediately
+                # Reload user data with verification status
                 user_data = database.get_user_by_email(email)
-                user = User(
-                    user_id=user_data['id'],
-                    email=user_data['email'],
-                    full_name=user_data.get('full_name'),
-                    subscription_tier=user_data.get('subscription_tier', 'free'),
-                    subscription_status=user_data.get('subscription_status', 'active'),
-                    is_verified=user_data.get('is_verified', True)
-                )
-                login_user(user)
-                flash('Account created successfully! (Email verification skipped - email not configured)', 'success')
-                return redirect(url_for('index'))
 
-            return redirect(url_for('login'))
+            # Log the user in immediately (verified or not)
+            user = User(
+                user_id=user_data['id'],
+                email=user_data['email'],
+                full_name=user_data.get('full_name'),
+                subscription_tier=user_data.get('subscription_tier', 'free'),
+                subscription_status=user_data.get('subscription_status', 'active'),
+                is_verified=user_data.get('is_verified', False)
+            )
+            login_user(user)
+            database.update_user_login(user.id)
+
+            return redirect(url_for('index'))
         else:
             flash('Failed to create account. Please try again.', 'error')
             return redirect(url_for('register'))
@@ -25642,14 +25737,15 @@ def login():
             flash('Invalid email or password', 'error')
             return redirect(url_for('login'))
 
-        # Check password
-        if not bcrypt.check_password_hash(user_data['password_hash'], password):
-            flash('Invalid email or password', 'error')
+        # Check if this is an OAuth-only user (no password set)
+        if user_data.get('oauth_provider') and not user_data.get('password_hash'):
+            oauth_provider = user_data['oauth_provider'].title()  # Google or Apple
+            flash(f'This account uses {oauth_provider} Sign In. Please use the "{oauth_provider} Sign In" button.', 'error')
             return redirect(url_for('login'))
 
-        # Check if email is verified (only if email is configured)
-        if EMAIL_CONFIGURED and not user_data.get('is_verified', False):
-            flash('Please verify your email before logging in. Check your inbox for the verification link.', 'warning')
+        # Check password (for email/password users or linked accounts with password)
+        if not user_data.get('password_hash') or not bcrypt.check_password_hash(user_data['password_hash'], password):
+            flash('Invalid email or password', 'error')
             return redirect(url_for('login'))
 
         # Create user object and log in
@@ -25664,7 +25760,11 @@ def login():
         login_user(user, remember=True)
         database.update_user_login(user.id)
 
-        flash(f'Welcome back, {user.display_name}!', 'success')
+        # Show reminder if email is not verified
+        if EMAIL_CONFIGURED and not user_data.get('is_verified', False):
+            flash('Please verify your email address. Check your inbox or request a new verification link.', 'warning')
+        else:
+            flash(f'Welcome back, {user.display_name}!', 'success')
 
         # Redirect to next page or home
         next_page = request.args.get('next')
@@ -25912,11 +26012,17 @@ def verify_email(token):
 @app.route("/resend-verification", methods=["GET", "POST"])
 def resend_verification():
     """Resend verification email"""
-    if current_user.is_authenticated:
+    # If user is authenticated and already verified, redirect to index
+    if current_user.is_authenticated and current_user.is_verified:
+        flash('Your email is already verified!', 'info')
         return redirect(url_for('index'))
 
     if request.method == "POST":
-        email = request.form.get('email', '').strip()
+        # If authenticated user, use their email; otherwise get from form
+        if current_user.is_authenticated:
+            email = current_user.email
+        else:
+            email = request.form.get('email', '').strip()
 
         if not email:
             flash('Email is required', 'error')
@@ -25964,7 +26070,8 @@ def resend_verification():
         else:
             flash('Email verification is not configured. Please contact support.', 'error')
 
-        return redirect(url_for('login'))
+        # Redirect to index if authenticated, otherwise to login
+        return redirect(url_for('index' if current_user.is_authenticated else 'login'))
 
     # GET request - show resend form
     return render_template_string(RESEND_VERIFICATION_HTML)
