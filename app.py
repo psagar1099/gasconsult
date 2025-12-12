@@ -32,6 +32,15 @@ except ImportError as e:
     import logging
     logging.warning(f"Database module not available: {e}")
 
+# Import IOH model classes for pickle deserialization
+try:
+    import ioh_models
+    IOH_MODELS_AVAILABLE = True
+except ImportError as e:
+    IOH_MODELS_AVAILABLE = False
+    import logging
+    logging.warning(f"IOH models module not available: {e}")
+
 # Load environment variables from .env file
 load_dotenv()
 
