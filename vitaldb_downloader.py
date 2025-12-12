@@ -44,9 +44,13 @@ def download_case_list() -> List[Dict]:
         response = requests.get(VITALDB_CASES_ENDPOINT, timeout=30)
         response.raise_for_status()
 
-        # Response is gzip-compressed CSV
-        with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
-            csv_data = f.read().decode('utf-8')
+        # Try gzip-compressed CSV first
+        try:
+            with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
+                csv_data = f.read().decode('utf-8-sig')  # Handle BOM
+        except (gzip.BadGzipFile, OSError):
+            # Not gzipped, try plain text
+            csv_data = response.content.decode('utf-8-sig')  # Handle BOM
 
         # Parse CSV
         reader = csv.DictReader(io.StringIO(csv_data))
@@ -74,9 +78,12 @@ def get_available_tracks(caseid: str) -> List[str]:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
 
-        # Parse gzip CSV
-        with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
-            csv_data = f.read().decode('utf-8')
+        # Try gzip first, then plain text
+        try:
+            with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
+                csv_data = f.read().decode('utf-8-sig')
+        except (gzip.BadGzipFile, OSError):
+            csv_data = response.content.decode('utf-8-sig')
 
         reader = csv.DictReader(io.StringIO(csv_data))
         tracks = [row['name'] for row in reader]
@@ -104,9 +111,12 @@ def download_track_data(caseid: str, track: str, interval: int = 10) -> Optional
         response = requests.get(url, timeout=30)
         response.raise_for_status()
 
-        # Parse gzip CSV
-        with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
-            csv_data = f.read().decode('utf-8')
+        # Try gzip first, then plain text
+        try:
+            with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as f:
+                csv_data = f.read().decode('utf-8-sig')
+        except (gzip.BadGzipFile, OSError):
+            csv_data = response.content.decode('utf-8-sig')
 
         # Values are comma-separated
         values = [float(v) if v and v != '' else None
