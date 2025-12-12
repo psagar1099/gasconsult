@@ -7881,16 +7881,22 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 .library-title { display: flex; align-items: center; gap: 12px; font-size: 32px; font-weight: 800; color: var(--gray-900); letter-spacing: -1px; }
                 .library-title svg { width: 28px; height: 28px; color: var(--blue-600); }
                 .library-stats { font-size: 14px; color: var(--gray-500); font-weight: 500; }
-                /* Fix: Prevent all dropdown toggles from showing active state when child links are active */
-                .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-                    color: var(--gray-700) !important;
-                    background: transparent !important;
+
+                /* Library Page Active State Overrides - Prevent dropdown toggles from showing active */
+                .nav-dropdown .nav-dropdown-toggle {
+                    color: var(--gray-600) !important;
+                    background: none !important;
                 }
-                /* Style active dropdown links to match home page */
+                .nav-dropdown .nav-dropdown-toggle:hover {
+                    color: var(--gray-900) !important;
+                    background: rgba(0,0,0,0.04) !important;
+                }
+                /* Style active dropdown links only (not the toggle buttons) */
                 .nav-dropdown-link.active {
                     color: var(--blue-600) !important;
                     background: var(--blue-50) !important;
                     font-weight: 600 !important;
+                    border-radius: 8px !important;
                 }
                 .search-bar { width: 100%; max-width: 400px; padding: 12px 16px 12px 44px; border: 1px solid var(--gray-300); border-radius: 12px; font-family: inherit; font-size: 15px; background: var(--white); color: var(--gray-900); transition: all 0.2s ease; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; background-size: 20px 20px; margin-bottom: 24px; }
                 .search-bar:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
@@ -10916,6 +10922,13 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             h3 { font-size: 20px; margin-top: 28px; margin-bottom: 14px; }
             p { font-size: 16px; }
             li { font-size: 16px; }
+
+            /* Footer desktop layout */
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
         }
 
         @media (min-width: 1024px) {
