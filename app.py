@@ -5019,7 +5019,7 @@ HTML = """<!DOCTYPE html>
         }
 
         .new-chat-btn:hover svg {
-            transform: rotate(-15deg);
+            transform: scale(1.05);
         }
 
         .new-chat-btn.hidden {
@@ -5981,7 +5981,7 @@ HTML = """<!DOCTYPE html>
 
                             {% if current_user.is_authenticated %}
                             <div class="message-actions" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200); display: flex; gap: 8px;">
-                                <button class="save-to-library-btn" onclick="saveToLibrary({{ loop.index0 }})" title="Save to My Library">
+                                <button class="save-to-library-btn" onclick="saveToLibrary(event, {{ loop.index0 }})" title="Save to My Library">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
                                         <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                                     </svg>
@@ -6022,9 +6022,10 @@ HTML = """<!DOCTYPE html>
 
             <!-- New Chat Button (fixed position top-right) -->
             <a href="/clear" class="new-chat-btn" aria-label="Start a new chat conversation">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <polyline points="1 4 1 10 7 10"></polyline>
-                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <line x1="9" y1="10" x2="15" y2="10"></line>
+                    <line x1="12" y1="7" x2="12" y2="13"></line>
                 </svg>
                 New Chat
             </a>
@@ -6530,7 +6531,7 @@ HTML = """<!DOCTYPE html>
         {% endif %}
 
         // ====== Save to Library Function ======
-        async function saveToLibrary(messageIndex) {
+        async function saveToLibrary(event, messageIndex) {
             const button = event.target.closest('.save-to-library-btn');
 
             // Prevent double-clicking
@@ -7880,10 +7881,17 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 .library-title { display: flex; align-items: center; gap: 12px; font-size: 32px; font-weight: 800; color: var(--gray-900); letter-spacing: -1px; }
                 .library-title svg { width: 28px; height: 28px; color: var(--blue-600); }
                 .library-stats { font-size: 14px; color: var(--gray-500); font-weight: 500; }
-                /* Fix: Prevent user dropdown toggle from showing active state */
-                .user-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle { color: var(--gray-600) !important; background: transparent !important; }
-                /* Style active library link */
-                .nav-dropdown-link.active { color: var(--blue-600); background: var(--blue-50); }
+                /* Fix: Prevent all dropdown toggles from showing active state when child links are active */
+                .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+                    color: var(--gray-700) !important;
+                    background: transparent !important;
+                }
+                /* Style active dropdown links to match home page */
+                .nav-dropdown-link.active {
+                    color: var(--blue-600) !important;
+                    background: var(--blue-50) !important;
+                    font-weight: 600 !important;
+                }
                 .search-bar { width: 100%; max-width: 400px; padding: 12px 16px 12px 44px; border: 1px solid var(--gray-300); border-radius: 12px; font-family: inherit; font-size: 15px; background: var(--white); color: var(--gray-900); transition: all 0.2s ease; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; background-size: 20px 20px; margin-bottom: 24px; }
                 .search-bar:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
                 .bookmark-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -7905,7 +7913,27 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 .empty-state p { font-size: 16px; color: var(--gray-500); margin-bottom: 24px; }
                 .empty-state-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--blue-600); color: var(--white); text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.2); }
                 .empty-state-btn:hover { background: var(--blue-700); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.3); }
-                @media (min-width: 768px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); } }
+
+                /* Footer Styles */
+                .footer { padding: 32px 20px; border-top: 1px solid var(--gray-200); background: rgba(255,255,255,0.5); margin-top: 60px; }
+                .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+                .footer-text { font-size: 13px; color: var(--gray-500); }
+                .footer-links { display: flex; gap: 24px; }
+                .footer-link { font-size: 13px; color: var(--gray-500); text-decoration: none; transition: color 0.2s ease; }
+                .footer-link:hover { color: var(--gray-700); }
+                .social-icons { display: flex; gap: 20px; justify-content: center; align-items: center; }
+                .social-icon { color: var(--gray-500); transition: color 0.2s ease, transform 0.2s ease; display: flex; align-items: center; justify-content: center; }
+                .social-icon:hover { color: var(--gray-700); transform: translateY(-2px); }
+                .social-icon svg { width: 24px; height: 24px; }
+
+                @media (min-width: 768px) {
+                    .bookmark-grid { grid-template-columns: repeat(2, 1fr); }
+                    .footer { padding: 40px 32px; }
+                    .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+                    .footer-text { font-size: 14px; }
+                    .footer-links { gap: 32px; }
+                    .footer-link { font-size: 14px; }
+                }
                 @media (min-width: 1200px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
             </style>
 
@@ -8021,6 +8049,37 @@ LIBRARY_HTML = """<!DOCTYPE html>
             document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
         });
     </script>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
+            </div>
+        </footer>
         </main>
     </div>
 </body>
@@ -10842,6 +10901,14 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
+            /* Show desktop navigation and hide mobile menu button */
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+
             .main-content { padding: 120px 32px 60px; }
             .content-card { padding: 40px; border-radius: 24px; }
             h1 { font-size: 40px; margin-bottom: 12px; }
