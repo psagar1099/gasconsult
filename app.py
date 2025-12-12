@@ -20346,7 +20346,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                     Intraoperative <span class="gradient">Hypotension</span> Predictor
                 </h1>
                 <p class="hero-subtitle">
-                    Evidence-based ML model that predicts IOH risk using 14 clinical features. Trained on 10,000 synthetic cases based on published research.
+                    Evidence-based ML model that predicts IOH risk using 14 clinical features. Trained on 6,388 real surgical cases from the VitalDB open dataset.
                 </p>
             </div>
 
