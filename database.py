@@ -1210,7 +1210,7 @@ def migrate_database_for_oauth() -> bool:
                     ADD COLUMN oauth_provider_id TEXT
                 """)
 
-            # Make password_hash nullable by creating new table and copying data
+            # Check if password_hash has NOT NULL constraint (would prevent OAuth users)
             if 'password_hash' in columns:
                 cursor = conn.execute("""
                     SELECT sql FROM sqlite_master
@@ -1218,12 +1218,12 @@ def migrate_database_for_oauth() -> bool:
                 """)
                 table_sql = cursor.fetchone()
                 if table_sql and 'password_hash TEXT NOT NULL' in table_sql['sql']:
-                    logger.info("Recreating users table to make password_hash nullable")
-                    # This is complex in SQLite, so we'll rely on the new table creation
-                    # For existing deployments, password_hash will remain NOT NULL
-                    # New OAuth users will be handled by the updated schema
-                    logger.warning("Existing users table has NOT NULL constraint on password_hash")
-                    logger.warning("This will be fixed on next database initialization")
+                    # Note: SQLite doesn't support ALTER COLUMN to drop NOT NULL
+                    # OAuth users will need password_hash to be nullable
+                    # If this is a fresh install, the schema already has password_hash as nullable
+                    logger.info("Note: Existing users table has NOT NULL constraint on password_hash")
+                    logger.info("OAuth sign-in requires nullable password_hash field")
+                    logger.info("For fresh installs, this is already handled by the current schema")
 
         logger.info("OAuth migration completed successfully")
         return True
