@@ -7926,7 +7926,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 .empty-state { text-align: center; padding: 80px 20px; background: rgba(255,255,255,0.5); border-radius: 20px; border: 2px dashed var(--gray-300); }
                 .empty-state svg { color: var(--gray-300); margin-bottom: 20px; }
                 .empty-state p { font-size: 16px; color: var(--gray-500); margin-bottom: 24px; }
-                .empty-state-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--blue-600); color: var(--white); text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.2); }
+                .empty-state-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; background: var(--blue-600); color: var(--white); text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 15px; transition: all 0.2s ease; box-shadow: 0 4px 16px rgba(37,99,235,0.2); }
                 .empty-state-btn:hover { background: var(--blue-700); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.3); }
 
                 /* Footer Styles */
@@ -7978,9 +7978,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 </svg>
                 <p>No saved responses yet. Start building your evidence library!</p>
                 <a href="/?clear=1" class="empty-state-btn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
-                        <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
                     Start a Conversation
                 </a>
             </div>
