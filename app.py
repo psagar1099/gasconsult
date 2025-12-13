@@ -66,7 +66,7 @@ mail = Mail(app)
 EMAIL_CONFIGURED = bool(os.getenv('MAIL_USERNAME') and os.getenv('MAIL_PASSWORD'))
 if not EMAIL_CONFIGURED:
     import logging
-    logging.warning("Email not configured - verification emails will not be sent")
+    logging.info("Email not configured - verification emails will not be sent (users will be auto-verified)")
 
 # Initialize OAuth for Google and Apple Sign In
 oauth = OAuth(app)
@@ -99,11 +99,11 @@ APPLE_OAUTH_CONFIGURED = bool(os.getenv('APPLE_CLIENT_ID') and os.getenv('APPLE_
 
 if not GOOGLE_OAUTH_CONFIGURED:
     import logging
-    logging.warning("Google OAuth not configured - Google Sign In will not work")
+    logging.info("Google OAuth not configured - Google Sign In will be disabled")
 
 if not APPLE_OAUTH_CONFIGURED:
     import logging
-    logging.warning("Apple OAuth not configured - Apple Sign In will not work")
+    logging.info("Apple OAuth not configured - Apple Sign In will be disabled")
 
 # Initialize Flask-Login for user session management
 login_manager = LoginManager()
