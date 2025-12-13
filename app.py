@@ -12672,6 +12672,9 @@ CRISIS_HTML = """<!DOCTYPE html>
     <meta name="theme-color" content="#2563EB">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
             --gray-50: #F8FAFC;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
