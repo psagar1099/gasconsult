@@ -12635,692 +12635,101 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 CRISIS_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crisis Protocols - Evidence-Based Anesthesia Emergencies | gasconsult.ai</title>
-
-    <!-- SEO -->
-    <meta name="description" content="Quick-reference crisis protocols for anesthesia emergencies: cardiac arrest, malignant hyperthermia, difficult airway, anaphylaxis, and more with evidence-based steps.">
-
-    <!-- PWA -->
+    <title>Crisis Protocols | gasconsult.ai</title>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --white: #FFFFFF;
-            --gray-50: #F8FAFC;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-            --red-50: #FEF2F2;
-            --red-500: #EF4444;
-            --red-600: #DC2626;
-            --orange-50: #FFF7ED;
-            --orange-500: #F97316;
-            --purple-50: #FAF5FF;
-            --purple-500: #A855F7;
-            --rose-50: #FFF1F2;
-            --rose-500: #F43F5E;
+            --gray-50: #F8FAFC; --gray-100: #F1F5F9; --gray-200: #E2E8F0; --gray-400: #94A3B8; --gray-600: #475569; --gray-700: #334155; --gray-900: #0F172A;
+            --blue-50: #EFF6FF; --blue-600: #2563EB; --blue-700: #1D4ED8;
+            --red-50: #FEF2F2; --red-600: #DC2626; --orange-50: #FFF7ED; --orange-500: #F97316;
+            --purple-50: #FAF5FF; --purple-500: #A855F7; --rose-50: #FFF1F2; --rose-500: #F43F5E;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Background */
-        .bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(180deg, #F0F7FF 0%, #F8FAFC 100%); min-height: 100vh; }
+        .page { position: relative; z-index: 2; }
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 12px 16px; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; height: 56px; background: rgba(255,255,255,0.7); backdrop-filter: blur(20px); border-radius: 16px; padding: 0 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+        .logo-text { font-size: 18px; font-weight: 700; }
         .logo-text .gas { color: var(--blue-600); }
         .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 8px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            padding: 8px;
-            min-width: 200px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-        }
-
-        .nav-dropdown.active .nav-dropdown-menu {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 10px 14px;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .nav-dropdown-link:hover {
-            background: var(--gray-100);
-            color: var(--gray-900);
-        }
-
-        .nav-dropdown-link.active {
-            background: var(--blue-50);
-            color: var(--blue-600);
-            font-weight: 600;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .mobile-menu-btn span {
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 2px;
-            transition: all 0.3s;
-        }
-
-        .mobile-menu {
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--gray-200);
-            border-radius: 16px;
-            padding: 12px;
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            z-index: 99;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 12px 16px;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .mobile-menu-link:hover {
-            background: var(--gray-100);
-        }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            padding: 100px 16px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            margin-bottom: 48px;
-        }
-
-        .hero h1 {
-            font-size: 32px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, var(--gray-900), var(--gray-600));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 16px;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto 32px;
-        }
-
-        /* Search */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 48px;
-        }
-
-        .search-box {
-            position: relative;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 16px 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
-        .search-input {
-            width: 100%;
-            border: none;
-            background: none;
-            font-size: 16px;
-            color: var(--gray-900);
-            outline: none;
-            font-family: inherit;
-        }
-
-        .search-input::placeholder {
-            color: var(--gray-400);
-        }
-
-        /* Category Section */
-        .category {
-            margin-bottom: 48px;
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .category-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
+        .logo-text .ai { color: rgba(15,23,42,0.4); }
+        .nav-links { display: none; align-items: center; gap: 4px; }
+        .nav-link { padding: 10px 18px; font-size: 14px; font-weight: 500; color: var(--gray-600); text-decoration: none; border-radius: 12px; transition: all 0.2s; }
+        .nav-link:hover { color: var(--gray-900); background: rgba(0,0,0,0.04); }
+        .nav-link.active { color: var(--blue-600); background: var(--blue-50); }
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-toggle { cursor: pointer; background: none; border: none; font-family: inherit; }
+        .nav-dropdown-menu { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border: 1px solid var(--gray-200); border-radius: 12px; padding: 8px; min-width: 200px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .nav-dropdown.active .nav-dropdown-menu { display: block; }
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle { color: var(--blue-600); background: var(--blue-50); }
+        .nav-dropdown-link { display: block; padding: 10px 14px; color: var(--gray-700); text-decoration: none; border-radius: 8px; font-size: 14px; transition: all 0.2s; }
+        .nav-dropdown-link:hover { background: var(--gray-100); }
+        .nav-dropdown-link.active { background: var(--blue-50); color: var(--blue-600); font-weight: 600; }
+        .mobile-menu-btn { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 8px; }
+        .mobile-menu-btn span { width: 22px; height: 2px; background: var(--gray-700); border-radius: 2px; }
+        .mobile-menu { position: fixed; top: 80px; left: 16px; right: 16px; background: rgba(255,255,255,0.95); backdrop-filter: blur(20px); border: 1px solid var(--gray-200); border-radius: 16px; padding: 12px; display: none; flex-direction: column; gap: 4px; z-index: 99; }
+        .mobile-menu.active { display: flex; }
+        .mobile-menu-link { padding: 12px 16px; color: var(--gray-700); text-decoration: none; border-radius: 10px; font-size: 15px; font-weight: 500; }
+        main { padding: 100px 16px 40px; max-width: 1200px; margin: 0 auto; }
+        .hero { text-align: center; margin-bottom: 40px; }
+        .hero h1 { font-size: 36px; font-weight: 800; color: var(--gray-900); margin-bottom: 12px; }
+        .hero p { font-size: 16px; color: var(--gray-600); }
+        .search-box { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-radius: 16px; padding: 16px 20px; margin: 0 auto 40px; max-width: 600px; }
+        .search-input { width: 100%; border: none; background: none; font-size: 16px; outline: none; }
+        .category { margin-bottom: 40px; }
+        .category-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+        .category-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
         .category-icon.red { background: var(--red-50); }
+        .category-icon.red svg { stroke: var(--red-600); }
         .category-icon.orange { background: var(--orange-50); }
-        .category-icon.purple { background: var(--purple-50); }
-        .category-icon.rose { background: var(--rose-50); }
-
-        .category-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
-
-        /* Protocol Grid */
-        .protocols-grid {
-            display: grid;
-            gap: 16px;
-            grid-template-columns: 1fr;
-        }
-
-        /* Protocol Card */
-        .protocol-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.03);
-        }
-
-        .protocol-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 32px rgba(0,0,0,0.04);
-        }
-
-        .protocol-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .protocol-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-        }
-
-        .protocol-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .protocol-badge.critical {
-            background: var(--red-50);
-            color: var(--red-600);
-        }
-
-        .protocol-badge.urgent {
-            background: var(--orange-50);
-            color: var(--orange-500);
-        }
-
-        .protocol-badge.important {
-            background: var(--purple-50);
-            color: var(--purple-500);
-        }
-
-        .protocol-summary {
-            font-size: 14px;
-            color: var(--gray-600);
-            line-height: 1.6;
-            margin-bottom: 16px;
-        }
-
-        .expand-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: 8px;
-            background: var(--gray-100);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            flex-shrink: 0;
-        }
-
-        .expand-icon svg {
-            width: 16px;
-            height: 16px;
-            stroke: var(--gray-600);
-            transition: transform 0.3s;
-        }
-
-        .protocol-card.expanded .expand-icon svg {
-            transform: rotate(180deg);
-        }
-
-        /* Protocol Content */
-        .protocol-content {
-            display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--gray-200);
-        }
-
-        .protocol-card.expanded .protocol-content {
-            display: block;
-        }
-
-        .protocol-steps {
-            list-style: none;
-            counter-reset: step;
-        }
-
-        .protocol-step {
-            counter-increment: step;
-            padding-left: 36px;
-            position: relative;
-            margin-bottom: 16px;
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--gray-700);
-        }
-
-        .protocol-step:before {
-            content: counter(step);
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--blue-600);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .protocol-step strong {
-            color: var(--gray-900);
-            font-weight: 600;
-        }
-
-        .dose-box {
-            background: var(--blue-50);
-            border-left: 3px solid var(--blue-600);
-            padding: 16px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-
-        .dose-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--blue-700);
-            margin-bottom: 12px;
-        }
-
-        .dose-item {
-            font-size: 13px;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-            line-height: 1.6;
-        }
-
-        .dose-item:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Footer */
-        .footer {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid var(--gray-200);
-            padding: 32px 16px;
-            margin-top: auto;
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-
-        .footer-text {
-            font-size: 14px;
-            color: var(--gray-600);
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 16px;
-        }
-
-        .social-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: var(--gray-100);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--gray-600);
-            transition: all 0.2s;
-            text-decoration: none;
-        }
-
-        .social-icon:hover {
-            background: var(--blue-600);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .social-icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .footer-link {
-            font-size: 14px;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover {
-            color: var(--blue-600);
-        }
-
-        /* Tablet */
-        @media (min-width: 768px) {
-            .protocols-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .nav-links {
-                display: flex;
-            }
-
-            .mobile-menu-btn {
-                display: none;
-            }
-
-            .hero h1 {
-                font-size: 42px;
-            }
-
-            .footer-inner {
-                flex-direction: row;
-                justify-content: space-between;
-                text-align: left;
-            }
-        }
-
-        /* Desktop */
-        @media (min-width: 1024px) {
-            .protocols-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            main {
-                padding: 120px 32px 60px;
-            }
-
-            .hero h1 {
-                font-size: 48px;
-            }
-        }
+        .category-icon.orange svg { stroke: var(--orange-500); }
+        .category-title { font-size: 20px; font-weight: 700; }
+        .protocols-grid { display: grid; gap: 16px; }
+        .protocol-card { background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); border-radius: 16px; padding: 20px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .protocol-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .protocol-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .protocol-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .protocol-badge { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .protocol-badge.critical { background: var(--red-50); color: var(--red-600); }
+        .protocol-badge.urgent { background: var(--orange-50); color: var(--orange-500); }
+        .protocol-summary { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+        .expand-icon { width: 24px; height: 24px; border-radius: 8px; background: var(--gray-100); display: flex; align-items: center; justify-content: center; }
+        .expand-icon svg { transition: transform 0.3s; }
+        .protocol-card.expanded .expand-icon svg { transform: rotate(180deg); }
+        .protocol-content { display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--gray-200); }
+        .protocol-card.expanded .protocol-content { display: block; }
+        .protocol-steps { list-style: none; counter-reset: step; margin-bottom: 20px; }
+        .protocol-step { counter-increment: step; padding-left: 36px; position: relative; margin-bottom: 16px; font-size: 14px; line-height: 1.7; color: var(--gray-700); }
+        .protocol-step:before { content: counter(step); position: absolute; left: 0; top: 0; width: 24px; height: 24px; background: var(--blue-600); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+        .dose-box { background: var(--blue-50); border-left: 3px solid var(--blue-600); padding: 16px; border-radius: 10px; margin-bottom: 20px; }
+        .dose-title { font-size: 14px; font-weight: 700; color: var(--blue-700); margin-bottom: 12px; }
+        .dose-item { font-size: 13px; color: var(--gray-700); margin-bottom: 8px; }
+        .references { border-top: 1px solid var(--gray-200); padding-top: 16px; margin-top: 20px; }
+        .references-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+        .reference { font-size: 12px; color: var(--gray-600); margin-bottom: 8px; }
+        .footer { background: rgba(255,255,255,0.5); backdrop-filter: blur(20px); border-top: 1px solid var(--gray-200); padding: 32px 16px; margin-top: auto; }
+        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
+        .footer-text { font-size: 14px; color: var(--gray-600); }
+        .social-icons { display: flex; gap: 12px; }
+        .social-icon { width: 40px; height: 40px; border-radius: 10px; background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; color: var(--gray-600); transition: all 0.2s; text-decoration: none; border: 1px solid var(--gray-200); }
+        .social-icon:hover { background: var(--blue-600); border-color: var(--blue-600); color: white; transform: translateY(-2px); }
+        .social-icon svg { width: 20px; height: 20px; }
+        .footer-links { display: flex; gap: 24px; }
+        .footer-link { font-size: 14px; color: var(--gray-600); text-decoration: none; }
+        .footer-link:hover { color: var(--blue-600); }
+        @media (min-width: 768px) { .protocols-grid { grid-template-columns: repeat(2, 1fr); } .nav-links { display: flex; } .mobile-menu-btn { display: none; } .hero h1 { font-size: 42px; } .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; } }
+        @media (min-width: 1024px) { .protocols-grid { grid-template-columns: repeat(3, 1fr); } main { padding: 120px 32px 60px; } }
     </style>
 </head>
 <body>
-    <div class="bg-canvas">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
-    <div class="grain"></div>
-
     <div class="page">
-        <!-- Navigation -->
-        <nav class="nav">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
             <div class="nav-inner">
-                <a href="/?clear=1" class="logo">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
                     <div class="logo-icon">
                         <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
                             <circle cx="9" cy="9" r="9" fill="#2563EB"/>
@@ -13334,7 +12743,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Calculators</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
                         <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
                         <div class="nav-dropdown-menu">
@@ -13344,9 +12753,11 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    {{ generate_navbar_html('crisis')|safe }}
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
+                    {{ generate_navbar_html()|safe }}
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -13358,11 +12769,13 @@ CRISIS_HTML = """<!DOCTYPE html>
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Calculators</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link" style="background:var(--blue-50);color:var(--blue-600);font-weight:600;">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -13372,40 +12785,34 @@ CRISIS_HTML = """<!DOCTYPE html>
             {% endif %}
         </div>
 
-        <!-- Main Content -->
         <main>
             <div class="hero">
                 <h1>Crisis Protocols</h1>
-                <p>Quick-reference evidence-based protocols for anesthesia emergencies. Click any card to expand details.</p>
+                <p>Quick-reference evidence-based protocols for anesthesia emergencies</p>
             </div>
 
-            <!-- Search -->
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text"
-                           class="search-input"
-                           id="searchInput"
-                           placeholder="Search protocols (e.g., cardiac arrest, airway, anaphylaxis)..."
-                           oninput="filterProtocols()">
-                </div>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search protocols..." oninput="filterProtocols()">
             </div>
 
-            <!-- Cardiac Emergencies -->
-            <div class="category" data-category="cardiac">
+            <div class="category">
                 <div class="category-header">
-                    <div class="category-icon red">❤️</div>
+                    <div class="category-icon red">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Cardiac Emergencies</h2>
                 </div>
                 <div class="protocols-grid">
-                    <!-- Cardiac Arrest -->
-                    <div class="protocol-card" data-keywords="cardiac arrest cpr acls code blue vfib asystole pea" onclick="toggleCard(this)">
+                    <div class="protocol-card" data-keywords="cardiac arrest cpr acls" onclick="toggleCard(this)">
                         <div class="protocol-header">
                             <div>
                                 <div class="protocol-title">Cardiac Arrest (ACLS)</div>
                                 <span class="protocol-badge critical">Critical</span>
                             </div>
                             <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </div>
@@ -13413,325 +12820,102 @@ CRISIS_HTML = """<!DOCTYPE html>
                         <div class="protocol-summary">High-quality CPR with rhythm-specific advanced life support</div>
                         <div class="protocol-content">
                             <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>Start CPR immediately:</strong> 100-120 compressions/min, depth 2-2.4 inches</li>
-                                <li class="protocol-step"><strong>Call for help / Code Blue</strong></li>
-                                <li class="protocol-step"><strong>Attach defibrillator:</strong> Identify rhythm (shockable vs non-shockable)</li>
-                                <li class="protocol-step"><strong>Secure airway:</strong> ETT or LMA + capnography (target EtCO₂ >10 mmHg)</li>
-                                <li class="protocol-step"><strong>IV/IO access:</strong> Establish for medications</li>
-                                <li class="protocol-step"><strong>Epinephrine 1 mg IV/IO</strong> every 3-5 minutes</li>
-                                <li class="protocol-step"><strong>If VF/VT:</strong> Defibrillate 200J, then amiodarone 300 mg after 3rd shock</li>
-                                <li class="protocol-step"><strong>Treat reversible causes:</strong> H's and T's (hypovolemia, hypoxia, acidosis, hyperK, hypothermia, tension pneumo, tamponade, toxins, thrombosis)</li>
+                                <li class="protocol-step"><strong>Start CPR:</strong> 100-120 compressions/min, depth 2-2.4 inches</li>
+                                <li class="protocol-step"><strong>Call for help</strong></li>
+                                <li class="protocol-step"><strong>Attach defibrillator:</strong> Identify rhythm</li>
+                                <li class="protocol-step"><strong>Secure airway:</strong> ETT/LMA + capnography</li>
+                                <li class="protocol-step"><strong>Epinephrine 1 mg IV/IO</strong> q3-5min</li>
+                                <li class="protocol-step"><strong>If VF/VT:</strong> Defibrillate 200J, amiodarone 300 mg after 3rd shock</li>
+                                <li class="protocol-step"><strong>Treat H's and T's</strong></li>
                             </ol>
                             <div class="dose-box">
-                                <div class="dose-title">💊 Key Medications</div>
-                                <div class="dose-item"><strong>Epinephrine:</strong> 1 mg IV/IO every 3-5 min</div>
-                                <div class="dose-item"><strong>Amiodarone:</strong> 300 mg IV/IO first dose, then 150 mg</div>
-                                <div class="dose-item"><strong>Lidocaine (alternative):</strong> 1-1.5 mg/kg IV/IO</div>
+                                <div class="dose-title">Key Medications</div>
+                                <div class="dose-item"><strong>Epinephrine:</strong> 1 mg IV q3-5min</div>
+                                <div class="dose-item"><strong>Amiodarone:</strong> 300 mg then 150 mg</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">References</div>
+                                <div class="reference">Panchal AR, et al. Part 3: Adult Basic and Advanced Life Support: 2020 AHA Guidelines. Circulation. 2020;142(16_suppl_2):S366-S468. PMID: 33081529</div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Malignant Hyperthermia -->
-                    <div class="protocol-card" data-keywords="malignant hyperthermia mh dantrolene hypermetabolic" onclick="toggleCard(this)">
+                    <div class="protocol-card" data-keywords="malignant hyperthermia mh dantrolene" onclick="toggleCard(this)">
                         <div class="protocol-header">
                             <div>
                                 <div class="protocol-title">Malignant Hyperthermia</div>
                                 <span class="protocol-badge critical">Critical</span>
                             </div>
                             <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </div>
                         </div>
-                        <div class="protocol-summary">Life-threatening hypermetabolic crisis triggered by volatile anesthetics</div>
+                        <div class="protocol-summary">Hypermetabolic crisis from volatile anesthetics</div>
                         <div class="protocol-content">
                             <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>STOP all triggers:</strong> Discontinue volatile anesthetics and succinylcholine immediately</li>
-                                <li class="protocol-step"><strong>Call for help</strong> – MH cart and multiple hands needed</li>
-                                <li class="protocol-step"><strong>Hyperventilate with 100% O₂</strong> at 10 L/min (2-3x minute ventilation)</li>
-                                <li class="protocol-step"><strong>Dantrolene 2.5 mg/kg IV</strong> rapid bolus, repeat until signs resolve (up to 10 mg/kg)</li>
-                                <li class="protocol-step"><strong>Cooling:</strong> Ice packs to groin/axilla, cold IV saline, lavage body cavities</li>
-                                <li class="protocol-step"><strong>Treat hyperkalemia:</strong> Insulin + glucose, calcium chloride, bicarbonate</li>
-                                <li class="protocol-step"><strong>Treat acidosis:</strong> Sodium bicarbonate 1-2 mEq/kg IV</li>
-                                <li class="protocol-step"><strong>Monitor:</strong> Core temp, ABG, K+, CK, myoglobin, coags q15-30min</li>
-                                <li class="protocol-step"><strong>Maintain dantrolene 1 mg/kg IV</strong> q6h for 24-48 hours</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">💊 Dantrolene Dosing</div>
-                                <div class="dose-item"><strong>Initial:</strong> 2.5 mg/kg IV rapid push, repeat until HR/temp/rigidity resolve</div>
-                                <div class="dose-item"><strong>Maximum initial:</strong> Up to 10 mg/kg</div>
-                                <div class="dose-item"><strong>Maintenance:</strong> 1 mg/kg IV q6h × 24-48 hours</div>
-                                <div class="dose-item"><strong>Mixing:</strong> Each 20 mg vial requires 60 mL sterile water (hard to dissolve, shake vigorously)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Anaphylaxis -->
-                    <div class="protocol-card" data-keywords="anaphylaxis allergic reaction epinephrine bronchospasm hypotension" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Anaphylaxis</div>
-                                <span class="protocol-badge critical">Critical</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">Severe IgE-mediated hypersensitivity with airway/cardiovascular collapse</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>STOP suspected trigger:</strong> Common culprits are antibiotics, NMBs, latex, colloids</li>
+                                <li class="protocol-step"><strong>STOP triggers:</strong> Discontinue volatiles and succinylcholine</li>
                                 <li class="protocol-step"><strong>Call for help</strong></li>
-                                <li class="protocol-step"><strong>Epinephrine IM:</strong> 0.3-0.5 mg (1:1000) into anterolateral thigh, repeat q5-15min</li>
-                                <li class="protocol-step"><strong>100% O₂:</strong> Maintain airway, consider early intubation if airway edema</li>
-                                <li class="protocol-step"><strong>Aggressive fluids:</strong> 20-50 mL/kg crystalloid rapidly</li>
-                                <li class="protocol-step"><strong>H1 blocker:</strong> Diphenhydramine 25-50 mg IV</li>
-                                <li class="protocol-step"><strong>H2 blocker:</strong> Famotidine 20 mg IV</li>
-                                <li class="protocol-step"><strong>Steroids:</strong> Methylprednisolone 1-2 mg/kg IV</li>
-                                <li class="protocol-step"><strong>If refractory:</strong> Start epinephrine infusion 0.05-0.5 mcg/kg/min</li>
+                                <li class="protocol-step"><strong>Hyperventilate</strong> with 100% O₂</li>
+                                <li class="protocol-step"><strong>Dantrolene 2.5 mg/kg IV</strong> repeat until resolved (max 10 mg/kg)</li>
+                                <li class="protocol-step"><strong>Cooling:</strong> Ice packs, cold IV saline</li>
+                                <li class="protocol-step"><strong>Treat hyperkalemia</strong></li>
+                                <li class="protocol-step"><strong>Bicarbonate</strong> for acidosis</li>
+                                <li class="protocol-step"><strong>Maintain dantrolene 1 mg/kg q6h × 24-48h</strong></li>
                             </ol>
                             <div class="dose-box">
-                                <div class="dose-title">💊 Epinephrine Dosing</div>
-                                <div class="dose-item"><strong>IM (first-line):</strong> 0.3-0.5 mg (1:1000) q5-15min PRN</div>
-                                <div class="dose-item"><strong>IV bolus:</strong> 10-100 mcg slow push if severe</div>
-                                <div class="dose-item"><strong>IV infusion:</strong> 0.05-0.5 mcg/kg/min titrated to BP</div>
+                                <div class="dose-title">Dantrolene Dosing</div>
+                                <div class="dose-item"><strong>Initial:</strong> 2.5 mg/kg IV rapid, repeat PRN</div>
+                                <div class="dose-item"><strong>Max:</strong> Up to 10 mg/kg</div>
+                                <div class="dose-item"><strong>Maintenance:</strong> 1 mg/kg q6h × 24-48h</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">References</div>
+                                <div class="reference">Rosenberg H, et al. Malignant Hyperthermia: A Review. Orphanet J Rare Dis. 2015;10:93. PMID: 26238698</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Respiratory Emergencies -->
-            <div class="category" data-category="respiratory">
+            <div class="category">
                 <div class="category-header">
-                    <div class="category-icon orange">🫁</div>
+                    <div class="category-icon orange">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                    </div>
                     <h2 class="category-title">Respiratory Emergencies</h2>
                 </div>
                 <div class="protocols-grid">
-                    <!-- Difficult Airway -->
-                    <div class="protocol-card" data-keywords="difficult airway cant intubate ventilate crico emergency" onclick="toggleCard(this)">
+                    <div class="protocol-card" data-keywords="cant intubate oxygenate cico airway" onclick="toggleCard(this)">
                         <div class="protocol-header">
                             <div>
                                 <div class="protocol-title">Can't Intubate Can't Oxygenate</div>
                                 <span class="protocol-badge critical">Critical</span>
                             </div>
                             <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <polyline points="6 9 12 15 18 9"></polyline>
                                 </svg>
                             </div>
                         </div>
-                        <div class="protocol-summary">Emergency front-of-neck access when airway lost</div>
+                        <div class="protocol-summary">Emergency cricothyroidotomy for lost airway</div>
                         <div class="protocol-content">
                             <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>Declare CICO</strong> – Get surgical airway equipment immediately</li>
+                                <li class="protocol-step"><strong>Declare CICO</strong> - Get surgical airway equipment</li>
                                 <li class="protocol-step"><strong>Call for help</strong></li>
-                                <li class="protocol-step"><strong>Final attempt:</strong> Optimized BMV (two hands, oral airway, PEEP valve)</li>
-                                <li class="protocol-step"><strong>Position:</strong> Extend neck, palpate landmarks (cricothyroid membrane)</li>
-                                <li class="protocol-step"><strong>Scalpel-bougie-tube technique:</strong> Transverse stab incision through cricothyroid membrane</li>
-                                <li class="protocol-step"><strong>Insert bougie</strong> through incision into trachea</li>
-                                <li class="protocol-step"><strong>Railroad 6.0 cuffed ETT</strong> over bougie into trachea</li>
-                                <li class="protocol-step"><strong>Confirm placement:</strong> Capnography, bilateral breath sounds</li>
+                                <li class="protocol-step"><strong>Extend neck,</strong> palpate cricothyroid membrane</li>
+                                <li class="protocol-step"><strong>Transverse stab</strong> through cricothyroid membrane</li>
+                                <li class="protocol-step"><strong>Insert bougie</strong> into trachea</li>
+                                <li class="protocol-step"><strong>Railroad 6.0 ETT</strong> over bougie</li>
+                                <li class="protocol-step"><strong>Confirm:</strong> Capnography</li>
                             </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">⚡ Critical Steps</div>
-                                <div class="dose-item">Time to hypoxic brain injury: <strong>~3-4 minutes</strong></div>
-                                <div class="dose-item">Scalpel incision: <strong>Transverse, 1-2 cm through cricothyroid membrane</strong></div>
-                                <div class="dose-item">Tube size: <strong>6.0 cuffed ETT</strong></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bronchospasm -->
-                    <div class="protocol-card" data-keywords="bronchospasm wheezing asthma beta agonist albuterol" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Bronchospasm</div>
-                                <span class="protocol-badge urgent">Urgent</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">Acute airway obstruction from smooth muscle constriction</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>100% O₂:</strong> Maximize FiO₂</li>
-                                <li class="protocol-step"><strong>Deepen anesthesia:</strong> Increase volatile anesthetic (bronchodilator effect)</li>
-                                <li class="protocol-step"><strong>Rule out mechanical:</strong> Check for kinked ETT, mucus plug, pneumothorax</li>
-                                <li class="protocol-step"><strong>Albuterol:</strong> 4-8 puffs via MDI into circuit (or 2.5-5 mg nebulized)</li>
-                                <li class="protocol-step"><strong>If refractory – Epinephrine:</strong> 10-50 mcg IV boluses</li>
-                                <li class="protocol-step"><strong>Ketamine:</strong> 0.5-1 mg/kg IV (bronchodilator)</li>
-                                <li class="protocol-step"><strong>Magnesium:</strong> 2 g IV over 20 minutes</li>
-                                <li class="protocol-step"><strong>Steroids:</strong> Methylprednisolone 1-2 mg/kg IV (delayed onset)</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">💊 Key Medications</div>
-                                <div class="dose-item"><strong>Albuterol (MDI):</strong> 4-8 puffs q20min PRN</div>
-                                <div class="dose-item"><strong>Epinephrine:</strong> 10-50 mcg IV boluses</div>
-                                <div class="dose-item"><strong>Ketamine:</strong> 0.5-1 mg/kg IV</div>
-                                <div class="dose-item"><strong>Magnesium:</strong> 2 g IV over 20 min</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Aspiration -->
-                    <div class="protocol-card" data-keywords="aspiration gastric contents pneumonitis full stomach" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Aspiration</div>
-                                <span class="protocol-badge urgent">Urgent</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">Gastric contents entering airway causing chemical pneumonitis</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>If witnessed:</strong> Immediate head-down/left lateral position</li>
-                                <li class="protocol-step"><strong>Suction oropharynx</strong> thoroughly before positive pressure ventilation</li>
-                                <li class="protocol-step"><strong>Intubate immediately</strong> with cuffed ETT</li>
-                                <li class="protocol-step"><strong>Suction trachea/bronchi</strong> via ETT (do NOT lavage – worsens injury)</li>
-                                <li class="protocol-step"><strong>100% O₂</strong> with PEEP 5-10 cmH₂O</li>
-                                <li class="protocol-step"><strong>Bronchoscopy</strong> if particulate matter or persistent hypoxemia</li>
-                                <li class="protocol-step"><strong>CXR</strong> and ABG</li>
-                                <li class="protocol-step"><strong>Monitor for ARDS:</strong> May develop 12-24 hours post-aspiration</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">⚠️ Important Notes</div>
-                                <div class="dose-item"><strong>Do NOT:</strong> Bronchial lavage (spreads acid injury)</div>
-                                <div class="dose-item"><strong>Do NOT:</strong> Prophylactic antibiotics (unless particulate matter)</div>
-                                <div class="dose-item"><strong>Do NOT:</strong> Prophylactic steroids (no proven benefit)</div>
-                                <div class="dose-item"><strong>Monitor:</strong> For pneumonitis (12-24h) and possible ARDS</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Metabolic Emergencies -->
-            <div class="category" data-category="metabolic">
-                <div class="category-header">
-                    <div class="category-icon purple">⚗️</div>
-                    <h2 class="category-title">Metabolic Emergencies</h2>
-                </div>
-                <div class="protocols-grid">
-                    <!-- Local Anesthetic Toxicity -->
-                    <div class="protocol-card" data-keywords="local anesthetic systemic toxicity last lipid emulsion intralipid" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Local Anesthetic Systemic Toxicity</div>
-                                <span class="protocol-badge critical">Critical</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">CNS and cardiac toxicity from excessive local anesthetic absorption</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>STOP local anesthetic</strong> injection immediately</li>
-                                <li class="protocol-step"><strong>Call for help</strong> – Get lipid emulsion (Intralipid 20%)</li>
-                                <li class="protocol-step"><strong>Seizures:</strong> Small dose benzos (e.g., midazolam 1-2 mg), avoid propofol</li>
-                                <li class="protocol-step"><strong>Lipid emulsion 20%:</strong> 1.5 mL/kg IV bolus (~100 mL for 70kg) over 1 min</li>
-                                <li class="protocol-step"><strong>Start lipid infusion:</strong> 0.25 mL/kg/min (~18 mL/min for 70kg)</li>
-                                <li class="protocol-step"><strong>Repeat bolus</strong> q5min × 2 if persistent cardiovascular instability</li>
-                                <li class="protocol-step"><strong>If cardiac arrest:</strong> Start CPR, continue lipid, avoid vasopressin/calcium/beta-blockers/propofol</li>
-                                <li class="protocol-step"><strong>Continue lipid</strong> until hemodynamically stable (max ~10 mL/kg)</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">💊 Lipid Emulsion 20% Dosing</div>
-                                <div class="dose-item"><strong>Bolus:</strong> 1.5 mL/kg IV (~100 mL for 70 kg) over 1 minute</div>
-                                <div class="dose-item"><strong>Infusion:</strong> 0.25 mL/kg/min (~18 mL/min for 70 kg)</div>
-                                <div class="dose-item"><strong>Repeat bolus:</strong> q5min × 2 if needed</div>
-                                <div class="dose-item"><strong>Maximum dose:</strong> ~10 mL/kg over first 30 minutes</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hyperkalemia -->
-                    <div class="protocol-card" data-keywords="hyperkalemia potassium cardiac arrhythmia peaked t waves" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Severe Hyperkalemia</div>
-                                <span class="protocol-badge critical">Critical</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">Life-threatening K+ >6.5 mEq/L with ECG changes or arrhythmias</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>ECG changes:</strong> Peaked T waves, wide QRS, sine wave = CRITICAL</li>
-                                <li class="protocol-step"><strong>Calcium:</strong> 10 mL 10% calcium chloride IV (or 30 mL 10% calcium gluconate) – cardiac membrane stabilization</li>
-                                <li class="protocol-step"><strong>Insulin + glucose:</strong> 10 units regular insulin + 50 mL D50 IV – shifts K+ intracellularly</li>
-                                <li class="protocol-step"><strong>Sodium bicarbonate:</strong> 50 mEq (1 amp) IV if acidotic</li>
-                                <li class="protocol-step"><strong>Albuterol:</strong> 10-20 mg nebulized (shifts K+ into cells)</li>
-                                <li class="protocol-step"><strong>If refractory:</strong> Consider emergent dialysis</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">💊 Acute Management</div>
-                                <div class="dose-item"><strong>Calcium chloride 10%:</strong> 10 mL IV over 2-5 min</div>
-                                <div class="dose-item"><strong>Insulin + D50:</strong> 10 units regular + 50 mL D50 IV</div>
-                                <div class="dose-item"><strong>Bicarbonate:</strong> 50 mEq IV if acidotic</div>
-                                <div class="dose-item"><strong>Albuterol:</strong> 10-20 mg nebulized</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hemorrhage/Trauma -->
-            <div class="category" data-category="hemorrhage">
-                <div class="category-header">
-                    <div class="category-icon rose">🩸</div>
-                    <h2 class="category-title">Hemorrhage / Trauma</h2>
-                </div>
-                <div class="protocols-grid">
-                    <!-- Massive Transfusion -->
-                    <div class="protocol-card" data-keywords="massive transfusion mtp hemorrhage shock trauma blood products" onclick="toggleCard(this)">
-                        <div class="protocol-header">
-                            <div>
-                                <div class="protocol-title">Massive Transfusion Protocol</div>
-                                <span class="protocol-badge critical">Critical</span>
-                            </div>
-                            <div class="expand-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="protocol-summary">Hemorrhagic shock requiring massive blood product replacement</div>
-                        <div class="protocol-content">
-                            <ol class="protocol-steps">
-                                <li class="protocol-step"><strong>Activate MTP</strong> – Call blood bank immediately</li>
-                                <li class="protocol-step"><strong>Control bleeding:</strong> Direct pressure, tourniquet, surgical control</li>
-                                <li class="protocol-step"><strong>Large-bore IV access:</strong> 14-16G × 2 or rapid infusion catheter</li>
-                                <li class="protocol-step"><strong>1:1:1 ratio:</strong> pRBC : FFP : platelets (balanced resuscitation)</li>
-                                <li class="protocol-step"><strong>TXA:</strong> 1 g IV over 10 min, then 1 g over 8 hours (if <3h from injury)</li>
-                                <li class="protocol-step"><strong>Calcium:</strong> 1 g calcium chloride IV (citrate toxicity from massive transfusion)</li>
-                                <li class="protocol-step"><strong>Permissive hypotension:</strong> Target SBP 80-90 until bleeding controlled</li>
-                                <li class="protocol-step"><strong>Monitor:</strong> ABG, lactate, INR, fibrinogen, platelets q30-60min</li>
-                            </ol>
-                            <div class="dose-box">
-                                <div class="dose-title">📦 Transfusion Targets</div>
-                                <div class="dose-item"><strong>Ratio:</strong> 1:1:1 (pRBC : FFP : platelets)</div>
-                                <div class="dose-item"><strong>TXA:</strong> 1 g IV load, then 1 g over 8h</div>
-                                <div class="dose-item"><strong>Fibrinogen goal:</strong> >150-200 mg/dL</div>
-                                <div class="dose-item"><strong>Platelet goal:</strong> >50,000 (>100,000 for CNS injury)</div>
+                            <div class="references">
+                                <div class="references-title">References</div>
+                                <div class="reference">Frerk C, et al. Difficult Airway Society Guidelines for Management of the Unanticipated Difficult Intubation in Adults. Br J Anaesth. 2015;115(6):827-848. PMID: 26556848</div>
                             </div>
                         </div>
                     </div>
@@ -13739,24 +12923,23 @@ CRISIS_HTML = """<!DOCTYPE html>
             </div>
         </main>
 
-        <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="social-icons">
-                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener" class="social-icon" aria-label="X">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
                     </a>
-                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener" class="social-icon" aria-label="Instagram">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>
                     </a>
-                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener" class="social-icon" aria-label="LinkedIn">
+                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                         </svg>
@@ -13772,71 +12955,47 @@ CRISIS_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile Menu
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('active');
         }
 
-        // Nav Dropdown
         function toggleNavDropdown(e) {
             e.stopPropagation();
             const dropdown = e.target.closest('.nav-dropdown');
             dropdown.classList.toggle('active');
-
-            document.addEventListener('click', function closeDropdown(evt) {
+            document.addEventListener('click', function close(evt) {
                 if (!dropdown.contains(evt.target)) {
                     dropdown.classList.remove('active');
-                    document.removeEventListener('click', closeDropdown);
+                    document.removeEventListener('click', close);
                 }
             });
         }
 
-        // Toggle Protocol Card
         function toggleCard(card) {
             card.classList.toggle('expanded');
         }
 
-        // Search Filter
         function filterProtocols() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const cards = document.querySelectorAll('.protocol-card');
-            const categories = document.querySelectorAll('.category');
-
             cards.forEach(card => {
                 const keywords = card.dataset.keywords || '';
                 const title = card.querySelector('.protocol-title').textContent.toLowerCase();
-                const summary = card.querySelector('.protocol-summary').textContent.toLowerCase();
-
-                if (keywords.includes(query) || title.includes(query) || summary.includes(query) || query === '') {
+                if (keywords.includes(query) || title.includes(query) || query === '') {
                     card.style.display = '';
                 } else {
                     card.style.display = 'none';
                 }
             });
-
-            // Hide empty categories
-            categories.forEach(category => {
-                const visibleCards = category.querySelectorAll('.protocol-card[style=""], .protocol-card:not([style*="none"])');
-                if (visibleCards.length === 0 && query !== '') {
-                    category.style.display = 'none';
-                } else {
-                    category.style.display = '';
-                }
-            });
         }
 
-        // Close mobile menu when clicking link
         document.querySelectorAll('.mobile-menu-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').classList.remove('active');
-            });
+            link.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('active'));
         });
     </script>
 </body>
 </html>
 """
-
-
 
 QUICK_DOSE_HTML = """<!DOCTYPE html>
 <html lang="en">
