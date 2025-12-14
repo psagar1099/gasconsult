@@ -12648,33 +12648,17 @@ CRISIS_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crisis Protocols - gasconsult.ai</title>
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Emergency crisis protocols for anesthesiology: cardiac arrest, malignant hyperthermia, anaphylaxis, airway emergencies, and more with evidence-based management.">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gasconsult.ai/crisis">
-    <meta property="og:title" content="Crisis Protocols - gasconsult.ai">
-    <meta property="og:description" content="Emergency crisis protocols for anesthesiology with evidence-based management guidelines.">
-    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gasconsult.ai/crisis">
-    <meta property="twitter:title" content="Crisis Protocols - gasconsult.ai">
-    <meta property="twitter:description" content="Emergency crisis protocols for anesthesiology with evidence-based management guidelines.">
-    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
-
     <!-- PWA -->
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
     <link rel="manifest" href="/static/manifest.json">
     <meta name="theme-color" content="#2563EB">
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+
         :root {
+            --white: #FFFFFF;
             --gray-50: #F8FAFC;
             --gray-100: #F1F5F9;
             --gray-200: #E2E8F0;
@@ -12694,7 +12678,6 @@ CRISIS_HTML = """<!DOCTYPE html>
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
             --red-50: #FEF2F2;
-            --red-100: #FEE2E2;
             --red-500: #EF4444;
             --red-600: #DC2626;
             --red-700: #B91C1C;
@@ -12707,19 +12690,12 @@ CRISIS_HTML = """<!DOCTYPE html>
             --amber-50: #FFFBEB;
             --amber-500: #F59E0B;
             --amber-600: #D97706;
-            --teal-50: #F0FDFA;
-            --teal-500: #14B8A6;
-            --teal-600: #0D9488;
-            --rose-50: #FFF1F2;
-            --rose-500: #F43F5E;
-            --rose-600: #E11D48;
+            --emerald-50: #ECFDF5;
+            --emerald-500: #10B981;
+            --emerald-600: #059669;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         html {
             -webkit-font-smoothing: antialiased;
@@ -12735,7 +12711,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
-        /* Skip to Content Link */
+        /* Skip to Content Link for Accessibility */
         .skip-to-content {
             position: absolute;
             top: -40px;
@@ -12754,27 +12730,26 @@ CRISIS_HTML = """<!DOCTYPE html>
             top: 0;
         }
 
-        /* Background */
         .bg-canvas {
             position: fixed;
             inset: 0;
             z-index: 0;
             overflow: hidden;
-            background: linear-gradient(180deg, #FFF5F5 0%, var(--gray-50) 40%, #FFFBF0 100%);
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
         }
 
         .orb {
             position: absolute;
             border-radius: 50%;
             filter: blur(80px);
-            opacity: 0.5;
+            opacity: 0.6;
             animation: float 20s ease-in-out infinite;
         }
 
         .orb-1 {
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
             top: -15%;
             left: -20%;
         }
@@ -12782,7 +12757,7 @@ CRISIS_HTML = """<!DOCTYPE html>
         .orb-2 {
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
             top: 30%;
             right: -20%;
             animation-delay: -7s;
@@ -12792,7 +12767,7 @@ CRISIS_HTML = """<!DOCTYPE html>
         .orb-3 {
             width: 250px;
             height: 250px;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
             bottom: -10%;
             left: 20%;
             animation-delay: -14s;
@@ -12823,7 +12798,6 @@ CRISIS_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -12862,42 +12836,33 @@ CRISIS_HTML = """<!DOCTYPE html>
             justify-content: center;
         }
 
-        .logo-text {
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
+        .logo-icon svg { width: 36px; height: 12px; }
 
-        .gas {
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
             color: var(--gray-900);
         }
 
-        .consult {
-            color: var(--gray-600);
-        }
-
-        .ai {
-            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+        .logo-text .gas { color: var(--blue-600); }
+        .logo-text .consult { color: #0F172A; }
+        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
 
         .nav-links {
-            display: flex;
+            display: none;
             align-items: center;
             gap: 4px;
         }
 
         .nav-link {
-            padding: 8px 14px;
+            padding: 10px 18px;
             font-size: 14px;
             font-weight: 500;
             color: var(--gray-600);
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             transition: all 0.2s ease;
-            white-space: nowrap;
         }
 
         .nav-link:hover {
@@ -12908,12 +12873,16 @@ CRISIS_HTML = """<!DOCTYPE html>
         .nav-link.active {
             color: var(--blue-600);
             background: var(--blue-50);
-            font-weight: 600;
         }
 
-        /* Dropdown */
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+            color: var(--blue-600);
+            background: var(--blue-50);
+        }
+
         .nav-dropdown {
             position: relative;
+            display: inline-block;
         }
 
         .nav-dropdown-toggle {
@@ -12928,31 +12897,27 @@ CRISIS_HTML = """<!DOCTYPE html>
             position: absolute;
             top: 100%;
             right: 0;
-            margin-top: 8px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: white;
+            border: 1px solid var(--gray-200);
             border-radius: 12px;
-            padding: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             min-width: 200px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 101;
+            margin-top: 4px;
+            z-index: 1000;
+            overflow: hidden;
         }
 
-        .nav-dropdown:hover .nav-dropdown-menu,
-        .nav-dropdown.active .nav-dropdown-menu {
+        .nav-dropdown-menu.show {
             display: block;
         }
 
         .nav-dropdown-link {
             display: block;
-            padding: 10px 14px;
+            padding: 12px 18px;
             font-size: 14px;
             font-weight: 500;
-            color: var(--gray-700);
+            color: var(--gray-600);
             text-decoration: none;
-            border-radius: 8px;
             transition: all 0.2s ease;
         }
 
@@ -12961,51 +12926,74 @@ CRISIS_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
             font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
         }
 
-        /* User Dropdown */
-        .user-dropdown .nav-dropdown-menu {
-            min-width: 260px;
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         .user-avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
             font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
         }
 
         .user-dropdown-header {
-            padding: 12px 14px;
+            padding: 16px 18px;
             border-bottom: 1px solid var(--gray-200);
-            margin-bottom: 4px;
+            background: var(--gray-50);
         }
 
         .user-dropdown-email {
             font-size: 13px;
             color: var(--gray-600);
-            font-weight: 500;
+            margin-bottom: 4px;
         }
 
         .user-dropdown-tier {
             font-size: 11px;
-            color: var(--gray-500);
-            margin-top: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
         }
 
-        /* Mobile Menu */
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 5px;
             background: none;
@@ -13078,16 +13066,8 @@ CRISIS_HTML = """<!DOCTYPE html>
             background: rgba(0,0,0,0.04);
         }
 
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding-top: 80px;
-            padding-bottom: 60px;
-        }
-
-        /* Hero Section */
         .hero {
-            padding: 40px 20px;
+            padding: 100px 20px 40px;
             text-align: center;
             max-width: 900px;
             margin: 0 auto;
@@ -13125,12 +13105,10 @@ CRISIS_HTML = """<!DOCTYPE html>
             font-size: 12px;
             font-weight: 600;
             color: var(--red-700);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .hero-title {
-            font-size: clamp(32px, 8vw, 48px);
+            font-size: 48px;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -2px;
@@ -13148,12 +13126,12 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .hero-subtitle {
-            font-size: clamp(14px, 3vw, 18px);
+            font-size: 18px;
             font-weight: 400;
             line-height: 1.6;
             color: var(--gray-600);
             max-width: 700px;
-            margin: 0 auto 32px;
+            margin: 0 auto 40px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
             opacity: 0;
         }
@@ -13163,10 +13141,9 @@ CRISIS_HTML = """<!DOCTYPE html>
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Search */
         .search-container {
             max-width: 600px;
-            margin: 0 auto 40px;
+            margin: 0 auto 50px;
             padding: 0 20px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.3s forwards;
             opacity: 0;
@@ -13178,7 +13155,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         .search-input {
             width: 100%;
-            padding: 14px 48px;
+            padding: 14px 48px 14px 48px;
             font-size: 16px;
             font-family: inherit;
             border: 2px solid var(--gray-200);
@@ -13227,15 +13204,37 @@ CRISIS_HTML = """<!DOCTYPE html>
             display: block;
         }
 
-        /* Protocols Container */
         .protocols-container {
+            flex: 1 0 auto;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px 80px;
         }
 
+        .demo-note {
+            background: linear-gradient(135deg, var(--blue-50) 0%, var(--purple-50) 100%);
+            border: 2px solid var(--blue-200);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .demo-note-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .demo-note-text {
+            font-size: 14px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
         .category-section {
-            margin-bottom: 48px;
+            margin-bottom: 40px;
             animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
             opacity: 0;
         }
@@ -13244,7 +13243,6 @@ CRISIS_HTML = """<!DOCTYPE html>
         .category-section:nth-child(2) { animation-delay: 0.5s; }
         .category-section:nth-child(3) { animation-delay: 0.6s; }
         .category-section:nth-child(4) { animation-delay: 0.7s; }
-        .category-section:nth-child(5) { animation-delay: 0.8s; }
 
         .category-header {
             display: flex;
@@ -13254,13 +13252,13 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .category-icon {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            font-size: 20px;
         }
 
         .category-icon svg {
@@ -13270,27 +13268,37 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .category-icon.red {
-            background: linear-gradient(135deg, var(--red-500), var(--red-600));
+            background: linear-gradient(135deg, var(--red-500) 0%, var(--red-600) 100%);
             box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
         }
 
         .category-icon.orange {
-            background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+            background: linear-gradient(135deg, var(--orange-500) 0%, var(--orange-600) 100%);
             box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
         }
 
         .category-icon.purple {
-            background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+            background: linear-gradient(135deg, var(--purple-500) 0%, var(--purple-600) 100%);
             box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
         }
 
+        .category-icon.amber {
+            background: linear-gradient(135deg, var(--amber-500) 0%, var(--amber-600) 100%);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .category-icon.blue {
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
         .category-icon.teal {
-            background: linear-gradient(135deg, var(--teal-500), var(--teal-600));
+            background: linear-gradient(135deg, #14b8a6 0%, #0f766e 100%);
             box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
         }
 
         .category-icon.rose {
-            background: linear-gradient(135deg, var(--rose-500), var(--rose-600));
+            background: linear-gradient(135deg, #f43f5e 0%, #be123c 100%);
             box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
         }
 
@@ -13301,108 +13309,54 @@ CRISIS_HTML = """<!DOCTYPE html>
             letter-spacing: -0.5px;
         }
 
-        .category-subtitle {
-            font-size: 14px;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
-
         .protocols-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
         }
 
-        /* Protocol Cards */
         .protocol-card {
             background: var(--white);
+            border: 2px solid var(--gray-200);
             border-radius: 16px;
-            padding: 20px;
-            border: 2px solid transparent;
-            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            padding: 24px;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
         }
+
+        .protocol-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .protocol-card.red::before { background: linear-gradient(90deg, var(--red-500) 0%, var(--red-600) 100%); }
+        .protocol-card.orange::before { background: linear-gradient(90deg, var(--orange-500) 0%, var(--orange-600) 100%); }
+        .protocol-card.purple::before { background: linear-gradient(90deg, var(--purple-500) 0%, var(--purple-600) 100%); }
+        .protocol-card.amber::before { background: linear-gradient(90deg, var(--amber-500) 0%, var(--amber-600) 100%); }
+        .protocol-card.blue::before { background: linear-gradient(90deg, var(--blue-500) 0%, var(--blue-600) 100%); }
 
         .protocol-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-        }
-
-        .protocol-card.red {
-            border-color: var(--red-100);
-        }
-
-        .protocol-card.red:hover {
-            border-color: var(--red-300);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
-        }
-
-        .protocol-card.orange {
-            border-color: var(--orange-100);
-        }
-
-        .protocol-card.orange:hover {
-            border-color: var(--orange-300);
-            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.15);
-        }
-
-        .protocol-card.purple {
-            border-color: var(--purple-100);
-        }
-
-        .protocol-card.purple:hover {
-            border-color: var(--purple-300);
-            box-shadow: 0 8px 24px rgba(168, 85, 247, 0.15);
-        }
-
-        .protocol-card.teal {
-            border-color: var(--teal-100);
-        }
-
-        .protocol-card.teal:hover {
-            border-color: var(--teal-300);
-            box-shadow: 0 8px 24px rgba(20, 184, 166, 0.15);
-        }
-
-        .protocol-card.rose {
-            border-color: var(--rose-100);
-        }
-
-        .protocol-card.rose:hover {
-            border-color: var(--rose-300);
-            box-shadow: 0 8px 24px rgba(244, 63, 94, 0.15);
+            border-color: var(--gray-300);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
         }
 
         .protocol-card.expanded {
-            border-width: 2px;
-        }
-
-        .protocol-card.red.expanded {
-            border-color: var(--red-400);
-        }
-
-        .protocol-card.orange.expanded {
-            border-color: var(--orange-400);
-        }
-
-        .protocol-card.purple.expanded {
-            border-color: var(--purple-400);
-        }
-
-        .protocol-card.teal.expanded {
-            border-color: var(--teal-400);
-        }
-
-        .protocol-card.rose.expanded {
-            border-color: var(--rose-400);
+            border-color: var(--blue-400);
+            box-shadow: 0 16px 48px rgba(59, 130, 246, 0.2);
         }
 
         .protocol-header {
             display: flex;
+            align-items: start;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 12px;
             margin-bottom: 8px;
         }
 
@@ -13410,31 +13364,37 @@ CRISIS_HTML = """<!DOCTYPE html>
             font-size: 18px;
             font-weight: 700;
             color: var(--gray-900);
+            margin-bottom: 4px;
             line-height: 1.3;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
         }
 
         .protocol-ref-count {
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--gray-500);
-            background: var(--gray-100);
-            padding: 3px 8px;
-            border-radius: 6px;
             display: inline-flex;
             align-items: center;
+            gap: 4px;
+            background: var(--blue-50);
+            color: var(--blue-700);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-left: 8px;
         }
 
         .expand-icon {
-            color: var(--gray-400);
-            transition: transform 0.3s ease;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .protocol-card.expanded .expand-icon {
+            background: var(--blue-100);
             transform: rotate(180deg);
         }
 
@@ -13448,8 +13408,7 @@ CRISIS_HTML = """<!DOCTYPE html>
         .protocol-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 16px;
+            gap: 8px;
         }
 
         .protocol-tag {
@@ -13458,69 +13417,66 @@ CRISIS_HTML = """<!DOCTYPE html>
             padding: 4px 10px;
             border-radius: 6px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
 
         .protocol-tag.immediate {
-            background: var(--red-100);
+            background: var(--red-50);
             color: var(--red-700);
         }
 
-        .protocol-tag.call-help {
-            background: var(--orange-100);
+        .protocol-tag.urgent {
+            background: var(--orange-50);
             color: var(--orange-700);
         }
 
-        .protocol-tag.urgent {
-            background: var(--amber-100);
-            color: var(--amber-700);
-        }
-
-        .protocol-tag.equipment {
-            background: var(--blue-100);
-            color: var(--blue-700);
+        .protocol-tag.call-help {
+            background: var(--purple-50);
+            color: var(--purple-700);
         }
 
         .protocol-content {
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .protocol-card.expanded .protocol-content {
+            max-height: 6000px;
+        }
+
+        .protocol-details {
             margin-top: 20px;
             padding-top: 20px;
             border-top: 2px solid var(--gray-100);
         }
 
-        .protocol-card.expanded .protocol-content {
-            display: block;
-        }
-
         .protocol-section {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .protocol-section-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--gray-900);
             margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .protocol-steps {
             list-style: none;
             counter-reset: step-counter;
-            margin: 0;
-            padding: 0;
         }
 
         .protocol-step {
+            counter-increment: step-counter;
             position: relative;
             padding-left: 36px;
             margin-bottom: 12px;
             font-size: 14px;
             line-height: 1.6;
             color: var(--gray-700);
-            counter-increment: step-counter;
         }
 
         .protocol-step::before {
@@ -13532,12 +13488,12 @@ CRISIS_HTML = """<!DOCTYPE html>
             height: 24px;
             background: var(--blue-100);
             color: var(--blue-700);
-            font-size: 12px;
-            font-weight: 700;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
         }
 
         .protocol-step strong {
@@ -13546,138 +13502,186 @@ CRISIS_HTML = """<!DOCTYPE html>
         }
 
         .ref-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue-100);
+            color: var(--blue-700);
             font-size: 10px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            margin-left: 2px;
+            cursor: help;
             vertical-align: super;
-            color: var(--blue-600);
-            font-weight: 600;
+            line-height: 1;
+            padding: 2px 4px;
+            transition: all 0.2s ease;
         }
 
-        /* Info Boxes */
-        .dose-box,
-        .info-box,
-        .warning-box {
-            padding: 16px;
-            border-radius: 12px;
-            margin-bottom: 16px;
+        .ref-num:hover {
+            background: var(--blue-600);
+            color: white;
+            transform: scale(1.15);
         }
 
         .dose-box {
-            background: linear-gradient(135deg, var(--purple-50), var(--blue-50));
-            border: 1px solid var(--purple-200);
+            background: var(--emerald-50);
+            border-left: 3px solid var(--emerald-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
         }
 
-        .info-box {
-            background: linear-gradient(135deg, var(--blue-50), var(--gray-50));
-            border: 1px solid var(--blue-200);
+        .dose-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--emerald-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dose-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            margin: 4px 0;
+            line-height: 1.5;
         }
 
         .warning-box {
-            background: linear-gradient(135deg, var(--amber-50), var(--orange-50));
-            border: 1px solid var(--amber-300);
+            background: var(--red-50);
+            border-left: 3px solid var(--red-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
         }
 
-        .dose-box-title,
-        .info-box-title,
         .warning-box-title {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: var(--gray-900);
-        }
-
-        .dose-detail,
-        .info-detail,
-        .warning-detail {
             font-size: 13px;
-            line-height: 1.6;
-            color: var(--gray-700);
+            font-weight: 700;
+            color: var(--red-700);
             margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .dose-detail:last-child,
-        .info-detail:last-child,
-        .warning-detail:last-child {
-            margin-bottom: 0;
+        .warning-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            line-height: 1.5;
         }
 
-        /* References */
+        .info-box {
+            background: var(--blue-50);
+            border-left: 3px solid var(--blue-500);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .info-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--blue-700);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-detail {
+            font-size: 14px;
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
         .protocol-references {
-            margin-top: 20px;
+            margin-top: 24px;
             padding-top: 16px;
-            border-top: 1px dashed var(--gray-300);
+            border-top: 1px solid var(--gray-200);
         }
 
         .references-toggle {
-            width: 100%;
-            padding: 10px 14px;
-            background: var(--gray-50);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-700);
-            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
+            background: var(--gray-50);
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
             transition: all 0.2s ease;
         }
 
         .references-toggle:hover {
             background: var(--gray-100);
-            border-color: var(--gray-300);
         }
 
         .references-toggle svg {
-            width: 14px;
-            height: 14px;
-            transition: transform 0.3s ease;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .references-toggle.active svg {
+        .references-toggle.expanded svg {
             transform: rotate(180deg);
         }
 
         .references-list {
-            display: none;
-            margin-top: 12px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding-top: 0;
         }
 
-        .references-list.active {
-            display: block;
+        .references-list.show {
+            max-height: 1200px;
+            padding-top: 12px;
         }
 
         .reference-item {
-            display: flex;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--gray-100);
-            font-size: 12px;
-            line-height: 1.5;
+            padding: 12px 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+            border-left: 3px solid transparent;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
         }
 
-        .reference-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
+        .reference-item:hover {
+            background: var(--gray-50);
+            border-left-color: var(--blue-500);
         }
 
         .reference-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue-100);
+            color: var(--blue-700);
+            font-size: 11px;
             font-weight: 700;
-            color: var(--blue-600);
-            flex-shrink: 0;
+            min-width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            margin-right: 10px;
         }
 
         .reference-citation {
-            color: var(--gray-700);
+            color: var(--gray-600);
         }
 
         .reference-citation strong {
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .reference-citation em {
-            font-style: italic;
+            color: var(--gray-800);
         }
 
         .reference-citation a {
@@ -13689,130 +13693,117 @@ CRISIS_HTML = """<!DOCTYPE html>
             text-decoration: underline;
         }
 
-        /* Footer */
         .footer {
+            margin-top: auto;
             flex-shrink: 0;
-            padding: 24px 20px;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
+            background: rgba(255,255,255,0.9);
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
         }
 
         .footer-text {
-            font-size: 14px;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
-
-        /* No Results */
-        .no-results {
-            display: none;
-            text-align: center;
-            padding: 60px 20px;
+            font-size: 13px;
             color: var(--gray-500);
         }
 
-        .no-results.visible {
-            display: block;
+        .footer-links {
+            display: flex;
+            gap: 24px;
         }
 
-        .no-results-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-            opacity: 0.5;
+        .footer-link {
+            font-size: 13px;
+            color: var(--gray-500);
+            text-decoration: none;
+            transition: color 0.2s ease;
         }
 
-        .no-results-text {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
+        .footer-link:hover {
             color: var(--gray-700);
         }
 
-        .no-results-hint {
-            font-size: 14px;
-            color: var(--gray-500);
+        /* Social Media Icons */
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
+        .social-icon {
+            color: var(--gray-500);
+            transition: color 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-            .mobile-menu-btn {
+        .social-icon:hover {
+            color: var(--gray-700);
+            transform: translateY(-2px);
+        }
+
+        .social-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+
+            .nav-links {
                 display: flex;
             }
 
-            .hero {
-                padding: 24px 16px;
+            .mobile-menu-btn {
+                display: none;
             }
 
             .hero-title {
-                font-size: 32px;
-                letter-spacing: -1px;
-            }
-
-            .hero-subtitle {
-                font-size: 15px;
-            }
-
-            .search-container {
-                padding: 0 16px;
-                margin-bottom: 32px;
-            }
-
-            .protocols-container {
-                padding: 0 16px 60px;
-            }
-
-            .category-section {
-                margin-bottom: 40px;
-            }
-
-            .category-title {
-                font-size: 20px;
-            }
-
-            .protocol-card {
-                padding: 16px;
-            }
-
-            .protocol-title {
-                font-size: 16px;
+                font-size: 56px;
             }
 
             .protocols-grid {
-                gap: 12px;
+                grid-template-columns: repeat(2, 1fr);
             }
+
+            .footer { padding: 40px 32px; }
+            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-text { font-size: 14px; }
+            .footer-links { gap: 32px; }
+            .footer-link { font-size: 14px; }
+            
         }
 
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 28px;
+        @media (min-width: 1024px) {
+            .nav { padding: 16px 40px; }
+
+            .protocols-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
 
-            .category-icon {
-                width: 36px;
-                height: 36px;
-            }
-
-            .category-icon svg {
-                width: 18px;
-                height: 18px;
-            }
-
-            .protocol-step {
-                font-size: 13px;
-            }
+            .footer { padding: 48px 40px; }
         }
+
+        .hidden {
+            display: none !important;
+        }
+
     </style>
 </head>
 <body>
@@ -13839,6 +13830,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                     </div>
                     <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
                 </a>
+
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
                     <a href="/quick-dose" class="nav-link">Quick Dose</a>
@@ -13853,24 +13845,30 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    {{ generate_navbar_html('crisis')|safe }}
+                    <!-- Soft Launch: Hiding Plans link -->
+                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
+                    {{ generate_navbar_html()|safe }}
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
                 </button>
             </div>
         </nav>
+
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
             <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link" style="background:var(--blue-50);color:var(--blue-600);font-weight:600;">Crisis Protocols</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
             <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
             <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
             <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
             {% if current_user.is_authenticated %}
                 <a href="/library" class="mobile-menu-link">My Library</a>
                 <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
@@ -13880,62 +13878,143 @@ CRISIS_HTML = """<!DOCTYPE html>
             {% endif %}
         </div>
 
-        <!-- Main Content -->
-        <main class="main-content" id="main-content">
-            {{ generate_verification_banner_html()|safe }}
-
-            <!-- Hero Section -->
-            <div class="hero">
-                <div class="hero-badge">
-                    <div class="badge-dot"></div>
-                    <span class="badge-text">Emergency Protocols</span>
-                </div>
-                <h1 class="hero-title">
-                    <span class="gradient">Crisis</span> Protocols
-                </h1>
-                <p class="hero-subtitle">
-                    Evidence-based emergency management for anesthesiology crises - organized by clinical category with comprehensive references
-                </p>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-badge">
+                <div class="badge-dot"></div>
+                <div class="badge-text">Emergency Reference</div>
             </div>
+            <h1 class="hero-title">
+                <span class="gradient">Crisis</span> Protocols
+            </h1>
+            <p class="hero-subtitle">
+                Evidence-based, step-by-step management for anesthesia emergencies. Quick access to critical protocols when seconds count.
+            </p>
+        </section>
 
-            <!-- Search Bar -->
-            <div class="search-container">
-                <div class="search-box">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
+        <!-- Search -->
+        <div class="search-container">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input
+                    type="text"
+                    class="search-input"
+                    id="searchInput"
+                    placeholder="Search protocols (e.g., malignant hyperthermia, anaphylaxis...)"
+                    oninput="filterProtocols()"
+                />
+                <button class="clear-btn" id="clearBtn" onclick="clearSearch()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
                     </svg>
-                    <input type="text"
-                           id="searchInput"
-                           class="search-input"
-                           placeholder="Search protocols... (e.g., cardiac arrest, malignant hyperthermia)"
-                           oninput="filterProtocols()"
-                           aria-label="Search protocols">
-                    <button class="clear-btn" id="clearBtn" onclick="clearSearch()" aria-label="Clear search">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                </div>
+                </button>
             </div>
+        </div>
 
-            <!-- Protocols Container -->
-            <div class="protocols-container">
-                <!-- CATEGORY 1: Cardiac/Circulatory (RED) -->
-                <div class="category-section">
-                    <div class="category-header">
-                        <div class="category-icon red">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                            </svg>
+        <!-- Protocols -->
+        <div class="protocols-container">
+
+            <!-- Cardiac/Circulatory Emergencies -->
+            <div class="category-section" data-category="cardiac">
+                <div class="category-header">
+                    <div class="category-icon red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h2 class="category-title">Cardiac/Circulatory Emergencies</h2>
+                </div>
+                <div class="protocols-grid">
+
+                    
+                        <p class="protocol-summary">Hypermetabolic crisis triggered by volatile anesthetics or succinylcholine</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
                         </div>
-                        <div>
-                            <h2 class="category-title">Cardiac / Circulatory</h2>
-                            <p class="category-subtitle">6 protocols</p>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP triggers immediately:</strong> Discontinue all volatile anesthetics and succinylcholine<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Call for help:</strong> Activate MH emergency protocol, assign roles<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Hyperventilate with 100% O₂:</strong> 2-3× normal minute ventilation to eliminate CO₂<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Give dantrolene immediately:</strong> See dosing below<sup class="ref-num">2</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Dantrolene Dosing<sup class="ref-num">2</sup></div>
+                                    <div class="dose-detail"><strong>Initial:</strong> 2.5 mg/kg IV rapid push (reconstitute each 20mg vial with 60mL sterile water)</div>
+                                    <div class="dose-detail"><strong>Repeat:</strong> 1 mg/kg boluses every 5-10 min until signs resolve</div>
+                                    <div class="dose-detail"><strong>Maximum:</strong> Up to 10 mg/kg in acute phase (rarely >10 vials needed initially)</div>
+                                    <div class="dose-detail"><strong>Continuation:</strong> 1 mg/kg IV q6h × 24-48h to prevent recrudescence</div>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Supportive Care</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Cool the patient:</strong> Cold IV saline, ice packs to groin/axilla, cooling blanket. Target temp <38.5°C<sup class="ref-num">1,3</sup></li>
+                                        <li class="protocol-step"><strong>Treat hyperkalemia:</strong> Insulin/dextrose, calcium chloride, bicarbonate, avoid Ca²⁺ channel blockers with dantrolene<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Manage arrhythmias:</strong> Standard ACLS (avoid calcium channel blockers)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Monitor urine output:</strong> Foley catheter, maintain >1 mL/kg/h to prevent myoglobin-induced renal failure<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Labs:</strong> ABG, electrolytes, CK, lactate, coags, myoglobin q6h<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">📞 MH Hotline</div>
+                                    <div class="info-detail"><strong>USA:</strong> 1-800-MH-HYPER (1-800-644-9737)</div>
+                                    <div class="info-detail"><strong>Outside USA:</strong> +1-315-464-7079</div>
+                                    <div class="info-detail">Expert consultant available 24/7 for real-time guidance<sup class="ref-num">4</sup></div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Key Points</div>
+                                    <div class="warning-detail">• Early signs: Unexplained ↑EtCO₂, masseter spasm, tachycardia, hypercarbia refractory to ↑ventilation<br>• Late signs: Fever, rigidity, rhabdomyolysis, hyperkalemia, acidosis<br>• Dantrolene can cause profound weakness - prepare for prolonged ventilation<br>• ICU monitoring × 24-48h minimum (recrudescence occurs in ~25%)<sup class="ref-num">5</sup></div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (5)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Litman RS, Griggs SM, Dowling JJ, et al. <strong>Malignant Hyperthermia Susceptibility and Related Diseases.</strong> <em>Anesthesiology</em>. 2018;128(1):159-167. PMID: 29200006</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">MHAUS Emergency Therapy for MH (2022 Update). <a href="https://www.mhaus.org/healthcare-professionals/be-prepared/managing-a-crisis/" target="_blank">mhaus.org/managing-a-crisis</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Rosenberg H, Pollock N, Schiemann A, et al. <strong>Malignant hyperthermia: a review.</strong> <em>Orphanet J Rare Dis</em>. 2015;10:93. PMID: 26238698</span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Malignant Hyperthermia Association of the United States (MHAUS). <strong>24/7 Emergency Hotline.</strong> <a href="https://www.mhaus.org" target="_blank">mhaus.org</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">5</span>
+                                            <span class="reference-citation">Larach MG, Brandom BW, Allen GC, et al. <strong>Malignant Hyperthermia Deaths Related to Inadequate Temperature Monitoring.</strong> <em>Anesthesiology</em>. 2019;130(1):40-51. PMID: 30475256</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="protocols-grid">
+
+                    <!-- Cardiac Arrest (ENHANCED) -->
                     <div class="protocol-card red" data-keywords="cardiac arrest code blue cpr acls asystole vfib pea pulseless" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
@@ -14886,24 +14965,567 @@ CRISIS_HTML = """<!DOCTYPE html>
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Neumar RW, et al. <strong>Part 8: Adult Advanced Cardiovascular Life Support: 2010 AHA Guidelines for CPR and ECC.</strong> <em>Circulation</em>. 2010;122(18 Suppl 3):S729-S767. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/20956224/" target="_blank">20956224</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Khan IA. <strong>Clinical and therapeutic aspects of congenital and acquired long QT syndrome.</strong> <em>Am J Med</em>. 2002;112(1):58-66. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/11812408/" target="_blank">11812408</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Page RL, et al. <strong>2015 ACC/AHA/HRS Guideline for the Management of Adult Patients With Supraventricular Tachycardia.</strong> <em>J Am Coll Cardiol</em>. 2016;67(13):e27-e115. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26409259/" target="_blank">26409259</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Alzand BS, Crijns HJ. <strong>Diagnostic criteria of broad QRS complex tachycardia: decades of evolution.</strong> <em>Europace</em>. 2011;13(4):465-472. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/21270053/" target="_blank">21270053</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- CATEGORY 2: Metabolic / Drug (PURPLE) -->
-                <div class="category-section">
-                    <div class="category-header">
-                        <div class="category-icon purple">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <circle cx="12" cy="12" r="1"></circle>
-                            </svg>
+                    
+                        <p class="protocol-summary">Life-threatening air accumulation in pleural space with mediastinal shift and cardiovascular compromise</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
                         </div>
-                        <div>
-                            <h2 class="category-title">Metabolic / Drug</h2>
-                            <p class="category-subtitle">5 protocols</p>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Clinical Recognition</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Classic triad:</strong> Hypotension + hypoxia + absent breath sounds (unilateral)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Additional signs:</strong> Tracheal deviation (away from affected side), JVD, hyperresonance to percussion<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Under anesthesia:</strong> Sudden hypotension, hypoxia, increased PIP, decreased tidal volume, cardiovascular collapse<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>High-risk scenarios:</strong> Central line placement, rib fractures, positive pressure ventilation, barotrauma<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Treatment (DO NOT WAIT FOR X-RAY)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Needle decompression:</strong> 14-16G angiocath in 2nd intercostal space, midclavicular line (affected side)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Technique:</strong> Insert perpendicular to chest wall, just above rib (avoid neurovascular bundle below rib)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Confirmation:</strong> Rush of air, immediate clinical improvement (BP, SpO₂, hemodynamics)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Definitive: Chest tube</strong> (tube thoracostomy) in 4th-5th intercostal space, mid-axillary line<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Call surgery/pulmonary</strong> for chest tube placement and management</li>
+                                    </ol>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">📍 Needle Decompression Landmarks<sup class="ref-num">1</sup></div>
+                                    <div class="info-detail"><strong>Preferred site (anterior):</strong> 2nd intercostal space, midclavicular line (MCL)<br>
+                                    <strong>Alternative site (lateral):</strong> 4th-5th intercostal space, anterior axillary line (AAL) - higher success rate in obese patients<br>
+                                    <strong>Needle:</strong> 14-16G angiocath, at least 4.5-5 cm length (standard 1.5" needle often too short)<br>
+                                    <strong>Direction:</strong> Insert perpendicular to chest wall, just ABOVE the rib (neurovascular bundle runs below)<br>
+                                    <strong>Advance until:</strong> Rush of air heard/felt (pleural space entered), then remove needle, leave catheter</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Supportive Management</div>
+                                    <div class="dose-detail"><strong>100% O₂:</strong> Maximize oxygenation</div>
+                                    <div class="dose-detail"><strong>Fluid resuscitation:</strong> Crystalloid bolus 500-1000 mL (preload-dependent hemodynamics)</div>
+                                    <div class="dose-detail"><strong>Vasopressors:</strong> Phenylephrine 100-200 mcg or ephedrine 5-10 mg IV PRN for persistent hypotension</div>
+                                    <div class="dose-detail"><strong>Reduce PEEP:</strong> Decrease if possible (high intrathoracic pressure worsens tension pneumo)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Anesthesia-Specific Causes & Scenarios</div>
+                                    <div class="warning-detail">• <strong>Central line placement:</strong> Subclavian/internal jugular attempts (1-3% incidence)<br>• <strong>Positive pressure ventilation:</strong> Especially with high PIP, PEEP, or pre-existing blebs/bullae<br>• <strong>Nitrous oxide:</strong> Rapidly expands pneumothorax - DISCONTINUE immediately if suspected<br>• <strong>Rib fractures:</strong> Trauma patients, thoracic surgery, CPR<br>• <strong>Barotrauma:</strong> Difficult mask ventilation, bronchospasm with high pressures<br>• <strong>Esophageal perforation:</strong> TEE probe, esophageal surgery</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Critical Pitfalls</div>
+                                    <div class="warning-detail">• <strong>Clinical diagnosis:</strong> DO NOT wait for chest X-ray if patient unstable - treat immediately<br>• <strong>Tracheal deviation:</strong> Late sign, may be absent (especially in supine/anesthetized patients)<br>• <strong>Needle length:</strong> Standard 1.5" angiocath often too short in obese/muscular patients (use 5 cm needle)<br>• <strong>Bilateral tension pneumo:</strong> Rare but catastrophic, decompress both sides if suspected<br>• <strong>Re-accumulation:</strong> Needle decompression is temporary - chest tube placement is definitive</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Differential Diagnosis (Similar Presentation)</div>
+                                    <div class="info-detail">• <strong>Pulmonary embolism:</strong> Hypotension, hypoxia, but bilateral breath sounds<br>• <strong>Bronchospasm:</strong> Wheezing, high PIP, but no unilateral findings<br>• <strong>Endobronchial intubation:</strong> Unilateral breath sounds, but no cardiovascular collapse<br>• <strong>Massive hemorrhage:</strong> Hypotension, but SpO₂ may be preserved initially<br>• <strong>Cardiac tamponade:</strong> Hypotension, JVD, but muffled heart sounds, no unilateral breath sounds</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (3)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Roberts DJ, et al. <strong>Anesthesia considerations for patients with pneumothorax.</strong> <em>J Cardiothorac Vasc Anesth</em>. 2015;29(5):1326-1336. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26279180/" target="_blank">26279180</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Leigh-Smith S, Harris T. <strong>Tension pneumothorax--time for a re-think?</strong> <em>Emerg Med J</em>. 2005;22(1):8-16. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/15611534/" target="_blank">15611534</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Laan DV, Vu TD, Thiels CA. <strong>Chest wall thickness and decompression failure: A systematic review and meta-analysis comparing anatomic locations in needle thoracostomy.</strong> <em>Injury</em>. 2016;47(4):797-804. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/26838215/" target="_blank">26838215</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="protocols-grid">
+
+                    
+                        <p class="protocol-summary">Blood glucose <50 mg/dL with altered mental status, seizures, or coma</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Recognition & Assessment</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Check blood glucose:</strong> Fingerstick or point-of-care glucose (normal 70-100 mg/dL)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Classic triad:</strong> Altered mental status + sympathetic symptoms (sweating, tachycardia, tremor) + resolution with glucose<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Under anesthesia:</strong> Confusion on emergence, delayed awakening, seizures, tachycardia<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Risk factors:</strong> Diabetes (insulin/sulfonylureas), prolonged NPO, sepsis, liver failure, adrenal insufficiency<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Treatment (Immediate Glucose Administration)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>If IV access available:</strong> Dextrose 50% (D50W) 25-50 mL (12.5-25 g) IV push<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Recheck glucose in 10-15 minutes:</strong> Repeat D50W if still <70 mg/dL<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Start dextrose infusion:</strong> D10W at 50-100 mL/h to maintain glucose 100-150 mg/dL<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>If no IV access:</strong> Glucagon 1 mg IM or intranasal (onset 10-15 min)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Identify and treat underlying cause</strong></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Dextrose Dosing<sup class="ref-num">1</sup></div>
+                                    <div class="dose-detail"><strong>D50W (50% dextrose):</strong> 25-50 mL (12.5-25 g glucose) IV push over 1-2 min. May cause thrombophlebitis (dilute if peripheral IV)</div>
+                                    <div class="dose-detail"><strong>D25W (25% dextrose):</strong> 50-100 mL (12.5-25 g glucose) - preferred if peripheral IV (less sclerosis)</div>
+                                    <div class="dose-detail"><strong>D10W (10% dextrose):</strong> 125-250 mL (12.5-25 g glucose) - safest for peripheral IV, slower onset</div>
+                                    <div class="dose-detail"><strong>Maintenance infusion:</strong> D10W at 50-100 mL/h OR D5W at 100-200 mL/h (titrate to glucose 100-150 mg/dL)</div>
+                                    <div class="dose-detail"><strong>Glucagon (if no IV):</strong> 1 mg IM/SC or 3 mg intranasal (onset 10-15 min, works by mobilizing liver glycogen)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Glucose Targets & Monitoring<sup class="ref-num">1</sup></div>
+                                    <div class="info-detail"><strong>Immediate goal:</strong> Glucose >70 mg/dL (resolution of symptoms)<br>
+                                    <strong>Target range:</strong> 100-150 mg/dL (avoid hyperglycemia)<br>
+                                    <strong>Monitoring:</strong> Recheck q15min until stable >100 mg/dL, then q1h x 4h<br>
+                                    <strong>Duration:</strong> Continue dextrose infusion until patient eating or underlying cause treated</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Anesthesia-Specific Considerations</div>
+                                    <div class="warning-detail">• <strong>Prolonged NPO:</strong> Diabetics on insulin/sulfonylureas at high risk (especially if took morning meds)<br>• <strong>Delayed emergence:</strong> Always check glucose if patient not waking up appropriately<br>• <strong>Neuraxial anesthesia:</strong> Can mask hypoglycemic symptoms (sweating, tremor)<br>• <strong>Beta-blockers:</strong> Blunt sympathetic response to hypoglycemia (tachycardia, sweating)<br>• <strong>Intraoperative glucose monitoring:</strong> Check glucose q1-2h in diabetics (especially long cases)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Special Situations</div>
+                                    <div class="warning-detail">• <strong>Sulfonylurea overdose:</strong> May require prolonged dextrose infusion (24-48h) - long half-life<br>• <strong>Insulinoma:</strong> Tumor secreting insulin - refractory hypoglycemia, may need continuous high-dose dextrose + octreotide<br>• <strong>Liver failure:</strong> Impaired gluconeogenesis - higher dextrose requirements<br>• <strong>Adrenal insufficiency:</strong> Give hydrocortisone 100 mg IV + dextrose<br>• <strong>Post-gastric bypass:</strong> Reactive hypoglycemia 1-3h postprandial, treat with glucose + small frequent meals</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Differential Diagnosis (Delayed Awakening)</div>
+                                    <div class="info-detail">• <strong>Residual anesthesia:</strong> Especially volatile agents in obese patients<br>• <strong>Opioid overdose:</strong> Pinpoint pupils, respiratory depression (naloxone trial)<br>• <strong>Stroke:</strong> Focal neurologic deficits, unequal pupils<br>• <strong>Hyponatremia:</strong> TURP syndrome, excessive hypotonic fluids<br>• <strong>Hypothermia:</strong> Temperature <35°C<br>• <strong>Hypoglycemia:</strong> Check glucose first - easiest to diagnose and treat!</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (3)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Cryer PE, et al. <strong>Evaluation and management of adult hypoglycemic disorders: an Endocrine Society Clinical Practice Guideline.</strong> <em>J Clin Endocrinol Metab</em>. 2009;94(3):709-728. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/19088155/" target="_blank">19088155</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Joshi GP, et al. <strong>Society for Ambulatory Anesthesia consensus statement on perioperative blood glucose management in diabetic patients undergoing ambulatory surgery.</strong> <em>Anesth Analg</em>. 2010;111(6):1378-1387. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/20889933/" target="_blank">20889933</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Yale JF, et al. <strong>Hypoglycemia.</strong> <em>Can J Diabetes</em>. 2018;42 Suppl 1:S104-S108. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/29650086/" target="_blank">29650086</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                        <p class="protocol-summary">Life-threatening reaction to blood product transfusion (hemolytic, TRALI, TACO, anaphylaxis)</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions (ALL Transfusion Reactions)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>STOP the transfusion immediately</strong> - most important step<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Keep IV line open</strong> with normal saline (use new tubing, do NOT flush existing line)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Notify blood bank</strong> - send remaining blood product + patient blood sample for investigation<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Check vitals:</strong> BP, HR, temp, SpO₂, urine output (Foley catheter if not present)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Identify reaction type:</strong> Hemolytic vs TRALI vs TACO vs febrile vs allergic<sup class="ref-num">2</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Acute Hemolytic Transfusion Reaction (AHTR) - MOST SERIOUS</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>ABO incompatibility:</strong> Fever, hypotension, back/flank pain, dark urine (hemoglobinuria), DIC<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Under anesthesia:</strong> Hypotension, tachycardia, oozing at surgical site, hemoglobinuria (may be only sign)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Treatment:</strong> Aggressive IV fluids (maintain UOP >1 mL/kg/h), mannitol 12.5-25 g IV, furosemide 40-80 mg IV<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Labs:</strong> Free hemoglobin, haptoglobin, LDH, bilirubin, coags (PT/PTT/fibrinogen), type & crossmatch<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Monitor for DIC and renal failure</strong> - may need dialysis<sup class="ref-num">2</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">TRALI (Transfusion-Related Acute Lung Injury)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Clinical:</strong> Acute hypoxemia (SpO₂ <90%), bilateral pulmonary infiltrates, normal CVP (vs TACO)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Onset:</strong> Within 6 hours of transfusion (usually within 1-2 hours)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Treatment:</strong> 100% O₂, mechanical ventilation if needed (ARDS protocol), supportive care<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>AVOID diuretics</strong> (not volume overload - treat like ARDS)<sup class="ref-num">3</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">TACO (Transfusion-Associated Circulatory Overload)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Clinical:</strong> Dyspnea, hypoxemia, hypertension, JVD, pulmonary edema on CXR<sup class="ref-num">4</sup></li>
+                                        <li class="protocol-step"><strong>Risk factors:</strong> Heart failure, renal failure, elderly, rapid transfusion<sup class="ref-num">4</sup></li>
+                                        <li class="protocol-step"><strong>Treatment:</strong> Diuretics (furosemide 40-80 mg IV), upright positioning, O₂, slow transfusion rate<sup class="ref-num">4</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Allergic/Anaphylactic Reactions</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Mild (urticaria):</strong> Diphenhydramine 25-50 mg IV, may resume transfusion if symptoms resolve<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Anaphylaxis:</strong> See Anaphylaxis protocol - epinephrine 0.1-0.5 mg IV, fluids, antihistamines<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Management by Reaction Type</div>
+                                    <div class="dose-detail"><strong>AHTR (hemolytic):</strong> IV fluids 200-300 mL/h, mannitol 12.5-25 g IV, furosemide 40-80 mg IV (maintain UOP >1 mL/kg/h)</div>
+                                    <div class="dose-detail"><strong>TRALI:</strong> 100% O₂, mechanical ventilation (lung-protective strategy), supportive care (NO diuretics)</div>
+                                    <div class="dose-detail"><strong>TACO:</strong> Furosemide 40-80 mg IV, O₂, upright positioning, slow transfusion (25-50 mL/h if needed)</div>
+                                    <div class="dose-detail"><strong>Febrile:</strong> Acetaminophen 650-1000 mg PO/PR, meperidine 25-50 mg IV for rigors</div>
+                                    <div class="dose-detail"><strong>Allergic (mild):</strong> Diphenhydramine 25-50 mg IV ± ranitidine 50 mg IV</div>
+                                    <div class="dose-detail"><strong>Anaphylaxis:</strong> Epinephrine 0.1-0.5 mg IV, fluids, diphenhydramine 50 mg IV, hydrocortisone 100-200 mg IV</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Differentiating TRALI vs TACO<sup class="ref-num">3,4</sup></div>
+                                    <div class="info-detail"><strong>TRALI:</strong> Normal CVP/PCWP, hypotension, bilateral infiltrates, BNP normal/low, NO response to diuretics<br>
+                                    <strong>TACO:</strong> Elevated CVP/PCWP, hypertension, pulmonary edema, BNP elevated, response to diuretics<br>
+                                    <strong>Timing:</strong> Both within 6h of transfusion, but TRALI usually 1-2h<br>
+                                    <strong>CXR:</strong> Both show bilateral infiltrates<br>
+                                    <strong>Key:</strong> Measure CVP/BNP if uncertain - opposite findings</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Under Anesthesia - Hidden Signs</div>
+                                    <div class="warning-detail">• <strong>AHTR:</strong> Hemoglobinuria in Foley bag (dark urine) may be ONLY sign - check frequently<br>• <strong>Fever blunted:</strong> Anesthesia masks fever response<br>• <strong>Hypotension:</strong> May be attributed to anesthesia/blood loss - high suspicion needed<br>• <strong>DIC:</strong> Oozing at surgical site, petechiae (check coags immediately)<br>• <strong>Golden rule:</strong> Any unexplained hemodynamic change during transfusion = STOP transfusion first, investigate second</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Prevention & Risk Mitigation</div>
+                                    <div class="warning-detail">• <strong>Clerical errors:</strong> #1 cause of AHTR - double-check patient ID, blood type at bedside<br>• <strong>Slow transfusion:</strong> 25-50 mL/h first 15 min, watch closely<br>• <strong>Leukoreduction:</strong> Reduces febrile reactions<br>• <strong>Washed RBCs:</strong> For patients with recurrent allergic reactions<br>• <strong>Male-predominant plasma:</strong> Reduces TRALI risk<br>• <strong>Foley catheter:</strong> Place before large transfusions (monitor hemoglobinuria, UOP)</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">Savage WJ. <strong>Transfusion reactions.</strong> <em>Hematol Oncol Clin North Am</em>. 2016;30(3):619-634. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/27112999/" target="_blank">27112999</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Hendrickson JE, Hillyer CD. <strong>Noninfectious serious hazards of transfusion.</strong> <em>Anesth Analg</em>. 2009;108(3):759-769. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/19224780/" target="_blank">19224780</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">Toy P, et al. <strong>Transfusion-related acute lung injury: definition and review.</strong> <em>Crit Care Med</em>. 2005;33(4):721-726. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/15818095/" target="_blank">15818095</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Narick C, et al. <strong>Transfusion-associated circulatory overload after plasma transfusion.</strong> <em>Transfusion</em>. 2012;52(1):160-165. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/21762464/" target="_blank">21762464</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                        <p class="protocol-summary">Postpartum blood loss >1000 mL OR blood loss with signs of hypovolemia</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Actions (4 T's Assessment)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Call for help:</strong> Activate OB hemorrhage protocol, notify blood bank for MTP<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Assess cause (4 T's):</strong> Tone (uterine atony 70%), Trauma (laceration), Tissue (retained placenta), Thrombin (coagulopathy)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Bimanual uterine massage</strong> - stimulate uterine contraction<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Large-bore IV access:</strong> Two 14-16G IVs, send labs (CBC, type & cross 4 units, coags, fibrinogen)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Begin uterotonic medications</strong> (see below)<sup class="ref-num">2</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Stepwise Uterotonic Therapy</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>1st line: Oxytocin</strong> 10-40 units in 1L NS at 200-500 mL/h (or 10 units IM)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>2nd line: Methylergonovine (Methergine)</strong> 0.2 mg IM q2-4h (max 5 doses) - contraindicated in HTN<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>3rd line: Carboprost (Hemabate)</strong> 250 mcg IM q15-90min (max 8 doses) - contraindicated in asthma<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>4th line: Misoprostol</strong> 800-1000 mcg PR or sublingual (one-time dose)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Tranexamic acid (TXA):</strong> 1 g IV over 10 min (within 3h of delivery)<sup class="ref-num">3</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Escalating Interventions (If Medical Management Fails)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Intrauterine balloon tamponade:</strong> Bakri balloon (fill with 300-500 mL saline)<sup class="ref-num">4</sup></li>
+                                        <li class="protocol-step"><strong>Uterine artery embolization:</strong> If patient stable, IR available<sup class="ref-num">4</sup></li>
+                                        <li class="protocol-step"><strong>Surgical management:</strong> B-Lynch suture, uterine artery ligation, hysterectomy<sup class="ref-num">4</sup></li>
+                                        <li class="protocol-step"><strong>Massive transfusion protocol:</strong> 1:1:1 ratio (PRBC:FFP:platelets)<sup class="ref-num">5</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Uterotonic Medications<sup class="ref-num">2</sup></div>
+                                    <div class="dose-detail"><strong>Oxytocin (Pitocin):</strong> 10-40 units in 1L NS IV at 200-500 mL/h OR 10 units IM. Avoid IV bolus (hypotension, tachycardia)</div>
+                                    <div class="dose-detail"><strong>Methylergonovine (Methergine):</strong> 0.2 mg IM q2-4h (max 5 doses). ⚠️ Contraindicated: HTN, preeclampsia</div>
+                                    <div class="dose-detail"><strong>Carboprost (Hemabate, 15-methyl PGF2α):</strong> 250 mcg IM q15-90min (max 2 mg total). ⚠️ Contraindicated: asthma</div>
+                                    <div class="dose-detail"><strong>Misoprostol (Cytotec):</strong> 800-1000 mcg PR or sublingual (one-time dose). Slower onset, useful if other routes unavailable</div>
+                                    <div class="dose-detail"><strong>Tranexamic acid (TXA):</strong> 1 g IV over 10 min (give within 3h of delivery), may repeat x1 if continued bleeding</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Anesthesia Management<sup class="ref-num">1</sup></div>
+                                    <div class="dose-detail"><strong>Conversion to GA:</strong> If neuraxial inadequate or patient unstable. Use ketamine or etomidate for induction (maintain BP)</div>
+                                    <div class="dose-detail"><strong>Fluid resuscitation:</strong> Crystalloid 2-3L, then blood products (1:1:1 MTP)</div>
+                                    <div class="dose-detail"><strong>Vasopressor:</strong> Phenylephrine 100-200 mcg or ephedrine 5-10 mg IV PRN (maintain perfusion)</div>
+                                    <div class="dose-detail"><strong>Avoid:</strong> NSAIDs (worsen bleeding), excessive crystalloid (dilutional coagulopathy)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 4 T's: Causes of PPH<sup class="ref-num">1</sup></div>
+                                    <div class="info-detail"><strong>Tone (70%):</strong> Uterine atony - soft, boggy uterus on exam<br>
+                                    <strong>Trauma (20%):</strong> Lacerations (cervical, vaginal, perineal), uterine inversion, rupture<br>
+                                    <strong>Tissue (10%):</strong> Retained placenta, retained clot, invasive placenta (accreta, percreta)<br>
+                                    <strong>Thrombin (<1%):</strong> Coagulopathy (DIC, amniotic fluid embolism, pre-existing bleeding disorder)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Drug Contraindications & Side Effects</div>
+                                    <div class="warning-detail">• <strong>Oxytocin IV bolus:</strong> Hypotension, tachycardia, ST depression (give as infusion, NOT bolus)<br>• <strong>Methylergonovine:</strong> AVOID in HTN/preeclampsia (vasoconstriction, severe HTN, stroke risk)<br>• <strong>Carboprost:</strong> AVOID in asthma (bronchospasm). Also causes diarrhea, fever, hypoxia<br>• <strong>Misoprostol:</strong> Fever, shivering (very common), slower onset vs other agents</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Critical Actions - Don't Delay</div>
+                                    <div class="warning-detail">• <strong>Call for help EARLY:</strong> Activate hemorrhage protocol at >1000 mL OR signs of instability<br>• <strong>Quantify blood loss:</strong> Under-the-table bucket, weigh sponges (1 g = 1 mL)<br>• <strong>Type & cross EARLY:</strong> Don't wait - cross 4 units at first sign of bleeding<br>• <strong>TXA timing:</strong> Give within 3 hours of delivery (WOMAN trial - reduced mortality)<br>• <strong>Bakri balloon:</strong> Simple, effective, can buy time for definitive intervention<br>• <strong>Hysterectomy:</strong> Don't delay if bleeding uncontrolled - maternal life > uterus</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (5)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">ACOG Practice Bulletin No. 183. <strong>Postpartum Hemorrhage.</strong> <em>Obstet Gynecol</em>. 2017;130(4):e168-e186. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/28937571/" target="_blank">28937571</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Bateman BT, et al. <strong>The epidemiology of postpartum hemorrhage in a large, nationwide sample of deliveries.</strong> <em>Anesth Analg</em>. 2010;110(5):1368-1373. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/20237047/" target="_blank">20237047</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">WOMAN Trial Collaborators. <strong>Effect of early tranexamic acid administration on mortality in trauma patients with ongoing bleeding (WOMAN trial).</strong> <em>Lancet</em>. 2017;389(10084):2105-2116. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/28456509/" target="_blank">28456509</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Grönvall M, et al. <strong>Bakri balloon tamponade in the management of postpartum hemorrhage.</strong> <em>Acta Obstet Gynecol Scand</em>. 2013;92(4):433-438. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/23330882/" target="_blank">23330882</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">5</span>
+                                            <span class="reference-citation">Shields LE, et al. <strong>Comprehensive maternal hemorrhage protocols improve patient safety and reduce utilization of blood products.</strong> <em>Am J Obstet Gynecol</em>. 2011;205(4):368.e1-8. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/21944226/" target="_blank">21944226</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                        <p class="protocol-summary">New-onset seizure in pregnancy/postpartum WITHOUT other neurologic cause</p>
+                        <div class="protocol-tags">
+                            <span class="protocol-tag immediate">Immediate</span>
+                            <span class="protocol-tag call-help">Call Help</span>
+                        </div>
+                        <div class="protocol-content">
+                            <div class="protocol-details">
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Immediate Seizure Management</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Call for help:</strong> Activate MFM/OB team<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Position patient:</strong> Left lateral decubitus (prevent aortocaval compression), protect airway<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>100% O₂ by face mask,</strong> suction airway, consider intubation if prolonged seizure/airway compromise<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>IV access,</strong> check BP frequently, continuous fetal monitoring if antepartum<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Magnesium Sulfate (First-Line Anticonvulsant)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Loading dose:</strong> Magnesium sulfate 4-6 g IV over 15-20 min (may give 10 g IM if no IV access)<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Maintenance infusion:</strong> 1-2 g/h IV continuous<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>If seizure continues/recurs:</strong> Give additional 2 g IV over 5 min<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Monitor:</strong> Deep tendon reflexes, urine output >25 mL/h, respiratory rate >12/min<sup class="ref-num">2</sup></li>
+                                        <li class="protocol-step"><strong>Therapeutic level:</strong> 4-8 mEq/L (4.8-9.6 mg/dL)<sup class="ref-num">2</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Blood Pressure Control (SEVERE RANGE)</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Treat if SBP ≥160 OR DBP ≥110:</strong> Goal SBP 140-150, DBP 90-100 mmHg<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>First-line: Labetalol</strong> 20 mg IV → 40 mg → 80 mg q10min (max 220 mg cumulative)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Alternative: Hydralazine</strong> 5-10 mg IV q20min (max 20 mg) OR nicardipine infusion 5 mg/h (titrate)<sup class="ref-num">3</sup></li>
+                                        <li class="protocol-step"><strong>Avoid: Aggressive BP reduction</strong> (can compromise placental perfusion)<sup class="ref-num">3</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="protocol-section">
+                                    <h4 class="protocol-section-title">Definitive Treatment: DELIVERY</h4>
+                                    <ol class="protocol-steps">
+                                        <li class="protocol-step"><strong>Delivery is curative:</strong> Stabilize mother, then proceed to delivery (C-section if unfavorable cervix)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Timing:</strong> After maternal stabilization (seizure control, BP management)<sup class="ref-num">1</sup></li>
+                                        <li class="protocol-step"><strong>Continue magnesium</strong> for 24h postpartum (eclampsia can occur postpartum)<sup class="ref-num">1</sup></li>
+                                    </ol>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Magnesium Sulfate Protocol<sup class="ref-num">2</sup></div>
+                                    <div class="dose-detail"><strong>Loading dose:</strong> 4-6 g IV in 100 mL NS over 15-20 min (run at 400 mL/h)</div>
+                                    <div class="dose-detail"><strong>Maintenance:</strong> 1-2 g/h IV continuous (20-40 g in 1L NS at 50-100 mL/h)</div>
+                                    <div class="dose-detail"><strong>Recurrent seizure:</strong> Additional 2 g IV over 5 min</div>
+                                    <div class="dose-detail"><strong>IM route (if no IV):</strong> 10 g IM loading (5 g deep IM in each buttock), then 5 g IM q4h</div>
+                                    <div class="dose-detail"><strong>Therapeutic level:</strong> 4-8 mEq/L (check if toxicity suspected)</div>
+                                </div>
+
+                                <div class="dose-box">
+                                    <div class="dose-box-title">💊 Antihypertensive Agents<sup class="ref-num">3</sup></div>
+                                    <div class="dose-detail"><strong>Labetalol:</strong> 20 mg IV over 2 min → 40 mg → 80 mg q10min (max 220 mg). May start 1-2 mg/min infusion</div>
+                                    <div class="dose-detail"><strong>Hydralazine:</strong> 5-10 mg IV q20min (max 20 mg total). Slower onset, more unpredictable</div>
+                                    <div class="dose-detail"><strong>Nicardipine:</strong> 5 mg/h IV infusion, titrate by 2.5 mg/h q5-15min (max 15 mg/h). Preferred by some (titratable)</div>
+                                    <div class="dose-detail"><strong>Avoid:</strong> Nifedipine + magnesium (can cause severe hypotension, neuromuscular blockade)</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">⚠️ Magnesium Toxicity Signs & Antidote<sup class="ref-num">2</sup></div>
+                                    <div class="info-detail"><strong>Mild toxicity (8-10 mEq/L):</strong> Loss of deep tendon reflexes<br>
+                                    <strong>Moderate toxicity (10-12 mEq/L):</strong> Respiratory depression (RR <12/min), muscle weakness<br>
+                                    <strong>Severe toxicity (>12 mEq/L):</strong> Respiratory arrest, cardiac arrest, coma<br>
+                                    <strong>Antidote:</strong> Calcium gluconate 1 g (10 mL of 10%) IV over 3 min<br>
+                                    <strong>If toxicity:</strong> STOP magnesium, give calcium gluconate, support ventilation</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ Anesthesia Considerations</div>
+                                    <div class="warning-detail">• <strong>Neuraxial preferred</strong> for C-section if platelets >70-80K (check platelet count - HELLP syndrome)<br>• <strong>Magnesium + NMBDs:</strong> Magnesium potentiates neuromuscular blockade - reduce NMBDs by 30-50%<br>• <strong>Difficult airway:</strong> Airway edema common (have smaller ETT ready, video laryngoscopy)<br>• <strong>Aspiration risk:</strong> Increased - RSI with cricoid pressure<br>• <strong>Urine output:</strong> Foley catheter (monitor UOP, oliguria suggests worsening preeclampsia)</div>
+                                </div>
+
+                                <div class="warning-box">
+                                    <div class="warning-box-title">⚠️ HELLP Syndrome (Associated Complication)</div>
+                                    <div class="warning-detail">• <strong>HELLP:</strong> Hemolysis, Elevated Liver enzymes, Low Platelets<br>• <strong>Clinical:</strong> RUQ/epigastric pain, nausea/vomiting, malaise<br>• <strong>Labs:</strong> Platelets <100K, AST/ALT elevated, LDH elevated, hemolysis on smear<br>• <strong>Implications:</strong> Can't do neuraxial if platelets <70K, increased bleeding risk, higher maternal mortality<br>• <strong>Management:</strong> Check CBC, liver enzymes, coags BEFORE neuraxial<br>• <strong>Delivery:</strong> Only cure - deliver urgently after stabilization</div>
+                                </div>
+
+                                <div class="info-box">
+                                    <div class="info-box-title">🔍 Differential Diagnosis (Seizure in Pregnancy)</div>
+                                    <div class="info-detail">• <strong>Eclampsia:</strong> NEW seizure in pregnancy/postpartum with HTN ± proteinuria (diagnosis of exclusion)<br>• <strong>Epilepsy:</strong> Prior seizure history, therapeutic AED levels<br>• <strong>Stroke:</strong> Focal deficits, headache, altered level of consciousness<br>• <strong>PRES (Posterior Reversible Encephalopathy Syndrome):</strong> Seizure + visual changes + MRI findings<br>• <strong>Metabolic:</strong> Hypoglycemia, hyponatremia (TURP, SIADH)<br>• <strong>Drug/toxin:</strong> Local anesthetic toxicity, cocaine, amphetamines</div>
+                                </div>
+
+                                <!-- Inline References Section -->
+                                <div class="protocol-references">
+                                    <button class="references-toggle" onclick="event.stopPropagation(); toggleReferences(this)">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                        <span>View References (4)</span>
+                                    </button>
+                                    <div class="references-list">
+                                        <div class="reference-item">
+                                            <span class="reference-num">1</span>
+                                            <span class="reference-citation">ACOG Practice Bulletin No. 202. <strong>Gestational Hypertension and Preeclampsia.</strong> <em>Obstet Gynecol</em>. 2019;133(1):e1-e25. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/30575675/" target="_blank">30575675</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">2</span>
+                                            <span class="reference-citation">Eclampsia Trial Collaborative Group. <strong>Which anticonvulsant for women with eclampsia?</strong> <em>Lancet</em>. 1995;345(8963):1455-1463. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/7769899/" target="_blank">7769899</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">3</span>
+                                            <span class="reference-citation">ACOG Committee Opinion No. 767. <strong>Emergent Therapy for Acute-Onset, Severe Hypertension During Pregnancy and the Postpartum Period.</strong> <em>Obstet Gynecol</em>. 2019;133(2):e174-e180. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/30683912/" target="_blank">30683912</a></span>
+                                        </div>
+                                        <div class="reference-item">
+                                            <span class="reference-num">4</span>
+                                            <span class="reference-citation">Dennis AT. <strong>Management of pre-eclampsia: issues for anaesthetists.</strong> <em>Anaesthesia</em>. 2012;67(9):1009-1020. PMID: <a href="https://pubmed.ncbi.nlm.nih.gov/22670854/" target="_blank">22670854</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            
+            <!-- Metabolic/Drug Emergencies -->
+            <div class="category-section" data-category="metabolic">
+                <div class="category-header">
+                    <div class="category-icon purple">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 2v6m6-6v6M9 18c.6.5 1.3 1 2.1 1.3M19 4h-3.2c-1 0-1.5 0-2 .2a2 2 0 0 0-.6.3c-.4.3-.6.7-1.2 1.5l-4.4 6.8c-.5.8-.8 1.2-1.2 1.5a2 2 0 0 1-.6.3C5.3 15 4.8 15 3.8 15H3m11 0c-.5-.7-1.2-1.3-2-1.6M15 22c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5Z"/>
+                        </svg>
+                    </div>
+                    <h2 class="category-title">Metabolic/Drug Emergencies</h2>
+                </div>
                 <div class="protocols-grid">
                     <!-- Malignant Hyperthermia (ENHANCED) -->
                     <div class="protocol-card purple" data-keywords="malignant hyperthermia mh dantrolene hypermetabolic crisis muscle rigidity hyperthermia" onclick="toggleProtocol(this)">
@@ -14991,23 +15613,12 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/>
                             <path d="M12 12v6"/>
                             <path d="M6 15c-2.213 -1.246 -3.5 -3.154 -3.5 -5.294 0 -3.314 2.686 -6 6 -6h7c3.314 0 6 2.686 6 6 0 2.14 -1.287 4.048 -3.5 5.294"/>
+                        </svg>
                     </div>
+                    <h2 class="category-title">Respiratory/Airway Emergencies</h2>
                 </div>
-
-                <!-- CATEGORY 3: Respiratory / Airway (ORANGE) -->
-                <div class="category-section">
-                    <div class="category-header">
-                        <div class="category-icon orange">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="category-title">Respiratory / Airway</h2>
-                            <p class="category-subtitle">5 protocols</p>
-                        </div>
-                    </div>
-                    <div class="protocols-grid">
+                <div class="protocols-grid">
+                    <!-- Tension Pneumothorax (NEW) -->
                     <div class="protocol-card orange" data-keywords="tension pneumothorax pneumo chest decompression needle thoracostomy chest tube hypotension tracheal deviation jvd" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
@@ -15091,23 +15702,12 @@ CRISIS_HTML = """<!DOCTYPE html>
                     <div class="category-icon teal">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                        </svg>
                     </div>
+                    <h2 class="category-title">Hematologic/Transfusion Emergencies</h2>
                 </div>
-
-                <!-- CATEGORY 4: Hematologic / Transfusion (TEAL) -->
-                <div class="category-section">
-                    <div class="category-header">
-                        <div class="category-icon teal">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="category-title">Hematologic / Transfusion</h2>
-                            <p class="category-subtitle">2 protocols</p>
-                        </div>
-                    </div>
-                    <div class="protocols-grid">
+                <div class="protocols-grid">
+                    <!-- Massive Transfusion Protocol (ENHANCED) -->
                     <div class="protocol-card teal" data-keywords="massive transfusion mtp hemorrhage shock trauma coagulopathy prbc ffp platelets blood products" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
@@ -15149,23 +15749,12 @@ CRISIS_HTML = """<!DOCTYPE html>
                             <path d="M10.3 21c-2 0-5.5-.5-7.6-2.8C.2 15.6.8 12.3 1.2 10.8c0-.2.1-.4.1-.5C2.5 6.5 5.7 4 10.3 4c4.6 0 7.8 2.5 9 6.3 0 .1.1.3.1.5.4 1.5 1 4.8-1.5 7.4-2.1 2.3-5.6 2.8-7.6 2.8z"/>
                             <path d="M8 11h4"/>
                             <path d="M9 9.3V11"/>
+                        </svg>
                     </div>
+                    <h2 class="category-title">Obstetric Emergencies</h2>
                 </div>
-
-                <!-- CATEGORY 5: Obstetric (ROSE) -->
-                <div class="category-section">
-                    <div class="category-header">
-                        <div class="category-icon rose">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h2 class="category-title">Obstetric</h2>
-                            <p class="category-subtitle">2 protocols</p>
-                        </div>
-                    </div>
-                    <div class="protocols-grid">
+                <div class="protocols-grid">
+                    <!-- Obstetric Hemorrhage (NEW) -->
                     <div class="protocol-card rose" data-keywords="postpartum hemorrhage pph ob hemorrhage uterine atony placenta accreta oxytocin methergine tranexamic acid bakri balloon" onclick="toggleProtocol(this)">
                         <div class="protocol-header">
                             <div>
@@ -15199,7 +15788,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             </div>
 
 
-        <!-- Footer -->
+        <!-- Footer   <!-- Footer -->
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
@@ -15232,139 +15821,95 @@ CRISIS_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile Menu Toggle
         function toggleMobileMenu() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            mobileMenu.classList.toggle('active');
-            menuBtn.classList.toggle('active');
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.querySelector('.mobile-menu-btn');
+            menu.classList.toggle('active');
+            btn.classList.toggle('active');
         }
 
-        // Navbar Dropdown Toggle
         function toggleNavDropdown(event) {
             event.stopPropagation();
-            const dropdown = event.target.closest('.nav-dropdown');
-            dropdown.classList.toggle('active');
-
-            // Close dropdown when clicking outside
-            function closeDropdown(e) {
-                if (!dropdown.contains(e.target)) {
-                    dropdown.classList.remove('active');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            }
-            if (dropdown.classList.contains('active')) {
-                setTimeout(() => document.addEventListener('click', closeDropdown), 0);
-            }
+            const menu = event.currentTarget.nextElementSibling;
+            menu.classList.toggle('show');
         }
 
-        // Protocol Card Toggle
+        document.addEventListener('click', function(event) {
+            if (!event.target.matches('.nav-dropdown-toggle')) {
+                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+
         function toggleProtocol(card) {
-            card.classList.toggle('expanded');
+            const wasExpanded = card.classList.contains('expanded');
+
+            // Close ALL protocol cards first
+            document.querySelectorAll('.protocol-card').forEach(c => {
+                c.classList.remove('expanded');
+            });
+
+            // If this card wasn't already open, open it
+            if (!wasExpanded) {
+                card.classList.add('expanded');
+            }
         }
 
-        // References Toggle
         function toggleReferences(button) {
-            event.stopPropagation();
-            button.classList.toggle('active');
+            button.classList.toggle('expanded');
             const refList = button.nextElementSibling;
-            refList.classList.toggle('active');
+            refList.classList.toggle('show');
         }
-
-        // Search Functionality
-        const searchInput = document.getElementById('searchInput');
-        const clearBtn = document.getElementById('clearBtn');
-        const noResults = document.getElementById('noResults');
 
         function filterProtocols() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            const protocolCards = document.querySelectorAll('.protocol-card');
-            const categorySections = document.querySelectorAll('.category-section');
-            let visibleCount = 0;
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const clearBtn = document.getElementById('clearBtn');
+            const cards = document.querySelectorAll('.protocol-card');
+            const categories = document.querySelectorAll('.category-section');
 
             // Show/hide clear button
-            clearBtn.classList.toggle('visible', searchTerm.length > 0);
-
-            if (searchTerm === '') {
-                // Show all
-                protocolCards.forEach(card => card.style.display = 'block');
-                categorySections.forEach(section => section.style.display = 'block');
-                noResults.classList.remove('visible');
-                return;
+            if (filter.length > 0) {
+                clearBtn.classList.add('visible');
+            } else {
+                clearBtn.classList.remove('visible');
             }
 
-            // Filter protocols
-            protocolCards.forEach(card => {
-                const keywords = card.dataset.keywords || '';
-                const title = card.querySelector('.protocol-title').textContent.toLowerCase();
-                const summary = card.querySelector('.protocol-summary').textContent.toLowerCase();
-                const searchableText = keywords + ' ' + title + ' ' + summary;
+            // Filter protocol cards
+            let hasVisibleCards = new Set();
 
-                if (searchableText.includes(searchTerm)) {
-                    card.style.display = 'block';
-                    visibleCount++;
+            cards.forEach(card => {
+                const keywords = card.getAttribute('data-keywords') || '';
+                const title = card.querySelector('.protocol-title').textContent;
+                const summary = card.querySelector('.protocol-summary').textContent;
+
+                const searchableText = (keywords + ' ' + title + ' ' + summary).toLowerCase();
+
+                if (searchableText.includes(filter) || filter === '') {
+                    card.style.display = '';
+                    hasVisibleCards.add(card.closest('.category-section'));
                 } else {
                     card.style.display = 'none';
                 }
             });
 
-            // Hide empty categories
-            categorySections.forEach(section => {
-                const visibleCards = Array.from(section.querySelectorAll('.protocol-card'))
-                    .filter(card => card.style.display !== 'none');
-                section.style.display = visibleCards.length > 0 ? 'block' : 'none';
+            // Show/hide category sections
+            categories.forEach(category => {
+                if (hasVisibleCards.has(category) || filter === '') {
+                    category.style.display = '';
+                } else {
+                    category.style.display = 'none';
+                }
             });
-
-            // Show no results message
-            noResults.classList.toggle('visible', visibleCount === 0);
         }
 
         function clearSearch() {
-            searchInput.value = '';
+            document.getElementById('searchInput').value = '';
             filterProtocols();
-            searchInput.focus();
         }
-
-        // Keyboard shortcut for search (Ctrl/Cmd + K)
-        document.addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-                e.preventDefault();
-                searchInput.focus();
-            }
-            // ESC to clear search
-            if (e.key === 'Escape' && searchInput.value) {
-                clearSearch();
-            }
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            const mobileMenu = document.getElementById('mobileMenu');
-            const menuBtn = document.querySelector('.mobile-menu-btn');
-            if (mobileMenu.classList.contains('active') && !mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
-                mobileMenu.classList.remove('active');
-                menuBtn.classList.remove('active');
-            }
-        });
-
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.mobile-menu-link').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').classList.remove('active');
-                document.querySelector('.mobile-menu-btn').classList.remove('active');
-            });
-        });
-
-        // Add smooth scroll behavior for skip link
-        document.querySelector('.skip-to-content').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('main-content').focus();
-            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Log page view
-        console.log('Crisis Protocols page loaded - 20 protocols across 5 categories');
     </script>
+
 </body>
 </html>
 """
