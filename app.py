@@ -13779,7 +13779,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </svg>
                     </div>
                     <h2 class="category-title">Metabolic/Toxic</h2>
-                    <span class="category-count">5</span>
+                    <span class="category-count">7</span>
                 </div>
                 <div class="protocols-grid" data-category="metabolic">
 
@@ -13917,6 +13917,98 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="references-title">Evidence-Based References</div>
                                 <div class="reference">Mertes PM, et al. Perioperative anaphylaxis. Immunol Allergy Clin North Am. 2009;29(3):429-451. PMID: 19563990</div>
                                 <div class="reference">Harper NJN, et al. Anaesthesia, surgery, and life-threatening allergic reactions: management of perioperative anaphylaxis. Anaesthesia. 2018;73(8):1007-1014. PMID: 29974440</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hyperkalemia -->
+                    <div class="protocol-card" data-keywords="hyperkalemia potassium high elevated k ecg peaked t waves">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Hyperkalemia</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">Life-threatening K⁺ >6.5 - cardiac membrane stabilization first</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>ECG immediately:</strong> Look for peaked T waves, widened QRS, prolonged PR</li>
+                                <li class="protocol-step"><strong>If ECG changes: Calcium chloride 1 g IV</strong> (or calcium gluconate 3 g IV) over 2-3 min - cardiac membrane stabilization (does NOT lower K⁺)</li>
+                                <li class="protocol-step"><strong>Shift K⁺ intracellularly: Insulin 10 units IV + D50W 25 g IV</strong> (onset 15-30 min, lasts 4-6 hours)</li>
+                                <li class="protocol-step"><strong>Hyperventilate</strong> to create respiratory alkalosis (temporary measure)</li>
+                                <li class="protocol-step"><strong>Sodium bicarbonate 50 mEq IV</strong> if metabolic acidosis present</li>
+                                <li class="protocol-step"><strong>Albuterol 10-20 mg nebulized</strong> (shifts K⁺ into cells)</li>
+                                <li class="protocol-step"><strong>Stop all K⁺ sources</strong> (IV fluids, blood products, succinylcholine)</li>
+                                <li class="protocol-step"><strong>Definitive treatment:</strong> Consider dialysis for refractory hyperkalemia or renal failure</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Treatment Sequence</div>
+                                <div class="dose-item"><strong>1. Calcium Chloride:</strong> 1 g IV (10 mL of 10%) over 2-3 min - FIRST for cardiac protection</div>
+                                <div class="dose-item"><strong>2. Insulin + Dextrose:</strong> 10 units regular insulin IV + 25 g D50W (50 mL) IV</div>
+                                <div class="dose-item"><strong>3. Bicarbonate:</strong> 50 mEq (1 amp) IV if acidotic</div>
+                                <div class="dose-item"><strong>4. Albuterol:</strong> 10-20 mg nebulized continuously</div>
+                            </div>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Succinylcholine-induced hyperkalemia can occur in burns, crush injuries, denervation, prolonged immobility. Peaked T waves and widened QRS are ominous signs requiring immediate calcium. Recheck K⁺ after treatment.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Alfonzo AV, et al. Potassium Disorders--Clinical Spectrum and Emergency Management. Resuscitation. 2006;70(1):10-25. PMID: 16730126</div>
+                                <div class="reference">Parham WA, et al. Hyperkalemia Revisited. Texas Heart Inst J. 2006;33(1):40-47. PMID: 16572868</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfusion Reaction -->
+                    <div class="protocol-card" data-keywords="transfusion reaction blood hemolytic trali taco allergic">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Acute Transfusion Reaction</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">STOP transfusion immediately - identify reaction type</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>STOP transfusion immediately</strong> - Preserve IV access with saline</li>
+                                <li class="protocol-step"><strong>Check patient ID and blood product labeling</strong> for ABO incompatibility</li>
+                                <li class="protocol-step"><strong>Notify blood bank</strong> - Send blood bag and tubing for analysis</li>
+                                <li class="protocol-step"><strong>Send labs:</strong> CBC, coags, LDH, haptoglobin, direct Coombs, urine hemoglobin</li>
+                                <li class="protocol-step"><strong>If hemolytic reaction suspected:</strong> Maintain urine output >1 mL/kg/hr with fluids/diuretics, alkalinize urine</li>
+                                <li class="protocol-step"><strong>If allergic:</strong> Diphenhydramine 25-50 mg IV, steroids, epinephrine if anaphylaxis</li>
+                                <li class="protocol-step"><strong>If TRALI (pulmonary edema without fluid overload):</strong> Supportive care, oxygen, mechanical ventilation as needed</li>
+                                <li class="protocol-step"><strong>If TACO (fluid overload):</strong> Diuretics, upright positioning</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Reaction Types & Treatment</div>
+                                <div class="dose-item"><strong>Hemolytic (ABO incompatibility):</strong> Aggressive fluids, maintain UOP, alkalinize urine</div>
+                                <div class="dose-item"><strong>Allergic/Anaphylactic:</strong> Diphenhydramine, steroids, epinephrine if severe</div>
+                                <div class="dose-item"><strong>TRALI:</strong> Supportive care, mechanical ventilation (usually resolves in 48-96 hours)</div>
+                                <div class="dose-item"><strong>TACO:</strong> Diuretics (furosemide 20-40 mg IV)</div>
+                            </div>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Acute hemolytic transfusion reaction is life-threatening. Classic signs: fever, hypotension, tachycardia, hemoglobinuria (pink/red urine), DIC. Under anesthesia, may only see unexplained hypotension, bleeding, or hemoglobinuria.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Tobian AAR, et al. Transfusion-Related Acute Lung Injury. N Engl J Med. 2019;381(19):1849-1859. PMID: 31693808</div>
+                                <div class="reference">Sandler SG, et al. Strategies to Prevent Transfusion-Related Acute Lung Injury. Vox Sang. 2005;88(3):137-142. PMID: 15787717</div>
                             </div>
                         </div>
                     </div>
