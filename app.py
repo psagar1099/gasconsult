@@ -13251,7 +13251,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </svg>
                     </div>
                     <h2 class="category-title">Cardiac/Circulatory</h2>
-                    <span class="category-count">7</span>
+                    <span class="category-count">10</span>
                 </div>
                 <div class="protocols-grid" data-category="cardiac">
 
@@ -13405,6 +13405,120 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
+                    <!-- Ventricular Tachycardia/Fibrillation -->
+                    <div class="protocol-card" data-keywords="ventricular tachycardia vt vfib fibrillation defibrillation cardioversion amiodarone">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Ventricular Tachycardia/Fibrillation</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">Immediate defibrillation for pulseless VT/VF</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Check pulse</strong> - If pulseless, start CPR immediately</li>
+                                <li class="protocol-step"><strong>Defibrillate 200J</strong> biphasic (360J monophasic), resume CPR immediately</li>
+                                <li class="protocol-step"><strong>Epinephrine 1 mg IV</strong> every 3-5 minutes during CPR</li>
+                                <li class="protocol-step"><strong>After 2nd shock: Amiodarone 300 mg IV push</strong></li>
+                                <li class="protocol-step"><strong>If stable VT with pulse: Synchronized cardioversion 100J,</strong> increase as needed</li>
+                                <li class="protocol-step"><strong>For monomorphic VT: Amiodarone 150 mg IV over 10 min,</strong> then 1 mg/min infusion</li>
+                                <li class="protocol-step"><strong>Treat reversible causes:</strong> Electrolytes (K⁺, Mg²⁺), ischemia, drugs</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Key Medications</div>
+                                <div class="dose-item"><strong>Amiodarone:</strong> 300 mg IV (first dose), 150 mg IV (second dose) for VF/VT</div>
+                                <div class="dose-item"><strong>Lidocaine (alternative):</strong> 1-1.5 mg/kg IV, then 0.5-0.75 mg/kg q5-10min (max 3 mg/kg)</div>
+                                <div class="dose-item"><strong>Magnesium:</strong> 2 g IV over 10 min for Torsades de Pointes</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Panchal AR, et al. Part 3: Adult Basic and Advanced Life Support: 2020 AHA Guidelines. Circulation. 2020;142(16_suppl_2):S366-S468. PMID: 33081529</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hypertensive Emergency -->
+                    <div class="protocol-card" data-keywords="hypertensive emergency crisis high blood pressure sbp nicardipine labetalol">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Hypertensive Emergency</div>
+                                <span class="protocol-badge urgent">Urgent</span>
+                                <div class="protocol-summary">Severe hypertension with end-organ damage</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Assess for end-organ damage:</strong> MI, stroke, aortic dissection, pulmonary edema</li>
+                                <li class="protocol-step"><strong>Deepen anesthesia</strong> if intraoperative</li>
+                                <li class="protocol-step"><strong>First-line: Nicardipine 5 mg/hr IV infusion,</strong> titrate by 2.5 mg/hr q5-15min (max 15 mg/hr)</li>
+                                <li class="protocol-step"><strong>Alternative: Labetalol 10-20 mg IV bolus,</strong> then 20-80 mg q10min or infusion 0.5-2 mg/min</li>
+                                <li class="protocol-step"><strong>Goal: Reduce MAP by 20-25% over first hour</strong> (avoid precipitous drops)</li>
+                                <li class="protocol-step"><strong>Avoid in aortic dissection:</strong> Use beta-blocker first (esmolol), then vasodilator</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Antihypertensive Options</div>
+                                <div class="dose-item"><strong>Nicardipine:</strong> 5-15 mg/hr IV infusion (preferred)</div>
+                                <div class="dose-item"><strong>Labetalol:</strong> 10-20 mg IV, then 20-80 mg q10min or 0.5-2 mg/min infusion</div>
+                                <div class="dose-item"><strong>Esmolol:</strong> 500 mcg/kg load, then 50-300 mcg/kg/min (aortic dissection)</div>
+                                <div class="dose-item"><strong>Hydralazine:</strong> 5-20 mg IV (avoid in CAD/aortic dissection)</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Whelton PK, et al. 2017 ACC/AHA Guideline for the Prevention, Detection, Evaluation, and Management of High Blood Pressure in Adults. Hypertension. 2018;71(6):e13-e115. PMID: 29133356</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Myocardial Infarction -->
+                    <div class="protocol-card" data-keywords="myocardial infarction mi heart attack stemi chest pain ischemia troponin">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Myocardial Infarction/Ischemia</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">Perioperative MI - Optimize oxygen supply/demand</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Call for help,</strong> get cardiology consultation</li>
+                                <li class="protocol-step"><strong>12-lead ECG,</strong> troponin (stat and serial)</li>
+                                <li class="protocol-step"><strong>Aspirin 325 mg PO/PR</strong> (if not contraindicated)</li>
+                                <li class="protocol-step"><strong>100% oxygen,</strong> maintain SpO₂ >90%</li>
+                                <li class="protocol-step"><strong>Optimize hemodynamics:</strong> HR 60-80, SBP 100-140, avoid tachycardia/hypertension</li>
+                                <li class="protocol-step"><strong>Nitroglycerin 0.5-10 mcg/kg/min IV</strong> for ongoing ischemia (if SBP >100)</li>
+                                <li class="protocol-step"><strong>Beta-blocker:</strong> Metoprolol 2.5-5 mg IV or esmolol infusion (if no contraindications)</li>
+                                <li class="protocol-step"><strong>If STEMI: Activate cath lab</strong> for emergency PCI (suspend surgery if possible)</li>
+                                <li class="protocol-step"><strong>Consider heparin 60 units/kg IV bolus</strong> (max 4000 units) in consultation with cardiology</li>
+                            </ol>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Perioperative MI has high mortality. STEMI requires emergent intervention. Avoid hypotension, tachycardia, and increased myocardial oxygen demand. Consider aborting/delaying elective surgery.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Devereaux PJ, et al. Association of Postoperative High-Sensitivity Troponin Levels With Myocardial Injury and 30-Day Mortality Among Patients Undergoing Noncardiac Surgery. JAMA. 2017;317(16):1642-1651. PMID: 28444280</div>
+                                <div class="reference">Fleisher LA, et al. 2014 ACC/AHA Guideline on Perioperative Cardiovascular Evaluation. Circulation. 2014;130(24):e278-e333. PMID: 25085961</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -13417,7 +13531,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </svg>
                     </div>
                     <h2 class="category-title">Airway/Respiratory</h2>
-                    <span class="category-count">6</span>
+                    <span class="category-count">9</span>
                 </div>
                 <div class="protocols-grid" data-category="airway">
 
@@ -13535,6 +13649,124 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
+                    <!-- Aspiration -->
+                    <div class="protocol-card" data-keywords="aspiration gastric contents vomit regurgitation pneumonitis">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Pulmonary Aspiration</div>
+                                <span class="protocol-badge urgent">Urgent</span>
+                                <div class="protocol-summary">Aspiration of gastric contents - supportive care</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Immediate head-down tilt</strong> (Trendelenburg) if possible</li>
+                                <li class="protocol-step"><strong>Suction oropharynx and airway immediately</strong></li>
+                                <li class="protocol-step"><strong>100% oxygen,</strong> prepare for intubation if not already intubated</li>
+                                <li class="protocol-step"><strong>If intubated: Suction ETT,</strong> consider bronchoscopy to remove particulate matter</li>
+                                <li class="protocol-step"><strong>Positive pressure ventilation</strong> with PEEP as needed for oxygenation</li>
+                                <li class="protocol-step"><strong>CXR, ABG</strong> to assess severity</li>
+                                <li class="protocol-step"><strong>Supportive care:</strong> Maintain oxygenation/ventilation, fluid management</li>
+                                <li class="protocol-step"><strong>Do NOT give prophylactic antibiotics or steroids routinely</strong> (no proven benefit)</li>
+                                <li class="protocol-step"><strong>Monitor for ARDS, pneumonia</strong> (may develop over 24-72 hours)</li>
+                            </ol>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Aspiration pneumonitis (chemical injury) develops within 2 hours. Aspiration pneumonia (bacterial infection) develops over 24-72 hours. Treatment is primarily supportive. Avoid routine antibiotics/steroids unless infection develops.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Warner MA, et al. Perioperative Pulmonary Aspiration in Infants and Children. Anesthesiology. 1999;90(1):66-71. PMID: 9915314</div>
+                                <div class="reference">Nason KS. Acute Intraoperative Pulmonary Aspiration. Thorac Surg Clin. 2015;25(3):301-307. PMID: 26210928</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pneumothorax -->
+                    <div class="protocol-card" data-keywords="pneumothorax tension ptx chest tube needle decompression">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Tension Pneumothorax</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">Immediate needle decompression - life-threatening emergency</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Clinical diagnosis:</strong> Hypoxia, hypotension, tracheal deviation, unilateral absent breath sounds, increased peak pressures</li>
+                                <li class="protocol-step"><strong>Do NOT wait for CXR confirmation</strong> if tension pneumothorax suspected</li>
+                                <li class="protocol-step"><strong>Immediate needle decompression:</strong> 14-16G IV catheter in 2nd intercostal space, midclavicular line</li>
+                                <li class="protocol-step"><strong>100% oxygen</strong></li>
+                                <li class="protocol-step"><strong>Definitive treatment: Chest tube placement</strong> (4th-5th intercostal space, anterior axillary line)</li>
+                                <li class="protocol-step"><strong>If bilateral breath sounds absent:</strong> Consider bilateral pneumothoraces, mainstem intubation, or equipment failure</li>
+                            </ol>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Tension pneumothorax is a clinical diagnosis requiring immediate treatment. Do NOT delay for imaging. Can occur with central line placement, positive pressure ventilation, trauma, or rib fractures.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Roberts DJ, et al. Anesthesia-related Pneumothorax. Anesth Analg. 2003;96(2):516-522. PMID: 12538205</div>
+                                <div class="reference">Leigh-Smith S, Harris T. Tension pneumothorax--time for a re-think? Emerg Med J. 2005;22(1):8-16. PMID: 15611534</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Severe Hypoxemia -->
+                    <div class="protocol-card" data-keywords="hypoxemia desaturation low oxygen saturation spo2 hypoxia">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Severe Hypoxemia</div>
+                                <span class="protocol-badge urgent">Urgent</span>
+                                <div class="protocol-summary">Rapid systematic approach to desaturation</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>Increase FiO₂ to 100%</strong> immediately</li>
+                                <li class="protocol-step"><strong>Check: Airway patency, ETT position,</strong> bilateral breath sounds</li>
+                                <li class="protocol-step"><strong>Hand ventilate</strong> to assess compliance and rule out circuit disconnect</li>
+                                <li class="protocol-step"><strong>Check circuit connections,</strong> oxygen source, fresh gas flow</li>
+                                <li class="protocol-step"><strong>Suction airway</strong> if secretions present</li>
+                                <li class="protocol-step"><strong>Auscultate:</strong> Rule out mainstem intubation, bronchospasm, pneumothorax</li>
+                                <li class="protocol-step"><strong>Consider:</strong> Pulmonary embolism, aspiration, atelectasis, pulmonary edema</li>
+                                <li class="protocol-step"><strong>Recruitment maneuvers</strong> (sustained inflation 30-40 cm H₂O for 30 sec) if atelectasis</li>
+                                <li class="protocol-step"><strong>Add PEEP</strong> (5-10 cm H₂O initially)</li>
+                                <li class="protocol-step"><strong>ABG, CXR</strong> to guide further management</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Systematic Approach (DOPE)</div>
+                                <div class="dose-item"><strong>D</strong>isplaced ETT (mainstem, esophageal)</div>
+                                <div class="dose-item"><strong>O</strong>bstruction (secretions, kinked tube, bronchospasm)</div>
+                                <div class="dose-item"><strong>P</strong>neumothorax</div>
+                                <div class="dose-item"><strong>E</strong>quipment failure (circuit, ventilator, O₂ source)</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Whiteley JP, et al. The Investigation and Management of Intraoperative Hypoxemia. BJA Educ. 2016;16(5):170-174.</div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
@@ -13547,7 +13779,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                         </svg>
                     </div>
                     <h2 class="category-title">Metabolic/Toxic</h2>
-                    <span class="category-count">5</span>
+                    <span class="category-count">7</span>
                 </div>
                 <div class="protocols-grid" data-category="metabolic">
 
@@ -13685,6 +13917,98 @@ CRISIS_HTML = """<!DOCTYPE html>
                                 <div class="references-title">Evidence-Based References</div>
                                 <div class="reference">Mertes PM, et al. Perioperative anaphylaxis. Immunol Allergy Clin North Am. 2009;29(3):429-451. PMID: 19563990</div>
                                 <div class="reference">Harper NJN, et al. Anaesthesia, surgery, and life-threatening allergic reactions: management of perioperative anaphylaxis. Anaesthesia. 2018;73(8):1007-1014. PMID: 29974440</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hyperkalemia -->
+                    <div class="protocol-card" data-keywords="hyperkalemia potassium high elevated k ecg peaked t waves">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Hyperkalemia</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">Life-threatening K⁺ >6.5 - cardiac membrane stabilization first</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>ECG immediately:</strong> Look for peaked T waves, widened QRS, prolonged PR</li>
+                                <li class="protocol-step"><strong>If ECG changes: Calcium chloride 1 g IV</strong> (or calcium gluconate 3 g IV) over 2-3 min - cardiac membrane stabilization (does NOT lower K⁺)</li>
+                                <li class="protocol-step"><strong>Shift K⁺ intracellularly: Insulin 10 units IV + D50W 25 g IV</strong> (onset 15-30 min, lasts 4-6 hours)</li>
+                                <li class="protocol-step"><strong>Hyperventilate</strong> to create respiratory alkalosis (temporary measure)</li>
+                                <li class="protocol-step"><strong>Sodium bicarbonate 50 mEq IV</strong> if metabolic acidosis present</li>
+                                <li class="protocol-step"><strong>Albuterol 10-20 mg nebulized</strong> (shifts K⁺ into cells)</li>
+                                <li class="protocol-step"><strong>Stop all K⁺ sources</strong> (IV fluids, blood products, succinylcholine)</li>
+                                <li class="protocol-step"><strong>Definitive treatment:</strong> Consider dialysis for refractory hyperkalemia or renal failure</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Treatment Sequence</div>
+                                <div class="dose-item"><strong>1. Calcium Chloride:</strong> 1 g IV (10 mL of 10%) over 2-3 min - FIRST for cardiac protection</div>
+                                <div class="dose-item"><strong>2. Insulin + Dextrose:</strong> 10 units regular insulin IV + 25 g D50W (50 mL) IV</div>
+                                <div class="dose-item"><strong>3. Bicarbonate:</strong> 50 mEq (1 amp) IV if acidotic</div>
+                                <div class="dose-item"><strong>4. Albuterol:</strong> 10-20 mg nebulized continuously</div>
+                            </div>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Succinylcholine-induced hyperkalemia can occur in burns, crush injuries, denervation, prolonged immobility. Peaked T waves and widened QRS are ominous signs requiring immediate calcium. Recheck K⁺ after treatment.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Alfonzo AV, et al. Potassium Disorders--Clinical Spectrum and Emergency Management. Resuscitation. 2006;70(1):10-25. PMID: 16730126</div>
+                                <div class="reference">Parham WA, et al. Hyperkalemia Revisited. Texas Heart Inst J. 2006;33(1):40-47. PMID: 16572868</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transfusion Reaction -->
+                    <div class="protocol-card" data-keywords="transfusion reaction blood hemolytic trali taco allergic">
+                        <div class="protocol-header" onclick="toggleCard(this.parentElement)">
+                            <div class="protocol-title-group">
+                                <div class="protocol-title">Acute Transfusion Reaction</div>
+                                <span class="protocol-badge critical">Critical</span>
+                                <div class="protocol-summary">STOP transfusion immediately - identify reaction type</div>
+                            </div>
+                            <div class="expand-icon">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="protocol-content">
+                            <ol class="protocol-steps">
+                                <li class="protocol-step"><strong>STOP transfusion immediately</strong> - Preserve IV access with saline</li>
+                                <li class="protocol-step"><strong>Check patient ID and blood product labeling</strong> for ABO incompatibility</li>
+                                <li class="protocol-step"><strong>Notify blood bank</strong> - Send blood bag and tubing for analysis</li>
+                                <li class="protocol-step"><strong>Send labs:</strong> CBC, coags, LDH, haptoglobin, direct Coombs, urine hemoglobin</li>
+                                <li class="protocol-step"><strong>If hemolytic reaction suspected:</strong> Maintain urine output >1 mL/kg/hr with fluids/diuretics, alkalinize urine</li>
+                                <li class="protocol-step"><strong>If allergic:</strong> Diphenhydramine 25-50 mg IV, steroids, epinephrine if anaphylaxis</li>
+                                <li class="protocol-step"><strong>If TRALI (pulmonary edema without fluid overload):</strong> Supportive care, oxygen, mechanical ventilation as needed</li>
+                                <li class="protocol-step"><strong>If TACO (fluid overload):</strong> Diuretics, upright positioning</li>
+                            </ol>
+                            <div class="dose-box">
+                                <div class="dose-title">Reaction Types & Treatment</div>
+                                <div class="dose-item"><strong>Hemolytic (ABO incompatibility):</strong> Aggressive fluids, maintain UOP, alkalinize urine</div>
+                                <div class="dose-item"><strong>Allergic/Anaphylactic:</strong> Diphenhydramine, steroids, epinephrine if severe</div>
+                                <div class="dose-item"><strong>TRALI:</strong> Supportive care, mechanical ventilation (usually resolves in 48-96 hours)</div>
+                                <div class="dose-item"><strong>TACO:</strong> Diuretics (furosemide 20-40 mg IV)</div>
+                            </div>
+                            <div class="warning-box">
+                                <svg class="warning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <div class="warning-text">Acute hemolytic transfusion reaction is life-threatening. Classic signs: fever, hypotension, tachycardia, hemoglobinuria (pink/red urine), DIC. Under anesthesia, may only see unexplained hypotension, bleeding, or hemoglobinuria.</div>
+                            </div>
+                            <div class="references">
+                                <div class="references-title">Evidence-Based References</div>
+                                <div class="reference">Tobian AAR, et al. Transfusion-Related Acute Lung Injury. N Engl J Med. 2019;381(19):1849-1859. PMID: 31693808</div>
+                                <div class="reference">Sandler SG, et al. Strategies to Prevent Transfusion-Related Acute Lung Injury. Vox Sang. 2005;88(3):137-142. PMID: 15787717</div>
                             </div>
                         </div>
                     </div>
