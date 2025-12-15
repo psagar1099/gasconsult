@@ -12711,6 +12711,73 @@ CRISIS_HTML = """<!DOCTYPE html>
             transition: all 0.2s ease;
         }
         .nav-dropdown-link:hover { color: var(--gray-900); background: rgba(0,0,0,0.04); }
+
+        /* User Avatar & Auth Buttons */
+        .nav-btn-primary {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .user-dropdown-menu {
+            min-width: 240px;
+        }
+
+        .user-dropdown-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+
+        .user-dropdown-email {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .user-dropdown-tier {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--blue-600);
+        }
+
+        .nav-dropdown-divider {
+            height: 1px;
+            background: var(--gray-200);
+            margin: 4px 0;
+        }
+
+        .nav-dropdown-link svg {
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         .mobile-menu-btn {
             display: flex; flex-direction: column; gap: 5px;
             background: none; border: none; cursor: pointer; padding: 8px;
@@ -13673,7 +13740,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         <footer class="footer">
             <div class="footer-inner">
-                <span class="footer-text">© 2025 GasConsult.ai - Evidence-based anesthesia crisis protocols</span>
+                <span class="footer-text">© 2025 GasConsult.ai</span>
                 <div class="social-icons">
                     <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
                         <svg viewBox="0 0 24 24" fill="currentColor">
