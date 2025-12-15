@@ -12807,9 +12807,87 @@ CRISIS_HTML = """<!DOCTYPE html>
         main { padding: 90px 16px 40px; max-width: 1400px; margin: 0 auto; flex: 1; }
 
         /* Hero */
-        .hero { text-align: center; margin-bottom: 32px; }
-        .hero h1 { font-size: 32px; font-weight: 800; color: var(--gray-900); margin-bottom: 8px; }
-        .hero p { font-size: 15px; color: var(--gray-600); line-height: 1.5; }
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 0 4px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--gray-200);
+            border-radius: 100px;
+            padding: 8px 16px 8px 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+            opacity: 0;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--red-500);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .badge-dot::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: var(--red-500);
+            animation: pulse-ring 2s ease-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+
+        .badge-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1.5px;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards;
+            opacity: 0;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--red-600), var(--orange-600));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fade-up 0.8s cubic-bezier(0.16,1,0.3,1) 0.2s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fade-up {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* Search Box - Mobile First (Large Touch Target) */
         .search-container {
@@ -13058,8 +13136,12 @@ CRISIS_HTML = """<!DOCTYPE html>
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
             main { padding: 110px 32px 60px; }
-            .hero h1 { font-size: 42px; }
-            .hero p { font-size: 17px; }
+            .hero { margin-bottom: 48px; }
+            .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 24px; }
+            .badge-dot { width: 10px; height: 10px; }
+            .badge-text { font-size: 13px; }
+            .hero h1 { font-size: 48px; letter-spacing: -2px; margin-bottom: 16px; }
+            .hero p { font-size: 18px; }
             .search-container { padding: 0; }
             .protocols-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
             .footer { padding: 40px 32px; }
@@ -13134,7 +13216,11 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         <main>
             <div class="hero">
-                <h1>Anesthesia Crisis Protocols</h1>
+                <div class="hero-badge">
+                    <div class="badge-dot"></div>
+                    <span class="badge-text">Emergency Resources</span>
+                </div>
+                <h1><span class="gradient">Anesthesia Crisis</span> Protocols</h1>
                 <p>Evidence-based emergency management for operating room crises</p>
             </div>
 
