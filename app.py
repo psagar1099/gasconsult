@@ -1597,42 +1597,15 @@ def detect_and_calculate(query, context_hint=None):
 PREOP_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pre-Operative Assessment - gasconsult.ai</title>
-
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="AI-powered pre-operative assessment tool combining evidence-based protocols with patient-specific factors for comprehensive anesthesia planning.">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gasconsult.ai/preop">
-    <meta property="og:title" content="Pre-Operative Assessment - gasconsult.ai">
-    <meta property="og:description" content="AI-powered pre-operative assessment tool for comprehensive anesthesia planning.">
-    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gasconsult.ai/preop">
-    <meta property="twitter:title" content="Pre-Operative Assessment - gasconsult.ai">
-    <meta property="twitter:description" content="AI-powered pre-operative assessment tool for comprehensive anesthesia planning.">
-    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
-
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
+    <title>Pre-Operative Assessment - GasConsult.ai</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="AI-powered pre-operative assessment combining evidence-based protocols with agentic reasoning for comprehensive anesthesia planning.">
+    
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --white: #FFFFFF;
@@ -1649,35 +1622,34 @@ PREOP_HTML = """<!DOCTYPE html>
             --blue-50: #EFF6FF;
             --blue-100: #DBEAFE;
             --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
             --blue-400: #60A5FA;
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
+            --green-50: #F0FDF4;
+            --green-500: #10B981;
+            --green-600: #059669;
+            --amber-50: #FFFBEB;
+            --amber-500: #F59E0B;
+            --red-50: #FEF2F2;
+            --red-500: #EF4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             min-height: 100vh;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Background Canvas */
+        /* Background */
         .bg-canvas {
             position: fixed;
             inset: 0;
             z-index: 0;
-            overflow: hidden;
             background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
         }
 
@@ -1694,51 +1666,23 @@ PREOP_HTML = """<!DOCTYPE html>
             height: 400px;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
             top: -15%;
-            left: -20%;
+            left: -10%;
+            animation-delay: 0s;
         }
 
         .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.12) 0%, transparent 70%);
             bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
+            right: -5%;
+            animation-delay: 7s;
         }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         /* Navigation */
@@ -1747,50 +1691,47 @@ PREOP_HTML = """<!DOCTYPE html>
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
-            padding: 12px 16px;
+            z-index: 1000;
+            padding: 12px 20px;
         }
 
         .nav-inner {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
-            padding: 0 16px;
+            padding: 0 20px;
+            height: 56px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.02);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             text-decoration: none;
         }
 
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .logo-icon svg {
+            width: 36px;
+            height: 12px;
         }
-
-        .logo-icon svg { width: 36px; height: 12px; }
 
         .logo-text {
             font-size: 18px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.02em;
         }
 
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
+        .gas { color: var(--blue-600); }
+        .consult { color: var(--gray-800); }
+        .ai { color: var(--blue-500); font-weight: 600; }
 
         .nav-links {
             display: none;
@@ -1799,781 +1740,478 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .nav-link {
-            padding: 10px 18px;
+            padding: 8px 14px;
+            border-radius: 8px;
             font-size: 14px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
         }
 
         .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
+            background: var(--blue-50);
+            color: var(--blue-700);
         }
 
         .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
+            background: var(--blue-100);
+            color: var(--blue-700);
         }
 
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
+            gap: 4px;
             padding: 8px;
-            border-radius: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
         }
 
         .mobile-menu-btn span {
-            display: block;
-            width: 22px;
+            width: 20px;
             height: 2px;
             background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
+            border-radius: 2px;
+            transition: all 0.3s;
         }
 
         .mobile-menu {
             display: none;
             position: fixed;
             top: 80px;
-            left: 16px;
-            right: 16px;
+            left: 20px;
+            right: 20px;
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
             border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
+            padding: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            z-index: 999;
         }
 
-        .mobile-menu.active { display: flex; }
+        .mobile-menu.show {
+            display: block;
+        }
 
         .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
+            display: block;
+            padding: 12px 16px;
             color: var(--gray-700);
             text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
         .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
+            background: var(--blue-50);
+            color: var(--blue-700);
         }
 
         /* Main Content */
         .main-content {
-            flex: 1;
-            padding: 88px 16px 32px;
-            max-width: 800px;
+            position: relative;
+            z-index: 1;
+            padding: 100px 20px 60px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 100%;
         }
 
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-            animation: fade-up 0.6s ease forwards;
+        /* Results Section */
+        .results-section {
+            margin-top: 40px;
+            animation: fadeIn 0.6s ease-out;
         }
 
-        @keyframes fade-up {
+        @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .header-title {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-        }
-
-        .header-title .blue { color: var(--blue-600); }
-
-        .header-subtitle {
-            font-size: 15px;
-            color: var(--gray-500);
-            line-height: 1.6;
-        }
-
-        /* Form Card */
-        .form-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
-            animation: fade-up 0.6s 0.1s ease forwards;
-            opacity: 0;
-        }
-
-        /* Form Groups */
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            margin-bottom: 8px;
-        }
-
-        .form-label .required {
-            color: #EF4444;
-            margin-left: 2px;
-        }
-
-        /* Input Styles */
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 15px;
-            font-family: inherit;
-            color: var(--gray-800);
-            background: var(--white);
-            border: 2px solid var(--gray-200);
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: var(--gray-400);
-        }
-
-        /* Input Row for Multiple Fields */
-        .input-row {
-            display: grid;
-            gap: 12px;
-            grid-template-columns: 1fr;
-        }
-
-        /* Radio Buttons */
-        .radio-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .radio-option {
-            position: relative;
-            display: flex;
+        /* Mode Badge */
+        .mode-badge {
+            display: inline-flex;
             align-items: center;
-            padding: 14px 16px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
+            gap: 8px;
+            padding: 10px 18px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .radio-option:hover {
-            border-color: var(--blue-300);
+            margin-bottom: 24px;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
         }
 
-        .radio-option input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
+        .mode-badge.fast-rag {
+            border-color: rgba(16, 185, 129, 0.3);
         }
 
-        .radio-option input[type="radio"]:checked + .radio-visual {
-            background: var(--blue-600);
-            border-color: var(--blue-600);
+        .mode-badge.agentic {
+            border-color: rgba(139, 92, 246, 0.3);
         }
 
-        .radio-option input[type="radio"]:checked + .radio-visual::after {
-            opacity: 1;
-        }
-
-        .radio-option input[type="radio"]:checked ~ .radio-label {
-            font-weight: 600;
-            color: var(--blue-600);
-        }
-
-        .radio-option.selected {
-            background: var(--blue-50);
-            border-color: var(--blue-500);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-        }
-
-        .radio-visual {
+        .mode-icon {
             width: 20px;
             height: 20px;
-            border: 2px solid var(--gray-300);
-            border-radius: 50%;
-            flex-shrink: 0;
-            position: relative;
-            transition: all 0.2s ease;
-            margin-right: 12px;
         }
 
-        .radio-visual::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: white;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .radio-label {
-            font-size: 14px;
-            color: var(--gray-700);
-            flex: 1;
-            transition: all 0.2s ease;
-        }
-
-        /* Checkboxes */
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .checkbox-option {
-            display: flex;
-            align-items: center;
-            padding: 12px 14px;
-            background: var(--white);
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .checkbox-option:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.06);
-        }
-
-        .checkbox-option input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-            cursor: pointer;
-            accent-color: var(--blue-600);
-        }
-
-        .checkbox-label {
-            font-size: 14px;
-            color: var(--gray-700);
-            cursor: pointer;
-            flex: 1;
-        }
-
-        /* Textarea */
-        textarea.form-input {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        /* Section Divider */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, var(--gray-200) 50%, transparent 100%);
-            margin: 32px 0;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--gray-800);
-            margin-bottom: 16px;
-        }
-
-        /* Submit Button */
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            font-size: 16px;
+        .mode-label {
+            font-size: 13px;
             font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3), 0 8px 24px rgba(37,99,235,0.2);
+            color: var(--gray-700);
         }
 
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4), 0 12px 32px rgba(37,99,235,0.25);
+        .mode-badge.fast-rag .mode-label {
+            color: var(--green-600);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
+        .mode-badge.agentic .mode-label {
+            color: #8B5CF6;
         }
 
-        /* Results State */
-        .results-container {
-            animation: fade-up 0.6s ease forwards;
-        }
-
-        .results-header {
-            text-align: center;
-            padding: 40px 32px;
-            background: linear-gradient(135deg, var(--blue-50) 0%, var(--blue-100) 100%);
-            border-radius: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(37,99,235,0.08);
-        }
-
-        .results-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 16px;
-            background: var(--blue-600);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .results-icon svg {
-            width: 28px;
-            height: 28px;
-            stroke: white;
-        }
-
-        .results-title {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
-
-        .results-subtitle {
-            font-size: 14px;
-            color: var(--gray-600);
-        }
-
-        .results-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
+        /* Assessment Card */
+        .assessment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            animation: slideUp 0.5s ease-out;
         }
 
-        .results-content {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--gray-700);
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Assessment Content Typography */
-        .results-content h3 {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--gray-900);
-            margin-top: 32px;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--blue-100);
-            letter-spacing: -0.5px;
+        .assessment-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--blue-100);
         }
 
-        .results-content h3:first-child {
+        .assessment-icon {
+            width: 28px;
+            height: 28px;
+            color: var(--blue-600);
+        }
+
+        .assessment-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .assessment-content {
+            line-height: 1.8;
+            color: var(--gray-700);
+            font-size: 15px;
+        }
+
+        .assessment-content h3 {
+            color: var(--gray-900);
+            font-size: 18px;
+            font-weight: 700;
+            margin: 32px 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .assessment-content h3:first-child {
             margin-top: 0;
         }
 
-        .results-content h3::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
-            border-radius: 2px;
-            flex-shrink: 0;
+        .assessment-content h3::before {
+            content: "▸";
+            color: var(--blue-600);
+            font-size: 22px;
         }
 
-        .results-content h4 {
-            font-size: 17px;
-            font-weight: 700;
+        .assessment-content h4 {
             color: var(--gray-800);
-            margin-top: 24px;
-            margin-bottom: 12px;
-            letter-spacing: -0.3px;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
         }
 
-        .results-content p {
-            margin-bottom: 16px;
-            line-height: 1.8;
+        .assessment-content p {
+            margin-bottom: 14px;
+            line-height: 1.7;
         }
 
-        .results-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .results-content strong {
-            font-weight: 700;
-            color: var(--gray-900);
-        }
-
-        .results-content ul,
-        .results-content ol {
-            margin: 16px 0;
+        .assessment-content ul {
+            margin: 0 0 16px 0;
             padding-left: 0;
             list-style: none;
         }
 
-        .results-content ul li,
-        .results-content ol li {
+        .assessment-content li {
+            margin-bottom: 10px;
+            padding-left: 28px;
             position: relative;
-            padding-left: 32px;
-            margin-bottom: 12px;
-            line-height: 1.8;
+            line-height: 1.6;
         }
 
-        .results-content ul li::before {
-            content: '';
-            position: absolute;
-            left: 8px;
-            top: 11px;
-            width: 6px;
-            height: 6px;
-            background: var(--blue-500);
-            border-radius: 50%;
-        }
-
-        .results-content ol {
-            counter-reset: item;
-        }
-
-        .results-content ol li {
-            counter-increment: item;
-        }
-
-        .results-content ol li::before {
-            content: counter(item);
+        .assessment-content li::before {
+            content: "✓";
             position: absolute;
             left: 0;
-            top: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--blue-50);
             color: var(--blue-600);
-            border-radius: 6px;
-            font-size: 12px;
             font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 16px;
         }
 
-        /* Info boxes within assessment */
-        .results-content blockquote {
-            margin: 20px 0;
-            padding: 16px 20px;
-            background: linear-gradient(135deg, var(--blue-50) 0%, rgba(239, 246, 255, 0.5) 100%);
-            border-left: 4px solid var(--blue-500);
-            border-radius: 12px;
-            font-style: normal;
-        }
-
-        /* Citation styling */
-        .results-content a {
-            color: var(--blue-600);
-            text-decoration: none;
+        .assessment-content strong {
+            color: var(--gray-900);
             font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .results-content a:hover {
-            color: var(--blue-700);
-            text-decoration: underline;
-        }
-
-        /* Code/monospace elements */
-        .results-content code {
-            background: var(--gray-100);
+            background: var(--blue-50);
             padding: 2px 6px;
             border-radius: 4px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--gray-800);
         }
 
-        /* References */
-        .references-card {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
-            border-radius: 24px;
-            padding: 32px;
+        /* Agent Reasoning */
+        .agent-reasoning {
+            background: linear-gradient(135deg, #F0F9FF 0%, #EFF6FF 100%);
+            border: 1px solid var(--blue-200);
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06);
         }
 
-        .references-title {
+        .agent-reasoning-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            user-select: none;
         }
 
-        .references-title svg {
+        .agent-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--blue-600);
+        }
+
+        .agent-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--blue-900);
+            flex: 1;
+        }
+
+        .toggle-icon {
             width: 20px;
             height: 20px;
-            stroke: var(--blue-600);
-        }
-
-        .reference-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-200);
-        }
-
-        .reference-item:last-child {
-            border-bottom: none;
-        }
-
-        .reference-number {
-            display: inline-block;
-            width: 32px;
-            height: 32px;
-            background: var(--blue-50);
             color: var(--blue-600);
-            border-radius: 8px;
-            text-align: center;
-            line-height: 32px;
-            font-size: 13px;
-            font-weight: 700;
-            margin-right: 12px;
-            flex-shrink: 0;
+            transition: transform 0.3s;
         }
 
-        .reference-link {
-            color: var(--blue-600);
-            text-decoration: none;
-            font-weight: 600;
+        .toggle-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .agent-steps {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--blue-200);
+        }
+
+        .agent-steps.show {
+            display: block;
+        }
+
+        .agent-step {
+            padding: 8px 0;
             font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .reference-link:hover {
-            text-decoration: underline;
-        }
-
-        .reference-meta {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-top: 6px;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
+            color: var(--gray-700);
             display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .btn {
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 8px;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: white;
-            border: none;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
+        .agent-step::before {
+            content: "✓";
+            color: var(--green-600);
+            font-weight: 700;
         }
 
-        .btn-primary:hover {
+        .search-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-top: 12px;
+        }
+
+        /* References Section */
+        .references-section {
+            margin-top: 24px;
+        }
+
+        .references-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .references-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--blue-600);
+        }
+
+        .references-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .references-count {
+            background: var(--blue-100);
+            color: var(--blue-700);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .reference-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reference-card:hover {
+            border-color: var(--blue-300);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
         }
 
-        .btn-secondary {
-            background: white;
-            color: var(--gray-700);
-            border: 2px solid var(--gray-300);
+        .reference-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--blue-600);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
+        .reference-card:hover::before {
+            opacity: 1;
+        }
+
+        .reference-number {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--blue-600);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .reference-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.5;
+            margin-bottom: 12px;
+            padding-right: 48px;
+        }
+
+        .reference-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 12px;
+        }
+
+        .reference-authors {
+            font-weight: 500;
+        }
+
+        .reference-journal {
+            color: var(--gray-500);
+        }
+
+        .reference-year {
+            padding: 2px 8px;
+            background: var(--gray-100);
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .study-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .pmid-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--gray-100);
+            border-radius: 8px;
+            color: var(--blue-600);
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .pmid-link:hover {
+            background: var(--blue-100);
+            color: var(--blue-700);
         }
 
         /* Footer */
         .footer {
             padding: 32px 20px;
             border-top: 1px solid var(--gray-200);
-            background: rgba(255,255,255,0.5);
+            background: rgba(255, 255, 255, 0.5);
+            margin-top: 60px;
         }
 
         .footer-inner {
@@ -2600,27 +2238,21 @@ PREOP_HTML = """<!DOCTYPE html>
             font-size: 13px;
             color: var(--gray-500);
             text-decoration: none;
-            transition: color 0.2s ease;
+            transition: color 0.2s;
         }
 
         .footer-link:hover {
             color: var(--gray-700);
         }
 
-        /* Social Media Icons */
         .social-icons {
             display: flex;
             gap: 20px;
-            justify-content: center;
-            align-items: center;
         }
 
         .social-icon {
             color: var(--gray-500);
-            transition: color 0.2s ease, transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.2s;
         }
 
         .social-icon:hover {
@@ -2633,600 +2265,208 @@ PREOP_HTML = """<!DOCTYPE html>
             height: 24px;
         }
 
-        /* Tablet & Desktop */
-        @media (min-width: 640px) {
-            .input-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .checkbox-group {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .radio-group {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-
-            .radio-option {
-                flex: 1;
-                min-width: calc(50% - 5px);
-            }
-        }
-
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
             .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
-
-            .main-content {
-                padding: 108px 32px 48px;
-            }
-
-            .header-title {
-                font-size: 36px;
-            }
-
-            .form-card {
-                padding: 32px;
-            }
-
-            .action-buttons {
-                flex-direction: row;
-            }
-
             .footer { padding: 40px 32px; }
             .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-            
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-
-            .main-content {
-                max-width: 900px;
-            }
-
-            .header-title {
-                font-size: 42px;
-            }
-
-            .form-card,
-            .results-card,
-            .references-card {
-                padding: 40px;
-            }
-
-            .results-header {
-                padding: 48px 40px;
-            }
+            .main-content { padding: 140px 40px 80px; }
+            .assessment-card { padding: 40px; }
         }
-
-        /* Mobile-specific adjustments */
-        @media (max-width: 639px) {
-            .results-card,
-            .references-card {
-                padding: 20px;
-                border-radius: 20px;
-            }
-
-            .results-header {
-                padding: 24px 20px;
-                border-radius: 20px;
-            }
-
-            .results-content h3 {
-                font-size: 18px;
-            }
-
-            .results-content h4 {
-                font-size: 16px;
-            }
-
-            .results-title {
-                font-size: 20px;
-            }
-        }
-
-        /* Loading Overlay */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-content {
-            background: white;
-            border-radius: 20px;
-            padding: 32px 48px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--gray-200);
-            border-top-color: var(--blue-600);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
     </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="spinner"></div>
-            <div class="loading-text">Generating Assessment...</div>
-        </div>
-    </div>
-
-    <a href="#main-content" class="skip-to-content">Skip to main content</a>
-
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
     </div>
-    <div class="grain"></div>
 
-    <div class="page">
-        <!-- Navigation -->
-        <nav class="nav" role="navigation" aria-label="Main navigation">
-            <div class="nav-inner">
-                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
-                    <div class="logo-icon">
-                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-                </a>
-                <div class="nav-links">
-                    <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                    <a href="/preop" class="nav-link active">Pre-Op</a>
-                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
-                    <div class="nav-dropdown">
-                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
-                        <div class="nav-dropdown-menu">
-                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
-                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
-                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
-                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
-                        </div>
-                    </div>
-                    <!-- Soft Launch: Hiding Plans link -->
-                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
-                    {{ generate_navbar_html()|safe }}
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/?clear=1" class="logo">
+                <div class="logo-icon">
+                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                        <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                        <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                    </svg>
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="/?clear=1" class="nav-link">Home</a>
+                <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                <a href="/preop" class="nav-link active">Pre-Op</a>
+                <a href="/calculators" class="nav-link">Clinical Calculators</a>
             </div>
-        </nav>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <!-- Soft Launch: Hiding Plans link -->
-            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
-            {% if current_user.is_authenticated %}
-                <a href="/library" class="mobile-menu-link">My Library</a>
-                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
-            {% else %}
-                <a href="/login" class="mobile-menu-link">Log In</a>
-                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/?clear=1" class="mobile-menu-link">Home</a>
+        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+    </div>
+
+    <main class="main-content">
+        {% if summary %}
+        <div class="results-section">
+            {% if mode %}
+            <div class="mode-badge {{ 'fast-rag' if mode == 'fast_rag' else 'agentic' }}">
+                <svg class="mode-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {% if mode == 'agentic' %}
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    {% else %}
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    {% endif %}
+                </svg>
+                <span class="mode-label">
+                    {% if mode == 'agentic' %}
+                    Agentic AI Analysis
+                    {% else %}
+                    Fast RAG Assessment
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+
+            {% if reasoning_trace and mode == 'agentic' %}
+            <div class="agent-reasoning">
+                <div class="agent-reasoning-header" onclick="toggleAgentSteps()">
+                    <svg class="agent-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                    </svg>
+                    <span class="agent-title">AI Agent Workflow</span>
+                    <svg class="toggle-icon" id="toggleIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </div>
+                <div class="agent-steps" id="agentSteps">
+                    {% for step in reasoning_trace %}
+                    <div class="agent-step">{{ step }}</div>
+                    {% endfor %}
+                    {% if search_count %}
+                    <div class="search-count">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        {{ search_count }} PubMed searches performed
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="assessment-card">
+                <div class="assessment-header">
+                    <svg class="assessment-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    <h2 class="assessment-title">Pre-Operative Assessment</h2>
+                </div>
+                <div class="assessment-content">
+                    {{ summary|safe }}
+                </div>
+            </div>
+
+            {% if references and references|length > 0 %}
+            <div class="references-section">
+                <div class="references-header">
+                    <svg class="references-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                    </svg>
+                    <h3 class="references-title">References</h3>
+                    <span class="references-count">{{ references|length }}</span>
+                </div>
+
+                {% for ref in references %}
+                <div class="reference-card">
+                    <div class="reference-number">{{ loop.index }}</div>
+                    <div class="reference-title">{{ ref.title }}</div>
+                    <div class="reference-meta">
+                        <span class="reference-authors">{{ ref.authors }}</span>
+                        <span class="reference-journal">{{ ref.journal }}</span>
+                        <span class="reference-year">{{ ref.year }}</span>
+                    </div>
+                    {% if ref.study_badge %}
+                    <span class="study-badge" style="background-color: {{ ref.study_color }}; color: white;">
+                        {{ ref.study_badge }}
+                    </span>
+                    {% endif %}
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" class="pmid-link">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                        PMID: {{ ref.pmid }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
             {% endif %}
         </div>
+        {% else %}
+        <div style="text-align: center; padding: 60px 20px;">
+            <p style="color: var(--gray-500); font-size: 15px;">Complete the form above to generate your pre-operative assessment.</p>
+        </div>
+        {% endif %}
+    </main>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            {% if not summary %}
-            <!-- Form State -->
-            <div class="header">
-                <h1 class="header-title"><span class="blue">Pre-Operative</span> Assessment</h1>
-                <p class="header-subtitle">Evidence-based risk stratification with personalized recommendations</p>
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-text">© 2025 GasConsult.ai</span>
+            <div class="social-icons">
+                <a href="https://x.com/GasConsultAI" target="_blank" class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                    </svg>
+                </a>
+                <a href="https://instagram.com/gasconsult.ai" target="_blank" class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" class="social-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    </svg>
+                </a>
             </div>
-
-            <div class="form-card">
-                <form method="POST" action="/preop">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-
-                    <!-- Patient Demographics -->
-                    <div class="section-title">Patient Information</div>
-                    
-                    <div class="input-row">
-                        <div class="form-group">
-                            <label class="form-label">Age<span class="required">*</span></label>
-                            <input type="number" name="age" class="form-input" placeholder="65" required min="0" max="120">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Weight (kg)<span class="required">*</span></label>
-                            <input type="number" name="weight" class="form-input" placeholder="70" required min="1" max="300" step="0.1">
-                        </div>
-                    </div>
-
-                    <div class="input-row">
-                        <div class="form-group">
-                            <label class="form-label">Height (cm)<span class="required">*</span></label>
-                            <input type="number" name="height" class="form-input" placeholder="170" required min="50" max="250">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Sex<span class="required">*</span></label>
-                            <select name="sex" class="form-input" required>
-                                <option value="">Select...</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <!-- Functional Capacity -->
-                    <div class="section-title">Functional Capacity</div>
-                    <div class="form-group">
-                        <label class="form-label">METs Capacity<span class="required">*</span></label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="mets" value="<4 METs" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">&lt;4 METs - Poor</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mets" value="4-10 METs" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">4-10 METs - Moderate</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mets" value=">10 METs" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">&gt;10 METs - Excellent</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <!-- Comorbidities -->
-                    <div class="section-title">Comorbidities</div>
-                    <div class="form-group">
-                        <label class="form-label">Select all that apply</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Hypertension">
-                                <span class="checkbox-label">Hypertension</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Diabetes Mellitus">
-                                <span class="checkbox-label">Diabetes</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Coronary Artery Disease">
-                                <span class="checkbox-label">CAD</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Heart Failure">
-                                <span class="checkbox-label">Heart Failure</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Chronic Kidney Disease">
-                                <span class="checkbox-label">CKD</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Obstructive Sleep Apnea">
-                                <span class="checkbox-label">OSA</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="COPD">
-                                <span class="checkbox-label">COPD</span>
-                            </label>
-                            <label class="checkbox-option">
-                                <input type="checkbox" name="comorbidities" value="Prior Stroke">
-                                <span class="checkbox-label">Prior Stroke</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Other Comorbidities</label>
-                        <input type="text" name="other_comorbidities" class="form-input" placeholder="Enter any other conditions...">
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <!-- Medications -->
-                    <div class="section-title">Medications & Allergies</div>
-                    <div class="form-group">
-                        <label class="form-label">Current Medications</label>
-                        <textarea name="medications" class="form-input" placeholder="List medications (e.g., aspirin, metoprolol, lisinopril...)"></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Allergies</label>
-                        <input type="text" name="allergies" class="form-input" placeholder="Drug allergies and reactions...">
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <!-- Procedure Details -->
-                    <div class="section-title">Surgical Procedure</div>
-                    <div class="form-group">
-                        <label class="form-label">Planned Procedure<span class="required">*</span></label>
-                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Total hip arthroplasty" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Surgery Risk Category<span class="required">*</span></label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="surgery_risk" value="low" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">Low Risk</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="surgery_risk" value="intermediate" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">Intermediate</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="surgery_risk" value="high" required>
-                                <div class="radio-visual"></div>
-                                <span class="radio-label">High Risk</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="section-divider"></div>
-
-                    <!-- Additional Details -->
-                    <div class="section-title">Additional Information (Optional)</div>
-                    
-                    <div class="input-row">
-                        <div class="form-group">
-                            <label class="form-label">Hemoglobin (g/dL)</label>
-                            <input type="text" name="hgb" class="form-input" placeholder="12.5">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Creatinine (mg/dL)</label>
-                            <input type="text" name="cr" class="form-input" placeholder="1.0">
-                        </div>
-                    </div>
-
-                    <div class="input-row">
-                        <div class="form-group">
-                            <label class="form-label">Platelets (×10³/µL)</label>
-                            <input type="text" name="plt" class="form-input" placeholder="250">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">INR</label>
-                            <input type="text" name="inr" class="form-input" placeholder="1.0">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Ejection Fraction (%)</label>
-                        <input type="text" name="ef" class="form-input" placeholder="55-60%">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">EKG Findings</label>
-                        <input type="text" name="ekg" class="form-input" placeholder="Normal sinus rhythm">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">NPO Status</label>
-                        <input type="text" name="npo" class="form-input" placeholder="NPO after midnight">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Previous Anesthesia Issues</label>
-                        <textarea name="previous_anesthesia" class="form-input" placeholder="Any prior anesthesia complications, difficult airway, PONV history..."></textarea>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Generate Assessment</button>
-                </form>
+            <div class="footer-links">
+                <a href="/privacy" class="footer-link">Privacy</a>
+                <a href="/terms" class="footer-link">Terms</a>
+                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
             </div>
-
-            {% else %}
-            <!-- Results State -->
-            <div class="results-container">
-                <div class="results-header">
-                    <div class="results-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                    <h1 class="results-title"><span style="color: var(--blue-600);">Pre-Operative</span> Assessment Complete</h1>
-                    <p class="results-subtitle">Evidence-based risk stratification and optimization recommendations</p>
-                </div>
-
-                <div class="results-card">
-                    <div class="results-content">
-                        {{ summary|safe }}
-                    </div>
-                </div>
-
-                {% if references %}
-                <div class="references-card">
-                    <div class="references-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                        <span>Evidence-Based References</span>
-                    </div>
-                    {% for ref in references %}
-                    <div class="reference-item">
-                        <span class="reference-number">[{{ loop.index }}]</span>
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                            {{ ref.title }}
-                        </a>
-                        <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <div class="action-buttons">
-                    <a href="/preop" class="btn btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        New Assessment
-                    </a>
-                    <button onclick="window.print()" class="btn btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                            <rect x="6" y="14" width="12" height="8"></rect>
-                        </svg>
-                        Print/Save PDF
-                    </button>
-                </div>
-            </div>
-            {% endif %}
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-inner">
-                <span class="footer-text">© 2025 GasConsult.ai</span>
-                <div class="social-icons">
-                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                        </svg>
-                    </a>
-                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                    </a>
-                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                    </a>
-                </div>
-                <div class="footer-links">
-                    <a href="/privacy" class="footer-link">Privacy</a>
-                    <a href="/terms" class="footer-link">Terms</a>
-                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-                </div>
-            </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
 
     <script>
-        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
+            menu.classList.toggle('show');
         }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
+        function toggleAgentSteps() {
+            const steps = document.getElementById('agentSteps');
+            const icon = document.getElementById('toggleIcon');
+            steps.classList.toggle('show');
+            icon.classList.toggle('expanded');
         }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
-
-        // Radio button selection handler
-        document.querySelectorAll('.radio-option').forEach(option => {
-            option.addEventListener('click', function() {
-                const radio = this.querySelector('input[type="radio"]');
-                if (radio) {
-                    radio.checked = true;
-                    // Remove selected class from siblings
-                    const name = radio.getAttribute('name');
-                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-                        r.closest('.radio-option').classList.remove('selected');
-                    });
-                    // Add selected class to clicked option
-                    this.classList.add('selected');
-                }
-            });
-        });
-
-        // Show loading overlay when form is submitted
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form[method="POST"]');
-            const loadingOverlay = document.getElementById('loadingOverlay');
-
-            if (form && loadingOverlay) {
-                form.addEventListener('submit', function(e) {
-                    // Validate required fields before showing loading
-                    const procedure = form.querySelector('input[name="procedure"]');
-                    const surgeryRisk = form.querySelector('input[name="surgery_risk"]:checked');
-
-                    // Only show loading if all required fields are filled
-                    if (procedure && procedure.value.trim() !== '' &&
-                        surgeryRisk) {
-                        loadingOverlay.classList.add('active');
-                    }
-                });
-            }
-        });
     </script>
 </body>
 </html>
