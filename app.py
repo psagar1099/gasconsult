@@ -12737,7 +12737,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             z-index: 1000; overflow: hidden;
         }
         .nav-dropdown-menu.show { display: block; }
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600); background: var(--blue-50);
         }
         .nav-dropdown-link {
@@ -18634,7 +18634,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -25410,10 +25410,17 @@ def bookmark_response():
         return jsonify({'error': str(e)}), 500
 
 @app.route("/library")
+@login_required
 def library():
     """View all bookmarked responses"""
-    user_id = session.get('user_id')
-    bookmarks = BOOKMARKS_STORAGE.get(user_id, []) if user_id else []
+    # Use current_user.id for authenticated users
+    user_id = current_user.id if current_user.is_authenticated else None
+
+    if not user_id:
+        flash('Please log in to view your library', 'info')
+        return redirect(url_for('login'))
+
+    bookmarks = BOOKMARKS_STORAGE.get(user_id, [])
 
     # Sort by timestamp (newest first)
     bookmarks = sorted(bookmarks, key=lambda x: x['timestamp'], reverse=True)
@@ -25457,8 +25464,8 @@ def save_to_library():
             'timestamp': datetime.now().isoformat()
         }
 
-        # Get user ID (use session user_id or current_user id)
-        user_id = session.get('user_id') or (current_user.id if current_user.is_authenticated else None)
+        # Get user ID from current_user
+        user_id = current_user.id
 
         if not user_id:
             return jsonify({'error': 'User not found'}), 401
