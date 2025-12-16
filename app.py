@@ -1818,7 +1818,8 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -3882,7 +3883,8 @@ HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -7067,7 +7069,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -7911,22 +7914,6 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 .library-title svg { width: 28px; height: 28px; color: var(--blue-600); }
                 .library-stats { font-size: 14px; color: var(--gray-500); font-weight: 500; }
 
-                /* Library Page Active State Overrides - Prevent dropdown toggles from showing active */
-                /* Override the :has() selector that makes parent dropdowns active */
-                .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-                    color: var(--gray-600);
-                    background: none;
-                }
-                .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle:hover {
-                    color: var(--gray-900);
-                    background: rgba(0,0,0,0.04);
-                }
-                /* Keep dropdown links active with proper styling */
-                .nav-dropdown-link.active {
-                    color: var(--blue-600);
-                    background: var(--blue-50);
-                    font-weight: 600;
-                }
                 .search-bar { width: 100%; max-width: 400px; padding: 12px 16px 12px 44px; border: 1px solid var(--gray-300); border-radius: 12px; font-family: inherit; font-size: 15px; background: var(--white); color: var(--gray-900); transition: all 0.2s ease; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: 12px center; background-size: 20px 20px; margin-bottom: 24px; }
                 .search-bar:focus { outline: none; border-color: var(--blue-500); box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
                 .bookmark-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
@@ -8345,7 +8332,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -9438,7 +9426,8 @@ TERMS_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -10584,7 +10573,8 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -11646,7 +11636,8 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -14599,7 +14590,8 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -16516,7 +16508,8 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -21002,7 +20995,8 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -22372,7 +22366,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
+        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
