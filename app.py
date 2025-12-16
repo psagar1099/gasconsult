@@ -3623,6 +3623,853 @@ def get_evidence_strength(num_papers, references):
             'breakdown': breakdown
         }
 
+# ============================================================================
+# HYBRID RAG + AGENTIC AI FOR PREOPERATIVE ASSESSMENT
+# ============================================================================
+
+def calculate_rcri(age, comorbidities, cr, surgery_risk, procedure):
+    """
+    Calculate Revised Cardiac Risk Index (RCRI) score.
+
+    RCRI Components (1 point each):
+    1. High-risk surgery
+    2. History of ischemic heart disease
+    3. History of congestive heart failure
+    4. History of cerebrovascular disease
+    5. Diabetes mellitus requiring insulin
+    6. Preoperative creatinine > 2.0 mg/dL
+
+    Risk of major cardiac complications:
+    - 0 points: 0.4%
+    - 1 point: 0.9%
+    - 2 points: 6.6%
+    - ≥3 points: 11%
+    """
+    score = 0
+    components = []
+
+    # 1. High-risk surgery (intraperitoneal, intrathoracic, suprainguinal vascular)
+    high_risk_keywords = [
+        'abdominal', 'laparotomy', 'bowel', 'colon', 'liver', 'pancreas',
+        'thoracic', 'lung', 'esophageal', 'chest',
+        'vascular', 'aortic', 'carotid', 'femoral'
+    ]
+    procedure_lower = procedure.lower()
+    if surgery_risk.lower() == 'high' or any(keyword in procedure_lower for keyword in high_risk_keywords):
+        score += 1
+        components.append("High-risk surgery")
+
+    # 2. Ischemic heart disease (CAD, prior MI, PCI, CABG)
+    cad_conditions = ["Coronary Artery Disease", "Prior MI", "Prior PCI", "Prior CABG"]
+    if any(cond in comorbidities for cond in cad_conditions):
+        score += 1
+        components.append("Ischemic heart disease")
+
+    # 3. Congestive heart failure
+    if "Heart Failure" in comorbidities or "CHF" in comorbidities:
+        score += 1
+        components.append("Heart failure")
+
+    # 4. Cerebrovascular disease
+    if "Prior Stroke" in comorbidities or "TIA" in comorbidities or "Cerebrovascular Disease" in comorbidities:
+        score += 1
+        components.append("Cerebrovascular disease")
+
+    # 5. Diabetes requiring insulin (cannot determine from form, assume if DM present - conservative)
+    if "Diabetes Mellitus" in comorbidities:
+        score += 1
+        components.append("Diabetes mellitus")
+
+    # 6. Creatinine > 2.0 mg/dL
+    try:
+        cr_value = float(cr) if cr else 0
+        if cr_value > 2.0:
+            score += 1
+            components.append(f"Creatinine > 2.0 mg/dL ({cr_value})")
+    except (ValueError, TypeError):
+        pass
+
+    # Risk categorization
+    if score == 0:
+        risk_category = "Very Low"
+        cardiac_event_risk = 0.4
+    elif score == 1:
+        risk_category = "Low"
+        cardiac_event_risk = 0.9
+    elif score == 2:
+        risk_category = "Moderate"
+        cardiac_event_risk = 6.6
+    else:  # ≥3
+        risk_category = "High"
+        cardiac_event_risk = 11.0
+
+    return {
+        'score': score,
+        'components': components,
+        'risk_category': risk_category,
+        'cardiac_event_risk': cardiac_event_risk
+    }
+
+
+def classify_preop_complexity(patient_data):
+    """
+    Classify preoperative assessment complexity to determine routing:
+    - 'fast_rag': Simple cases (ASA I-II, low-risk surgery, <3 comorbidities)
+    - 'agentic': Complex cases (ASA III-IV, high-risk surgery, multiple comorbidities, drug interactions)
+
+    Returns: 'fast_rag' or 'agentic'
+    """
+    complexity_score = 0
+    reasoning = []
+
+    # Age factor
+    age = patient_data.get('age', 0)
+    if age > 75:
+        complexity_score += 2
+        reasoning.append(f"Age > 75 years ({age})")
+    elif age > 65:
+        complexity_score += 1
+        reasoning.append(f"Age > 65 years ({age})")
+
+    # Comorbidity count
+    comorbidities = patient_data.get('comorbidities', [])
+    num_comorbidities = len(comorbidities)
+    if num_comorbidities >= 3:
+        complexity_score += 3
+        reasoning.append(f"Multiple comorbidities (n={num_comorbidities})")
+    elif num_comorbidities >= 2:
+        complexity_score += 2
+        reasoning.append(f"Multiple comorbidities (n={num_comorbidities})")
+
+    # High-risk comorbidities
+    high_risk_conditions = [
+        "Heart Failure", "Coronary Artery Disease", "Prior MI",
+        "Chronic Kidney Disease", "Liver Disease", "Pulmonary Hypertension"
+    ]
+    if any(cond in comorbidities for cond in high_risk_conditions):
+        complexity_score += 2
+        reasoning.append("High-risk cardiac/renal/hepatic disease")
+
+    # Surgery risk
+    surgery_risk = patient_data.get('surgery_risk', '').lower()
+    if 'high' in surgery_risk:
+        complexity_score += 3
+        reasoning.append("High-risk surgery")
+    elif 'intermediate' in surgery_risk or 'moderate' in surgery_risk:
+        complexity_score += 1
+        reasoning.append("Intermediate-risk surgery")
+
+    # Anticoagulation (complex medication management)
+    medications = patient_data.get('medications', '').lower()
+    anticoag_drugs = ['warfarin', 'coumadin', 'apixaban', 'eliquis', 'rivaroxaban', 'xarelto', 'dabigatran', 'pradaxa', 'edoxaban']
+    if any(drug in medications for drug in anticoag_drugs):
+        complexity_score += 3
+        reasoning.append("Anticoagulation requiring bridging assessment")
+
+    # Insulin/complex diabetes
+    if 'insulin' in medications or 'lantus' in medications or 'humalog' in medications or 'novolog' in medications:
+        complexity_score += 2
+        reasoning.append("Insulin-dependent diabetes")
+
+    # Abnormal labs
+    try:
+        cr = float(patient_data.get('cr', 0))
+        if cr > 1.5:
+            complexity_score += 2
+            reasoning.append(f"Elevated creatinine ({cr} mg/dL)")
+    except (ValueError, TypeError):
+        pass
+
+    try:
+        ef_str = patient_data.get('ef', '').lower()
+        # Try to extract numeric value
+        ef_numeric = None
+        for part in ef_str.split():
+            try:
+                ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', part)))
+                break
+            except:
+                pass
+
+        if ef_numeric and ef_numeric < 40:
+            complexity_score += 3
+            reasoning.append(f"Reduced ejection fraction ({ef_numeric}%)")
+        elif any(term in ef_str for term in ['reduced', 'low', 'decreased', 'hfref']):
+            complexity_score += 3
+            reasoning.append("Reduced ejection fraction")
+    except:
+        pass
+
+    # Emergency surgery
+    if patient_data.get('emergency', False):
+        complexity_score += 3
+        reasoning.append("Emergency surgery")
+
+    # Decision threshold
+    mode = 'agentic' if complexity_score >= 5 else 'fast_rag'
+
+    return {
+        'mode': mode,
+        'complexity_score': complexity_score,
+        'reasoning': reasoning
+    }
+
+
+class PreopAgent:
+    """
+    Agentic AI for preoperative optimization planning.
+
+    Implements 7-step workflow:
+    1. Risk Stratification (RCRI, estimated NSQIP risks)
+    2. Identify Critical Issues (anticoagulation, cardiac, diabetes, renal)
+    3. Adaptive Literature Search (multi-round with self-verification)
+    4. Guideline Cross-Check (ASA, ACC/AHA)
+    5. Drug Interaction Check
+    6. Optimization Plan Generator (timeline-based)
+    7. Final Synthesis with Reasoning Trace
+    """
+
+    def __init__(self, patient_data):
+        self.patient = patient_data
+        self.findings = {}
+        self.recommendations = {}
+        self.evidence = []
+        self.reasoning_trace = []
+        self.search_count = 0
+
+    def run(self):
+        """Orchestrate full agentic workflow"""
+        try:
+            # STEP 1: Risk Stratification
+            self.reasoning_trace.append("✓ Step 1: Risk Stratification")
+            self.findings['risk'] = self.assess_baseline_risk()
+
+            # STEP 2: Identify Critical Issues
+            self.reasoning_trace.append("✓ Step 2: Identifying Critical Issues")
+            critical_issues = self.identify_critical_issues()
+
+            # STEP 3: Adaptive Literature Search
+            self.reasoning_trace.append(f"✓ Step 3: Adaptive Literature Search ({len(critical_issues)} issues)")
+            for issue in critical_issues[:5]:  # Limit to 5 issues to avoid overwhelming
+                evidence = self.deep_search(issue)
+                if evidence and evidence.get('papers'):
+                    self.evidence.append(evidence)
+
+            # STEP 4: Guideline Cross-Check
+            self.reasoning_trace.append("✓ Step 4: Guideline Cross-Check")
+            guideline_evidence = self.check_guidelines()
+            if guideline_evidence:
+                self.evidence.extend(guideline_evidence)
+
+            # STEP 5: Drug Interaction Check
+            self.reasoning_trace.append("✓ Step 5: Drug Interaction Analysis")
+            self.findings['interactions'] = self.check_drug_interactions()
+
+            # STEP 6: Optimization Plan
+            self.reasoning_trace.append("✓ Step 6: Generating Optimization Plan")
+            self.recommendations = self.generate_optimization_plan()
+
+            # STEP 7: Final Synthesis
+            self.reasoning_trace.append("✓ Step 7: Final Synthesis")
+            return self.synthesize_final_report()
+
+        except Exception as e:
+            logging.error(f"PreopAgent error: {str(e)}")
+            return None
+
+    def assess_baseline_risk(self):
+        """Step 1: Calculate RCRI and estimate complication risks"""
+        rcri = calculate_rcri(
+            age=self.patient['age'],
+            comorbidities=self.patient['comorbidities'],
+            cr=self.patient.get('cr', ''),
+            surgery_risk=self.patient['surgery_risk'],
+            procedure=self.patient['procedure']
+        )
+
+        # Simple NSQIP risk estimates based on RCRI + age + comorbidities
+        # (In production, would use actual NSQIP calculator or API)
+        base_risk = rcri['cardiac_event_risk']
+
+        # Age adjustment
+        age = self.patient['age']
+        age_factor = 1.0
+        if age > 75:
+            age_factor = 1.5
+        elif age > 65:
+            age_factor = 1.2
+
+        # Comorbidity adjustment
+        num_comorbidities = len(self.patient.get('comorbidities', []))
+        comorbid_factor = 1.0 + (num_comorbidities * 0.15)
+
+        cardiac_risk = min(base_risk * age_factor * comorbid_factor, 25.0)  # Cap at 25%
+        respiratory_risk = min(2.0 * age_factor * comorbid_factor, 15.0) if age > 60 or "COPD" in self.patient.get('comorbidities', []) else 1.0
+        aki_risk = 5.0 if "Chronic Kidney Disease" in self.patient.get('comorbidities', []) else 1.0
+        mortality_risk = min(0.5 * rcri['score'] * age_factor, 10.0)
+
+        return {
+            'rcri': rcri,
+            'cardiac_risk': round(cardiac_risk, 1),
+            'respiratory_risk': round(respiratory_risk, 1),
+            'aki_risk': round(aki_risk, 1),
+            'mortality_risk': round(mortality_risk, 1)
+        }
+
+    def identify_critical_issues(self):
+        """Step 2: Agent identifies what needs investigation"""
+        issues = []
+
+        # Anticoagulation management
+        medications = self.patient.get('medications', '').lower()
+        anticoag_drugs = {
+            'warfarin': 'warfarin', 'coumadin': 'warfarin',
+            'apixaban': 'apixaban (Eliquis)', 'eliquis': 'apixaban (Eliquis)',
+            'rivaroxaban': 'rivaroxaban (Xarelto)', 'xarelto': 'rivaroxaban (Xarelto)',
+            'dabigatran': 'dabigatran (Pradaxa)', 'pradaxa': 'dabigatran (Pradaxa)'
+        }
+
+        detected_anticoag = None
+        for drug_key, drug_name in anticoag_drugs.items():
+            if drug_key in medications:
+                detected_anticoag = drug_name
+                break
+
+        if detected_anticoag:
+            issues.append({
+                'category': 'anticoagulation',
+                'query': f"perioperative {detected_anticoag} management bridging {self.patient['procedure']}",
+                'priority': 'critical',
+                'follow_up_needed': True,
+                'description': f"Anticoagulation bridging protocol for {detected_anticoag}"
+            })
+
+        # High cardiac risk
+        if self.findings['risk']['rcri']['score'] >= 2:
+            issues.append({
+                'category': 'cardiac',
+                'query': f"perioperative cardiac risk optimization RCRI {self.patient['procedure']}",
+                'priority': 'critical',
+                'follow_up_needed': True,
+                'description': f"Cardiac risk optimization (RCRI = {self.findings['risk']['rcri']['score']})"
+            })
+
+        # Diabetes management (distinguish insulin vs oral)
+        if 'Diabetes Mellitus' in self.patient.get('comorbidities', []):
+            insulin_user = any(drug in medications for drug in ['insulin', 'lantus', 'novolog', 'humalog', 'levemir'])
+            diabetes_type = 'insulin' if insulin_user else 'oral hypoglycemic'
+            issues.append({
+                'category': 'diabetes',
+                'query': f"perioperative {diabetes_type} management glycemic control",
+                'priority': 'high',
+                'follow_up_needed': insulin_user,
+                'description': f"Perioperative glycemic management ({diabetes_type})"
+            })
+
+        # CKD + nephrotoxic procedures
+        if 'Chronic Kidney Disease' in self.patient.get('comorbidities', []):
+            procedure_lower = self.patient['procedure'].lower()
+            nephrotoxic_keywords = ['contrast', 'cardiac', 'vascular', 'bypass']
+            if any(keyword in procedure_lower for keyword in nephrotoxic_keywords):
+                issues.append({
+                    'category': 'renal',
+                    'query': 'perioperative renal protection AKI prevention chronic kidney disease',
+                    'priority': 'high',
+                    'follow_up_needed': True,
+                    'description': 'Renal protection for CKD patient'
+                })
+
+        # Reduced EF
+        ef_str = self.patient.get('ef', '').lower()
+        if ef_str and (any(term in ef_str for term in ['reduced', 'low', 'hfref']) or '<40' in ef_str):
+            issues.append({
+                'category': 'cardiac',
+                'query': f"reduced ejection fraction heart failure perioperative management {self.patient['procedure']}",
+                'priority': 'high',
+                'follow_up_needed': True,
+                'description': 'Reduced ejection fraction management'
+            })
+
+        # Sort by priority
+        priority_order = {'critical': 0, 'high': 1, 'medium': 2}
+        issues.sort(key=lambda x: priority_order.get(x['priority'], 3))
+
+        return issues
+
+    def deep_search(self, issue):
+        """Step 3: Multi-round adaptive search with self-verification"""
+        try:
+            # Round 1: High-quality evidence (guidelines, meta-analyses, systematic reviews)
+            q_expanded = issue['query'].replace(" ", " AND ")
+            search_term = (
+                f'({q_expanded}) AND '
+                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt]) AND '
+                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            )
+
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
+            result = Entrez.read(handle)
+            ids = result.get("IdList", [])
+
+            papers = []
+            if ids:
+                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                fetched_papers = Entrez.read(handle).get("PubmedArticle", [])
+
+                for p in fetched_papers:
+                    try:
+                        art = p["MedlineCitation"]["Article"]
+                        title = str(art.get("ArticleTitle", "No title"))
+                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                        journal = str(art["Journal"].get("Title", "Unknown"))
+                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                        pmid = str(p["MedlineCitation"]["PMID"])
+
+                        study_classification = classify_study_type(title, journal)
+
+                        papers.append({
+                            "title": title,
+                            "abstract": abstract,
+                            "authors": authors,
+                            "journal": journal,
+                            "year": year,
+                            "pmid": pmid,
+                            "study_type": study_classification['type'],
+                            "study_badge": study_classification['badge_text'],
+                            "study_color": study_classification['badge_color'],
+                            "study_score": study_classification['score'],
+                            "sort_priority": study_classification['sort_priority']
+                        })
+                    except:
+                        continue
+
+            self.search_count += 1
+
+            # Self-verification: Is evidence sufficient?
+            if issue['follow_up_needed'] and len(papers) < 3:
+                # Round 2: Broaden to RCTs
+                search_term = (
+                    f'({q_expanded}) AND '
+                    f'("randomized controlled trial"[pt]) AND '
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                )
+
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=3, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result.get("IdList", [])
+
+                if ids:
+                    handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                    fetched_papers = Entrez.read(handle).get("PubmedArticle", [])
+
+                    for p in fetched_papers:
+                        try:
+                            art = p["MedlineCitation"]["Article"]
+                            title = str(art.get("ArticleTitle", "No title"))
+                            abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                            authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                            journal = str(art["Journal"].get("Title", "Unknown"))
+                            year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                            pmid = str(p["MedlineCitation"]["PMID"])
+
+                            study_classification = classify_study_type(title, journal)
+
+                            papers.append({
+                                "title": title,
+                                "abstract": abstract,
+                                "authors": authors,
+                                "journal": journal,
+                                "year": year,
+                                "pmid": pmid,
+                                "study_type": study_classification['type'],
+                                "study_badge": study_classification['badge_text'],
+                                "study_color": study_classification['badge_color'],
+                                "study_score": study_classification['score'],
+                                "sort_priority": study_classification['sort_priority']
+                            })
+                        except:
+                            continue
+
+                self.search_count += 1
+
+            return {
+                'issue': issue,
+                'papers': papers,
+                'evidence_strength': 'high' if len(papers) >= 3 else 'moderate' if len(papers) >= 1 else 'low'
+            }
+
+        except Exception as e:
+            logging.error(f"Deep search error: {str(e)}")
+            return None
+
+    def check_guidelines(self):
+        """Step 4: Search for specific guidelines"""
+        guideline_evidence = []
+
+        try:
+            # ACC/AHA perioperative guidelines if cardiac risk present
+            if self.findings['risk']['rcri']['score'] >= 1:
+                search_term = '"ACC AHA" AND (perioperative OR noncardiac surgery) AND guideline[pt]'
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=2, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result.get("IdList", [])
+
+                if ids:
+                    papers = self._fetch_papers(ids)
+                    if papers:
+                        guideline_evidence.append({
+                            'issue': {'category': 'guideline', 'description': 'ACC/AHA perioperative guidelines'},
+                            'papers': papers,
+                            'evidence_strength': 'high'
+                        })
+                        self.search_count += 1
+
+            # ASA guidelines for specific scenarios
+            if "Obstructive Sleep Apnea" in self.patient.get('comorbidities', []):
+                search_term = '"American Society of Anesthesiologists" AND "obstructive sleep apnea" AND guideline[pt]'
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=1, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result.get("IdList", [])
+
+                if ids:
+                    papers = self._fetch_papers(ids)
+                    if papers:
+                        guideline_evidence.append({
+                            'issue': {'category': 'guideline', 'description': 'ASA OSA guidelines'},
+                            'papers': papers,
+                            'evidence_strength': 'high'
+                        })
+                        self.search_count += 1
+
+        except Exception as e:
+            logging.error(f"Guideline check error: {str(e)}")
+
+        return guideline_evidence
+
+    def _fetch_papers(self, ids):
+        """Helper to fetch and format papers"""
+        papers = []
+        try:
+            handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+            fetched_papers = Entrez.read(handle).get("PubmedArticle", [])
+
+            for p in fetched_papers:
+                try:
+                    art = p["MedlineCitation"]["Article"]
+                    title = str(art.get("ArticleTitle", "No title"))
+                    abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                    authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                    journal = str(art["Journal"].get("Title", "Unknown"))
+                    year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                    pmid = str(p["MedlineCitation"]["PMID"])
+
+                    study_classification = classify_study_type(title, journal)
+
+                    papers.append({
+                        "title": title,
+                        "abstract": abstract,
+                        "authors": authors,
+                        "journal": journal,
+                        "year": year,
+                        "pmid": pmid,
+                        "study_type": study_classification['type'],
+                        "study_badge": study_classification['badge_text'],
+                        "study_color": study_classification['badge_color'],
+                        "study_score": study_classification['score'],
+                        "sort_priority": study_classification['sort_priority']
+                    })
+                except:
+                    continue
+        except Exception as e:
+            logging.error(f"Fetch papers error: {str(e)}")
+
+        return papers
+
+    def check_drug_interactions(self):
+        """Step 5: Check for critical drug interactions"""
+        interactions = []
+        medications = self.patient.get('medications', '').lower()
+
+        # ACEI/ARB on morning of surgery
+        acei_arb_drugs = ['lisinopril', 'enalapril', 'losartan', 'valsartan', 'ramipril', 'perindopril']
+        if any(drug in medications for drug in acei_arb_drugs):
+            interactions.append({
+                'drugs': 'ACEI/ARB',
+                'issue': 'Intraoperative hypotension risk',
+                'recommendation': 'Consider holding on morning of surgery (controversial - discuss risks/benefits)',
+                'evidence_query': 'perioperative ACEI ARB hypotension management',
+                'severity': 'moderate'
+            })
+
+        # SGLT2 inhibitors + ketoacidosis risk
+        sglt2_drugs = ['jardiance', 'farxiga', 'empagliflozin', 'dapagliflozin', 'canagliflozin', 'invokana']
+        if any(drug in medications for drug in sglt2_drugs):
+            interactions.append({
+                'drugs': 'SGLT2 inhibitor',
+                'issue': 'Euglycemic DKA risk',
+                'recommendation': 'Hold 3-4 days preoperatively for major surgery',
+                'evidence_query': 'SGLT2 inhibitor perioperative ketoacidosis',
+                'severity': 'high'
+            })
+
+        # Metformin + lactic acidosis
+        if 'metformin' in medications:
+            cr_value = 0
+            try:
+                cr_value = float(self.patient.get('cr', 0))
+            except:
+                pass
+
+            if cr_value > 1.5 or 'Chronic Kidney Disease' in self.patient.get('comorbidities', []):
+                interactions.append({
+                    'drugs': 'Metformin',
+                    'issue': 'Lactic acidosis risk with CKD',
+                    'recommendation': 'Hold 48 hours preoperatively, resume when renal function stable',
+                    'evidence_query': 'metformin perioperative lactic acidosis',
+                    'severity': 'high'
+                })
+
+        return interactions
+
+    def generate_optimization_plan(self):
+        """Step 6: Generate timeline-based optimization recommendations"""
+        plan = {
+            'immediate': [],  # Day of surgery
+            'short_term': [],  # 1-7 days pre-op
+            'long_term': [],  # >7 days pre-op
+            'intraoperative': [],
+            'postoperative': []
+        }
+
+        # Drug interaction recommendations
+        for interaction in self.findings.get('interactions', []):
+            if interaction['severity'] == 'high':
+                if '3-4 days' in interaction['recommendation']:
+                    plan['short_term'].append({
+                        'action': interaction['recommendation'],
+                        'rationale': interaction['issue'],
+                        'category': 'medication'
+                    })
+                elif '48 hours' in interaction['recommendation']:
+                    plan['short_term'].append({
+                        'action': interaction['recommendation'],
+                        'rationale': interaction['issue'],
+                        'category': 'medication'
+                    })
+            else:
+                plan['immediate'].append({
+                    'action': interaction['recommendation'],
+                    'rationale': interaction['issue'],
+                    'category': 'medication'
+                })
+
+        # Cardiac optimization
+        rcri_score = self.findings['risk']['rcri']['score']
+        if rcri_score >= 2:
+            plan['long_term'].append({
+                'action': f'Consider cardiology consultation (RCRI = {rcri_score})',
+                'rationale': f'Moderate-high cardiac risk ({self.findings["risk"]["cardiac_risk"]}% major cardiac event)',
+                'category': 'cardiac'
+            })
+
+        # Renal protection
+        if 'Chronic Kidney Disease' in self.patient.get('comorbidities', []):
+            plan['immediate'].append({
+                'action': 'Perioperative IV fluid hydration (0.9% NS 1-1.5 mL/kg/hr)',
+                'rationale': 'Renal protection for CKD patient',
+                'category': 'renal'
+            })
+
+        # Diabetes management
+        if 'Diabetes Mellitus' in self.patient.get('comorbidities', []):
+            plan['immediate'].append({
+                'action': 'NPO insulin protocol (50% long-acting insulin, hold short-acting)',
+                'rationale': 'Perioperative glycemic control',
+                'category': 'endocrine'
+            })
+
+        return plan
+
+    def synthesize_final_report(self):
+        """Step 7: Generate comprehensive report with all evidence"""
+        # Collect all papers
+        all_papers = []
+        for evidence_group in self.evidence:
+            if evidence_group and 'papers' in evidence_group:
+                all_papers.extend(evidence_group['papers'])
+
+        # Remove duplicates by PMID
+        seen_pmids = set()
+        unique_papers = []
+        for paper in all_papers:
+            if paper['pmid'] not in seen_pmids:
+                seen_pmids.add(paper['pmid'])
+                unique_papers.append(paper)
+
+        # Sort by quality
+        unique_papers.sort(key=lambda x: x.get('sort_priority', 99))
+
+        # Build context for GPT
+        ref_list = ""
+        all_context = ""
+        for i, ref in enumerate(unique_papers, 1):
+            ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+            all_context += f"Title: {ref['title']}\nAbstract: {ref.get('abstract', '')}\nAuthors: {ref['authors']}\nJournal: {ref['journal']} ({ref['year']})\nPMID: {ref['pmid']}\n\n"
+
+        # Build patient summary
+        comorbidities_str = ', '.join(self.patient.get('comorbidities', [])) if self.patient.get('comorbidities') else 'None'
+        other_comorbidities = self.patient.get('other_comorbidities', '')
+        if other_comorbidities:
+            comorbidities_str += f"; {other_comorbidities}"
+
+        # Calculate BMI and IBW
+        weight = self.patient.get('weight', 0)
+        height = self.patient.get('height', 0)
+        bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else None
+
+        sex = self.patient.get('sex', 'male')
+        if sex == 'male':
+            ibw = round(50 + 0.91 * (height - 152.4), 1) if height else None
+        else:
+            ibw = round(45.5 + 0.91 * (height - 152.4), 1) if height else None
+
+        patient_data = f"""
+Patient Demographics:
+- Age: {self.patient.get('age', 'N/A')} years
+- Weight: {weight} kg
+- Height: {height} cm
+- Sex: {sex}
+- BMI: {bmi} kg/m²
+- IBW: {ibw} kg
+
+Comorbidities: {comorbidities_str}
+
+Functional Status:
+- METs: {self.patient.get('mets', 'Not specified')}
+
+Previous Anesthesia: {self.patient.get('previous_anesthesia', 'None reported')}
+
+Medications: {self.patient.get('medications', 'None reported')}
+
+Laboratory Values:
+- Hemoglobin: {self.patient.get('hgb', 'N/A')} g/dL
+- Platelets: {self.patient.get('plt', 'N/A')} ×10³/μL
+- Creatinine: {self.patient.get('cr', 'N/A')} mg/dL
+- INR: {self.patient.get('inr', 'N/A')}
+
+Cardiac Assessment:
+- Ejection Fraction: {self.patient.get('ef', 'Not available')}
+- EKG: {self.patient.get('ekg', 'Not available')}
+
+Procedure: {self.patient.get('procedure', 'Not specified')}
+Surgery Risk: {self.patient.get('surgery_risk', 'Not specified')}
+
+NPO Status: {self.patient.get('npo', 'Not specified')}
+Allergies: {self.patient.get('allergies', 'NKDA')}
+"""
+
+        # Build optimization timeline summary
+        optimization_summary = ""
+        if self.recommendations.get('long_term'):
+            optimization_summary += "\n**Long-term (>7 days pre-op):**\n"
+            for rec in self.recommendations['long_term']:
+                optimization_summary += f"- {rec['action']} ({rec['rationale']})\n"
+
+        if self.recommendations.get('short_term'):
+            optimization_summary += "\n**Short-term (1-7 days pre-op):**\n"
+            for rec in self.recommendations['short_term']:
+                optimization_summary += f"- {rec['action']} ({rec['rationale']})\n"
+
+        if self.recommendations.get('immediate'):
+            optimization_summary += "\n**Day of surgery:**\n"
+            for rec in self.recommendations['immediate']:
+                optimization_summary += f"- {rec['action']} ({rec['rationale']})\n"
+
+        # Generate GPT prompt
+        prompt = f"""You are an expert anesthesiologist using an AI-powered decision support system. This assessment was generated using AGENTIC AI that performed multi-step reasoning, adaptive literature search, and guideline cross-checking.
+
+AGENT ANALYSIS RESULTS:
+
+**Risk Stratification:**
+- RCRI Score: {self.findings['risk']['rcri']['score']} ({', '.join(self.findings['risk']['rcri']['components']) if self.findings['risk']['rcri']['components'] else 'No risk factors'})
+- Risk Category: {self.findings['risk']['rcri']['risk_category']}
+- Estimated 30-day Risks:
+  * Major cardiac event: {self.findings['risk']['cardiac_risk']}%
+  * Respiratory complication: {self.findings['risk']['respiratory_risk']}%
+  * Acute kidney injury: {self.findings['risk']['aki_risk']}%
+  * Mortality: {self.findings['risk']['mortality_risk']}%
+
+**Critical Issues Identified by AI Agent:**
+{chr(10).join([f"- {issue['description']} (Priority: {issue['priority']})" for issue in self.identify_critical_issues()[:5]])}
+
+**Literature Searches Performed:** {self.search_count} adaptive PubMed searches
+
+**Drug Interactions Detected:** {len(self.findings.get('interactions', []))}
+
+**Optimization Timeline:**
+{optimization_summary}
+
+PATIENT INFORMATION:
+{patient_data}
+
+AVAILABLE EVIDENCE (use numbered citations [1], [2], etc.):
+{ref_list}
+
+PAPER DETAILS:
+{all_context}
+
+Generate a comprehensive pre-operative assessment with these sections:
+
+1. **ASA Physical Status Classification**
+   - Assign ASA class (I-V) with detailed justification
+
+2. **Cardiac Risk Assessment**
+   - RCRI Score: {self.findings['risk']['rcri']['score']} - explain what this means
+   - Estimated cardiac event risk: {self.findings['risk']['cardiac_risk']}%
+   - Risk mitigation strategies
+
+3. **Preoperative Optimization Plan** (TIMELINE-BASED)
+   - Long-term (>7 days): What should be done now if surgery can be delayed
+   - Short-term (1-7 days): Actions in the week before surgery
+   - Day of surgery: Medication management, NPO protocols
+
+4. **Anesthetic Recommendations**
+   - Preferred technique (general vs regional vs combined) with rationale
+   - Drug selection and dosing adjustments
+   - Monitoring (standard vs advanced)
+
+5. **Postoperative Planning**
+   - Disposition (PACU vs ICU) with justification
+   - Pain management strategy
+   - Complication monitoring
+
+Use HTML formatting with <h3>, <h4>, <p>, <strong>, <ul>, <li> tags.
+Use inline citations [1], [2], [3] throughout.
+
+CRITICAL: Make this assessment SPECIFIC to THIS patient. Reference their exact RCRI score, estimated risks, comorbidities, and medications. This is an agentic AI-powered assessment - show the depth of analysis."""
+
+        try:
+            response = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1
+            ).choices[0].message.content
+
+            return {
+                'assessment': response,
+                'references': unique_papers,
+                'risk_scores': self.findings['risk'],
+                'reasoning_trace': self.reasoning_trace,
+                'search_count': self.search_count,
+                'mode': 'agentic'
+            }
+
+        except Exception as e:
+            logging.error(f"GPT synthesis error: {str(e)}")
+            return None
+
+
 HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23594,9 +24441,9 @@ def quick_dose():
     return render_template_string(QUICK_DOSE_HTML)
 @app.route("/preop", methods=["GET", "POST"])
 def preop_assessment():
-    """Pre-operative assessment with evidence-based risk stratification"""
+    """Pre-operative assessment with HYBRID RAG + AGENTIC AI"""
     if request.method == "GET":
-        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None))
+        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None, mode=None, reasoning_trace=None))
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
@@ -23626,11 +24473,11 @@ def preop_assessment():
     # Validate required fields
     if not procedure or not procedure.strip():
         error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the surgical procedure before submitting the form.</p>"
-        return render_template_string(PREOP_HTML, summary=error_message, references=None)
+        return render_template_string(PREOP_HTML, summary=error_message, references=None, mode=None, reasoning_trace=None)
 
     if not surgery_risk:
         error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please select a surgery risk category before submitting the form.</p>"
-        return render_template_string(PREOP_HTML, summary=error_message, references=None)
+        return render_template_string(PREOP_HTML, summary=error_message, references=None, mode=None, reasoning_trace=None)
 
     # Calculate BMI and IBW
     bmi = round(weight / ((height / 100) ** 2), 1) if weight and height else None
@@ -23639,137 +24486,192 @@ def preop_assessment():
     else:
         ibw = round(45.5 + 0.91 * (height - 152.4), 1)
 
-    # Build targeted PubMed searches based on patient risk factors
-    search_queries = []
+    # =================================================================
+    # HYBRID RAG + AGENTIC AI SYSTEM
+    # =================================================================
 
-    # Anticoagulation management
-    if any(drug in medications.lower() for drug in ['apixaban', 'rivaroxaban', 'warfarin', 'dabigatran', 'edoxaban', 'eliquis', 'xarelto', 'coumadin']):
-        search_queries.append(f"perioperative anticoagulation management {procedure}")
+    # Build patient data dict
+    patient_dict = {
+        'age': age,
+        'weight': weight,
+        'height': height,
+        'sex': sex,
+        'bmi': bmi,
+        'ibw': ibw,
+        'comorbidities': comorbidities,
+        'other_comorbidities': other_comorbidities,
+        'mets': mets,
+        'previous_anesthesia': previous_anesthesia,
+        'medications': medications,
+        'hgb': hgb,
+        'plt': plt,
+        'cr': cr,
+        'inr': inr,
+        'ef': ef,
+        'ekg': ekg,
+        'procedure': procedure,
+        'surgery_risk': surgery_risk,
+        'npo': npo,
+        'allergies': allergies
+    }
 
-    # Antiplatelet management
-    if any(drug in medications.lower() for drug in ['aspirin', 'plavix', 'clopidogrel', 'ticagrelor', 'brilinta']):
-        search_queries.append(f"perioperative antiplatelet management {procedure}")
+    # STEP 1: Classify complexity (fast RAG vs agentic)
+    complexity_result = classify_preop_complexity(patient_dict)
+    mode = complexity_result['mode']
 
-    # Obesity + OSA
-    if bmi and bmi >= 30 and "Obstructive Sleep Apnea" in comorbidities:
-        search_queries.append("obese patient OSA perioperative anesthesia management")
+    logging.info(f"Preop assessment mode: {mode}, complexity score: {complexity_result['complexity_score']}, reasoning: {complexity_result['reasoning']}")
 
-    # Diabetes management
-    if "Diabetes Mellitus" in comorbidities:
-        search_queries.append(f"perioperative diabetes insulin management {procedure}")
-
-    # Cardiac risk
-    if any(c in comorbidities for c in ["Coronary Artery Disease", "Heart Failure", "Prior Stroke"]):
-        search_queries.append(f"perioperative cardiac risk {procedure} guidelines")
-
-    # Reduced ejection fraction
-    if ef:
-        ef_lower = ef.lower()
+    # STEP 2: Route to appropriate pipeline
+    if mode == 'agentic':
+        # AGENTIC MODE: Multi-step reasoning with adaptive search
         try:
-            # Try to extract numeric value from EF
-            ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', ef.split('-')[0])))
-            if ef_numeric < 40:
-                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
-        except:
-            # Check for descriptive terms
-            if any(term in ef_lower for term in ['reduced', 'low', 'decreased', 'hfref']):
-                search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+            agent = PreopAgent(patient_dict)
+            result = agent.run()
 
-    # Atrial fibrillation from EKG
-    if ekg:
-        ekg_lower = ekg.lower()
-        if any(term in ekg_lower for term in ['afib', 'a-fib', 'atrial fib', 'atrial fibrillation']):
-            search_queries.append(f"atrial fibrillation perioperative management {procedure}")
+            if result:
+                return render_template_string(
+                    PREOP_HTML,
+                    summary=result['assessment'],
+                    references=result['references'],
+                    mode='agentic',
+                    reasoning_trace=result.get('reasoning_trace', []),
+                    search_count=result.get('search_count', 0),
+                    complexity_reasoning=complexity_result['reasoning']
+                )
+            else:
+                # Fallback to fast RAG if agent fails
+                logging.error("PreopAgent failed, falling back to fast RAG")
+                mode = 'fast_rag'
+        except Exception as e:
+            logging.error(f"PreopAgent error: {str(e)}, falling back to fast RAG")
+            mode = 'fast_rag'
 
-    # CKD
-    if "Chronic Kidney Disease" in comorbidities:
-        search_queries.append(f"chronic kidney disease perioperative management {procedure}")
+    # FAST RAG MODE: Quick 3-query search (default or fallback)
+    if mode == 'fast_rag':
+        # Build targeted PubMed searches (same as original logic, but allow 5 searches)
+        search_queries = []
 
-    # General perioperative guidelines for procedure
-    search_queries.append(f"{procedure} anesthesia perioperative management guidelines")
+        # Anticoagulation management
+        if any(drug in medications.lower() for drug in ['apixaban', 'rivaroxaban', 'warfarin', 'dabigatran', 'edoxaban', 'eliquis', 'xarelto', 'coumadin']):
+            search_queries.append(f"perioperative anticoagulation management {procedure}")
 
-    # Search PubMed for all queries and collect papers
-    all_refs = []
-    all_context = ""
+        # Antiplatelet management
+        if any(drug in medications.lower() for drug in ['aspirin', 'plavix', 'clopidogrel', 'ticagrelor', 'brilinta']):
+            search_queries.append(f"perioperative antiplatelet management {procedure}")
 
-    for query in search_queries[:3]:  # Limit to 3 searches to avoid overwhelming
-        try:
-            q_expanded = query.replace(" ", " AND ")
-            search_term = (
-                f'({q_expanded}) AND '
-                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
-                f'"randomized controlled trial"[pt]) AND '
-                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
-            )
+        # Obesity + OSA
+        if bmi and bmi >= 30 and "Obstructive Sleep Apnea" in comorbidities:
+            search_queries.append("obese patient OSA perioperative anesthesia management")
 
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
-            result = Entrez.read(handle)
-            ids = result["IdList"]
+        # Diabetes management
+        if "Diabetes Mellitus" in comorbidities:
+            search_queries.append(f"perioperative diabetes insulin management {procedure}")
 
-            if ids:
-                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
-                papers = Entrez.read(handle)["PubmedArticle"]
+        # Cardiac risk
+        if any(c in comorbidities for c in ["Coronary Artery Disease", "Heart Failure", "Prior Stroke"]):
+            search_queries.append(f"perioperative cardiac risk {procedure} guidelines")
 
-                for p in papers:
-                    try:
-                        art = p["MedlineCitation"]["Article"]
-                        # CRITICAL: Convert all Biopython StringElement objects to plain Python strings
-                        # for Redis serialization compatibility
-                        title = str(art.get("ArticleTitle", "No title"))
-                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
-                        journal = str(art["Journal"].get("Title", "Unknown"))
-                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
-                        pmid = str(p["MedlineCitation"]["PMID"])
+        # Reduced ejection fraction
+        if ef:
+            ef_lower = ef.lower()
+            try:
+                ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', ef.split('-')[0])))
+                if ef_numeric < 40:
+                    search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
+            except:
+                if any(term in ef_lower for term in ['reduced', 'low', 'decreased', 'hfref']):
+                    search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
 
-                        # Classify study type for quality indicators
-                        study_classification = classify_study_type(title, journal)
+        # Atrial fibrillation from EKG
+        if ekg:
+            ekg_lower = ekg.lower()
+            if any(term in ekg_lower for term in ['afib', 'a-fib', 'atrial fib', 'atrial fibrillation']):
+                search_queries.append(f"atrial fibrillation perioperative management {procedure}")
 
-                        all_refs.append({
-                            "title": title,
-                            "authors": authors,
-                            "journal": journal,
-                            "year": year,
-                            "pmid": pmid,
-                            "study_type": study_classification['type'],
-                            "study_badge": study_classification['badge_text'],
-                            "study_color": study_classification['badge_color'],
-                            "study_score": study_classification['score'],
-                            "sort_priority": study_classification['sort_priority']
-                        })
-                        all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
-                    except:
-                        continue
-        except:
-            continue
+        # CKD
+        if "Chronic Kidney Disease" in comorbidities:
+            search_queries.append(f"chronic kidney disease perioperative management {procedure}")
 
-    # Remove duplicate references by PMID
-    seen_pmids = set()
-    unique_refs = []
-    for ref in all_refs:
-        if ref['pmid'] not in seen_pmids:
-            seen_pmids.add(ref['pmid'])
-            unique_refs.append(ref)
+        # General perioperative guidelines for procedure
+        search_queries.append(f"{procedure} anesthesia perioperative management guidelines")
 
-    # Sort references by quality (highest quality first)
-    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
+        # Search PubMed (allow 5 searches for fast RAG)
+        all_refs = []
+        all_context = ""
 
-    # Create numbered reference list for GPT
-    ref_list = ""
-    for i, ref in enumerate(unique_refs, 1):
-        ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+        for query in search_queries[:5]:
+            try:
+                q_expanded = query.replace(" ", " AND ")
+                search_term = (
+                    f'({q_expanded}) AND '
+                    f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
+                    f'"randomized controlled trial"[pt]) AND '
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                )
 
-    # Build patient summary for GPT
-    all_comorbidities = ', '.join(comorbidities) if comorbidities else 'None'
-    if other_comorbidities:
-        all_comorbidities += f"; {other_comorbidities}"
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result["IdList"]
 
-    patient_data = f"""
+                if ids:
+                    handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                    papers = Entrez.read(handle)["PubmedArticle"]
+
+                    for p in papers:
+                        try:
+                            art = p["MedlineCitation"]["Article"]
+                            title = str(art.get("ArticleTitle", "No title"))
+                            abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                            authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                            journal = str(art["Journal"].get("Title", "Unknown"))
+                            year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                            pmid = str(p["MedlineCitation"]["PMID"])
+
+                            study_classification = classify_study_type(title, journal)
+
+                            all_refs.append({
+                                "title": title,
+                                "authors": authors,
+                                "journal": journal,
+                                "year": year,
+                                "pmid": pmid,
+                                "study_type": study_classification['type'],
+                                "study_badge": study_classification['badge_text'],
+                                "study_color": study_classification['badge_color'],
+                                "study_score": study_classification['score'],
+                                "sort_priority": study_classification['sort_priority']
+                            })
+                            all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
+                        except:
+                            continue
+            except:
+                continue
+
+        # Remove duplicates and sort
+        seen_pmids = set()
+        unique_refs = []
+        for ref in all_refs:
+            if ref['pmid'] not in seen_pmids:
+                seen_pmids.add(ref['pmid'])
+                unique_refs.append(ref)
+
+        unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
+
+        # Build prompt
+        ref_list = ""
+        for i, ref in enumerate(unique_refs, 1):
+            ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+
+        all_comorbidities = ', '.join(comorbidities) if comorbidities else 'None'
+        if other_comorbidities:
+            all_comorbidities += f"; {other_comorbidities}"
+
+        patient_data = f"""
 Patient Demographics:
 - Age: {age} years
 - Weight: {weight} kg
 - Height: {height} cm
-- Sex Assigned at Birth: {sex}
+- Sex: {sex}
 - BMI: {bmi} kg/m²
 - IBW: {ibw} kg
 
@@ -23778,7 +24680,7 @@ Comorbidities: {all_comorbidities}
 Functional Status:
 - METs: {mets}
 
-Previous Anesthesia History: {previous_anesthesia if previous_anesthesia else 'None reported'}
+Previous Anesthesia: {previous_anesthesia if previous_anesthesia else 'None reported'}
 
 Medications: {medications if medications else 'None reported'}
 
@@ -23793,14 +24695,13 @@ Cardiac Assessment:
 - EKG: {ekg if ekg else 'Not available'}
 
 Procedure: {procedure}
-Surgery Risk Category: {surgery_risk}
+Surgery Risk: {surgery_risk}
 
 NPO Status: {npo if npo else 'Not specified'}
 Allergies: {allergies if allergies else 'NKDA'}
 """
 
-    # Generate GPT summary
-    prompt = f"""You are an expert anesthesiologist performing a comprehensive pre-operative assessment. Based on the patient data and evidence from recent literature, provide a detailed evidence-based assessment.
+        prompt = f"""You are an expert anesthesiologist performing a comprehensive pre-operative assessment.
 
 Patient Information:
 {patient_data}
@@ -23811,60 +24712,51 @@ Available Evidence (use numbered citations [1], [2], etc.):
 Paper Details:
 {all_context}
 
-CRITICAL: PATIENT-SPECIFIC ASSESSMENT PROTOCOL
-This is NOT a template - tailor EVERY recommendation to THIS specific patient. Before finalizing:
-1. **Individualize Risk Assessment**: Don't use generic statements. Calculate actual RCRI score, cite specific comorbidities.
-2. **Personalize Medication Recommendations**: Base timing on THIS patient's medications, procedures, and comorbidities - not general lists.
-3. **Specific Risk Quantification**: Provide actual risk percentages for THIS patient (cardiac event, respiratory complication, AKI) using RCRI/NSQIP framework.
-4. **Airway Individualization**: Address THIS patient's airway (BMI, OSA, age, Mallampati if mentioned, previous anesthesia).
-5. **Cross-Check**: Are all recommendations consistent with THIS patient's labs, EF, creatinine, comorbidities?
-6. **Avoid Generic Advice**: Don't say "consider monitoring" - specify WHICH monitors for THIS patient and WHY.
-
 Generate a comprehensive pre-operative assessment including:
 
-1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification based on comorbidities and functional status (METs)
+1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification
 
 2. **Cardiac Risk Stratification**:
-   - Calculate RCRI score if applicable (high-risk surgery + cardiac disease)
-   - Reference ACS NSQIP Surgical Risk Calculator considerations for this patient's specific risk profile (age, comorbidities, functional status, procedure type)
-   - Discuss perioperative cardiac risk with specific percentages when possible
+   - Calculate RCRI score if applicable
+   - Provide estimated cardiac event risk percentage
 
 3. **Perioperative Recommendations**:
-   - Medication management (which to continue, hold, or adjust with specific timing)
-   - Airway considerations (OSA, obesity, difficult airway predictors, previous anesthesia complications)
-   - Hemodynamic management strategies
-   - VTE prophylaxis recommendations
+   - Medication management (specific timing)
+   - Airway considerations
+   - Hemodynamic management
+   - VTE prophylaxis
    - Glycemic control if diabetic
    - Renal protection if CKD
-   - Special considerations based on previous anesthesia history
 
 4. **Anesthetic Considerations**:
-   - Preferred anesthetic technique with rationale
-   - Drug selection and dosing adjustments
-   - Monitoring requirements (standard vs advanced)
+   - Preferred technique with rationale
+   - Drug selection and dosing
+   - Monitoring requirements
    - Postoperative disposition (PACU vs ICU)
-   - Risk mitigation strategies
 
-Use HTML formatting:
-- <h3>Section Headers</h3>
-- <p>Paragraphs</p>
-- <strong>Bold for emphasis</strong>
-- <br><br> for spacing
+Use HTML formatting with <h3>, <p>, <strong>, <ul>, <li> tags.
+Use inline citations [1], [2], [3] throughout.
 
-IMPORTANT: Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above. Do NOT create a separate "Evidence-Based Citations" or "References" section - the references will be displayed separately below your assessment.
+IMPORTANT: Make this assessment SPECIFIC to THIS patient's exact comorbidities, medications, and risk factors."""
 
-Provide maximum clinical utility with specific, actionable recommendations backed by evidence. When discussing risk, reference the ACS NSQIP risk calculator framework and provide estimated risk percentages for major complications when relevant based on the patient's profile."""
+        try:
+            response = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.1
+            ).choices[0].message.content
+        except Exception as e:
+            response = f"<p>Error generating assessment: {str(e)}</p>"
 
-    try:
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.1
-        ).choices[0].message.content
-    except Exception as e:
-        response = f"<p>Error generating assessment: {str(e)}</p>"
-
-    return render_template_string(PREOP_HTML, summary=response, references=unique_refs)
+        return render_template_string(
+            PREOP_HTML,
+            summary=response,
+            references=unique_refs,
+            mode='fast_rag',
+            reasoning_trace=None,
+            search_count=len(search_queries[:5]),
+            complexity_reasoning=complexity_result['reasoning']
+        )
 
 @app.route("/informed-consent", methods=["GET", "POST"])
 def informed_consent_generator():
