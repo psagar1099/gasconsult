@@ -2358,6 +2358,398 @@ PREOP_HTML = """<!DOCTYPE html>
 
             .footer { padding: 48px 40px; }
         }
+
+        /* ===== WIZARD STYLES ===== */
+        /* ===================================================================
+           WIZARD STYLES
+           =================================================================== */
+        
+        .wizard-progress {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-600) 0%, #1D4ED8 100%);
+            border-radius: 999px;
+            transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+        
+        .wizard-step {
+            display: none;
+        }
+        
+        .wizard-step[style*="display: block"] {
+            animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .step-header {
+            margin-bottom: 32px;
+        }
+        
+        .step-number {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--blue-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+        
+        .step-description {
+            font-size: 15px;
+            color: var(--gray-600);
+        }
+        
+        .subsection {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--gray-200);
+            border-radius: 16px;
+        }
+        
+        .subsection-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .subsection-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        
+        .conditional-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid var(--blue-200);
+            border-radius: 12px;
+        }
+        
+        .wizard-navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-200);
+        }
+        
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 24px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+        }
+        
+        .nav-btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+        
+        .nav-btn-secondary:hover {
+            background: var(--gray-200);
+            transform: translateY(-1px);
+        }
+        
+        .nav-btn-primary {
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .nav-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .nav-btn-submit {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .nav-btn-submit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .input-with-unit {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .input-with-unit .form-input {
+            flex: 1;
+        }
+        
+        .form-select-small {
+            width: 80px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .form-select-small:hover {
+            border-color: var(--blue-500);
+        }
+        
+        .form-select-small:focus {
+            outline: none;
+            border-color: var(--blue-600);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .checkbox-option:hover {
+            border-color: var(--blue-500);
+            background: var(--blue-50);
+        }
+        
+        .checkbox-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+        }
+        
+        .radio-group-inline {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-option-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .radio-option-inline:hover {
+            border-color: var(--blue-500);
+            background: var(--blue-50);
+        }
+        
+        .radio-option-inline input[type="radio"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .radio-option-inline input[type="radio"]:checked + span {
+            color: var(--blue-600);
+            font-weight: 600;
+        }
+        
+        .question-card {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+        }
+        
+        .question-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .question-text strong {
+            color: var(--blue-600);
+            font-weight: 700;
+        }
+        
+        .score-display {
+            margin-top: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--blue-50), #EFF6FF);
+            border: 1px solid var(--blue-200);
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+        
+        .score-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--blue-600);
+            margin-bottom: 8px;
+        }
+        
+        .score-interpretation {
+            font-size: 15px;
+            color: var(--gray-600);
+        }
+        
+        .allergy-entry {
+            padding: 20px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .allergy-header {
+            margin-bottom: 16px;
+        }
+        
+        .allergy-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+        
+        .form-help {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 6px;
+        }
+        
+        .required {
+            color: var(--red-600);
+        }
+        
+        .error {
+            border-color: var(--red-600) !important;
+        }
+        
+        .error-message {
+            color: var(--red-600);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .wizard-navigation {
+                flex-direction: column-reverse;
+            }
+        
+            .nav-btn-primary,
+            .nav-btn-submit {
+                margin-left: 0;
+            }
+        
+            .step-title {
+                font-size: 20px;
+            }
+        
+            .score-value {
+                font-size: 28px;
+            }
+        
+            .radio-group-inline {
+                flex-direction: column;
+                gap: 8px;
+            }
+        
+            .radio-option-inline {
+                width: 100%;
+            }
+        }
+        
+
     </style>
 </head>
 <body>
@@ -2432,144 +2824,1718 @@ PREOP_HTML = """<!DOCTYPE html>
                 </p>
             </div>
 
-            <form method="POST" class="form-card">
+            <form method="POST" class="form-card" id="preop-wizard-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
-                <!-- Demographics -->
-                <div class="section-title">Patient Demographics</div>
-                <div class="input-row">
-                    <div class="form-group">
-                        <label class="form-label">Age <span class="required">*</span></label>
-                        <input type="number" name="age" class="form-input" placeholder="70" min="0" max="120" required>
+                <!-- Progress Bar -->
+                <div class="wizard-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 16.67%;"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Weight (kg) <span class="required">*</span></label>
-                        <input type="number" name="weight" class="form-input" placeholder="75" min="1" max="300" step="0.1" required>
-                    </div>
+                    <div class="progress-text" id="progress-text">Step 1 of 6</div>
                 </div>
+
+                <!-- Wizard Steps -->
+                <!-- STEP 1: Demographics & Basic Information -->
+<div class="wizard-step" id="step-1" data-step="1">
+    <div class="step-header">
+        <div class="step-number">Step 1 of 6</div>
+        <h2 class="step-title">Demographics & Basic Information</h2>
+        <p class="step-description">Let's start with some basic information about you.</p>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Date of Birth <span class="required">*</span></label>
+        <input type="date" name="dob" class="form-input" required max="{{ today_date }}">
+        <p class="form-help">We'll calculate your age from this</p>
+    </div>
+
+    <div class="input-row">
+        <div class="form-group">
+            <label class="form-label">Weight <span class="required">*</span></label>
+            <div class="input-with-unit">
+                <input type="number" name="weight" class="form-input" placeholder="70" min="20" max="300" step="0.1" required id="weight-input">
+                <select name="weight_unit" class="form-select-small" id="weight-unit">
+                    <option value="kg">kg</option>
+                    <option value="lbs">lbs</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Height <span class="required">*</span></label>
+            <div class="input-with-unit">
+                <input type="number" name="height" class="form-input" placeholder="170" min="50" max="250" step="0.1" required id="height-input">
+                <select name="height_unit" class="form-select-small" id="height-unit">
+                    <option value="cm">cm</option>
+                    <option value="inches">inches</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-row">
+        <div class="form-group">
+            <label class="form-label">Sex <span class="required">*</span></label>
+            <select name="sex" class="form-select" required>
+                <option value="">Select</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label">BMI</label>
+            <input type="text" class="form-input" id="bmi-display" readonly placeholder="Auto-calculated">
+            <input type="hidden" name="bmi" id="bmi-value">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Primary Care Physician</label>
+        <input type="text" name="primary_physician" class="form-input" placeholder="Dr. Smith">
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Emergency Contact Name</label>
+        <input type="text" name="emergency_contact_name" class="form-input" placeholder="Full name">
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Emergency Contact Phone</label>
+        <input type="tel" name="emergency_contact_phone" class="form-input" placeholder="(555) 123-4567">
+    </div>
+</div>
+
+                <!-- STEP 2: Medical History -->
+<div class="wizard-step" id="step-2" data-step="2">
+    <div class="step-header">
+        <div class="step-number">Step 2 of 6</div>
+        <h2 class="step-title">Medical History</h2>
+        <p class="step-description">Tell us about your medical conditions. This helps us assess your anesthesia risk.</p>
+    </div>
+
+    <!-- Cardiovascular -->
+    <div class="subsection">
+        <h3 class="subsection-title">Cardiovascular</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Hypertension" id="htn">
+                <span class="checkbox-label">Hypertension (High Blood Pressure)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Coronary Artery Disease" id="cad" onchange="toggleConditional('cad-details')">
+                <span class="checkbox-label">Coronary Artery Disease (CAD)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Prior MI" id="prior-mi">
+                <span class="checkbox-label">Prior Heart Attack (MI)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Heart Failure" id="hf" onchange="toggleConditional('hf-details')">
+                <span class="checkbox-label">Heart Failure</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Atrial Fibrillation" id="afib">
+                <span class="checkbox-label">Atrial Fibrillation (AFib)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Valvular Disease" id="valvular">
+                <span class="checkbox-label">Heart Valve Disease</span>
+            </label>
+        </div>
+
+        <!-- Conditional: CAD Details -->
+        <div class="conditional-section" id="cad-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">Prior Stent Placement?</label>
+                    <select name="prior_stent" class="form-select" onchange="toggleConditional('stent-details', this.value === 'yes')">
+                        <option value="">Select</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Prior CABG?</label>
+                    <select name="prior_cabg" class="form-select" onchange="toggleConditional('cabg-details', this.value === 'yes')">
+                        <option value="">Select</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="conditional-section" id="stent-details" style="display:none;">
                 <div class="input-row">
                     <div class="form-group">
-                        <label class="form-label">Height (cm) <span class="required">*</span></label>
-                        <input type="number" name="height" class="form-input" placeholder="170" min="50" max="250" step="0.1" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Sex <span class="required">*</span></label>
-                        <select name="sex" class="form-select" required>
+                        <label class="form-label">Stent Type</label>
+                        <select name="stent_type" class="form-select">
                             <option value="">Select</option>
-                            <option value="M">Male</option>
-                            <option value="F">Female</option>
+                            <option value="BMS">Bare Metal Stent (BMS)</option>
+                            <option value="DES">Drug-Eluting Stent (DES)</option>
+                            <option value="Unknown">Unknown</option>
                         </select>
                     </div>
-                </div>
-
-                <!-- Medical History -->
-                <div class="section-title">Medical History</div>
-                <div class="form-group">
-                    <label class="form-label">Comorbidities (select all that apply)</label>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Hypertension" id="htn">
-                            <label for="htn">Hypertension</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Diabetes Mellitus" id="dm">
-                            <label for="dm">Diabetes Mellitus</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Coronary Artery Disease" id="cad">
-                            <label for="cad">Coronary Artery Disease (CAD)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Heart Failure" id="hf">
-                            <label for="hf">Heart Failure</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Chronic Kidney Disease" id="ckd">
-                            <label for="ckd">Chronic Kidney Disease (CKD)</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="COPD" id="copd">
-                            <label for="copd">COPD</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Asthma" id="asthma">
-                            <label for="asthma">Asthma</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Stroke/TIA" id="stroke">
-                            <label for="stroke">Stroke/TIA</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Atrial Fibrillation" id="afib">
-                            <label for="afib">Atrial Fibrillation</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Liver Disease" id="liver">
-                            <label for="liver">Liver Disease</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" name="comorbidities" value="Obstructive Sleep Apnea" id="osa">
-                            <label for="osa">Obstructive Sleep Apnea (OSA)</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Current Medications</label>
-                    <textarea name="medications" class="form-input form-textarea" placeholder="List medications (e.g., metoprolol 50mg BID, lisinopril 10mg daily, warfarin 5mg daily)"></textarea>
-                </div>
-
-                <!-- Cardiac Assessment -->
-                <div class="section-title">Cardiac Assessment</div>
-                <div class="input-row">
                     <div class="form-group">
-                        <label class="form-label">Ejection Fraction (EF%)</label>
-                        <input type="number" name="ef" class="form-input" placeholder="55" min="10" max="100">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Functional Capacity (METs)</label>
-                        <input type="number" name="mets" class="form-input" placeholder="4" min="1" max="20" step="0.5">
+                        <label class="form-label">Stent Date</label>
+                        <input type="month" name="stent_date" class="form-input">
                     </div>
                 </div>
+            </div>
 
-                <!-- Renal Function -->
-                <div class="section-title">Renal Function</div>
-                <div class="input-row">
-                    <div class="form-group">
-                        <label class="form-label">Creatinine (mg/dL)</label>
-                        <input type="number" name="cr" class="form-input" placeholder="1.0" min="0.1" max="20" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">eGFR (mL/min/1.73m²)</label>
-                        <input type="number" name="egfr" class="form-input" placeholder="90" min="1" max="150">
-                    </div>
+            <div class="conditional-section" id="cabg-details" style="display:none;">
+                <div class="form-group">
+                    <label class="form-label">CABG Date</label>
+                    <input type="month" name="cabg_date" class="form-input">
                 </div>
+            </div>
+        </div>
 
-                <!-- Surgical Details -->
-                <div class="section-title">Surgical Details</div>
+        <!-- Conditional: Heart Failure Details -->
+        <div class="conditional-section" id="hf-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Ejection Fraction (EF%)</label>
+                <input type="number" name="ef" class="form-input" placeholder="55" min="10" max="100">
+                <p class="form-help">If known from recent echocardiogram</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Pacemaker or ICD?</label>
+            <select name="cardiac_device" class="form-select" onchange="toggleConditional('device-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="device-details" style="display:none;">
+            <div class="input-row">
                 <div class="form-group">
-                    <label class="form-label">Procedure <span class="required">*</span></label>
-                    <input type="text" name="procedure" class="form-input" placeholder="e.g., Total knee replacement" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Surgery Risk Level <span class="required">*</span></label>
-                    <select name="surgery_risk" class="form-select" required>
-                        <option value="">Select risk level</option>
-                        <option value="low">Low Risk (superficial, cataract, breast biopsy)</option>
-                        <option value="intermediate">Intermediate Risk (orthopedic, ENT, laparoscopic)</option>
-                        <option value="high">High Risk (cardiac, vascular, major abdominal)</option>
+                    <label class="form-label">Device Type</label>
+                    <select name="device_type" class="form-select">
+                        <option value="">Select</option>
+                        <option value="Pacemaker">Pacemaker</option>
+                        <option value="ICD">ICD (Defibrillator)</option>
+                        <option value="Biventricular">Biventricular (CRT)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Emergency Surgery?</label>
-                    <select name="emergency" class="form-select">
-                        <option value="No">No (Elective)</option>
-                        <option value="Yes">Yes (Emergency)</option>
+                    <label class="form-label">Manufacturer</label>
+                    <input type="text" name="device_manufacturer" class="form-input" placeholder="e.g., Medtronic, Boston Scientific">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Respiratory -->
+    <div class="subsection">
+        <h3 class="subsection-title">Respiratory</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Asthma" id="asthma">
+                <span class="checkbox-label">Asthma</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="COPD" id="copd" onchange="toggleConditional('copd-details')">
+                <span class="checkbox-label">COPD</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Obstructive Sleep Apnea" id="osa">
+                <span class="checkbox-label">Obstructive Sleep Apnea (OSA)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Pulmonary Hypertension" id="pulm-htn">
+                <span class="checkbox-label">Pulmonary Hypertension</span>
+            </label>
+        </div>
+
+        <div class="conditional-section" id="copd-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">On Home Oxygen?</label>
+                    <select name="home_oxygen" class="form-select">
+                        <option value="">Select</option>
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Recent Exacerbation (within 2 weeks)?</label>
+                    <select name="recent_exacerbation" class="form-select">
+                        <option value="">Select</option>
+                        <option value="no">No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <button type="submit" class="submit-btn">Generate Assessment</button>
+    <!-- Endocrine -->
+    <div class="subsection">
+        <h3 class="subsection-title">Endocrine</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Diabetes Mellitus" id="dm" onchange="toggleConditional('dm-details')">
+                <span class="checkbox-label">Diabetes Mellitus</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Thyroid Disease" id="thyroid">
+                <span class="checkbox-label">Thyroid Disease</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Adrenal Insufficiency" id="adrenal">
+                <span class="checkbox-label">Adrenal Insufficiency / Chronic Steroid Use</span>
+            </label>
+        </div>
+
+        <div class="conditional-section" id="dm-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">Diabetes Type</label>
+                    <select name="dm_type" class="form-select">
+                        <option value="">Select</option>
+                        <option value="Type 1">Type 1</option>
+                        <option value="Type 2">Type 2</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Management</label>
+                    <select name="dm_management" class="form-select">
+                        <option value="">Select</option>
+                        <option value="Diet">Diet Only</option>
+                        <option value="Oral">Oral Medications</option>
+                        <option value="Insulin">Insulin</option>
+                        <option value="Both">Oral + Insulin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Most Recent HbA1c (%)</label>
+                <input type="number" name="hba1c" class="form-input" placeholder="7.0" min="4" max="15" step="0.1">
+            </div>
+        </div>
+    </div>
+
+    <!-- Renal/Hepatic -->
+    <div class="subsection">
+        <h3 class="subsection-title">Renal & Hepatic</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Chronic Kidney Disease" id="ckd" onchange="toggleConditional('ckd-details')">
+                <span class="checkbox-label">Chronic Kidney Disease (CKD)</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Liver Disease" id="liver">
+                <span class="checkbox-label">Liver Disease / Cirrhosis</span>
+            </label>
+        </div>
+
+        <div class="conditional-section" id="ckd-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">Baseline Creatinine (mg/dL)</label>
+                    <input type="number" name="cr" class="form-input" placeholder="1.0" min="0.1" max="20" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">eGFR (mL/min/1.73m²)</label>
+                    <input type="number" name="egfr" class="form-input" placeholder="90" min="1" max="150">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">On Dialysis?</label>
+                <select name="dialysis" class="form-select">
+                    <option value="">Select</option>
+                    <option value="no">No</option>
+                    <option value="hemodialysis">Hemodialysis</option>
+                    <option value="peritoneal">Peritoneal Dialysis</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Neurologic -->
+    <div class="subsection">
+        <h3 class="subsection-title">Neurologic</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Stroke/TIA" id="stroke" onchange="toggleConditional('stroke-details')">
+                <span class="checkbox-label">Stroke / TIA</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Seizure Disorder" id="seizure">
+                <span class="checkbox-label">Seizure Disorder</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Myasthenia Gravis" id="myasthenia">
+                <span class="checkbox-label">Myasthenia Gravis</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Peripheral Neuropathy" id="neuropathy">
+                <span class="checkbox-label">Peripheral Neuropathy</span>
+            </label>
+        </div>
+
+        <div class="conditional-section" id="stroke-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Date of Most Recent Event</label>
+                <input type="month" name="stroke_date" class="form-input">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Residual Deficits?</label>
+                <textarea name="stroke_deficits" class="form-input" rows="2" placeholder="Describe any weakness, speech issues, etc."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other -->
+    <div class="subsection">
+        <h3 class="subsection-title">Other Conditions</h3>
+        <div class="checkbox-group">
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="GERD" id="gerd">
+                <span class="checkbox-label">GERD / Hiatal Hernia</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Bleeding Disorder" id="bleeding">
+                <span class="checkbox-label">Bleeding Disorder</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="Anemia" id="anemia">
+                <span class="checkbox-label">Anemia</span>
+            </label>
+            <label class="checkbox-option">
+                <input type="checkbox" name="comorbidities" value="DVT/PE History" id="vte">
+                <span class="checkbox-label">History of Blood Clots (DVT/PE)</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Other Medical Conditions</label>
+        <textarea name="other_conditions" class="form-input" rows="3" placeholder="Any other conditions not listed above"></textarea>
+    </div>
+</div>
+
+                <!-- STEP 3: Medications & Allergies -->
+<div class="wizard-step" id="step-3" data-step="3">
+    <div class="step-header">
+        <div class="step-number">Step 3 of 6</div>
+        <h2 class="step-title">Medications & Allergies</h2>
+        <p class="step-description">Please list ALL medications including over-the-counter drugs and supplements.</p>
+    </div>
+
+    <div class="subsection">
+        <h3 class="subsection-title">Current Medications</h3>
+        <p class="form-help" style="margin-bottom: 16px;">Include prescription drugs, over-the-counter medications, vitamins, and herbal supplements.</p>
+
+        <div class="form-group">
+            <label class="form-label">Cardiac Medications</label>
+            <textarea name="cardiac_meds" class="form-input" rows="3" placeholder="Example: Metoprolol 50mg twice daily, Lisinopril 10mg once daily"></textarea>
+            <p class="form-help">Beta blockers, ACE inhibitors, ARBs, statins, aspirin, etc.</p>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Diabetes Medications</label>
+            <textarea name="diabetes_meds" class="form-input" rows="3" placeholder="Example: Metformin 1000mg twice daily, Insulin glargine 30 units at bedtime"></textarea>
+            <p class="form-help">Metformin, insulin, SGLT2 inhibitors (Jardiance, Farxiga), GLP-1 agonists (Ozempic, semaglutide)</p>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Anticoagulation / Antiplatelet</label>
+            <textarea name="anticoag_meds" class="form-input" rows="3" placeholder="Example: Warfarin 5mg daily, Clopidogrel 75mg daily"></textarea>
+            <p class="form-help">Warfarin, Eliquis, Xarelto, Pradaxa, aspirin, Plavix</p>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Pain Medications</label>
+            <textarea name="pain_meds" class="form-input" rows="2" placeholder="Example: Ibuprofen 600mg as needed, Hydrocodone/acetaminophen 5/325mg as needed"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">All Other Medications</label>
+            <textarea name="other_meds" class="form-input" rows="4" placeholder="List all other medications with doses and frequency"></textarea>
+        </div>
+    </div>
+
+    <div class="subsection">
+        <h3 class="subsection-title">Drug Allergies</h3>
+        <p class="form-help" style="margin-bottom: 16px;">It's critical we know about any drug allergies or adverse reactions.</p>
+
+        <div class="form-group">
+            <label class="form-label">Do you have any drug allergies?</label>
+            <select name="has_allergies" class="form-select" onchange="toggleConditional('allergy-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No Known Drug Allergies</option>
+                <option value="yes">Yes, I have drug allergies</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="allergy-details" style="display:none;">
+            <div id="allergy-list">
+                <!-- Allergy Entry 1 -->
+                <div class="allergy-entry">
+                    <div class="allergy-header">
+                        <h4>Allergy #1</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Drug Name</label>
+                        <input type="text" name="allergy_drug_1" class="form-input" placeholder="e.g., Penicillin">
+                    </div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Reaction Type</label>
+                            <select name="allergy_type_1" class="form-select">
+                                <option value="">Select</option>
+                                <option value="Rash">Rash / Hives</option>
+                                <option value="Anaphylaxis">Anaphylaxis (severe allergic reaction)</option>
+                                <option value="Swelling">Swelling (angioedema)</option>
+                                <option value="Breathing">Breathing difficulty</option>
+                                <option value="Nausea">Nausea / Vomiting</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Severity</label>
+                            <select name="allergy_severity_1" class="form-select">
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+                                <option value="Life-threatening">Life-threatening</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description of Reaction</label>
+                        <textarea name="allergy_description_1" class="form-input" rows="2" placeholder="Describe what happened"></textarea>
+                    </div>
+                </div>
+
+                <!-- Allergy Entry 2 -->
+                <div class="allergy-entry">
+                    <div class="allergy-header">
+                        <h4>Allergy #2 (optional)</h4>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Drug Name</label>
+                        <input type="text" name="allergy_drug_2" class="form-input" placeholder="e.g., Codeine">
+                    </div>
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Reaction Type</label>
+                            <select name="allergy_type_2" class="form-select">
+                                <option value="">Select</option>
+                                <option value="Rash">Rash / Hives</option>
+                                <option value="Anaphylaxis">Anaphylaxis</option>
+                                <option value="Swelling">Swelling</option>
+                                <option value="Breathing">Breathing difficulty</option>
+                                <option value="Nausea">Nausea / Vomiting</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Severity</label>
+                            <select name="allergy_severity_2" class="form-select">
+                                <option value="">Select</option>
+                                <option value="Mild">Mild</option>
+                                <option value="Moderate">Moderate</option>
+                                <option value="Severe">Severe</option>
+                                <option value="Life-threatening">Life-threatening</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Any other allergies?</label>
+                <textarea name="other_allergies" class="form-input" rows="2" placeholder="List any additional drug allergies"></textarea>
+            </div>
+
+            <!-- Special Allergies -->
+            <div class="form-group">
+                <label class="form-label">Special Allergies (check all that apply)</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_allergies" value="Latex">
+                        <span class="checkbox-label">Latex</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_allergies" value="Egg">
+                        <span class="checkbox-label">Egg (may affect propofol use)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_allergies" value="Soy">
+                        <span class="checkbox-label">Soy (may affect propofol use)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="special_allergies" value="Iodine/Shellfish">
+                        <span class="checkbox-label">Iodine / Shellfish</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="subsection">
+        <h3 class="subsection-title">Social History</h3>
+
+        <div class="form-group">
+            <label class="form-label">Tobacco Use</label>
+            <select name="tobacco" class="form-select" onchange="toggleConditional('tobacco-details', ['current', 'former'].includes(this.value))">
+                <option value="">Select</option>
+                <option value="never">Never</option>
+                <option value="current">Current Smoker</option>
+                <option value="former">Former Smoker</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="tobacco-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">Packs per Day</label>
+                    <input type="number" name="packs_per_day" class="form-input" placeholder="1" min="0" max="5" step="0.5">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Years Smoked</label>
+                    <input type="number" name="years_smoked" class="form-input" placeholder="20" min="0" max="100">
+                </div>
+            </div>
+            <div class="form-group" id="quit-date-group" style="display:none;">
+                <label class="form-label">Quit Date (if former smoker)</label>
+                <input type="month" name="quit_date" class="form-input">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Alcohol Use</label>
+            <select name="alcohol" class="form-select">
+                <option value="">Select</option>
+                <option value="none">None</option>
+                <option value="occasional">Occasional (1-7 drinks/week)</option>
+                <option value="moderate">Moderate (8-14 drinks/week)</option>
+                <option value="heavy">Heavy (>14 drinks/week)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Recreational Drug Use</label>
+            <select name="drug_use" class="form-select" onchange="toggleConditional('drug-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="prefer-not-to-answer">Prefer not to answer</option>
+            </select>
+            <p class="form-help">This information is confidential and helps us provide safer care.</p>
+        </div>
+
+        <div class="conditional-section" id="drug-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Type of Substance(s)</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="substances" value="Marijuana">
+                        <span class="checkbox-label">Marijuana / THC</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="substances" value="Cocaine">
+                        <span class="checkbox-label">Cocaine</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="substances" value="Methamphetamine">
+                        <span class="checkbox-label">Methamphetamine</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="substances" value="Opioids">
+                        <span class="checkbox-label">Opioids (non-prescribed)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" name="substances" value="Other">
+                        <span class="checkbox-label">Other</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Last Use</label>
+                <select name="last_use" class="form-select">
+                    <option value="">Select</option>
+                    <option value="within-24h">Within 24 hours</option>
+                    <option value="1-7-days">1-7 days ago</option>
+                    <option value="1-4-weeks">1-4 weeks ago</option>
+                    <option value=">4-weeks">More than 4 weeks ago</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!-- STEP 4: Functional Assessment -->
+<div class="wizard-step" id="step-4" data-step="4">
+    <div class="step-header">
+        <div class="step-number">Step 4 of 6</div>
+        <h2 class="step-title">Functional Capacity Assessment</h2>
+        <p class="step-description">These questions help us understand your physical fitness and screen for sleep apnea.</p>
+    </div>
+
+    <!-- STOP-BANG Questionnaire -->
+    <div class="subsection">
+        <h3 class="subsection-title">STOP-BANG: Sleep Apnea Screening</h3>
+        <p class="form-help" style="margin-bottom: 20px;">Answer YES or NO to each question. A score ≥3 suggests high risk for obstructive sleep apnea.</p>
+
+        <div class="stopbang-questions">
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>S</strong>noring: Do you snore loudly (louder than talking or loud enough to be heard through closed doors)?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_snoring" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_snoring" value="no">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>T</strong>iredness: Do you often feel tired, fatigued, or sleepy during the daytime?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_tired" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_tired" value="no">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>O</strong>bserved: Has anyone observed you stop breathing during your sleep?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_observed" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_observed" value="no">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>P</strong>ressure: Do you have or are you being treated for high blood pressure?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_pressure" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_pressure" value="no">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>B</strong>MI: Is your BMI more than 35 kg/m²?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_bmi" value="yes" required id="stopbang-bmi-yes">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_bmi" value="no" id="stopbang-bmi-no">
+                        <span>No</span>
+                    </label>
+                </div>
+                <p class="form-help" style="margin-top: 8px;">Your BMI: <span id="stopbang-bmi-value">--</span> kg/m² (auto-calculated)</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>A</strong>ge: Are you older than 50 years?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_age" value="yes" required id="stopbang-age-yes">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_age" value="no" id="stopbang-age-no">
+                        <span>No</span>
+                    </label>
+                </div>
+                <p class="form-help" style="margin-top: 8px;">Your age: <span id="stopbang-age-value">--</span> years (auto-calculated)</p>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>N</strong>eck: Is your neck circumference > 40 cm (16 inches)?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_neck" value="yes" required>
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_neck" value="no">
+                        <span>No</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_neck" value="unknown">
+                        <span>Don't know</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    <strong>G</strong>ender: Are you male?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_gender" value="yes" required id="stopbang-gender-yes">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="stopbang_gender" value="no" id="stopbang-gender-no">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-display" id="stopbang-score-display">
+            <div class="score-label">STOP-BANG Score:</div>
+            <div class="score-value" id="stopbang-score">0 / 8</div>
+            <div class="score-interpretation" id="stopbang-interpretation">Complete all questions to see your score</div>
+        </div>
+    </div>
+
+    <!-- DASI Questionnaire -->
+    <div class="subsection">
+        <h3 class="subsection-title">DASI: Functional Capacity</h3>
+        <p class="form-help" style="margin-bottom: 20px;">Answer YES or NO to indicate whether you can perform each activity. This helps estimate your functional capacity in METs.</p>
+
+        <div class="dasi-questions">
+            <div class="question-card">
+                <div class="question-text">
+                    1. Can you take care of yourself (eating, dressing, bathing, or using the toilet)?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_1" value="2.75" data-weight="2.75">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_1" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    2. Can you walk indoors, such as around your house?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_2" value="1.75" data-weight="1.75">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_2" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    3. Can you walk a block or two on level ground?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_3" value="2.75" data-weight="2.75">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_3" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    4. Can you climb a flight of stairs or walk up a hill?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_4" value="5.50" data-weight="5.50">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_4" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    5. Can you run a short distance?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_5" value="8.00" data-weight="8.00">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_5" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    6. Can you do light work around the house like dusting or washing dishes?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_6" value="2.70" data-weight="2.70">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_6" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    7. Can you do moderate work around the house like vacuuming, sweeping floors, or carrying groceries?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_7" value="3.50" data-weight="3.50">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_7" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    8. Can you do heavy work around the house like scrubbing floors or lifting/moving heavy furniture?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_8" value="8.00" data-weight="8.00">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_8" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    9. Can you do yard work like raking leaves, weeding, or pushing a power mower?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_9" value="4.50" data-weight="4.50">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_9" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    10. Can you have sexual relations?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_10" value="5.25" data-weight="5.25">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_10" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    11. Can you participate in moderate recreational activities like golf, bowling, dancing, doubles tennis, or throwing a baseball/football?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_11" value="6.00" data-weight="6.00">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_11" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="question-card">
+                <div class="question-text">
+                    12. Can you participate in strenuous sports like swimming, singles tennis, football, basketball, or skiing?
+                </div>
+                <div class="radio-group-inline">
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_12" value="7.50" data-weight="7.50">
+                        <span>Yes</span>
+                    </label>
+                    <label class="radio-option-inline">
+                        <input type="radio" name="dasi_12" value="0">
+                        <span>No</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="score-display" id="dasi-score-display">
+            <div class="score-label">DASI Score:</div>
+            <div class="score-value" id="dasi-score">0.0 / 58.2</div>
+            <div class="score-interpretation" id="dasi-interpretation">Estimated Functional Capacity: <span id="dasi-mets">--</span> METs</div>
+        </div>
+    </div>
+</div>
+
+                <!-- STEP 5: Airway Assessment & Surgical Details -->
+<div class="wizard-step" id="step-5" data-step="5">
+    <div class="step-header">
+        <div class="step-number">Step 5 of 6</div>
+        <h2 class="step-title">Airway Assessment & Surgical Details</h2>
+        <p class="step-description">Help us prepare for your anesthesia and surgery.</p>
+    </div>
+
+    <!-- Airway Assessment -->
+    <div class="subsection">
+        <h3 class="subsection-title">Airway Assessment</h3>
+        <p class="form-help" style="margin-bottom: 20px;">These questions help us predict potential airway challenges. If you're unsure, leave blank and we'll assess in person.</p>
+
+        <div class="form-group">
+            <label class="form-label">Previous Difficult Intubation?</label>
+            <select name="difficult_intubation" class="form-select" onchange="toggleConditional('difficult-intubation-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown / Never intubated</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="difficult-intubation-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Details of Previous Difficult Intubation</label>
+                <textarea name="difficult_intubation_details" class="form-input" rows="3" placeholder="Describe what happened (e.g., needed fiberoptic intubation, multiple attempts, told by anesthesiologist)"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Mallampati Classification</label>
+            <select name="mallampati" class="form-select">
+                <option value="">Select if known</option>
+                <option value="I">Class I - Full visibility of tonsils, uvula, and soft palate</option>
+                <option value="II">Class II - Visibility of hard and soft palate, upper portion of tonsils and uvula</option>
+                <option value="III">Class III - Soft and hard palate and base of uvula visible</option>
+                <option value="IV">Class IV - Only hard palate visible</option>
+                <option value="unknown">Unknown / Never assessed</option>
+            </select>
+            <p class="form-help">Open your mouth wide and stick out your tongue. Higher class = potentially more difficult airway.</p>
+        </div>
+
+        <div class="input-row">
+            <div class="form-group">
+                <label class="form-label">Mouth Opening (interincisor distance)</label>
+                <select name="mouth_opening" class="form-select">
+                    <option value="">Select if known</option>
+                    <option value=">4cm">&gt;4 cm (normal - 3+ finger widths)</option>
+                    <option value="3-4cm">3-4 cm (2-3 finger widths)</option>
+                    <option value="<3cm">&lt;3 cm (limited - <2 finger widths)</option>
+                    <option value="unknown">Unknown</option>
+                </select>
+                <p class="form-help">How wide can you open your mouth?</p>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Thyromental Distance</label>
+                <select name="thyromental_distance" class="form-select">
+                    <option value="">Select if known</option>
+                    <option value=">6.5cm">&gt;6.5 cm (normal - 3+ finger widths)</option>
+                    <option value="6-6.5cm">6-6.5 cm (borderline)</option>
+                    <option value="<6cm">&lt;6 cm (short - <3 finger widths)</option>
+                    <option value="unknown">Unknown</option>
+                </select>
+                <p class="form-help">Distance from chin to thyroid cartilage (Adam's apple)</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Neck Mobility</label>
+            <select name="neck_mobility" class="form-select">
+                <option value="">Select</option>
+                <option value="normal">Normal - Can touch chin to chest and look straight up</option>
+                <option value="limited">Limited - Restricted neck movement</option>
+                <option value="severely-limited">Severely Limited - Minimal neck movement (arthritis, fusion, trauma)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Dentition</label>
+            <div class="checkbox-group">
+                <label class="checkbox-option">
+                    <input type="checkbox" name="dentition" value="Loose teeth">
+                    <span class="checkbox-label">Loose teeth</span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="dentition" value="Dentures (full or partial)">
+                    <span class="checkbox-label">Dentures (full or partial)</span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="dentition" value="Caps/crowns/bridges">
+                    <span class="checkbox-label">Caps / Crowns / Bridges</span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="dentition" value="Chipped/broken teeth">
+                    <span class="checkbox-label">Chipped or broken teeth</span>
+                </label>
+                <label class="checkbox-option">
+                    <input type="checkbox" name="dentition" value="None - Normal dentition">
+                    <span class="checkbox-label">None - Normal dentition</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Facial Hair (for mask ventilation assessment)</label>
+            <select name="facial_hair" class="form-select">
+                <option value="">Select</option>
+                <option value="none">None</option>
+                <option value="clean-shaven">Clean-shaven</option>
+                <option value="stubble">Stubble</option>
+                <option value="beard-short">Short beard</option>
+                <option value="beard-full">Full beard</option>
+            </select>
+            <p class="form-help">Heavy beards can make mask ventilation challenging</p>
+        </div>
+    </div>
+
+    <!-- Family History of Anesthesia Complications -->
+    <div class="subsection">
+        <h3 class="subsection-title">Family History of Anesthesia Complications</h3>
+        <p class="form-help" style="margin-bottom: 16px;">Critical for identifying genetic risks like malignant hyperthermia.</p>
+
+        <div class="form-group">
+            <label class="form-label">Family History of Malignant Hyperthermia?</label>
+            <select name="family_mh" class="form-select" onchange="toggleConditional('family-mh-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown</option>
+            </select>
+            <p class="form-help">Rare genetic disorder causing life-threatening reaction to certain anesthetics</p>
+        </div>
+
+        <div class="conditional-section" id="family-mh-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Which Family Member(s)?</label>
+                <input type="text" name="family_mh_relation" class="form-input" placeholder="e.g., Father, Brother, Uncle">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Details of Incident</label>
+                <textarea name="family_mh_details" class="form-input" rows="2" placeholder="Describe what happened"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Family History of Unexpected Death During/After Anesthesia?</label>
+            <select name="family_anesthesia_death" class="form-select" onchange="toggleConditional('family-death-details', this.value === 'yes')">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="family-death-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Details</label>
+                <textarea name="family_death_details" class="form-input" rows="2" placeholder="Which family member(s) and approximate circumstances"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Family History of Pseudocholinesterase Deficiency?</label>
+            <select name="family_pseudocholinesterase" class="form-select">
+                <option value="">Select</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+                <option value="unknown">Unknown</option>
+            </select>
+            <p class="form-help">Genetic condition causing prolonged paralysis after succinylcholine</p>
+        </div>
+    </div>
+
+    <!-- Surgical Details -->
+    <div class="subsection">
+        <h3 class="subsection-title">Surgical Details</h3>
+
+        <div class="form-group">
+            <label class="form-label">Planned Surgical Procedure <span class="required">*</span></label>
+            <input type="text" name="procedure" class="form-input" placeholder="e.g., Laparoscopic cholecystectomy, Total knee replacement" required>
+        </div>
+
+        <div class="input-row">
+            <div class="form-group">
+                <label class="form-label">Surgical Specialty</label>
+                <select name="surgical_specialty" class="form-select">
+                    <option value="">Select</option>
+                    <option value="General Surgery">General Surgery</option>
+                    <option value="Orthopedic">Orthopedic</option>
+                    <option value="Cardiac">Cardiac</option>
+                    <option value="Vascular">Vascular</option>
+                    <option value="Neurosurgery">Neurosurgery</option>
+                    <option value="Urology">Urology</option>
+                    <option value="Gynecology">Gynecology</option>
+                    <option value="ENT">ENT (Ear, Nose, Throat)</option>
+                    <option value="Ophthalmology">Ophthalmology</option>
+                    <option value="Plastic Surgery">Plastic Surgery</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Surgical Risk Classification <span class="required">*</span></label>
+                <select name="surgery_risk" class="form-select" required>
+                    <option value="">Select</option>
+                    <option value="low">Low Risk - Superficial, breast, dental, eye, endoscopy</option>
+                    <option value="intermediate">Intermediate Risk - Orthopedic, gynecologic, urologic</option>
+                    <option value="high">High Risk - Vascular, cardiac, major abdominal, neurosurgery</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="form-group">
+                <label class="form-label">Surgery Urgency <span class="required">*</span></label>
+                <select name="urgency" class="form-select" required>
+                    <option value="">Select</option>
+                    <option value="elective">Elective</option>
+                    <option value="urgent">Urgent (within days)</option>
+                    <option value="emergency">Emergency (within hours)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Expected Blood Loss</label>
+                <select name="expected_blood_loss" class="form-select">
+                    <option value="">Select</option>
+                    <option value="minimal">Minimal (&lt;100 mL)</option>
+                    <option value="low">Low (100-500 mL)</option>
+                    <option value="moderate">Moderate (500-1000 mL)</option>
+                    <option value="high">High (&gt;1000 mL)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Surgeon Name</label>
+            <input type="text" name="surgeon_name" class="form-input" placeholder="Dr. Smith">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Planned Surgery Date</label>
+            <input type="date" name="surgery_date" class="form-input" min="{{ today_date }}">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Additional Surgical Information</label>
+            <textarea name="additional_surgical_info" class="form-input" rows="3" placeholder="Any other details we should know about the planned surgery"></textarea>
+        </div>
+    </div>
+</div>
+
+                <!-- STEP 6: Review & Submit -->
+<div class="wizard-step" id="step-6" data-step="6">
+    <div class="step-header">
+        <div class="step-number">Step 6 of 6</div>
+        <h2 class="step-title">Review & Submit</h2>
+        <p class="step-description">Please review your information before submitting.</p>
+    </div>
+
+    <!-- Automated Risk Summary Cards -->
+    <div class="subsection">
+        <h3 class="subsection-title">Calculated Risk Scores</h3>
+        <p class="form-help" style="margin-bottom: 20px;">These scores are auto-calculated based on your responses.</p>
+
+        <div class="risk-summary-grid">
+            <div class="risk-card">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">❤️</div>
+                    <div class="risk-card-title">RCRI Score</div>
+                </div>
+                <div class="risk-card-value" id="review-rcri-score">--</div>
+                <div class="risk-card-interpretation" id="review-rcri-interpretation">Revised Cardiac Risk Index</div>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">😴</div>
+                    <div class="risk-card-title">STOP-BANG</div>
+                </div>
+                <div class="risk-card-value" id="review-stopbang-score">--</div>
+                <div class="risk-card-interpretation" id="review-stopbang-interpretation">Sleep Apnea Risk</div>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">🏃</div>
+                    <div class="risk-card-title">DASI / METs</div>
+                </div>
+                <div class="risk-card-value" id="review-dasi-mets">--</div>
+                <div class="risk-card-interpretation" id="review-dasi-interpretation">Functional Capacity</div>
+            </div>
+
+            <div class="risk-card">
+                <div class="risk-card-header">
+                    <div class="risk-card-icon">🏥</div>
+                    <div class="risk-card-title">ASA Class</div>
+                </div>
+                <div class="risk-card-value" id="review-asa-class">--</div>
+                <div class="risk-card-interpretation" id="review-asa-interpretation">Physical Status</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Red Flags Section -->
+    <div class="subsection" id="red-flags-section" style="display:none;">
+        <h3 class="subsection-title" style="color: var(--red-600);">🚨 Red Flags Detected</h3>
+        <div id="red-flags-list">
+            <!-- Auto-populated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Review Sections (Collapsible) -->
+    <div class="subsection">
+        <h3 class="subsection-title">Your Information Summary</h3>
+        <p class="form-help" style="margin-bottom: 20px;">Click any section to expand and review. Click "Edit" to go back and make changes.</p>
+
+        <!-- Demographics Summary -->
+        <div class="review-section">
+            <div class="review-section-header" onclick="toggleReviewSection('demo')">
+                <div class="review-section-title">
+                    <span class="review-section-icon">👤</span>
+                    Demographics & Basic Information
+                </div>
+                <div class="review-section-actions">
+                    <button type="button" class="review-edit-btn" onclick="goToStep(1); event.stopPropagation();">Edit</button>
+                    <span class="review-toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="review-section-content" id="review-demo" style="display:none;">
+                <div class="review-item">
+                    <span class="review-label">Age:</span>
+                    <span class="review-value" id="review-age">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Weight:</span>
+                    <span class="review-value" id="review-weight">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Height:</span>
+                    <span class="review-value" id="review-height">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">BMI:</span>
+                    <span class="review-value" id="review-bmi">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Sex:</span>
+                    <span class="review-value" id="review-sex">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical History Summary -->
+        <div class="review-section">
+            <div class="review-section-header" onclick="toggleReviewSection('medical')">
+                <div class="review-section-title">
+                    <span class="review-section-icon">🏥</span>
+                    Medical History
+                </div>
+                <div class="review-section-actions">
+                    <button type="button" class="review-edit-btn" onclick="goToStep(2); event.stopPropagation();">Edit</button>
+                    <span class="review-toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="review-section-content" id="review-medical" style="display:none;">
+                <div class="review-item">
+                    <span class="review-label">Comorbidities:</span>
+                    <span class="review-value" id="review-comorbidities">None reported</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medications & Allergies Summary -->
+        <div class="review-section">
+            <div class="review-section-header" onclick="toggleReviewSection('meds')">
+                <div class="review-section-title">
+                    <span class="review-section-icon">💊</span>
+                    Medications & Allergies
+                </div>
+                <div class="review-section-actions">
+                    <button type="button" class="review-edit-btn" onclick="goToStep(3); event.stopPropagation();">Edit</button>
+                    <span class="review-toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="review-section-content" id="review-meds" style="display:none;">
+                <div class="review-item">
+                    <span class="review-label">Cardiac Medications:</span>
+                    <span class="review-value" id="review-cardiac-meds">None</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Drug Allergies:</span>
+                    <span class="review-value" id="review-allergies">None</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Tobacco Use:</span>
+                    <span class="review-value" id="review-tobacco">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Functional Assessment Summary -->
+        <div class="review-section">
+            <div class="review-section-header" onclick="toggleReviewSection('functional')">
+                <div class="review-section-title">
+                    <span class="review-section-icon">🏃</span>
+                    Functional Capacity Assessment
+                </div>
+                <div class="review-section-actions">
+                    <button type="button" class="review-edit-btn" onclick="goToStep(4); event.stopPropagation();">Edit</button>
+                    <span class="review-toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="review-section-content" id="review-functional" style="display:none;">
+                <div class="review-item">
+                    <span class="review-label">STOP-BANG Score:</span>
+                    <span class="review-value" id="review-sb-full">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">DASI Score:</span>
+                    <span class="review-value" id="review-dasi-full">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Airway & Surgical Summary -->
+        <div class="review-section">
+            <div class="review-section-header" onclick="toggleReviewSection('surgical')">
+                <div class="review-section-title">
+                    <span class="review-section-icon">🔬</span>
+                    Airway & Surgical Details
+                </div>
+                <div class="review-section-actions">
+                    <button type="button" class="review-edit-btn" onclick="goToStep(5); event.stopPropagation();">Edit</button>
+                    <span class="review-toggle-icon">▼</span>
+                </div>
+            </div>
+            <div class="review-section-content" id="review-surgical" style="display:none;">
+                <div class="review-item">
+                    <span class="review-label">Procedure:</span>
+                    <span class="review-value" id="review-procedure">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Surgery Risk:</span>
+                    <span class="review-value" id="review-surgery-risk">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Urgency:</span>
+                    <span class="review-value" id="review-urgency">--</span>
+                </div>
+                <div class="review-item">
+                    <span class="review-label">Difficult Airway History:</span>
+                    <span class="review-value" id="review-airway">--</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consent & Accuracy Statement -->
+    <div class="subsection">
+        <h3 class="subsection-title">Consent & Accuracy</h3>
+
+        <div class="consent-box">
+            <div class="form-group">
+                <label class="checkbox-option" style="align-items: flex-start;">
+                    <input type="checkbox" name="accuracy_confirmed" id="accuracy-checkbox" required>
+                    <span class="checkbox-label" style="font-size: 14px; line-height: 1.6;">
+                        <strong>I confirm that all information provided is accurate and complete to the best of my knowledge.</strong>
+                        I understand that inaccurate or incomplete information may affect my anesthesia care and surgical outcome.
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-option" style="align-items: flex-start;">
+                    <input type="checkbox" name="understand_disclaimer" id="disclaimer-checkbox" required>
+                    <span class="checkbox-label" style="font-size: 14px; line-height: 1.6;">
+                        <strong>I understand this is an educational tool only.</strong>
+                        This assessment does not replace a formal preoperative evaluation by an anesthesiologist.
+                        All recommendations must be verified by a qualified healthcare provider.
+                    </span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Comments -->
+    <div class="subsection">
+        <h3 class="subsection-title">Additional Comments (Optional)</h3>
+        <div class="form-group">
+            <label class="form-label">Anything else we should know?</label>
+            <textarea name="additional_comments" class="form-input" rows="4" placeholder="Any concerns, questions, or additional information you'd like to share with your anesthesia team"></textarea>
+        </div>
+    </div>
+
+    <!-- Submit Button Styling -->
+    <style>
+        .risk-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .risk-card {
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .risk-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+
+        .risk-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .risk-card-icon {
+            font-size: 24px;
+        }
+
+        .risk-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .risk-card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--blue-600);
+            margin-bottom: 8px;
+        }
+
+        .risk-card-interpretation {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        .review-section {
+            background: rgba(255,255,255,0.6);
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .review-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+        }
+
+        .review-section-header:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .review-section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .review-section-icon {
+            font-size: 20px;
+        }
+
+        .review-section-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .review-edit-btn {
+            padding: 6px 12px;
+            background: var(--blue-600);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .review-edit-btn:hover {
+            background: var(--blue-700);
+            transform: translateY(-1px);
+        }
+
+        .review-toggle-icon {
+            color: var(--gray-500);
+            transition: transform 0.3s;
+        }
+
+        .review-section-content {
+            padding: 0 20px 16px 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .review-item {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            min-width: 180px;
+        }
+
+        .review-value {
+            font-size: 14px;
+            color: var(--gray-900);
+            flex: 1;
+        }
+
+        .consent-box {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid var(--blue-200);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .red-flag-alert {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--red-600);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .red-flag-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .red-flag-content {
+            flex: 1;
+        }
+
+        .red-flag-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--red-700);
+            margin-bottom: 4px;
+        }
+
+        .red-flag-description {
+            font-size: 14px;
+            color: var(--red-600);
+        }
+    </style>
+</div>
+
+
+                <!-- Navigation Buttons -->
+                <div class="wizard-navigation">
+                    <button type="button" class="nav-btn nav-btn-secondary" id="prev-btn" onclick="previousStep()" style="display:none;">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Previous
+                    </button>
+                    <button type="button" class="nav-btn nav-btn-primary" id="next-btn" onclick="nextStep()">
+                        Next
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                    <button type="submit" class="nav-btn nav-btn-submit" id="submit-btn" style="display:none;">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Submit Assessment
+                    </button>
+                </div>
             </form>
+
 
             {% else %}
             <!-- RESULTS SECTION -->
@@ -2734,6 +4700,771 @@ PREOP_HTML = """<!DOCTYPE html>
             }
         }
     </script>
+        <script>
+// ===================================================================
+// ROLLS ROYCE PREOPERATIVE WIZARD - JAVASCRIPT
+// ===================================================================
+
+// Global state
+let currentStep = 1;
+const totalSteps = 6;
+let formData = {};
+
+// ===================================================================
+// INITIALIZATION
+// ===================================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeWizard();
+    attachEventListeners();
+    calculateBMI(); // Initial BMI calculation
+    calculateAge(); // Initial age calculation
+});
+
+function initializeWizard() {
+    showStep(1);
+    updateProgressBar();
+}
+
+// ===================================================================
+// WIZARD NAVIGATION
+// ===================================================================
+
+function showStep(stepNumber) {
+    // Hide all steps
+    const steps = document.querySelectorAll('.wizard-step');
+    steps.forEach(step => {
+        step.style.display = 'none';
+    });
+
+    // Show target step
+    const targetStep = document.querySelector(`[data-step="${stepNumber}"]`);
+    if (targetStep) {
+        targetStep.style.display = 'block';
+        currentStep = stepNumber;
+        updateProgressBar();
+        updateNavigationButtons();
+
+        // Special handling for review step
+        if (stepNumber === 6) {
+            populateReviewPage();
+        }
+
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function goToStep(stepNumber) {
+    if (stepNumber >= 1 && stepNumber <= totalSteps) {
+        showStep(stepNumber);
+    }
+}
+
+function nextStep() {
+    if (validateCurrentStep()) {
+        if (currentStep < totalSteps) {
+            showStep(currentStep + 1);
+        }
+    }
+}
+
+function previousStep() {
+    if (currentStep > 1) {
+        showStep(currentStep - 1);
+    }
+}
+
+function updateProgressBar() {
+    const progressFill = document.getElementById('progress-fill');
+    const progressText = document.getElementById('progress-text');
+    const percentage = (currentStep / totalSteps) * 100;
+
+    if (progressFill) {
+        progressFill.style.width = percentage + '%';
+    }
+    if (progressText) {
+        progressText.textContent = `Step ${currentStep} of ${totalSteps}`;
+    }
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (prevBtn) {
+        prevBtn.style.display = currentStep === 1 ? 'none' : 'inline-flex';
+    }
+
+    if (nextBtn) {
+        nextBtn.style.display = currentStep === totalSteps ? 'none' : 'inline-flex';
+        nextBtn.textContent = currentStep === totalSteps - 1 ? 'Review' : 'Next';
+    }
+
+    if (submitBtn) {
+        submitBtn.style.display = currentStep === totalSteps ? 'inline-flex' : 'none';
+    }
+}
+
+// ===================================================================
+// FORM VALIDATION
+// ===================================================================
+
+function validateCurrentStep() {
+    const currentStepElement = document.querySelector(`[data-step="${currentStep}"]`);
+    if (!currentStepElement) return true;
+
+    const requiredFields = currentStepElement.querySelectorAll('[required]');
+    let isValid = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value || field.value.trim() === '') {
+            isValid = false;
+            field.classList.add('error');
+
+            // Show error message
+            let errorMsg = field.parentElement.querySelector('.error-message');
+            if (!errorMsg) {
+                errorMsg = document.createElement('p');
+                errorMsg.className = 'error-message';
+                errorMsg.textContent = 'This field is required';
+                errorMsg.style.color = 'var(--red-600)';
+                errorMsg.style.fontSize = '13px';
+                errorMsg.style.marginTop = '4px';
+                field.parentElement.appendChild(errorMsg);
+            }
+        } else {
+            field.classList.remove('error');
+            const errorMsg = field.parentElement.querySelector('.error-message');
+            if (errorMsg) {
+                errorMsg.remove();
+            }
+        }
+    });
+
+    if (!isValid) {
+        alert('Please fill in all required fields before continuing.');
+    }
+
+    return isValid;
+}
+
+// ===================================================================
+// EVENT LISTENERS
+// ===================================================================
+
+function attachEventListeners() {
+    // Weight/Height change for BMI calculation
+    const weightInput = document.getElementById('weight-input');
+    const heightInput = document.getElementById('height-input');
+    const weightUnit = document.getElementById('weight-unit');
+    const heightUnit = document.getElementById('height-unit');
+
+    if (weightInput) weightInput.addEventListener('input', calculateBMI);
+    if (heightInput) heightInput.addEventListener('input', calculateBMI);
+    if (weightUnit) weightUnit.addEventListener('change', calculateBMI);
+    if (heightUnit) heightUnit.addEventListener('change', calculateBMI);
+
+    // DOB change for age calculation
+    const dobInput = document.querySelector('input[name="dob"]');
+    if (dobInput) dobInput.addEventListener('change', calculateAge);
+
+    // STOP-BANG questions
+    document.querySelectorAll('input[name^="stopbang_"]').forEach(input => {
+        input.addEventListener('change', calculateStopBangScore);
+    });
+
+    // DASI questions
+    document.querySelectorAll('input[name^="dasi_"]').forEach(input => {
+        input.addEventListener('change', calculateDASIScore);
+    });
+}
+
+// ===================================================================
+// BMI CALCULATOR
+// ===================================================================
+
+function calculateBMI() {
+    const weightInput = document.getElementById('weight-input');
+    const heightInput = document.getElementById('height-input');
+    const weightUnit = document.getElementById('weight-unit');
+    const heightUnit = document.getElementById('height-unit');
+    const bmiDisplay = document.getElementById('bmi-display');
+    const bmiValue = document.getElementById('bmi-value');
+
+    if (!weightInput || !heightInput || !bmiDisplay) return;
+
+    const weight = parseFloat(weightInput.value);
+    const height = parseFloat(heightInput.value);
+
+    if (!weight || !height || weight <= 0 || height <= 0) {
+        bmiDisplay.value = '';
+        if (bmiValue) bmiValue.value = '';
+        return;
+    }
+
+    // Convert to metric (kg and meters)
+    let weightKg = weight;
+    let heightM = height / 100; // cm to meters
+
+    if (weightUnit && weightUnit.value === 'lbs') {
+        weightKg = weight * 0.453592; // lbs to kg
+    }
+
+    if (heightUnit && heightUnit.value === 'inches') {
+        heightM = height * 0.0254; // inches to meters
+    }
+
+    const bmi = weightKg / (heightM * heightM);
+
+    bmiDisplay.value = bmi.toFixed(1) + ' kg/m²';
+    if (bmiValue) bmiValue.value = bmi.toFixed(1);
+
+    // Update STOP-BANG BMI question
+    updateStopBangBMI(bmi);
+}
+
+function updateStopBangBMI(bmi) {
+    const bmiValueSpan = document.getElementById('stopbang-bmi-value');
+    const bmiYes = document.getElementById('stopbang-bmi-yes');
+    const bmiNo = document.getElementById('stopbang-bmi-no');
+
+    if (bmiValueSpan) {
+        bmiValueSpan.textContent = bmi.toFixed(1);
+    }
+
+    // Auto-select based on BMI > 35
+    if (bmi > 35) {
+        if (bmiYes) bmiYes.checked = true;
+    } else {
+        if (bmiNo) bmiNo.checked = true;
+    }
+
+    calculateStopBangScore();
+}
+
+// ===================================================================
+// AGE CALCULATOR
+// ===================================================================
+
+function calculateAge() {
+    const dobInput = document.querySelector('input[name="dob"]');
+    if (!dobInput || !dobInput.value) return;
+
+    const dob = new Date(dobInput.value);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+
+    // Update STOP-BANG age question
+    updateStopBangAge(age);
+
+    return age;
+}
+
+function updateStopBangAge(age) {
+    const ageValueSpan = document.getElementById('stopbang-age-value');
+    const ageYes = document.getElementById('stopbang-age-yes');
+    const ageNo = document.getElementById('stopbang-age-no');
+
+    if (ageValueSpan) {
+        ageValueSpan.textContent = age;
+    }
+
+    // Auto-select based on age > 50
+    if (age > 50) {
+        if (ageYes) ageYes.checked = true;
+    } else {
+        if (ageNo) ageNo.checked = true;
+    }
+
+    calculateStopBangScore();
+}
+
+// ===================================================================
+// STOP-BANG CALCULATOR
+// ===================================================================
+
+function calculateStopBangScore() {
+    const questions = [
+        'stopbang_snoring',
+        'stopbang_tired',
+        'stopbang_observed',
+        'stopbang_pressure',
+        'stopbang_bmi',
+        'stopbang_age',
+        'stopbang_neck',
+        'stopbang_gender'
+    ];
+
+    let score = 0;
+    let answeredCount = 0;
+
+    questions.forEach(name => {
+        const selected = document.querySelector(`input[name="${name}"]:checked`);
+        if (selected) {
+            answeredCount++;
+            if (selected.value === 'yes') {
+                score++;
+            }
+        }
+    });
+
+    const scoreDisplay = document.getElementById('stopbang-score');
+    const interpretation = document.getElementById('stopbang-interpretation');
+
+    if (scoreDisplay) {
+        scoreDisplay.textContent = `${score} / 8`;
+    }
+
+    if (interpretation && answeredCount === 8) {
+        let riskLevel = '';
+        let color = '';
+
+        if (score >= 5) {
+            riskLevel = 'High Risk for severe OSA';
+            color = 'var(--red-600)';
+        } else if (score >= 3) {
+            riskLevel = 'High Risk for OSA';
+            color = 'var(--orange-600)';
+        } else {
+            riskLevel = 'Low Risk for OSA';
+            color = 'var(--green-600)';
+        }
+
+        interpretation.innerHTML = `<span style="color: ${color}; font-weight: 600;">${riskLevel}</span>`;
+    } else if (interpretation) {
+        interpretation.textContent = 'Complete all questions to see your score';
+    }
+
+    return score;
+}
+
+// ===================================================================
+// DASI CALCULATOR
+// ===================================================================
+
+function calculateDASIScore() {
+    const questions = [
+        'dasi_1', 'dasi_2', 'dasi_3', 'dasi_4', 'dasi_5', 'dasi_6',
+        'dasi_7', 'dasi_8', 'dasi_9', 'dasi_10', 'dasi_11', 'dasi_12'
+    ];
+
+    let totalScore = 0;
+    let answeredCount = 0;
+
+    questions.forEach(name => {
+        const selected = document.querySelector(`input[name="${name}"]:checked`);
+        if (selected) {
+            answeredCount++;
+            totalScore += parseFloat(selected.value);
+        }
+    });
+
+    const scoreDisplay = document.getElementById('dasi-score');
+    const interpretation = document.getElementById('dasi-interpretation');
+    const metsSpan = document.getElementById('dasi-mets');
+
+    if (scoreDisplay) {
+        scoreDisplay.textContent = `${totalScore.toFixed(1)} / 58.2`;
+    }
+
+    if (answeredCount === 12 && interpretation && metsSpan) {
+        // Calculate METs using formula: VO2 max = 0.43 × DASI + 9.6
+        const vo2max = (0.43 * totalScore) + 9.6;
+        const mets = vo2max / 3.5; // Convert to METs
+
+        metsSpan.textContent = mets.toFixed(1);
+
+        let capacity = '';
+        let color = '';
+
+        if (mets >= 10) {
+            capacity = 'Excellent';
+            color = 'var(--green-600)';
+        } else if (mets >= 7) {
+            capacity = 'Good';
+            color = 'var(--blue-600)';
+        } else if (mets >= 4) {
+            capacity = 'Moderate';
+            color = 'var(--orange-600)';
+        } else {
+            capacity = 'Poor';
+            color = 'var(--red-600)';
+        }
+
+        interpretation.innerHTML = `Estimated Functional Capacity: <span style="color: ${color}; font-weight: 600;">${mets.toFixed(1)} METs (${capacity})</span>`;
+    } else if (interpretation) {
+        interpretation.innerHTML = 'Estimated Functional Capacity: <span id="dasi-mets">--</span> METs';
+    }
+
+    return totalScore;
+}
+
+// ===================================================================
+// RCRI CALCULATOR
+// ===================================================================
+
+function calculateRCRI() {
+    let score = 0;
+
+    // High-risk surgery
+    const surgeryRisk = document.querySelector('select[name="surgery_risk"]');
+    if (surgeryRisk && surgeryRisk.value === 'high') {
+        score++;
+    }
+
+    // Ischemic heart disease (CAD or Prior MI)
+    const cad = document.getElementById('cad');
+    const priorMI = document.getElementById('prior-mi');
+    if ((cad && cad.checked) || (priorMI && priorMI.checked)) {
+        score++;
+    }
+
+    // Heart failure
+    const hf = document.getElementById('hf');
+    if (hf && hf.checked) {
+        score++;
+    }
+
+    // Cerebrovascular disease (Stroke/TIA)
+    const stroke = document.getElementById('stroke');
+    if (stroke && stroke.checked) {
+        score++;
+    }
+
+    // Diabetes mellitus (on insulin)
+    const dm = document.getElementById('dm');
+    const dmManagement = document.querySelector('select[name="dm_management"]');
+    if (dm && dm.checked && dmManagement && (dmManagement.value === 'Insulin' || dmManagement.value === 'Both')) {
+        score++;
+    }
+
+    // Creatinine > 2.0 mg/dL
+    const crInput = document.querySelector('input[name="cr"]');
+    if (crInput && parseFloat(crInput.value) > 2.0) {
+        score++;
+    }
+
+    return score;
+}
+
+// ===================================================================
+// ASA CLASSIFICATION ESTIMATOR
+// ===================================================================
+
+function estimateASAClass() {
+    const comorbidities = document.querySelectorAll('input[name="comorbidities"]:checked');
+    const urgency = document.querySelector('select[name="urgency"]');
+
+    // Emergency surgery → add "E" suffix
+    const isEmergency = urgency && urgency.value === 'emergency';
+
+    if (comorbidities.length === 0) {
+        return isEmergency ? 'I E' : 'I';
+    }
+
+    // Check for severe disease
+    const hf = document.getElementById('hf');
+    const ckd = document.getElementById('ckd');
+    const dialysis = document.querySelector('select[name="dialysis"]');
+    const liver = document.getElementById('liver');
+    const pulmonaryHtn = document.getElementById('pulm-htn');
+
+    const hasSevereDisease = (hf && hf.checked) ||
+                             (ckd && ckd.checked && dialysis && dialysis.value !== 'no') ||
+                             (liver && liver.checked) ||
+                             (pulmonaryHtn && pulmonaryHtn.checked);
+
+    if (hasSevereDisease) {
+        return isEmergency ? 'IV E' : 'IV';
+    }
+
+    if (comorbidities.length >= 3) {
+        return isEmergency ? 'III E' : 'III';
+    }
+
+    if (comorbidities.length >= 1) {
+        return isEmergency ? 'II E' : 'II';
+    }
+
+    return isEmergency ? 'I E' : 'I';
+}
+
+// ===================================================================
+// RED FLAGS DETECTION
+// ===================================================================
+
+function detectRedFlags() {
+    const flags = [];
+
+    // Malignant hyperthermia family history
+    const familyMH = document.querySelector('select[name="family_mh"]');
+    if (familyMH && familyMH.value === 'yes') {
+        flags.push({
+            icon: '🔥',
+            title: 'MALIGNANT HYPERTHERMIA FAMILY HISTORY',
+            description: 'Avoid triggering agents (succinylcholine, volatile anesthetics). Use total IV anesthesia (TIVA).'
+        });
+    }
+
+    // Difficult airway history
+    const difficultIntubation = document.querySelector('select[name="difficult_intubation"]');
+    if (difficultIntubation && difficultIntubation.value === 'yes') {
+        flags.push({
+            icon: '⚠️',
+            title: 'DIFFICULT AIRWAY HISTORY',
+            description: 'Prepare advanced airway equipment. Consider awake fiberoptic intubation. Anesthesiologist consultation required.'
+        });
+    }
+
+    // Anticoagulation management
+    const anticoagMeds = document.querySelector('textarea[name="anticoag_meds"]');
+    if (anticoagMeds && anticoagMeds.value.trim() !== '') {
+        flags.push({
+            icon: '💊',
+            title: 'ANTICOAGULATION MANAGEMENT NEEDED',
+            description: 'Plan warfarin/DOAC holding times. Consider bridging based on thrombotic risk and procedure.'
+        });
+    }
+
+    // ACEI + metformin + CKD interaction
+    const cardiacMeds = document.querySelector('textarea[name="cardiac_meds"]');
+    const diabetesMeds = document.querySelector('textarea[name="diabetes_meds"]');
+    const ckd = document.getElementById('ckd');
+
+    const hasACEI = cardiacMeds && (cardiacMeds.value.toLowerCase().includes('lisinopril') ||
+                                    cardiacMeds.value.toLowerCase().includes('enalapril') ||
+                                    cardiacMeds.value.toLowerCase().includes('losartan'));
+    const hasMetformin = diabetesMeds && diabetesMeds.value.toLowerCase().includes('metformin');
+    const hasCKD = ckd && ckd.checked;
+
+    if (hasACEI && hasMetformin && hasCKD) {
+        flags.push({
+            icon: '⚡',
+            title: 'DRUG INTERACTION: ACEI + METFORMIN + CKD',
+            description: 'Hold ACEI morning of surgery (hypotension risk). Hold metformin 48hr pre-op (lactic acidosis risk).'
+        });
+    }
+
+    // STOP-BANG high risk
+    const stopBangScore = calculateStopBangScore();
+    if (stopBangScore >= 5) {
+        flags.push({
+            icon: '😴',
+            title: 'SEVERE OSA RISK (STOP-BANG ≥5)',
+            description: 'Consider monitored setting for recovery. Minimize opioids. CPAP available postoperatively.'
+        });
+    }
+
+    // Poor functional capacity
+    const dasiScore = calculateDASIScore();
+    const vo2max = (0.43 * dasiScore) + 9.6;
+    const mets = vo2max / 3.5;
+
+    if (mets < 4) {
+        flags.push({
+            icon: '🏃',
+            title: 'POOR FUNCTIONAL CAPACITY (<4 METs)',
+            description: 'Increased perioperative cardiac risk. Consider preoperative cardiac evaluation per ACC/AHA guidelines.'
+        });
+    }
+
+    // High RCRI score
+    const rcriScore = calculateRCRI();
+    if (rcriScore >= 3) {
+        flags.push({
+            icon: '❤️',
+            title: 'HIGH CARDIAC RISK (RCRI ≥3)',
+            description: 'Cardiac event risk >5%. Cardiology consultation recommended. Optimize medical therapy.'
+        });
+    }
+
+    return flags;
+}
+
+// ===================================================================
+// CONDITIONAL SECTIONS TOGGLE
+// ===================================================================
+
+function toggleConditional(sectionId, condition = null) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    if (condition === null) {
+        // Toggle
+        section.style.display = section.style.display === 'none' ? 'block' : 'none';
+    } else {
+        // Set explicit state
+        section.style.display = condition ? 'block' : 'none';
+    }
+}
+
+// ===================================================================
+// REVIEW PAGE POPULATION
+// ===================================================================
+
+function populateReviewPage() {
+    // Calculate all scores
+    const rcriScore = calculateRCRI();
+    const stopBangScore = calculateStopBangScore();
+    const dasiScore = calculateDASIScore();
+    const asaClass = estimateASAClass();
+    const redFlags = detectRedFlags();
+
+    // Populate risk cards
+    document.getElementById('review-rcri-score').textContent = rcriScore;
+    document.getElementById('review-rcri-interpretation').textContent =
+        rcriScore >= 3 ? 'High Risk (>5% cardiac event)' :
+        rcriScore >= 2 ? 'Moderate Risk' : 'Low Risk';
+
+    document.getElementById('review-stopbang-score').textContent = `${stopBangScore} / 8`;
+    document.getElementById('review-stopbang-interpretation').textContent =
+        stopBangScore >= 5 ? 'High Risk (severe OSA)' :
+        stopBangScore >= 3 ? 'High Risk' : 'Low Risk';
+
+    const vo2max = (0.43 * dasiScore) + 9.6;
+    const mets = vo2max / 3.5;
+    document.getElementById('review-dasi-mets').textContent = mets.toFixed(1);
+    document.getElementById('review-dasi-interpretation').textContent =
+        mets >= 10 ? 'Excellent' :
+        mets >= 7 ? 'Good' :
+        mets >= 4 ? 'Moderate' : 'Poor';
+
+    document.getElementById('review-asa-class').textContent = asaClass;
+    document.getElementById('review-asa-interpretation').textContent = 'Physical Status';
+
+    // Show red flags
+    const redFlagsSection = document.getElementById('red-flags-section');
+    const redFlagsList = document.getElementById('red-flags-list');
+
+    if (redFlags.length > 0) {
+        redFlagsSection.style.display = 'block';
+        redFlagsList.innerHTML = redFlags.map(flag => `
+            <div class="red-flag-alert">
+                <div class="red-flag-icon">${flag.icon}</div>
+                <div class="red-flag-content">
+                    <div class="red-flag-title">${flag.title}</div>
+                    <div class="red-flag-description">${flag.description}</div>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        redFlagsSection.style.display = 'none';
+    }
+
+    // Populate demographics
+    const age = calculateAge();
+    document.getElementById('review-age').textContent = age ? `${age} years` : '--';
+
+    const weightInput = document.getElementById('weight-input');
+    const weightUnit = document.getElementById('weight-unit');
+    if (weightInput && weightUnit) {
+        document.getElementById('review-weight').textContent =
+            `${weightInput.value} ${weightUnit.value}`;
+    }
+
+    const heightInput = document.getElementById('height-input');
+    const heightUnit = document.getElementById('height-unit');
+    if (heightInput && heightUnit) {
+        document.getElementById('review-height').textContent =
+            `${heightInput.value} ${heightUnit.value}`;
+    }
+
+    const bmiDisplay = document.getElementById('bmi-display');
+    if (bmiDisplay) {
+        document.getElementById('review-bmi').textContent = bmiDisplay.value || '--';
+    }
+
+    const sex = document.querySelector('select[name="sex"]');
+    if (sex) {
+        document.getElementById('review-sex').textContent =
+            sex.value === 'M' ? 'Male' : sex.value === 'F' ? 'Female' : '--';
+    }
+
+    // Populate comorbidities
+    const comorbidities = Array.from(document.querySelectorAll('input[name="comorbidities"]:checked'))
+        .map(cb => cb.value);
+    document.getElementById('review-comorbidities').textContent =
+        comorbidities.length > 0 ? comorbidities.join(', ') : 'None reported';
+
+    // Populate medications
+    const cardiacMeds = document.querySelector('textarea[name="cardiac_meds"]');
+    if (cardiacMeds) {
+        document.getElementById('review-cardiac-meds').textContent =
+            cardiacMeds.value.trim() || 'None';
+    }
+
+    // Populate allergies
+    const hasAllergies = document.querySelector('select[name="has_allergies"]');
+    if (hasAllergies && hasAllergies.value === 'yes') {
+        const allergyDrug1 = document.querySelector('input[name="allergy_drug_1"]');
+        document.getElementById('review-allergies').textContent =
+            allergyDrug1 && allergyDrug1.value ? allergyDrug1.value : 'See form';
+    } else {
+        document.getElementById('review-allergies').textContent = 'No known drug allergies';
+    }
+
+    // Populate tobacco
+    const tobacco = document.querySelector('select[name="tobacco"]');
+    if (tobacco) {
+        document.getElementById('review-tobacco').textContent =
+            tobacco.options[tobacco.selectedIndex]?.text || '--';
+    }
+
+    // Populate STOP-BANG/DASI
+    document.getElementById('review-sb-full').textContent =
+        `${stopBangScore} / 8 (${stopBangScore >= 3 ? 'High Risk' : 'Low Risk'})`;
+    document.getElementById('review-dasi-full').textContent =
+        `${dasiScore.toFixed(1)} / 58.2 (${mets.toFixed(1)} METs)`;
+
+    // Populate surgical details
+    const procedure = document.querySelector('input[name="procedure"]');
+    if (procedure) {
+        document.getElementById('review-procedure').textContent = procedure.value || '--';
+    }
+
+    const surgeryRisk = document.querySelector('select[name="surgery_risk"]');
+    if (surgeryRisk) {
+        document.getElementById('review-surgery-risk').textContent =
+            surgeryRisk.options[surgeryRisk.selectedIndex]?.text || '--';
+    }
+
+    const urgency = document.querySelector('select[name="urgency"]');
+    if (urgency) {
+        document.getElementById('review-urgency').textContent =
+            urgency.options[urgency.selectedIndex]?.text || '--';
+    }
+
+    const difficultIntubation = document.querySelector('select[name="difficult_intubation"]');
+    if (difficultIntubation) {
+        document.getElementById('review-airway').textContent =
+            difficultIntubation.value === 'yes' ? 'Yes - Difficult Airway History' :
+            difficultIntubation.value === 'no' ? 'No' : 'Unknown';
+    }
+}
+
+function toggleReviewSection(sectionId) {
+    const content = document.getElementById(`review-${sectionId}`);
+    const header = content.previousElementSibling;
+    const icon = header.querySelector('.review-toggle-icon');
+
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.textContent = '▲';
+    } else {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+    }
+}
+
+        </script>
+
 </body>
 </html>
 """
@@ -23949,22 +26680,65 @@ def quick_dose():
 def preop_assessment():
     """Pre-operative assessment with HYBRID RAG + AGENTIC AI"""
     if request.method == "GET":
-        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None, mode=None, reasoning_trace=None))
+        from datetime import date
+        today_date = date.today().isoformat()
+        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None, mode=None, reasoning_trace=None, today_date=today_date))
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
         return response
 
     # Collect and sanitize form data
-    age = int(request.form.get("age", 0))
+    # Handle both old simple form and new wizard form
+
+    # Age: calculate from DOB if provided, otherwise use age field
+    dob_str = request.form.get("dob", "")
+    if dob_str:
+        from datetime import datetime, date
+        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
+        today = date.today()
+        age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+    else:
+        age = int(request.form.get("age", 0))
+
+    # Weight: convert to kg if provided in lbs
     weight = float(request.form.get("weight", 0))
+    weight_unit = request.form.get("weight_unit", "kg")
+    if weight_unit == "lbs":
+        weight = weight * 0.453592  # Convert lbs to kg
+
+    # Height: convert to cm if provided in inches
     height = float(request.form.get("height", 0))
+    height_unit = request.form.get("height_unit", "cm")
+    if height_unit == "inches":
+        height = height * 2.54  # Convert inches to cm
+
     sex = sanitize_user_query(request.form.get("sex", ""))
     comorbidities = request.form.getlist("comorbidities")
     other_comorbidities = sanitize_user_query(request.form.get("other_comorbidities", ""))
     mets = sanitize_user_query(request.form.get("mets", ""))
     previous_anesthesia = sanitize_user_query(request.form.get("previous_anesthesia", ""))
-    medications = sanitize_user_query(request.form.get("medications", ""))
+
+    # Medications: combine from wizard categories if present, otherwise use single field
+    wizard_meds = []
+    cardiac_meds = sanitize_user_query(request.form.get("cardiac_meds", "")).strip()
+    diabetes_meds = sanitize_user_query(request.form.get("diabetes_meds", "")).strip()
+    anticoag_meds = sanitize_user_query(request.form.get("anticoag_meds", "")).strip()
+    pain_meds = sanitize_user_query(request.form.get("pain_meds", "")).strip()
+    other_meds = sanitize_user_query(request.form.get("other_meds", "")).strip()
+
+    if cardiac_meds:
+        wizard_meds.append(f"Cardiac: {cardiac_meds}")
+    if diabetes_meds:
+        wizard_meds.append(f"Diabetes: {diabetes_meds}")
+    if anticoag_meds:
+        wizard_meds.append(f"Anticoagulation: {anticoag_meds}")
+    if pain_meds:
+        wizard_meds.append(f"Pain: {pain_meds}")
+    if other_meds:
+        wizard_meds.append(f"Other: {other_meds}")
+
+    medications = "; ".join(wizard_meds) if wizard_meds else sanitize_user_query(request.form.get("medications", ""))
     hgb = sanitize_user_query(request.form.get("hgb", ""))
     plt = sanitize_user_query(request.form.get("plt", ""))
     cr = sanitize_user_query(request.form.get("cr", ""))
