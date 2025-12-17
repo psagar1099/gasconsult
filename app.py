@@ -2844,10 +2844,19 @@ PREOP_HTML = """<!DOCTYPE html>
         <p class="step-description">Let's start with some basic information about you.</p>
     </div>
 
-    <div class="form-group">
-        <label class="form-label">Date of Birth <span class="required">*</span></label>
-        <input type="date" name="dob" class="form-input" required max="{{ today_date }}">
-        <p class="form-help">We'll calculate your age from this</p>
+    <div class="input-row">
+        <div class="form-group">
+            <label class="form-label">Age <span class="required">*</span></label>
+            <input type="number" name="age" class="form-input" placeholder="65" min="0" max="120" required id="age-input">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Sex <span class="required">*</span></label>
+            <select name="sex" class="form-select" required>
+                <option value="">Select</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+        </div>
     </div>
 
     <div class="input-row">
@@ -2873,35 +2882,10 @@ PREOP_HTML = """<!DOCTYPE html>
         </div>
     </div>
 
-    <div class="input-row">
-        <div class="form-group">
-            <label class="form-label">Sex <span class="required">*</span></label>
-            <select name="sex" class="form-select" required>
-                <option value="">Select</option>
-                <option value="M">Male</option>
-                <option value="F">Female</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-label">BMI</label>
-            <input type="text" class="form-input" id="bmi-display" readonly placeholder="Auto-calculated">
-            <input type="hidden" name="bmi" id="bmi-value">
-        </div>
-    </div>
-
     <div class="form-group">
-        <label class="form-label">Primary Care Physician</label>
-        <input type="text" name="primary_physician" class="form-input" placeholder="Dr. Smith">
-    </div>
-
-    <div class="form-group">
-        <label class="form-label">Emergency Contact Name</label>
-        <input type="text" name="emergency_contact_name" class="form-input" placeholder="Full name">
-    </div>
-
-    <div class="form-group">
-        <label class="form-label">Emergency Contact Phone</label>
-        <input type="tel" name="emergency_contact_phone" class="form-input" placeholder="(555) 123-4567">
+        <label class="form-label">BMI</label>
+        <input type="text" class="form-input" id="bmi-display" readonly placeholder="Auto-calculated">
+        <input type="hidden" name="bmi" id="bmi-value">
     </div>
 </div>
 
@@ -4718,7 +4702,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeWizard();
     attachEventListeners();
     calculateBMI(); // Initial BMI calculation
-    calculateAge(); // Initial age calculation
+    updateStopBangAge(); // Initial STOP-BANG age auto-population
 });
 
 function initializeWizard() {
@@ -4866,9 +4850,9 @@ function attachEventListeners() {
     if (weightUnit) weightUnit.addEventListener('change', calculateBMI);
     if (heightUnit) heightUnit.addEventListener('change', calculateBMI);
 
-    // DOB change for age calculation
-    const dobInput = document.querySelector('input[name="dob"]');
-    if (dobInput) dobInput.addEventListener('change', calculateAge);
+    // Age input for STOP-BANG auto-population
+    const ageInput = document.getElementById('age-input');
+    if (ageInput) ageInput.addEventListener('input', updateStopBangAge);
 
     // STOP-BANG questions
     document.querySelectorAll('input[name^="stopbang_"]').forEach(input => {
@@ -4945,29 +4929,16 @@ function updateStopBangBMI(bmi) {
 }
 
 // ===================================================================
-// AGE CALCULATOR
+// STOP-BANG AGE AUTO-POPULATION
 // ===================================================================
 
-function calculateAge() {
-    const dobInput = document.querySelector('input[name="dob"]');
-    if (!dobInput || !dobInput.value) return;
+function updateStopBangAge() {
+    const ageInput = document.getElementById('age-input');
+    if (!ageInput || !ageInput.value) return;
 
-    const dob = new Date(dobInput.value);
-    const today = new Date();
-    let age = today.getFullYear() - dob.getFullYear();
-    const monthDiff = today.getMonth() - dob.getMonth();
+    const age = parseInt(ageInput.value);
+    if (isNaN(age)) return;
 
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-        age--;
-    }
-
-    // Update STOP-BANG age question
-    updateStopBangAge(age);
-
-    return age;
-}
-
-function updateStopBangAge(age) {
     const ageValueSpan = document.getElementById('stopbang-age-value');
     const ageYes = document.getElementById('stopbang-age-yes');
     const ageNo = document.getElementById('stopbang-age-no');
@@ -5359,7 +5330,8 @@ function populateReviewPage() {
     }
 
     // Populate demographics
-    const age = calculateAge();
+    const ageInput = document.getElementById('age-input');
+    const age = ageInput ? parseInt(ageInput.value) : null;
     document.getElementById('review-age').textContent = age ? `${age} years` : '--';
 
     const weightInput = document.getElementById('weight-input');
@@ -26680,26 +26652,14 @@ def quick_dose():
 def preop_assessment():
     """Pre-operative assessment with HYBRID RAG + AGENTIC AI"""
     if request.method == "GET":
-        from datetime import date
-        today_date = date.today().isoformat()
-        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None, mode=None, reasoning_trace=None, today_date=today_date))
+        response = make_response(render_template_string(PREOP_HTML, summary=None, references=None, mode=None, reasoning_trace=None))
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
         return response
 
     # Collect and sanitize form data
-    # Handle both old simple form and new wizard form
-
-    # Age: calculate from DOB if provided, otherwise use age field
-    dob_str = request.form.get("dob", "")
-    if dob_str:
-        from datetime import datetime, date
-        dob = datetime.strptime(dob_str, "%Y-%m-%d").date()
-        today = date.today()
-        age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
-    else:
-        age = int(request.form.get("age", 0))
+    age = int(request.form.get("age", 0))
 
     # Weight: convert to kg if provided in lbs
     weight = float(request.form.get("weight", 0))
