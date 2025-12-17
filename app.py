@@ -1601,7 +1601,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pre-Operative Assessment - GasConsult.ai</title>
     
-    <meta name="description" content="AI-powered pre-operative assessment combining evidence-based protocols with agentic reasoning for comprehensive anesthesia planning.">
+    <meta name="description" content="AI-powered preoperative assessment with hybrid RAG + Agentic AI for evidence-based risk stratification.">
     
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1622,27 +1622,23 @@ PREOP_HTML = """<!DOCTYPE html>
             --blue-50: #EFF6FF;
             --blue-100: #DBEAFE;
             --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
             --blue-400: #60A5FA;
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
-            --green-50: #F0FDF4;
-            --green-500: #10B981;
-            --green-600: #059669;
-            --amber-50: #FFFBEB;
-            --amber-500: #F59E0B;
-            --red-50: #FEF2F2;
-            --red-500: #EF4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--gray-50);
             color: var(--gray-900);
             min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         /* Background */
@@ -1662,21 +1658,23 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .orb-1 {
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -10%;
-            animation-delay: 0s;
+            top: -15%; left: -20%;
         }
 
         .orb-2 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.12) 0%, transparent 70%);
-            bottom: -10%;
-            right: -5%;
-            animation-delay: 7s;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%; right: -20%;
+            animation-delay: -7s; animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(191, 219, 254, 0.15) 0%, transparent 70%);
+            bottom: 10%; left: 30%;
+            animation-delay: -14s; animation-duration: 30s;
         }
 
         @keyframes float {
@@ -1685,203 +1683,124 @@ PREOP_HTML = """<!DOCTYPE html>
             66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
+        .grain {
+            position: fixed; inset: 0; z-index: 1;
+            pointer-events: none; opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
+
         /* Navigation */
         .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
             padding: 12px 20px;
         }
 
         .nav-inner {
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 1400px; margin: 0 auto;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 16px;
-            padding: 0 20px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 0 20px; height: 56px;
+            display: flex; align-items: center; justify-content: space-between;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.02);
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-        }
-
-        .logo-icon svg {
-            width: 36px;
-            height: 12px;
-        }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
+        .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .logo-icon svg { width: 36px; height: 12px; }
+        .logo-text { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
         .gas { color: var(--blue-600); }
         .consult { color: var(--gray-800); }
         .ai { color: var(--blue-500); font-weight: 600; }
 
         .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
+            display: none; align-items: center; gap: 4px;
         }
 
         .nav-link {
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
+            padding: 8px 14px; border-radius: 8px;
+            font-size: 14px; font-weight: 500;
+            color: var(--gray-700); text-decoration: none;
             transition: all 0.2s;
         }
 
-        .nav-link:hover {
-            background: var(--blue-50);
-            color: var(--blue-700);
+        .nav-link:hover { background: var(--blue-50); color: var(--blue-700); }
+        .nav-link.active { background: var(--blue-100); color: var(--blue-700); }
+
+        .nav-dropdown { position: relative; }
+        .nav-dropdown-toggle { background: none; border: none; cursor: pointer; }
+        .nav-dropdown-menu {
+            display: none; position: absolute; top: 100%; right: 0;
+            background: white; border-radius: 12px; padding: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            min-width: 180px; margin-top: 8px;
         }
 
-        .nav-link.active {
-            background: var(--blue-100);
-            color: var(--blue-700);
+        .nav-dropdown-menu.show { display: block; }
+        .nav-dropdown-link {
+            display: block; padding: 10px 12px; border-radius: 8px;
+            color: var(--gray-700); text-decoration: none; font-size: 14px;
+            transition: all 0.2s;
         }
+        .nav-dropdown-link:hover { background: var(--blue-50); color: var(--blue-700); }
 
         .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 8px;
-            border: none;
-            background: transparent;
-            cursor: pointer;
+            display: flex; flex-direction: column; gap: 4px;
+            padding: 8px; border: none; background: transparent; cursor: pointer;
         }
-
         .mobile-menu-btn span {
-            width: 20px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 2px;
-            transition: all 0.3s;
+            width: 20px; height: 2px; background: var(--gray-700);
+            border-radius: 2px; transition: all 0.3s;
         }
 
         .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            z-index: 999;
+            display: none; position: fixed; top: 80px; left: 20px; right: 20px;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+            border-radius: 16px; padding: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); z-index: 999;
         }
-
-        .mobile-menu.show {
-            display: block;
-        }
+        .mobile-menu.show { display: block; }
 
         .mobile-menu-link {
-            display: block;
-            padding: 12px 16px;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            transition: all 0.2s;
+            display: block; padding: 12px 16px; color: var(--gray-700);
+            text-decoration: none; border-radius: 8px; font-size: 15px;
+            font-weight: 500; transition: all 0.2s;
         }
-
-        .mobile-menu-link:hover {
-            background: var(--blue-50);
-            color: var(--blue-700);
-        }
+        .mobile-menu-link:hover { background: var(--blue-50); color: var(--blue-700); }
 
         /* Main Content */
         .main-content {
-            position: relative;
-            z-index: 1;
-            padding: 100px 20px 60px;
-            max-width: 1200px;
-            margin: 0 auto;
+            flex: 1; padding: 88px 16px 32px;
+            max-width: 900px; margin: 0 auto; width: 100%;
         }
 
-        /* Results Section */
-        .results-section {
-            margin-top: 40px;
-            animation: fadeIn 0.6s ease-out;
+        /* Header */
+        .header { text-align: center; margin-bottom: 40px; animation: fadeIn 0.6s ease; }
+        .header-title {
+            font-size: 32px; font-weight: 800; letter-spacing: -1px;
+            color: var(--gray-900); margin-bottom: 12px;
         }
+        .header-subtitle {
+            font-size: 16px; color: var(--gray-600); line-height: 1.6;
+        }
+        .blue { color: var(--blue-600); }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mode Badge */
-        .mode-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 18px;
+        /* Form Card */
+        .form-card {
             background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
-        }
-
-        .mode-badge.fast-rag {
-            border-color: rgba(16, 185, 129, 0.3);
-        }
-
-        .mode-badge.agentic {
-            border-color: rgba(139, 92, 246, 0.3);
-        }
-
-        .mode-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .mode-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .mode-badge.fast-rag .mode-label {
-            color: var(--green-600);
-        }
-
-        .mode-badge.agentic .mode-label {
-            color: #8B5CF6;
-        }
-
-        /* Assessment Card */
-        .assessment-card {
-            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 24px;
             padding: 32px;
-            margin-bottom: 24px;
             box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-            animation: slideUp 0.5s ease-out;
+            animation: slideUp 0.6s ease;
         }
 
         @keyframes slideUp {
@@ -1889,220 +1808,211 @@ PREOP_HTML = """<!DOCTYPE html>
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .assessment-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
+        .section-title {
+            font-size: 18px; font-weight: 700; color: var(--gray-900);
+            margin-bottom: 20px; padding-bottom: 12px;
             border-bottom: 2px solid var(--blue-100);
         }
 
-        .assessment-icon {
-            width: 28px;
-            height: 28px;
-            color: var(--blue-600);
+        .input-row {
+            display: grid; grid-template-columns: 1fr;
+            gap: 16px; margin-bottom: 20px;
         }
 
-        .assessment-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--gray-900);
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label {
+            font-size: 14px; font-weight: 600; color: var(--gray-700);
+        }
+        .required { color: var(--blue-600); }
+
+        .form-input, .form-select {
+            padding: 12px 16px; border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            font-size: 15px; font-family: inherit;
+            transition: all 0.2s;
+            background: white;
         }
 
-        .assessment-content {
-            line-height: 1.8;
-            color: var(--gray-700);
-            font-size: 15px;
+        .form-input:focus, .form-select:focus {
+            outline: none; border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .assessment-content h3 {
-            color: var(--gray-900);
-            font-size: 18px;
-            font-weight: 700;
-            margin: 32px 0 16px 0;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--blue-100);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .form-textarea {
+            min-height: 80px; resize: vertical;
         }
 
-        .assessment-content h3:first-child {
-            margin-top: 0;
+        .checkbox-group {
+            display: grid; grid-template-columns: 1fr; gap: 10px;
         }
 
-        .assessment-content h3::before {
-            content: "▸";
-            color: var(--blue-600);
-            font-size: 22px;
+        .checkbox-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px; border-radius: 8px;
+            transition: background 0.2s;
         }
 
-        .assessment-content h4 {
-            color: var(--gray-800);
-            font-size: 16px;
-            font-weight: 600;
-            margin: 24px 0 12px 0;
+        .checkbox-item:hover { background: var(--gray-50); }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px; height: 18px; cursor: pointer;
         }
 
-        .assessment-content p {
-            margin-bottom: 14px;
-            line-height: 1.7;
+        .checkbox-item label {
+            font-size: 14px; color: var(--gray-700);
+            cursor: pointer; user-select: none;
         }
 
-        .assessment-content ul {
-            margin: 0 0 16px 0;
-            padding-left: 0;
-            list-style: none;
+        .submit-btn {
+            width: 100%; padding: 16px; margin-top: 24px;
+            font-size: 16px; font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
+            border: none; border-radius: 14px; cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
-        .assessment-content li {
-            margin-bottom: 10px;
-            padding-left: 28px;
-            position: relative;
-            line-height: 1.6;
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
         }
 
-        .assessment-content li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--blue-600);
-            font-weight: 700;
-            font-size: 16px;
+        .submit-btn:active { transform: translateY(0); }
+
+        /* Results */
+        .results-section {
+            animation: fadeIn 0.8s ease;
         }
 
-        .assessment-content strong {
-            color: var(--gray-900);
-            font-weight: 600;
-            background: var(--blue-50);
-            padding: 2px 6px;
-            border-radius: 4px;
+        .mode-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 18px; margin-bottom: 24px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            border: 1px solid var(--blue-200);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
         }
+
+        .mode-badge.agentic { border-color: #A78BFA; }
+
+        .mode-icon { width: 20px; height: 20px; }
+        .mode-label {
+            font-size: 13px; font-weight: 600;
+            color: var(--blue-700);
+        }
+
+        .mode-badge.agentic .mode-label { color: #7C3AED; }
 
         /* Agent Reasoning */
         .agent-reasoning {
             background: linear-gradient(135deg, #F0F9FF 0%, #EFF6FF 100%);
             border: 1px solid var(--blue-200);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
+            border-radius: 16px; padding: 20px; margin-bottom: 24px;
         }
 
-        .agent-reasoning-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            user-select: none;
+        .agent-header {
+            display: flex; align-items: center; gap: 10px;
+            cursor: pointer; user-select: none;
         }
 
-        .agent-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--blue-600);
-        }
-
+        .agent-icon { width: 24px; height: 24px; color: var(--blue-600); }
         .agent-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--blue-900);
-            flex: 1;
+            font-size: 16px; font-weight: 600;
+            color: var(--blue-900); flex: 1;
         }
 
         .toggle-icon {
-            width: 20px;
-            height: 20px;
-            color: var(--blue-600);
+            width: 20px; height: 20px; color: var(--blue-600);
             transition: transform 0.3s;
         }
-
-        .toggle-icon.expanded {
-            transform: rotate(180deg);
-        }
+        .toggle-icon.expanded { transform: rotate(180deg); }
 
         .agent-steps {
-            display: none;
-            margin-top: 16px;
-            padding-top: 16px;
+            display: none; margin-top: 16px; padding-top: 16px;
             border-top: 1px solid var(--blue-200);
         }
-
-        .agent-steps.show {
-            display: block;
-        }
+        .agent-steps.show { display: block; }
 
         .agent-step {
-            padding: 8px 0;
-            font-size: 14px;
-            color: var(--gray-700);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            padding: 8px 0; font-size: 14px; color: var(--gray-700);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .agent-step::before { content: "✓"; color: #10B981; font-weight: 700; }
+
+        /* Assessment Card */
+        .assessment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px; padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            animation: slideUp 0.5s ease;
         }
 
-        .agent-step::before {
-            content: "✓";
-            color: var(--green-600);
-            font-weight: 700;
+        .assessment-content {
+            line-height: 1.8; color: var(--gray-700); font-size: 15px;
         }
 
-        .search-count {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--gray-600);
-            margin-top: 12px;
+        .assessment-content h3 {
+            color: var(--gray-900); font-size: 18px; font-weight: 700;
+            margin: 32px 0 16px 0; padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
         }
 
-        /* References Section */
-        .references-section {
-            margin-top: 24px;
+        .assessment-content h3:first-child { margin-top: 0; }
+
+        .assessment-content h4 {
+            color: var(--gray-800); font-size: 16px; font-weight: 600;
+            margin: 20px 0 12px 0;
         }
+
+        .assessment-content p { margin-bottom: 14px; line-height: 1.7; }
+
+        .assessment-content ul {
+            margin: 0 0 16px 0; padding-left: 0; list-style: none;
+        }
+
+        .assessment-content li {
+            margin-bottom: 10px; padding-left: 28px;
+            position: relative; line-height: 1.6;
+        }
+
+        .assessment-content li::before {
+            content: "✓"; position: absolute; left: 0;
+            color: var(--blue-600); font-weight: 700; font-size: 16px;
+        }
+
+        .assessment-content strong {
+            color: var(--gray-900); font-weight: 600;
+            background: var(--blue-50); padding: 2px 6px; border-radius: 4px;
+        }
+
+        /* References */
+        .references-section { margin-top: 24px; }
 
         .references-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
         }
 
-        .references-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--blue-600);
-        }
-
+        .references-icon { width: 24px; height: 24px; color: var(--blue-600); }
         .references-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
+            font-size: 20px; font-weight: 700; color: var(--gray-900);
         }
 
         .references-count {
-            background: var(--blue-100);
-            color: var(--blue-700);
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
+            background: var(--blue-100); color: var(--blue-700);
+            padding: 4px 10px; border-radius: 12px;
+            font-size: 13px; font-weight: 600;
         }
 
         .reference-card {
             background: rgba(255, 255, 255, 0.95);
             border: 1px solid var(--gray-200);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 16px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+            transition: all 0.3s; position: relative; overflow: hidden;
         }
 
         .reference-card:hover {
@@ -2112,158 +2022,85 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .reference-card::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--blue-600);
-            opacity: 0;
-            transition: opacity 0.3s;
+            content: ""; position: absolute; top: 0; left: 0;
+            width: 4px; height: 100%; background: var(--blue-600);
+            opacity: 0; transition: opacity 0.3s;
         }
 
-        .reference-card:hover::before {
-            opacity: 1;
-        }
+        .reference-card:hover::before { opacity: 1; }
 
         .reference-number {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            background: var(--blue-600);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
+            position: absolute; top: 16px; right: 16px;
+            background: var(--blue-600); color: white;
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; font-weight: 700;
         }
 
         .reference-title {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--gray-900);
-            line-height: 1.5;
-            margin-bottom: 12px;
-            padding-right: 48px;
+            font-size: 15px; font-weight: 600; color: var(--gray-900);
+            line-height: 1.5; margin-bottom: 12px; padding-right: 48px;
         }
 
         .reference-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 12px;
+            display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+            font-size: 13px; color: var(--gray-600); margin-bottom: 12px;
         }
 
-        .reference-authors {
-            font-weight: 500;
-        }
-
-        .reference-journal {
-            color: var(--gray-500);
-        }
-
+        .reference-authors { font-weight: 500; }
+        .reference-journal { color: var(--gray-500); }
         .reference-year {
-            padding: 2px 8px;
-            background: var(--gray-100);
-            border-radius: 6px;
-            font-weight: 500;
+            padding: 2px 8px; background: var(--gray-100);
+            border-radius: 6px; font-weight: 500;
         }
 
         .study-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            display: inline-block; padding: 4px 10px; border-radius: 6px;
+            font-size: 12px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.3px;
         }
 
         .pmid-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background: var(--gray-100);
-            border-radius: 8px;
-            color: var(--blue-600);
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 600;
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 6px 12px; background: var(--gray-100);
+            border-radius: 8px; color: var(--blue-600);
+            text-decoration: none; font-size: 12px; font-weight: 600;
             transition: all 0.2s;
         }
 
         .pmid-link:hover {
-            background: var(--blue-100);
-            color: var(--blue-700);
+            background: var(--blue-100); color: var(--blue-700);
         }
 
         /* Footer */
         .footer {
-            padding: 32px 20px;
-            border-top: 1px solid var(--gray-200);
-            background: rgba(255, 255, 255, 0.5);
-            margin-top: 60px;
+            padding: 32px 20px; border-top: 1px solid var(--gray-200);
+            background: rgba(255, 255, 255, 0.5); margin-top: 60px;
         }
 
         .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
+            max-width: 1200px; margin: 0 auto;
+            display: flex; flex-direction: column; align-items: center;
+            gap: 20px; text-align: center;
         }
 
-        .footer-text {
-            font-size: 13px;
-            color: var(--gray-500);
-        }
+        .footer-text { font-size: 13px; color: var(--gray-500); }
 
-        .footer-links {
-            display: flex;
-            gap: 24px;
-        }
-
+        .footer-links { display: flex; gap: 24px; }
         .footer-link {
-            font-size: 13px;
-            color: var(--gray-500);
-            text-decoration: none;
-            transition: color 0.2s;
+            font-size: 13px; color: var(--gray-500);
+            text-decoration: none; transition: color 0.2s;
         }
+        .footer-link:hover { color: var(--gray-700); }
 
-        .footer-link:hover {
-            color: var(--gray-700);
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 20px;
-        }
-
+        .social-icons { display: flex; gap: 20px; }
         .social-icon {
-            color: var(--gray-500);
-            transition: all 0.2s;
+            color: var(--gray-500); transition: all 0.2s;
         }
-
         .social-icon:hover {
-            color: var(--gray-700);
-            transform: translateY(-2px);
+            color: var(--gray-700); transform: translateY(-2px);
         }
-
-        .social-icon svg {
-            width: 24px;
-            height: 24px;
-        }
+        .social-icon svg { width: 24px; height: 24px; }
 
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
@@ -2271,12 +2108,18 @@ PREOP_HTML = """<!DOCTYPE html>
             .logo-text { font-size: 20px; }
             .nav-links { display: flex; }
             .mobile-menu-btn { display: none; }
+            .main-content { padding: 108px 32px 48px; }
+            .input-row { grid-template-columns: 1fr 1fr; }
+            .checkbox-group { grid-template-columns: 1fr 1fr; }
             .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
+            .footer-inner {
+                flex-direction: row; justify-content: space-between; text-align: left;
+            }
         }
 
         @media (min-width: 1024px) {
-            .main-content { padding: 140px 40px 80px; }
+            .main-content { padding: 140px 40px 80px; max-width: 1000px; }
+            .form-card { padding: 40px; }
             .assessment-card { padding: 40px; }
         }
     </style>
@@ -2285,187 +2128,374 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
     </div>
+    <div class="grain"></div>
 
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="/?clear=1" class="logo">
-                <div class="logo-icon">
-                    <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
-                        <circle cx="9" cy="9" r="9" fill="#2563EB"/>
-                        <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
-                        <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
-                    </svg>
+    <div class="page">
+        <nav class="nav" role="navigation" aria-label="Main navigation">
+            <div class="nav-inner">
+                <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+                    <div class="logo-icon">
+                        <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                            <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                            <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                            <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+                </a>
+                <div class="nav-links">
+                    <a href="/?clear=1" class="nav-link">Home</a>
+                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/preop" class="nav-link active">Pre-Op</a>
+                    <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                    <div class="nav-dropdown">
+                        <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                        <div class="nav-dropdown-menu">
+                            <a href="/crisis" class="nav-dropdown-link">Crisis Protocols</a>
+                            <a href="/hypotension" class="nav-dropdown-link">IOH Predictor</a>
+                            <a href="/difficult-airway" class="nav-dropdown-link">Difficult Airway</a>
+                            <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
+                        </div>
+                    </div>
+                    {{ generate_navbar_html()|safe }}
                 </div>
-                <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
-            </a>
-            <div class="nav-links">
-                <a href="/?clear=1" class="nav-link">Home</a>
-                <a href="/quick-dose" class="nav-link">Quick Dose</a>
-                <a href="/preop" class="nav-link active">Pre-Op</a>
-                <a href="/calculators" class="nav-link">Clinical Calculators</a>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+        </nav>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/?clear=1" class="mobile-menu-link">Home</a>
+            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+            {% if current_user.is_authenticated %}
+                <a href="/library" class="mobile-menu-link">My Library</a>
+                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+            {% else %}
+                <a href="/login" class="mobile-menu-link">Log In</a>
+                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+            {% endif %}
         </div>
-    </nav>
 
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="/?clear=1" class="mobile-menu-link">Home</a>
-        <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-        <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-        <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-        <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-        <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-    </div>
-
-    <main class="main-content">
-        {% if summary %}
-        <div class="results-section">
-            {% if mode %}
-            <div class="mode-badge {{ 'fast-rag' if mode == 'fast_rag' else 'agentic' }}">
-                <svg class="mode-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {% if mode == 'agentic' %}
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                    {% else %}
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                    {% endif %}
-                </svg>
-                <span class="mode-label">
-                    {% if mode == 'agentic' %}
-                    Agentic AI Analysis
-                    {% else %}
-                    Fast RAG Assessment
-                    {% endif %}
-                </span>
+        <main class="main-content">
+            {% if not summary %}
+            <!-- FORM SECTION -->
+            <div class="header">
+                <h1 class="header-title">Pre-Operative <span class="blue">Assessment</span></h1>
+                <p class="header-subtitle">
+                    Hybrid RAG + Agentic AI for evidence-based risk stratification and perioperative optimization.
+                </p>
             </div>
-            {% endif %}
 
-            {% if reasoning_trace and mode == 'agentic' %}
-            <div class="agent-reasoning">
-                <div class="agent-reasoning-header" onclick="toggleAgentSteps()">
-                    <svg class="agent-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
-                    </svg>
-                    <span class="agent-title">AI Agent Workflow</span>
-                    <svg class="toggle-icon" id="toggleIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </div>
-                <div class="agent-steps" id="agentSteps">
-                    {% for step in reasoning_trace %}
-                    <div class="agent-step">{{ step }}</div>
-                    {% endfor %}
-                    {% if search_count %}
-                    <div class="search-count">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                        {{ search_count }} PubMed searches performed
+            <form method="POST" class="form-card">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Demographics -->
+                <div class="section-title">Patient Demographics</div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label">Age <span class="required">*</span></label>
+                        <input type="number" name="age" class="form-input" placeholder="70" min="0" max="120" required>
                     </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% endif %}
-
-            <div class="assessment-card">
-                <div class="assessment-header">
-                    <svg class="assessment-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    <h2 class="assessment-title">Pre-Operative Assessment</h2>
-                </div>
-                <div class="assessment-content">
-                    {{ summary|safe }}
-                </div>
-            </div>
-
-            {% if references and references|length > 0 %}
-            <div class="references-section">
-                <div class="references-header">
-                    <svg class="references-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                    </svg>
-                    <h3 class="references-title">References</h3>
-                    <span class="references-count">{{ references|length }}</span>
-                </div>
-
-                {% for ref in references %}
-                <div class="reference-card">
-                    <div class="reference-number">{{ loop.index }}</div>
-                    <div class="reference-title">{{ ref.title }}</div>
-                    <div class="reference-meta">
-                        <span class="reference-authors">{{ ref.authors }}</span>
-                        <span class="reference-journal">{{ ref.journal }}</span>
-                        <span class="reference-year">{{ ref.year }}</span>
+                    <div class="form-group">
+                        <label class="form-label">Weight (kg) <span class="required">*</span></label>
+                        <input type="number" name="weight" class="form-input" placeholder="75" min="1" max="300" step="0.1" required>
                     </div>
-                    {% if ref.study_badge %}
-                    <span class="study-badge" style="background-color: {{ ref.study_color }}; color: white;">
-                        {{ ref.study_badge }}
+                </div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label">Height (cm) <span class="required">*</span></label>
+                        <input type="number" name="height" class="form-input" placeholder="170" min="50" max="250" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sex <span class="required">*</span></label>
+                        <select name="sex" class="form-select" required>
+                            <option value="">Select</option>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="section-title">Medical History</div>
+                <div class="form-group">
+                    <label class="form-label">Comorbidities (select all that apply)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Hypertension" id="htn">
+                            <label for="htn">Hypertension</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Diabetes Mellitus" id="dm">
+                            <label for="dm">Diabetes Mellitus</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Coronary Artery Disease" id="cad">
+                            <label for="cad">Coronary Artery Disease (CAD)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Heart Failure" id="hf">
+                            <label for="hf">Heart Failure</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Chronic Kidney Disease" id="ckd">
+                            <label for="ckd">Chronic Kidney Disease (CKD)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="COPD" id="copd">
+                            <label for="copd">COPD</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Asthma" id="asthma">
+                            <label for="asthma">Asthma</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Stroke/TIA" id="stroke">
+                            <label for="stroke">Stroke/TIA</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Atrial Fibrillation" id="afib">
+                            <label for="afib">Atrial Fibrillation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Liver Disease" id="liver">
+                            <label for="liver">Liver Disease</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="comorbidities" value="Obstructive Sleep Apnea" id="osa">
+                            <label for="osa">Obstructive Sleep Apnea (OSA)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Current Medications</label>
+                    <textarea name="medications" class="form-input form-textarea" placeholder="List medications (e.g., metoprolol 50mg BID, lisinopril 10mg daily, warfarin 5mg daily)"></textarea>
+                </div>
+
+                <!-- Cardiac Assessment -->
+                <div class="section-title">Cardiac Assessment</div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label">Ejection Fraction (EF%)</label>
+                        <input type="number" name="ef" class="form-input" placeholder="55" min="10" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Functional Capacity (METs)</label>
+                        <input type="number" name="mets" class="form-input" placeholder="4" min="1" max="20" step="0.5">
+                    </div>
+                </div>
+
+                <!-- Renal Function -->
+                <div class="section-title">Renal Function</div>
+                <div class="input-row">
+                    <div class="form-group">
+                        <label class="form-label">Creatinine (mg/dL)</label>
+                        <input type="number" name="cr" class="form-input" placeholder="1.0" min="0.1" max="20" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">eGFR (mL/min/1.73m²)</label>
+                        <input type="number" name="egfr" class="form-input" placeholder="90" min="1" max="150">
+                    </div>
+                </div>
+
+                <!-- Surgical Details -->
+                <div class="section-title">Surgical Details</div>
+                <div class="form-group">
+                    <label class="form-label">Procedure <span class="required">*</span></label>
+                    <input type="text" name="procedure" class="form-input" placeholder="e.g., Total knee replacement" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Surgery Risk Level <span class="required">*</span></label>
+                    <select name="surgery_risk" class="form-select" required>
+                        <option value="">Select risk level</option>
+                        <option value="low">Low Risk (superficial, cataract, breast biopsy)</option>
+                        <option value="intermediate">Intermediate Risk (orthopedic, ENT, laparoscopic)</option>
+                        <option value="high">High Risk (cardiac, vascular, major abdominal)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Emergency Surgery?</label>
+                    <select name="emergency" class="form-select">
+                        <option value="No">No (Elective)</option>
+                        <option value="Yes">Yes (Emergency)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">Generate Assessment</button>
+            </form>
+
+            {% else %}
+            <!-- RESULTS SECTION -->
+            <div class="results-section">
+                <div class="header">
+                    <h1 class="header-title">Pre-Operative <span class="blue">Assessment</span></h1>
+                    <p class="header-subtitle">Evidence-based risk stratification and perioperative recommendations.</p>
+                </div>
+
+                <!-- Mode Badge -->
+                {% if mode %}
+                <div class="mode-badge {% if mode == 'agentic' %}agentic{% endif %}">
+                    <svg class="mode-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {% if mode == 'agentic' %}
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        {% else %}
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        {% endif %}
+                    </svg>
+                    <span class="mode-label">
+                        {% if mode == 'agentic' %}
+                        AGENTIC MODE • 7-Step Analysis
+                        {% else %}
+                        FAST RAG • Evidence Synthesis
+                        {% endif %}
                     </span>
-                    {% endif %}
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" class="pmid-link">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                </div>
+                {% endif %}
+
+                <!-- Agent Reasoning Trace -->
+                {% if reasoning_trace %}
+                <div class="agent-reasoning">
+                    <div class="agent-header" onclick="toggleAgentReasoning()">
+                        <svg class="agent-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
-                        PMID: {{ ref.pmid }}
+                        <div class="agent-title">Agent Reasoning Trace</div>
+                        <svg class="toggle-icon" id="toggleIcon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    <div class="agent-steps" id="agentSteps">
+                        {% for step in reasoning_trace %}
+                        <div class="agent-step">{{ step }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Assessment Card -->
+                <div class="assessment-card">
+                    <div class="assessment-content">
+                        {{ summary|safe }}
+                    </div>
+                </div>
+
+                <!-- References Section -->
+                {% if references %}
+                <div class="references-section">
+                    <div class="references-header">
+                        <svg class="references-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                        </svg>
+                        <div class="references-title">References</div>
+                        <div class="references-count">{{ references|length }}</div>
+                    </div>
+
+                    {% for ref in references %}
+                    <div class="reference-card">
+                        <div class="reference-number">{{ loop.index }}</div>
+                        <div class="reference-title">{{ ref.title }}</div>
+                        <div class="reference-meta">
+                            <span class="reference-authors">{{ ref.authors }}</span>
+                            <span class="reference-journal">{{ ref.journal }}</span>
+                            <span class="reference-year">{{ ref.year }}</span>
+                        </div>
+                        {% if ref.study_badge %}
+                        <span class="study-badge" style="background-color: {{ ref.study_color }}; color: white;">
+                            {{ ref.study_badge }}
+                        </span>
+                        {% endif %}
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener" class="pmid-link">
+                            PMID: {{ ref.pmid }}
+                            <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div style="margin-top: 32px; text-align: center;">
+                    <a href="/preop" class="submit-btn" style="display: inline-block; text-decoration: none; max-width: 300px;">New Assessment</a>
+                </div>
+            </div>
+            {% endif %}
+        </main>
+
+        <footer class="footer">
+            <div class="footer-inner">
+                <span class="footer-text">© 2025 GasConsult.ai</span>
+                <div class="social-icons">
+                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
                     </a>
                 </div>
-                {% endfor %}
+                <div class="footer-links">
+                    <a href="/privacy" class="footer-link">Privacy</a>
+                    <a href="/terms" class="footer-link">Terms</a>
+                    <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
+                </div>
             </div>
-            {% endif %}
-        </div>
-        {% else %}
-        <div style="text-align: center; padding: 60px 20px;">
-            <p style="color: var(--gray-500); font-size: 15px;">Complete the form above to generate your pre-operative assessment.</p>
-        </div>
-        {% endif %}
-    </main>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <span class="footer-text">© 2025 GasConsult.ai</span>
-            <div class="social-icons">
-                <a href="https://x.com/GasConsultAI" target="_blank" class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                </a>
-                <a href="https://instagram.com/gasconsult.ai" target="_blank" class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                    </svg>
-                </a>
-                <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" class="social-icon">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                    </svg>
-                </a>
-            </div>
-            <div class="footer-links">
-                <a href="/privacy" class="footer-link">Privacy</a>
-                <a href="/terms" class="footer-link">Terms</a>
-                <a href="mailto:contact@gasconsult.ai" class="footer-link">Contact</a>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
+        // Mobile menu toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             menu.classList.toggle('show');
         }
 
-        function toggleAgentSteps() {
+        // Nav dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdowns = document.querySelectorAll('.nav-dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+
+        // Agent reasoning toggle
+        function toggleAgentReasoning() {
             const steps = document.getElementById('agentSteps');
             const icon = document.getElementById('toggleIcon');
-            steps.classList.toggle('show');
-            icon.classList.toggle('expanded');
+            if (steps && icon) {
+                steps.classList.toggle('show');
+                icon.classList.toggle('expanded');
+            }
         }
     </script>
 </body>
@@ -12824,7 +12854,7 @@ CRISIS_HTML = """<!DOCTYPE html>
             z-index: 1000; overflow: hidden;
         }
         .nav-dropdown-menu.show { display: block; }
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600); background: var(--blue-50);
         }
         .nav-dropdown-link {
@@ -18721,7 +18751,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
+        .nav-dropdown:has(.nav-dropdown-link.active) .nav-dropdown-toggle {
             color: var(--blue-600);
             background: var(--blue-50);
         }
@@ -25542,17 +25572,10 @@ def bookmark_response():
         return jsonify({'error': str(e)}), 500
 
 @app.route("/library")
-@login_required
 def library():
     """View all bookmarked responses"""
-    # Use current_user.id for authenticated users
-    user_id = current_user.id if current_user.is_authenticated else None
-
-    if not user_id:
-        flash('Please log in to view your library', 'info')
-        return redirect(url_for('login'))
-
-    bookmarks = BOOKMARKS_STORAGE.get(user_id, [])
+    user_id = session.get('user_id')
+    bookmarks = BOOKMARKS_STORAGE.get(user_id, []) if user_id else []
 
     # Sort by timestamp (newest first)
     bookmarks = sorted(bookmarks, key=lambda x: x['timestamp'], reverse=True)
@@ -25596,8 +25619,8 @@ def save_to_library():
             'timestamp': datetime.now().isoformat()
         }
 
-        # Get user ID from current_user
-        user_id = current_user.id
+        # Get user ID (use session user_id or current_user id)
+        user_id = session.get('user_id') or (current_user.id if current_user.is_authenticated else None)
 
         if not user_id:
             return jsonify({'error': 'User not found'}), 401
