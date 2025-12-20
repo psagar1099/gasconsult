@@ -27580,6 +27580,33 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        /* Form Layout */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .form-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Assessment Content - NO CHECKMARKS */
+        .assessment-content ul {
+            margin-left: 0;
+            margin-bottom: 16px;
+            padding-left: 24px;
+            list-style: disc;
+        }
+
+        .assessment-content li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
         /* Info Boxes */
         .assessment-content blockquote {
             background: var(--blue-50);
@@ -27818,97 +27845,122 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <form method="POST" class="card">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="section-title">Physical Examination</div>
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        <path d="M9 11l3 3L22 4"></path>
+                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                    </svg>
+                    Physical Examination
+                </div>
 
-                <div class="form-group">
-                    <label for="mallampati">Mallampati Classification</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="mallampati" value="I" required>
-                            <span>Class I - Full visibility of tonsils, uvula, soft palate</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="mallampati" value="II">
-                            <span>Class II - Uvula, soft palate visible</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="mallampati" value="III">
-                            <span>Class III - Only soft palate visible</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="mallampati" value="IV">
-                            <span>Class IV - Only hard palate visible</span>
-                        </label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mallampati">Mallampati Classification</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="I" required>
+                                <span>Class I - Full visibility of tonsils, uvula, soft palate</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="II">
+                                <span>Class II - Uvula, soft palate visible</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="III">
+                                <span>Class III - Only soft palate visible</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mallampati" value="IV">
+                                <span>Class IV - Only hard palate visible</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="thyromental">Thyromental Distance</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="thyromental" value=">6.5cm" required>
-                            <span>> 6.5 cm (Normal)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="thyromental" value="6-6.5cm">
-                            <span>6-6.5 cm (Borderline)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="thyromental" value="<6cm">
-                            <span>< 6 cm (Concerning)</span>
-                        </label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="thyromental">Thyromental Distance</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value=">6.5cm" required>
+                                <span>> 6.5 cm (Normal)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="6-6.5cm">
+                                <span>6-6.5 cm (Borderline)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="thyromental" value="<6cm">
+                                <span>< 6 cm (Concerning)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mouth_opening">Mouth Opening</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value=">4cm" required>
+                                <span>> 4 cm (Normal)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="3-4cm">
+                                <span>3-4 cm (Borderline)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="mouth_opening" value="<3cm">
+                                <span>< 3 cm (Limited)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="mouth_opening">Mouth Opening</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value=">4cm" required>
-                            <span>> 4 cm (Normal)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value="3-4cm">
-                            <span>3-4 cm (Borderline)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="mouth_opening" value="<3cm">
-                            <span>< 3 cm (Limited)</span>
-                        </label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="neck_extension">Neck Extension</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Normal" required>
+                                <span>Normal (> 35°)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Moderate">
+                                <span>Moderate Limitation</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="neck_extension" value="Limited">
+                                <span>Severe Limitation</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="neck_extension">Neck Extension</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Normal" required>
-                            <span>Normal (> 35°)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Moderate">
-                            <span>Moderate Limitation</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="neck_extension" value="Limited">
-                            <span>Severe Limitation</span>
-                        </label>
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Patient Information
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bmi">BMI (Body Mass Index)</label>
+                        <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="80" placeholder="e.g., 27.5" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
                     </div>
                 </div>
 
-                <div class="section-title">Patient Information</div>
-
-                <div class="form-group">
-                    <label for="bmi">BMI (Body Mass Index)</label>
-                    <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="80" placeholder="e.g., 27.5" required>
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 8v4m0 4h.01"></path>
+                    </svg>
+                    Risk Factors
                 </div>
-
-                <div class="form-group">
-                    <label for="age">Age</label>
-                    <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
-                </div>
-
-                <div class="section-title">Risk Factors</div>
                 <div class="checkbox-group">
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation">
@@ -27944,34 +27996,48 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     </label>
                 </div>
 
-                <div class="section-title">Case Details</div>
-
-                <div class="form-group">
-                    <label for="procedure">Surgical Procedure</label>
-                    <input type="text" id="procedure" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
+                <div class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    Case Details
                 </div>
 
-                <div class="form-group">
-                    <label for="case_type">Case Type</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="case_type" value="Elective" required>
-                            <span>Elective</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="case_type" value="Urgent">
-                            <span>Urgent</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="case_type" value="Emergency">
-                            <span>Emergency</span>
-                        </label>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="procedure">Surgical Procedure</label>
+                        <input type="text" id="procedure" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="additional_notes">Additional Notes (Optional)</label>
-                    <textarea id="additional_notes" name="additional_notes" placeholder="Any other relevant findings..."></textarea>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="case_type">Case Type</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Elective" required>
+                                <span>Elective</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Urgent">
+                                <span>Urgent</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="case_type" value="Emergency">
+                                <span>Emergency</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="additional_notes">Additional Notes (Optional)</label>
+                        <textarea id="additional_notes" name="additional_notes" placeholder="Any other relevant findings..." rows="4"></textarea>
+                    </div>
                 </div>
 
                 <button type="submit" class="submit-btn">Generate Assessment</button>
@@ -29225,44 +29291,134 @@ Begin with this exact HTML structure to create the visual risk dashboard:
     </div>
 </div>
 
-**SVG TEMPLATES FOR CORMACK-LEHANE GRADES** (copy exactly, just replace [X] with grade number):
+**SVG TEMPLATES FOR CORMACK-LEHANE GRADES** (anatomically realistic with proper shading and depth):
 
 GRADE 1 SVG (Full glottis view - EASY):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-1">
-    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
-    <ellipse cx="150" cy="110" rx="35" ry="15" class="epiglottis"/>
-    <ellipse cx="135" cy="165" rx="12" ry="45" class="vocal-cords"/>
-    <ellipse cx="165" cy="165" rx="12" ry="45" class="vocal-cords"/>
-    <circle cx="130" cy="200" r="8" class="arytenoids"/>
-    <circle cx="170" cy="200" r="8" class="arytenoids"/>
-    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#059669" font-weight="bold">Full Glottic View</text>
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="g1-pharynx" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#FDE4E4;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#F8BBD0;stop-opacity:1" />
+        </radialGradient>
+        <linearGradient id="g1-cords" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+            <stop offset="50%" style="stop-color:#F0F0F0;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#D0D0D0;stop-opacity:1" />
+        </linearGradient>
+        <radialGradient id="g1-epiglottis" cx="50%" cy="30%">
+            <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:0.7" />
+            <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:0.9" />
+        </radialGradient>
+    </defs>
+    <!-- Pharyngeal wall -->
+    <circle cx="150" cy="150" r="140" fill="url(#g1-pharynx)" stroke="#E91E63" stroke-width="4"/>
+    <!-- Soft tissue folds -->
+    <ellipse cx="150" cy="80" rx="100" ry="25" fill="#FFCDD2" opacity="0.6"/>
+    <ellipse cx="150" cy="220" rx="100" ry="25" fill="#FFCDD2" opacity="0.6"/>
+    <!-- Epiglottis (minimal, pushed up) -->
+    <ellipse cx="150" cy="90" rx="40" ry="12" fill="url(#g1-epiglottis)" stroke="#FF6F00" stroke-width="2" opacity="0.5"/>
+    <!-- Glottic opening (dark) -->
+    <ellipse cx="150" cy="150" rx="45" ry="70" fill="#424242"/>
+    <!-- Vocal cords (white, clearly visible) -->
+    <ellipse cx="130" cy="150" rx="8" ry="60" fill="url(#g1-cords)" stroke="#90A4AE" stroke-width="2"/>
+    <ellipse cx="170" cy="150" rx="8" ry="60" fill="url(#g1-cords)" stroke="#90A4AE" stroke-width="2"/>
+    <!-- Arytenoids (posterior structures) -->
+    <ellipse cx="130" cy="190" rx="10" ry="12" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
+    <ellipse cx="170" cy="190" rx="10" ry="12" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
+    <!-- Label -->
+    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#059669" font-weight="700" letter-spacing="0.5">FULL GLOTTIC VIEW</text>
 </svg>
 
 GRADE 2 SVG (Partial glottis - MODERATE):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-2">
-    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
-    <ellipse cx="150" cy="100" rx="40" ry="20" class="epiglottis"/>
-    <ellipse cx="135" cy="175" rx="10" ry="30" class="vocal-cords"/>
-    <ellipse cx="165" cy="175" rx="10" ry="30" class="vocal-cords"/>
-    <circle cx="130" cy="210" r="10" class="arytenoids"/>
-    <circle cx="170" cy="210" r="10" class="arytenoids"/>
-    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#D97706" font-weight="bold">Partial Glottic View</text>
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-2" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="g2-pharynx" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#FFE4E1;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FFCDD2;stop-opacity:1" />
+        </radialGradient>
+        <linearGradient id="g2-cords" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#F5F5F5;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#BDBDBD;stop-opacity:0.7" />
+        </linearGradient>
+        <radialGradient id="g2-epiglottis" cx="50%" cy="30%">
+            <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:1" />
+        </radialGradient>
+    </defs>
+    <!-- Pharyngeal wall -->
+    <circle cx="150" cy="150" r="140" fill="url(#g2-pharynx)" stroke="#D32F2F" stroke-width="4"/>
+    <!-- Soft tissue folds (more prominent) -->
+    <ellipse cx="150" cy="75" rx="110" ry="30" fill="#FFCDD2" opacity="0.7"/>
+    <ellipse cx="150" cy="225" rx="110" ry="30" fill="#FFCDD2" opacity="0.7"/>
+    <!-- Epiglottis (more visible, lower) -->
+    <ellipse cx="150" cy="105" rx="55" ry="20" fill="url(#g2-epiglottis)" stroke="#FF6F00" stroke-width="2" opacity="0.8"/>
+    <!-- Glottic opening (partially obscured) -->
+    <ellipse cx="150" cy="165" rx="40" ry="55" fill="#424242"/>
+    <!-- Vocal cords (partially visible - posterior only) -->
+    <ellipse cx="130" cy="175" rx="7" ry="45" fill="url(#g2-cords)" stroke="#90A4AE" stroke-width="2" opacity="0.7"/>
+    <ellipse cx="170" cy="175" rx="7" ry="45" fill="url(#g2-cords)" stroke="#90A4AE" stroke-width="2" opacity="0.7"/>
+    <!-- Arytenoids (clearly visible) -->
+    <ellipse cx="130" cy="200" rx="12" ry="14" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
+    <ellipse cx="170" cy="200" rx="12" ry="14" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
+    <!-- Label -->
+    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#D97706" font-weight="700" letter-spacing="0.5">PARTIAL GLOTTIC VIEW</text>
 </svg>
 
 GRADE 3 SVG (Only epiglottis - DIFFICULT):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-3">
-    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
-    <ellipse cx="150" cy="130" rx="60" ry="40" class="epiglottis"/>
-    <ellipse cx="135" cy="200" rx="8" ry="20" class="vocal-cords" opacity="0"/>
-    <ellipse cx="165" cy="200" rx="8" ry="20" class="vocal-cords" opacity="0"/>
-    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#EA580C" font-weight="bold">Only Epiglottis Visible</text>
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-3" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="g3-pharynx" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#FFEBEE;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FFCDD2;stop-opacity:1" />
+        </radialGradient>
+        <radialGradient id="g3-epiglottis" cx="50%" cy="30%">
+            <stop offset="0%" style="stop-color:#FFCC80;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FF8A65;stop-opacity:1" />
+        </radialGradient>
+    </defs>
+    <!-- Pharyngeal wall -->
+    <circle cx="150" cy="150" r="140" fill="url(#g3-pharynx)" stroke="#C62828" stroke-width="4"/>
+    <!-- Prominent soft tissue folds -->
+    <ellipse cx="150" cy="70" rx="120" ry="35" fill="#FFCDD2" opacity="0.8"/>
+    <ellipse cx="150" cy="230" rx="120" ry="35" fill="#FFCDD2" opacity="0.8"/>
+    <!-- Epiglottis (DOMINANT - obscuring everything) -->
+    <ellipse cx="150" cy="125" rx="75" ry="45" fill="url(#g3-epiglottis)" stroke="#E65100" stroke-width="3"/>
+    <ellipse cx="150" cy="115" rx="60" ry="30" fill="#FFAB91" opacity="0.6"/>
+    <!-- No visible glottis - completely obscured -->
+    <ellipse cx="150" cy="180" rx="30" ry="40" fill="#616161" opacity="0.3"/>
+    <!-- Tissue shadowing -->
+    <ellipse cx="150" cy="140" rx="50" ry="20" fill="#FF6F00" opacity="0.3"/>
+    <!-- Label -->
+    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#EA580C" font-weight="700" letter-spacing="0.5">EPIGLOTTIS ONLY</text>
 </svg>
 
 GRADE 4 SVG (No glottic structures - VERY DIFFICULT):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-4">
-    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
-    <ellipse cx="150" cy="150" rx="70" ry="60" class="soft-tissue"/>
-    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#991B1B" font-weight="bold">No Glottic Structures</text>
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-4" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <radialGradient id="g4-pharynx" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#FFEBEE;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#EF9A9A;stop-opacity:1" />
+        </radialGradient>
+        <radialGradient id="g4-tissue" cx="50%" cy="50%">
+            <stop offset="0%" style="stop-color:#FFCCBC;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#FF8A80;stop-opacity:1" />
+        </radialGradient>
+    </defs>
+    <!-- Pharyngeal wall (more irregular) -->
+    <circle cx="150" cy="150" r="140" fill="url(#g4-pharynx)" stroke="#B71C1C" stroke-width="4"/>
+    <!-- Dense soft tissue masses -->
+    <ellipse cx="150" cy="65" rx="125" ry="40" fill="#EF5350" opacity="0.7"/>
+    <ellipse cx="150" cy="235" rx="125" ry="40" fill="#EF5350" opacity="0.7"/>
+    <ellipse cx="80" cy="150" rx="35" ry="80" fill="#F44336" opacity="0.6"/>
+    <ellipse cx="220" cy="150" rx="35" ry="80" fill="#F44336" opacity="0.6"/>
+    <!-- Central soft tissue mass (no structures visible) -->
+    <ellipse cx="150" cy="150" rx="85" ry="70" fill="url(#g4-tissue)" stroke="#C62828" stroke-width="3"/>
+    <ellipse cx="150" cy="140" rx="70" ry="55" fill="#FF7043" opacity="0.5"/>
+    <ellipse cx="150" cy="150" rx="55" ry="45" fill="#D84315" opacity="0.4"/>
+    <!-- Additional tissue shadowing -->
+    <ellipse cx="150" cy="160" rx="40" ry="30" fill="#BF360C" opacity="0.3"/>
+    <!-- Label -->
+    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#991B1B" font-weight="700" letter-spacing="0.5">NO GLOTTIC STRUCTURES</text>
 </svg>
 
 **Then continue with standard HTML formatting**:
@@ -29270,20 +29426,22 @@ GRADE 4 SVG (No glottic structures - VERY DIFFICULT):
 - <h4>Subsection Headers</h4> - For sub-topics
 - <p>Paragraphs</p> - Normal text
 - <strong>Key Terms</strong> - Highlighted with blue background
-- <ul><li>Bulleted lists</li></ul> - Display with checkmark icons
+- <ul><li>Bulleted lists</li></ul> - Simple disc bullets (NO checkmarks, NO icons)
 - <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, <span class="risk-low">Low Risk</span> - Color-coded risk badges
 
 CRITICAL REQUIREMENTS:
 1. **MUST START** with the risk dashboard, then anatomical visualization, THEN continue with text sections
-2. **SELECT THE CORRECT SVG** for predicted Cormack-Lehane grade:
-   - Mallampati I-II + TM distance >6.5cm + Good mouth opening = Grade 1 (easy)
-   - Mallampati III + TM distance 6-6.5cm = Grade 2 (moderate)
-   - Mallampati IV + TM distance <6cm OR limited neck extension = Grade 3 (difficult)
-   - Multiple severe predictors (Mallampati IV + TM <6cm + mouth opening <3cm) = Grade 4 (very difficult)
-3. Use inline citations [1], [2], [3] throughout to reference papers
-4. DO NOT create a "References" section - displayed separately
-5. Use <strong> for drug names, equipment, critical decisions
-6. **Output ONLY HTML** - NO "```html" code fences, NO preambles, start directly with <div class="risk-dashboard">
+2. **SELECT THE CORRECT SVG** for predicted Cormack-Lehane grade based on patient anatomy:
+   - Mallampati I-II + TM distance >6.5cm + Good mouth opening = Grade 1 (FULL GLOTTIC VIEW - easy)
+   - Mallampati III + TM distance 6-6.5cm = Grade 2 (PARTIAL GLOTTIC VIEW - moderate)
+   - Mallampati IV + TM distance <6cm OR limited neck extension = Grade 3 (EPIGLOTTIS ONLY - difficult)
+   - Multiple severe predictors (Mallampati IV + TM <6cm + mouth opening <3cm) = Grade 4 (NO GLOTTIC STRUCTURES - very difficult)
+3. **COPY THE EXACT SVG CODE** from the templates above - do NOT modify the SVG paths, gradients, or colors
+4. Use inline citations [1], [2], [3] throughout to reference papers
+5. DO NOT create a "References" section - displayed separately
+6. Use <strong> for drug names, equipment, critical decisions
+7. **Output ONLY HTML** - NO "```html" code fences, NO preambles, start directly with <div class="risk-dashboard">
+8. **NO CHECKMARKS IN LISTS** - use standard HTML <ul><li> with disc bullets only
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
 
