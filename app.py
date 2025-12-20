@@ -2322,6 +2322,120 @@ PREOP_HTML = """<!DOCTYPE html>
         }
         .social-icon svg { width: 24px; height: 24px; }
 
+        /* Loading Overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner-container {
+            text-align: center;
+            animation: fade-in 0.3s ease;
+        }
+
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 24px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .loading-subtext {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Assessment Results - Structured Display */
+        .assessment-results {
+            margin-top: 24px;
+        }
+
+        .assessment-results h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 32px 0 16px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--blue-100);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .assessment-results h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .assessment-results h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 24px 0 12px 0;
+        }
+
+        .assessment-results p {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        .assessment-results ul,
+        .assessment-results ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .assessment-results li {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        .assessment-results strong {
+            color: var(--gray-900);
+            font-weight: 600;
+        }
+
         /* Responsive - EXACT from Homepage */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
@@ -4610,11 +4724,9 @@ PREOP_HTML = """<!DOCTYPE html>
                 </div>
                 {% endif %}
 
-                <!-- Assessment Card -->
-                <div class="assessment-card">
-                    <div class="assessment-content">
-                        {{ summary|safe }}
-                    </div>
+                <!-- Assessment Results (Structured Display) -->
+                <div class="assessment-results">
+                    {{ summary|safe }}
                 </div>
 
                 <!-- References Section -->
@@ -4744,6 +4856,17 @@ document.addEventListener('DOMContentLoaded', function() {
     attachEventListeners();
     calculateBMI(); // Initial BMI calculation
     updateStopBangAge(); // Initial STOP-BANG age auto-population
+
+    // Form submit loading overlay
+    const form = document.getElementById('preop-wizard-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('show');
+            }
+        });
+    }
 });
 
 function initializeWizard() {
