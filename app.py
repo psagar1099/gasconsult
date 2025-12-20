@@ -2960,57 +2960,71 @@ PREOP_HTML = """<!DOCTYPE html>
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 16px 28px;
+            padding: 14px 32px;
             font-size: 15px;
             font-weight: 600;
-            border-radius: 12px;
+            border-radius: 16px;
             border: none;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
         }
 
         .nav-btn-secondary {
-            background: white;
+            background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
             color: var(--gray-700);
-            border: 1.5px solid var(--gray-300);
+            border: 1px solid rgba(15, 23, 42, 0.08);
         }
 
         .nav-btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
+            background: linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%);
+            border-color: rgba(15, 23, 42, 0.12);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         }
 
         .nav-btn-primary {
-            background: rgba(59, 130, 246, 0.9);
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
             color: white;
             margin-left: auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav-btn-primary:hover {
-            background: rgba(37, 99, 235, 1);
+            background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.3);
         }
 
         .nav-btn-submit {
-            background: rgba(16, 185, 129, 0.9);
-            backdrop-filter: blur(12px) saturate(180%);
-            -webkit-backdrop-filter: blur(12px) saturate(180%);
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
             color: white;
             margin-left: auto;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
         }
 
         .nav-btn-submit:hover {
-            background: rgba(5, 150, 105, 1);
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.35);
         }
         
         .btn-icon {
