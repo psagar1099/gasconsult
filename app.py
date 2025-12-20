@@ -2080,25 +2080,39 @@ PREOP_HTML = """<!DOCTYPE html>
             animation: fadeIn 0.8s ease;
         }
 
-        .mode-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 18px; margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
-            border: 1px solid var(--blue-200);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-        }
-
-        .mode-badge.agentic { border-color: #A78BFA; }
-
-        .mode-icon { width: 20px; height: 20px; }
-        .mode-label {
-            font-size: 13px; font-weight: 600;
+        /* Inline Mode Badge (Compact version in header) */
+        .mode-badge-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 12px;
+            font-weight: 600;
             color: var(--blue-700);
+            transition: all 0.2s;
         }
 
-        .mode-badge.agentic .mode-label { color: #7C3AED; }
+        .mode-badge-inline.agentic {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: rgba(124, 58, 237, 0.2);
+            color: #7C3AED;
+        }
+
+        .mode-icon-inline {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .mode-text-inline {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
 
         /* Agent Reasoning */
         .agent-reasoning {
@@ -5043,28 +5057,28 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="results-section">
                 <div class="header">
                     <h1 class="header-title">Pre-Operative <span class="blue">Assessment</span></h1>
-                    <p class="header-subtitle">Evidence-based risk stratification and perioperative recommendations.</p>
-                </div>
-
-                <!-- Mode Badge -->
-                {% if mode %}
-                <div class="mode-badge {% if mode == 'agentic' %}agentic{% endif %}">
-                    <svg class="mode-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        {% if mode == 'agentic' %}
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                        {% else %}
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <p class="header-subtitle" style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                        <span>Evidence-based risk stratification and perioperative recommendations</span>
+                        {% if mode %}
+                        <span class="mode-badge-inline {% if mode == 'agentic' %}agentic{% endif %}">
+                            <svg class="mode-icon-inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {% if mode == 'agentic' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                {% else %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                {% endif %}
+                            </svg>
+                            <span class="mode-text-inline">
+                                {% if mode == 'agentic' %}
+                                Agentic AI
+                                {% else %}
+                                Fast RAG
+                                {% endif %}
+                            </span>
+                        </span>
                         {% endif %}
-                    </svg>
-                    <span class="mode-label">
-                        {% if mode == 'agentic' %}
-                        AGENTIC MODE • 7-Step Analysis
-                        {% else %}
-                        FAST RAG • Evidence Synthesis
-                        {% endif %}
-                    </span>
+                    </p>
                 </div>
-                {% endif %}
 
                 <!-- Agent Reasoning Trace -->
                 {% if reasoning_trace %}
