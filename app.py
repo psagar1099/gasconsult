@@ -27434,6 +27434,73 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .grade-3 { background: linear-gradient(135deg, #FED7AA, #FDBA74); color: #7C2D12; border: 2px solid #FB923C; }
         .grade-4 { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #991B1B; border: 2px solid #FCA5A5; }
 
+        /* CORMACK-LEHANE ANATOMICAL SVG STYLES */
+        .cl-larynx-view {
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .cl-view-grade-1 .vocal-cords { fill: #10B981; opacity: 1; }
+        .cl-view-grade-1 .arytenoids { fill: #059669; opacity: 1; }
+        .cl-view-grade-1 .epiglottis { fill: #FBBF24; opacity: 0.6; }
+
+        .cl-view-grade-2 .vocal-cords { fill: #F59E0B; opacity: 0.5; }
+        .cl-view-grade-2 .arytenoids { fill: #D97706; opacity: 1; }
+        .cl-view-grade-2 .epiglottis { fill: #FBBF24; opacity: 0.8; }
+
+        .cl-view-grade-3 .vocal-cords { fill: #EF4444; opacity: 0; }
+        .cl-view-grade-3 .arytenoids { fill: #DC2626; opacity: 0; }
+        .cl-view-grade-3 .epiglottis { fill: #F97316; opacity: 1; }
+
+        .cl-view-grade-4 .vocal-cords { fill: #991B1B; opacity: 0; }
+        .cl-view-grade-4 .arytenoids { fill: #7C2D12; opacity: 0; }
+        .cl-view-grade-4 .epiglottis { fill: #7C2D12; opacity: 0; }
+        .cl-view-grade-4 .soft-tissue { fill: #B91C1C; opacity: 1; }
+
+        .anatomy-card-description {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            margin-top: 12px;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+        }
+
+        .difficulty-easy {
+            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+            color: #065F46;
+            border: 1px solid #6EE7B7;
+        }
+
+        .difficulty-moderate {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #92400E;
+            border: 1px solid #FCD34D;
+        }
+
+        .difficulty-difficult {
+            background: linear-gradient(135deg, #FED7AA, #FDBA74);
+            color: #7C2D12;
+            border: 1px solid #FB923C;
+        }
+
+        .difficulty-very-difficult {
+            background: linear-gradient(135deg, #FEE2E2, #FECACA);
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+        }
+
         /* Risk Score Dashboard */
         .risk-dashboard {
             display: grid;
@@ -29139,6 +29206,65 @@ Begin with this exact HTML structure to create the visual risk dashboard:
     </div>
 </div>
 
+**After the risk dashboard, add Cormack-Lehane anatomical visualization**:
+
+<div class="anatomy-visualization">
+    <div class="anatomy-header">
+        <div class="anatomy-title">Predicted Laryngoscopic View</div>
+    </div>
+    <div class="anatomy-grid">
+        <div class="anatomy-card">
+            <div class="anatomy-card-title">Estimated Cormack-Lehane Grade</div>
+            <div class="anatomy-svg-container">
+                [Insert the appropriate SVG based on predicted grade - see SVG templates below]
+            </div>
+            <div class="grade-indicator grade-[1|2|3|4]">Grade [X]</div>
+            <div class="anatomy-card-description">[Description of what will be visible: e.g., "Full glottis view expected" or "Only epiglottis visible, difficult intubation predicted"]</div>
+            <div class="difficulty-badge difficulty-[easy|moderate|difficult|very-difficult]">[Intubation difficulty level]</div>
+        </div>
+    </div>
+</div>
+
+**SVG TEMPLATES FOR CORMACK-LEHANE GRADES** (copy exactly, just replace [X] with grade number):
+
+GRADE 1 SVG (Full glottis view - EASY):
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-1">
+    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
+    <ellipse cx="150" cy="110" rx="35" ry="15" class="epiglottis"/>
+    <ellipse cx="135" cy="165" rx="12" ry="45" class="vocal-cords"/>
+    <ellipse cx="165" cy="165" rx="12" ry="45" class="vocal-cords"/>
+    <circle cx="130" cy="200" r="8" class="arytenoids"/>
+    <circle cx="170" cy="200" r="8" class="arytenoids"/>
+    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#059669" font-weight="bold">Full Glottic View</text>
+</svg>
+
+GRADE 2 SVG (Partial glottis - MODERATE):
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-2">
+    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
+    <ellipse cx="150" cy="100" rx="40" ry="20" class="epiglottis"/>
+    <ellipse cx="135" cy="175" rx="10" ry="30" class="vocal-cords"/>
+    <ellipse cx="165" cy="175" rx="10" ry="30" class="vocal-cords"/>
+    <circle cx="130" cy="210" r="10" class="arytenoids"/>
+    <circle cx="170" cy="210" r="10" class="arytenoids"/>
+    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#D97706" font-weight="bold">Partial Glottic View</text>
+</svg>
+
+GRADE 3 SVG (Only epiglottis - DIFFICULT):
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-3">
+    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
+    <ellipse cx="150" cy="130" rx="60" ry="40" class="epiglottis"/>
+    <ellipse cx="135" cy="200" rx="8" ry="20" class="vocal-cords" opacity="0"/>
+    <ellipse cx="165" cy="200" rx="8" ry="20" class="vocal-cords" opacity="0"/>
+    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#EA580C" font-weight="bold">Only Epiglottis Visible</text>
+</svg>
+
+GRADE 4 SVG (No glottic structures - VERY DIFFICULT):
+<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-4">
+    <circle cx="150" cy="150" r="140" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="3"/>
+    <ellipse cx="150" cy="150" rx="70" ry="60" class="soft-tissue"/>
+    <text x="150" y="265" text-anchor="middle" font-size="14" fill="#991B1B" font-weight="bold">No Glottic Structures</text>
+</svg>
+
 **Then continue with standard HTML formatting**:
 - <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
 - <h4>Subsection Headers</h4> - For sub-topics
@@ -29146,14 +29272,18 @@ Begin with this exact HTML structure to create the visual risk dashboard:
 - <strong>Key Terms</strong> - Highlighted with blue background
 - <ul><li>Bulleted lists</li></ul> - Display with checkmark icons
 - <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, <span class="risk-low">Low Risk</span> - Color-coded risk badges
-- <div class="grade-indicator grade-[1-4]">Grade [X] View</div> - For Cormack-Lehane grades
 
 CRITICAL REQUIREMENTS:
-1. **MUST START** with the risk dashboard div shown above - use actual patient risk category and score
-2. Use inline citations [1], [2], [3] throughout to reference papers
-3. DO NOT create a "References" section - displayed separately
-4. Predict likely Cormack-Lehane grade based on patient's Mallampati, thyromental distance, and other factors
+1. **MUST START** with the risk dashboard, then anatomical visualization, THEN continue with text sections
+2. **SELECT THE CORRECT SVG** for predicted Cormack-Lehane grade:
+   - Mallampati I-II + TM distance >6.5cm + Good mouth opening = Grade 1 (easy)
+   - Mallampati III + TM distance 6-6.5cm = Grade 2 (moderate)
+   - Mallampati IV + TM distance <6cm OR limited neck extension = Grade 3 (difficult)
+   - Multiple severe predictors (Mallampati IV + TM <6cm + mouth opening <3cm) = Grade 4 (very difficult)
+3. Use inline citations [1], [2], [3] throughout to reference papers
+4. DO NOT create a "References" section - displayed separately
 5. Use <strong> for drug names, equipment, critical decisions
+6. **Output ONLY HTML** - NO "```html" code fences, NO preambles, start directly with <div class="risk-dashboard">
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
 
@@ -29163,6 +29293,8 @@ Provide maximum clinical utility with specific, actionable recommendations backe
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1
         ).choices[0].message.content
+        # Clean markdown code fences and extra whitespace
+        response = strip_markdown_code_fences(response)
     except Exception as e:
         response = f"<p>Error generating assessment: {str(e)}</p>"
 
