@@ -22912,6 +22912,220 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
+        /* Modern Risk Cards with Glassmorphism */
+        .risk-card-modern {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            padding: 28px 24px;
+            text-align: center;
+            border: 2px solid;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-card-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, currentColor, transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .risk-card-modern:hover::before {
+            opacity: 0.5;
+        }
+
+        .risk-card-modern:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .risk-card-modern.low {
+            border-color: var(--green-500);
+            color: var(--green-600);
+        }
+
+        .risk-card-modern.low .risk-card-icon {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            color: var(--green-600);
+        }
+
+        .risk-card-modern.moderate {
+            border-color: var(--amber-500);
+            color: var(--amber-600);
+        }
+
+        .risk-card-modern.moderate .risk-card-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            color: var(--amber-600);
+        }
+
+        .risk-card-modern.high {
+            border-color: var(--red-500);
+            color: var(--red-600);
+        }
+
+        .risk-card-modern.high .risk-card-icon {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+            color: var(--red-600);
+        }
+
+        .risk-card-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            margin-top: 12px;
+        }
+
+        .risk-card-modern.low .risk-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--green-700);
+        }
+
+        .risk-card-modern.moderate .risk-badge {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--amber-700);
+        }
+
+        .risk-card-modern.high .risk-badge {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--red-700);
+        }
+
+        /* Modern Factor Cards */
+        .factor-card-modern {
+            background: rgba(59, 130, 246, 0.04);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--blue-600);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .factor-card-modern:hover {
+            transform: translateX(6px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .factor-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.1));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-600);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .factor-content {
+            flex: 1;
+        }
+
+        /* Modern Intervention Cards */
+        .intervention-card-modern {
+            background: rgba(16, 185, 129, 0.04);
+            backdrop-filter: blur(10px);
+            border-left: 4px solid var(--green-500);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .intervention-card-modern:hover {
+            transform: translateX(6px);
+            box-shadow: 0 6px 16px rgba(16, 185, 129, 0.12);
+            background: rgba(16, 185, 129, 0.08);
+        }
+
+        .intervention-icon {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--green-600);
+            border: 2px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .intervention-content {
+            flex: 1;
+        }
+
+        /* New Assessment Button */
+        .new-assessment-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: white;
+            color: var(--gray-900);
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 12px;
+            border: 1.5px solid rgba(15, 23, 42, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 32px;
+        }
+
+        .new-assessment-btn:hover {
+            background: white;
+            border-color: rgba(15, 23, 42, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .new-assessment-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .new-assessment-btn:hover svg {
+            transform: rotate(90deg);
+        }
+
         /* Factor/Intervention Cards */
         .factor-card {
             background: var(--blue-50);
@@ -23441,53 +23655,103 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             {% else %}
             <!-- Prediction Results -->
             <div class="glass-card">
-                <h2 class="section-title">Machine Learning Prediction Results</h2>
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                    <div style="background: linear-gradient(135deg, var(--blue-600), #1D4ED8); border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                        <svg fill="none" stroke="white" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h2 class="section-title" style="margin: 0;">Machine Learning Prediction Results</h2>
+                </div>
                 <p class="section-subtitle">
                     RandomForest classifier analyzed 14 clinical features to estimate IOH probability.
                 </p>
 
                 <!-- Risk Probabilities -->
                 <div class="risk-grid">
-                    <div class="risk-card {{ prediction.risk_5min_class }}">
+                    <div class="risk-card-modern {{ prediction.risk_5min_class }}">
+                        <div class="risk-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
                         <div class="risk-label">5-Minute Risk</div>
                         <div class="risk-value">{{ prediction.prob_5min }}%</div>
-                        <div class="risk-text">{{ prediction.risk_5min_text }}</div>
+                        <div class="risk-badge">{{ prediction.risk_5min_text }}</div>
                     </div>
-                    <div class="risk-card {{ prediction.risk_10min_class }}">
+                    <div class="risk-card-modern {{ prediction.risk_10min_class }}">
+                        <div class="risk-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
                         <div class="risk-label">10-Minute Risk</div>
                         <div class="risk-value">{{ prediction.prob_10min }}%</div>
-                        <div class="risk-text">{{ prediction.risk_10min_text }}</div>
+                        <div class="risk-badge">{{ prediction.risk_10min_text }}</div>
                     </div>
-                    <div class="risk-card {{ prediction.risk_20min_class }}">
+                    <div class="risk-card-modern {{ prediction.risk_20min_class }}">
+                        <div class="risk-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 32px; height: 32px;">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
                         <div class="risk-label">20-Minute Risk</div>
                         <div class="risk-value">{{ prediction.prob_20min }}%</div>
-                        <div class="risk-text">{{ prediction.risk_20min_text }}</div>
+                        <div class="risk-badge">{{ prediction.risk_20min_text }}</div>
                     </div>
                 </div>
 
                 <!-- Risk Factors -->
-                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 40px; margin-bottom: 20px;">Top Risk Factors Identified</h3>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 48px; margin-bottom: 24px;">
+                    <div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05)); border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(239, 68, 68, 0.2);">
+                        <svg fill="none" stroke="var(--red-600)" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin: 0;">Top Risk Factors Identified</h3>
+                </div>
                 {% for factor in prediction.factors %}
-                <div class="factor-card">
-                    <div class="card-title">{{ factor.name }}</div>
-                    <div class="card-desc">{{ factor.description }}</div>
+                <div class="factor-card-modern">
+                    <div class="factor-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="factor-content">
+                        <div class="card-title">{{ factor.name }}</div>
+                        <div class="card-desc">{{ factor.description }}</div>
+                    </div>
                 </div>
                 {% endfor %}
 
                 <!-- Interventions -->
-                <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin-top: 40px; margin-bottom: 20px;">Suggested Interventions</h3>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 48px; margin-bottom: 24px;">
+                    <div style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.05)); border-radius: 12px; padding: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid rgba(16, 185, 129, 0.2);">
+                        <svg fill="none" stroke="var(--green-500)" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 20px; font-weight: 700; color: var(--gray-900); margin: 0;">Suggested Interventions</h3>
+                </div>
                 {% for intervention in prediction.interventions %}
-                <div class="intervention-card">
-                    <div class="card-title">{{ intervention.name }}</div>
-                    <div class="card-desc">{{ intervention.description }}</div>
+                <div class="intervention-card-modern">
+                    <div class="intervention-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <div class="intervention-content">
+                        <div class="card-title">{{ intervention.name }}</div>
+                        <div class="card-desc">{{ intervention.description }}</div>
+                    </div>
                 </div>
                 {% endfor %}
 
-                <a href="/hypotension" class="back-btn">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                <a href="/hypotension" class="new-assessment-btn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
-                    Calculate Another
+                    Calculate Another Prediction
                 </a>
             </div>
             {% endif %}
