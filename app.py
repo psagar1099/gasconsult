@@ -25427,13 +25427,13 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         }
 
         .card {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
             animation: fade-up 0.6s 0.1s ease forwards;
             opacity: 0;
@@ -25735,12 +25735,12 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 
         .consent-card {
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
         }
 
@@ -25887,15 +25887,123 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             font-style: normal;
         }
 
+        /* VISUAL RISK DASHBOARD */
+        .risk-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .risk-metric-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .risk-metric-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .risk-metric-card.high {
+            border-color: #EF4444;
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.3), rgba(254, 202, 202, 0.3));
+        }
+
+        .risk-metric-card.moderate {
+            border-color: #F59E0B;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.3), rgba(253, 230, 138, 0.3));
+        }
+
+        .risk-metric-card.low {
+            border-color: #10B981;
+            background: linear-gradient(135deg, rgba(209, 250, 229, 0.3), rgba(167, 243, 208, 0.3));
+        }
+
+        .risk-metric-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .risk-metric-card.high .risk-metric-icon {
+            color: #EF4444;
+        }
+
+        .risk-metric-card.moderate .risk-metric-icon {
+            color: #F59E0B;
+        }
+
+        .risk-metric-card.low .risk-metric-icon {
+            color: #10B981;
+        }
+
+        .risk-metric-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .risk-metric-label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+        }
+
+        .risk-metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .risk-metric-card.high .risk-metric-value {
+            color: #DC2626;
+        }
+
+        .risk-metric-card.moderate .risk-metric-value {
+            color: #D97706;
+        }
+
+        .risk-metric-card.low .risk-metric-value {
+            color: #059669;
+        }
+
+        .risk-metric-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        /* SECTION DIVIDERS */
+        .consent-content .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gray-300), transparent);
+            margin: 40px 0;
+        }
+
         /* References Card */
         .references-card {
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
         }
 
@@ -26270,7 +26378,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                 {% endif %}
 
                 <div class="action-buttons">
-                    <a href="/informed-consent" class="btn btn-primary">
+                    <a href="/informed-consent" class="btn btn-secondary">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"></line>
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -26799,13 +26907,13 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .card {
-            background: rgba(255,255,255,0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
             animation: fade-up 0.6s 0.1s ease forwards;
             opacity: 0;
@@ -27241,6 +27349,170 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border: 1px solid #6EE7B7;
         }
 
+        /* ANATOMICAL VISUALIZATION SYSTEM */
+        .anatomy-visualization {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 32px;
+            margin: 32px 0;
+            border: 2px solid rgba(59, 130, 246, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+
+        .anatomy-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--blue-100);
+        }
+
+        .anatomy-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .anatomy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .anatomy-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(147, 197, 253, 0.03));
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid rgba(59, 130, 246, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .anatomy-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .anatomy-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .anatomy-svg-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            border: 1px solid var(--gray-200);
+            margin-bottom: 12px;
+        }
+
+        .cormack-lehane-view {
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .grade-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .grade-1 { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); color: #065F46; border: 2px solid #6EE7B7; }
+        .grade-2 { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; border: 2px solid #FCD34D; }
+        .grade-3 { background: linear-gradient(135deg, #FED7AA, #FDBA74); color: #7C2D12; border: 2px solid #FB923C; }
+        .grade-4 { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #991B1B; border: 2px solid #FCA5A5; }
+
+        /* Risk Score Dashboard */
+        .risk-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .risk-metric-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 2px solid;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .risk-metric-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+        }
+
+        .risk-metric-card.high { border-color: #EF4444; }
+        .risk-metric-card.moderate { border-color: #F59E0B; }
+        .risk-metric-card.low { border-color: #10B981; }
+
+        .risk-metric-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-metric-card.high .risk-metric-icon {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .risk-metric-card.moderate .risk-metric-icon {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .risk-metric-card.low .risk-metric-icon {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .risk-metric-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .risk-metric-value {
+            font-size: 32px;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .risk-metric-card.high .risk-metric-value { color: #DC2626; }
+        .risk-metric-card.moderate .risk-metric-value { color: #D97706; }
+        .risk-metric-card.low .risk-metric-value { color: #059669; }
+
+        .risk-metric-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
         /* Info Boxes */
         .assessment-content blockquote {
             background: var(--blue-50);
@@ -27263,12 +27535,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         /* References Card */
         .references-card {
             background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
         }
 
@@ -28424,7 +28696,7 @@ Additional Notes: {notes if notes else 'None'}
     prompt = f"""You are an expert anesthesiologist helping create a comprehensive, patient-specific informed consent discussion guide. Based on the patient's information and evidence-based literature, provide a detailed consent discussion that balances medical accuracy with patient-friendly language.
 
 IMPORTANT OUTPUT INSTRUCTIONS:
-- Output ONLY the formatted HTML content - NO preamble, NO "Here is..." or "Html", just start directly with the first <h3> tag
+- Output ONLY the formatted HTML content - NO preamble, NO "Here is..." or "Html", just start directly with the risk dashboard
 - Use THIRD PERSON language throughout (refer to "the patient" or "this patient", NOT "you" or "your")
 - Write in a neutral, professional tone suitable for medical documentation
 - Example: Use "The patient will experience..." instead of "You will experience..."
@@ -28438,6 +28710,62 @@ Available Evidence (use numbered citations [1], [2], etc.):
 
 Paper Details:
 {all_context}
+
+CRITICAL FORMATTING REQUIREMENT - MUST START WITH VISUAL RISK DASHBOARD:
+
+**YOU MUST BEGIN YOUR OUTPUT WITH THIS EXACT HTML STRUCTURE** (fill in the bracketed values with patient-specific information):
+
+<div class="risk-dashboard">
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">ASA Classification</div>
+        <div class="risk-metric-value">ASA [I-V]</div>
+        <div class="risk-metric-text">[Physical status]</div>
+    </div>
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Anesthesia Type</div>
+        <div class="risk-metric-value">[Type]</div>
+        <div class="risk-metric-text">[Brief description]</div>
+    </div>
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Age Category</div>
+        <div class="risk-metric-value">[Age] years</div>
+        <div class="risk-metric-text">[Pediatric|Adult|Geriatric]</div>
+    </div>
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Comorbidity Burden</div>
+        <div class="risk-metric-value">[X]</div>
+        <div class="risk-metric-text">[X conditions present]</div>
+    </div>
+</div>
+
+<div class="section-divider"></div>
+
+CRITICAL REQUIREMENTS FOR RISK DASHBOARD:
+1. **MUST be the FIRST thing in your output** - before any <h3> tags
+2. Set risk level (high/moderate/low) based on ASA class: ASA I-II = low, ASA III = moderate, ASA IV-V = high
+3. Use actual patient values: ASA {asa}, Age {age}, {anesthesia_type} anesthesia
+4. Count comorbidities accurately from: {all_comorbidities}
+5. After the risk dashboard and section divider, then proceed with the rest of the consent discussion
 
 CRITICAL: PATIENT-SPECIFIC CONSENT PROTOCOL
 This is NOT a generic template - personalize EVERY section to THIS specific patient. Before finalizing:
@@ -28772,20 +29100,60 @@ Generate a comprehensive difficult airway assessment including:
    - Postoperative extubation planning
    - Communication plan with surgical team
 
-Use HTML formatting with visual enhancements:
-- <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
-- <h4>Subsection Headers</h4> - For sub-topics within sections
-- <p>Paragraphs</p> - Normal text
-- <strong>Key Terms</strong> - Important terms will be highlighted with blue background
-- <ul><li>Bulleted lists</li></ul> - Items will display with checkmark icons
-- Risk levels: Wrap risk categories in spans like <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, or <span class="risk-low">Low Risk</span> for color-coded badges
-- <br><br> for spacing between major sections
+CRITICAL FORMATTING REQUIREMENTS:
 
-IMPORTANT:
-1. Use inline citations [1], [2], [3] throughout your assessment to reference the papers provided above
-2. DO NOT create a separate "References" section - references will be displayed separately below
-3. Use the risk level spans (risk-high, risk-moderate, risk-low) when mentioning risk categories for visual impact
-4. Use <strong> tags for drug names, equipment, and critical decision points
+**START YOUR ASSESSMENT WITH A VISUAL RISK DASHBOARD**:
+Begin with this exact HTML structure to create the visual risk dashboard:
+
+<div class="risk-dashboard">
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Overall Risk</div>
+        <div class="risk-metric-value">[High|Mod|Low]</div>
+        <div class="risk-metric-text">[Risk Category]</div>
+    </div>
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Risk Score</div>
+        <div class="risk-metric-value">[Score]/7</div>
+        <div class="risk-metric-text">[X] predictors</div>
+    </div>
+    <div class="risk-metric-card [high|moderate|low]">
+        <div class="risk-metric-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+        </div>
+        <div class="risk-metric-label">Cormack-Lehane</div>
+        <div class="risk-metric-value">Grade [1-4]</div>
+        <div class="risk-metric-text">Predicted view</div>
+    </div>
+</div>
+
+**Then continue with standard HTML formatting**:
+- <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
+- <h4>Subsection Headers</h4> - For sub-topics
+- <p>Paragraphs</p> - Normal text
+- <strong>Key Terms</strong> - Highlighted with blue background
+- <ul><li>Bulleted lists</li></ul> - Display with checkmark icons
+- <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, <span class="risk-low">Low Risk</span> - Color-coded risk badges
+- <div class="grade-indicator grade-[1-4]">Grade [X] View</div> - For Cormack-Lehane grades
+
+CRITICAL REQUIREMENTS:
+1. **MUST START** with the risk dashboard div shown above - use actual patient risk category and score
+2. Use inline citations [1], [2], [3] throughout to reference papers
+3. DO NOT create a "References" section - displayed separately
+4. Predict likely Cormack-Lehane grade based on patient's Mallampati, thyromental distance, and other factors
+5. Use <strong> for drug names, equipment, critical decisions
 
 Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
 
