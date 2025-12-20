@@ -3437,6 +3437,31 @@ PREOP_HTML = """<!DOCTYPE html>
         <p class="step-description">Medical history and comorbidities for anesthesia risk assessment.</p>
     </div>
 
+    <!-- Patient History of Present Illness (HPI) -->
+    <div class="subsection" style="margin-bottom: 32px; border: 2px dashed rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 24px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(147, 197, 253, 0.03) 100%);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div style="background: linear-gradient(135deg, var(--blue-600), #1D4ED8); border-radius: 10px; padding: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);">
+                <svg fill="none" stroke="white" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3 class="subsection-title" style="margin: 0;">Patient History of Present Illness (Optional)</h3>
+        </div>
+        <p class="form-help" style="margin-bottom: 16px; color: var(--gray-600); font-size: 14px;">
+            Copy relevant patient history from EHR to provide additional clinical context.
+            <strong style="color: var(--red-600);">⚠️ Remove all identifiers (names, dates of birth, MRNs) for HIPAA compliance.</strong>
+        </p>
+        <textarea
+            name="hpi"
+            class="form-input"
+            rows="6"
+            placeholder="Example: Patient presenting for elective total knee arthroplasty. Chronic knee pain for 3 years, conservative management unsuccessful. Lives independently, able to climb one flight of stairs with difficulty. Recent echocardiogram shows preserved EF. Last stress test 6 months ago negative for ischemia."
+            style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6;"></textarea>
+        <p class="form-help" style="margin-top: 8px; font-size: 13px; color: var(--gray-500);">
+            💡 This field helps the AI provide more personalized and context-aware recommendations.
+        </p>
+    </div>
+
     <!-- Cardiovascular -->
     <div class="subsection">
         <h3 class="subsection-title">Cardiovascular</h3>
@@ -4751,6 +4776,10 @@ PREOP_HTML = """<!DOCTYPE html>
                 </div>
             </div>
             <div class="review-section-content" id="review-medical" style="display:none;">
+                <div class="review-item" id="review-hpi-item" style="display:none;">
+                    <span class="review-label">History of Present Illness:</span>
+                    <span class="review-value" id="review-hpi" style="white-space: pre-wrap; display: block; margin-top: 8px; padding: 12px; background: rgba(59, 130, 246, 0.05); border-radius: 8px; border-left: 3px solid var(--blue-600); font-size: 14px; line-height: 1.6;"></span>
+                </div>
                 <div class="review-item">
                     <span class="review-label">Comorbidities:</span>
                     <span class="review-value" id="review-comorbidities">None reported</span>
@@ -5978,6 +6007,17 @@ function populateReviewPage() {
     document.getElementById('review-comorbidities').textContent =
         comorbidities.length > 0 ? comorbidities.join(', ') : 'None reported';
 
+    // Populate HPI
+    const hpi = document.querySelector('textarea[name="hpi"]');
+    const hpiItem = document.getElementById('review-hpi-item');
+    const hpiValue = document.getElementById('review-hpi');
+    if (hpi && hpi.value.trim()) {
+        hpiValue.textContent = hpi.value.trim();
+        hpiItem.style.display = 'block';
+    } else {
+        hpiItem.style.display = 'none';
+    }
+
     // Populate medications
     const cardiacMeds = document.querySelector('textarea[name="cardiac_meds"]');
     if (cardiacMeds) {
@@ -7166,6 +7206,9 @@ Patient Demographics:
 - IBW: {ibw} kg
 
 Comorbidities: {comorbidities_str}
+
+History of Present Illness:
+{self.patient.get('hpi', 'Not provided')}
 
 Functional Status:
 - METs: {self.patient.get('mets', 'Not specified')}
@@ -27445,6 +27488,7 @@ def preop_assessment():
     surgery_risk = sanitize_user_query(request.form.get("surgery_risk", ""))
     npo = sanitize_user_query(request.form.get("npo", ""))
     allergies = sanitize_user_query(request.form.get("allergies", ""))
+    hpi = sanitize_user_query(request.form.get("hpi", ""))
 
     # Validate required fields
     if not procedure or not procedure.strip():
@@ -27488,7 +27532,8 @@ def preop_assessment():
         'procedure': procedure,
         'surgery_risk': surgery_risk,
         'npo': npo,
-        'allergies': allergies
+        'allergies': allergies,
+        'hpi': hpi
     }
 
     # STEP 1: Classify complexity (fast RAG vs agentic)
@@ -27652,6 +27697,9 @@ Patient Demographics:
 - IBW: {ibw} kg
 
 Comorbidities: {all_comorbidities}
+
+History of Present Illness:
+{hpi if hpi else 'Not provided'}
 
 Functional Status:
 - METs: {mets}
