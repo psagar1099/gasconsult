@@ -3001,30 +3001,33 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .nav-btn-primary {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: white;
+            background: white;
+            color: var(--gray-900);
             margin-left: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1.5px solid rgba(15, 23, 42, 0.15);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
         }
 
         .nav-btn-primary:hover {
-            background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+            background: white;
+            border-color: rgba(15, 23, 42, 0.25);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
         .nav-btn-submit {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            color: white;
+            background: white;
+            color: var(--gray-900);
             margin-left: auto;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+            border: 1.5px solid rgba(15, 23, 42, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
         }
 
         .nav-btn-submit:hover {
-            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            background: white;
+            border-color: rgba(15, 23, 42, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(5, 150, 105, 0.35);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08);
         }
         
         .btn-icon {
@@ -3378,7 +3381,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="step-header">
         <div class="step-number">Step 1 of 6</div>
         <h2 class="step-title">Demographics & Basic Information</h2>
-        <p class="step-description">Let's start with some basic information about you.</p>
+        <p class="step-description">Patient demographics and basic information.</p>
     </div>
 
     <div class="input-row">
@@ -3431,7 +3434,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="step-header">
         <div class="step-number">Step 2 of 6</div>
         <h2 class="step-title">Medical History</h2>
-        <p class="step-description">Tell us about your medical conditions. This helps us assess your anesthesia risk.</p>
+        <p class="step-description">Medical history and comorbidities for anesthesia risk assessment.</p>
     </div>
 
     <!-- Cardiovascular -->
@@ -3784,7 +3787,7 @@ PREOP_HTML = """<!DOCTYPE html>
         <p class="form-help" style="margin-bottom: 16px;">It's critical we know about any drug allergies or adverse reactions.</p>
 
         <div class="form-group">
-            <label class="form-label">Do you have any drug allergies?</label>
+            <label class="form-label">Drug allergies</label>
             <select name="has_allergies" class="form-select" onchange="toggleConditional('allergy-details', this.value === 'yes')">
                 <option value="">Select</option>
                 <option value="no">No Known Drug Allergies</option>
@@ -3996,7 +3999,7 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="step-header">
         <div class="step-number">Step 4 of 6</div>
         <h2 class="step-title">Functional Capacity Assessment</h2>
-        <p class="step-description">These questions help us understand your physical fitness and screen for sleep apnea.</p>
+        <p class="step-description">Physical fitness assessment and sleep apnea screening.</p>
     </div>
 
     <!-- STOP-BANG Questionnaire -->
@@ -4007,7 +4010,7 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="stopbang-questions">
             <div class="question-card">
                 <div class="question-text">
-                    <strong>S</strong>noring: Do you snore loudly (louder than talking or loud enough to be heard through closed doors)?
+                    <strong>S</strong>noring: Does the patient snore loudly (louder than talking or loud enough to be heard through closed doors)?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4023,7 +4026,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>T</strong>iredness: Do you often feel tired, fatigued, or sleepy during the daytime?
+                    <strong>T</strong>iredness: Does the patient often feel tired, fatigued, or sleepy during the daytime?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4039,7 +4042,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>O</strong>bserved: Has anyone observed you stop breathing during your sleep?
+                    <strong>O</strong>bserved: Has anyone observed the patient stop breathing during sleep?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4055,7 +4058,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>P</strong>ressure: Do you have or are you being treated for high blood pressure?
+                    <strong>P</strong>ressure: Does the patient have or are they being treated for high blood pressure?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4071,7 +4074,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>B</strong>MI: Is your BMI more than 35 kg/m²?
+                    <strong>B</strong>MI: Is the patient's BMI more than 35 kg/m²?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4083,12 +4086,12 @@ PREOP_HTML = """<!DOCTYPE html>
                         <span>No</span>
                     </label>
                 </div>
-                <p class="form-help" style="margin-top: 8px;">Your BMI: <span id="stopbang-bmi-value">--</span> kg/m² (auto-calculated)</p>
+                <p class="form-help" style="margin-top: 8px;">Patient BMI: <span id="stopbang-bmi-value">--</span> kg/m² (auto-calculated)</p>
             </div>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>A</strong>ge: Are you older than 50 years?
+                    <strong>A</strong>ge: Is the patient older than 50 years?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4100,12 +4103,12 @@ PREOP_HTML = """<!DOCTYPE html>
                         <span>No</span>
                     </label>
                 </div>
-                <p class="form-help" style="margin-top: 8px;">Your age: <span id="stopbang-age-value">--</span> years (auto-calculated)</p>
+                <p class="form-help" style="margin-top: 8px;">Patient age: <span id="stopbang-age-value">--</span> years (auto-calculated)</p>
             </div>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>N</strong>eck: Is your neck circumference > 40 cm (16 inches)?
+                    <strong>N</strong>eck: Is the patient's neck circumference > 40 cm (16 inches)?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4125,7 +4128,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    <strong>G</strong>ender: Are you male?
+                    <strong>G</strong>ender: Is the patient male?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4143,19 +4146,19 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="score-display" id="stopbang-score-display">
             <div class="score-label">STOP-BANG Score:</div>
             <div class="score-value" id="stopbang-score">0 / 8</div>
-            <div class="score-interpretation" id="stopbang-interpretation">Complete all questions to see your score</div>
+            <div class="score-interpretation" id="stopbang-interpretation">Complete all questions to see the score</div>
         </div>
     </div>
 
     <!-- DASI Questionnaire -->
     <div class="subsection">
         <h3 class="subsection-title">DASI: Functional Capacity</h3>
-        <p class="form-help" style="margin-bottom: 20px;">Answer YES or NO to indicate whether you can perform each activity. This helps estimate your functional capacity in METs.</p>
+        <p class="form-help" style="margin-bottom: 20px;">Answer YES or NO to indicate whether the patient can perform each activity. This helps estimate functional capacity in METs.</p>
 
         <div class="dasi-questions">
             <div class="question-card">
                 <div class="question-text">
-                    1. Can you take care of yourself (eating, dressing, bathing, or using the toilet)?
+                    1. Can the patient take care of themselves (eating, dressing, bathing, or using the toilet)?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4171,7 +4174,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    2. Can you walk indoors, such as around your house?
+                    2. Can the patient walk indoors?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4187,7 +4190,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    3. Can you walk a block or two on level ground?
+                    3. Can the patient walk a block or two on level ground?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4203,7 +4206,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    4. Can you climb a flight of stairs or walk up a hill?
+                    4. Can the patient climb a flight of stairs or walk up a hill?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4219,7 +4222,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    5. Can you run a short distance?
+                    5. Can the patient run a short distance?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4235,7 +4238,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    6. Can you do light work around the house like dusting or washing dishes?
+                    6. Can the patient do light work around the house like dusting or washing dishes?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4251,7 +4254,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    7. Can you do moderate work around the house like vacuuming, sweeping floors, or carrying groceries?
+                    7. Can the patient do moderate work around the house like vacuuming, sweeping floors, or carrying groceries?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4267,7 +4270,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    8. Can you do heavy work around the house like scrubbing floors or lifting/moving heavy furniture?
+                    8. Can the patient do heavy work around the house like scrubbing floors or lifting/moving heavy furniture?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4283,7 +4286,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    9. Can you do yard work like raking leaves, weeding, or pushing a power mower?
+                    9. Can the patient do yard work like raking leaves, weeding, or pushing a power mower?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4299,7 +4302,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    10. Can you have sexual relations?
+                    10. Can the patient have sexual relations?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4315,7 +4318,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    11. Can you participate in moderate recreational activities like golf, bowling, dancing, doubles tennis, or throwing a baseball/football?
+                    11. Can the patient participate in moderate recreational activities like golf, bowling, dancing, doubles tennis, or throwing a baseball/football?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4331,7 +4334,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="question-card">
                 <div class="question-text">
-                    12. Can you participate in strenuous sports like swimming, singles tennis, football, basketball, or skiing?
+                    12. Can the patient participate in strenuous sports like swimming, singles tennis, football, basketball, or skiing?
                 </div>
                 <div class="radio-group-inline">
                     <label class="radio-option-inline">
@@ -4359,13 +4362,13 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="step-header">
         <div class="step-number">Step 5 of 6</div>
         <h2 class="step-title">Airway Assessment & Surgical Details</h2>
-        <p class="step-description">Help us prepare for your anesthesia and surgery.</p>
+        <p class="step-description">Surgical details and airway assessment information.</p>
     </div>
 
     <!-- Airway Assessment -->
     <div class="subsection">
         <h3 class="subsection-title">Airway Assessment</h3>
-        <p class="form-help" style="margin-bottom: 20px;">These questions help us predict potential airway challenges. If you're unsure, leave blank and we'll assess in person.</p>
+        <p class="form-help" style="margin-bottom: 20px;">These questions help predict potential airway challenges. Leave blank if unknown or unable to assess.</p>
 
         <div class="form-group">
             <label class="form-label">Previous Difficult Intubation?</label>
@@ -4394,7 +4397,7 @@ PREOP_HTML = """<!DOCTYPE html>
                 <option value="IV">Class IV - Only hard palate visible</option>
                 <option value="unknown">Unknown / Never assessed</option>
             </select>
-            <p class="form-help">Open your mouth wide and stick out your tongue. Higher class = potentially more difficult airway.</p>
+            <p class="form-help">Patient opens mouth wide and sticks out tongue. Higher class = potentially more difficult airway.</p>
         </div>
 
         <div class="input-row">
@@ -4407,7 +4410,7 @@ PREOP_HTML = """<!DOCTYPE html>
                     <option value="<3cm">&lt;3 cm (limited - <2 finger widths)</option>
                     <option value="unknown">Unknown</option>
                 </select>
-                <p class="form-help">How wide can you open your mouth?</p>
+                <p class="form-help">How wide can the patient open their mouth?</p>
             </div>
             <div class="form-group">
                 <label class="form-label">Thyromental Distance</label>
@@ -4610,13 +4613,13 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="step-header">
         <div class="step-number">Step 6 of 6</div>
         <h2 class="step-title">Review & Submit</h2>
-        <p class="step-description">Please review your information before submitting.</p>
+        <p class="step-description">Review patient information before submitting.</p>
     </div>
 
     <!-- Automated Risk Summary Cards -->
     <div class="subsection">
         <h3 class="subsection-title">Calculated Risk Scores</h3>
-        <p class="form-help" style="margin-bottom: 20px;">These scores are auto-calculated based on your responses.</p>
+        <p class="form-help" style="margin-bottom: 20px;">These scores are auto-calculated based on responses.</p>
 
         <div class="risk-summary-grid">
             <div class="risk-card">
@@ -4688,7 +4691,7 @@ PREOP_HTML = """<!DOCTYPE html>
 
     <!-- Review Sections (Collapsible) -->
     <div class="subsection">
-        <h3 class="subsection-title">Your Information Summary</h3>
+        <h3 class="subsection-title">Patient Information Summary</h3>
         <p class="form-help" style="margin-bottom: 20px;">Click any section to expand and review. Click "Edit" to go back and make changes.</p>
 
         <!-- Demographics Summary -->
@@ -4885,7 +4888,7 @@ PREOP_HTML = """<!DOCTYPE html>
         <h3 class="subsection-title">Additional Comments (Optional)</h3>
         <div class="form-group">
             <label class="form-label">Anything else we should know?</label>
-            <textarea name="additional_comments" class="form-input" rows="4" placeholder="Any concerns, questions, or additional information you'd like to share with your anesthesia team"></textarea>
+            <textarea name="additional_comments" class="form-input" rows="4" placeholder="Any additional concerns, questions, or pertinent information for the anesthesia team"></textarea>
         </div>
     </div>
 
