@@ -2225,55 +2225,106 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         /* References */
-        .references-section { margin-top: 24px; }
-
-        .references-header {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+        /* References Section - Enhanced Modern Design */
+        .references-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid var(--gray-200);
         }
 
-        .references-icon { width: 24px; height: 24px; color: var(--blue-600); }
+        .references-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .references-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--blue-600);
+            flex-shrink: 0;
+        }
+
         .references-title {
-            font-size: 20px; font-weight: 700; color: var(--gray-900);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            flex: 1;
         }
 
         .references-count {
-            background: var(--blue-100); color: var(--blue-700);
-            padding: 4px 10px; border-radius: 12px;
-            font-size: 13px; font-weight: 600;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
         }
 
         .reference-card {
             background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px) saturate(180%);
             border: 1px solid var(--gray-200);
-            border-radius: 16px; padding: 20px; margin-bottom: 16px;
-            transition: all 0.3s; position: relative; overflow: hidden;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .reference-card:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
-            transform: translateY(-2px);
+            border-color: var(--blue-400);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+            transform: translateY(-3px);
         }
 
         .reference-card::before {
-            content: ""; position: absolute; top: 0; left: 0;
-            width: 4px; height: 100%; background: var(--blue-600);
-            opacity: 0; transition: opacity 0.3s;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--blue-600), #1D4ED8);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .reference-card:hover::before { opacity: 1; }
+        .reference-card:hover::before {
+            opacity: 1;
+        }
 
         .reference-number {
-            position: absolute; top: 16px; right: 16px;
-            background: var(--blue-600); color: white;
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
         }
 
         .reference-title {
-            font-size: 15px; font-weight: 600; color: var(--gray-900);
-            line-height: 1.5; margin-bottom: 12px; padding-right: 48px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            padding-right: 56px;
         }
 
         .reference-meta {
