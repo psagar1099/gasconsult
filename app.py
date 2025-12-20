@@ -3394,19 +3394,27 @@ PREOP_HTML = """<!DOCTYPE html>
             </div>
             <h3 class="subsection-title" style="margin: 0;">Patient History of Present Illness (Optional)</h3>
         </div>
-        <p class="form-help" style="margin-bottom: 16px; color: var(--gray-600); font-size: 14px;">
-            Copy relevant patient history from EHR to provide additional clinical context.
-            <strong style="color: var(--red-600);">⚠️ Remove all identifiers (names, dates of birth, MRNs) for HIPAA compliance.</strong>
+        <p class="form-help" style="margin-bottom: 16px; color: var(--gray-600); font-size: 14px; display: flex; align-items: flex-start; gap: 8px;">
+            <span style="flex-shrink: 0; margin-top: 1px;">Copy relevant patient history from EHR to provide additional clinical context.</span>
         </p>
+        <div style="display: flex; align-items: center; gap: 8px; padding: 12px; background: rgba(239, 68, 68, 0.05); border-radius: 8px; border-left: 3px solid var(--red-600); margin-bottom: 16px;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; color: var(--red-600); flex-shrink: 0;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <strong style="color: var(--red-600); font-size: 14px;">Remove all identifiers (names, dates of birth, MRNs) for HIPAA compliance.</strong>
+        </div>
         <textarea
             name="hpi"
             class="form-input"
             rows="6"
             placeholder="Example: Patient presenting for elective total knee arthroplasty. Chronic knee pain for 3 years, conservative management unsuccessful. Lives independently, able to climb one flight of stairs with difficulty. Recent echocardiogram shows preserved EF. Last stress test 6 months ago negative for ischemia."
-            style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6;"></textarea>
-        <p class="form-help" style="margin-top: 8px; font-size: 13px; color: var(--gray-500);">
-            💡 This field helps the AI provide more personalized and context-aware recommendations.
-        </p>
+            style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6; resize: vertical; width: 100%; min-height: 120px; box-sizing: border-box;"></textarea>
+        <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; padding: 10px; background: rgba(59, 130, 246, 0.05); border-radius: 8px;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 18px; height: 18px; color: var(--blue-600); flex-shrink: 0;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+            <span style="font-size: 13px; color: var(--gray-600);">This field helps the AI provide more personalized and context-aware recommendations.</span>
+        </div>
     </div>
 
     <div class="input-row">
