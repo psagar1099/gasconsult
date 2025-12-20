@@ -2080,25 +2080,39 @@ PREOP_HTML = """<!DOCTYPE html>
             animation: fadeIn 0.8s ease;
         }
 
-        .mode-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 10px 18px; margin-bottom: 24px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
-            border: 1px solid var(--blue-200);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
-        }
-
-        .mode-badge.agentic { border-color: #A78BFA; }
-
-        .mode-icon { width: 20px; height: 20px; }
-        .mode-label {
-            font-size: 13px; font-weight: 600;
+        /* Inline Mode Badge (Compact version in header) */
+        .mode-badge-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 8px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            font-size: 12px;
+            font-weight: 600;
             color: var(--blue-700);
+            transition: all 0.2s;
         }
 
-        .mode-badge.agentic .mode-label { color: #7C3AED; }
+        .mode-badge-inline.agentic {
+            background: rgba(124, 58, 237, 0.1);
+            border-color: rgba(124, 58, 237, 0.2);
+            color: #7C3AED;
+        }
+
+        .mode-icon-inline {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .mode-text-inline {
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
 
         /* Agent Reasoning */
         .agent-reasoning {
@@ -2211,55 +2225,106 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         /* References */
-        .references-section { margin-top: 24px; }
-
-        .references-header {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+        /* References Section - Enhanced Modern Design */
+        .references-section {
+            margin-top: 48px;
+            padding-top: 32px;
+            border-top: 2px solid var(--gray-200);
         }
 
-        .references-icon { width: 24px; height: 24px; color: var(--blue-600); }
+        .references-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 197, 253, 0.05) 100%);
+            border-radius: 12px;
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .references-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--blue-600);
+            flex-shrink: 0;
+        }
+
         .references-title {
-            font-size: 20px; font-weight: 700; color: var(--gray-900);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            flex: 1;
         }
 
         .references-count {
-            background: var(--blue-100); color: var(--blue-700);
-            padding: 4px 10px; border-radius: 12px;
-            font-size: 13px; font-weight: 600;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
         }
 
         .reference-card {
             background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px) saturate(180%);
             border: 1px solid var(--gray-200);
-            border-radius: 16px; padding: 20px; margin-bottom: 16px;
-            transition: all 0.3s; position: relative; overflow: hidden;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
         .reference-card:hover {
-            border-color: var(--blue-300);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.1);
-            transform: translateY(-2px);
+            border-color: var(--blue-400);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12);
+            transform: translateY(-3px);
         }
 
         .reference-card::before {
-            content: ""; position: absolute; top: 0; left: 0;
-            width: 4px; height: 100%; background: var(--blue-600);
-            opacity: 0; transition: opacity 0.3s;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--blue-600), #1D4ED8);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .reference-card:hover::before { opacity: 1; }
+        .reference-card:hover::before {
+            opacity: 1;
+        }
 
         .reference-number {
-            position: absolute; top: 16px; right: 16px;
-            background: var(--blue-600); color: white;
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; font-weight: 700;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
         }
 
         .reference-title {
-            font-size: 15px; font-weight: 600; color: var(--gray-900);
-            line-height: 1.5; margin-bottom: 12px; padding-right: 48px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            line-height: 1.6;
+            margin-bottom: 12px;
+            padding-right: 56px;
         }
 
         .reference-meta {
@@ -2919,25 +2984,33 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         .nav-btn-primary {
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
+            background: rgba(59, 130, 246, 0.9);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
             color: white;
             margin-left: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-btn-primary:hover {
+            background: rgba(37, 99, 235, 1);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
         }
 
         .nav-btn-submit {
-            background: linear-gradient(135deg, #10B981, #059669);
+            background: rgba(16, 185, 129, 0.9);
+            backdrop-filter: blur(12px) saturate(180%);
+            -webkit-backdrop-filter: blur(12px) saturate(180%);
             color: white;
             margin-left: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .nav-btn-submit:hover {
+            background: rgba(5, 150, 105, 1);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
         }
         
         .btn-icon {
@@ -3194,6 +3267,15 @@ PREOP_HTML = """<!DOCTYPE html>
     </style>
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner-container">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Generating Assessment...</div>
+            <div class="loading-subtext">Analyzing patient data and searching medical literature</div>
+        </div>
+    </div>
+
     <div class="bg-canvas">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -4525,7 +4607,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="risk-summary-grid">
             <div class="risk-card">
                 <div class="risk-card-header">
-                    <div class="risk-card-icon">❤️</div>
+                    <div class="risk-card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </div>
                     <div class="risk-card-title">RCRI Score</div>
                 </div>
                 <div class="risk-card-value" id="review-rcri-score">--</div>
@@ -4534,7 +4620,11 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="risk-card">
                 <div class="risk-card-header">
-                    <div class="risk-card-icon">😴</div>
+                    <div class="risk-card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                    </div>
                     <div class="risk-card-title">STOP-BANG</div>
                 </div>
                 <div class="risk-card-value" id="review-stopbang-score">--</div>
@@ -4543,7 +4633,11 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="risk-card">
                 <div class="risk-card-header">
-                    <div class="risk-card-icon">🏃</div>
+                    <div class="risk-card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
                     <div class="risk-card-title">DASI / METs</div>
                 </div>
                 <div class="risk-card-value" id="review-dasi-mets">--</div>
@@ -4552,7 +4646,11 @@ PREOP_HTML = """<!DOCTYPE html>
 
             <div class="risk-card">
                 <div class="risk-card-header">
-                    <div class="risk-card-icon">🏥</div>
+                    <div class="risk-card-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                    </div>
                     <div class="risk-card-title">ASA Class</div>
                 </div>
                 <div class="risk-card-value" id="review-asa-class">--</div>
@@ -4563,7 +4661,12 @@ PREOP_HTML = """<!DOCTYPE html>
 
     <!-- Red Flags Section -->
     <div class="subsection" id="red-flags-section" style="display:none;">
-        <h3 class="subsection-title" style="color: var(--red-600);">🚨 Red Flags Detected</h3>
+        <h3 class="subsection-title" style="color: var(--red-600); display: flex; align-items: center; gap: 10px;">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Red Flags Detected
+        </h3>
         <div id="red-flags-list">
             <!-- Auto-populated by JavaScript -->
         </div>
@@ -4578,7 +4681,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="review-section">
             <div class="review-section-header" onclick="toggleReviewSection('demo')">
                 <div class="review-section-title">
-                    <span class="review-section-icon">👤</span>
+                    <span class="review-section-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </span>
                     Demographics & Basic Information
                 </div>
                 <div class="review-section-actions">
@@ -4614,7 +4721,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="review-section">
             <div class="review-section-header" onclick="toggleReviewSection('medical')">
                 <div class="review-section-title">
-                    <span class="review-section-icon">🏥</span>
+                    <span class="review-section-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </span>
                     Medical History
                 </div>
                 <div class="review-section-actions">
@@ -4634,7 +4745,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="review-section">
             <div class="review-section-header" onclick="toggleReviewSection('meds')">
                 <div class="review-section-title">
-                    <span class="review-section-icon">💊</span>
+                    <span class="review-section-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                        </svg>
+                    </span>
                     Medications & Allergies
                 </div>
                 <div class="review-section-actions">
@@ -4662,7 +4777,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="review-section">
             <div class="review-section-header" onclick="toggleReviewSection('functional')">
                 <div class="review-section-title">
-                    <span class="review-section-icon">🏃</span>
+                    <span class="review-section-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </span>
                     Functional Capacity Assessment
                 </div>
                 <div class="review-section-actions">
@@ -4686,7 +4805,11 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="review-section">
             <div class="review-section-header" onclick="toggleReviewSection('surgical')">
                 <div class="review-section-title">
-                    <span class="review-section-icon">🔬</span>
+                    <span class="review-section-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </span>
                     Airway & Surgical Details
                 </div>
                 <div class="review-section-actions">
@@ -4785,6 +4908,15 @@ PREOP_HTML = """<!DOCTYPE html>
 
         .risk-card-icon {
             font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-600);
+        }
+
+        .risk-card-icon svg {
+            width: 28px;
+            height: 28px;
         }
 
         .risk-card-title {
@@ -4839,6 +4971,15 @@ PREOP_HTML = """<!DOCTYPE html>
 
         .review-section-icon {
             font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blue-600);
+        }
+
+        .review-section-icon svg {
+            width: 20px;
+            height: 20px;
         }
 
         .review-section-actions {
@@ -4967,28 +5108,28 @@ PREOP_HTML = """<!DOCTYPE html>
             <div class="results-section">
                 <div class="header">
                     <h1 class="header-title">Pre-Operative <span class="blue">Assessment</span></h1>
-                    <p class="header-subtitle">Evidence-based risk stratification and perioperative recommendations.</p>
-                </div>
-
-                <!-- Mode Badge -->
-                {% if mode %}
-                <div class="mode-badge {% if mode == 'agentic' %}agentic{% endif %}">
-                    <svg class="mode-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        {% if mode == 'agentic' %}
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                        {% else %}
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <p class="header-subtitle" style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                        <span>Evidence-based risk stratification and perioperative recommendations</span>
+                        {% if mode %}
+                        <span class="mode-badge-inline {% if mode == 'agentic' %}agentic{% endif %}">
+                            <svg class="mode-icon-inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                {% if mode == 'agentic' %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                                {% else %}
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                {% endif %}
+                            </svg>
+                            <span class="mode-text-inline">
+                                {% if mode == 'agentic' %}
+                                Agentic AI
+                                {% else %}
+                                Fast RAG
+                                {% endif %}
+                            </span>
+                        </span>
                         {% endif %}
-                    </svg>
-                    <span class="mode-label">
-                        {% if mode == 'agentic' %}
-                        AGENTIC MODE • 7-Step Analysis
-                        {% else %}
-                        FAST RAG • Evidence Synthesis
-                        {% endif %}
-                    </span>
+                    </p>
                 </div>
-                {% endif %}
 
                 <!-- Agent Reasoning Trace -->
                 {% if reasoning_trace %}
@@ -5051,8 +5192,13 @@ PREOP_HTML = """<!DOCTYPE html>
                 </div>
                 {% endif %}
 
-                <div style="margin-top: 32px; text-align: center;">
-                    <a href="/preop" class="submit-btn" style="display: inline-block; text-decoration: none; max-width: 300px;">New Assessment</a>
+                <div style="margin-top: 48px; text-align: center;">
+                    <a href="/preop" style="display: inline-flex; align-items: center; gap: 10px; padding: 16px 32px; background: rgba(59, 130, 246, 0.9); backdrop-filter: blur(12px) saturate(180%); -webkit-backdrop-filter: blur(12px) saturate(180%); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; font-size: 15px; font-weight: 600; text-decoration: none; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                        New Assessment
+                    </a>
                 </div>
             </div>
             {% endif %}
@@ -7085,7 +7231,11 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 <div class="risk-dashboard">
     <div class="risk-score-card risk-[determine from RCRI score]">
         <div class="risk-card-header">
-            <div class="risk-card-icon">❤️</div>
+            <div class="risk-card-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </div>
             <div class="risk-card-title">RCRI Score</div>
         </div>
         <div class="risk-card-body">
@@ -7097,7 +7247,11 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 
     <div class="risk-score-card risk-[based on ASA]">
         <div class="risk-card-header">
-            <div class="risk-card-icon">🏥</div>
+            <div class="risk-card-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
             <div class="risk-card-title">ASA Class</div>
         </div>
         <div class="risk-card-body">
@@ -7109,7 +7263,11 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 
     <div class="risk-score-card risk-[based on mortality]">
         <div class="risk-card-header">
-            <div class="risk-card-icon">⚕️</div>
+            <div class="risk-card-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+            </div>
             <div class="risk-card-title">30-Day Mortality</div>
         </div>
         <div class="risk-card-body">
@@ -7119,7 +7277,7 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
         </div>
     </div>
 
-    [Add more cards if relevant: Respiratory Risk, AKI Risk, METs if functional capacity mentioned]
+    [Add more cards if relevant: Respiratory Risk (lungs icon), AKI Risk (kidney icon), METs (bolt icon) if functional capacity mentioned]
 </div>
 
 **Risk Card Color Coding:**
@@ -7205,7 +7363,10 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 Use HTML formatting with <h3>, <h4>, <p>, <strong>, <ul>, <li> tags for all other content.
 Use inline citations [1], [2], [3] throughout.
 
-CRITICAL:
+CRITICAL FORMATTING RULES:
+- Output PURE HTML ONLY - NO markdown code blocks (do NOT use ```html or ``` markers)
+- Start your response directly with the <div class="risk-dashboard"> tag
+- Do NOT use emojis anywhere - ONLY use SVG icons as shown in the examples above
 - Start with the visual risk dashboard cards (ALWAYS include at least RCRI, ASA, and Mortality cards)
 - Use the visual timeline for the optimization plan
 - Make this assessment SPECIFIC to THIS patient
@@ -27517,7 +27678,11 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 <div class="risk-dashboard">
     <div class="risk-score-card risk-[low/moderate/high based on score]">
         <div class="risk-card-header">
-            <div class="risk-card-icon">❤️</div>
+            <div class="risk-card-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </div>
             <div class="risk-card-title">RCRI Score</div>
         </div>
         <div class="risk-card-body">
@@ -27529,7 +27694,11 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 
     <div class="risk-score-card risk-[based on ASA]">
         <div class="risk-card-header">
-            <div class="risk-card-icon">🏥</div>
+            <div class="risk-card-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 28px; height: 28px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+            </div>
             <div class="risk-card-title">ASA Class</div>
         </div>
         <div class="risk-card-body">
@@ -27539,7 +27708,7 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
         </div>
     </div>
 
-    [Add more cards if relevant: STOP-BANG for OSA, METs for functional capacity, etc.]
+    [Add more cards if relevant: STOP-BANG (moon icon) for OSA, Energy bolt icon for METs/functional capacity, etc.]
 </div>
 
 **Risk Card Color Coding:**
@@ -27608,7 +27777,10 @@ Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS a
 Use HTML formatting with <h3>, <p>, <strong>, <ul>, <li> tags for all other content.
 Use inline citations [1], [2], [3] throughout.
 
-IMPORTANT:
+CRITICAL FORMATTING RULES:
+- Output PURE HTML ONLY - NO markdown code blocks (do NOT use ```html or ``` markers)
+- Start your response directly with the <div class="risk-dashboard"> tag
+- Do NOT use emojis anywhere - ONLY use SVG icons as shown in the examples above
 - Start with the visual risk dashboard cards (ALWAYS include at least RCRI and ASA cards)
 - Use the visual timeline for perioperative recommendations
 - Make this assessment SPECIFIC to THIS patient's exact comorbidities, medications, and risk factors
