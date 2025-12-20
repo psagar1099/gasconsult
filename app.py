@@ -2436,6 +2436,292 @@ PREOP_HTML = """<!DOCTYPE html>
             font-weight: 600;
         }
 
+        /* Risk Score Dashboard - Visual Charts */
+        .risk-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin: 32px 0;
+        }
+
+        .risk-score-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .risk-score-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--blue-600), #1D4ED8);
+            transition: height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .risk-score-card.risk-low::before {
+            background: linear-gradient(90deg, #10B981, #059669);
+        }
+
+        .risk-score-card.risk-moderate::before {
+            background: linear-gradient(90deg, #F59E0B, #D97706);
+        }
+
+        .risk-score-card.risk-high::before {
+            background: linear-gradient(90deg, #EF4444, #DC2626);
+        }
+
+        .risk-score-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .risk-score-card:hover::before {
+            height: 6px;
+        }
+
+        .risk-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .risk-card-icon {
+            font-size: 28px;
+            line-height: 1;
+        }
+
+        .risk-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-card-body {
+            text-align: center;
+        }
+
+        .risk-score-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--blue-600);
+            line-height: 1;
+            margin-bottom: 12px;
+            animation: count-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .risk-score-card.risk-low .risk-score-value {
+            color: #10B981;
+        }
+
+        .risk-score-card.risk-moderate .risk-score-value {
+            color: #F59E0B;
+        }
+
+        .risk-score-card.risk-high .risk-score-value {
+            color: #EF4444;
+        }
+
+        @keyframes count-up {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .risk-score-label {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 16px;
+        }
+
+        /* Circular Progress Indicator */
+        .circular-progress {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .circular-progress svg {
+            transform: rotate(-90deg);
+            width: 100%;
+            height: 100%;
+        }
+
+        .circular-progress-bg {
+            fill: none;
+            stroke: var(--gray-200);
+            stroke-width: 8;
+        }
+
+        .circular-progress-fill {
+            fill: none;
+            stroke: var(--blue-600);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .circular-progress-fill.risk-low {
+            stroke: #10B981;
+        }
+
+        .circular-progress-fill.risk-moderate {
+            stroke: #F59E0B;
+        }
+
+        .circular-progress-fill.risk-high {
+            stroke: #EF4444;
+        }
+
+        .circular-progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .circular-progress-subtext {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 20px);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Risk Level Badge */
+        .risk-level-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-level-badge.risk-low {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+        }
+
+        .risk-level-badge.risk-moderate {
+            background: rgba(245, 158, 11, 0.1);
+            color: #D97706;
+        }
+
+        .risk-level-badge.risk-high {
+            background: rgba(239, 68, 68, 0.1);
+            color: #DC2626;
+        }
+
+        .risk-level-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Visual Timeline */
+        .visual-timeline {
+            margin: 32px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .visual-timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--blue-600), var(--blue-400));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 32px;
+            padding-left: 32px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid var(--blue-600);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            z-index: 1;
+        }
+
+        .timeline-item.completed::before {
+            background: var(--blue-600);
+            border-color: var(--blue-600);
+        }
+
+        .timeline-phase {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--blue-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .timeline-description {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+
+        .timeline-description ul {
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+
+        .timeline-description li {
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
         /* Responsive - EXACT from Homepage */
         @media (min-width: 768px) {
             .nav { padding: 16px 32px; }
@@ -6792,20 +7078,119 @@ AVAILABLE EVIDENCE (use numbered citations [1], [2], etc.):
 PAPER DETAILS:
 {all_context}
 
-Generate a comprehensive pre-operative assessment with these sections:
+Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS at the top:
+
+**FIRST, create a visual risk dashboard using this exact HTML structure:**
+
+<div class="risk-dashboard">
+    <div class="risk-score-card risk-[determine from RCRI score]">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">❤️</div>
+            <div class="risk-card-title">RCRI Score</div>
+        </div>
+        <div class="risk-card-body">
+            <div class="risk-score-value">{self.findings['risk']['rcri']['score']}</div>
+            <div class="risk-score-label">Cardiac Risk - {self.findings['risk']['cardiac_risk']}% Event Rate</div>
+            <div class="risk-level-badge risk-[low/moderate/high]">[Risk Category]</div>
+        </div>
+    </div>
+
+    <div class="risk-score-card risk-[based on ASA]">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">🏥</div>
+            <div class="risk-card-title">ASA Class</div>
+        </div>
+        <div class="risk-card-body">
+            <div class="risk-score-value">ASA [I-V]</div>
+            <div class="risk-score-label">Physical Status</div>
+            <div class="risk-level-badge risk-[low/moderate/high]">[Class Description]</div>
+        </div>
+    </div>
+
+    <div class="risk-score-card risk-[based on mortality]">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">⚕️</div>
+            <div class="risk-card-title">30-Day Mortality</div>
+        </div>
+        <div class="risk-card-body">
+            <div class="risk-score-value">{self.findings['risk']['mortality_risk']}%</div>
+            <div class="risk-score-label">Estimated Risk</div>
+            <div class="risk-level-badge risk-[low/moderate/high]">[Risk Level]</div>
+        </div>
+    </div>
+
+    [Add more cards if relevant: Respiratory Risk, AKI Risk, METs if functional capacity mentioned]
+</div>
+
+**Risk Card Color Coding:**
+- risk-low: RCRI 0-1, ASA I-II, Mortality <1%, Cardiac <1%
+- risk-moderate: RCRI 2, ASA III, Mortality 1-5%, Cardiac 1-5%
+- risk-high: RCRI ≥3, ASA IV-V, Mortality >5%, Cardiac >5%
+
+**THEN, generate detailed assessment sections:**
 
 1. **ASA Physical Status Classification**
-   - Assign ASA class (I-V) with detailed justification
+   - Assign ASA class (I-V) with detailed justification (already shown in card above)
 
 2. **Cardiac Risk Assessment**
-   - RCRI Score: {self.findings['risk']['rcri']['score']} - explain what this means
+   - RCRI Score breakdown (already shown in card above)
+   - Explain what RCRI {self.findings['risk']['rcri']['score']} means clinically
    - Estimated cardiac event risk: {self.findings['risk']['cardiac_risk']}%
-   - Risk mitigation strategies
+   - Risk mitigation strategies with citations
 
-3. **Preoperative Optimization Plan** (TIMELINE-BASED)
-   - Long-term (>7 days): What should be done now if surgery can be delayed
-   - Short-term (1-7 days): Actions in the week before surgery
-   - Day of surgery: Medication management, NPO protocols
+3. **Preoperative Optimization Plan** (use visual timeline format):
+
+<div class="visual-timeline">
+    <div class="timeline-item completed">
+        <div class="timeline-phase">Long-Term (&gt;7 Days Pre-Op)</div>
+        <div class="timeline-title">[Action Category]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific action with timing and citation]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Short-Term (1-7 Days Pre-Op)</div>
+        <div class="timeline-title">[Action Category]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions with citations]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Day of Surgery</div>
+        <div class="timeline-title">[Action Category]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions with citations]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Intraoperative</div>
+        <div class="timeline-title">[Action Category]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions with citations]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Postoperative</div>
+        <div class="timeline-title">[Action Category]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions with citations]</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 4. **Anesthetic Recommendations**
    - Preferred technique (general vs regional vs combined) with rationale
@@ -6817,10 +7202,15 @@ Generate a comprehensive pre-operative assessment with these sections:
    - Pain management strategy
    - Complication monitoring
 
-Use HTML formatting with <h3>, <h4>, <p>, <strong>, <ul>, <li> tags.
+Use HTML formatting with <h3>, <h4>, <p>, <strong>, <ul>, <li> tags for all other content.
 Use inline citations [1], [2], [3] throughout.
 
-CRITICAL: Make this assessment SPECIFIC to THIS patient. Reference their exact RCRI score, estimated risks, comorbidities, and medications. This is an agentic AI-powered assessment - show the depth of analysis."""
+CRITICAL:
+- Start with the visual risk dashboard cards (ALWAYS include at least RCRI, ASA, and Mortality cards)
+- Use the visual timeline for the optimization plan
+- Make this assessment SPECIFIC to THIS patient
+- Reference their exact RCRI score ({self.findings['risk']['rcri']['score']}), estimated risks, comorbidities, and medications
+- This is an agentic AI-powered assessment - show the depth of analysis"""
 
         try:
             response = openai_client.chat.completions.create(
@@ -27120,21 +27510,94 @@ Available Evidence (use numbered citations [1], [2], etc.):
 Paper Details:
 {all_context}
 
-Generate a comprehensive pre-operative assessment including:
+Generate a comprehensive pre-operative assessment with VISUAL RISK SCORE CARDS at the top:
 
-1. **ASA Physical Status Classification**: Assign ASA class (I-V) with detailed justification
+**FIRST, create a visual risk dashboard using this exact HTML structure:**
+
+<div class="risk-dashboard">
+    <div class="risk-score-card risk-[low/moderate/high based on score]">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">❤️</div>
+            <div class="risk-card-title">RCRI Score</div>
+        </div>
+        <div class="risk-card-body">
+            <div class="risk-score-value">[actual score 0-6]</div>
+            <div class="risk-score-label">Cardiac Risk</div>
+            <div class="risk-level-badge risk-[low/moderate/high]">[Low/Moderate/High] Risk</div>
+        </div>
+    </div>
+
+    <div class="risk-score-card risk-[based on ASA]">
+        <div class="risk-card-header">
+            <div class="risk-card-icon">🏥</div>
+            <div class="risk-card-title">ASA Class</div>
+        </div>
+        <div class="risk-card-body">
+            <div class="risk-score-value">ASA [I-V]</div>
+            <div class="risk-score-label">Physical Status</div>
+            <div class="risk-level-badge risk-[low/moderate/high]">[Class Description]</div>
+        </div>
+    </div>
+
+    [Add more cards if relevant: STOP-BANG for OSA, METs for functional capacity, etc.]
+</div>
+
+**Risk Card Color Coding:**
+- risk-low: RCRI 0-1, ASA I-II, STOP-BANG 0-2, METs >4
+- risk-moderate: RCRI 2, ASA III, STOP-BANG 3-4, METs <4
+- risk-high: RCRI ≥3, ASA IV-V, STOP-BANG 5-8, METs <4 with cardiac disease
+
+**THEN, generate detailed assessment sections:**
+
+1. **ASA Physical Status Classification**: Detailed justification (already shown in card above)
 
 2. **Cardiac Risk Stratification**:
-   - Calculate RCRI score if applicable
-   - Provide estimated cardiac event risk percentage
+   - RCRI calculation breakdown (already shown in card)
+   - Estimated cardiac event risk percentage with citation
 
-3. **Perioperative Recommendations**:
-   - Medication management (specific timing)
-   - Airway considerations
-   - Hemodynamic management
-   - VTE prophylaxis
-   - Glycemic control if diabetic
-   - Renal protection if CKD
+3. **Perioperative Recommendations** (use visual timeline format):
+
+<div class="visual-timeline">
+    <div class="timeline-item completed">
+        <div class="timeline-phase">Pre-Operative (Before Surgery)</div>
+        <div class="timeline-title">[Action Title]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific action with timing and rationale]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Day of Surgery</div>
+        <div class="timeline-title">[Action Title]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Intraoperative</div>
+        <div class="timeline-title">[Action Title]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="timeline-item">
+        <div class="timeline-phase">Postoperative</div>
+        <div class="timeline-title">[Action Title]</div>
+        <div class="timeline-description">
+            <ul>
+                <li>[Specific actions]</li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 4. **Anesthetic Considerations**:
    - Preferred technique with rationale
@@ -27142,10 +27605,14 @@ Generate a comprehensive pre-operative assessment including:
    - Monitoring requirements
    - Postoperative disposition (PACU vs ICU)
 
-Use HTML formatting with <h3>, <p>, <strong>, <ul>, <li> tags.
+Use HTML formatting with <h3>, <p>, <strong>, <ul>, <li> tags for all other content.
 Use inline citations [1], [2], [3] throughout.
 
-IMPORTANT: Make this assessment SPECIFIC to THIS patient's exact comorbidities, medications, and risk factors."""
+IMPORTANT:
+- Start with the visual risk dashboard cards (ALWAYS include at least RCRI and ASA cards)
+- Use the visual timeline for perioperative recommendations
+- Make this assessment SPECIFIC to THIS patient's exact comorbidities, medications, and risk factors
+- Calculate actual scores (RCRI, STOP-BANG if sleep apnea, METs if functional capacity mentioned)"""
 
         try:
             response = openai_client.chat.completions.create(
