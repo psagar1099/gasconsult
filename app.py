@@ -3384,6 +3384,31 @@ PREOP_HTML = """<!DOCTYPE html>
         <p class="step-description">Patient demographics and basic information.</p>
     </div>
 
+    <!-- Patient History of Present Illness (HPI) -->
+    <div class="subsection" style="margin-bottom: 32px; border: 2px dashed rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 24px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(147, 197, 253, 0.03) 100%);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+            <div style="background: linear-gradient(135deg, var(--blue-600), #1D4ED8); border-radius: 10px; padding: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);">
+                <svg fill="none" stroke="white" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+            </div>
+            <h3 class="subsection-title" style="margin: 0;">Patient History of Present Illness (Optional)</h3>
+        </div>
+        <p class="form-help" style="margin-bottom: 16px; color: var(--gray-600); font-size: 14px;">
+            Copy relevant patient history from EHR to provide additional clinical context.
+            <strong style="color: var(--red-600);">⚠️ Remove all identifiers (names, dates of birth, MRNs) for HIPAA compliance.</strong>
+        </p>
+        <textarea
+            name="hpi"
+            class="form-input"
+            rows="6"
+            placeholder="Example: Patient presenting for elective total knee arthroplasty. Chronic knee pain for 3 years, conservative management unsuccessful. Lives independently, able to climb one flight of stairs with difficulty. Recent echocardiogram shows preserved EF. Last stress test 6 months ago negative for ischemia."
+            style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6;"></textarea>
+        <p class="form-help" style="margin-top: 8px; font-size: 13px; color: var(--gray-500);">
+            💡 This field helps the AI provide more personalized and context-aware recommendations.
+        </p>
+    </div>
+
     <div class="input-row">
         <div class="form-group">
             <label class="form-label">Age <span class="required">*</span></label>
@@ -3435,31 +3460,6 @@ PREOP_HTML = """<!DOCTYPE html>
         <div class="step-number">Step 2 of 6</div>
         <h2 class="step-title">Medical History</h2>
         <p class="step-description">Medical history and comorbidities for anesthesia risk assessment.</p>
-    </div>
-
-    <!-- Patient History of Present Illness (HPI) -->
-    <div class="subsection" style="margin-bottom: 32px; border: 2px dashed rgba(59, 130, 246, 0.3); border-radius: 12px; padding: 24px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(147, 197, 253, 0.03) 100%);">
-        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-            <div style="background: linear-gradient(135deg, var(--blue-600), #1D4ED8); border-radius: 10px; padding: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);">
-                <svg fill="none" stroke="white" viewBox="0 0 24 24" style="width: 20px; height: 20px;">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-            </div>
-            <h3 class="subsection-title" style="margin: 0;">Patient History of Present Illness (Optional)</h3>
-        </div>
-        <p class="form-help" style="margin-bottom: 16px; color: var(--gray-600); font-size: 14px;">
-            Copy relevant patient history from EHR to provide additional clinical context.
-            <strong style="color: var(--red-600);">⚠️ Remove all identifiers (names, dates of birth, MRNs) for HIPAA compliance.</strong>
-        </p>
-        <textarea
-            name="hpi"
-            class="form-input"
-            rows="6"
-            placeholder="Example: Patient presenting for elective total knee arthroplasty. Chronic knee pain for 3 years, conservative management unsuccessful. Lives independently, able to climb one flight of stairs with difficulty. Recent echocardiogram shows preserved EF. Last stress test 6 months ago negative for ischemia."
-            style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; line-height: 1.6;"></textarea>
-        <p class="form-help" style="margin-top: 8px; font-size: 13px; color: var(--gray-500);">
-            💡 This field helps the AI provide more personalized and context-aware recommendations.
-        </p>
     </div>
 
     <!-- Cardiovascular -->
@@ -3763,6 +3763,92 @@ PREOP_HTML = """<!DOCTYPE html>
     <div class="form-group">
         <label class="form-label">Other Medical Conditions</label>
         <textarea name="other_conditions" class="form-input" rows="3" placeholder="Any other conditions not listed above"></textarea>
+    </div>
+
+    <!-- Imaging Studies -->
+    <div class="subsection">
+        <h3 class="subsection-title">Recent Imaging Studies</h3>
+        <p class="form-help" style="margin-bottom: 20px;">Document recent imaging results relevant to anesthesia planning. Include key findings only.</p>
+
+        <div class="form-group">
+            <label class="form-label">Chest X-Ray</label>
+            <select name="chest_xray_done" class="form-select" onchange="toggleConditional('chest-xray-details', this.value === 'yes')">
+                <option value="">Not done / Not available</option>
+                <option value="yes">Done - Enter findings</option>
+                <option value="normal">Done - Normal/Clear</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="chest-xray-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Chest X-Ray Findings</label>
+                <textarea name="chest_xray_findings" class="form-input" rows="2" placeholder="e.g., Cardiomegaly, pulmonary edema, infiltrates, pleural effusion"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Echocardiogram (Echo)</label>
+            <select name="echo_done" class="form-select" onchange="toggleConditional('echo-details', this.value === 'yes')">
+                <option value="">Not done / Not available</option>
+                <option value="yes">Done - Enter findings</option>
+                <option value="normal">Done - Normal</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="echo-details" style="display:none;">
+            <div class="input-row">
+                <div class="form-group">
+                    <label class="form-label">Echo Date (approximate)</label>
+                    <input type="month" name="echo_date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ejection Fraction (EF%)</label>
+                    <input type="number" name="echo_ef" class="form-input" placeholder="55" min="10" max="100">
+                    <p class="form-help">Normal: 50-70%</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Other Echo Findings</label>
+                <textarea name="echo_findings" class="form-input" rows="2" placeholder="e.g., Valvular abnormalities, wall motion abnormalities, diastolic dysfunction"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Carotid Ultrasound / Doppler</label>
+            <select name="carotid_done" class="form-select" onchange="toggleConditional('carotid-details', this.value === 'yes')">
+                <option value="">Not done / Not available</option>
+                <option value="yes">Done - Enter findings</option>
+                <option value="normal">Done - Normal / No significant stenosis</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="carotid-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">Carotid Findings</label>
+                <textarea name="carotid_findings" class="form-input" rows="2" placeholder="e.g., Right ICA 70% stenosis, Left ICA 30% stenosis"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">CT / MRI Findings</label>
+            <select name="ct_mri_done" class="form-select" onchange="toggleConditional('ct-mri-details', this.value === 'yes')">
+                <option value="">Not done / Not available</option>
+                <option value="yes">Enter findings</option>
+            </select>
+        </div>
+
+        <div class="conditional-section" id="ct-mri-details" style="display:none;">
+            <div class="form-group">
+                <label class="form-label">CT / MRI Type & Findings</label>
+                <textarea name="ct_mri_findings" class="form-input" rows="3" placeholder="e.g., CT chest: Multiple pulmonary nodules. MRI brain: Old lacunar infarcts."></textarea>
+                <p class="form-help">Include anatomical region (chest, abdomen, brain, spine) and key findings</p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Other Imaging</label>
+            <textarea name="other_imaging" class="form-input" rows="2" placeholder="e.g., Nuclear stress test, cardiac catheterization, pulmonary function tests"></textarea>
+        </div>
     </div>
 </div>
 
@@ -7226,6 +7312,13 @@ Laboratory Values:
 Cardiac Assessment:
 - Ejection Fraction: {self.patient.get('ef', 'Not available')}
 - EKG: {self.patient.get('ekg', 'Not available')}
+
+Recent Imaging Studies:
+- Chest X-Ray: {self.patient.get('chest_xray_done', 'Not done')} {f"- {self.patient.get('chest_xray_findings', '')}" if self.patient.get('chest_xray_findings') else ''}
+- Echocardiogram: {self.patient.get('echo_done', 'Not done')} {f"({self.patient.get('echo_date', '')}) EF {self.patient.get('echo_ef', '')}% - {self.patient.get('echo_findings', '')}" if self.patient.get('echo_findings') or self.patient.get('echo_ef') else ''}
+- Carotid Ultrasound: {self.patient.get('carotid_done', 'Not done')} {f"- {self.patient.get('carotid_findings', '')}" if self.patient.get('carotid_findings') else ''}
+- CT/MRI: {self.patient.get('ct_mri_done', 'Not done')} {f"- {self.patient.get('ct_mri_findings', '')}" if self.patient.get('ct_mri_findings') else ''}
+- Other Imaging: {self.patient.get('other_imaging', 'None')}
 
 Procedure: {self.patient.get('procedure', 'Not specified')}
 Surgery Risk: {self.patient.get('surgery_risk', 'Not specified')}
@@ -27490,6 +27583,19 @@ def preop_assessment():
     allergies = sanitize_user_query(request.form.get("allergies", ""))
     hpi = sanitize_user_query(request.form.get("hpi", ""))
 
+    # Imaging studies
+    chest_xray_done = sanitize_user_query(request.form.get("chest_xray_done", ""))
+    chest_xray_findings = sanitize_user_query(request.form.get("chest_xray_findings", ""))
+    echo_done = sanitize_user_query(request.form.get("echo_done", ""))
+    echo_date = sanitize_user_query(request.form.get("echo_date", ""))
+    echo_ef = sanitize_user_query(request.form.get("echo_ef", ""))
+    echo_findings = sanitize_user_query(request.form.get("echo_findings", ""))
+    carotid_done = sanitize_user_query(request.form.get("carotid_done", ""))
+    carotid_findings = sanitize_user_query(request.form.get("carotid_findings", ""))
+    ct_mri_done = sanitize_user_query(request.form.get("ct_mri_done", ""))
+    ct_mri_findings = sanitize_user_query(request.form.get("ct_mri_findings", ""))
+    other_imaging = sanitize_user_query(request.form.get("other_imaging", ""))
+
     # Validate required fields
     if not procedure or not procedure.strip():
         error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the surgical procedure before submitting the form.</p>"
@@ -27533,7 +27639,18 @@ def preop_assessment():
         'surgery_risk': surgery_risk,
         'npo': npo,
         'allergies': allergies,
-        'hpi': hpi
+        'hpi': hpi,
+        'chest_xray_done': chest_xray_done,
+        'chest_xray_findings': chest_xray_findings,
+        'echo_done': echo_done,
+        'echo_date': echo_date,
+        'echo_ef': echo_ef,
+        'echo_findings': echo_findings,
+        'carotid_done': carotid_done,
+        'carotid_findings': carotid_findings,
+        'ct_mri_done': ct_mri_done,
+        'ct_mri_findings': ct_mri_findings,
+        'other_imaging': other_imaging
     }
 
     # STEP 1: Classify complexity (fast RAG vs agentic)
@@ -27717,6 +27834,13 @@ Laboratory Values:
 Cardiac Assessment:
 - Ejection Fraction: {ef if ef else 'Not available'}
 - EKG: {ekg if ekg else 'Not available'}
+
+Recent Imaging Studies:
+- Chest X-Ray: {chest_xray_done if chest_xray_done else 'Not done'} {f"- {chest_xray_findings}" if chest_xray_findings else ''}
+- Echocardiogram: {echo_done if echo_done else 'Not done'} {f"({echo_date}) EF {echo_ef}% - {echo_findings}" if echo_findings or echo_ef else ''}
+- Carotid Ultrasound: {carotid_done if carotid_done else 'Not done'} {f"- {carotid_findings}" if carotid_findings else ''}
+- CT/MRI: {ct_mri_done if ct_mri_done else 'Not done'} {f"- {ct_mri_findings}" if ct_mri_findings else ''}
+- Other Imaging: {other_imaging if other_imaging else 'None'}
 
 Procedure: {procedure}
 Surgery Risk: {surgery_risk}
