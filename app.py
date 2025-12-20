@@ -26486,9 +26486,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Assessment - GasConsult.ai</title>
-    <meta name="description" content="AI-powered difficult airway risk assessment with evidence-based management strategies and ASA guidelines.">
+    <meta name="description" content="AI-powered difficult airway risk stratification with anatomically realistic Cormack-Lehane visualizations.">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --white: #FFFFFF;
@@ -26513,12 +26514,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
+        html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -26528,11 +26524,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             overflow-x: hidden;
         }
 
+        /* Background */
         .bg-canvas {
             position: fixed;
             inset: 0;
             z-index: 0;
-            overflow: hidden;
             background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
         }
 
@@ -26545,57 +26541,40 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .orb-1 {
-            width: 400px;
-            height: 400px;
+            width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -20%;
+            top: -15%; left: -20%;
         }
 
         .orb-2 {
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
+            top: 30%; right: -20%;
+            animation-delay: -7s; animation-duration: 25s;
         }
 
         .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
+            width: 250px; height: 250px;
+            background: radial-gradient(circle, rgba(191, 219, 254, 0.15) 0%, transparent 70%);
+            bottom: 10%; left: 30%;
+            animation-delay: -14s; animation-duration: 30s;
         }
 
         @keyframes float {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
+            position: fixed; inset: 0; z-index: 1;
+            pointer-events: none; opacity: 0.02;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
         }
 
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+        .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
 
+        /* NAVIGATION - EXACT SAME AS HOMEPAGE */
         .nav {
             position: fixed;
             top: 0;
@@ -26626,12 +26605,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             align-items: center;
             gap: 14px;
             text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
         .logo-icon svg { width: 36px; height: 12px; }
@@ -26673,12 +26646,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
         .nav-dropdown {
             position: relative;
             display: inline-block;
@@ -26703,7 +26670,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             min-width: 200px;
             margin-top: 4px;
             z-index: 1000;
-            overflow: hidden;
         }
 
         .nav-dropdown-menu.show {
@@ -26730,71 +26696,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             background: var(--blue-50);
         }
 
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
         .mobile-menu-btn {
             display: flex;
             flex-direction: column;
@@ -26803,12 +26704,6 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             border: none;
             cursor: pointer;
             padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
         }
 
         .mobile-menu-btn span {
@@ -26820,82 +26715,34 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             transition: all 0.3s ease;
         }
 
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
+        @media (min-width: 768px) {
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
         }
 
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
+        /* MAIN CONTENT */
         .main-content {
             flex: 1;
-            padding: 100px 20px 40px;
-            max-width: 900px;
+            padding: 100px 20px 60px;
+            max-width: 1000px;
             margin: 0 auto;
             width: 100%;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            animation: fade-up 0.6s ease forwards;
+            margin-bottom: 50px;
         }
 
-        @keyframes fade-up {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-size: 32px;
+        .header h1 {
+            font-size: 36px;
             font-weight: 800;
             margin-bottom: 12px;
             letter-spacing: -1px;
-        }
-
-        .gradient {
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -26906,131 +26753,174 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-size: 16px;
         }
 
-        .card {
+        /* FORM CARD */
+        .form-card {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
-            padding: 32px;
+            padding: 40px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 24px;
-            animation: fade-up 0.6s 0.1s ease forwards;
-            opacity: 0;
         }
 
-        .section-title {
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #DBEAFE;
+            margin-bottom: 28px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--blue-100);
+            color: var(--gray-900);
         }
 
-        .form-group {
-            margin-bottom: 28px;
+        .section-header svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blue-600);
+            flex-shrink: 0;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-field.full-width {
+            grid-column: 1 / -1;
         }
 
         label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 10px;
             font-size: 14px;
+            font-weight: 600;
             color: var(--gray-700);
             letter-spacing: -0.01em;
         }
 
-        input, select, textarea {
+        input[type="text"],
+        input[type="number"],
+        textarea {
             width: 100%;
             padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1.5px solid rgba(226, 232, 240, 0.6);
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
             font-size: 15px;
             font-family: inherit;
             transition: all 0.3s ease;
             color: var(--gray-900);
         }
 
-        input::placeholder, select::placeholder, textarea::placeholder {
-            color: var(--gray-400);
-        }
-
-        input:hover, select:hover, textarea:hover {
-            border-color: var(--blue-300);
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--blue-500);
-            background: rgba(255, 255, 255, 1);
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.08), 0 2px 8px rgba(0,0,0,0.04);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.08);
             transform: translateY(-1px);
         }
 
         textarea {
-            min-height: 110px;
+            min-height: 100px;
             resize: vertical;
         }
 
-        .radio-group, .checkbox-group {
+        .radio-group {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
         }
 
-        .radio-option, .checkbox-option {
+        .radio-option {
             display: flex;
             align-items: center;
             padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1.5px solid rgba(226, 232, 240, 0.6);
-            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
         }
 
-        .radio-option:hover, .checkbox-option:hover {
+        .radio-option:hover {
             border-color: var(--blue-400);
             background: rgba(239, 246, 255, 0.9);
             transform: translateX(4px);
-            box-shadow: 0 2px 8px rgba(59,130,246,0.08);
         }
 
-        .radio-option input:checked + span, .checkbox-option input:checked + span {
-            color: var(--blue-600);
-            font-weight: 600;
-        }
-
-        .radio-option:has(input:checked), .checkbox-option:has(input:checked) {
+        .radio-option:has(input:checked) {
             border-color: var(--blue-500);
             background: rgba(239, 246, 255, 0.95);
             box-shadow: 0 2px 12px rgba(59,130,246,0.12);
         }
 
-        .radio-option input, .checkbox-option input {
+        .radio-option input {
             width: auto;
-            margin-right: 14px;
+            margin-right: 12px;
             cursor: pointer;
             accent-color: var(--blue-600);
-            transform: scale(1.1);
         }
 
-        .radio-option span, .checkbox-option span {
-            flex: 1;
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .checkbox-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-option:hover {
+            border-color: var(--blue-400);
+            background: rgba(239, 246, 255, 0.9);
+        }
+
+        .checkbox-option:has(input:checked) {
+            border-color: var(--blue-500);
+            background: rgba(239, 246, 255, 0.95);
+        }
+
+        .checkbox-option input {
+            width: auto;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: var(--blue-600);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 16px 24px;
+            padding: 18px 24px;
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             color: white;
             border: none;
@@ -27038,38 +26928,66 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(37,99,235,0.3);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.4);
         }
 
-        .back-btn {
-            display: inline-flex;
+        /* LOADING */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
             align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.9);
-            border: 1.5px solid #E2E8F0;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 500;
-            color: #475569;
-            text-decoration: none;
-            transition: all 0.2s;
-            margin-bottom: 24px;
+            justify-content: center;
         }
 
-        .back-btn:hover {
-            border-color: #3B82F6;
-            color: #2563EB;
-            background: #EFF6FF;
+        .loading-overlay.active {
+            display: flex;
         }
 
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* FOOTER - EXACT SAME AS HOMEPAGE */
         .footer {
-            padding: 32px 20px;
+            padding: 40px 20px;
             border-top: 1px solid var(--gray-200);
             background: rgba(255,255,255,0.5);
         }
@@ -27105,653 +27023,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             color: var(--gray-700);
         }
 
-        /* Social Media Icons */
-        
-        .social-icons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .social-icon {
-            color: var(--gray-500);
-            transition: color 0.2s ease, transform 0.2s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-icon:hover {
-            color: var(--gray-700);
-            transform: translateY(-2px);
-        }
-
-        .social-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
-            h1 { font-size: 36px; }
-            .footer { padding: 40px 32px; }
-            .footer-inner { flex-direction: row; justify-content: space-between; text-align: left; }
-            .footer-text { font-size: 14px; }
-            .footer-links { gap: 32px; }
-            .footer-link { font-size: 14px; }
-            
-        }
-
-        @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
-            h1 { font-size: 42px; }
-            .main-content { padding: 140px 40px 80px; }
-            .card { padding: 40px; }
-            .footer { padding: 48px 40px; }
-        }
-
-        /* Loading Spinner */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-content {
-            background: white;
-            border-radius: 20px;
-            padding: 32px 48px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--gray-200);
-            border-top-color: var(--blue-600);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        /* Results Section */
-        .results-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .assessment-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-            margin-bottom: 24px;
-        }
-
-        .assessment-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--blue-100);
-        }
-
-        .assessment-header svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--blue-600);
-            flex-shrink: 0;
-        }
-
-        .assessment-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
-
-        .assessment-content {
-            line-height: 1.8;
-            color: var(--gray-700);
-            font-size: 15px;
-        }
-
-        .assessment-content h3 {
-            color: var(--gray-900);
-            font-size: 17px;
-            font-weight: 700;
-            margin-top: 32px;
-            margin-bottom: 16px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid var(--blue-100);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .assessment-content h3:first-child {
-            margin-top: 0;
-        }
-
-        .assessment-content h3::before {
-            content: "▸";
-            color: var(--blue-600);
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .assessment-content p {
-            margin-bottom: 14px;
-            line-height: 1.7;
-        }
-
-        .assessment-content ul {
-            margin-left: 0;
-            margin-bottom: 16px;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .assessment-content li {
-            margin-bottom: 10px;
-            padding-left: 28px;
-            position: relative;
-            line-height: 1.6;
-        }
-
-        .assessment-content li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--blue-600);
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .assessment-content strong {
-            color: var(--gray-900);
-            font-weight: 600;
-            background: var(--blue-50);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        /* Risk Level Badges */
-        .assessment-content .risk-high,
-        .assessment-content .high-risk {
-            display: inline-block;
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            color: #991B1B;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid #FCA5A5;
-        }
-
-        .assessment-content .risk-moderate,
-        .assessment-content .moderate-risk {
-            display: inline-block;
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            color: #92400E;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid #FCD34D;
-        }
-
-        .assessment-content .risk-low,
-        .assessment-content .low-risk {
-            display: inline-block;
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            border: 1px solid #6EE7B7;
-        }
-
-        /* ANATOMICAL VISUALIZATION SYSTEM */
-        .anatomy-visualization {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 32px;
-            margin: 32px 0;
-            border: 2px solid rgba(59, 130, 246, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-        }
-
-        .anatomy-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--blue-100);
-        }
-
-        .anatomy-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--gray-900);
-        }
-
-        .anatomy-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        .anatomy-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03), rgba(147, 197, 253, 0.03));
-            border-radius: 16px;
-            padding: 24px;
-            border: 2px solid rgba(59, 130, 246, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        .anatomy-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(59, 130, 246, 0.15);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .anatomy-card-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 16px;
-        }
-
-        .anatomy-svg-container {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 200px;
-            border: 1px solid var(--gray-200);
-            margin-bottom: 12px;
-        }
-
-        .cormack-lehane-view {
-            width: 100%;
-            max-width: 280px;
-        }
-
-        .grade-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .grade-1 { background: linear-gradient(135deg, #D1FAE5, #A7F3D0); color: #065F46; border: 2px solid #6EE7B7; }
-        .grade-2 { background: linear-gradient(135deg, #FEF3C7, #FDE68A); color: #92400E; border: 2px solid #FCD34D; }
-        .grade-3 { background: linear-gradient(135deg, #FED7AA, #FDBA74); color: #7C2D12; border: 2px solid #FB923C; }
-        .grade-4 { background: linear-gradient(135deg, #FEE2E2, #FECACA); color: #991B1B; border: 2px solid #FCA5A5; }
-
-        /* CORMACK-LEHANE ANATOMICAL SVG STYLES */
-        .cl-larynx-view {
-            width: 100%;
-            max-width: 300px;
-            height: 300px;
-            margin: 0 auto;
-        }
-
-        .cl-view-grade-1 .vocal-cords { fill: #10B981; opacity: 1; }
-        .cl-view-grade-1 .arytenoids { fill: #059669; opacity: 1; }
-        .cl-view-grade-1 .epiglottis { fill: #FBBF24; opacity: 0.6; }
-
-        .cl-view-grade-2 .vocal-cords { fill: #F59E0B; opacity: 0.5; }
-        .cl-view-grade-2 .arytenoids { fill: #D97706; opacity: 1; }
-        .cl-view-grade-2 .epiglottis { fill: #FBBF24; opacity: 0.8; }
-
-        .cl-view-grade-3 .vocal-cords { fill: #EF4444; opacity: 0; }
-        .cl-view-grade-3 .arytenoids { fill: #DC2626; opacity: 0; }
-        .cl-view-grade-3 .epiglottis { fill: #F97316; opacity: 1; }
-
-        .cl-view-grade-4 .vocal-cords { fill: #991B1B; opacity: 0; }
-        .cl-view-grade-4 .arytenoids { fill: #7C2D12; opacity: 0; }
-        .cl-view-grade-4 .epiglottis { fill: #7C2D12; opacity: 0; }
-        .cl-view-grade-4 .soft-tissue { fill: #B91C1C; opacity: 1; }
-
-        .anatomy-card-description {
-            font-size: 13px;
-            color: var(--gray-600);
-            line-height: 1.6;
-            margin-top: 12px;
-        }
-
-        .difficulty-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 8px;
-        }
-
-        .difficulty-easy {
-            background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
-            color: #065F46;
-            border: 1px solid #6EE7B7;
-        }
-
-        .difficulty-moderate {
-            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
-            color: #92400E;
-            border: 1px solid #FCD34D;
-        }
-
-        .difficulty-difficult {
-            background: linear-gradient(135deg, #FED7AA, #FDBA74);
-            color: #7C2D12;
-            border: 1px solid #FB923C;
-        }
-
-        .difficulty-very-difficult {
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            color: #991B1B;
-            border: 1px solid #FCA5A5;
-        }
-
-        /* Risk Score Dashboard */
-        .risk-dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 32px 0;
-        }
-
-        .risk-metric-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 24px;
-            border: 2px solid;
-            text-align: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
-        }
-
-        .risk-metric-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-        }
-
-        .risk-metric-card.high { border-color: #EF4444; }
-        .risk-metric-card.moderate { border-color: #F59E0B; }
-        .risk-metric-card.low { border-color: #10B981; }
-
-        .risk-metric-icon {
-            width: 48px;
-            height: 48px;
-            margin: 0 auto 12px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .risk-metric-card.high .risk-metric-icon {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
-            border: 2px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .risk-metric-card.moderate .risk-metric-icon {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(217, 119, 6, 0.1));
-            border: 2px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .risk-metric-card.low .risk-metric-icon {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.1));
-            border: 2px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .risk-metric-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--gray-600);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .risk-metric-value {
-            font-size: 32px;
-            font-weight: 900;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .risk-metric-card.high .risk-metric-value { color: #DC2626; }
-        .risk-metric-card.moderate .risk-metric-value { color: #D97706; }
-        .risk-metric-card.low .risk-metric-value { color: #059669; }
-
-        .risk-metric-text {
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        /* Form Layout */
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 32px;
-            margin-bottom: 40px;
-        }
-
-        @media (min-width: 768px) {
-            .form-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        /* Assessment Content - NO CHECKMARKS */
-        .assessment-content ul {
-            margin-left: 0;
-            margin-bottom: 16px;
-            padding-left: 24px;
-            list-style: disc;
-        }
-
-        .assessment-content li {
-            margin-bottom: 10px;
-            line-height: 1.6;
-        }
-
-        /* Info Boxes */
-        .assessment-content blockquote {
-            background: var(--blue-50);
-            border-left: 4px solid var(--blue-600);
-            padding: 16px 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-style: normal;
-        }
-
-        /* Subsections */
-        .assessment-content h4 {
-            color: var(--blue-700);
-            font-size: 15px;
-            font-weight: 600;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        /* References Card */
-        .references-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
-        }
-
-        .references-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: 20px;
-        }
-
-        .references-title svg {
-            width: 22px;
-            height: 22px;
-            stroke: var(--blue-600);
-        }
-
-        .reference-item {
-            padding: 16px 0;
-            border-bottom: 1px solid var(--gray-200);
-            display: flex;
-            gap: 12px;
-        }
-
-        .reference-item:last-child {
-            border-bottom: none;
-        }
-
-        .reference-number {
-            display: inline-block;
-            min-width: 32px;
-            height: 32px;
-            background: var(--blue-50);
-            color: var(--blue-600);
-            border-radius: 8px;
-            text-align: center;
-            line-height: 32px;
-            font-size: 13px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .reference-content {
-            flex: 1;
-        }
-
-        .reference-link {
-            color: var(--blue-600);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 1.5;
-            display: block;
-            margin-bottom: 4px;
-        }
-
-        .reference-link:hover {
-            text-decoration: underline;
-        }
-
-        .reference-meta {
-            font-size: 13px;
-            color: var(--gray-600);
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 24px;
-        }
-
-        .btn {
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border: none;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
-            color: white;
-            box-shadow: 0 2px 8px rgba(37,99,235,0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.4);
-        }
-
-        .btn-secondary {
-            background: white;
-            color: var(--gray-700);
-            border: 2px solid var(--gray-300);
-        }
-
-        .btn-secondary:hover {
-            background: var(--gray-50);
-            border-color: var(--gray-400);
-        }
-
-        @media (min-width: 640px) {
-            .action-buttons {
+            .footer { padding: 48px 32px; }
+            .footer-inner {
                 flex-direction: row;
-                justify-content: center;
+                justify-content: space-between;
+                text-align: left;
             }
         }
     </style>
@@ -27801,11 +27078,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             <a href="/informed-consent" class="nav-dropdown-link">Informed Consent</a>
                         </div>
                     </div>
-                    <!-- Soft Launch: Hiding Plans link -->
-                    <!-- <a href="/pricing" class="nav-link">Plans</a> -->
                     {{ generate_navbar_html()|safe }}
                 </div>
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -27813,49 +27088,29 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             </div>
         </nav>
 
-        <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
-            <a href="/preop" class="mobile-menu-link">Pre-Op</a>
-            <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
-            <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
-            <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
-            <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
-            <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
-            <!-- Soft Launch: Hiding Plans link -->
-            <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
-            {% if current_user.is_authenticated %}
-                <a href="/library" class="mobile-menu-link">My Library</a>
-                <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
-            {% else %}
-                <a href="/login" class="mobile-menu-link">Log In</a>
-                <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
-            {% endif %}
-        </div>
-
         <main class="main-content">
             {% if not summary %}
-            <!-- Assessment Form -->
+            <!-- INPUT FORM -->
             <div class="header">
-                <h1><span class="gradient">Difficult Airway Assessment</span></h1>
-                <p class="subtitle">AI-powered difficult airway risk stratification with evidence-based management strategies</p>
+                <h1>Difficult Airway Assessment</h1>
+                <p class="subtitle">AI-powered risk stratification with anatomically realistic Cormack-Lehane visualizations</p>
             </div>
 
-            <form method="POST" class="card">
+            <form method="POST" action="/difficult-airway" class="form-card">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                <!-- Physical Examination -->
+                <div class="section-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 11l3 3L22 4"></path>
                         <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
                     </svg>
                     Physical Examination
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="mallampati">Mallampati Classification</label>
+                <div class="form-grid">
+                    <div class="form-field full-width">
+                        <label>Mallampati Classification</label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="mallampati" value="I" required>
@@ -27875,11 +27130,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             </label>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="thyromental">Thyromental Distance</label>
+                    <div class="form-field">
+                        <label>Thyromental Distance</label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="thyromental" value=">6.5cm" required>
@@ -27896,8 +27149,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="mouth_opening">Mouth Opening</label>
+                    <div class="form-field">
+                        <label>Mouth Opening</label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="mouth_opening" value=">4cm" required>
@@ -27913,11 +27166,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             </label>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="neck_extension">Neck Extension</label>
+                    <div class="form-field full-width">
+                        <label>Neck Extension</label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="neck_extension" value="Normal" required>
@@ -27935,40 +27186,43 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     </div>
                 </div>
 
-                <div class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                <!-- Patient Information -->
+                <div class="section-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                     Patient Information
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
+                <div class="form-grid">
+                    <div class="form-field">
                         <label for="bmi">BMI (Body Mass Index)</label>
                         <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="80" placeholder="e.g., 27.5" required>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-field">
                         <label for="age">Age</label>
                         <input type="number" id="age" name="age" min="1" max="120" placeholder="Patient age" required>
                     </div>
                 </div>
 
-                <div class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                <!-- Risk Factors -->
+                <div class="section-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M12 8v4m0 4h.01"></path>
                     </svg>
                     Risk Factors
                 </div>
-                <div class="checkbox-group">
+
+                <div class="checkbox-grid">
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Previous Difficult Intubation">
                         <span>Previous Difficult Intubation</span>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="OSA">
-                        <span>Obstructive Sleep Apnea (OSA)</span>
+                        <span>Obstructive Sleep Apnea</span>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Beard">
@@ -27976,7 +27230,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Prominent Incisors">
-                        <span>Prominent Incisors/Buck Teeth</span>
+                        <span>Prominent Incisors</span>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Short Neck">
@@ -27984,20 +27238,21 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Large Tongue">
-                        <span>Large Tongue (Macroglossia)</span>
+                        <span>Large Tongue</span>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="Facial Trauma">
-                        <span>Facial Trauma/Abnormalities</span>
+                        <span>Facial Trauma</span>
                     </label>
                     <label class="checkbox-option">
                         <input type="checkbox" name="risk_factors" value="C-Spine Pathology">
-                        <span>C-Spine Pathology/Limited Mobility</span>
+                        <span>C-Spine Pathology</span>
                     </label>
                 </div>
 
-                <div class="section-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline-block; vertical-align: middle; margin-right: 8px;">
+                <!-- Case Details -->
+                <div class="section-header" style="margin-top: 40px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
                         <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -28006,16 +27261,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                     Case Details
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
+                <div class="form-grid">
+                    <div class="form-field full-width">
                         <label for="procedure">Surgical Procedure</label>
                         <input type="text" id="procedure" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="case_type">Case Type</label>
+                    <div class="form-field full-width">
+                        <label>Case Type</label>
                         <div class="radio-group">
                             <label class="radio-option">
                                 <input type="radio" name="case_type" value="Elective" required>
@@ -28031,10 +27284,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                             </label>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-row">
-                    <div class="form-group">
+                    <div class="form-field full-width">
                         <label for="additional_notes">Additional Notes (Optional)</label>
                         <textarea id="additional_notes" name="additional_notes" placeholder="Any other relevant findings..." rows="4"></textarea>
                     </div>
@@ -28044,91 +27295,48 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             </form>
 
             {% else %}
-            <!-- Results -->
-            <div class="results-container">
-                <div class="header">
-                    <h1><span class="gradient">Difficult Airway Assessment</span></h1>
-                    <p class="subtitle">Evidence-based risk stratification and management plan</p>
-                </div>
-
-                <div class="assessment-card">
-                    <div class="assessment-header">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-                        </svg>
-                        <div class="assessment-title">Clinical Assessment & Management Plan</div>
-                    </div>
-                    <div class="assessment-content">
-                        {{ summary|safe }}
-                    </div>
-                </div>
-
-                {% if references %}
-                <div class="references-card">
-                    <div class="references-title">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                        <span>Evidence-Based References</span>
-                    </div>
-                    {% for ref in references %}
-                    <div class="reference-item">
-                        <span class="reference-number">[{{ loop.index }}]</span>
-                        <div class="reference-content">
-                            <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
-                                {{ ref.title }}
-                            </a>
-                            <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                <div class="action-buttons">
-                    <a href="/difficult-airway" class="btn btn-primary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        New Assessment
-                    </a>
-                    <button onclick="window.print()" class="btn btn-secondary">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                            <rect x="6" y="14" width="12" height="8"></rect>
-                        </svg>
-                        Print/Save PDF
-                    </button>
-                </div>
+            <!-- ASSESSMENT RESULTS -->
+            <div class="header">
+                <h1>Difficult Airway Assessment</h1>
+                <p class="subtitle">Evidence-based risk stratification and management plan</p>
             </div>
+
+            <div class="form-card">
+                {{ summary|safe }}
+            </div>
+
+            {% if references %}
+            <div class="form-card">
+                <div class="section-header">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    Evidence-Based References
+                </div>
+                {% for ref in references %}
+                <div style="padding: 16px 0; border-bottom: 1px solid var(--gray-200);">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600; font-size: 14px; display: block; margin-bottom: 6px;">
+                        [{{ loop.index }}] {{ ref.title }}
+                    </a>
+                    <div style="font-size: 13px; color: var(--gray-600);">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="text-align: center; margin-top: 24px;">
+                <a href="/difficult-airway" style="display: inline-block; padding: 14px 24px; background: white; color: var(--gray-700); border: 2px solid var(--gray-300); border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.2s ease;">
+                    New Assessment
+                </a>
+            </div>
+            {% endif %}
+
             {% endif %}
         </main>
 
         <footer class="footer">
             <div class="footer-inner">
                 <span class="footer-text">© 2025 GasConsult.ai</span>
-                <div class="social-icons">
-                    <a href="https://x.com/GasConsultAI" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on X">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                        </svg>
-                    </a>
-                    <a href="https://instagram.com/gasconsult.ai" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on Instagram">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                        </svg>
-                    </a>
-                    <a href="https://www.linkedin.com/company/gasconsult-ai/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Follow us on LinkedIn">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                    </a>
-                </div>
                 <div class="footer-links">
                     <a href="/privacy" class="footer-link">Privacy</a>
                     <a href="/terms" class="footer-link">Terms</a>
@@ -28139,21 +27347,11 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
         function toggleNavDropdown(event) {
             event.stopPropagation();
             const menu = event.currentTarget.nextElementSibling;
             menu.classList.toggle('show');
 
-            // Close dropdown when clicking outside
             document.addEventListener('click', function closeDropdown(e) {
                 if (!event.currentTarget.contains(e.target)) {
                     menu.classList.remove('show');
@@ -28162,27 +27360,29 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             });
         }
 
-        // Show loading overlay when form is submitted
+        function toggleMobileMenu() {
+            // Mobile menu toggle (if needed)
+        }
+
+        // Show loading overlay on form submit
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form[method="POST"]');
+            const form = document.querySelector('form[action="/difficult-airway"]');
             const loadingOverlay = document.getElementById('loadingOverlay');
 
             if (form && loadingOverlay) {
                 form.addEventListener('submit', function(e) {
-                    // Validate required fields before showing loading
-                    const procedure = document.getElementById('procedure');
+                    // Validate required fields
                     const mallampati = document.querySelector('input[name="mallampati"]:checked');
                     const thyromental = document.querySelector('input[name="thyromental"]:checked');
                     const mouthOpening = document.querySelector('input[name="mouth_opening"]:checked');
                     const neckExtension = document.querySelector('input[name="neck_extension"]:checked');
                     const bmi = document.getElementById('bmi');
                     const age = document.getElementById('age');
+                    const procedure = document.getElementById('procedure');
                     const caseType = document.querySelector('input[name="case_type"]:checked');
 
-                    // Only show loading if all required fields are filled
-                    if (procedure && procedure.value.trim() !== '' &&
-                        mallampati && thyromental && mouthOpening && neckExtension &&
-                        bmi && bmi.value && age && age.value && caseType) {
+                    if (mallampati && thyromental && mouthOpening && neckExtension &&
+                        bmi && bmi.value && age && age.value && procedure && procedure.value && caseType) {
                         loadingOverlay.classList.add('active');
                     }
                 });
