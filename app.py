@@ -28518,12 +28518,12 @@ def difficult_airway_assessment():
             cl_description = "Grade 1: Full glottic view - EASY"
 
         # ==================================================================
-        # GENERATE DALL-E IMAGE - Predicted Cormack-Lehane View
+        # CORMACK-LEHANE IMAGE - Standardized Static Illustrations
         # ==================================================================
-        # TEMPORARILY DISABLED: DALL-E takes 30+ seconds and causes worker timeout
-        # TODO: Implement async DALL-E generation or increase worker timeout
-        dalle_image_url = None
-        logger.info(f"DALL-E image generation skipped (timeout prevention) for CL Grade {predicted_cl_grade}")
+        # Use pre-generated anatomically accurate SVG illustrations
+        # These are standardized medical illustrations for each CL grade
+        dalle_image_url = f"/static/cormack-lehane-grade-{predicted_cl_grade}.svg"
+        logger.info(f"Using static Cormack-Lehane Grade {predicted_cl_grade} illustration")
 
         # ==================================================================
         # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile

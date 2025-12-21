@@ -1,0 +1,55 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cormack-Lehane Grade 4: No laryngeal structures visible - VERY DIFFICULT -->
+  <defs>
+    <radialGradient id="pharynxGrad4" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFC5C5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF9191;stop-opacity:1" />
+    </radialGradient>
+    <radialGradient id="tissueGrad4" cx="40%" cy="40%">
+      <stop offset="0%" style="stop-color:#FFCCBC;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#FFAB91;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF7043;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background: Pharyngeal wall -->
+  <circle cx="400" cy="400" r="350" fill="url(#pharynxGrad4)" stroke="#E53935" stroke-width="8"/>
+  
+  <!-- NO epiglottis, NO glottis, NO vocal cords - complete obstruction -->
+  
+  <!-- Only soft palate and pharyngeal tissue visible -->
+  <!-- Soft palate (upper tissue mass) -->
+  <ellipse cx="400" cy="300" rx="180" ry="120" fill="url(#tissueGrad4)" opacity="0.9"/>
+  <ellipse cx="400" cy="300" rx="140" ry="90" fill="#FFCCBC" opacity="0.5"/>
+  
+  <!-- Posterior pharyngeal wall (lower tissue mass) -->
+  <ellipse cx="400" cy="500" rx="200" ry="140" fill="url(#tissueGrad4)" opacity="0.85"/>
+  <ellipse cx="400" cy="500" rx="160" ry="100" fill="#FFAB91" opacity="0.4"/>
+  
+  <!-- Tissue folds for realism -->
+  <path d="M 250 350 Q 400 330 550 350" stroke="#FF7043" stroke-width="3" fill="none" opacity="0.6"/>
+  <path d="M 250 420 Q 400 400 550 420" stroke="#FF7043" stroke-width="3" fill="none" opacity="0.6"/>
+  <path d="M 270 480 Q 400 460 530 480" stroke="#FF7043" stroke-width="3" fill="none" opacity="0.6"/>
+  
+  <!-- Tissue texture - mucosal surfaces -->
+  <circle cx="320" cy="380" r="30" fill="#FF8A80" opacity="0.3"/>
+  <circle cx="480" cy="380" r="30" fill="#FF8A80" opacity="0.3"/>
+  <circle cx="350" cy="470" r="35" fill="#FF8A80" opacity="0.3"/>
+  <circle cx="450" cy="470" r="35" fill="#FF8A80" opacity="0.3"/>
+  
+  <!-- Additional tissue masses (completely blocked view) -->
+  <ellipse cx="300" cy="400" rx="80" ry="100" fill="#FFAB91" opacity="0.5"/>
+  <ellipse cx="500" cy="400" rx="80" ry="100" fill="#FFAB91" opacity="0.5"/>
+  
+  <!-- Vascular appearance (realistic tissue coloring) -->
+  <path d="M 350 320 Q 380 340 410 320 Q 440 340 470 320" stroke="#E57373" stroke-width="2" fill="none" opacity="0.7"/>
+  <path d="M 340 450 Q 370 470 400 450 Q 430 470 460 450" stroke="#E57373" stroke-width="2" fill="none" opacity="0.7"/>
+  
+  <!-- Deep tissue shadows -->
+  <ellipse cx="400" cy="400" rx="100" ry="80" fill="#C62828" opacity="0.15"/>
+  
+  <!-- Grade label -->
+  <text x="400" y="750" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#B71C1C">
+    Grade 4: No Structures Visible - VERY DIFFICULT
+  </text>
+</svg>

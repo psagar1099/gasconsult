@@ -1,0 +1,50 @@
+<svg width="800" height="800" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
+  <!-- Cormack-Lehane Grade 1: Full glottic view - EASY -->
+  <defs>
+    <radialGradient id="pharynxGrad1" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#FFE5E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB3B3;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="cordGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#F5F5F5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#E0E0E0;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glottisGrad1" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#2C2C2C;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background: Pharyngeal wall -->
+  <circle cx="400" cy="400" r="350" fill="url(#pharynxGrad1)" stroke="#E57373" stroke-width="8"/>
+  
+  <!-- Glottic opening (dark center) -->
+  <ellipse cx="400" cy="400" rx="120" ry="180" fill="url(#glottisGrad1)" opacity="0.9"/>
+  
+  <!-- Left vocal cord (white, clearly visible) -->
+  <ellipse cx="320" cy="400" rx="15" ry="160" fill="url(#cordGrad1)" stroke="#B0BEC5" stroke-width="3" opacity="0.95"/>
+  
+  <!-- Right vocal cord (white, clearly visible) -->
+  <ellipse cx="480" cy="400" rx="15" ry="160" fill="url(#cordGrad1)" stroke="#B0BEC5" stroke-width="3" opacity="0.95"/>
+  
+  <!-- Left arytenoid cartilage -->
+  <ellipse cx="320" cy="280" rx="28" ry="35" fill="#FFCDD2" stroke="#E57373" stroke-width="2"/>
+  <ellipse cx="320" cy="280" rx="20" ry="25" fill="#F8BBD0" opacity="0.6"/>
+  
+  <!-- Right arytenoid cartilage -->
+  <ellipse cx="480" cy="280" rx="28" ry="35" fill="#FFCDD2" stroke="#E57373" stroke-width="2"/>
+  <ellipse cx="480" cy="280" rx="20" ry="25" fill="#F8BBD0" opacity="0.6"/>
+  
+  <!-- Epiglottis tip (visible at top) -->
+  <path d="M 350 200 Q 400 180 450 200 Q 400 220 350 200 Z" fill="#FFAB91" stroke="#FF7043" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Tissue highlights for depth -->
+  <ellipse cx="280" cy="350" rx="40" ry="60" fill="#FFE5E5" opacity="0.3"/>
+  <ellipse cx="520" cy="350" rx="40" ry="60" fill="#FFE5E5" opacity="0.3"/>
+  
+  <!-- Grade label -->
+  <text x="400" y="750" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#2E7D32">
+    Grade 1: Full Glottic View - EASY
+  </text>
+</svg>
