@@ -26770,10 +26770,17 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 24px;
-            padding: 44px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
             margin-bottom: 28px;
+        }
+
+        @media (min-width: 768px) {
+            .form-card {
+                border-radius: 24px;
+                padding: 44px;
+            }
         }
 
         .section-header {
@@ -27037,19 +27044,32 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         .risk-dashboard {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 16px;
             margin-bottom: 32px;
+        }
+
+        @media (min-width: 640px) {
+            .risk-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
         }
 
         .risk-card {
             background: white;
             border-radius: 20px;
-            padding: 28px;
+            padding: 24px;
             text-align: center;
             border: 2px solid;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 768px) {
+            .risk-card {
+                padding: 28px;
+            }
         }
 
         .risk-card:hover {
@@ -27097,12 +27117,19 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             font-weight: 500;
         }
 
-        /* CORMACK-LEHANE VISUALIZATION CARD */
+        /* VISUALIZATION CARD (deprecated - Cormack removed, kept for legacy) */
         .visualization-card {
             background: white;
-            border-radius: 24px;
-            padding: 36px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        @media (min-width: 768px) {
+            .visualization-card {
+                border-radius: 24px;
+                padding: 36px;
+            }
         }
 
         .visualization-header {
@@ -27154,20 +27181,36 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         /* MANAGEMENT PLAN */
         .management-section {
             background: white;
-            border-radius: 24px;
-            padding: 36px;
-            margin-bottom: 28px;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
         }
 
+        @media (min-width: 768px) {
+            .management-section {
+                border-radius: 24px;
+                padding: 36px;
+                margin-bottom: 28px;
+            }
+        }
+
         .management-section h3 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             color: var(--gray-900);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .management-section h3 {
+                font-size: 20px;
+                margin-bottom: 24px;
+                gap: 12px;
+            }
         }
 
         .management-section ul {
@@ -27200,20 +27243,36 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         /* REFERENCES */
         .references-section {
             background: white;
-            border-radius: 24px;
-            padding: 36px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            margin-bottom: 28px;
+            margin-bottom: 20px;
+        }
+
+        @media (min-width: 768px) {
+            .references-section {
+                border-radius: 24px;
+                padding: 36px;
+                margin-bottom: 28px;
+            }
         }
 
         .references-section h3 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             color: var(--gray-900);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .references-section h3 {
+                font-size: 20px;
+                margin-bottom: 24px;
+                gap: 12px;
+            }
         }
 
         .reference-item {
@@ -28495,36 +28554,19 @@ def difficult_airway_assessment():
                 risk_score += 0.5
                 risk_factors_list.append(factor.lower())
 
-        # Determine risk category and predicted Cormack-Lehane grade
+        # Determine risk category
         if risk_score >= 6:
             risk_category = "High"
             risk_level_class = "high"
-            predicted_cl_grade = 4
-            cl_description = "Grade 4: No glottic structures visible - VERY DIFFICULT"
         elif risk_score >= 4:
             risk_category = "Moderate-High"
             risk_level_class = "moderate"
-            predicted_cl_grade = 3
-            cl_description = "Grade 3: Only epiglottis visible - DIFFICULT"
         elif risk_score >= 2:
             risk_category = "Moderate"
             risk_level_class = "moderate"
-            predicted_cl_grade = 2
-            cl_description = "Grade 2b: Partial glottis visible - MODERATE"
         else:
             risk_category = "Low"
             risk_level_class = "low"
-            predicted_cl_grade = 1
-            cl_description = "Grade 1: Full glottic view - EASY"
-
-        # ==================================================================
-        # CORMACK-LEHANE IMAGE - DALL-E Generated Static Images
-        # ==================================================================
-        # Use pre-generated DALL-E hyperrealistic medical endoscopy images
-        # These are real AI-generated photographs saved as static PNG files
-        # Generated once using DALL-E-3 HD quality, then saved for instant loading
-        dalle_image_url = f"/static/cormack-lehane-grade-{predicted_cl_grade}.png"
-        logger.info(f"Using DALL-E generated Cormack-Lehane Grade {predicted_cl_grade} image")
 
         # ==================================================================
         # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
@@ -28606,26 +28648,6 @@ def difficult_airway_assessment():
         # GPT-4o SYNTHESIS - Generate Management Plan
         # ==================================================================
 
-        # Build DALL-E visualization HTML if image was generated
-        dalle_html = ""
-        if dalle_image_url:
-            dalle_html = f'''<div class="visualization-card">
-<div class="visualization-header">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<circle cx="12" cy="12" r="10"></circle>
-<path d="M12 16v-4m0-4h.01"></path>
-</svg>
-Predicted Laryngoscopy View
-</div>
-<div class="cormack-image-container">
-<img src="{dalle_image_url}" alt="Predicted Cormack-Lehane View" class="cormack-image">
-</div>
-<div class="cormack-caption">
-<strong>{cl_description}</strong><br>
-This AI-generated visualization represents the predicted laryngeal view during direct laryngoscopy or videolaryngoscopy based on the patient airway examination findings.
-</div>
-</div>'''
-
         patient_summary = f"""
 PATIENT: {age}yo, BMI {bmi}, {case_type.lower()} {procedure}
 AIRWAY EXAM: Mallampati {mallampati}, Thyromental {thyromental}, Mouth opening {mouth_opening}, Neck extension {neck_extension}
@@ -28633,7 +28655,6 @@ RISK FACTORS: {', '.join(risk_factors) if risk_factors else 'None'}
 ADDITIONAL NOTES: {additional_notes if additional_notes else 'None'}
 
 CALCULATED RISK: {risk_category} (Score: {risk_score:.1f}/10)
-PREDICTED CORMACK-LEHANE: Grade {predicted_cl_grade}
 IDENTIFIED CONCERNS: {', '.join(risk_factors_list) if risk_factors_list else 'None'}
 """
 
@@ -28660,7 +28681,7 @@ Create a comprehensive, evidence-based difficult airway management plan with the
 
 CRITICAL FORMATTING REQUIREMENTS:
 
-1. Use this EXACT HTML structure for output:
+1. Use this EXACT HTML structure for the risk dashboard (ONLY 2 cards):
 
 <div class="risk-dashboard">
         <div class="risk-card {risk_level_class}">
@@ -28669,22 +28690,13 @@ CRITICAL FORMATTING REQUIREMENTS:
             <div class="risk-card-description">Difficult Intubation</div>
         </div>
         <div class="risk-card {risk_level_class}">
-            <div class="risk-card-label">Predicted CL Grade</div>
-            <div class="risk-card-value">Grade {predicted_cl_grade}</div>
-            <div class="risk-card-description">{cl_description}</div>
-        </div>
-        <div class="risk-card {risk_level_class}">
             <div class="risk-card-label">Risk Score</div>
             <div class="risk-card-value">{risk_score:.1f}/10</div>
             <div class="risk-card-description">Evidence-based</div>
         </div>
 </div>
 
-2. Then create visualization card with DALL-E image (if generated):
-
-{dalle_html}
-
-3. Then create management sections using this structure:
+2. Then create management sections using this structure:
 
 <div class="management-section">
 <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>Risk Stratification Summary</h3>
@@ -28701,12 +28713,20 @@ CRITICAL FORMATTING REQUIREMENTS:
 
 [Continue for all sections...]
 
+IMPORTANT OUTPUT REQUIREMENTS:
+- Output ONLY the HTML code shown above - nothing else
+- NO markdown code fences (```) - just raw HTML
+- NO explanatory text before or after the HTML
+- Start immediately with <div class="risk-dashboard">
+- Ensure all HTML tags are properly closed
+- All content must be mobile-responsive (looks perfect on small screens)
+- Use the EXACT CSS classes shown above (.risk-dashboard, .risk-card, .management-section, etc.)
+- Include SVG icons in h3 tags as shown in examples
+
 CITATION RULES:
 - Cite specific recommendations with [1], [2], etc.
 - Use evidence to support all key decisions
 - Reference ASA Difficult Airway Algorithm when relevant
-
-Output ONLY the HTML. No markdown code fences, no extra text.
 """
 
         try:
