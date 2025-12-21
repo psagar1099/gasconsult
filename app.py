@@ -26480,13 +26480,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 """
 
 
+# ============================================================================
+# DIFFICULT AIRWAY ASSESSMENT - REVOLUTIONARY VERSION WITH DALL-E
+# ============================================================================
+
 DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Difficult Airway Assessment - GasConsult.ai</title>
-    <meta name="description" content="AI-powered difficult airway risk stratification with anatomically realistic Cormack-Lehane visualizations.">
+    <meta name="description" content="AI-powered difficult airway assessment with DALL-E generated Cormack-Lehane visualizations">
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -26511,6 +26515,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             --blue-500: #3B82F6;
             --blue-600: #2563EB;
             --blue-700: #1D4ED8;
+            --green-500: #10B981;
+            --green-600: #059669;
+            --amber-500: #F59E0B;
+            --amber-600: #D97706;
+            --red-500: #EF4444;
+            --red-600: #DC2626;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26574,7 +26584,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* NAVIGATION - EXACT SAME AS HOMEPAGE */
+        /* NAVIGATION - MATCHING HOMEPAGE */
         .nav {
             position: fixed;
             top: 0;
@@ -26728,7 +26738,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .main-content {
             flex: 1;
             padding: 100px 20px 60px;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
         }
@@ -26739,18 +26749,19 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .header h1 {
-            font-size: 36px;
-            font-weight: 800;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-            background: linear-gradient(135deg, #2563EB, #3B82F6);
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #2563EB, #3B82F6, #60A5FA);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
             color: #64748B;
-            font-size: 16px;
+            font-size: 17px;
+            font-weight: 500;
         }
 
         /* FORM CARD */
@@ -26760,26 +26771,26 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
             border-radius: 24px;
-            padding: 40px;
+            padding: 44px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 28px;
-            padding-bottom: 16px;
+            gap: 14px;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            padding-bottom: 18px;
             border-bottom: 2px solid var(--blue-100);
             color: var(--gray-900);
         }
 
         .section-header svg {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             stroke: var(--blue-600);
             flex-shrink: 0;
         }
@@ -26787,8 +26798,8 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .form-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 32px;
-            margin-bottom: 40px;
+            gap: 36px;
+            margin-bottom: 44px;
         }
 
         @media (min-width: 768px) {
@@ -26800,7 +26811,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .form-field {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .form-field.full-width {
@@ -26808,33 +26819,44 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         label {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-700);
-            letter-spacing: -0.01em;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--gray-800);
+            letter-spacing: -0.02em;
         }
 
         input[type="text"],
         input[type="number"],
+        select,
         textarea {
             width: 100%;
-            padding: 14px 18px;
+            padding: 15px 20px;
             background: rgba(255, 255, 255, 0.9);
             border: 1.5px solid rgba(226, 232, 240, 0.8);
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 15px;
             font-family: inherit;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             color: var(--gray-900);
         }
 
         input:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             border-color: var(--blue-500);
             background: white;
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.08);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 4px 12px rgba(59,130,246,0.15);
+            transform: translateY(-2px);
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
         }
 
         textarea {
@@ -26842,40 +26864,41 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             resize: vertical;
         }
 
-        .radio-group {
-            display: flex;
-            flex-direction: column;
+        .radio-grid {
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 12px;
         }
 
         .radio-option {
             display: flex;
             align-items: center;
-            padding: 16px 20px;
+            padding: 18px 22px;
             background: rgba(255, 255, 255, 0.8);
-            border: 1.5px solid rgba(226, 232, 240, 0.8);
-            border-radius: 12px;
+            border: 2px solid rgba(226, 232, 240, 0.8);
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .radio-option:hover {
             border-color: var(--blue-400);
             background: rgba(239, 246, 255, 0.9);
-            transform: translateX(4px);
+            transform: translateX(6px);
         }
 
         .radio-option:has(input:checked) {
-            border-color: var(--blue-500);
-            background: rgba(239, 246, 255, 0.95);
-            box-shadow: 0 2px 12px rgba(59,130,246,0.12);
+            border-color: var(--blue-600);
+            background: linear-gradient(135deg, rgba(239, 246, 255, 0.95), rgba(219, 234, 254, 0.95));
+            box-shadow: 0 4px 16px rgba(59,130,246,0.15);
         }
 
         .radio-option input {
             width: auto;
-            margin-right: 12px;
+            margin-right: 14px;
             cursor: pointer;
             accent-color: var(--blue-600);
+            transform: scale(1.2);
         }
 
         .checkbox-grid {
@@ -26893,12 +26916,12 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         .checkbox-option {
             display: flex;
             align-items: center;
-            padding: 14px 18px;
+            padding: 16px 20px;
             background: rgba(255, 255, 255, 0.8);
-            border: 1.5px solid rgba(226, 232, 240, 0.8);
+            border: 2px solid rgba(226, 232, 240, 0.8);
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .checkbox-option:hover {
@@ -26913,31 +26936,36 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         .checkbox-option input {
             width: auto;
-            margin-right: 10px;
+            margin-right: 12px;
             cursor: pointer;
             accent-color: var(--blue-600);
+            transform: scale(1.2);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 18px 24px;
+            padding: 20px 28px;
             background: linear-gradient(135deg, #2563EB, #3B82F6);
             color: white;
             border: none;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
         }
 
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37,99,235,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(37,99,235,0.4);
         }
 
-        /* LOADING */
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* LOADING OVERLAY - MATCHING PRE-OP */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -26945,31 +26973,33 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(8px);
-            z-index: 1000;
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
             align-items: center;
             justify-content: center;
         }
 
-        .loading-overlay.active {
+        .loading-overlay.show {
             display: flex;
         }
 
-        .loading-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .loading-spinner-container {
+            text-align: center;
+            animation: fade-in 0.3s ease;
         }
 
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--gray-200);
+        @keyframes fade-in {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 24px;
+            border: 4px solid rgba(59, 130, 246, 0.2);
             border-top-color: var(--blue-600);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -26980,12 +27010,265 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
         }
 
         .loading-text {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--gray-700);
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
         }
 
-        /* FOOTER - EXACT SAME AS HOMEPAGE */
+        .loading-subtext {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* ASSESSMENT RESULTS */
+        .assessment-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 1024px) {
+            .assessment-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .risk-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .risk-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            text-align: center;
+            border: 2px solid;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .risk-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .risk-card.high {
+            border-color: var(--red-500);
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.4), rgba(254, 202, 202, 0.4));
+        }
+
+        .risk-card.moderate {
+            border-color: var(--amber-500);
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.4), rgba(253, 230, 138, 0.4));
+        }
+
+        .risk-card.low {
+            border-color: var(--green-500);
+            background: linear-gradient(135deg, rgba(209, 250, 229, 0.4), rgba(167, 243, 208, 0.4));
+        }
+
+        .risk-card-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .risk-card-value {
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+
+        .risk-card.high .risk-card-value { color: var(--red-600); }
+        .risk-card.moderate .risk-card-value { color: var(--amber-600); }
+        .risk-card.low .risk-card-value { color: var(--green-600); }
+
+        .risk-card-description {
+            font-size: 13px;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        /* CORMACK-LEHANE VISUALIZATION CARD */
+        .visualization-card {
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .visualization-header {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .visualization-header svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blue-600);
+        }
+
+        .cormack-image-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+        }
+
+        .cormack-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .cormack-caption {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--blue-50);
+            border-radius: 16px;
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .cormack-caption strong {
+            color: var(--blue-700);
+            font-weight: 700;
+        }
+
+        /* MANAGEMENT PLAN */
+        .management-section {
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .management-section h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .management-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .management-section li {
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .management-section li:last-child {
+            border-bottom: none;
+        }
+
+        .management-section li::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--blue-600);
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        /* REFERENCES */
+        .references-section {
+            background: white;
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            margin-bottom: 28px;
+        }
+
+        .references-section h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reference-item {
+            padding: 18px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .reference-item:last-child {
+            border-bottom: none;
+        }
+
+        .reference-title {
+            color: var(--blue-600);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .reference-title:hover {
+            color: var(--blue-700);
+            text-decoration: underline;
+        }
+
+        .reference-meta {
+            font-size: 13px;
+            color: var(--gray-600);
+        }
+
+        /* NEW ASSESSMENT BUTTON */
+        .new-assessment-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 28px;
+            background: white;
+            color: var(--gray-700);
+            border: 2px solid var(--gray-300);
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .new-assessment-btn:hover {
+            border-color: var(--blue-500);
+            color: var(--blue-600);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(59,130,246,0.15);
+        }
+
+        /* FOOTER - MATCHING HOMEPAGE */
         .footer {
             padding: 40px 20px;
             border-top: 1px solid var(--gray-200);
@@ -27036,9 +27319,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-content">
-            <div class="spinner"></div>
+        <div class="loading-spinner-container">
+            <div class="loading-spinner"></div>
             <div class="loading-text">Generating Assessment...</div>
+            <div class="loading-subtext">Creating AI-powered visualization</div>
         </div>
     </div>
 
@@ -27093,10 +27377,10 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             <!-- INPUT FORM -->
             <div class="header">
                 <h1>Difficult Airway Assessment</h1>
-                <p class="subtitle">AI-powered risk stratification with anatomically realistic Cormack-Lehane visualizations</p>
+                <p class="subtitle">AI-powered risk prediction with DALL-E generated Cormack-Lehane visualization</p>
             </div>
 
-            <form method="POST" action="/difficult-airway" class="form-card">
+            <form method="POST" action="/difficult-airway" class="form-card" id="airwayForm">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- Physical Examination -->
@@ -27109,92 +27393,47 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 </div>
 
                 <div class="form-grid">
-                    <div class="form-field full-width">
-                        <label>Mallampati Classification</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="mallampati" value="I" required>
-                                <span>Class I - Full visibility of tonsils, uvula, soft palate</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mallampati" value="II">
-                                <span>Class II - Uvula, soft palate visible</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mallampati" value="III">
-                                <span>Class III - Only soft palate visible</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mallampati" value="IV">
-                                <span>Class IV - Only hard palate visible</span>
-                            </label>
-                        </div>
+                    <div class="form-field">
+                        <label for="mallampati">Mallampati Classification</label>
+                        <select id="mallampati" name="mallampati" required>
+                            <option value="">Select Mallampati Class...</option>
+                            <option value="I">Class I - Full visibility</option>
+                            <option value="II">Class II - Partial visibility</option>
+                            <option value="III">Class III - Only soft palate</option>
+                            <option value="IV">Class IV - Only hard palate</option>
+                        </select>
                     </div>
 
                     <div class="form-field">
-                        <label>Thyromental Distance</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="thyromental" value=">6.5cm" required>
-                                <span>> 6.5 cm (Normal)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="thyromental" value="6-6.5cm">
-                                <span>6-6.5 cm (Borderline)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="thyromental" value="<6cm">
-                                <span>< 6 cm (Concerning)</span>
-                            </label>
-                        </div>
+                        <label for="thyromental">Thyromental Distance</label>
+                        <select id="thyromental" name="thyromental" required>
+                            <option value="">Select distance...</option>
+                            <option value=">6.5cm">> 6.5 cm (Normal)</option>
+                            <option value="6-6.5cm">6-6.5 cm (Borderline)</option>
+                            <option value="<6cm">< 6 cm (Concerning)</option>
+                        </select>
                     </div>
 
                     <div class="form-field">
-                        <label>Mouth Opening</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="mouth_opening" value=">4cm" required>
-                                <span>> 4 cm (Normal)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mouth_opening" value="3-4cm">
-                                <span>3-4 cm (Borderline)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="mouth_opening" value="<3cm">
-                                <span>< 3 cm (Limited)</span>
-                            </label>
-                        </div>
+                        <label for="mouth_opening">Mouth Opening (Inter-incisor Distance)</label>
+                        <select id="mouth_opening" name="mouth_opening" required>
+                            <option value="">Select opening...</option>
+                            <option value=">4cm">> 4 cm (Normal)</option>
+                            <option value="3-4cm">3-4 cm (Borderline)</option>
+                            <option value="<3cm">< 3 cm (Limited)</option>
+                        </select>
                     </div>
 
-                    <div class="form-field full-width">
-                        <label>Neck Extension</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="neck_extension" value="Normal" required>
-                                <span>Normal (> 35°)</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="neck_extension" value="Moderate">
-                                <span>Moderate Limitation</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="neck_extension" value="Limited">
-                                <span>Severe Limitation</span>
-                            </label>
-                        </div>
+                    <div class="form-field">
+                        <label for="neck_extension">Neck Extension</label>
+                        <select id="neck_extension" name="neck_extension" required>
+                            <option value="">Select extension...</option>
+                            <option value="Normal">Normal (> 35°)</option>
+                            <option value="Moderate">Moderate Limitation</option>
+                            <option value="Limited">Severe Limitation</option>
+                        </select>
                     </div>
-                </div>
 
-                <!-- Patient Information -->
-                <div class="section-header">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                    Patient Information
-                </div>
-
-                <div class="form-grid">
                     <div class="form-field">
                         <label for="bmi">BMI (Body Mass Index)</label>
                         <input type="number" id="bmi" name="bmi" step="0.1" min="10" max="80" placeholder="e.g., 27.5" required>
@@ -27267,22 +27506,14 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                         <input type="text" id="procedure" name="procedure" placeholder="e.g., Laparoscopic cholecystectomy" required>
                     </div>
 
-                    <div class="form-field full-width">
-                        <label>Case Type</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="case_type" value="Elective" required>
-                                <span>Elective</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="case_type" value="Urgent">
-                                <span>Urgent</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="case_type" value="Emergency">
-                                <span>Emergency</span>
-                            </label>
-                        </div>
+                    <div class="form-field">
+                        <label for="case_type">Case Type</label>
+                        <select id="case_type" name="case_type" required>
+                            <option value="">Select type...</option>
+                            <option value="Elective">Elective</option>
+                            <option value="Urgent">Urgent</option>
+                            <option value="Emergency">Emergency</option>
+                        </select>
                     </div>
 
                     <div class="form-field full-width">
@@ -27301,31 +27532,33 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 <p class="subtitle">Evidence-based risk stratification and management plan</p>
             </div>
 
-            <div class="form-card">
-                {{ summary|safe }}
-            </div>
+            {{ summary|safe }}
 
             {% if references %}
-            <div class="form-card">
-                <div class="section-header">
+            <div class="references-section">
+                <h3>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                     </svg>
                     Evidence-Based References
-                </div>
+                </h3>
                 {% for ref in references %}
-                <div style="padding: 16px 0; border-bottom: 1px solid var(--gray-200);">
-                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" style="color: var(--blue-600); text-decoration: none; font-weight: 600; font-size: 14px; display: block; margin-bottom: 6px;">
+                <div class="reference-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" class="reference-title">
                         [{{ loop.index }}] {{ ref.title }}
                     </a>
-                    <div style="font-size: 13px; color: var(--gray-600);">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
+                    <div class="reference-meta">{{ ref.authors }} - {{ ref.journal }}, {{ ref.year }}</div>
                 </div>
                 {% endfor %}
             </div>
 
-            <div style="text-align: center; margin-top: 24px;">
-                <a href="/difficult-airway" style="display: inline-block; padding: 14px 24px; background: white; color: var(--gray-700); border: 2px solid var(--gray-300); border-radius: 12px; text-decoration: none; font-weight: 600; transition: all 0.2s ease;">
+            <div style="text-align: center;">
+                <a href="/difficult-airway" class="new-assessment-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
                     New Assessment
                 </a>
             </div>
@@ -27366,24 +27599,24 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 
         // Show loading overlay on form submit
         document.addEventListener('DOMContentLoaded', function() {
-            const form = document.querySelector('form[action="/difficult-airway"]');
+            const form = document.getElementById('airwayForm');
             const loadingOverlay = document.getElementById('loadingOverlay');
 
             if (form && loadingOverlay) {
                 form.addEventListener('submit', function(e) {
                     // Validate required fields
-                    const mallampati = document.querySelector('input[name="mallampati"]:checked');
-                    const thyromental = document.querySelector('input[name="thyromental"]:checked');
-                    const mouthOpening = document.querySelector('input[name="mouth_opening"]:checked');
-                    const neckExtension = document.querySelector('input[name="neck_extension"]:checked');
-                    const bmi = document.getElementById('bmi');
-                    const age = document.getElementById('age');
-                    const procedure = document.getElementById('procedure');
-                    const caseType = document.querySelector('input[name="case_type"]:checked');
+                    const mallampati = document.getElementById('mallampati').value;
+                    const thyromental = document.getElementById('thyromental').value;
+                    const mouthOpening = document.getElementById('mouth_opening').value;
+                    const neckExtension = document.getElementById('neck_extension').value;
+                    const bmi = document.getElementById('bmi').value;
+                    const age = document.getElementById('age').value;
+                    const procedure = document.getElementById('procedure').value;
+                    const caseType = document.getElementById('case_type').value;
 
                     if (mallampati && thyromental && mouthOpening && neckExtension &&
-                        bmi && bmi.value && age && age.value && procedure && procedure.value && caseType) {
-                        loadingOverlay.classList.add('active');
+                        bmi && age && procedure && caseType) {
+                        loadingOverlay.classList.add('show');
                     }
                 });
             }
@@ -27392,6 +27625,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 </body>
 </html>
 """
+
 
 @app.route("/quick-dose")
 def quick_dose():
@@ -28181,9 +28415,10 @@ Tone: Professional, neutral, and accessible - explain medical concepts in plain 
 
     return render_template_string(INFORMED_CONSENT_HTML, summary=response, references=unique_refs)
 
+
 @app.route("/difficult-airway", methods=["GET", "POST"])
 def difficult_airway_assessment():
-    """Difficult Airway Assessment with AI-powered risk stratification"""
+    """Revolutionary Difficult Airway Assessment with DALL-E visualization"""
     if request.method == "GET":
         response = make_response(render_template_string(DIFFICULT_AIRWAY_HTML, summary=None, references=None))
         response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -28201,98 +28436,142 @@ def difficult_airway_assessment():
     risk_factors = request.form.getlist("risk_factors")
     procedure = sanitize_user_query(request.form.get("procedure", ""))
     case_type = sanitize_user_query(request.form.get("case_type", ""))
-    notes = sanitize_user_query(request.form.get("notes", ""))
+    additional_notes = sanitize_user_query(request.form.get("additional_notes", ""))
 
     # Validate required fields
     if not procedure or not procedure.strip():
-        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the planned procedure before submitting the form.</p>"
+        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the planned procedure.</p>"
         return render_template_string(DIFFICULT_AIRWAY_HTML, summary=error_message, references=None)
 
-    # Calculate risk score based on validated predictors
+    # ==================================================================
+    # CALCULATE RISK SCORE - Evidence-based predictors
+    # ==================================================================
     risk_score = 0
     risk_factors_list = []
 
-    # Mallampati III-IV (1 point)
+    # Mallampati III-IV (Odds ratio: 3.0-5.0)
     if mallampati in ["III", "IV"]:
-        risk_score += 1
+        risk_score += 2
         risk_factors_list.append(f"Mallampati Class {mallampati}")
 
-    # Thyromental distance <6cm (1 point)
+    # Thyromental distance <6cm (Strong predictor)
     if thyromental == "<6cm":
-        risk_score += 1
+        risk_score += 2
         risk_factors_list.append("Thyromental distance <6 cm")
 
-    # Mouth opening <3cm (1 point)
+    # Mouth opening <3cm (Critical predictor)
     if mouth_opening == "<3cm":
-        risk_score += 1
-        risk_factors_list.append("Mouth opening <3 cm")
+        risk_score += 2
+        risk_factors_list.append("Limited mouth opening <3 cm")
 
-    # Limited neck extension (1 point)
+    # Limited neck extension (Strong predictor)
     if neck_extension == "Limited":
+        risk_score += 2
+        risk_factors_list.append("Severely limited neck extension")
+    elif neck_extension == "Moderate":
         risk_score += 1
-        risk_factors_list.append("Limited neck extension")
+        risk_factors_list.append("Moderately limited neck extension")
 
-    # High BMI >35 (1 point)
+    # High BMI >35 (Obesity effect)
     if bmi > 35:
         risk_score += 1
         risk_factors_list.append(f"Obesity (BMI {bmi:.1f} kg/m²)")
 
-    # Previous difficult intubation (2 points - strong predictor)
+    # Previous difficult intubation (Strongest single predictor)
     if "Previous Difficult Intubation" in risk_factors:
-        risk_score += 2
+        risk_score += 3
         risk_factors_list.append("Previous difficult intubation")
 
-    # OSA (1 point)
+    # OSA (Independent predictor)
     if "OSA" in risk_factors:
         risk_score += 1
         risk_factors_list.append("Obstructive sleep apnea")
 
-    # Other anatomical factors (0.5 points each)
+    # Other anatomical factors
     for factor in ["Beard", "Prominent Incisors", "Short Neck", "Large Tongue", "Facial Trauma", "C-Spine Pathology"]:
         if factor in risk_factors:
             risk_score += 0.5
             risk_factors_list.append(factor.lower())
 
-    # Determine risk category
-    if risk_score >= 4:
+    # Determine risk category and predicted Cormack-Lehane grade
+    if risk_score >= 6:
         risk_category = "High"
+        risk_level_class = "high"
+        predicted_cl_grade = 4
+        cl_description = "Grade 4: No glottic structures visible - VERY DIFFICULT"
+    elif risk_score >= 4:
+        risk_category = "Moderate-High"
+        risk_level_class = "moderate"
+        predicted_cl_grade = 3
+        cl_description = "Grade 3: Only epiglottis visible - DIFFICULT"
     elif risk_score >= 2:
         risk_category = "Moderate"
+        risk_level_class = "moderate"
+        predicted_cl_grade = 2
+        cl_description = "Grade 2b: Partial glottis visible - MODERATE"
     else:
         risk_category = "Low"
+        risk_level_class = "low"
+        predicted_cl_grade = 1
+        cl_description = "Grade 1: Full glottic view - EASY"
 
-    # Build targeted PubMed searches
+    # ==================================================================
+    # GENERATE DALL-E IMAGE - Predicted Cormack-Lehane View
+    # ==================================================================
+    dalle_image_url = None
+    try:
+        # Construct anatomically precise DALL-E prompt
+        dalle_prompts = {
+            1: "Medical illustration: Cormack-Lehane Grade 1 laryngoscopy view. Crystal clear anatomical visualization showing full visibility of vocal cords with symmetric white glistening appearance, arytenoid cartilages clearly visible, glottic opening widely patent. Pink pharyngeal walls surrounding. Professional medical textbook quality, realistic tissue colors (pink mucosa, white vocal cords), sharp focus, superior perspective from videolaryngoscope. Hyperrealistic 3D medical rendering.",
+            2: "Medical illustration: Cormack-Lehane Grade 2 laryngoscopy view. Anatomical visualization showing partial view of glottic opening with only posterior portion of vocal cords visible, anterior commissure obscured. Arytenoid cartilages prominent. Pink pharyngeal tissue, partially restricted view. Professional medical textbook quality, realistic tissue colors, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing moderate difficulty.",
+            3: "Medical illustration: Cormack-Lehane Grade 3 laryngoscopy view. Anatomical visualization showing only epiglottis visible, no glottic structures seen. Curved epiglottis covering glottic opening completely. Pink-red pharyngeal walls, very restricted view suggesting anterior larynx. Professional medical textbook quality, realistic tissue colors, difficult intubation scenario, videolaryngoscope perspective. Hyperrealistic 3D medical rendering.",
+            4: "Medical illustration: Cormack-Lehane Grade 4 laryngoscopy view. Anatomical visualization showing complete obstruction with only soft palate and pharyngeal walls visible, no epiglottis or glottic structures identifiable. Deep pink-red tissue, severely restricted view indicating very difficult airway anatomy. Professional medical textbook quality, realistic tissue colors, extreme anterior larynx, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing very difficult intubation."
+        }
+
+        response_dalle = openai_client.images.generate(
+            model="dall-e-3",
+            prompt=dalle_prompts[predicted_cl_grade],
+            size="1024x1024",
+            quality="hd",
+            n=1,
+        )
+        dalle_image_url = response_dalle.data[0].url
+        logger.info(f"DALL-E image generated successfully for CL Grade {predicted_cl_grade}")
+    except Exception as e:
+        logger.error(f"DALL-E generation error: {str(e)}")
+        # Fallback: Use placeholder or skip image
+        dalle_image_url = None
+
+    # ==================================================================
+    # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
+    # ==================================================================
     search_queries = []
 
-    # Primary airway management search
-    search_queries.append("difficult airway management guidelines anesthesia")
+    # Primary airway management guidelines
+    search_queries.append("difficult airway management guidelines anesthesia ASA")
 
-    # If high risk, search for advanced techniques
-    if risk_category == "High":
+    # Risk-specific searches
+    if risk_category in ["High", "Moderate-High"]:
         search_queries.append("awake fiberoptic intubation indications technique")
-        search_queries.append("video laryngoscopy difficult airway")
+        search_queries.append("video laryngoscopy difficult airway glidescope")
 
-    # OSA-specific management
     if "OSA" in risk_factors:
         search_queries.append("obstructive sleep apnea difficult airway perioperative")
 
-    # Obesity-specific positioning
     if bmi > 35:
-        search_queries.append("obese patient airway management positioning HELP")
+        search_queries.append("obese patient airway management positioning ramping")
 
-    # Emergency airway if emergency case
     if case_type == "Emergency":
-        search_queries.append("emergency airway management rapid sequence intubation")
+        search_queries.append("emergency difficult airway management rapid sequence")
 
-    # Previous difficult intubation
     if "Previous Difficult Intubation" in risk_factors:
-        search_queries.append("previous difficult intubation management anesthesia")
+        search_queries.append("previous difficult intubation management plan")
 
-    # Search PubMed for all queries and collect papers
+    # Search PubMed and collect evidence
     all_refs = []
     all_context = ""
 
-    for query in search_queries[:4]:  # Limit to 4 searches
+    for query in search_queries[:5]:  # Limit to 5 searches
         try:
             q_expanded = query.replace(" ", " AND ")
             search_term = (
@@ -28302,7 +28581,7 @@ def difficult_airway_assessment():
                 f'("2015/01/01"[PDAT] : "3000"[PDAT])'
             )
 
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=5, sort="relevance")
+            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=4, sort="relevance")
             result = Entrez.read(handle)
             ids = result["IdList"]
 
@@ -28320,343 +28599,146 @@ def difficult_airway_assessment():
                         year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
                         pmid = str(p["MedlineCitation"]["PMID"])
 
-                        study_classification = classify_study_type(title, journal)
+                        if {"pmid": pmid} not in [{"pmid": r["pmid"]} for r in all_refs]:
+                            all_refs.append({
+                                "title": title,
+                                "authors": authors,
+                                "journal": journal,
+                                "year": year,
+                                "pmid": pmid
+                            })
 
-                        all_refs.append({
-                            "title": title,
-                            "authors": authors,
-                            "journal": journal,
-                            "year": year,
-                            "pmid": pmid,
-                            "study_type": study_classification['type'],
-                            "study_badge": study_classification['badge_text'],
-                            "study_color": study_classification['badge_color'],
-                            "study_score": study_classification['score'],
-                            "sort_priority": study_classification['sort_priority']
-                        })
-                        all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
-                    except:
+                            all_context += f"\n\n[PMID {pmid}] {title}\n{abstract[:800]}"
+
+                    except Exception as e:
+                        logger.error(f"Error parsing paper: {str(e)}")
                         continue
-        except:
+
+        except Exception as e:
+            logger.error(f"PubMed search error for '{query}': {str(e)}")
             continue
 
-    # Remove duplicate references by PMID
-    seen_pmids = set()
-    unique_refs = []
-    for ref in all_refs:
-        if ref['pmid'] not in seen_pmids:
-            seen_pmids.add(ref['pmid'])
-            unique_refs.append(ref)
+    # ==================================================================
+    # GPT-4o SYNTHESIS - Generate Management Plan
+    # ==================================================================
 
-    # Sort references by quality
-    unique_refs.sort(key=lambda x: x.get('sort_priority', 99))
+    # Build DALL-E visualization HTML if image was generated
+    dalle_html = ""
+    if dalle_image_url:
+        dalle_html = f'''<div class="visualization-card">
+<div class="visualization-header">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M12 16v-4m0-4h.01"></path>
+</svg>
+Predicted Laryngoscopy View
+</div>
+<div class="cormack-image-container">
+<img src="{dalle_image_url}" alt="Predicted Cormack-Lehane View" class="cormack-image">
+</div>
+<div class="cormack-caption">
+<strong>{cl_description}</strong><br>
+This AI-generated visualization represents the predicted laryngeal view during direct laryngoscopy or videolaryngoscopy based on the patient airway examination findings.
+</div>
+</div>'''
 
-    # Create numbered reference list for GPT
-    ref_list = ""
-    for i, ref in enumerate(unique_refs, 1):
-        ref_list += f"[{i}] {ref['title']} - {ref['authors']} ({ref['year']}) PMID: {ref['pmid']}\n"
+    patient_summary = f"""
+PATIENT: {age}yo, BMI {bmi}, {case_type.lower()} {procedure}
+AIRWAY EXAM: Mallampati {mallampati}, Thyromental {thyromental}, Mouth opening {mouth_opening}, Neck extension {neck_extension}
+RISK FACTORS: {', '.join(risk_factors) if risk_factors else 'None'}
+ADDITIONAL NOTES: {additional_notes if additional_notes else 'None'}
 
-    # Build patient summary for GPT
-    all_risk_factors = ', '.join(risk_factors_list) if risk_factors_list else 'None identified'
-
-    patient_data = f"""
-Patient Demographics:
-- Age: {age} years
-- BMI: {bmi:.1f} kg/m²
-
-Airway Assessment:
-- Mallampati Classification: Class {mallampati}
-- Thyromental Distance: {thyromental}
-- Mouth Opening: {mouth_opening}
-- Neck Extension: {neck_extension}
-
-Risk Factors Present: {all_risk_factors}
-
-Risk Score: {risk_score}/7 points
-Risk Category: {risk_category}
-
-Procedure: {procedure}
-Case Type: {case_type}
-
-Additional Notes: {notes if notes else 'None'}
+CALCULATED RISK: {risk_category} (Score: {risk_score:.1f}/10)
+PREDICTED CORMACK-LEHANE: Grade {predicted_cl_grade}
+IDENTIFIED CONCERNS: {', '.join(risk_factors_list) if risk_factors_list else 'None'}
 """
 
-    # Generate GPT summary
-    prompt = f"""You are an expert anesthesiologist performing a comprehensive difficult airway assessment. Based on validated clinical predictors and recent evidence, provide a detailed risk stratification and management plan.
+    gpt_prompt = f"""You are an expert anesthesiologist creating a difficult airway management plan.
 
-Patient Information:
-{patient_data}
+{patient_summary}
 
-Available Evidence (use numbered citations [1], [2], etc.):
-{ref_list}
-
-Paper Details:
+EVIDENCE FROM PUBMED:
 {all_context}
 
-CRITICAL: PATIENT-SPECIFIC AIRWAY ASSESSMENT PROTOCOL
-This is NOT a template - tailor EVERY recommendation to THIS specific patient. Before finalizing:
-1. **Individualize Risk Assessment**: Calculate the actual difficult airway risk score based on THIS patient's Mallampati, thyromental distance, mouth opening, neck extension, BMI, and history.
-2. **Specific Management Strategy**: Base airway plan on THIS patient's risk category ({risk_category}), case urgency ({case_type}), and specific anatomical challenges.
-3. **Evidence-Based Equipment Selection**: Recommend specific airway devices and techniques appropriate for THIS patient's risk factors.
-4. **Personalized Positioning**: If patient is obese (BMI {bmi:.1f}), specify HELP position or ramping details.
-5. **Cross-Check Case Urgency**: If {case_type} case, adjust awake vs asleep intubation recommendations accordingly.
+Create a comprehensive, evidence-based difficult airway management plan with these sections:
 
-Generate a comprehensive difficult airway assessment including:
+1. **Risk Stratification Summary** (2-3 sentences explaining the overall risk level and why)
 
-1. **Risk Stratification Summary**:
-   - Overall risk category ({risk_category}) with justification
-   - Specific predictors identified in this patient
-   - Estimated difficulty level for mask ventilation, supraglottic airway, and intubation
+2. **Equipment Preparation** (Bulleted list of specific equipment needed based on risk level)
 
-2. **Pre-Intubation Optimization**:
-   - Patient positioning (HELP position if BMI >35, ramping if needed)
-   - Pre-oxygenation strategy (target EtO₂, apneic oxygenation via nasal cannula)
-   - Equipment preparation (specific devices: video laryngoscope type, LMA size, bougie, etc.)
-   - Personnel needs (extra anesthesiologist, surgeon availability, etc.)
+3. **Primary Technique** (Detailed approach with step-by-step plan)
 
-3. **Primary Airway Management Plan**:
-   - Recommended primary technique (awake fiberoptic vs video laryngoscopy vs direct laryngoscopy)
-   - Drug selection and dosing if asleep intubation planned
-   - Maximum number of attempts before escalation
-   - Specific technique modifications for this patient's anatomy
+4. **Backup Plan** (Alternative techniques if primary fails)
 
-4. **Backup Plans (ASA Difficult Airway Algorithm 2022)**:
-   - Plan A: Primary intubation approach
-   - Plan B: Alternative intubation technique if Plan A fails
-   - Plan C: Supraglottic airway rescue (specific device and size)
-   - Plan D: Emergency front-of-neck access preparation (cricothyrotomy kit location)
-   - Decision point: When to awaken patient vs proceed with emergency pathway
+5. **Rescue Strategies** (Cannot intubate, cannot ventilate scenario)
 
-5. **Case-Specific Considerations**:
-   - Special considerations for {case_type} case
-   - Management of {', '.join(risk_factors) if risk_factors else 'patient-specific factors'}
-   - Postoperative extubation planning
-   - Communication plan with surgical team
+6. **Special Considerations** (Patient-specific factors from risk factors list)
 
 CRITICAL FORMATTING REQUIREMENTS:
 
-**START YOUR ASSESSMENT WITH A VISUAL RISK DASHBOARD**:
-Begin with this exact HTML structure to create the visual risk dashboard:
+1. Use this EXACT HTML structure for output:
 
 <div class="risk-dashboard">
-    <div class="risk-metric-card [high|moderate|low]">
-        <div class="risk-metric-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-            </svg>
-        </div>
-        <div class="risk-metric-label">Overall Risk</div>
-        <div class="risk-metric-value">[High|Mod|Low]</div>
-        <div class="risk-metric-text">[Risk Category]</div>
+    <div class="risk-card {risk_level_class}">
+        <div class="risk-card-label">Overall Risk</div>
+        <div class="risk-card-value">{risk_category}</div>
+        <div class="risk-card-description">Difficult Intubation</div>
     </div>
-    <div class="risk-metric-card [high|moderate|low]">
-        <div class="risk-metric-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-        </div>
-        <div class="risk-metric-label">Risk Score</div>
-        <div class="risk-metric-value">[Score]/7</div>
-        <div class="risk-metric-text">[X] predictors</div>
+    <div class="risk-card {risk_level_class}">
+        <div class="risk-card-label">Predicted CL Grade</div>
+        <div class="risk-card-value">Grade {predicted_cl_grade}</div>
+        <div class="risk-card-description">{cl_description}</div>
     </div>
-    <div class="risk-metric-card [high|moderate|low]">
-        <div class="risk-metric-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 24px; height: 24px;">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-            </svg>
-        </div>
-        <div class="risk-metric-label">Cormack-Lehane</div>
-        <div class="risk-metric-value">Grade [1-4]</div>
-        <div class="risk-metric-text">Predicted view</div>
+    <div class="risk-card {risk_level_class}">
+        <div class="risk-card-label">Risk Score</div>
+        <div class="risk-card-value">{risk_score:.1f}/10</div>
+        <div class="risk-card-description">Evidence-based</div>
     </div>
 </div>
 
-**After the risk dashboard, add Cormack-Lehane anatomical visualization**:
+2. Then create visualization card with DALL-E image (if generated):
 
-<div class="anatomy-visualization">
-    <div class="anatomy-header">
-        <div class="anatomy-title">Predicted Laryngoscopic View</div>
-    </div>
-    <div class="anatomy-grid">
-        <div class="anatomy-card">
-            <div class="anatomy-card-title">Estimated Cormack-Lehane Grade</div>
-            <div class="anatomy-svg-container">
-                [Insert the appropriate SVG based on predicted grade - see SVG templates below]
-            </div>
-            <div class="grade-indicator grade-[1|2|3|4]">Grade [X]</div>
-            <div class="anatomy-card-description">[Description of what will be visible: e.g., "Full glottis view expected" or "Only epiglottis visible, difficult intubation predicted"]</div>
-            <div class="difficulty-badge difficulty-[easy|moderate|difficult|very-difficult]">[Intubation difficulty level]</div>
-        </div>
-    </div>
+{dalle_html}
+
+3. Then create management sections using this structure:
+
+<div class="management-section">
+<h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path></svg>Risk Stratification Summary</h3>
+<p>[Your 2-3 sentence summary with citations like [1][2]]</p>
 </div>
 
-**SVG TEMPLATES FOR CORMACK-LEHANE GRADES** (anatomically realistic with proper shading and depth):
+<div class="management-section">
+<h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7h-9M14 17H5M17 12L12 7l-5 5"></path></svg>Equipment Preparation</h3>
+<ul>
+<li>Item 1 [cite if relevant]</li>
+<li>Item 2</li>
+</ul>
+</div>
 
-GRADE 1 SVG (Full glottis view - EASY):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-1" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <radialGradient id="g1-pharynx" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#FDE4E4;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#F8BBD0;stop-opacity:1" />
-        </radialGradient>
-        <linearGradient id="g1-cords" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
-            <stop offset="50%" style="stop-color:#F0F0F0;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#D0D0D0;stop-opacity:1" />
-        </linearGradient>
-        <radialGradient id="g1-epiglottis" cx="50%" cy="30%">
-            <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:0.7" />
-            <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:0.9" />
-        </radialGradient>
-    </defs>
-    <!-- Pharyngeal wall -->
-    <circle cx="150" cy="150" r="140" fill="url(#g1-pharynx)" stroke="#E91E63" stroke-width="4"/>
-    <!-- Soft tissue folds -->
-    <ellipse cx="150" cy="80" rx="100" ry="25" fill="#FFCDD2" opacity="0.6"/>
-    <ellipse cx="150" cy="220" rx="100" ry="25" fill="#FFCDD2" opacity="0.6"/>
-    <!-- Epiglottis (minimal, pushed up) -->
-    <ellipse cx="150" cy="90" rx="40" ry="12" fill="url(#g1-epiglottis)" stroke="#FF6F00" stroke-width="2" opacity="0.5"/>
-    <!-- Glottic opening (dark) -->
-    <ellipse cx="150" cy="150" rx="45" ry="70" fill="#424242"/>
-    <!-- Vocal cords (white, clearly visible) -->
-    <ellipse cx="130" cy="150" rx="8" ry="60" fill="url(#g1-cords)" stroke="#90A4AE" stroke-width="2"/>
-    <ellipse cx="170" cy="150" rx="8" ry="60" fill="url(#g1-cords)" stroke="#90A4AE" stroke-width="2"/>
-    <!-- Arytenoids (posterior structures) -->
-    <ellipse cx="130" cy="190" rx="10" ry="12" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
-    <ellipse cx="170" cy="190" rx="10" ry="12" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
-    <!-- Label -->
-    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#059669" font-weight="700" letter-spacing="0.5">FULL GLOTTIC VIEW</text>
-</svg>
+[Continue for all sections...]
 
-GRADE 2 SVG (Partial glottis - MODERATE):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-2" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <radialGradient id="g2-pharynx" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#FFE4E1;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FFCDD2;stop-opacity:1" />
-        </radialGradient>
-        <linearGradient id="g2-cords" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:#F5F5F5;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#BDBDBD;stop-opacity:0.7" />
-        </linearGradient>
-        <radialGradient id="g2-epiglottis" cx="50%" cy="30%">
-            <stop offset="0%" style="stop-color:#FFE0B2;stop-opacity:0.9" />
-            <stop offset="100%" style="stop-color:#FFAB91;stop-opacity:1" />
-        </radialGradient>
-    </defs>
-    <!-- Pharyngeal wall -->
-    <circle cx="150" cy="150" r="140" fill="url(#g2-pharynx)" stroke="#D32F2F" stroke-width="4"/>
-    <!-- Soft tissue folds (more prominent) -->
-    <ellipse cx="150" cy="75" rx="110" ry="30" fill="#FFCDD2" opacity="0.7"/>
-    <ellipse cx="150" cy="225" rx="110" ry="30" fill="#FFCDD2" opacity="0.7"/>
-    <!-- Epiglottis (more visible, lower) -->
-    <ellipse cx="150" cy="105" rx="55" ry="20" fill="url(#g2-epiglottis)" stroke="#FF6F00" stroke-width="2" opacity="0.8"/>
-    <!-- Glottic opening (partially obscured) -->
-    <ellipse cx="150" cy="165" rx="40" ry="55" fill="#424242"/>
-    <!-- Vocal cords (partially visible - posterior only) -->
-    <ellipse cx="130" cy="175" rx="7" ry="45" fill="url(#g2-cords)" stroke="#90A4AE" stroke-width="2" opacity="0.7"/>
-    <ellipse cx="170" cy="175" rx="7" ry="45" fill="url(#g2-cords)" stroke="#90A4AE" stroke-width="2" opacity="0.7"/>
-    <!-- Arytenoids (clearly visible) -->
-    <ellipse cx="130" cy="200" rx="12" ry="14" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
-    <ellipse cx="170" cy="200" rx="12" ry="14" fill="#FFAB91" stroke="#FF6F00" stroke-width="2"/>
-    <!-- Label -->
-    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#D97706" font-weight="700" letter-spacing="0.5">PARTIAL GLOTTIC VIEW</text>
-</svg>
+CITATION RULES:
+- Cite specific recommendations with [1], [2], etc.
+- Use evidence to support all key decisions
+- Reference ASA Difficult Airway Algorithm when relevant
 
-GRADE 3 SVG (Only epiglottis - DIFFICULT):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-3" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <radialGradient id="g3-pharynx" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#FFEBEE;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FFCDD2;stop-opacity:1" />
-        </radialGradient>
-        <radialGradient id="g3-epiglottis" cx="50%" cy="30%">
-            <stop offset="0%" style="stop-color:#FFCC80;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FF8A65;stop-opacity:1" />
-        </radialGradient>
-    </defs>
-    <!-- Pharyngeal wall -->
-    <circle cx="150" cy="150" r="140" fill="url(#g3-pharynx)" stroke="#C62828" stroke-width="4"/>
-    <!-- Prominent soft tissue folds -->
-    <ellipse cx="150" cy="70" rx="120" ry="35" fill="#FFCDD2" opacity="0.8"/>
-    <ellipse cx="150" cy="230" rx="120" ry="35" fill="#FFCDD2" opacity="0.8"/>
-    <!-- Epiglottis (DOMINANT - obscuring everything) -->
-    <ellipse cx="150" cy="125" rx="75" ry="45" fill="url(#g3-epiglottis)" stroke="#E65100" stroke-width="3"/>
-    <ellipse cx="150" cy="115" rx="60" ry="30" fill="#FFAB91" opacity="0.6"/>
-    <!-- No visible glottis - completely obscured -->
-    <ellipse cx="150" cy="180" rx="30" ry="40" fill="#616161" opacity="0.3"/>
-    <!-- Tissue shadowing -->
-    <ellipse cx="150" cy="140" rx="50" ry="20" fill="#FF6F00" opacity="0.3"/>
-    <!-- Label -->
-    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#EA580C" font-weight="700" letter-spacing="0.5">EPIGLOTTIS ONLY</text>
-</svg>
-
-GRADE 4 SVG (No glottic structures - VERY DIFFICULT):
-<svg viewBox="0 0 300 300" class="cl-larynx-view cl-view-grade-4" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <radialGradient id="g4-pharynx" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#FFEBEE;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#EF9A9A;stop-opacity:1" />
-        </radialGradient>
-        <radialGradient id="g4-tissue" cx="50%" cy="50%">
-            <stop offset="0%" style="stop-color:#FFCCBC;stop-opacity:1" />
-            <stop offset="100%" style="stop-color:#FF8A80;stop-opacity:1" />
-        </radialGradient>
-    </defs>
-    <!-- Pharyngeal wall (more irregular) -->
-    <circle cx="150" cy="150" r="140" fill="url(#g4-pharynx)" stroke="#B71C1C" stroke-width="4"/>
-    <!-- Dense soft tissue masses -->
-    <ellipse cx="150" cy="65" rx="125" ry="40" fill="#EF5350" opacity="0.7"/>
-    <ellipse cx="150" cy="235" rx="125" ry="40" fill="#EF5350" opacity="0.7"/>
-    <ellipse cx="80" cy="150" rx="35" ry="80" fill="#F44336" opacity="0.6"/>
-    <ellipse cx="220" cy="150" rx="35" ry="80" fill="#F44336" opacity="0.6"/>
-    <!-- Central soft tissue mass (no structures visible) -->
-    <ellipse cx="150" cy="150" rx="85" ry="70" fill="url(#g4-tissue)" stroke="#C62828" stroke-width="3"/>
-    <ellipse cx="150" cy="140" rx="70" ry="55" fill="#FF7043" opacity="0.5"/>
-    <ellipse cx="150" cy="150" rx="55" ry="45" fill="#D84315" opacity="0.4"/>
-    <!-- Additional tissue shadowing -->
-    <ellipse cx="150" cy="160" rx="40" ry="30" fill="#BF360C" opacity="0.3"/>
-    <!-- Label -->
-    <text x="150" y="275" text-anchor="middle" font-size="13" fill="#991B1B" font-weight="700" letter-spacing="0.5">NO GLOTTIC STRUCTURES</text>
-</svg>
-
-**Then continue with standard HTML formatting**:
-- <h3>Section Headers</h3> - Main sections with automatic blue arrow icons
-- <h4>Subsection Headers</h4> - For sub-topics
-- <p>Paragraphs</p> - Normal text
-- <strong>Key Terms</strong> - Highlighted with blue background
-- <ul><li>Bulleted lists</li></ul> - Simple disc bullets (NO checkmarks, NO icons)
-- <span class="risk-high">High Risk</span>, <span class="risk-moderate">Moderate Risk</span>, <span class="risk-low">Low Risk</span> - Color-coded risk badges
-
-CRITICAL REQUIREMENTS:
-1. **MUST START** with the risk dashboard, then anatomical visualization, THEN continue with text sections
-2. **SELECT THE CORRECT SVG** for predicted Cormack-Lehane grade based on patient anatomy:
-   - Mallampati I-II + TM distance >6.5cm + Good mouth opening = Grade 1 (FULL GLOTTIC VIEW - easy)
-   - Mallampati III + TM distance 6-6.5cm = Grade 2 (PARTIAL GLOTTIC VIEW - moderate)
-   - Mallampati IV + TM distance <6cm OR limited neck extension = Grade 3 (EPIGLOTTIS ONLY - difficult)
-   - Multiple severe predictors (Mallampati IV + TM <6cm + mouth opening <3cm) = Grade 4 (NO GLOTTIC STRUCTURES - very difficult)
-3. **COPY THE EXACT SVG CODE** from the templates above - do NOT modify the SVG paths, gradients, or colors
-4. Use inline citations [1], [2], [3] throughout to reference papers
-5. DO NOT create a "References" section - displayed separately
-6. Use <strong> for drug names, equipment, critical decisions
-7. **Output ONLY HTML** - NO "```html" code fences, NO preambles, start directly with <div class="risk-dashboard">
-8. **NO CHECKMARKS IN LISTS** - use standard HTML <ul><li> with disc bullets only
-
-Provide maximum clinical utility with specific, actionable recommendations backed by evidence. This assessment should be directly usable for safe airway management planning."""
+Output ONLY the HTML. No markdown code fences, no extra text.
+"""
 
     try:
-        response = openai_client.chat.completions.create(
+        response_gpt = openai_client.chat.completions.create(
             model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": gpt_prompt}],
             temperature=0.1
-        ).choices[0].message.content
-        # Clean markdown code fences and extra whitespace
-        response = strip_markdown_code_fences(response)
+        )
+        summary = response_gpt.choices[0].message.content.strip()
+        summary = strip_markdown_code_fences(summary)
     except Exception as e:
-        response = f"<p>Error generating assessment: {str(e)}</p>"
+        logger.error(f"GPT-4o synthesis error: {str(e)}")
+        summary = f"<p>Error generating assessment: {str(e)}</p>"
 
-    return render_template_string(DIFFICULT_AIRWAY_HTML, summary=response, references=unique_refs)
+    # Return results
+    return render_template_string(DIFFICULT_AIRWAY_HTML, summary=summary, references=all_refs)
 
 @app.route("/hypotension", methods=["GET", "POST"])
 def hypotension_predictor():
