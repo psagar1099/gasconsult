@@ -28520,29 +28520,10 @@ def difficult_airway_assessment():
         # ==================================================================
         # GENERATE DALL-E IMAGE - Predicted Cormack-Lehane View
         # ==================================================================
+        # TEMPORARILY DISABLED: DALL-E takes 30+ seconds and causes worker timeout
+        # TODO: Implement async DALL-E generation or increase worker timeout
         dalle_image_url = None
-        try:
-            # Construct anatomically precise DALL-E prompt
-            dalle_prompts = {
-                1: "Medical illustration: Cormack-Lehane Grade 1 laryngoscopy view. Crystal clear anatomical visualization showing full visibility of vocal cords with symmetric white glistening appearance, arytenoid cartilages clearly visible, glottic opening widely patent. Pink pharyngeal walls surrounding. Professional medical textbook quality, realistic tissue colors (pink mucosa, white vocal cords), sharp focus, superior perspective from videolaryngoscope. Hyperrealistic 3D medical rendering.",
-                2: "Medical illustration: Cormack-Lehane Grade 2 laryngoscopy view. Anatomical visualization showing partial view of glottic opening with only posterior portion of vocal cords visible, anterior commissure obscured. Arytenoid cartilages prominent. Pink pharyngeal tissue, partially restricted view. Professional medical textbook quality, realistic tissue colors, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing moderate difficulty.",
-                3: "Medical illustration: Cormack-Lehane Grade 3 laryngoscopy view. Anatomical visualization showing only epiglottis visible, no glottic structures seen. Curved epiglottis covering glottic opening completely. Pink-red pharyngeal walls, very restricted view suggesting anterior larynx. Professional medical textbook quality, realistic tissue colors, difficult intubation scenario, videolaryngoscope perspective. Hyperrealistic 3D medical rendering.",
-                4: "Medical illustration: Cormack-Lehane Grade 4 laryngoscopy view. Anatomical visualization showing complete obstruction with only soft palate and pharyngeal walls visible, no epiglottis or glottic structures identifiable. Deep pink-red tissue, severely restricted view indicating very difficult airway anatomy. Professional medical textbook quality, realistic tissue colors, extreme anterior larynx, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing very difficult intubation."
-            }
-
-            response_dalle = openai_client.images.generate(
-                model="dall-e-3",
-                prompt=dalle_prompts[predicted_cl_grade],
-                size="1024x1024",
-                quality="hd",
-                n=1,
-            )
-            dalle_image_url = response_dalle.data[0].url
-            logger.info(f"DALL-E image generated successfully for CL Grade {predicted_cl_grade}")
-        except Exception as e:
-            logger.error(f"DALL-E generation error: {str(e)}")
-            # Fallback: Use placeholder or skip image
-            dalle_image_url = None
+        logger.info(f"DALL-E image generation skipped (timeout prevention) for CL Grade {predicted_cl_grade}")
 
         # ==================================================================
         # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
