@@ -28518,12 +28518,13 @@ def difficult_airway_assessment():
             cl_description = "Grade 1: Full glottic view - EASY"
 
         # ==================================================================
-        # CORMACK-LEHANE IMAGE - Standardized Static Illustrations
+        # CORMACK-LEHANE IMAGE - DALL-E Generated Static Images
         # ==================================================================
-        # Use pre-generated anatomically accurate SVG illustrations
-        # These are standardized medical illustrations for each CL grade
-        dalle_image_url = f"/static/cormack-lehane-grade-{predicted_cl_grade}.svg"
-        logger.info(f"Using static Cormack-Lehane Grade {predicted_cl_grade} illustration")
+        # Use pre-generated DALL-E hyperrealistic medical endoscopy images
+        # These are real AI-generated photographs saved as static PNG files
+        # Generated once using DALL-E-3 HD quality, then saved for instant loading
+        dalle_image_url = f"/static/cormack-lehane-grade-{predicted_cl_grade}.png"
+        logger.info(f"Using DALL-E generated Cormack-Lehane Grade {predicted_cl_grade} image")
 
         # ==================================================================
         # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
