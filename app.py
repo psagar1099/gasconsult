@@ -28426,206 +28426,208 @@ def difficult_airway_assessment():
         response.headers['Expires'] = '0'
         return response
 
-    # Collect and sanitize form data
-    age = int(request.form.get("age", 0))
-    bmi = float(request.form.get("bmi", 0))
-    mallampati = sanitize_user_query(request.form.get("mallampati", ""))
-    thyromental = sanitize_user_query(request.form.get("thyromental", ""))
-    mouth_opening = sanitize_user_query(request.form.get("mouth_opening", ""))
-    neck_extension = sanitize_user_query(request.form.get("neck_extension", ""))
-    risk_factors = request.form.getlist("risk_factors")
-    procedure = sanitize_user_query(request.form.get("procedure", ""))
-    case_type = sanitize_user_query(request.form.get("case_type", ""))
-    additional_notes = sanitize_user_query(request.form.get("additional_notes", ""))
-
-    # Validate required fields
-    if not procedure or not procedure.strip():
-        error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the planned procedure.</p>"
-        return render_template_string(DIFFICULT_AIRWAY_HTML, summary=error_message, references=None)
-
-    # ==================================================================
-    # CALCULATE RISK SCORE - Evidence-based predictors
-    # ==================================================================
-    risk_score = 0
-    risk_factors_list = []
-
-    # Mallampati III-IV (Odds ratio: 3.0-5.0)
-    if mallampati in ["III", "IV"]:
-        risk_score += 2
-        risk_factors_list.append(f"Mallampati Class {mallampati}")
-
-    # Thyromental distance <6cm (Strong predictor)
-    if thyromental == "<6cm":
-        risk_score += 2
-        risk_factors_list.append("Thyromental distance <6 cm")
-
-    # Mouth opening <3cm (Critical predictor)
-    if mouth_opening == "<3cm":
-        risk_score += 2
-        risk_factors_list.append("Limited mouth opening <3 cm")
-
-    # Limited neck extension (Strong predictor)
-    if neck_extension == "Limited":
-        risk_score += 2
-        risk_factors_list.append("Severely limited neck extension")
-    elif neck_extension == "Moderate":
-        risk_score += 1
-        risk_factors_list.append("Moderately limited neck extension")
-
-    # High BMI >35 (Obesity effect)
-    if bmi > 35:
-        risk_score += 1
-        risk_factors_list.append(f"Obesity (BMI {bmi:.1f} kg/m²)")
-
-    # Previous difficult intubation (Strongest single predictor)
-    if "Previous Difficult Intubation" in risk_factors:
-        risk_score += 3
-        risk_factors_list.append("Previous difficult intubation")
-
-    # OSA (Independent predictor)
-    if "OSA" in risk_factors:
-        risk_score += 1
-        risk_factors_list.append("Obstructive sleep apnea")
-
-    # Other anatomical factors
-    for factor in ["Beard", "Prominent Incisors", "Short Neck", "Large Tongue", "Facial Trauma", "C-Spine Pathology"]:
-        if factor in risk_factors:
-            risk_score += 0.5
-            risk_factors_list.append(factor.lower())
-
-    # Determine risk category and predicted Cormack-Lehane grade
-    if risk_score >= 6:
-        risk_category = "High"
-        risk_level_class = "high"
-        predicted_cl_grade = 4
-        cl_description = "Grade 4: No glottic structures visible - VERY DIFFICULT"
-    elif risk_score >= 4:
-        risk_category = "Moderate-High"
-        risk_level_class = "moderate"
-        predicted_cl_grade = 3
-        cl_description = "Grade 3: Only epiglottis visible - DIFFICULT"
-    elif risk_score >= 2:
-        risk_category = "Moderate"
-        risk_level_class = "moderate"
-        predicted_cl_grade = 2
-        cl_description = "Grade 2b: Partial glottis visible - MODERATE"
-    else:
-        risk_category = "Low"
-        risk_level_class = "low"
-        predicted_cl_grade = 1
-        cl_description = "Grade 1: Full glottic view - EASY"
-
-    # ==================================================================
-    # GENERATE DALL-E IMAGE - Predicted Cormack-Lehane View
-    # ==================================================================
-    dalle_image_url = None
+    # Wrap entire POST request in try-except for comprehensive error handling
     try:
-        # Construct anatomically precise DALL-E prompt
-        dalle_prompts = {
-            1: "Medical illustration: Cormack-Lehane Grade 1 laryngoscopy view. Crystal clear anatomical visualization showing full visibility of vocal cords with symmetric white glistening appearance, arytenoid cartilages clearly visible, glottic opening widely patent. Pink pharyngeal walls surrounding. Professional medical textbook quality, realistic tissue colors (pink mucosa, white vocal cords), sharp focus, superior perspective from videolaryngoscope. Hyperrealistic 3D medical rendering.",
-            2: "Medical illustration: Cormack-Lehane Grade 2 laryngoscopy view. Anatomical visualization showing partial view of glottic opening with only posterior portion of vocal cords visible, anterior commissure obscured. Arytenoid cartilages prominent. Pink pharyngeal tissue, partially restricted view. Professional medical textbook quality, realistic tissue colors, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing moderate difficulty.",
-            3: "Medical illustration: Cormack-Lehane Grade 3 laryngoscopy view. Anatomical visualization showing only epiglottis visible, no glottic structures seen. Curved epiglottis covering glottic opening completely. Pink-red pharyngeal walls, very restricted view suggesting anterior larynx. Professional medical textbook quality, realistic tissue colors, difficult intubation scenario, videolaryngoscope perspective. Hyperrealistic 3D medical rendering.",
-            4: "Medical illustration: Cormack-Lehane Grade 4 laryngoscopy view. Anatomical visualization showing complete obstruction with only soft palate and pharyngeal walls visible, no epiglottis or glottic structures identifiable. Deep pink-red tissue, severely restricted view indicating very difficult airway anatomy. Professional medical textbook quality, realistic tissue colors, extreme anterior larynx, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing very difficult intubation."
-        }
+        # Collect and sanitize form data
+        age = int(request.form.get("age", 0))
+        bmi = float(request.form.get("bmi", 0))
+        mallampati = sanitize_user_query(request.form.get("mallampati", ""))
+        thyromental = sanitize_user_query(request.form.get("thyromental", ""))
+        mouth_opening = sanitize_user_query(request.form.get("mouth_opening", ""))
+        neck_extension = sanitize_user_query(request.form.get("neck_extension", ""))
+        risk_factors = request.form.getlist("risk_factors")
+        procedure = sanitize_user_query(request.form.get("procedure", ""))
+        case_type = sanitize_user_query(request.form.get("case_type", ""))
+        additional_notes = sanitize_user_query(request.form.get("additional_notes", ""))
 
-        response_dalle = openai_client.images.generate(
-            model="dall-e-3",
-            prompt=dalle_prompts[predicted_cl_grade],
-            size="1024x1024",
-            quality="hd",
-            n=1,
-        )
-        dalle_image_url = response_dalle.data[0].url
-        logger.info(f"DALL-E image generated successfully for CL Grade {predicted_cl_grade}")
-    except Exception as e:
-        logger.error(f"DALL-E generation error: {str(e)}")
-        # Fallback: Use placeholder or skip image
+        # Validate required fields
+        if not procedure or not procedure.strip():
+            error_message = "<p style='color: #ff6b6b; text-align: center; padding: 20px;'><strong>Error:</strong> Please specify the planned procedure.</p>"
+            return render_template_string(DIFFICULT_AIRWAY_HTML, summary=error_message, references=None)
+
+        # ==================================================================
+        # CALCULATE RISK SCORE - Evidence-based predictors
+        # ==================================================================
+        risk_score = 0
+        risk_factors_list = []
+
+        # Mallampati III-IV (Odds ratio: 3.0-5.0)
+        if mallampati in ["III", "IV"]:
+            risk_score += 2
+            risk_factors_list.append(f"Mallampati Class {mallampati}")
+
+        # Thyromental distance <6cm (Strong predictor)
+        if thyromental == "<6cm":
+            risk_score += 2
+            risk_factors_list.append("Thyromental distance <6 cm")
+
+        # Mouth opening <3cm (Critical predictor)
+        if mouth_opening == "<3cm":
+            risk_score += 2
+            risk_factors_list.append("Limited mouth opening <3 cm")
+
+        # Limited neck extension (Strong predictor)
+        if neck_extension == "Limited":
+            risk_score += 2
+            risk_factors_list.append("Severely limited neck extension")
+        elif neck_extension == "Moderate":
+            risk_score += 1
+            risk_factors_list.append("Moderately limited neck extension")
+
+        # High BMI >35 (Obesity effect)
+        if bmi > 35:
+            risk_score += 1
+            risk_factors_list.append(f"Obesity (BMI {bmi:.1f} kg/m²)")
+
+        # Previous difficult intubation (Strongest single predictor)
+        if "Previous Difficult Intubation" in risk_factors:
+            risk_score += 3
+            risk_factors_list.append("Previous difficult intubation")
+
+        # OSA (Independent predictor)
+        if "OSA" in risk_factors:
+            risk_score += 1
+            risk_factors_list.append("Obstructive sleep apnea")
+
+        # Other anatomical factors
+        for factor in ["Beard", "Prominent Incisors", "Short Neck", "Large Tongue", "Facial Trauma", "C-Spine Pathology"]:
+            if factor in risk_factors:
+                risk_score += 0.5
+                risk_factors_list.append(factor.lower())
+
+        # Determine risk category and predicted Cormack-Lehane grade
+        if risk_score >= 6:
+            risk_category = "High"
+            risk_level_class = "high"
+            predicted_cl_grade = 4
+            cl_description = "Grade 4: No glottic structures visible - VERY DIFFICULT"
+        elif risk_score >= 4:
+            risk_category = "Moderate-High"
+            risk_level_class = "moderate"
+            predicted_cl_grade = 3
+            cl_description = "Grade 3: Only epiglottis visible - DIFFICULT"
+        elif risk_score >= 2:
+            risk_category = "Moderate"
+            risk_level_class = "moderate"
+            predicted_cl_grade = 2
+            cl_description = "Grade 2b: Partial glottis visible - MODERATE"
+        else:
+            risk_category = "Low"
+            risk_level_class = "low"
+            predicted_cl_grade = 1
+            cl_description = "Grade 1: Full glottic view - EASY"
+
+        # ==================================================================
+        # GENERATE DALL-E IMAGE - Predicted Cormack-Lehane View
+        # ==================================================================
         dalle_image_url = None
-
-    # ==================================================================
-    # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
-    # ==================================================================
-    search_queries = []
-
-    # Primary airway management guidelines
-    search_queries.append("difficult airway management guidelines anesthesia ASA")
-
-    # Risk-specific searches
-    if risk_category in ["High", "Moderate-High"]:
-        search_queries.append("awake fiberoptic intubation indications technique")
-        search_queries.append("video laryngoscopy difficult airway glidescope")
-
-    if "OSA" in risk_factors:
-        search_queries.append("obstructive sleep apnea difficult airway perioperative")
-
-    if bmi > 35:
-        search_queries.append("obese patient airway management positioning ramping")
-
-    if case_type == "Emergency":
-        search_queries.append("emergency difficult airway management rapid sequence")
-
-    if "Previous Difficult Intubation" in risk_factors:
-        search_queries.append("previous difficult intubation management plan")
-
-    # Search PubMed and collect evidence
-    all_refs = []
-    all_context = ""
-
-    for query in search_queries[:5]:  # Limit to 5 searches
         try:
-            q_expanded = query.replace(" ", " AND ")
-            search_term = (
-                f'({q_expanded}) AND '
-                f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
-                f'"randomized controlled trial"[pt]) AND '
-                f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+            # Construct anatomically precise DALL-E prompt
+            dalle_prompts = {
+                1: "Medical illustration: Cormack-Lehane Grade 1 laryngoscopy view. Crystal clear anatomical visualization showing full visibility of vocal cords with symmetric white glistening appearance, arytenoid cartilages clearly visible, glottic opening widely patent. Pink pharyngeal walls surrounding. Professional medical textbook quality, realistic tissue colors (pink mucosa, white vocal cords), sharp focus, superior perspective from videolaryngoscope. Hyperrealistic 3D medical rendering.",
+                2: "Medical illustration: Cormack-Lehane Grade 2 laryngoscopy view. Anatomical visualization showing partial view of glottic opening with only posterior portion of vocal cords visible, anterior commissure obscured. Arytenoid cartilages prominent. Pink pharyngeal tissue, partially restricted view. Professional medical textbook quality, realistic tissue colors, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing moderate difficulty.",
+                3: "Medical illustration: Cormack-Lehane Grade 3 laryngoscopy view. Anatomical visualization showing only epiglottis visible, no glottic structures seen. Curved epiglottis covering glottic opening completely. Pink-red pharyngeal walls, very restricted view suggesting anterior larynx. Professional medical textbook quality, realistic tissue colors, difficult intubation scenario, videolaryngoscope perspective. Hyperrealistic 3D medical rendering.",
+                4: "Medical illustration: Cormack-Lehane Grade 4 laryngoscopy view. Anatomical visualization showing complete obstruction with only soft palate and pharyngeal walls visible, no epiglottis or glottic structures identifiable. Deep pink-red tissue, severely restricted view indicating very difficult airway anatomy. Professional medical textbook quality, realistic tissue colors, extreme anterior larynx, videolaryngoscope perspective. Hyperrealistic 3D medical rendering showing very difficult intubation."
+            }
+
+            response_dalle = openai_client.images.generate(
+                model="dall-e-3",
+                prompt=dalle_prompts[predicted_cl_grade],
+                size="1024x1024",
+                quality="hd",
+                n=1,
             )
-
-            handle = Entrez.esearch(db="pubmed", term=search_term, retmax=4, sort="relevance")
-            result = Entrez.read(handle)
-            ids = result["IdList"]
-
-            if ids:
-                handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
-                papers = Entrez.read(handle)["PubmedArticle"]
-
-                for p in papers:
-                    try:
-                        art = p["MedlineCitation"]["Article"]
-                        title = str(art.get("ArticleTitle", "No title"))
-                        abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
-                        authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
-                        journal = str(art["Journal"].get("Title", "Unknown"))
-                        year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
-                        pmid = str(p["MedlineCitation"]["PMID"])
-
-                        if {"pmid": pmid} not in [{"pmid": r["pmid"]} for r in all_refs]:
-                            all_refs.append({
-                                "title": title,
-                                "authors": authors,
-                                "journal": journal,
-                                "year": year,
-                                "pmid": pmid
-                            })
-
-                            all_context += f"\n\n[PMID {pmid}] {title}\n{abstract[:800]}"
-
-                    except Exception as e:
-                        logger.error(f"Error parsing paper: {str(e)}")
-                        continue
-
+            dalle_image_url = response_dalle.data[0].url
+            logger.info(f"DALL-E image generated successfully for CL Grade {predicted_cl_grade}")
         except Exception as e:
-            logger.error(f"PubMed search error for '{query}': {str(e)}")
-            continue
+            logger.error(f"DALL-E generation error: {str(e)}")
+            # Fallback: Use placeholder or skip image
+            dalle_image_url = None
 
-    # ==================================================================
-    # GPT-4o SYNTHESIS - Generate Management Plan
-    # ==================================================================
+        # ==================================================================
+        # PUBMED EVIDENCE SEARCH - Targeted searches based on risk profile
+        # ==================================================================
+        search_queries = []
 
-    # Build DALL-E visualization HTML if image was generated
-    dalle_html = ""
-    if dalle_image_url:
-        dalle_html = f'''<div class="visualization-card">
+        # Primary airway management guidelines
+        search_queries.append("difficult airway management guidelines anesthesia ASA")
+
+        # Risk-specific searches
+        if risk_category in ["High", "Moderate-High"]:
+            search_queries.append("awake fiberoptic intubation indications technique")
+            search_queries.append("video laryngoscopy difficult airway glidescope")
+
+        if "OSA" in risk_factors:
+            search_queries.append("obstructive sleep apnea difficult airway perioperative")
+
+        if bmi > 35:
+            search_queries.append("obese patient airway management positioning ramping")
+
+        if case_type == "Emergency":
+            search_queries.append("emergency difficult airway management rapid sequence")
+
+        if "Previous Difficult Intubation" in risk_factors:
+            search_queries.append("previous difficult intubation management plan")
+
+        # Search PubMed and collect evidence
+        all_refs = []
+        all_context = ""
+
+        for query in search_queries[:5]:  # Limit to 5 searches
+            try:
+                q_expanded = query.replace(" ", " AND ")
+                search_term = (
+                    f'({q_expanded}) AND '
+                    f'(systematic review[pt] OR meta-analysis[pt] OR guideline[pt] OR '
+                    f'"randomized controlled trial"[pt]) AND '
+                    f'("2015/01/01"[PDAT] : "3000"[PDAT])'
+                )
+
+                handle = Entrez.esearch(db="pubmed", term=search_term, retmax=4, sort="relevance")
+                result = Entrez.read(handle)
+                ids = result["IdList"]
+
+                if ids:
+                    handle = Entrez.efetch(db="pubmed", id=",".join(ids), retmode="xml")
+                    papers = Entrez.read(handle)["PubmedArticle"]
+
+                    for p in papers:
+                        try:
+                            art = p["MedlineCitation"]["Article"]
+                            title = str(art.get("ArticleTitle", "No title"))
+                            abstract = " ".join(str(t) for t in art.get("Abstract", {}).get("AbstractText", [])) if art.get("Abstract") else ""
+                            authors = ", ".join([str(a.get("LastName","")) + " " + (str(a.get("ForeName",""))[:1]+"." if a.get("ForeName") else "") for a in art.get("AuthorList",[])[:3]])
+                            journal = str(art["Journal"].get("Title", "Unknown"))
+                            year = str(art["Journal"]["JournalIssue"]["PubDate"].get("Year", "N/A"))
+                            pmid = str(p["MedlineCitation"]["PMID"])
+
+                            if {"pmid": pmid} not in [{"pmid": r["pmid"]} for r in all_refs]:
+                                all_refs.append({
+                                    "title": title,
+                                    "authors": authors,
+                                    "journal": journal,
+                                    "year": year,
+                                    "pmid": pmid
+                                })
+
+                                all_context += f"\n\n[PMID {pmid}] {title}\n{abstract[:800]}"
+
+                        except Exception as e:
+                            logger.error(f"Error parsing paper: {str(e)}")
+                            continue
+
+            except Exception as e:
+                logger.error(f"PubMed search error for '{query}': {str(e)}")
+                continue
+
+        # ==================================================================
+        # GPT-4o SYNTHESIS - Generate Management Plan
+        # ==================================================================
+
+        # Build DALL-E visualization HTML if image was generated
+        dalle_html = ""
+        if dalle_image_url:
+            dalle_html = f'''<div class="visualization-card">
 <div class="visualization-header">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 <circle cx="12" cy="12" r="10"></circle>
@@ -28642,7 +28644,7 @@ This AI-generated visualization represents the predicted laryngeal view during d
 </div>
 </div>'''
 
-    patient_summary = f"""
+        patient_summary = f"""
 PATIENT: {age}yo, BMI {bmi}, {case_type.lower()} {procedure}
 AIRWAY EXAM: Mallampati {mallampati}, Thyromental {thyromental}, Mouth opening {mouth_opening}, Neck extension {neck_extension}
 RISK FACTORS: {', '.join(risk_factors) if risk_factors else 'None'}
@@ -28653,7 +28655,7 @@ PREDICTED CORMACK-LEHANE: Grade {predicted_cl_grade}
 IDENTIFIED CONCERNS: {', '.join(risk_factors_list) if risk_factors_list else 'None'}
 """
 
-    gpt_prompt = f"""You are an expert anesthesiologist creating a difficult airway management plan.
+        gpt_prompt = f"""You are an expert anesthesiologist creating a difficult airway management plan.
 
 {patient_summary}
 
@@ -28679,21 +28681,21 @@ CRITICAL FORMATTING REQUIREMENTS:
 1. Use this EXACT HTML structure for output:
 
 <div class="risk-dashboard">
-    <div class="risk-card {risk_level_class}">
-        <div class="risk-card-label">Overall Risk</div>
-        <div class="risk-card-value">{risk_category}</div>
-        <div class="risk-card-description">Difficult Intubation</div>
-    </div>
-    <div class="risk-card {risk_level_class}">
-        <div class="risk-card-label">Predicted CL Grade</div>
-        <div class="risk-card-value">Grade {predicted_cl_grade}</div>
-        <div class="risk-card-description">{cl_description}</div>
-    </div>
-    <div class="risk-card {risk_level_class}">
-        <div class="risk-card-label">Risk Score</div>
-        <div class="risk-card-value">{risk_score:.1f}/10</div>
-        <div class="risk-card-description">Evidence-based</div>
-    </div>
+        <div class="risk-card {risk_level_class}">
+            <div class="risk-card-label">Overall Risk</div>
+            <div class="risk-card-value">{risk_category}</div>
+            <div class="risk-card-description">Difficult Intubation</div>
+        </div>
+        <div class="risk-card {risk_level_class}">
+            <div class="risk-card-label">Predicted CL Grade</div>
+            <div class="risk-card-value">Grade {predicted_cl_grade}</div>
+            <div class="risk-card-description">{cl_description}</div>
+        </div>
+        <div class="risk-card {risk_level_class}">
+            <div class="risk-card-label">Risk Score</div>
+            <div class="risk-card-value">{risk_score:.1f}/10</div>
+            <div class="risk-card-description">Evidence-based</div>
+        </div>
 </div>
 
 2. Then create visualization card with DALL-E image (if generated):
@@ -28725,20 +28727,37 @@ CITATION RULES:
 Output ONLY the HTML. No markdown code fences, no extra text.
 """
 
-    try:
-        response_gpt = openai_client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": gpt_prompt}],
-            temperature=0.1
-        )
-        summary = response_gpt.choices[0].message.content.strip()
-        summary = strip_markdown_code_fences(summary)
-    except Exception as e:
-        logger.error(f"GPT-4o synthesis error: {str(e)}")
-        summary = f"<p>Error generating assessment: {str(e)}</p>"
+        try:
+            response_gpt = openai_client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": gpt_prompt}],
+                temperature=0.1
+            )
+            summary = response_gpt.choices[0].message.content.strip()
+            summary = strip_markdown_code_fences(summary)
+        except Exception as e:
+            logger.error(f"GPT-4o synthesis error: {str(e)}")
+            summary = f"<p>Error generating assessment: {str(e)}</p>"
 
-    # Return results
-    return render_template_string(DIFFICULT_AIRWAY_HTML, summary=summary, references=all_refs)
+        # Return results
+        return render_template_string(DIFFICULT_AIRWAY_HTML, summary=summary, references=all_refs)
+
+    except Exception as e:
+        # Catch-all error handler for entire route
+        logger.error(f"Difficult Airway Assessment Error: {str(e)}")
+        import traceback
+        error_detail = traceback.format_exc()
+        logger.error(f"Full traceback: {error_detail}")
+        error_message = f"""
+        <div class="management-section" style="background: rgba(254, 226, 226, 0.5); border: 2px solid #EF4444;">
+            <h3 style="color: #DC2626;">Error Processing Assessment</h3>
+            <p style="margin-bottom: 16px;">An error occurred while generating your airway assessment. Please try again or contact support if the issue persists.</p>
+            <p style="font-size: 13px; color: #991B1B; font-family: monospace; background: rgba(255,255,255,0.8); padding: 12px; border-radius: 8px; word-break: break-word;">
+                <strong>Error Details:</strong><br>{str(e)}
+            </p>
+        </div>
+        """
+        return render_template_string(DIFFICULT_AIRWAY_HTML, summary=error_message, references=[])
 
 @app.route("/hypotension", methods=["GET", "POST"])
 def hypotension_predictor():
