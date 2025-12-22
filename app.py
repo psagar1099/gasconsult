@@ -9749,6 +9749,88 @@ HTML = """<!DOCTYPE html>
             }
         }
 
+        /* Follow-up Suggestions - Mobile First (Isolated Feature) */
+        .followup-container {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .followup-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .followup-title svg {
+            width: 14px;
+            height: 14px;
+            color: var(--blue-600);
+        }
+
+        .followup-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .followup-chip {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            padding: 9px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            width: 100%;
+            line-height: 1.4;
+        }
+
+        .followup-chip:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            color: var(--blue-700);
+            transform: translateX(3px);
+        }
+
+        .followup-loading {
+            font-size: 12px;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        /* Desktop enhancements */
+        @media (min-width: 768px) {
+            .followup-container {
+                margin-top: 16px;
+                padding-top: 16px;
+            }
+
+            .followup-title {
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+
+            .followup-chips {
+                gap: 8px;
+            }
+
+            .followup-chip {
+                padding: 10px 14px;
+                font-size: 14px;
+            }
+
+            .followup-loading {
+                font-size: 13px;
+            }
+        }
+
     </style>
 
     <!-- Marked.js for Markdown Parsing -->
@@ -9932,6 +10014,9 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 {% endfor %}
                             </div>
+
+                            <!-- Follow-up Suggestions (Isolated Feature) -->
+                            <div class="followup-container" data-message-index="{{ loop.index0 }}"></div>
                             {% endif %}
 
                             {% if current_user.is_authenticated %}
@@ -10763,6 +10848,102 @@ HTML = """<!DOCTYPE html>
                         clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
                     }
                 });
+            }
+        })();
+
+        // ===== ISOLATED FEATURE: Follow-up Suggestions =====
+        // Wrapped in IIFE with try/catch for safety
+        (function initFollowupSuggestions() {
+            try {
+                // Safety check: only run if containers exist
+                const containers = document.querySelectorAll('.followup-container');
+                if (!containers || containers.length === 0) {
+                    return; // Exit gracefully if no containers
+                }
+
+                // Function to load follow-up suggestions
+                async function loadFollowups(container) {
+                    if (!container) return;
+
+                    const messageIndex = container.getAttribute('data-message-index');
+                    if (messageIndex === null) return;
+
+                    // Show loading state
+                    container.innerHTML = `
+                        <div class="followup-title">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            Suggested follow-up questions
+                        </div>
+                        <div class="followup-chips">
+                            <div class="followup-loading">Loading suggestions...</div>
+                        </div>
+                    `;
+
+                    try {
+                        const response = await fetch('/generate-followups', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message_index: parseInt(messageIndex) })
+                        });
+
+                        const data = await response.json();
+
+                        if (data.success && data.followups && data.followups.length > 0) {
+                            // Build chips HTML
+                            let chipsHTML = '';
+                            data.followups.forEach(question => {
+                                const escapedQuestion = question.replace(/'/g, "\\'");
+                                chipsHTML += `<button class="followup-chip" onclick="fillFollowupQuery('${escapedQuestion}')">${question}</button>`;
+                            });
+
+                            container.innerHTML = `
+                                <div class="followup-title">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Suggested follow-up questions
+                                </div>
+                                <div class="followup-chips">${chipsHTML}</div>
+                            `;
+                        } else {
+                            // No suggestions available
+                            container.innerHTML = '';
+                        }
+                    } catch (error) {
+                        console.error('Error loading follow-ups:', error);
+                        // Hide container on error
+                        container.innerHTML = '';
+                    }
+                }
+
+                // Function to fill chat input (safe version)
+                window.fillFollowupQuery = function(question) {
+                    try {
+                        const textarea = document.getElementById('chat-query-input');
+                        if (textarea) {
+                            textarea.value = question;
+                            textarea.focus();
+                            // Auto-resize
+                            textarea.style.height = 'auto';
+                            textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
+                        }
+                    } catch (error) {
+                        console.error('Error filling query:', error);
+                    }
+                };
+
+                // Load suggestions for the last message only
+                if (containers.length > 0) {
+                    const lastContainer = containers[containers.length - 1];
+                    // Delay to not block page load
+                    setTimeout(() => loadFollowups(lastContainer), 1000);
+                }
+
+            } catch (error) {
+                // Catch any errors to prevent breaking other features
+                console.error('Follow-up suggestions feature failed:', error);
             }
         })();
     </script>
