@@ -25840,6 +25840,22 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             border-radius: 4px;
         }
 
+        /* Fix SVG sizing issues in generated content */
+        .consent-content svg {
+            max-width: 24px;
+            max-height: 24px;
+            width: 24px !important;
+            height: 24px !important;
+            flex-shrink: 0;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* Ensure consistent font inheritance */
+        .consent-content * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
         /* Risk Level Badges */
         .consent-content .risk-high,
         .consent-content .high-risk {
@@ -25953,6 +25969,9 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         .risk-metric-icon svg {
             width: 24px;
             height: 24px;
+            max-width: 24px;
+            max-height: 24px;
+            flex-shrink: 0;
         }
 
         .risk-metric-label {
@@ -26121,6 +26140,41 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             .action-buttons {
                 flex-direction: row;
                 justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .nav, .footer, .action-buttons, .mobile-menu {
+                display: none !important;
+            }
+
+            .bg-canvas, .grain {
+                display: none !important;
+            }
+
+            .main-content {
+                padding: 20px !important;
+                max-width: 100% !important;
+            }
+
+            .consent-card, .references-card {
+                box-shadow: none !important;
+                border: 1px solid #E2E8F0 !important;
+                page-break-inside: avoid;
+            }
+
+            .consent-content svg {
+                width: 20px !important;
+                height: 20px !important;
+            }
+
+            .risk-dashboard {
+                page-break-inside: avoid;
+            }
+
+            body {
+                background: white !important;
             }
         }
     </style>
@@ -28392,6 +28446,7 @@ CRITICAL REQUIREMENTS FOR RISK DASHBOARD:
 3. Use actual patient values: ASA {asa}, Age {age}, {anesthesia_type} anesthesia
 4. Count comorbidities accurately from: {all_comorbidities}
 5. After the risk dashboard and section divider, then proceed with the rest of the consent discussion
+6. **CRITICAL**: All SVG icons in the risk dashboard MUST have inline style="width: 24px; height: 24px;" - never exceed these dimensions
 
 CRITICAL: PATIENT-SPECIFIC CONSENT PROTOCOL
 This is NOT a generic template - personalize EVERY section to THIS specific patient. Before finalizing:
