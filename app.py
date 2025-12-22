@@ -9749,6 +9749,334 @@ HTML = """<!DOCTYPE html>
             }
         }
 
+        /* ========== NEW FEATURES CSS ========== */
+
+        /* Follow-up Suggestions */
+        .followup-suggestions {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .followup-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .followup-title svg {
+            width: 16px;
+            height: 16px;
+            color: var(--blue-600);
+        }
+
+        .followup-chips {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .followup-chip {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            width: 100%;
+        }
+
+        .followup-chip:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            color: var(--blue-700);
+            transform: translateX(4px);
+        }
+
+        .followup-loading {
+            font-size: 13px;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        /* Clinical Reasoning Toggle */
+        .clinical-reasoning {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .reasoning-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .reasoning-header:hover {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+
+        .reasoning-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reasoning-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--blue-600);
+        }
+
+        .reasoning-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        .reasoning-toggle-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--gray-500);
+            transition: transform 0.2s ease;
+        }
+
+        .reasoning-toggle-icon.expanded {
+            transform: rotate(180deg);
+        }
+
+        .reasoning-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .reasoning-content.expanded {
+            max-height: 1000px;
+            margin-top: 12px;
+        }
+
+        .reasoning-steps {
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .reasoning-step {
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--gray-200);
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .reasoning-step:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .reasoning-step strong {
+            color: var(--blue-700);
+            font-weight: 600;
+        }
+
+        /* Quick Action Buttons */
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gray-200);
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            color: var(--blue-700);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Copy Dosing Button */
+        .copy-dosing-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .copy-dosing-btn:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-300);
+            color: var(--blue-700);
+        }
+
+        .copy-dosing-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .copy-dosing-btn.copied {
+            background: var(--green-50);
+            border-color: var(--green-300);
+            color: var(--green-700);
+        }
+
+        /* Patient Context Bar */
+        .patient-context-bar {
+            position: sticky;
+            top: 80px;
+            z-index: 50;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin: 0 0 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .patient-context-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .patient-context-title svg {
+            width: 16px;
+            height: 16px;
+            color: var(--blue-600);
+        }
+
+        .patient-context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .patient-context-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .patient-context-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .patient-context-input {
+            padding: 8px 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.9);
+            transition: all 0.2s ease;
+        }
+
+        .patient-context-input:focus {
+            outline: none;
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .patient-context-select {
+            padding: 8px 10px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.9);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .patient-context-select:focus {
+            outline: none;
+            border-color: var(--blue-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .patient-context-bar {
+                top: 70px;
+                padding: 12px 16px;
+                border-radius: 12px;
+            }
+
+            .patient-context-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .quick-actions {
+                gap: 6px;
+            }
+
+            .quick-action-btn {
+                padding: 7px 12px;
+                font-size: 12px;
+            }
+
+            .followup-chip {
+                font-size: 13px;
+                padding: 9px 12px;
+            }
+        }
+
     </style>
 
     <!-- Marked.js for Markdown Parsing -->
@@ -9862,6 +10190,48 @@ HTML = """<!DOCTYPE html>
         {% if messages and messages|length > 0 %}
         <!-- Chat Interface -->
         <section class="chat-view" id="main-content">
+            <!-- Patient Context Bar -->
+            <div class="patient-context-bar">
+                <div class="patient-context-title">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    Patient Context
+                </div>
+                <div class="patient-context-grid">
+                    <div class="patient-context-field">
+                        <label class="patient-context-label" for="patientWeight">Weight (kg)</label>
+                        <input type="number" id="patientWeight" class="patient-context-input" placeholder="70" min="1" max="300">
+                    </div>
+                    <div class="patient-context-field">
+                        <label class="patient-context-label" for="patientAge">Age (years)</label>
+                        <input type="number" id="patientAge" class="patient-context-input" placeholder="45" min="0" max="120">
+                    </div>
+                    <div class="patient-context-field">
+                        <label class="patient-context-label" for="patientASA">ASA Class</label>
+                        <select id="patientASA" class="patient-context-select">
+                            <option value="">Select</option>
+                            <option value="I">I - Healthy</option>
+                            <option value="II">II - Mild disease</option>
+                            <option value="III">III - Severe disease</option>
+                            <option value="IV">IV - Life-threatening</option>
+                            <option value="V">V - Moribund</option>
+                        </select>
+                    </div>
+                    <div class="patient-context-field">
+                        <label class="patient-context-label" for="patientComorbidities">Comorbidities</label>
+                        <select id="patientComorbidities" class="patient-context-select" multiple style="height: 42px;">
+                            <option value="none">None</option>
+                            <option value="CHF">CHF</option>
+                            <option value="CKD">CKD</option>
+                            <option value="Liver">Liver disease</option>
+                            <option value="DM">Diabetes</option>
+                            <option value="CAD">CAD</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="messages-container" id="messagesContainer" role="log" aria-live="polite" aria-label="Conversation history">
                 {% if error_message %}
                 <div class="error-message" role="alert">{{ error_message|safe }}</div>
@@ -9934,6 +10304,57 @@ HTML = """<!DOCTYPE html>
                             </div>
                             {% endif %}
 
+                            <!-- Clinical Reasoning Toggle -->
+                            {% if message.references and message.references|length > 0 %}
+                            <div class="clinical-reasoning">
+                                <div class="reasoning-header" onclick="toggleReasoning(this)">
+                                    <div class="reasoning-header-left">
+                                        <svg class="reasoning-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                        </svg>
+                                        <span class="reasoning-title">Show Clinical Reasoning</span>
+                                    </div>
+                                    <svg class="reasoning-toggle-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <div class="reasoning-content">
+                                    <div class="reasoning-steps">
+                                        <div class="reasoning-step">
+                                            <strong>Step 1:</strong> Analyzed your clinical question and patient context
+                                        </div>
+                                        <div class="reasoning-step">
+                                            <strong>Step 2:</strong> Searched PubMed for high-quality evidence (meta-analyses, systematic reviews, RCTs, guidelines)
+                                        </div>
+                                        <div class="reasoning-step">
+                                            <strong>Step 3:</strong> Found {{ message.num_papers }} relevant papers published in the last 10 years
+                                        </div>
+                                        <div class="reasoning-step">
+                                            <strong>Step 4:</strong> Synthesized evidence from multiple sources to provide evidence-based recommendations
+                                        </div>
+                                        <div class="reasoning-step">
+                                            <strong>Step 5:</strong> Cross-referenced findings against ASA guidelines and major anesthesia textbooks (Barash, Miller's)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Follow-up Suggestions -->
+                            {% if message.references and message.references|length > 0 %}
+                            <div class="followup-suggestions" id="followup-{{ loop.index0 }}">
+                                <div class="followup-title">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Suggested follow-up questions
+                                </div>
+                                <div class="followup-chips" data-message-index="{{ loop.index0 }}">
+                                    <div class="followup-loading">Loading suggestions...</div>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             {% if current_user.is_authenticated %}
                             <div class="message-actions" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200); display: flex; gap: 8px;">
                                 <button class="save-to-library-btn" onclick="saveToLibrary(event, {{ loop.index0 }})" title="Save to My Library">
@@ -9987,6 +10408,34 @@ HTML = """<!DOCTYPE html>
 
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
+                    <!-- Quick Action Buttons -->
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" onclick="openQuickDose()" title="Calculate drug dose based on patient weight">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            Calculate Dose
+                        </button>
+                        <button class="quick-action-btn" onclick="showCrisisProtocols()" title="Access crisis management protocols">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            Crisis Protocol
+                        </button>
+                        <button class="quick-action-btn" onclick="checkDrugInteraction()" title="Check for drug interactions">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                            </svg>
+                            Drug Interaction
+                        </button>
+                        <button class="quick-action-btn" onclick="searchReference()" title="Search clinical guidelines and references">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                            Reference
+                        </button>
+                    </div>
+
                     <form method="post" action="/" id="chat-form" class="chat-card" role="form" aria-label="Follow-up question form">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                         <div class="chat-inner">
@@ -10765,6 +11214,181 @@ HTML = """<!DOCTYPE html>
                 });
             }
         })();
+
+        // ========== NEW FEATURES JAVASCRIPT ==========
+
+        // Clinical Reasoning Toggle
+        function toggleReasoning(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.reasoning-toggle-icon');
+
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                content.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+
+        // Load Follow-up Suggestions (called after message completes)
+        async function loadFollowupSuggestions(messageIndex) {
+            const container = document.querySelector(`#followup-${messageIndex} .followup-chips`);
+            if (!container) return;
+
+            try {
+                const response = await fetch('/generate-followups', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message_index: messageIndex })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.followups && data.followups.length > 0) {
+                    container.innerHTML = '';
+                    data.followups.forEach(question => {
+                        const chip = document.createElement('button');
+                        chip.className = 'followup-chip';
+                        chip.textContent = question;
+                        chip.onclick = () => fillFollowupQuery(question);
+                        container.appendChild(chip);
+                    });
+                } else {
+                    container.innerHTML = '<div class="followup-loading">No suggestions available</div>';
+                }
+            } catch (error) {
+                console.error('Error loading follow-ups:', error);
+                container.innerHTML = '<div class="followup-loading">Failed to load suggestions</div>';
+            }
+        }
+
+        // Fill chat input with follow-up question
+        function fillFollowupQuery(question) {
+            const textarea = document.getElementById('chat-query-input');
+            if (textarea) {
+                textarea.value = question;
+                textarea.focus();
+                // Auto-resize textarea
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
+            }
+        }
+
+        // Load follow-up suggestions when page loads (for last AI message)
+        window.addEventListener('DOMContentLoaded', function() {
+            const followupContainers = document.querySelectorAll('.followup-suggestions');
+            if (followupContainers.length > 0) {
+                // Only load for the last message
+                const lastContainer = followupContainers[followupContainers.length - 1];
+                const messageIndex = parseInt(lastContainer.id.split('-')[1]);
+                setTimeout(() => loadFollowupSuggestions(messageIndex), 1000);
+            }
+        });
+
+        // Quick Action Buttons
+        function openQuickDose() {
+            const weight = document.getElementById('patientWeight').value;
+            let url = '/quick-dose';
+            if (weight) {
+                url += `?weight=${weight}`;
+            }
+            window.location.href = url;
+        }
+
+        function showCrisisProtocols() {
+            const protocols = [
+                { name: 'Malignant Hyperthermia', query: 'malignant hyperthermia treatment protocol' },
+                { name: 'Local Anesthetic Systemic Toxicity (LAST)', query: 'LAST protocol treatment' },
+                { name: 'Anaphylaxis', query: 'anaphylaxis treatment protocol' },
+                { name: 'Difficult Airway', query: 'difficult airway algorithm ASA' },
+                { name: 'Can\'t Intubate Can\'t Oxygenate', query: 'CICO emergency cricothyrotomy' }
+            ];
+
+            let message = 'Select a crisis protocol:\\n\\n';
+            protocols.forEach((p, i) => {
+                message += `${i + 1}. ${p.name}\\n`;
+            });
+
+            const choice = prompt(message + '\\nEnter number (1-5):');
+            const index = parseInt(choice) - 1;
+
+            if (index >= 0 && index < protocols.length) {
+                const textarea = document.getElementById('chat-query-input');
+                if (textarea) {
+                    textarea.value = protocols[index].query;
+                    textarea.focus();
+                }
+            }
+        }
+
+        function checkDrugInteraction() {
+            const drug1 = prompt('Enter first drug:');
+            if (!drug1) return;
+
+            const drug2 = prompt('Enter second drug:');
+            if (!drug2) return;
+
+            const textarea = document.getElementById('chat-query-input');
+            if (textarea) {
+                textarea.value = `What are the interactions between ${drug1} and ${drug2}?`;
+                textarea.focus();
+            }
+        }
+
+        function searchReference() {
+            const query = prompt('Search for guidelines or references:');
+            if (query) {
+                const textarea = document.getElementById('chat-query-input');
+                if (textarea) {
+                    textarea.value = `Show me the guidelines for ${query}`;
+                    textarea.focus();
+                }
+            }
+        }
+
+        // Patient Context Persistence
+        function savePatientContext() {
+            const context = {
+                weight: document.getElementById('patientWeight').value,
+                age: document.getElementById('patientAge').value,
+                asa: document.getElementById('patientASA').value,
+                comorbidities: Array.from(document.getElementById('patientComorbidities').selectedOptions).map(o => o.value)
+            };
+            localStorage.setItem('patientContext', JSON.stringify(context));
+        }
+
+        function loadPatientContext() {
+            const saved = localStorage.getItem('patientContext');
+            if (saved) {
+                const context = JSON.parse(saved);
+                if (context.weight) document.getElementById('patientWeight').value = context.weight;
+                if (context.age) document.getElementById('patientAge').value = context.age;
+                if (context.asa) document.getElementById('patientASA').value = context.asa;
+                if (context.comorbidities) {
+                    const select = document.getElementById('patientComorbidities');
+                    Array.from(select.options).forEach(option => {
+                        option.selected = context.comorbidities.includes(option.value);
+                    });
+                }
+            }
+        }
+
+        // Save context on change
+        window.addEventListener('DOMContentLoaded', function() {
+            loadPatientContext();
+
+            ['patientWeight', 'patientAge', 'patientASA', 'patientComorbidities'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', savePatientContext);
+                    element.addEventListener('input', savePatientContext);
+                }
+            });
+        });
+
     </script>
 </body>
 </html>
