@@ -9777,15 +9777,15 @@ HTML = """<!DOCTYPE html>
         .followup-chips {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 7px;
         }
 
         .followup-chip {
             background: var(--gray-50);
             border: 1px solid var(--gray-200);
-            padding: 10px 14px;
+            padding: 9px 12px;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 13px;
             color: var(--gray-700);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -9801,7 +9801,7 @@ HTML = """<!DOCTYPE html>
         }
 
         .followup-loading {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--gray-500);
             font-style: italic;
         }
@@ -9895,25 +9895,25 @@ HTML = """<!DOCTYPE html>
             font-weight: 600;
         }
 
-        /* Quick Action Buttons */
+        /* Quick Action Buttons - Mobile First */
         .quick-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             padding: 0 4px;
         }
 
         .quick-action-btn {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
+            gap: 5px;
+            padding: 7px 12px;
             background: rgba(255,255,255,0.7);
             backdrop-filter: blur(10px);
             border: 1px solid var(--gray-200);
             border-radius: 10px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
             color: var(--gray-700);
             cursor: pointer;
@@ -9928,8 +9928,8 @@ HTML = """<!DOCTYPE html>
         }
 
         .quick-action-btn svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
         }
 
         /* Copy Dosing Button */
@@ -9966,41 +9966,41 @@ HTML = """<!DOCTYPE html>
             color: var(--green-700);
         }
 
-        /* Patient Context Bar */
+        /* Patient Context Bar - Mobile First */
         .patient-context-bar {
             position: sticky;
-            top: 80px;
+            top: 70px;
             z-index: 50;
             background: rgba(255,255,255,0.8);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 14px;
-            padding: 16px 20px;
-            margin: 0 0 20px 0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 0 0 16px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .patient-context-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--gray-700);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
         .patient-context-title svg {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             color: var(--blue-600);
         }
 
         .patient-context-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
         }
 
         .patient-context-field {
@@ -10010,7 +10010,7 @@ HTML = """<!DOCTYPE html>
         }
 
         .patient-context-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--gray-600);
             text-transform: uppercase;
@@ -10018,10 +10018,10 @@ HTML = """<!DOCTYPE html>
         }
 
         .patient-context-input {
-            padding: 8px 10px;
+            padding: 7px 10px;
             border: 1px solid var(--gray-200);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-family: inherit;
             background: rgba(255,255,255,0.9);
             transition: all 0.2s ease;
@@ -10034,10 +10034,10 @@ HTML = """<!DOCTYPE html>
         }
 
         .patient-context-select {
-            padding: 8px 10px;
+            padding: 7px 10px;
             border: 1px solid var(--gray-200);
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             font-family: inherit;
             background: rgba(255,255,255,0.9);
             cursor: pointer;
@@ -10050,30 +10050,67 @@ HTML = """<!DOCTYPE html>
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        @media (max-width: 768px) {
+        /* Tablet & Desktop Enhancements (min-width, not max-width!) */
+        @media (min-width: 768px) {
             .patient-context-bar {
-                top: 70px;
-                padding: 12px 16px;
-                border-radius: 12px;
+                top: 80px;
+                padding: 16px 20px;
+                border-radius: 14px;
+                margin: 0 0 20px 0;
+            }
+
+            .patient-context-title {
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+
+            .patient-context-title svg {
+                width: 16px;
+                height: 16px;
             }
 
             .patient-context-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+                gap: 12px;
+            }
+
+            .patient-context-label {
+                font-size: 11px;
+            }
+
+            .patient-context-input,
+            .patient-context-select {
+                padding: 8px 10px;
+                font-size: 14px;
             }
 
             .quick-actions {
-                gap: 6px;
+                gap: 8px;
+                margin-bottom: 12px;
             }
 
             .quick-action-btn {
-                padding: 7px 12px;
-                font-size: 12px;
+                padding: 8px 14px;
+                font-size: 13px;
+                gap: 6px;
+            }
+
+            .quick-action-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .followup-chips {
+                gap: 8px;
             }
 
             .followup-chip {
+                font-size: 14px;
+                padding: 10px 14px;
+            }
+
+            .followup-loading {
                 font-size: 13px;
-                padding: 9px 12px;
             }
         }
 
