@@ -25155,69 +25155,6 @@ def clear_chat():
     response.headers['Expires'] = '0'
     return response
 
-@app.route("/generate-followups", methods=["POST"])
-def generate_followups():
-    """Generate contextual follow-up questions based on conversation"""
-    try:
-        data = request.get_json()
-        message_index = data.get('message_index', 0)
-
-        # Get messages from session
-        messages = session.get('messages', [])
-
-        if not messages or message_index >= len(messages):
-            return jsonify({'success': False, 'error': 'Invalid message index'})
-
-        # Get the last few messages for context (up to 4 messages = 2 Q&A pairs)
-        context_messages = messages[max(0, message_index - 3):message_index + 1]
-
-        # Build context for GPT
-        conversation_context = ""
-        for msg in context_messages:
-            role = "User" if msg.get('role') == 'user' else "Assistant"
-            content = msg.get('content', '')[:500]  # Limit length
-            conversation_context += f"{role}: {content}\n\n"
-
-        # Generate follow-up questions using GPT
-        prompt = f"""Based on this medical conversation, generate exactly 3 brief, relevant follow-up questions that a user might naturally ask next.
-
-Conversation:
-{conversation_context}
-
-Requirements:
-- Each question should be 8-12 words maximum
-- Questions should be specific and clinically relevant
-- Focus on practical clinical concerns (dosing, contraindications, alternatives, patient-specific factors)
-- Return ONLY the 3 questions, one per line, no numbering or formatting
-
-Example output format:
-What about contraindications in renal failure?
-How does this compare to etomidate?
-What's the pediatric dosing?"""
-
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=150
-        )
-
-        # Parse response
-        followup_text = response.choices[0].message.content.strip()
-        followups = [q.strip() for q in followup_text.split('\n') if q.strip()]
-
-        # Limit to 3 questions
-        followups = followups[:3]
-
-        if len(followups) == 0:
-            return jsonify({'success': False, 'error': 'No followups generated'})
-
-        return jsonify({'success': True, 'followups': followups})
-
-    except Exception as e:
-        app.logger.error(f"Error generating follow-ups: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)})
-
 @app.route("/terms")
 def terms():
     """Terms of Service page"""
