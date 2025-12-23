@@ -10855,20 +10855,28 @@ HTML = """<!DOCTYPE html>
         // Wrapped in IIFE with try/catch for safety
         (function initFollowupSuggestions() {
             try {
+                console.log('[FollowupSuggestions] Initializing...');
+
                 // Safety check: only run if containers exist
                 const containers = document.querySelectorAll('.followup-container');
+                console.log('[FollowupSuggestions] Found containers:', containers.length);
+
                 if (!containers || containers.length === 0) {
+                    console.log('[FollowupSuggestions] No containers found, exiting');
                     return; // Exit gracefully if no containers
                 }
 
                 // Function to load follow-up suggestions
                 async function loadFollowups(container) {
+                    console.log('[FollowupSuggestions] Loading followups for container:', container);
                     if (!container) return;
 
                     const messageIndex = container.getAttribute('data-message-index');
+                    console.log('[FollowupSuggestions] Message index:', messageIndex);
                     if (messageIndex === null) return;
 
                     // Show loading state
+                    console.log('[FollowupSuggestions] Showing loading state');
                     container.innerHTML = `
                         <div class="followup-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10882,15 +10890,19 @@ HTML = """<!DOCTYPE html>
                     `;
 
                     try {
+                        console.log('[FollowupSuggestions] Fetching from API...');
                         const response = await fetch('/generate-followups', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message_index: parseInt(messageIndex) })
                         });
 
+                        console.log('[FollowupSuggestions] API response status:', response.status);
                         const data = await response.json();
+                        console.log('[FollowupSuggestions] API data:', data);
 
                         if (data.success && data.followups && data.followups.length > 0) {
+                            console.log('[FollowupSuggestions] Rendering', data.followups.length, 'questions');
                             // Build chips HTML
                             let chipsHTML = '';
                             data.followups.forEach(question => {
@@ -10907,12 +10919,14 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 <div class="followup-chips">${chipsHTML}</div>
                             `;
+                            console.log('[FollowupSuggestions] Successfully rendered');
                         } else {
+                            console.log('[FollowupSuggestions] No suggestions or API returned error, hiding container');
                             // No suggestions available
                             container.innerHTML = '';
                         }
                     } catch (error) {
-                        console.error('Error loading follow-ups:', error);
+                        console.error('[FollowupSuggestions] Error loading:', error);
                         // Hide container on error
                         container.innerHTML = '';
                     }
@@ -10937,13 +10951,19 @@ HTML = """<!DOCTYPE html>
                 // Load suggestions for the last message only
                 if (containers.length > 0) {
                     const lastContainer = containers[containers.length - 1];
+                    console.log('[FollowupSuggestions] Scheduling load for last container in 1 second...');
                     // Delay to not block page load
-                    setTimeout(() => loadFollowups(lastContainer), 1000);
+                    setTimeout(() => {
+                        console.log('[FollowupSuggestions] Timeout triggered, loading now');
+                        loadFollowups(lastContainer);
+                    }, 1000);
+                } else {
+                    console.log('[FollowupSuggestions] No containers to load');
                 }
 
             } catch (error) {
                 // Catch any errors to prevent breaking other features
-                console.error('Follow-up suggestions feature failed:', error);
+                console.error('[FollowupSuggestions] Feature failed:', error);
             }
         })();
     </script>
