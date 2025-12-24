@@ -10852,23 +10852,35 @@ HTML = """<!DOCTYPE html>
         })();
 
         // ===== ISOLATED FEATURE: Follow-up Suggestions =====
+        // TEST: This will show immediately if script loads
+        console.log('[DEBUG] Follow-up script is loading...');
+        alert('FOLLOWUP SCRIPT LOADED - Check console');
+
         // Wrapped in IIFE with try/catch for safety
         (function initFollowupSuggestions() {
             try {
+                console.log('[FollowupSuggestions] Initializing...');
+
                 // Safety check: only run if containers exist
                 const containers = document.querySelectorAll('.followup-container');
+                console.log('[FollowupSuggestions] Found containers:', containers.length);
+
                 if (!containers || containers.length === 0) {
+                    console.log('[FollowupSuggestions] No containers found, exiting');
                     return; // Exit gracefully if no containers
                 }
 
                 // Function to load follow-up suggestions
                 async function loadFollowups(container) {
+                    console.log('[FollowupSuggestions] Loading followups for container:', container);
                     if (!container) return;
 
                     const messageIndex = container.getAttribute('data-message-index');
+                    console.log('[FollowupSuggestions] Message index:', messageIndex);
                     if (messageIndex === null) return;
 
                     // Show loading state
+                    console.log('[FollowupSuggestions] Showing loading state');
                     container.innerHTML = `
                         <div class="followup-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10882,15 +10894,19 @@ HTML = """<!DOCTYPE html>
                     `;
 
                     try {
+                        console.log('[FollowupSuggestions] Fetching from API...');
                         const response = await fetch('/generate-followups', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message_index: parseInt(messageIndex) })
                         });
 
+                        console.log('[FollowupSuggestions] API response status:', response.status);
                         const data = await response.json();
+                        console.log('[FollowupSuggestions] API data:', data);
 
                         if (data.success && data.followups && data.followups.length > 0) {
+                            console.log('[FollowupSuggestions] Rendering', data.followups.length, 'questions');
                             // Build chips HTML
                             let chipsHTML = '';
                             data.followups.forEach(question => {
@@ -10907,12 +10923,14 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 <div class="followup-chips">${chipsHTML}</div>
                             `;
+                            console.log('[FollowupSuggestions] Successfully rendered');
                         } else {
+                            console.log('[FollowupSuggestions] No suggestions or API returned error, hiding container');
                             // No suggestions available
                             container.innerHTML = '';
                         }
                     } catch (error) {
-                        console.error('Error loading follow-ups:', error);
+                        console.error('[FollowupSuggestions] Error loading:', error);
                         // Hide container on error
                         container.innerHTML = '';
                     }
@@ -10937,13 +10955,19 @@ HTML = """<!DOCTYPE html>
                 // Load suggestions for the last message only
                 if (containers.length > 0) {
                     const lastContainer = containers[containers.length - 1];
+                    console.log('[FollowupSuggestions] Scheduling load for last container in 1 second...');
                     // Delay to not block page load
-                    setTimeout(() => loadFollowups(lastContainer), 1000);
+                    setTimeout(() => {
+                        console.log('[FollowupSuggestions] Timeout triggered, loading now');
+                        loadFollowups(lastContainer);
+                    }, 1000);
+                } else {
+                    console.log('[FollowupSuggestions] No containers to load');
                 }
 
             } catch (error) {
                 // Catch any errors to prevent breaking other features
-                console.error('Follow-up suggestions feature failed:', error);
+                console.error('[FollowupSuggestions] Feature failed:', error);
             }
         })();
     </script>
@@ -25154,69 +25178,6 @@ def clear_chat():
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
-
-@app.route("/generate-followups", methods=["POST"])
-def generate_followups():
-    """Generate contextual follow-up questions based on conversation"""
-    try:
-        data = request.get_json()
-        message_index = data.get('message_index', 0)
-
-        # Get messages from session
-        messages = session.get('messages', [])
-
-        if not messages or message_index >= len(messages):
-            return jsonify({'success': False, 'error': 'Invalid message index'})
-
-        # Get the last few messages for context (up to 4 messages = 2 Q&A pairs)
-        context_messages = messages[max(0, message_index - 3):message_index + 1]
-
-        # Build context for GPT
-        conversation_context = ""
-        for msg in context_messages:
-            role = "User" if msg.get('role') == 'user' else "Assistant"
-            content = msg.get('content', '')[:500]  # Limit length
-            conversation_context += f"{role}: {content}\n\n"
-
-        # Generate follow-up questions using GPT
-        prompt = f"""Based on this medical conversation, generate exactly 3 brief, relevant follow-up questions that a user might naturally ask next.
-
-Conversation:
-{conversation_context}
-
-Requirements:
-- Each question should be 8-12 words maximum
-- Questions should be specific and clinically relevant
-- Focus on practical clinical concerns (dosing, contraindications, alternatives, patient-specific factors)
-- Return ONLY the 3 questions, one per line, no numbering or formatting
-
-Example output format:
-What about contraindications in renal failure?
-How does this compare to etomidate?
-What's the pediatric dosing?"""
-
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.7,
-            max_tokens=150
-        )
-
-        # Parse response
-        followup_text = response.choices[0].message.content.strip()
-        followups = [q.strip() for q in followup_text.split('\n') if q.strip()]
-
-        # Limit to 3 questions
-        followups = followups[:3]
-
-        if len(followups) == 0:
-            return jsonify({'success': False, 'error': 'No followups generated'})
-
-        return jsonify({'success': True, 'followups': followups})
-
-    except Exception as e:
-        app.logger.error(f"Error generating follow-ups: {str(e)}")
-        return jsonify({'success': False, 'error': str(e)})
 
 @app.route("/terms")
 def terms():
