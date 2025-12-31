@@ -5121,28 +5121,7 @@ PREOP_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('show');
-        }
-
-        // Nav dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            menu.classList.toggle('show');
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdowns = document.querySelectorAll('.nav-dropdown-menu');
-            dropdowns.forEach(dropdown => {
-                if (!dropdown.parentElement.contains(e.target)) {
-                    dropdown.classList.remove('show');
-                }
-            });
-        });
+{SHARED_NAV_JS}
 
         // Agent reasoning toggle
         function toggleAgentReasoning() {
@@ -7594,6 +7573,31 @@ SHARED_NAV_CSS_RESPONSIVE_LG = """
             .nav { padding: 16px 40px; }
 """
 
+# Shared navigation JavaScript functions (used across all templates)
+SHARED_NAV_JS = """
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Nav dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdowns = document.querySelectorAll('.nav-dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+"""
+
 HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10022,29 +10026,7 @@ HTML = f"""<!DOCTYPE html>
             }
         }
 
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
 
         // Disable browser's automatic scroll restoration to prevent scrolling to top on page reload
         if ('scrollRestoration' in history) {
@@ -10093,11 +10075,8 @@ HTML = f"""<!DOCTYPE html>
             const streamingMessage = document.getElementById('streamingMessage');
 
             if (!streamingContent) {
-                console.error('[SSE] Streaming elements not found');
                 return;
             }
-
-            console.log('[SSE] Starting stream for request_id:', requestId);
 
             // CRITICAL: Scroll to bottom immediately when streaming starts
             // This ensures user sees the "Thinking..." indicator right away
@@ -10194,8 +10173,6 @@ HTML = f"""<!DOCTYPE html>
 
                         // Display references
                         if (event.data && event.data.length > 0) {
-                            console.log('[SSE] Received', event.data.length, 'references');
-
                             // Hide streaming indicator
                             if (streamingIndicator) {
                                 streamingIndicator.style.display = 'none';
@@ -10236,8 +10213,6 @@ HTML = f"""<!DOCTYPE html>
                             scrollToBottom();
                         }
                     } else if (event.type === 'done') {
-                        console.log('[SSE] Stream complete');
-
                         // Hide streaming indicator
                         if (streamingIndicator) {
                             streamingIndicator.style.display = 'none';
@@ -10249,8 +10224,6 @@ HTML = f"""<!DOCTYPE html>
                         eventSource.close();
                         scrollToBottom();
                     } else if (event.type === 'error') {
-                        console.error('[SSE] Server error:', event.message);
-
                         if (streamingIndicator) {
                             streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error: ' + (event.message || 'Unknown error') + '</span>';
                         }
@@ -10261,13 +10234,11 @@ HTML = f"""<!DOCTYPE html>
                         eventSource.close();
                     }
                 } catch (err) {
-                    console.error('[SSE] Error parsing message:', err);
+                    // Error parsing message
                 }
             });
 
             eventSource.addEventListener('error', function(e) {
-                console.error('[SSE] Connection error:', e);
-
                 if (streamingIndicator) {
                     streamingIndicator.innerHTML = '<span style="color: #DC2626;">Connection error - please refresh and try again</span>';
                 }
@@ -10368,7 +10339,6 @@ HTML = f"""<!DOCTYPE html>
                     throw new Error(data.error || 'Failed to save');
                 }
             } catch (error) {
-                console.error('Error saving to library:', error);
                 button.innerHTML = originalHTML;
                 button.disabled = false;
                 showToast(error.message || 'Failed to save to library', 'error');
@@ -10500,7 +10470,6 @@ HTML = f"""<!DOCTYPE html>
                         conversationsList.innerHTML = html;
                     })
                     .catch(error => {
-                        console.error('Failed to load conversations:', error);
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
                                 <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -10602,7 +10571,6 @@ HTML = f"""<!DOCTYPE html>
                             clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
                         }
                     } catch (error) {
-                        console.error('Error clearing history:', error);
                         alert('Failed to clear history. Please try again.');
                         // Re-enable button
                         clearHistoryBtn.disabled = false;
@@ -10616,28 +10584,21 @@ HTML = f"""<!DOCTYPE html>
         // Wrapped in IIFE with try/catch for safety
         (function initFollowupSuggestions() {
             try {
-                console.log('[FollowupSuggestions] Initializing...');
-
                 // Safety check: only run if containers exist
                 const containers = document.querySelectorAll('.followup-container');
-                console.log('[FollowupSuggestions] Found containers:', containers.length);
 
                 if (!containers || containers.length === 0) {
-                    console.log('[FollowupSuggestions] No containers found, exiting');
                     return; // Exit gracefully if no containers
                 }
 
                 // Function to load follow-up suggestions
                 async function loadFollowups(container) {
-                    console.log('[FollowupSuggestions] Loading followups for container:', container);
                     if (!container) return;
 
                     const messageIndex = container.getAttribute('data-message-index');
-                    console.log('[FollowupSuggestions] Message index:', messageIndex);
                     if (messageIndex === null) return;
 
                     // Show loading state
-                    console.log('[FollowupSuggestions] Showing loading state');
                     container.innerHTML = `
                         <div class="followup-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10651,19 +10612,15 @@ HTML = f"""<!DOCTYPE html>
                     `;
 
                     try {
-                        console.log('[FollowupSuggestions] Fetching from API...');
                         const response = await fetch('/generate-followups', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message_index: parseInt(messageIndex) })
                         });
 
-                        console.log('[FollowupSuggestions] API response status:', response.status);
                         const data = await response.json();
-                        console.log('[FollowupSuggestions] API data:', data);
 
                         if (data.success && data.followups && data.followups.length > 0) {
-                            console.log('[FollowupSuggestions] Rendering', data.followups.length, 'questions');
                             // Build chips HTML
                             let chipsHTML = '';
                             data.followups.forEach(question => {
@@ -10680,14 +10637,11 @@ HTML = f"""<!DOCTYPE html>
                                 </div>
                                 <div class="followup-chips">${chipsHTML}</div>
                             `;
-                            console.log('[FollowupSuggestions] Successfully rendered');
                         } else {
-                            console.log('[FollowupSuggestions] No suggestions or API returned error, hiding container');
                             // No suggestions available
                             container.innerHTML = '';
                         }
                     } catch (error) {
-                        console.error('[FollowupSuggestions] Error loading:', error);
                         // Hide container on error
                         container.innerHTML = '';
                     }
@@ -10705,26 +10659,21 @@ HTML = f"""<!DOCTYPE html>
                             textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
                         }
                     } catch (error) {
-                        console.error('Error filling query:', error);
+                        // Error filling query
                     }
                 };
 
                 // Load suggestions for the last message only
                 if (containers.length > 0) {
                     const lastContainer = containers[containers.length - 1];
-                    console.log('[FollowupSuggestions] Scheduling load for last container in 1 second...');
                     // Delay to not block page load
                     setTimeout(() => {
-                        console.log('[FollowupSuggestions] Timeout triggered, loading now');
                         loadFollowups(lastContainer);
                     }, 1000);
-                } else {
-                    console.log('[FollowupSuggestions] No containers to load');
                 }
 
             } catch (error) {
                 // Catch any errors to prevent breaking other features
-                console.error('[FollowupSuggestions] Feature failed:', error);
             }
         })();
     </script>
@@ -11661,28 +11610,8 @@ LIBRARY_HTML = f"""<!DOCTYPE html>
             // Implementation for removing bookmarks
             window.location.reload();
         }
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 
         <!-- Footer -->
@@ -13379,28 +13308,7 @@ TERMS_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
@@ -14155,28 +14063,7 @@ PRIVACY_POLICY_HTML = f"""<!DOCTYPE html>
         </footer>
     </div>
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
@@ -15165,12 +15052,7 @@ EVIDENCE_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('active');
-            btn.classList.toggle('active');
-        }
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
@@ -16725,27 +16607,7 @@ CRISIS_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('active');
-        }
-
-        // Navbar dropdown toggle
-        function toggleNavDropdown(e) {
-            e.stopPropagation();
-            const dropdown = e.target.closest('.nav-dropdown');
-            const menu = dropdown.querySelector('.nav-dropdown-menu');
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(evt) {
-                if (!dropdown.contains(evt.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Toggle protocol card expansion
         function toggleCard(card) {
@@ -16822,7 +16684,6 @@ CRISIS_HTML = f"""<!DOCTYPE html>
         });
 
         // Log page load for analytics
-        console.log('Crisis Protocols page loaded - ' + new Date().toISOString());
     </script>
 </body>
 </html>
@@ -18738,30 +18599,7 @@ QUICK_DOSE_HTML = f"""<!DOCTYPE html>
             `).join('');
         }
 
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        // Toggle nav dropdown
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 
     <footer class="footer">
@@ -20549,28 +20387,7 @@ CALCULATORS_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        // Toggle Mobile Menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('active');
-            btn.classList.toggle('active');
-        }
-
-        // Toggle Navigation Dropdown
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const dropdown = event.target.closest('.nav-dropdown');
-            const menu = dropdown.querySelector('.nav-dropdown-menu');
-            menu.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.nav-dropdown-menu.show').forEach(menu => {
-                menu.classList.remove('show');
-            });
-        });
+{SHARED_NAV_JS}
 
         // Filter Calculators by Category
         function filterCalculators(category) {
@@ -22425,30 +22242,7 @@ HYPOTENSION_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        // Dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay when form is submitted
         document.addEventListener('DOMContentLoaded', function() {
@@ -25061,28 +24855,7 @@ INFORMED_CONSENT_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay when form is submitted
         document.addEventListener('DOMContentLoaded', function() {
@@ -26270,22 +26043,7 @@ DIFFICULT_AIRWAY_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
-
-        function toggleMobileMenu() {
-            // Mobile menu toggle (if needed)
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay on form submit
         document.addEventListener('DOMContentLoaded', function() {
@@ -28635,7 +28393,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -28661,7 +28419,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -28776,7 +28534,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -28820,7 +28578,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -28889,7 +28647,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
         .submit-btn {
             width: 100%;
             padding: 16px 24px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -28938,7 +28696,7 @@ LOGIN_HTML = f"""<!DOCTYPE html>
         .social-btn {
             flex: 1;
             padding: 12px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
@@ -29144,7 +28902,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -29170,7 +28928,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -29285,7 +29043,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -29341,7 +29099,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -29394,7 +29152,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
         .submit-btn {
             width: 100%;
             padding: 16px 24px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -29443,7 +29201,7 @@ REGISTER_HTML = f"""<!DOCTYPE html>
         .social-btn {
             flex: 1;
             padding: 12px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
@@ -29650,7 +29408,7 @@ RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -29676,7 +29434,7 @@ RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -29791,7 +29549,7 @@ RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -29836,7 +29594,7 @@ RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -29855,7 +29613,7 @@ RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
         .btn-primary {
             width: 100%;
             padding: 14px 24px;
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -31587,44 +31345,7 @@ PRICING_HTML = f"""<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Find the dropdown container and menu
-            const dropdownContainer = e.target.closest('.nav-dropdown');
-            if (dropdownContainer) {
-                const menu = dropdownContainer.querySelector('.nav-dropdown-menu');
-                if (menu) {
-                    // Close other dropdowns first
-                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => {
-                        if (m !== menu) {
-                            m.classList.remove('show');
-                        }
-                    });
-                    // Toggle this dropdown
-                    menu.classList.toggle('show');
-                }
-            }
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.nav-dropdown')) {
-                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
-            }
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
