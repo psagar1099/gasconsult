@@ -10852,10 +10852,6 @@ HTML = """<!DOCTYPE html>
         })();
 
         // ===== ISOLATED FEATURE: Follow-up Suggestions =====
-        // TEST: This will show immediately if script loads
-        console.log('[DEBUG] Follow-up script is loading...');
-        alert('FOLLOWUP SCRIPT LOADED - Check console');
-
         // Wrapped in IIFE with try/catch for safety
         (function initFollowupSuggestions() {
             try {
