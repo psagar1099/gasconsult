@@ -7598,6 +7598,31 @@ SHARED_NAV_JS = """
         });
 """
 
+# Shared design tokens (CSS variables for consistent styling)
+SHARED_DESIGN_TOKENS = """
+        :root {
+            /* Border Radius Scale */
+            --radius-sm: 8px;     /* Small: badges, chips, small buttons */
+            --radius-md: 12px;    /* Medium: buttons, inputs, small cards */
+            --radius-lg: 16px;    /* Large: cards, panels, navigation */
+            --radius-xl: 20px;    /* Extra large: feature cards, main containers */
+            --radius-2xl: 24px;   /* Huge: hero sections, large panels */
+            --radius-full: 100px; /* Pills, fully rounded elements */
+
+            /* Spacing Scale (padding, margin, gap) */
+            --space-xs: 4px;      /* Extra small: tight spacing */
+            --space-sm: 8px;      /* Small: compact elements */
+            --space-md: 12px;     /* Medium: default spacing */
+            --space-lg: 16px;     /* Large: comfortable spacing */
+            --space-xl: 20px;     /* Extra large: spacious */
+            --space-2xl: 24px;    /* 2X large: section spacing */
+            --space-3xl: 32px;    /* 3X large: major sections */
+            --space-4xl: 40px;    /* 4X large: page sections */
+            --space-5xl: 48px;    /* 5X large: hero sections */
+            --space-6xl: 64px;    /* 6X large: major page divisions */
+        }
+"""
+
 HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
