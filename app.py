@@ -1594,7 +1594,7 @@ def detect_and_calculate(query, context_hint=None):
 
     return None  # No calculation detected
 
-PREOP_HTML = """<!DOCTYPE html>
+PREOP_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -1692,257 +1692,7 @@ PREOP_HTML = """<!DOCTYPE html>
         .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
 
         /* Navigation */
-        /* EXACT Navigation from Homepage */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show { display: block; }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu { min-width: 240px; }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active { display: flex; }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+        {SHARED_NAV_CSS}
 
         /* Main Content */
         .main-content {
@@ -2787,14 +2537,9 @@ PREOP_HTML = """<!DOCTYPE html>
             margin-bottom: 6px;
         }
 
-        /* Responsive - EXACT from Homepage */
+        /* Responsive */
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+            {SHARED_NAV_CSS_RESPONSIVE}
 
             .main-content { padding: 108px 32px 48px; }
 
@@ -2813,7 +2558,7 @@ PREOP_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+            {SHARED_NAV_CSS_RESPONSIVE_LG}
 
             .main-content { max-width: 900px; }
 
@@ -5376,28 +5121,7 @@ PREOP_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('show');
-        }
-
-        // Nav dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.target.nextElementSibling;
-            menu.classList.toggle('show');
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            const dropdowns = document.querySelectorAll('.nav-dropdown-menu');
-            dropdowns.forEach(dropdown => {
-                if (!dropdown.parentElement.contains(e.target)) {
-                    dropdown.classList.remove('show');
-                }
-            });
-        });
+{SHARED_NAV_JS}
 
         // Agent reasoning toggle
         function toggleAgentReasoning() {
@@ -7555,189 +7279,11 @@ CRITICAL FORMATTING RULES:
             return None
 
 
-HTML = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-01NZYD1DPP');
-    </script>
+# ============================================================================
+# SHARED CSS COMPONENTS
+# ============================================================================
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GasConsult.ai - AI-Powered Anesthesiology Assistant</title>
-
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o for hallucination-free, citation-backed clinical answers.">
-    <meta name="keywords" content="anesthesiology, anesthesia, medical AI, PubMed, clinical guidelines, evidence-based medicine, GPT-4o, systematic reviews">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gasconsult.ai/">
-    <meta property="og:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
-    <meta property="og:description" content="Get hallucination-free anesthesiology answers backed by PubMed research. GPT-4o + systematic reviews, RCTs, and clinical guidelines.">
-    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gasconsult.ai/">
-    <meta property="twitter:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
-    <meta property="twitter:description" content="Get hallucination-free anesthesiology answers backed by PubMed research.">
-    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
-
-    <!-- PWA -->
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
-    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
-    <link rel="manifest" href="/static/manifest.json">
-    <meta name="theme-color" content="#2563EB">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "MedicalWebPage",
-      "name": "GasConsult.ai",
-      "description": "Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o",
-      "specialty": "Anesthesiology",
-      "audience": {
-        "@type": "MedicalAudience",
-        "audienceType": "Healthcare Professional"
-      }
-    }
-    </script>
-
-    <style>
-        :root {
-            --white: #FFFFFF;
-            --gray-50: #F8FAFC;
-            --gray-100: #F1F5F9;
-            --gray-200: #E2E8F0;
-            --gray-300: #CBD5E1;
-            --gray-400: #94A3B8;
-            --gray-500: #64748B;
-            --gray-600: #475569;
-            --gray-700: #334155;
-            --gray-800: #1E293B;
-            --gray-900: #0F172A;
-            --blue-50: #EFF6FF;
-            --blue-100: #DBEAFE;
-            --blue-200: #BFDBFE;
-            --blue-300: #93C5FD;
-            --blue-400: #60A5FA;
-            --blue-500: #3B82F6;
-            --blue-600: #2563EB;
-            --blue-700: #1D4ED8;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        html {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Skip to Content Link for Accessibility */
-        .skip-to-content {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--blue-600);
-            color: white;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 0 0 4px 0;
-            z-index: 1000;
-            font-weight: 600;
-            transition: top 0.2s;
-        }
-
-        .skip-to-content:focus {
-            top: 0;
-        }
-
-        .bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-            top: -15%;
-            left: -20%;
-        }
-
-        .orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
-            top: 30%;
-            right: -20%;
-            animation-delay: -7s;
-            animation-duration: 25s;
-        }
-
-        .orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-            bottom: -10%;
-            left: 20%;
-            animation-delay: -14s;
-            animation-duration: 30s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -40px) scale(1.05); }
-            50% { transform: translate(20px, 40px) scale(0.95); }
-            75% { transform: translate(-40px, 20px) scale(1.02); }
-        }
-
-        .grain {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            pointer-events: none;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        .page {
-            position: relative;
-            z-index: 2;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
+SHARED_NAV_CSS = """
         .nav {
             position: fixed;
             top: 0;
@@ -8012,6 +7558,255 @@ HTML = """<!DOCTYPE html>
             color: var(--gray-900);
             background: rgba(0,0,0,0.04);
         }
+"""
+
+SHARED_NAV_CSS_RESPONSIVE = """
+            .nav { padding: 16px 32px; }
+            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
+            .logo-icon svg { width: 42px; height: 15px; }
+            .logo-text { font-size: 20px; }
+            .nav-links { display: flex; }
+            .mobile-menu-btn { display: none; }
+"""
+
+SHARED_NAV_CSS_RESPONSIVE_LG = """
+            .nav { padding: 16px 40px; }
+"""
+
+# Shared navigation JavaScript functions (used across all templates)
+SHARED_NAV_JS = """
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Nav dropdown toggle
+        function toggleNavDropdown(event) {
+            event.stopPropagation();
+            const menu = event.target.nextElementSibling;
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            const dropdowns = document.querySelectorAll('.nav-dropdown-menu');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.parentElement.contains(e.target)) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        });
+"""
+
+# Shared design tokens (CSS variables for consistent styling)
+SHARED_DESIGN_TOKENS = """
+        :root {
+            /* Border Radius Scale */
+            --radius-sm: 8px;     /* Small: badges, chips, small buttons */
+            --radius-md: 12px;    /* Medium: buttons, inputs, small cards */
+            --radius-lg: 16px;    /* Large: cards, panels, navigation */
+            --radius-xl: 20px;    /* Extra large: feature cards, main containers */
+            --radius-2xl: 24px;   /* Huge: hero sections, large panels */
+            --radius-full: 100px; /* Pills, fully rounded elements */
+
+            /* Spacing Scale (padding, margin, gap) */
+            --space-xs: 4px;      /* Extra small: tight spacing */
+            --space-sm: 8px;      /* Small: compact elements */
+            --space-md: 12px;     /* Medium: default spacing */
+            --space-lg: 16px;     /* Large: comfortable spacing */
+            --space-xl: 20px;     /* Extra large: spacious */
+            --space-2xl: 24px;    /* 2X large: section spacing */
+            --space-3xl: 32px;    /* 3X large: major sections */
+            --space-4xl: 40px;    /* 4X large: page sections */
+            --space-5xl: 48px;    /* 5X large: hero sections */
+            --space-6xl: 64px;    /* 6X large: major page divisions */
+        }
+"""
+
+HTML = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-01NZYD1DPP');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GasConsult.ai - AI-Powered Anesthesiology Assistant</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o for hallucination-free, citation-backed clinical answers.">
+    <meta name="keywords" content="anesthesiology, anesthesia, medical AI, PubMed, clinical guidelines, evidence-based medicine, GPT-4o, systematic reviews">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gasconsult.ai/">
+    <meta property="og:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
+    <meta property="og:description" content="Get hallucination-free anesthesiology answers backed by PubMed research. GPT-4o + systematic reviews, RCTs, and clinical guidelines.">
+    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gasconsult.ai/">
+    <meta property="twitter:title" content="GasConsult.ai - Evidence-Based Anesthesiology AI">
+    <meta property="twitter:description" content="Get hallucination-free anesthesiology answers backed by PubMed research.">
+    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": "GasConsult.ai",
+      "description": "Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o",
+      "specialty": "Anesthesiology",
+      "audience": {
+        "@type": "MedicalAudience",
+        "audienceType": "Healthcare Professional"
+      }
+    }
+    </script>
+
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-100: #DBEAFE;
+            --blue-200: #BFDBFE;
+            --blue-300: #93C5FD;
+            --blue-400: #60A5FA;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Skip to Content Link for Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--blue-600);
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 0 0 4px 0;
+            z-index: 1000;
+            font-weight: 600;
+            transition: top 0.2s;
+        }
+
+        .skip-to-content:focus {
+            top: 0;
+        }
+
+        .bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: -15%;
+            left: -20%;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(147, 197, 253, 0.2) 0%, transparent 70%);
+            top: 30%;
+            right: -20%;
+            animation-delay: -7s;
+            animation-duration: 25s;
+        }
+
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            bottom: -10%;
+            left: 20%;
+            animation-delay: -14s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -40px) scale(1.05); }
+            50% { transform: translate(20px, 40px) scale(0.95); }
+            75% { transform: translate(-40px, 20px) scale(1.02); }
+        }
+
+        .grain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.02;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
+
+        .page {
+            position: relative;
+            z-index: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+{SHARED_NAV_CSS}
 
         .hero {
             padding: 120px 20px 60px;
@@ -8412,12 +8207,7 @@ HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+{SHARED_NAV_CSS_RESPONSIVE}
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -8456,7 +8246,7 @@ HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+{SHARED_NAV_CSS_RESPONSIVE_LG}
             .hero { padding: 180px 40px 80px; }
             .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
@@ -10261,29 +10051,7 @@ HTML = """<!DOCTYPE html>
             }
         }
 
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
 
         // Disable browser's automatic scroll restoration to prevent scrolling to top on page reload
         if ('scrollRestoration' in history) {
@@ -10332,11 +10100,8 @@ HTML = """<!DOCTYPE html>
             const streamingMessage = document.getElementById('streamingMessage');
 
             if (!streamingContent) {
-                console.error('[SSE] Streaming elements not found');
                 return;
             }
-
-            console.log('[SSE] Starting stream for request_id:', requestId);
 
             // CRITICAL: Scroll to bottom immediately when streaming starts
             // This ensures user sees the "Thinking..." indicator right away
@@ -10433,8 +10198,6 @@ HTML = """<!DOCTYPE html>
 
                         // Display references
                         if (event.data && event.data.length > 0) {
-                            console.log('[SSE] Received', event.data.length, 'references');
-
                             // Hide streaming indicator
                             if (streamingIndicator) {
                                 streamingIndicator.style.display = 'none';
@@ -10475,8 +10238,6 @@ HTML = """<!DOCTYPE html>
                             scrollToBottom();
                         }
                     } else if (event.type === 'done') {
-                        console.log('[SSE] Stream complete');
-
                         // Hide streaming indicator
                         if (streamingIndicator) {
                             streamingIndicator.style.display = 'none';
@@ -10488,8 +10249,6 @@ HTML = """<!DOCTYPE html>
                         eventSource.close();
                         scrollToBottom();
                     } else if (event.type === 'error') {
-                        console.error('[SSE] Server error:', event.message);
-
                         if (streamingIndicator) {
                             streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error: ' + (event.message || 'Unknown error') + '</span>';
                         }
@@ -10500,13 +10259,11 @@ HTML = """<!DOCTYPE html>
                         eventSource.close();
                     }
                 } catch (err) {
-                    console.error('[SSE] Error parsing message:', err);
+                    // Error parsing message
                 }
             });
 
             eventSource.addEventListener('error', function(e) {
-                console.error('[SSE] Connection error:', e);
-
                 if (streamingIndicator) {
                     streamingIndicator.innerHTML = '<span style="color: #DC2626;">Connection error - please refresh and try again</span>';
                 }
@@ -10607,7 +10364,6 @@ HTML = """<!DOCTYPE html>
                     throw new Error(data.error || 'Failed to save');
                 }
             } catch (error) {
-                console.error('Error saving to library:', error);
                 button.innerHTML = originalHTML;
                 button.disabled = false;
                 showToast(error.message || 'Failed to save to library', 'error');
@@ -10739,7 +10495,6 @@ HTML = """<!DOCTYPE html>
                         conversationsList.innerHTML = html;
                     })
                     .catch(error => {
-                        console.error('Failed to load conversations:', error);
                         conversationsList.innerHTML = `
                             <div class="history-empty-state">
                                 <svg class="history-empty-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -10841,7 +10596,6 @@ HTML = """<!DOCTYPE html>
                             clearHistoryBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg> Clear All History';
                         }
                     } catch (error) {
-                        console.error('Error clearing history:', error);
                         alert('Failed to clear history. Please try again.');
                         // Re-enable button
                         clearHistoryBtn.disabled = false;
@@ -10855,28 +10609,21 @@ HTML = """<!DOCTYPE html>
         // Wrapped in IIFE with try/catch for safety
         (function initFollowupSuggestions() {
             try {
-                console.log('[FollowupSuggestions] Initializing...');
-
                 // Safety check: only run if containers exist
                 const containers = document.querySelectorAll('.followup-container');
-                console.log('[FollowupSuggestions] Found containers:', containers.length);
 
                 if (!containers || containers.length === 0) {
-                    console.log('[FollowupSuggestions] No containers found, exiting');
                     return; // Exit gracefully if no containers
                 }
 
                 // Function to load follow-up suggestions
                 async function loadFollowups(container) {
-                    console.log('[FollowupSuggestions] Loading followups for container:', container);
                     if (!container) return;
 
                     const messageIndex = container.getAttribute('data-message-index');
-                    console.log('[FollowupSuggestions] Message index:', messageIndex);
                     if (messageIndex === null) return;
 
                     // Show loading state
-                    console.log('[FollowupSuggestions] Showing loading state');
                     container.innerHTML = `
                         <div class="followup-title">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10890,19 +10637,15 @@ HTML = """<!DOCTYPE html>
                     `;
 
                     try {
-                        console.log('[FollowupSuggestions] Fetching from API...');
                         const response = await fetch('/generate-followups', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message_index: parseInt(messageIndex) })
                         });
 
-                        console.log('[FollowupSuggestions] API response status:', response.status);
                         const data = await response.json();
-                        console.log('[FollowupSuggestions] API data:', data);
 
                         if (data.success && data.followups && data.followups.length > 0) {
-                            console.log('[FollowupSuggestions] Rendering', data.followups.length, 'questions');
                             // Build chips HTML
                             let chipsHTML = '';
                             data.followups.forEach(question => {
@@ -10919,14 +10662,11 @@ HTML = """<!DOCTYPE html>
                                 </div>
                                 <div class="followup-chips">${chipsHTML}</div>
                             `;
-                            console.log('[FollowupSuggestions] Successfully rendered');
                         } else {
-                            console.log('[FollowupSuggestions] No suggestions or API returned error, hiding container');
                             // No suggestions available
                             container.innerHTML = '';
                         }
                     } catch (error) {
-                        console.error('[FollowupSuggestions] Error loading:', error);
                         // Hide container on error
                         container.innerHTML = '';
                     }
@@ -10944,26 +10684,21 @@ HTML = """<!DOCTYPE html>
                             textarea.style.height = Math.min(textarea.scrollHeight, 180) + 'px';
                         }
                     } catch (error) {
-                        console.error('Error filling query:', error);
+                        // Error filling query
                     }
                 };
 
                 // Load suggestions for the last message only
                 if (containers.length > 0) {
                     const lastContainer = containers[containers.length - 1];
-                    console.log('[FollowupSuggestions] Scheduling load for last container in 1 second...');
                     // Delay to not block page load
                     setTimeout(() => {
-                        console.log('[FollowupSuggestions] Timeout triggered, loading now');
                         loadFollowups(lastContainer);
                     }, 1000);
-                } else {
-                    console.log('[FollowupSuggestions] No containers to load');
                 }
 
             } catch (error) {
                 // Catch any errors to prevent breaking other features
-                console.error('[FollowupSuggestions] Feature failed:', error);
             }
         })();
     </script>
@@ -10973,7 +10708,7 @@ HTML = """<!DOCTYPE html>
 """
 
 
-LIBRARY_HTML = """<!DOCTYPE html>
+LIBRARY_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -11125,280 +10860,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+{SHARED_NAV_CSS}
 
         .hero {
             padding: 120px 20px 60px;
@@ -11799,12 +11261,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+{SHARED_NAV_CSS_RESPONSIVE}
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -11843,7 +11300,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+{SHARED_NAV_CSS_RESPONSIVE_LG}
             .hero { padding: 180px 40px 80px; }
             .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
@@ -12178,28 +11635,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             // Implementation for removing bookmarks
             window.location.reload();
         }
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
 
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 
         <!-- Footer -->
@@ -12238,7 +11675,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
 </html>
 """
 
-SHARED_RESPONSE_HTML = """<!DOCTYPE html>
+SHARED_RESPONSE_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -12388,280 +11825,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+{SHARED_NAV_CSS}
 
         .hero {
             padding: 120px 20px 60px;
@@ -13062,12 +12226,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+{SHARED_NAV_CSS_RESPONSIVE}
             .hero { padding: 160px 32px 80px; }
             .hero-badge { padding: 10px 20px 10px 14px; margin-bottom: 32px; }
             .badge-dot { width: 10px; height: 10px; }
@@ -13106,7 +12265,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+{SHARED_NAV_CSS_RESPONSIVE_LG}
             .hero { padding: 180px 40px 80px; }
             .hero-title { font-size: 72px; letter-spacing: -3px; margin-bottom: 28px; }
             .hero-subtitle { font-size: 20px; margin-bottom: 56px; }
@@ -13332,7 +12491,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
 </html>
 """
 
-TERMS_HTML = """<!DOCTYPE html>
+TERMS_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -13482,280 +12641,7 @@ TERMS_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+{SHARED_NAV_CSS}
 
         .main-content {
             flex: 1;
@@ -13917,12 +12803,7 @@ TERMS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 768px) {
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+{SHARED_NAV_CSS_RESPONSIVE}
             .main-content { padding: 120px 32px 60px; }
             .content-card { padding: 48px 40px; border-radius: 24px; }
             h1 { font-size: 42px; margin-bottom: 12px; }
@@ -13940,7 +12821,7 @@ TERMS_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+{SHARED_NAV_CSS_RESPONSIVE_LG}
             .main-content { padding: 140px 40px 80px; }
             .content-card { padding: 56px 48px; border-radius: 28px; }
             h1 { font-size: 48px; letter-spacing: -1.5px; }
@@ -14452,34 +13333,13 @@ TERMS_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
 """
 
-PRIVACY_POLICY_HTML = """<!DOCTYPE html>
+PRIVACY_POLICY_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -14629,280 +13489,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             flex-direction: column;
         }
 
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+{SHARED_NAV_CSS}
 
         .footer {
             padding: 32px 20px;
@@ -15075,12 +13662,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
         @media (min-width: 768px) {
             /* Show desktop navigation and hide mobile menu button */
-            .nav { padding: 16px 32px; }
-            .nav-inner { height: 64px; padding: 0 24px; border-radius: 20px; }
-            .logo-icon svg { width: 42px; height: 15px; }
-            .logo-text { font-size: 20px; }
-            .nav-links { display: flex; }
-            .mobile-menu-btn { display: none; }
+{SHARED_NAV_CSS_RESPONSIVE}
 
             .main-content { padding: 120px 32px 60px; }
             .content-card { padding: 40px; border-radius: 24px; }
@@ -15506,34 +14088,13 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         </footer>
     </div>
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
 """
 
-EVIDENCE_HTML = """<!DOCTYPE html>
+EVIDENCE_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -15692,280 +14253,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         }
 
         /* Navigation */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 12px 16px;
-        }
-
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            height: 56px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 0 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 12px 48px rgba(0,0,0,0.03);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            text-decoration: none;
-        }
-
-        .logo-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg { width: 36px; height: 12px; }
-
-        .logo-text {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: var(--gray-900);
-        }
-
-        .logo-text .gas { color: var(--blue-600); }
-        .logo-text .consult { color: #0F172A; }
-        .logo-text .ai { color: rgba(15, 23, 42, 0.4); }
-
-        .nav-links {
-            display: none;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-link {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        /* Only apply active state to dropdown toggles for non-user dropdowns (e.g., "More" dropdown) */
-        .nav-dropdown:not(.user-dropdown):has(.nav-dropdown-link.active) .nav-dropdown-toggle {
-            color: var(--blue-600);
-            background: var(--blue-50);
-        }
-
-        .nav-dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .nav-dropdown-toggle {
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-family: inherit;
-        }
-
-        .nav-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--gray-200);
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 200px;
-            margin-top: 4px;
-            z-index: 1000;
-            overflow: hidden;
-        }
-
-        .nav-dropdown-menu.show {
-            display: block;
-        }
-
-        .nav-dropdown-link {
-            display: block;
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--gray-600);
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .nav-dropdown-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
-
-        .nav-dropdown-link.active {
-            color: var(--blue-600);
-            background: var(--blue-50);
-            font-weight: 600;
-        }
-
-        /* User Avatar & Auth Buttons */
-        .nav-btn-primary {
-            padding: 10px 18px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-        }
-
-        .user-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--blue-600), #1D4ED8);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .user-dropdown-menu {
-            min-width: 240px;
-        }
-
-        .user-dropdown-header {
-            padding: 16px 18px;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--gray-50);
-        }
-
-        .user-dropdown-email {
-            font-size: 13px;
-            color: var(--gray-600);
-            margin-bottom: 4px;
-        }
-
-        .user-dropdown-tier {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--blue-600);
-        }
-
-        .nav-dropdown-divider {
-            height: 1px;
-            background: var(--gray-200);
-            margin: 4px 0;
-        }
-
-        .nav-dropdown-link svg {
-            display: inline-block;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        .mobile-menu-btn {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover {
-            background: rgba(0,0,0,0.04);
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 22px;
-            height: 2px;
-            background: var(--gray-700);
-            border-radius: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(7px, 7px);
-        }
-
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -7px);
-        }
-
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 16px;
-            right: 16px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            border-radius: 16px;
-            padding: 8px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08), 0 12px 48px rgba(0,0,0,0.12);
-            z-index: 99;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .mobile-menu.active {
-            display: flex;
-        }
-
-        .mobile-menu-link {
-            padding: 14px 16px;
-            font-size: 15px;
-            font-weight: 500;
-            color: var(--gray-700);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: all 0.2s ease;
-        }
-
-        .mobile-menu-link:hover {
-            color: var(--gray-900);
-            background: rgba(0,0,0,0.04);
-        }
+        {SHARED_NAV_CSS}
 
         /* Main Content */
         .main-content {
@@ -16319,7 +14607,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
         }
 
         @media (min-width: 1024px) {
-            .nav { padding: 16px 40px; }
+{SHARED_NAV_CSS_RESPONSIVE_LG}
             .main-content { padding: 140px 40px 80px; }
         }
     </style>
@@ -16789,18 +15077,13 @@ EVIDENCE_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('active');
-            btn.classList.toggle('active');
-        }
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
 """
 
-CRISIS_HTML = """<!DOCTYPE html>
+CRISIS_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18349,27 +16632,7 @@ CRISIS_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('active');
-        }
-
-        // Navbar dropdown toggle
-        function toggleNavDropdown(e) {
-            e.stopPropagation();
-            const dropdown = e.target.closest('.nav-dropdown');
-            const menu = dropdown.querySelector('.nav-dropdown-menu');
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(evt) {
-                if (!dropdown.contains(evt.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Toggle protocol card expansion
         function toggleCard(card) {
@@ -18446,13 +16709,12 @@ CRISIS_HTML = """<!DOCTYPE html>
         });
 
         // Log page load for analytics
-        console.log('Crisis Protocols page loaded - ' + new Date().toISOString());
     </script>
 </body>
 </html>
 """
 
-QUICK_DOSE_HTML = """<!DOCTYPE html>
+QUICK_DOSE_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -20362,30 +18624,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             `).join('');
         }
 
-        // Toggle mobile menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        // Toggle nav dropdown
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            const menu = e.target.nextElementSibling;
-            if (menu) {
-                menu.classList.toggle('show');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('show'));
-        });
+{SHARED_NAV_JS}
     </script>
 
     <footer class="footer">
@@ -20422,7 +18661,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 </html>
 """
 
-CALCULATORS_HTML = """<!DOCTYPE html>
+CALCULATORS_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -22173,28 +20412,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Toggle Mobile Menu
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            menu.classList.toggle('active');
-            btn.classList.toggle('active');
-        }
-
-        // Toggle Navigation Dropdown
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const dropdown = event.target.closest('.nav-dropdown');
-            const menu = dropdown.querySelector('.nav-dropdown-menu');
-            menu.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            document.querySelectorAll('.nav-dropdown-menu.show').forEach(menu => {
-                menu.classList.remove('show');
-            });
-        });
+{SHARED_NAV_JS}
 
         // Filter Calculators by Category
         function filterCalculators(category) {
@@ -22504,7 +20722,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
 </html>
 """
 
-HYPOTENSION_HTML = """<!DOCTYPE html>
+HYPOTENSION_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Google Analytics 4 -->
@@ -24049,30 +22267,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        // Dropdown toggle
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay when form is submitted
         document.addEventListener('DOMContentLoaded', function() {
@@ -25201,7 +23396,7 @@ def crisis_protocols():
     return render_template_string(CRISIS_HTML)
 
 
-INFORMED_CONSENT_HTML = """<!DOCTYPE html>
+INFORMED_CONSENT_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26685,28 +24880,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay when form is submitted
         document.addEventListener('DOMContentLoaded', function() {
@@ -26739,7 +24913,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
 # DIFFICULT AIRWAY ASSESSMENT - REVOLUTIONARY VERSION WITH DALL-E
 # ============================================================================
 
-DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
+DIFFICULT_AIRWAY_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27894,22 +26068,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleNavDropdown(event) {
-            event.stopPropagation();
-            const menu = event.currentTarget.nextElementSibling;
-            menu.classList.toggle('show');
-
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!event.currentTarget.contains(e.target)) {
-                    menu.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
-
-        function toggleMobileMenu() {
-            // Mobile menu toggle (if needed)
-        }
+{SHARED_NAV_JS}
 
         // Show loading overlay on form submit
         document.addEventListener('DOMContentLoaded', function() {
@@ -30250,7 +28409,7 @@ Keep each question under 60 characters."""
 
 # ====== Authentication & Pricing Templates ======
 
-LOGIN_HTML = """<!DOCTYPE html>
+LOGIN_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30259,7 +28418,7 @@ LOGIN_HTML = """<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -30285,7 +28444,7 @@ LOGIN_HTML = """<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -30400,7 +28559,7 @@ LOGIN_HTML = """<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -30444,7 +28603,7 @@ LOGIN_HTML = """<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -30513,7 +28672,7 @@ LOGIN_HTML = """<!DOCTYPE html>
         .submit-btn {
             width: 100%;
             padding: 16px 24px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -30562,7 +28721,7 @@ LOGIN_HTML = """<!DOCTYPE html>
         .social-btn {
             flex: 1;
             padding: 12px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
@@ -30759,7 +28918,7 @@ LOGIN_HTML = """<!DOCTYPE html>
 </html>
 """
 
-REGISTER_HTML = """<!DOCTYPE html>
+REGISTER_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -30768,7 +28927,7 @@ REGISTER_HTML = """<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -30794,7 +28953,7 @@ REGISTER_HTML = """<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -30909,7 +29068,7 @@ REGISTER_HTML = """<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -30965,7 +29124,7 @@ REGISTER_HTML = """<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -31018,7 +29177,7 @@ REGISTER_HTML = """<!DOCTYPE html>
         .submit-btn {
             width: 100%;
             padding: 16px 24px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -31067,7 +29226,7 @@ REGISTER_HTML = """<!DOCTYPE html>
         .social-btn {
             flex: 1;
             padding: 12px 16px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 14px;
             font-weight: 500;
             color: var(--text-primary);
@@ -31265,7 +29424,7 @@ REGISTER_HTML = """<!DOCTYPE html>
 </html>
 """
 
-RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
+RESEND_VERIFICATION_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -31274,7 +29433,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
     <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -31300,7 +29459,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
         }
 
         body {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             background: linear-gradient(145deg, #f0f7ff 0%, #f8fafc 50%, #f0f4f8 100%);
             display: flex;
@@ -31415,7 +29574,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
         }
 
         .auth-title {
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 26px;
             font-weight: 700;
             color: var(--text-primary);
@@ -31460,7 +29619,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
         .form-input {
             width: 100%;
             padding: 14px 18px;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             color: var(--text-primary);
             background: var(--input-bg);
@@ -31479,7 +29638,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
         .btn-primary {
             width: 100%;
             padding: 14px 24px;
-            font-family: 'Sora', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 15px;
             font-weight: 600;
             color: white;
@@ -31621,7 +29780,7 @@ RESEND_VERIFICATION_HTML = """<!DOCTYPE html>
 </html>
 """
 
-ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
+ADMIN_DASHBOARD_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32450,7 +30609,7 @@ ADMIN_DASHBOARD_HTML = """<!DOCTYPE html>
 </html>
 """
 
-PRICING_HTML = """<!DOCTYPE html>
+PRICING_HTML = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -33211,44 +31370,7 @@ PRICING_HTML = """<!DOCTYPE html>
     </div>
 
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.querySelector('.mobile-menu-btn');
-            if (menu && btn) {
-                menu.classList.toggle('active');
-                btn.classList.toggle('active');
-            }
-        }
-
-        function toggleNavDropdown(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            // Find the dropdown container and menu
-            const dropdownContainer = e.target.closest('.nav-dropdown');
-            if (dropdownContainer) {
-                const menu = dropdownContainer.querySelector('.nav-dropdown-menu');
-                if (menu) {
-                    // Close other dropdowns first
-                    document.querySelectorAll('.nav-dropdown-menu').forEach(m => {
-                        if (m !== menu) {
-                            m.classList.remove('show');
-                        }
-                    });
-                    // Toggle this dropdown
-                    menu.classList.toggle('show');
-                }
-            }
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.nav-dropdown')) {
-                document.querySelectorAll('.nav-dropdown-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
-            }
-        });
+{SHARED_NAV_JS}
     </script>
 </body>
 </html>
