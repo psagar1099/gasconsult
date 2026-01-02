@@ -7927,6 +7927,96 @@ SHARED_DESIGN_TOKENS = """
             --space-5xl: 48px;    /* 5X large: hero sections */
             --space-6xl: 64px;    /* 6X large: major page divisions */
         }
+
+        /* Unified Button Components */
+        .btn-primary {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            font-size: 15px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-700);
+            background: var(--gray-100);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-400);
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: var(--space-md) var(--space-xl);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--blue-600);
+            background: transparent;
+            border: 2px solid var(--blue-600);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline:hover {
+            background: var(--blue-50);
+        }
+
+        .btn-outline:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            padding: var(--space-sm) var(--space-lg);
+            font-size: 14px;
+        }
+
+        .btn-lg {
+            padding: var(--space-lg) var(--space-2xl);
+            font-size: 16px;
+        }
 """
 
 HTML = """<!DOCTYPE html>
