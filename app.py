@@ -549,38 +549,44 @@ def send_password_reset_email(user_email, user_name, reset_token):
 
 
 # ====== Data Storage ======
-# Simple in-memory storage for bookmarks and shared links
-# In production, replace with database (Redis, PostgreSQL, etc.)
-BOOKMARKS_STORAGE = {}  # {user_session_id: [{id, query, answer, references, timestamp}]}
-SHARED_LINKS_STORAGE = {}  # {share_id: {query, answer, references, timestamp, expires}}
+# Bookmarks and shared links are now persisted in SQLite database (see database.py)
+# Legacy in-memory storage removed - all data now persistent across restarts
 
-# In-memory cache for stream data (backup for session issues)
-# This helps when session state isn't shared properly between requests
-# WARNING: This won't work with multiple Gunicorn workers unless using sticky sessions
-STREAM_DATA_CACHE = {}  # {request_id: {data, expires_at}}
+# Stream data cache TTL
 STREAM_CACHE_TTL = 300  # 5 minutes
 
 def store_stream_data(request_id, data):
-    """Store stream data in both session and cache"""
-    STREAM_DATA_CACHE[request_id] = {
-        'data': data,
-        'expires_at': datetime.now() + timedelta(seconds=STREAM_CACHE_TTL)
-    }
-    # Clean up expired entries
-    now = datetime.now()
-    expired = [k for k, v in STREAM_DATA_CACHE.items() if v['expires_at'] < now]
-    for k in expired:
-        del STREAM_DATA_CACHE[k]
+    """
+    Store stream data in Redis cache (multi-worker safe).
+    Falls back to session if Redis unavailable.
+    """
+    try:
+        # Store in Redis with TTL
+        cache_key = f"stream:{request_id}"
+        redis_client.setex(cache_key, STREAM_CACHE_TTL, json.dumps(data))
+        logger.debug(f"Stored stream data in Redis: {request_id}")
+    except Exception as e:
+        logger.warning(f"Failed to store stream data in Redis: {e}. Using session fallback.")
+        # Fallback: store in session
+        session[f'stream_{request_id}'] = data
+        session.modified = True
 
 def get_stream_data(request_id):
-    """Get stream data from cache (fallback for session issues)"""
-    if request_id in STREAM_DATA_CACHE:
-        entry = STREAM_DATA_CACHE[request_id]
-        if entry['expires_at'] > datetime.now():
-            return entry['data']
-        else:
-            del STREAM_DATA_CACHE[request_id]
-    return None
+    """
+    Get stream data from Redis cache (fallback to session).
+    """
+    try:
+        # Try Redis first
+        cache_key = f"stream:{request_id}"
+        cached = redis_client.get(cache_key)
+        if cached:
+            logger.debug(f"Retrieved stream data from Redis: {request_id}")
+            return json.loads(cached)
+    except Exception as e:
+        logger.warning(f"Failed to get stream data from Redis: {e}. Using session fallback.")
+
+    # Fallback: try session
+    return session.get(f'stream_{request_id}')
 
 def strip_markdown_code_fences(content):
     """Remove markdown code fences (```html ... ```) from content"""
@@ -10596,19 +10602,23 @@ HTML = """<!DOCTYPE html>
                     <div class="chat-hints">
                         <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
-                            Pre-op cardiac risk
+                            What is the role of TXA in spine surgery?
                         </div>
                         <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                            Sugammadex dosing
+                            Propofol dosing in pediatrics
                         </div>
                         <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                            MH protocol
+                            Best PONV prophylaxis strategies
                         </div>
                         <div class="hint-chip" onclick="fillQuery(event)">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                            RSI checklist
+                            When to hold anticoagulation pre-operatively?
+                        </div>
+                        <div class="hint-chip" onclick="fillQuery(event)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            Sugammadex reversal dosing and timing
                         </div>
                     </div>
                 </form>
@@ -15659,15 +15669,21 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
                 <h2>1. Information We Collect</h2>
                 <p>
-                    We practice data minimization and collect only information necessary to operate the Service. We DO NOT require user accounts
-                    or registration. We DO NOT store long-term personal health information.
+                    We practice data minimization and collect only information necessary to operate the Service. User accounts are OPTIONAL - you can use the Service as a guest with temporary session storage only. We DO NOT store long-term personal health information.
                 </p>
 
                 <h3>1.1 Information You Voluntarily Provide</h3>
                 <ul>
-                    <li><strong>Medical Queries:</strong> Clinical questions you submit about anesthesiology topics (stored temporarily during your session only)</li>
-                    <li><strong>Form Inputs:</strong> Data entered into pre-operative assessment tools, clinical calculators, or hypotension predictors (processed in real-time, not permanently stored)</li>
-                    <li><strong>Session Conversation History:</strong> Your chat interactions during an active browser session (automatically cleared when you close the browser or click "Clear Session")</li>
+                    <li><strong>Account Information (Optional):</strong> If you create an account: email address, password (stored as bcrypt hash), and optional OAuth credentials (Google/Apple sign-in)</li>
+                    <li><strong>Medical Queries:</strong> Clinical questions you submit about anesthesiology topics
+                        <ul>
+                            <li>Guest users: Stored temporarily in session (1-hour TTL), not saved to database</li>
+                            <li>Registered users: Saved persistently to enable access across sessions (can be deleted anytime)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Form Inputs:</strong> Data entered into pre-operative assessment tools, clinical calculators, or hypotension predictors (processed in real-time, not permanently stored unless explicitly saved by registered users)</li>
+                    <li><strong>Bookmarks/Saved Responses:</strong> Responses you explicitly save to your library (registered users only, stored in database)</li>
+                    <li><strong>Shared Links:</strong> When you create a shareable link, the query and response are stored for 30 days</li>
                 </ul>
 
                 <h3>1.2 Automatically Collected Technical Information</h3>
@@ -15681,11 +15697,11 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
 
                 <h3>1.3 Information We DO NOT Collect</h3>
                 <ul>
-                    <li>User accounts, passwords, or login credentials (we do not have user registration)</li>
-                    <li>Payment information (the Service is free)</li>
-                    <li>Long-term storage of medical queries or conversation history</li>
+                    <li>Payment information beyond payment processor IDs (Stripe handles all payment details - we never see your credit card)</li>
+                    <li>Protected Health Information (PHI) or personally identifiable patient data (see Section 3)</li>
                     <li>Biometric data, precise geolocation, or device fingerprinting beyond standard web analytics</li>
-                    <li>Social media profiles or third-party account linkages</li>
+                    <li>Browsing history outside of gasconsult.ai</li>
+                    <li>Data from guest users beyond their active session (1-hour TTL, then permanently deleted)</li>
                 </ul>
 
                 <h2>2. How We Use Your Information</h2>
@@ -15785,12 +15801,40 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 </p>
 
                 <h2>6. Data Retention and Deletion</h2>
+
+                <h3>6.1 For Guest Users (No Account)</h3>
                 <ul>
-                    <li><strong>Session Data (Chat History):</strong> Stored temporarily in server-side sessions during your active browser session. Automatically deleted when you close your browser, click "Clear Session," or after 24 hours of inactivity.</li>
+                    <li><strong>Session Data (Chat History):</strong> Stored temporarily in server-side sessions (Redis) during your active browser session. Automatically deleted when you click "Clear Session" or after 1 hour of inactivity.</li>
+                    <li><strong>No Persistent Storage:</strong> If you do not create an account, your queries and conversation history are NOT saved to permanent storage and will be lost when your session expires.</li>
+                </ul>
+
+                <h3>6.2 For Registered Users (With Account)</h3>
+                <ul>
+                    <li><strong>Account Information:</strong> Email address, password hash (bcrypt encrypted), and account creation date are stored in our SQLite database while your account is active.</li>
+                    <li><strong>Conversation History:</strong> If you create an account, your chat conversations are saved persistently to our database to enable access across sessions and devices. You can view, manage, and delete individual conversations from the history sidebar.</li>
+                    <li><strong>Bookmarks/Saved Responses:</strong> Responses you explicitly save to your library are stored persistently in our database. You can delete these at any time from your library page.</li>
+                    <li><strong>OAuth Data:</strong> If you sign in with Google or Apple, we store your OAuth provider ID and email address. We do NOT store your Google/Apple password.</li>
+                    <li><strong>Subscription Information:</strong> For paid subscribers, we retain subscription tier, status, and payment processor IDs (e.g., Stripe customer ID) for billing purposes.</li>
+                </ul>
+
+                <h3>6.3 Shared Links</h3>
+                <ul>
+                    <li><strong>Public Shared Responses:</strong> When you create a shareable link using the "Share" button, the query and response are stored in our database with a 30-day expiration. After 30 days, shared links are automatically deleted.</li>
+                    <li><strong>No Authentication Required:</strong> Anyone with the share link can view the shared response until it expires or is manually deleted.</li>
+                </ul>
+
+                <h3>6.4 System Data</h3>
+                <ul>
                     <li><strong>System Logs:</strong> Technical logs (IP addresses, timestamps, error messages) are retained for 90 days for debugging, security monitoring, and abuse prevention, then permanently deleted.</li>
                     <li><strong>Analytics Data:</strong> Anonymized and aggregated usage statistics (page views, feature usage) are retained indefinitely for service improvement but cannot be traced back to individual users.</li>
-                    <li><strong>No Long-Term Storage:</strong> We do NOT maintain databases of your medical queries, conversation transcripts, or form inputs beyond the temporary session duration.</li>
-                    <li><strong>Manual Deletion:</strong> You can clear your session data at any time by clicking the "Clear Session" button in the chat interface or by closing your browser.</li>
+                </ul>
+
+                <h3>6.5 Data Deletion</h3>
+                <ul>
+                    <li><strong>Clear Session:</strong> Click "Clear Session" to delete temporary session data immediately (applies to both guest and registered users' current session).</li>
+                    <li><strong>Delete Account:</strong> Contact privacy@gasconsult.ai to request full account deletion. We will permanently delete your account, conversation history, bookmarks, and associated data within 30 days, except where required by law.</li>
+                    <li><strong>Delete Individual Conversations:</strong> Registered users can delete individual conversations from the history sidebar at any time.</li>
+                    <li><strong>Data Export:</strong> Registered users can request a copy of their data in machine-readable format (JSON) by contacting privacy@gasconsult.ai.</li>
                 </ul>
 
                 <h2>7. Your Privacy Rights (GDPR, CCPA, and Other Laws)</h2>
@@ -15825,12 +15869,19 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 <h3>7.3 How to Exercise Your Rights</h3>
                 <p>
                     To submit a privacy rights request, email us at <strong>privacy@gasconsult.ai</strong> with the subject line "Privacy Rights Request."
-                    Please include: (1) your name and contact information, (2) description of your request, (3) approximate dates of service usage (if known).
+                    Please include: (1) your name and email address (if you have an account), (2) description of your request, (3) approximate dates of service usage (if applicable).
                 </p>
                 <p>
-                    <strong>Important Limitation:</strong> Due to our minimal data collection practices (no user accounts, temporary session storage only),
-                    we may have limited ability to identify or retrieve historical data associated with your use of the Service. In most cases, simply clearing
-                    your browser session will delete all temporary data.
+                    <strong>For Registered Users:</strong> If you have created an account, we can identify and retrieve your data (conversation history, bookmarks, account information) using your email address. You can request:
+                </p>
+                <ul>
+                    <li>Export of all your data in JSON format</li>
+                    <li>Deletion of your account and all associated data</li>
+                    <li>Correction of inaccurate account information</li>
+                    <li>Restriction of processing (account suspension)</li>
+                </ul>
+                <p>
+                    <strong>For Guest Users:</strong> If you have not created an account, your data is stored only in temporary sessions (Redis, 1-hour TTL). We have limited ability to identify or retrieve historical data. Simply clearing your browser session will delete all temporary data.
                 </p>
                 <p>
                     We will respond to verifiable requests within 30 days (GDPR) or 45 days (CCPA). We reserve the right to request additional information
@@ -24599,9 +24650,8 @@ def stream():
         stream_data = session[stream_key]
         logger.info(f"[STREAM] Found stream data in session")
     else:
-        # Fallback to in-memory cache
-        logger.info(f"[STREAM] Session miss, checking cache...")
-        logger.info(f"[STREAM] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
+        # Fallback to Redis/session cache
+        logger.info(f"[STREAM] Session miss, checking Redis cache...")
         stream_data = get_stream_data(request_id)
         if stream_data:
             logger.info(f"[STREAM] Found stream data in cache (session fallback)")
@@ -25544,7 +25594,6 @@ Respond with maximum clinical utility:"""
 
             logger.info(f"[CHAT] Stored stream data with key: {stream_key}")
             logger.info(f"[CHAT] Session keys after storing: {[k for k in session.keys() if k.startswith('stream_')]}")
-            logger.info(f"[CHAT] Cache keys: {list(STREAM_DATA_CACHE.keys())}")
 
             logger.debug(f"Stream data prepared, returning request_id: {request_id}")
 
@@ -30478,15 +30527,14 @@ def bookmark_response():
         message_index = data.get('message_index')
         action = data.get('action', 'add')  # 'add' or 'remove'
 
-        # Get user session ID
-        user_id = session.get('user_id')
-        if not user_id:
-            user_id = str(uuid.uuid4())
-            session['user_id'] = user_id
+        # Get user session ID and user_id (if authenticated)
+        user_session_id = session.get('user_id')
+        if not user_session_id:
+            user_session_id = str(uuid.uuid4())
+            session['user_id'] = user_session_id
             session.modified = True
 
-        if user_id not in BOOKMARKS_STORAGE:
-            BOOKMARKS_STORAGE[user_id] = []
+        authenticated_user_id = current_user.id if current_user.is_authenticated else None
 
         messages = session.get('messages', [])
 
@@ -30498,21 +30546,30 @@ def bookmark_response():
         response_msg = messages[message_index]
 
         if action == 'add':
-            bookmark = {
-                'id': str(uuid.uuid4()),
-                'query': query,
-                'answer': response_msg['content'],
-                'references': response_msg.get('references', []),
-                'num_papers': response_msg.get('num_papers', 0),
-                'timestamp': datetime.now().isoformat(),
-                'message_index': message_index
-            }
-            BOOKMARKS_STORAGE[user_id].append(bookmark)
-            return jsonify({'success': True, 'action': 'added', 'bookmark_id': bookmark['id']})
+            # Save to database instead of memory
+            bookmark_id = database.save_bookmark(
+                user_session_id=user_session_id,
+                user_id=authenticated_user_id,
+                query=query,
+                answer=response_msg['content'],
+                references=response_msg.get('references', []),
+                num_papers=response_msg.get('num_papers', 0),
+                evidence_strength=response_msg.get('evidence_strength')
+            )
+
+            if bookmark_id:
+                return jsonify({'success': True, 'action': 'added', 'bookmark_id': bookmark_id})
+            else:
+                return jsonify({'error': 'Failed to save bookmark'}), 500
+
         elif action == 'remove':
             bookmark_id = data.get('bookmark_id')
-            BOOKMARKS_STORAGE[user_id] = [b for b in BOOKMARKS_STORAGE[user_id] if b['id'] != bookmark_id]
-            return jsonify({'success': True, 'action': 'removed'})
+            success = database.delete_bookmark(bookmark_id)
+
+            if success:
+                return jsonify({'success': True, 'action': 'removed'})
+            else:
+                return jsonify({'error': 'Failed to delete bookmark'}), 500
 
     except Exception as e:
         logger.error(f"Bookmark error: {str(e)}")
@@ -30521,11 +30578,14 @@ def bookmark_response():
 @app.route("/library")
 def library():
     """View all bookmarked responses"""
-    user_id = session.get('user_id')
-    bookmarks = BOOKMARKS_STORAGE.get(user_id, []) if user_id else []
+    user_session_id = session.get('user_id')
+    authenticated_user_id = current_user.id if current_user.is_authenticated else None
 
-    # Sort by timestamp (newest first)
-    bookmarks = sorted(bookmarks, key=lambda x: x['timestamp'], reverse=True)
+    # Fetch bookmarks from database
+    bookmarks = database.get_bookmarks(
+        user_session_id=user_session_id,
+        user_id=authenticated_user_id
+    )
 
     return render_template_string(LIBRARY_HTML, bookmarks=bookmarks)
 
@@ -30552,34 +30612,15 @@ def save_to_library():
         # Get the corresponding user query (previous message)
         query = messages[message_index - 1]['content'] if message_index > 0 else 'Direct query'
 
-        # Generate unique bookmark ID
-        bookmark_id = str(uuid.uuid4())
-
-        # Create bookmark object
-        bookmark = {
-            'id': bookmark_id,
-            'query': query,
-            'answer': ai_message.get('content', ''),
-            'references': ai_message.get('references', []),
-            'num_papers': ai_message.get('num_papers', 0),
-            'evidence_strength': ai_message.get('evidence_strength'),
-            'timestamp': datetime.now().isoformat()
-        }
-
-        # Get user ID (use session user_id or current_user id)
-        user_id = session.get('user_id') or (current_user.id if current_user.is_authenticated else None)
-
-        if not user_id:
-            return jsonify({'error': 'User not found'}), 401
-
-        # Initialize user's bookmarks if not exists
-        if user_id not in BOOKMARKS_STORAGE:
-            BOOKMARKS_STORAGE[user_id] = []
+        # Get user IDs
+        user_session_id = session.get('user_id')
+        authenticated_user_id = current_user.id
 
         # Check if already saved (by comparing query and answer content)
+        existing_bookmarks = database.get_bookmarks(user_id=authenticated_user_id)
         existing = any(
-            b['query'] == query and b['answer'] == bookmark['answer']
-            for b in BOOKMARKS_STORAGE[user_id]
+            b['query'] == query and b['answer'] == ai_message.get('content', '')
+            for b in existing_bookmarks
         )
 
         if existing:
@@ -30589,16 +30630,26 @@ def save_to_library():
                 'already_saved': True
             })
 
-        # Add to library
-        BOOKMARKS_STORAGE[user_id].append(bookmark)
+        # Save to database
+        bookmark_id = database.save_bookmark(
+            user_session_id=user_session_id,
+            user_id=authenticated_user_id,
+            query=query,
+            answer=ai_message.get('content', ''),
+            references=ai_message.get('references', []),
+            num_papers=ai_message.get('num_papers', 0),
+            evidence_strength=ai_message.get('evidence_strength')
+        )
 
-        logger.info(f"User {user_id} saved message to library: {bookmark_id}")
-
-        return jsonify({
-            'success': True,
-            'message': 'Saved to library',
-            'bookmark_id': bookmark_id
-        })
+        if bookmark_id:
+            logger.info(f"User {authenticated_user_id} saved message to library: {bookmark_id}")
+            return jsonify({
+                'success': True,
+                'message': 'Saved to library',
+                'bookmark_id': bookmark_id
+            })
+        else:
+            return jsonify({'error': 'Failed to save to database'}), 500
 
     except Exception as e:
         logger.error(f"Error saving to library: {str(e)}")
@@ -30619,21 +30670,19 @@ def create_share_link():
         query = messages[message_index - 1]['content'] if message_index > 0 else 'Direct query'
         response_msg = messages[message_index]
 
-        # Generate unique share ID
-        share_id = str(uuid.uuid4())[:8]
+        # Save to database (expires in 30 days)
+        share_id = database.create_shared_link(
+            query=query,
+            answer=response_msg['content'],
+            references=response_msg.get('references', []),
+            expires_days=30
+        )
 
-        # Store shared response (expires in 30 days)
-        SHARED_LINKS_STORAGE[share_id] = {
-            'query': query,
-            'answer': response_msg['content'],
-            'references': response_msg.get('references', []),
-            'num_papers': response_msg.get('num_papers', 0),
-            'timestamp': datetime.now().isoformat(),
-            'expires': (datetime.now() + timedelta(days=30)).isoformat()
-        }
-
-        share_url = f"{request.host_url}r/{share_id}"
-        return jsonify({'success': True, 'share_url': share_url, 'share_id': share_id})
+        if share_id:
+            share_url = f"{request.host_url}r/{share_id}"
+            return jsonify({'success': True, 'share_url': share_url, 'share_id': share_id})
+        else:
+            return jsonify({'error': 'Failed to create shared link'}), 500
 
     except Exception as e:
         logger.error(f"Share link error: {str(e)}")
@@ -30643,16 +30692,10 @@ def create_share_link():
 @csrf.exempt
 def view_shared_response(share_id):
     """View a shared response"""
-    shared_data = SHARED_LINKS_STORAGE.get(share_id)
+    shared_data = database.get_shared_link(share_id)
 
     if not shared_data:
         return "Shared link not found or expired", 404
-
-    # Check if expired
-    expires = datetime.fromisoformat(shared_data['expires'])
-    if datetime.now() > expires:
-        del SHARED_LINKS_STORAGE[share_id]
-        return "Shared link has expired", 410
 
     return render_template_string(SHARED_RESPONSE_HTML, data=shared_data, share_id=share_id)
 
