@@ -175,6 +175,57 @@ def init_db():
                 ON messages(conversation_id, created_at ASC)
             """)
 
+            # Create bookmarks table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS bookmarks (
+                    id TEXT PRIMARY KEY,
+                    user_session_id TEXT,
+                    user_id TEXT,
+                    query TEXT NOT NULL,
+                    answer TEXT NOT NULL,
+                    paper_references TEXT,
+                    num_papers INTEGER DEFAULT 0,
+                    evidence_strength TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+                )
+            """)
+
+            # Create shared_links table
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS shared_links (
+                    id TEXT PRIMARY KEY,
+                    share_id TEXT UNIQUE NOT NULL,
+                    query TEXT NOT NULL,
+                    answer TEXT NOT NULL,
+                    paper_references TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    expires_at TIMESTAMP NOT NULL
+                )
+            """)
+
+            # Create indexes for bookmarks
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_bookmarks_user_session
+                ON bookmarks(user_session_id, created_at DESC)
+            """)
+
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_bookmarks_user
+                ON bookmarks(user_id, created_at DESC)
+            """)
+
+            # Create indexes for shared_links
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_shared_links_share_id
+                ON shared_links(share_id)
+            """)
+
+            conn.execute("""
+                CREATE INDEX IF NOT EXISTS idx_shared_links_expires
+                ON shared_links(expires_at)
+            """)
+
             logger.info(f"Database initialized successfully at {DB_PATH}")
             return True
 
@@ -1231,6 +1282,259 @@ def migrate_database_for_oauth() -> bool:
     except Exception as e:
         logger.error(f"Failed to migrate database for OAuth: {e}")
         return False
+
+
+# ====== Bookmark Functions ======
+
+def save_bookmark(
+    user_session_id: str,
+    query: str,
+    answer: str,
+    references: Optional[List[Dict]] = None,
+    num_papers: int = 0,
+    evidence_strength: Optional[str] = None,
+    user_id: Optional[str] = None
+) -> Optional[str]:
+    """
+    Save a bookmark to the database.
+
+    Args:
+        user_session_id: Session ID (for guest users)
+        query: The original query
+        answer: The assistant's answer
+        references: List of paper references
+        num_papers: Number of papers cited
+        evidence_strength: Evidence quality ('high', 'moderate', 'low')
+        user_id: User ID (for authenticated users)
+
+    Returns:
+        str: Bookmark ID if successful, None otherwise
+    """
+    try:
+        bookmark_id = str(uuid.uuid4())
+        references_json = json.dumps(references) if references else None
+
+        with get_db_connection() as conn:
+            conn.execute("""
+                INSERT INTO bookmarks
+                (id, user_session_id, user_id, query, answer, references, num_papers, evidence_strength)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (bookmark_id, user_session_id, user_id, query, answer, references_json, num_papers, evidence_strength))
+
+        logger.info(f"Saved bookmark {bookmark_id} for user/session {user_id or user_session_id}")
+        return bookmark_id
+
+    except Exception as e:
+        logger.error(f"Failed to save bookmark: {e}")
+        return None
+
+
+def get_bookmarks(
+    user_session_id: Optional[str] = None,
+    user_id: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0
+) -> List[Dict]:
+    """
+    Retrieve bookmarks for a user or session.
+
+    Args:
+        user_session_id: Session ID (for guest users)
+        user_id: User ID (for authenticated users)
+        limit: Maximum number of bookmarks to return
+        offset: Number of bookmarks to skip
+
+    Returns:
+        List of bookmark dictionaries
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+
+            if user_id:
+                cursor.execute("""
+                    SELECT id, query, answer, paper_references, num_papers, evidence_strength, created_at
+                    FROM bookmarks
+                    WHERE user_id = ?
+                    ORDER BY created_at DESC
+                    LIMIT ? OFFSET ?
+                """, (user_id, limit, offset))
+            elif user_session_id:
+                cursor.execute("""
+                    SELECT id, query, answer, paper_references, num_papers, evidence_strength, created_at
+                    FROM bookmarks
+                    WHERE user_session_id = ?
+                    ORDER BY created_at DESC
+                    LIMIT ? OFFSET ?
+                """, (user_session_id, limit, offset))
+            else:
+                return []
+
+            rows = cursor.fetchall()
+            bookmarks = []
+
+            for row in rows:
+                bookmark = {
+                    'id': row['id'],
+                    'query': row['query'],
+                    'answer': row['answer'],
+                    'references': json.loads(row['paper_references']) if row['paper_references'] else [],
+                    'num_papers': row['num_papers'],
+                    'evidence_strength': row['evidence_strength'],
+                    'timestamp': row['created_at']
+                }
+                bookmarks.append(bookmark)
+
+            return bookmarks
+
+    except Exception as e:
+        logger.error(f"Failed to retrieve bookmarks: {e}")
+        return []
+
+
+def delete_bookmark(bookmark_id: str) -> bool:
+    """
+    Delete a bookmark by ID.
+
+    Args:
+        bookmark_id: The bookmark ID to delete
+
+    Returns:
+        bool: True if successful, False otherwise
+    """
+    try:
+        with get_db_connection() as conn:
+            conn.execute("DELETE FROM bookmarks WHERE id = ?", (bookmark_id,))
+
+        logger.info(f"Deleted bookmark {bookmark_id}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Failed to delete bookmark {bookmark_id}: {e}")
+        return False
+
+
+# ====== Shared Link Functions ======
+
+def create_shared_link(
+    query: str,
+    answer: str,
+    references: Optional[List[Dict]] = None,
+    expires_days: int = 30
+) -> Optional[str]:
+    """
+    Create a shareable link for a response.
+
+    Args:
+        query: The original query
+        answer: The assistant's answer
+        references: List of paper references
+        expires_days: Number of days until link expires (default: 30)
+
+    Returns:
+        str: Share ID if successful, None otherwise
+    """
+    try:
+        link_id = str(uuid.uuid4())
+        share_id = str(uuid.uuid4())[:12]  # Short ID for URLs
+        references_json = json.dumps(references) if references else None
+
+        from datetime import datetime, timedelta
+        expires_at = datetime.now() + timedelta(days=expires_days)
+
+        with get_db_connection() as conn:
+            conn.execute("""
+                INSERT INTO shared_links
+                (id, share_id, query, answer, references, expires_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (link_id, share_id, query, answer, references_json, expires_at))
+
+        logger.info(f"Created shared link {share_id} (expires: {expires_at})")
+        return share_id
+
+    except Exception as e:
+        logger.error(f"Failed to create shared link: {e}")
+        return None
+
+
+def get_shared_link(share_id: str) -> Optional[Dict]:
+    """
+    Retrieve a shared link by share ID.
+
+    Args:
+        share_id: The share ID
+
+    Returns:
+        Dict containing the shared data, or None if not found/expired
+    """
+    try:
+        from datetime import datetime
+
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT share_id, query, answer, paper_references, created_at, expires_at
+                FROM shared_links
+                WHERE share_id = ?
+            """, (share_id,))
+
+            row = cursor.fetchone()
+
+            if not row:
+                logger.warning(f"Shared link not found: {share_id}")
+                return None
+
+            # Check if expired
+            expires_at = datetime.fromisoformat(row['expires_at'])
+            if datetime.now() > expires_at:
+                logger.info(f"Shared link expired: {share_id}")
+                # Delete expired link
+                conn.execute("DELETE FROM shared_links WHERE share_id = ?", (share_id,))
+                return None
+
+            shared_data = {
+                'share_id': row['share_id'],
+                'query': row['query'],
+                'answer': row['answer'],
+                'references': json.loads(row['paper_references']) if row['paper_references'] else [],
+                'timestamp': row['created_at'],
+                'expires': row['expires_at']
+            }
+
+            return shared_data
+
+    except Exception as e:
+        logger.error(f"Failed to retrieve shared link {share_id}: {e}")
+        return None
+
+
+def cleanup_expired_shared_links() -> int:
+    """
+    Delete all expired shared links.
+
+    Returns:
+        int: Number of links deleted
+    """
+    try:
+        from datetime import datetime
+
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                DELETE FROM shared_links
+                WHERE expires_at < ?
+            """, (datetime.now(),))
+
+            deleted_count = cursor.rowcount
+
+        if deleted_count > 0:
+            logger.info(f"Cleaned up {deleted_count} expired shared links")
+
+        return deleted_count
+
+    except Exception as e:
+        logger.error(f"Failed to cleanup expired shared links: {e}")
+        return 0
 
 
 if __name__ == '__main__':
