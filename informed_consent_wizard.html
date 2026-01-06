@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informed Consent Generator - GasConsult.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --green-50: #ECFDF5;
+            --green-500: #10B981;
+            --indigo-500: #6366F1;
+            --indigo-600: #4F46E5;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--indigo-600), var(--indigo-500));
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-400);
+            transition: color 0.3s ease;
+        }
+
+        .progress-step.active { color: var(--indigo-600); }
+        .progress-step.completed { color: var(--green-500); }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 80px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.05));
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px;
+            margin-bottom: 16px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--indigo-500);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, var(--indigo-500) 0%, var(--indigo-600) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Wizard Card */
+        .wizard-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+            animation: scaleIn 0.4s ease;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-header {
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--indigo-600), var(--indigo-500));
+            color: white;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .required { color: #EF4444; }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--indigo-500);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+        }
+
+        textarea.form-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 6px;
+        }
+
+        /* Risk Cards */
+        .risk-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .risk-card {
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 56px;
+        }
+
+        .risk-card:hover {
+            border-color: var(--indigo-400);
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .risk-card.selected {
+            border-color: var(--indigo-600);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.05));
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+        }
+
+        .risk-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 6px;
+            border: 2px solid var(--gray-400);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .risk-card.selected .risk-checkbox {
+            background: var(--indigo-600);
+            border-color: var(--indigo-600);
+        }
+
+        .risk-checkbox svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+            display: none;
+        }
+
+        .risk-card.selected .risk-checkbox svg {
+            display: block;
+        }
+
+        .risk-content {
+            flex: 1;
+        }
+
+        .risk-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 4px;
+        }
+
+        .risk-card.selected .risk-title {
+            color: var(--indigo-700);
+        }
+
+        .risk-description {
+            font-size: 13px;
+            color: var(--gray-600);
+            line-height: 1.5;
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px;
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+            z-index: 90;
+        }
+
+        .action-bar-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 56px;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--indigo-600), var(--indigo-500));
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--indigo-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+                padding-bottom: 100px;
+            }
+
+            .container {
+                padding-top: 20px;
+            }
+
+            .hero {
+                margin-top: 60px;
+                margin-bottom: 24px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .wizard-card {
+                padding: 28px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Generating consent form...</div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+        </div>
+        <div class="progress-steps">
+            <span class="progress-step active" id="progressStep1">Patient</span>
+            <span class="progress-step" id="progressStep2">Procedure</span>
+            <span class="progress-step" id="progressStep3">Review</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-badge">
+                <div class="badge-dot"></div>
+                <span style="font-size: 12px; font-weight: 600; color: var(--indigo-600);">Legal Compliance</span>
+            </div>
+            <h1 class="hero-title">
+                Informed <span class="gradient">Consent</span> Generator
+            </h1>
+            <p class="hero-subtitle">
+                Create comprehensive, evidence-based informed consent documents
+            </p>
+        </div>
+
+        <!-- Wizard Card -->
+        <div class="wizard-card">
+            <form method="POST" action="/informed-consent" id="consentForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Step 1: Patient Information -->
+                <div class="step active" id="step1">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h2 class="step-title">Patient Information</h2>
+                        <p class="step-description">Basic patient demographics</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Patient Name <span class="required">*</span></label>
+                        <input type="text" name="patient_name" class="form-input" placeholder="John Doe" required id="inputPatientName">
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Date of Birth <span class="required">*</span></label>
+                            <input type="date" name="dob" class="form-input" required id="inputDOB">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Medical Record Number</label>
+                            <input type="text" name="mrn" class="form-input" placeholder="MRN12345" id="inputMRN">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Anesthesiologist Name <span class="required">*</span></label>
+                        <input type="text" name="anesthesiologist_name" class="form-input" placeholder="Dr. Jane Smith" required id="inputAnesthName">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Institution <span class="required">*</span></label>
+                        <input type="text" name="institution" class="form-input" placeholder="General Hospital" required id="inputInstitution">
+                    </div>
+                </div>
+
+                <!-- Step 2: Procedure & Risks -->
+                <div class="step" id="step2">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h2 class="step-title">Procedure & Risks</h2>
+                        <p class="step-description">Define the procedure and select relevant risks</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Anesthesia Type <span class="required">*</span></label>
+                        <select name="anesthesia_type" class="form-select" required id="inputAnesthesiaType">
+                            <option value="">Select...</option>
+                            <option value="General Anesthesia">General Anesthesia</option>
+                            <option value="Spinal Anesthesia">Spinal Anesthesia</option>
+                            <option value="Epidural Anesthesia">Epidural Anesthesia</option>
+                            <option value="Regional Nerve Block">Regional Nerve Block</option>
+                            <option value="Monitored Anesthesia Care (MAC)">Monitored Anesthesia Care (MAC)</option>
+                            <option value="Combined Spinal-Epidural">Combined Spinal-Epidural</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgical Procedure <span class="required">*</span></label>
+                        <input type="text" name="procedure" class="form-input" placeholder="e.g., Total knee replacement" required id="inputProcedure">
+                        <p class="help-text">Describe the planned surgical procedure</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Common Risks to Include</label>
+                        <p class="help-text" style="margin-bottom: 12px;">Select all that apply</p>
+
+                        <div class="risk-grid">
+                            <div class="risk-card" onclick="toggleRisk(this, 'Nausea and Vomiting')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Nausea and Vomiting</div>
+                                    <div class="risk-description">Postoperative nausea and vomiting (PONV) affects 20-30% of patients</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Nausea and Vomiting" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Sore Throat')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Sore Throat</div>
+                                    <div class="risk-description">From breathing tube placement during general anesthesia</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Sore Throat" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Dental Injury')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Dental Injury</div>
+                                    <div class="risk-description">Rare risk of tooth damage during airway management</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Dental Injury" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Allergic Reaction')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Allergic Reaction</div>
+                                    <div class="risk-description">Rare allergic reactions to anesthetic medications</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Allergic Reaction" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Blood Pressure Changes')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Blood Pressure Changes</div>
+                                    <div class="risk-description">Fluctuations in blood pressure during anesthesia</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Blood Pressure Changes" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Heart Attack or Stroke')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Heart Attack or Stroke</div>
+                                    <div class="risk-description">Rare but serious cardiovascular complications</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Heart Attack or Stroke" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Nerve Injury')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Nerve Injury</div>
+                                    <div class="risk-description">Positioning-related or block-related nerve damage</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Nerve Injury" style="display:none;">
+                            </div>
+
+                            <div class="risk-card" onclick="toggleRisk(this, 'Awareness Under Anesthesia')">
+                                <div class="risk-checkbox">
+                                    <svg fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <div class="risk-content">
+                                    <div class="risk-title">Awareness Under Anesthesia</div>
+                                    <div class="risk-description">Very rare (0.1-0.2%) unintended consciousness during surgery</div>
+                                </div>
+                                <input type="checkbox" name="risks" value="Awareness Under Anesthesia" style="display:none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Additional Risks or Special Considerations</label>
+                        <textarea name="additional_risks" class="form-input" placeholder="Any procedure-specific or patient-specific risks..." id="inputAdditionalRisks"></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 3: Review -->
+                <div class="step" id="step3">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h2 class="step-title">Review & Generate</h2>
+                        <p class="step-description">Review details and generate consent form</p>
+                    </div>
+
+                    <div style="background: var(--gray-50); border-radius: 16px; padding: 24px; margin-bottom: 24px;">
+                        <h3 style="font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 16px;">Consent Form Details</h3>
+
+                        <div style="display: grid; gap: 12px;">
+                            <div style="display: flex; gap: 12px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--gray-600); min-width: 140px;">Patient:</span>
+                                <span style="font-size: 14px; color: var(--gray-900);" id="reviewPatient">-</span>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--gray-600); min-width: 140px;">Anesthesia Type:</span>
+                                <span style="font-size: 14px; color: var(--gray-900);" id="reviewAnesthesia">-</span>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--gray-600); min-width: 140px;">Procedure:</span>
+                                <span style="font-size: 14px; color: var(--gray-900);" id="reviewProcedure">-</span>
+                            </div>
+                            <div style="display: flex; gap: 12px;">
+                                <span style="font-size: 14px; font-weight: 600; color: var(--gray-600); min-width: 140px;">Selected Risks:</span>
+                                <span style="font-size: 14px; color: var(--gray-900);" id="reviewRisks">None selected</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(79, 70, 229, 0.02)); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 16px; display: flex; gap: 12px;">
+                        <svg style="width: 20px; height: 20px; color: var(--indigo-600); flex-shrink: 0;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <div style="font-size: 13px; line-height: 1.6; color: var(--gray-700);">
+                            <strong>Note:</strong> This tool generates a template informed consent document. Always review and customize the form to match your institution's requirements and the specific patient scenario.
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar">
+        <div class="action-bar-inner">
+            <button type="button" class="btn btn-secondary" id="btnBack" style="display:none;" onclick="prevStep()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back
+            </button>
+            <button type="button" class="btn btn-primary" id="btnNext" onclick="nextStep()">
+                Next
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+            <button type="button" class="btn btn-primary" id="btnSubmit" style="display:none;" onclick="submitForm()">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Generate Consent Form
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.getElementById('progressStep' + i);
+                stepEl.classList.remove('active', 'completed');
+                if (i < currentStep) {
+                    stepEl.classList.add('completed');
+                } else if (i === currentStep) {
+                    stepEl.classList.add('active');
+                }
+            }
+
+            // Update buttons
+            document.getElementById('btnBack').style.display = currentStep > 1 ? 'flex' : 'none';
+            document.getElementById('btnNext').style.display = currentStep < totalSteps ? 'flex' : 'none';
+            document.getElementById('btnSubmit').style.display = currentStep === totalSteps ? 'flex' : 'none';
+
+            // Update review summary on step 3
+            if (currentStep === 3) {
+                updateReview();
+            }
+        }
+
+        function validateStep(step) {
+            const stepEl = document.getElementById('step' + step);
+            const inputs = stepEl.querySelectorAll('input[required], select[required]');
+
+            for (let input of inputs) {
+                if (!input.value || !input.checkValidity()) {
+                    input.focus();
+                    input.reportValidity();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+
+            if (currentStep < totalSteps) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep++;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep--;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function submitForm() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+            document.getElementById('loadingOverlay').classList.add('active');
+            document.getElementById('consentForm').submit();
+        }
+
+        // Toggle risk card
+        function toggleRisk(card, value) {
+            card.classList.toggle('selected');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            checkbox.checked = card.classList.contains('selected');
+        }
+
+        // Update review summary
+        function updateReview() {
+            const patientName = document.getElementById('inputPatientName').value || '-';
+            const anesthesiaType = document.getElementById('inputAnesthesiaType').value || '-';
+            const procedure = document.getElementById('inputProcedure').value || '-';
+
+            const selectedRisks = Array.from(document.querySelectorAll('input[name="risks"]:checked'))
+                .map(cb => cb.value)
+                .join(', ') || 'None selected';
+
+            document.getElementById('reviewPatient').textContent = patientName;
+            document.getElementById('reviewAnesthesia').textContent = anesthesiaType;
+            document.getElementById('reviewProcedure').textContent = procedure;
+            document.getElementById('reviewRisks').textContent = selectedRisks;
+        }
+
+        // Initialize
+        updateProgress();
+
+        // Handle Enter key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                if (currentStep < totalSteps) {
+                    nextStep();
+                } else {
+                    submitForm();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

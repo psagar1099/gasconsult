@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOH Predictor - GasConsult.ai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #FFFFFF;
+            --gray-50: #F8FAFC;
+            --gray-100: #F1F5F9;
+            --gray-200: #E2E8F0;
+            --gray-300: #CBD5E1;
+            --gray-400: #94A3B8;
+            --gray-500: #64748B;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1E293B;
+            --gray-900: #0F172A;
+            --blue-50: #EFF6FF;
+            --blue-500: #3B82F6;
+            --blue-600: #2563EB;
+            --blue-700: #1D4ED8;
+            --green-500: #10B981;
+            --amber-500: #F59E0B;
+            --red-500: #EF4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(180deg, #F0F7FF 0%, var(--gray-50) 50%, #FAFBFF 100%);
+            color: var(--gray-900);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding-top: 40px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px 20px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-600), var(--blue-500));
+            border-radius: 10px;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gray-400);
+            transition: color 0.3s ease;
+        }
+
+        .progress-step.active {
+            color: var(--blue-600);
+        }
+
+        .progress-step.completed {
+            color: var(--green-500);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+            margin-top: 80px;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(220, 38, 38, 0.05));
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 100px;
+            padding: 8px 16px;
+            margin-bottom: 16px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #F97316;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .hero-title {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .hero-title .gradient {
+            background: linear-gradient(135deg, #F97316 0%, #DC2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Wizard Card */
+        .wizard-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+            animation: scaleIn 0.4s ease;
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .step-header {
+            margin-bottom: 32px;
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            color: white;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 15px;
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: var(--red-500);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: white;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--blue-500);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 44px;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .input-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Action Buttons */
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+            position: sticky;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 -2px 20px rgba(0,0,0,0.08);
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 56px;
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+            color: white;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading State */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--gray-200);
+            border-top-color: var(--blue-600);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-700);
+        }
+
+        /* Help Text */
+        .help-text {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 6px;
+        }
+
+        /* Input Icons */
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            pointer-events: none;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+
+            .container {
+                padding-top: 20px;
+            }
+
+            .hero {
+                margin-top: 60px;
+                margin-bottom: 24px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .wizard-card {
+                padding: 28px 20px;
+            }
+
+            .action-bar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-radius: 16px 16px 0 0;
+                margin-top: 20px;
+            }
+
+            .btn {
+                min-height: 52px;
+            }
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(249, 115, 22, 0.08);
+            border-left: 4px solid #F97316;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 32px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .disclaimer-icon {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            color: #F97316;
+        }
+
+        .disclaimer-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--gray-700);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <div class="loading-text">Analyzing hemodynamics...</div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+        </div>
+        <div class="progress-steps">
+            <span class="progress-step active" id="progressStep1">Patient</span>
+            <span class="progress-step" id="progressStep2">Baseline</span>
+            <span class="progress-step" id="progressStep3">Current</span>
+            <span class="progress-step" id="progressStep4">Surgery</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Hero -->
+        <div class="hero">
+            <div class="hero-badge">
+                <div class="badge-dot"></div>
+                <span style="font-size: 12px; font-weight: 600; color: #EA580C;">Machine Learning</span>
+            </div>
+            <h1 class="hero-title">
+                Intraoperative <span class="gradient">Hypotension</span> Predictor
+            </h1>
+            <p class="hero-subtitle">
+                AI-powered IOH risk prediction in 4 simple steps
+            </p>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="disclaimer">
+            <svg class="disclaimer-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div class="disclaimer-text">
+                <strong>Educational Tool Only:</strong> This predictor is for learning purposes. Not for clinical decision-making.
+            </div>
+        </div>
+
+        <!-- Wizard Card -->
+        <div class="wizard-card">
+            <form method="POST" action="/hypotension" id="iohForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <!-- Step 1: Patient Information -->
+                <div class="step active" id="step1">
+                    <div class="step-header">
+                        <div class="step-number">1</div>
+                        <h2 class="step-title">Patient Information</h2>
+                        <p class="step-description">Basic demographics and physical status</p>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Age <span class="required">*</span></label>
+                            <input type="number" name="age" class="form-input" placeholder="65" required min="18" max="120" id="inputAge">
+                            <p class="help-text">Patient age in years</p>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sex <span class="required">*</span></label>
+                            <select name="sex" class="form-select" required id="inputSex">
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Weight <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <input type="number" name="weight" class="form-input" placeholder="70" required min="30" max="300" step="0.1" id="inputWeight">
+                                <span class="input-icon">kg</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Height <span class="required">*</span></label>
+                            <div class="input-with-icon">
+                                <input type="number" name="height" class="form-input" placeholder="170" required min="100" max="250" id="inputHeight">
+                                <span class="input-icon">cm</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">ASA Classification <span class="required">*</span></label>
+                        <select name="asa" class="form-select" required id="inputASA">
+                            <option value="">Select...</option>
+                            <option value="1">ASA I - Healthy patient</option>
+                            <option value="2">ASA II - Mild systemic disease</option>
+                            <option value="3">ASA III - Severe systemic disease</option>
+                            <option value="4">ASA IV - Life-threatening disease</option>
+                        </select>
+                        <p class="help-text">ASA physical status classification</p>
+                    </div>
+                </div>
+
+                <!-- Step 2: Baseline Vitals -->
+                <div class="step" id="step2">
+                    <div class="step-header">
+                        <div class="step-number">2</div>
+                        <h2 class="step-title">Baseline Vitals</h2>
+                        <p class="step-description">Preoperative hemodynamic parameters</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Baseline MAP <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="baseline_map" class="form-input" placeholder="85" required min="40" max="150" id="inputBaselineMAP">
+                            <span class="input-icon">mmHg</span>
+                        </div>
+                        <p class="help-text">Mean arterial pressure before induction</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Baseline Heart Rate <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="baseline_hr" class="form-input" placeholder="75" required min="30" max="200" id="inputBaselineHR">
+                            <span class="input-icon">bpm</span>
+                        </div>
+                        <p class="help-text">Heart rate before induction</p>
+                    </div>
+                </div>
+
+                <!-- Step 3: Current Vitals -->
+                <div class="step" id="step3">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <h2 class="step-title">Current Hemodynamics</h2>
+                        <p class="step-description">Real-time intraoperative vital signs</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Current MAP <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="current_map" class="form-input" placeholder="72" required min="40" max="150" id="inputCurrentMAP">
+                            <span class="input-icon">mmHg</span>
+                        </div>
+                        <p class="help-text">Current mean arterial pressure</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">MAP 5 minutes ago <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="map_5min" class="form-input" placeholder="76" required min="40" max="150" id="inputMAP5">
+                            <span class="input-icon">mmHg</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">MAP 10 minutes ago <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="map_10min" class="form-input" placeholder="80" required min="40" max="150" id="inputMAP10">
+                            <span class="input-icon">mmHg</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Surgery Details -->
+                <div class="step" id="step4">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <h2 class="step-title">Surgery Details</h2>
+                        <p class="step-description">Surgical and anesthetic factors</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgery Type <span class="required">*</span></label>
+                        <select name="surgery_type" class="form-select" required id="inputSurgeryType">
+                            <option value="">Select...</option>
+                            <option value="minor">Minor Surgery</option>
+                            <option value="moderate">Moderate Surgery</option>
+                            <option value="major_abdominal">Major Abdominal</option>
+                            <option value="cardiac">Cardiac Surgery</option>
+                            <option value="vascular">Vascular Surgery</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Surgery Duration <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <input type="number" name="surgery_duration" class="form-input" placeholder="120" required min="0" max="1000" id="inputDuration">
+                            <span class="input-icon">min</span>
+                        </div>
+                        <p class="help-text">Time since induction</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Induction Agent <span class="required">*</span></label>
+                        <select name="induction_agent" class="form-select" required id="inputInduction">
+                            <option value="">Select...</option>
+                            <option value="propofol">Propofol</option>
+                            <option value="etomidate">Etomidate</option>
+                            <option value="ketamine">Ketamine</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Current Vasopressor <span class="required">*</span></label>
+                        <select name="vasopressor" class="form-select" required id="inputVasopressor">
+                            <option value="none">None</option>
+                            <option value="phenylephrine">Phenylephrine</option>
+                            <option value="ephedrine">Ephedrine</option>
+                            <option value="norepinephrine">Norepinephrine</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Emergency Surgery <span class="required">*</span></label>
+                        <select name="emergency" class="form-select" required id="inputEmergency">
+                            <option value="no">No - Elective</option>
+                            <option value="yes">Yes - Emergency</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="action-bar">
+                    <button type="button" class="btn btn-secondary" id="btnBack" style="display:none;" onclick="prevStep()">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        Back
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btnNext" onclick="nextStep()">
+                        Next
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="btnSubmit" style="display:none;">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Calculate Risk
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const stepEl = document.getElementById('progressStep' + i);
+                stepEl.classList.remove('active', 'completed');
+                if (i < currentStep) {
+                    stepEl.classList.add('completed');
+                } else if (i === currentStep) {
+                    stepEl.classList.add('active');
+                }
+            }
+
+            // Update buttons
+            document.getElementById('btnBack').style.display = currentStep > 1 ? 'flex' : 'none';
+            document.getElementById('btnNext').style.display = currentStep < totalSteps ? 'flex' : 'none';
+            document.getElementById('btnSubmit').style.display = currentStep === totalSteps ? 'flex' : 'none';
+        }
+
+        function validateStep(step) {
+            const stepEl = document.getElementById('step' + step);
+            const inputs = stepEl.querySelectorAll('input[required], select[required]');
+
+            for (let input of inputs) {
+                if (!input.value || !input.checkValidity()) {
+                    input.focus();
+                    input.reportValidity();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function nextStep() {
+            if (!validateStep(currentStep)) {
+                return;
+            }
+
+            if (currentStep < totalSteps) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep++;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.getElementById('step' + currentStep).classList.remove('active');
+                currentStep--;
+                document.getElementById('step' + currentStep).classList.add('active');
+                updateProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('iohForm').addEventListener('submit', function(e) {
+            document.getElementById('loadingOverlay').classList.add('active');
+        });
+
+        // Initialize
+        updateProgress();
+
+        // Handle Enter key to go to next step (except on textareas)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+                if (currentStep < totalSteps) {
+                    nextStep();
+                } else {
+                    document.getElementById('iohForm').submit();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
