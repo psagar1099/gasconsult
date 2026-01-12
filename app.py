@@ -846,7 +846,8 @@ def add_security_headers(response):
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
 
     # Permissions policy - restrict access to sensitive features
-    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+    # microphone=(self) allows same-origin microphone access for voice input feature
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(self), camera=()'
 
     return response
 
@@ -8905,6 +8906,67 @@ HTML = """<!DOCTYPE html>
         .chat-send:active { transform: translateY(0); }
         .chat-send svg { width: 18px; height: 18px; }
 
+        /* Voice Input Button (Phase 2 Feature 1) */
+        .voice-input-btn {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            margin: 3px;
+        }
+
+        .voice-input-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .voice-input-btn:active {
+            transform: translateY(0);
+        }
+
+        .voice-input-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: all 0.2s ease;
+        }
+
+        /* Listening state */
+        .voice-input-btn.listening {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border-color: #EF4444;
+            color: #DC2626;
+            animation: voicePulse 1.5s ease-in-out infinite;
+        }
+
+        .voice-input-btn.listening svg {
+            animation: voiceWave 1s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+        }
+
+        @keyframes voiceWave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
         .chat-hints {
             display: flex;
             flex-wrap: wrap;
@@ -11041,6 +11103,23 @@ HTML = """<!DOCTYPE html>
                                       rows="1"
                                       required
                                       aria-label="Ask a follow-up question"></textarea>
+
+                            <!-- Voice Input Button (Phase 2 Feature 1) -->
+                            <button type="button"
+                                    id="voiceInputBtnChat"
+                                    class="voice-input-btn"
+                                    style="display: none;"
+                                    onclick="toggleVoiceInput('chat-query-input')"
+                                    title="Click to speak your question (Ctrl+Space)"
+                                    aria-label="Voice input">
+                                <svg id="voiceIconChat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                                </svg>
+                            </button>
+
                             <button type="submit" class="chat-send" aria-label="Submit follow-up question">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                     <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -11075,6 +11154,23 @@ HTML = """<!DOCTYPE html>
                                   required
                                   aria-label="Ask your anesthesiology question"
                                   aria-describedby="search-hint"></textarea>
+
+                        <!-- Voice Input Button (Phase 2 Feature 1) -->
+                        <button type="button"
+                                id="voiceInputBtnHome"
+                                class="voice-input-btn"
+                                style="display: none;"
+                                onclick="toggleVoiceInput('query-input')"
+                                title="Click to speak your question (Ctrl+Space)"
+                                aria-label="Voice input">
+                            <svg id="voiceIconHome" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                                <line x1="12" y1="19" x2="12" y2="23"></line>
+                                <line x1="8" y1="23" x2="16" y2="23"></line>
+                            </svg>
+                        </button>
+
                         <button type="submit" class="chat-send" aria-label="Submit question">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                                 <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -11648,6 +11744,224 @@ HTML = """<!DOCTYPE html>
                 badge.classList.add('expanded');
             }
         }
+
+        // ====== Voice Input Feature (Phase 2 Feature 1 - Bulletproof Implementation) ======
+        (function() {
+            'use strict';
+
+            // Feature detection - check if browser supports Web Speech API
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+            if (!SpeechRecognition) {
+                console.log('[Voice Input] Web Speech API not supported - feature disabled');
+                return; // Graceful exit - no errors
+            }
+
+            console.log('[Voice Input] Web Speech API supported - initializing');
+
+            // State management
+            let recognition = null;
+            let isListening = false;
+            let currentInputId = null;
+            let finalTranscript = '';
+
+            // Initialize Speech Recognition
+            function initRecognition() {
+                try {
+                    recognition = new SpeechRecognition();
+                    recognition.continuous = true;
+                    recognition.interimResults = true;
+                    recognition.lang = 'en-US';
+                    recognition.maxAlternatives = 1;
+
+                    // Event: Recognition starts
+                    recognition.onstart = function() {
+                        console.log('[Voice Input] Listening started');
+                        isListening = true;
+                        updateButtonState('listening');
+                        finalTranscript = '';
+                    };
+
+                    // Event: Interim results (while speaking)
+                    recognition.onresult = function(event) {
+                        let interimTranscript = '';
+
+                        for (let i = event.resultIndex; i < event.results.length; i++) {
+                            const transcript = event.results[i][0].transcript;
+
+                            if (event.results[i].isFinal) {
+                                finalTranscript += transcript + ' ';
+                            } else {
+                                interimTranscript += transcript;
+                            }
+                        }
+
+                        // Update input with transcript
+                        if (currentInputId) {
+                            const input = document.getElementById(currentInputId);
+                            if (input) {
+                                input.value = (finalTranscript + interimTranscript).trim();
+                            }
+                        }
+                    };
+
+                    // Event: Recognition ends
+                    recognition.onend = function() {
+                        console.log('[Voice Input] Listening ended');
+                        isListening = false;
+                        updateButtonState('idle');
+
+                        // Clean up transcript
+                        if (currentInputId && finalTranscript) {
+                            const input = document.getElementById(currentInputId);
+                            if (input) {
+                                input.value = finalTranscript.trim();
+                                input.focus();
+                            }
+                        }
+                    };
+
+                    // Event: Error handling
+                    recognition.onerror = function(event) {
+                        console.error('[Voice Input] Error:', event.error);
+                        isListening = false;
+                        updateButtonState('error');
+
+                        // User-friendly error messages
+                        let errorMsg = '';
+                        switch(event.error) {
+                            case 'no-speech':
+                                errorMsg = 'No speech detected. Please try again.';
+                                break;
+                            case 'audio-capture':
+                                errorMsg = 'Microphone not found. Please check your device.';
+                                break;
+                            case 'not-allowed':
+                                errorMsg = 'Microphone access denied. Please allow microphone access in your browser settings.';
+                                break;
+                            case 'network':
+                                errorMsg = 'Network error. Please check your connection.';
+                                break;
+                            default:
+                                errorMsg = 'Voice input error: ' + event.error;
+                        }
+
+                        showToast(errorMsg, 'error');
+
+                        // Reset button after error
+                        setTimeout(() => {
+                            if (!isListening) {
+                                updateButtonState('idle');
+                            }
+                        }, 3000);
+                    };
+
+                    return true;
+                } catch (e) {
+                    console.error('[Voice Input] Failed to initialize:', e);
+                    return false;
+                }
+            }
+
+            // Toggle voice input
+            window.toggleVoiceInput = function(inputId) {
+                currentInputId = inputId;
+
+                // Initialize recognition if not yet done
+                if (!recognition) {
+                    if (!initRecognition()) {
+                        showToast('Voice input initialization failed', 'error');
+                        return;
+                    }
+                }
+
+                if (isListening) {
+                    // Stop listening
+                    try {
+                        recognition.stop();
+                    } catch (e) {
+                        console.error('[Voice Input] Failed to stop:', e);
+                    }
+                } else {
+                    // Start listening
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        console.error('[Voice Input] Failed to start:', e);
+                        showToast('Failed to start microphone. Please try again.', 'error');
+                    }
+                }
+            };
+
+            // Update button visual state
+            function updateButtonState(state) {
+                // Update both buttons (homepage and chat)
+                const buttons = ['voiceInputBtnHome', 'voiceInputBtnChat'];
+
+                buttons.forEach(btnId => {
+                    const btn = document.getElementById(btnId);
+                    if (!btn) return;
+
+                    // Show button (was hidden initially)
+                    btn.style.display = 'flex';
+
+                    // Remove all state classes
+                    btn.classList.remove('listening', 'error');
+
+                    // Add appropriate state class
+                    if (state === 'listening') {
+                        btn.classList.add('listening');
+                        btn.title = 'Click to stop recording';
+                    } else if (state === 'error') {
+                        btn.classList.add('error');
+                        btn.title = 'Error - click to try again';
+                    } else {
+                        btn.title = 'Click to speak your question (Ctrl+Space)';
+                    }
+                });
+            }
+
+            // Keyboard shortcut: Ctrl+Space
+            document.addEventListener('keydown', function(e) {
+                if ((e.ctrlKey || e.metaKey) && e.code === 'Space' && !isListening) {
+                    e.preventDefault();
+
+                    // Determine which input to use
+                    const chatInput = document.getElementById('chat-query-input');
+                    const homeInput = document.getElementById('query-input');
+
+                    if (chatInput && chatInput.offsetParent !== null) {
+                        // Chat input is visible
+                        window.toggleVoiceInput('chat-query-input');
+                    } else if (homeInput && homeInput.offsetParent !== null) {
+                        // Home input is visible
+                        window.toggleVoiceInput('query-input');
+                    }
+                }
+            });
+
+            // Auto-timeout after 30 seconds
+            let listeningTimeout;
+            if (recognition) {
+                recognition.addEventListener('start', function() {
+                    listeningTimeout = setTimeout(() => {
+                        if (isListening) {
+                            console.log('[Voice Input] Auto-stopping after 30 seconds');
+                            recognition.stop();
+                        }
+                    }, 30000);
+                });
+
+                recognition.addEventListener('end', function() {
+                    clearTimeout(listeningTimeout);
+                });
+            }
+
+            // Initialize: Show buttons if API is supported
+            updateButtonState('idle');
+
+            console.log('[Voice Input] Initialized successfully');
+        })();
 
         // ====== Chat History Sidebar JavaScript (Phase 4) ======
         (function() {
@@ -12545,6 +12859,67 @@ LIBRARY_HTML = """<!DOCTYPE html>
 
         .chat-send:active { transform: translateY(0); }
         .chat-send svg { width: 18px; height: 18px; }
+
+        /* Voice Input Button (Phase 2 Feature 1) */
+        .voice-input-btn {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            margin: 3px;
+        }
+
+        .voice-input-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .voice-input-btn:active {
+            transform: translateY(0);
+        }
+
+        .voice-input-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: all 0.2s ease;
+        }
+
+        /* Listening state */
+        .voice-input-btn.listening {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border-color: #EF4444;
+            color: #DC2626;
+            animation: voicePulse 1.5s ease-in-out infinite;
+        }
+
+        .voice-input-btn.listening svg {
+            animation: voiceWave 1s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+        }
+
+        @keyframes voiceWave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
 
         .chat-hints {
             display: flex;
@@ -13816,6 +14191,67 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
 
         .chat-send:active { transform: translateY(0); }
         .chat-send svg { width: 18px; height: 18px; }
+
+        /* Voice Input Button (Phase 2 Feature 1) */
+        .voice-input-btn {
+            width: 36px;
+            height: 36px;
+            background: white;
+            border: 1px solid var(--gray-300);
+            border-radius: 10px;
+            color: var(--gray-600);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            margin: 3px;
+        }
+
+        .voice-input-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .voice-input-btn:active {
+            transform: translateY(0);
+        }
+
+        .voice-input-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: all 0.2s ease;
+        }
+
+        /* Listening state */
+        .voice-input-btn.listening {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border-color: #EF4444;
+            color: #DC2626;
+            animation: voicePulse 1.5s ease-in-out infinite;
+        }
+
+        .voice-input-btn.listening svg {
+            animation: voiceWave 1s ease-in-out infinite;
+        }
+
+        @keyframes voicePulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+        }
+
+        @keyframes voiceWave {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
 
         .chat-hints {
             display: flex;
