@@ -11764,6 +11764,8 @@ HTML = """<!DOCTYPE html>
             let isListening = false;
             let currentInputId = null;
             let finalTranscript = '';
+            let networkRetryCount = 0;
+            const MAX_NETWORK_RETRIES = 2;
 
             // Initialize Speech Recognition
             function initRecognition() {
@@ -11776,10 +11778,12 @@ HTML = """<!DOCTYPE html>
 
                     // Event: Recognition starts
                     recognition.onstart = function() {
-                        console.log('[Voice Input] Listening started');
+                        console.log('[Voice Input] Listening started successfully');
+                        console.log('[Voice Input] Connection established to speech service');
                         isListening = true;
                         updateButtonState('listening');
                         finalTranscript = '';
+                        networkRetryCount = 0; // Reset retry counter on success
                     };
 
                     // Event: Interim results (while speaking)
@@ -11824,11 +11828,17 @@ HTML = """<!DOCTYPE html>
                     // Event: Error handling
                     recognition.onerror = function(event) {
                         console.error('[Voice Input] Error:', event.error);
+                        console.error('[Voice Input] Error details:', event);
+                        console.error('[Voice Input] Protocol:', window.location.protocol);
+                        console.error('[Voice Input] Host:', window.location.host);
+
                         isListening = false;
                         updateButtonState('error');
 
-                        // User-friendly error messages
+                        // User-friendly error messages with diagnostics
                         let errorMsg = '';
+                        let technicalDetails = '';
+
                         switch(event.error) {
                             case 'no-speech':
                                 errorMsg = 'No speech detected. Please try again.';
@@ -11840,13 +11850,54 @@ HTML = """<!DOCTYPE html>
                                 errorMsg = 'Microphone access denied. Please allow microphone access in your browser settings.';
                                 break;
                             case 'network':
-                                errorMsg = 'Network error. Please check your connection.';
+                                // More detailed network error message
+                                if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && !window.location.hostname.startsWith('127.')) {
+                                    errorMsg = 'Voice input requires HTTPS. This site is using HTTP.';
+                                    technicalDetails = 'The Web Speech API requires a secure connection (HTTPS) for non-localhost domains.';
+                                } else {
+                                    // Automatic retry for network errors
+                                    if (networkRetryCount < MAX_NETWORK_RETRIES) {
+                                        networkRetryCount++;
+                                        console.log('[Voice Input] Network error, retry attempt ' + networkRetryCount + '/' + MAX_NETWORK_RETRIES);
+                                        errorMsg = 'Connection issue. Retrying... (attempt ' + networkRetryCount + ')';
+                                        showToast(errorMsg, 'info');
+
+                                        // Retry after 1 second
+                                        setTimeout(() => {
+                                            if (!isListening && currentInputId) {
+                                                console.log('[Voice Input] Retrying voice input...');
+                                                try {
+                                                    recognition.start();
+                                                } catch (e) {
+                                                    console.error('[Voice Input] Retry failed:', e);
+                                                }
+                                            }
+                                        }, 1000);
+                                        return; // Don't show error toast yet
+                                    } else {
+                                        errorMsg = 'Speech service unavailable after ' + MAX_NETWORK_RETRIES + ' attempts. Please try again later.';
+                                        technicalDetails = 'The browser cannot connect to Google\'s speech recognition service. This could be due to: network connectivity, firewall settings, or regional restrictions.';
+                                        networkRetryCount = 0; // Reset for next time
+                                    }
+                                }
+                                console.error('[Voice Input] Network error details:', technicalDetails);
+                                break;
+                            case 'service-not-allowed':
+                                errorMsg = 'Speech service not available on this device/browser.';
+                                break;
+                            case 'aborted':
+                                errorMsg = 'Speech recognition was aborted.';
                                 break;
                             default:
                                 errorMsg = 'Voice input error: ' + event.error;
                         }
 
                         showToast(errorMsg, 'error');
+
+                        // Log technical details for debugging
+                        if (technicalDetails) {
+                            console.warn('[Voice Input] Technical details:', technicalDetails);
+                        }
 
                         // Reset button after error
                         setTimeout(() => {
