@@ -2255,6 +2255,112 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50); padding: 2px 6px; border-radius: 4px;
         }
 
+        /* Reasoning Trace Section (NEW - Phase 1) */
+        .reasoning-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .reasoning-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: left;
+        }
+
+        .reasoning-toggle:hover {
+            background: var(--gray-200);
+            border-color: var(--gray-300);
+            color: var(--gray-900);
+        }
+
+        .reasoning-toggle[aria-expanded="true"] svg {
+            transform: rotate(90deg);
+        }
+
+        .reasoning-content {
+            margin-top: 12px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reasoning-timeline {
+            position: relative;
+            padding-left: 32px;
+        }
+
+        .reasoning-timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--blue-300) 0%, var(--blue-200) 100%);
+        }
+
+        .reasoning-step {
+            position: relative;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .reasoning-step:hover {
+            background: white;
+            border-color: var(--blue-200);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+        }
+
+        .step-indicator {
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+            z-index: 1;
+        }
+
+        .step-text {
+            font-size: 13px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
         /* References */
         /* References Section - Enhanced Modern Design */
         .references-section {
@@ -10460,6 +10566,28 @@ HTML = """<!DOCTYPE html>
 
                             <div class="message-content">{{ message.content|safe }}</div>
 
+                            <!-- Reasoning Trace Section (NEW) -->
+                            {% if message.get('reasoning_trace') and message.reasoning_trace|length > 0 %}
+                            <div class="reasoning-section" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-200);">
+                                <button class="reasoning-toggle" onclick="toggleReasoning(this)" aria-expanded="false" aria-controls="reasoning-{{ loop.index0 }}">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px; transition: transform 0.2s;">
+                                        <polyline points="9 18 15 12 9 6"></polyline>
+                                    </svg>
+                                    <span>Show AI reasoning process ({{ message.reasoning_trace|length }} steps)</span>
+                                </button>
+                                <div class="reasoning-content" style="display: none;">
+                                    <div class="reasoning-timeline">
+                                        {% for step in message.reasoning_trace %}
+                                        <div class="reasoning-step">
+                                            <div class="step-indicator">{{ loop.index }}</div>
+                                            <div class="step-text">{{ step }}</div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             {% if message.references and message.references|length > 0 %}
                             <div class="references-section">
                                 <div class="references-title">
@@ -11106,6 +11234,22 @@ HTML = """<!DOCTYPE html>
                 toast.classList.remove('show');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // Reasoning Trace Toggle (NEW - Phase 1)
+        function toggleReasoning(button) {
+            const content = button.nextElementSibling;
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            if (isExpanded) {
+                // Collapse
+                content.style.display = 'none';
+                button.setAttribute('aria-expanded', 'false');
+            } else {
+                // Expand
+                content.style.display = 'block';
+                button.setAttribute('aria-expanded', 'true');
+            }
         }
 
         // ====== Chat History Sidebar JavaScript (Phase 4) ======
@@ -24739,6 +24883,9 @@ def stream():
             # properly trigger Flask's filesystem session backend to persist changes
             messages = list(session.get('messages', []))
 
+            # Extract reasoning trace from stream data (if available)
+            reasoning_trace = stream_data.get('reasoning_trace', [])
+
             # Check if last message is an empty assistant placeholder (from homepage redirect)
             # If so, update it instead of appending a new one
             if (messages and
@@ -24751,7 +24898,8 @@ def stream():
                     "content": cleaned_response,
                     "references": refs,
                     "num_papers": num_papers,
-                    "evidence_strength": evidence_strength
+                    "evidence_strength": evidence_strength,
+                    "reasoning_trace": reasoning_trace  # NEW: Include reasoning trace
                 }
                 logger.debug("[STREAM] Updated existing placeholder assistant message")
             else:
@@ -24761,7 +24909,8 @@ def stream():
                     "content": cleaned_response,
                     "references": refs,
                     "num_papers": num_papers,
-                    "evidence_strength": evidence_strength
+                    "evidence_strength": evidence_strength,
+                    "reasoning_trace": reasoning_trace  # NEW: Include reasoning trace
                 })
                 logger.debug("[STREAM] Appended new assistant message")
 
@@ -25030,6 +25179,10 @@ def index():
             query = clean_query(raw_query)
             logger.debug(f"Cleaned query: '{query}'")
 
+            # ========== REASONING TRACE INITIALIZATION ==========
+            reasoning_trace = []
+            reasoning_trace.append("Step 1: Query preprocessing")
+
             # ========== DETECT QUERY INTENT (Casual vs Medical) ==========
             query_intent = detect_query_intent(query)
             logger.debug(f"Query intent: {query_intent}")
@@ -25131,6 +25284,7 @@ CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown c
 
             # Expand medical abbreviations and synonyms
             q = expand_medical_abbreviations(query)
+            reasoning_trace.append(f"Step 2: Expanded medical abbreviations → '{q[:80]}...'  " if len(q) > 80 else f"Step 2: Expanded medical abbreviations → '{q}'")
 
             # Boost emergency protocol searches
             query_lower = query.lower()
@@ -25200,6 +25354,7 @@ CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown c
                 search_term += negation_search_modifier
 
             logger.debug(f"Search term: '{search_term[:150]}...'")
+            reasoning_trace.append(f"Step 3: Searching PubMed (question type: {question_type})")
 
             # Multi-tier search strategy to find relevant papers
             ids = []
@@ -25484,9 +25639,15 @@ Answer as if you're a colleague continuing the conversation:"""
             num_papers = len(refs)
             logger.debug(f"Processed {num_papers} paper references")
 
+            # Count high-quality papers for reasoning trace
+            high_quality_count = sum(1 for ref in refs if ref.get('study_score', 0) >= 90)
+            reasoning_trace.append(f"Step 4: Found {num_papers} papers ({high_quality_count} high-quality: guidelines, meta-analyses, systematic reviews)")
+
             # Build smart conversation context (includes relevant earlier messages + recent)
             conversation_context = build_smart_context(session['messages'][:-1], raw_query)  # Exclude just-added user message
             logger.debug(f"Smart context built ({len(conversation_context)} chars)")
+            if is_followup:
+                reasoning_trace.append(f"Step 5: Analyzed conversation context ({len(session['messages'])-1} previous messages)")
 
             # Create numbered reference list for citation
             ref_list = ""
@@ -25570,6 +25731,7 @@ Respond with maximum clinical utility:"""
 
             logger.debug(f"Preparing streaming with {num_papers} papers...")
             logger.info(f"[CHAT] Preparing streaming with {num_papers} papers")
+            reasoning_trace.append(f"Step {len(reasoning_trace)+1}: Synthesizing evidence-based answer with GPT-4o")
 
             # Generate unique request ID for this streaming session
             request_id = str(uuid.uuid4())
@@ -25581,7 +25743,8 @@ Respond with maximum clinical utility:"""
                 'refs': refs,
                 'num_papers': num_papers,
                 'raw_query': raw_query,
-                'question_type': question_type  # Store for temperature adjustment
+                'question_type': question_type,  # Store for temperature adjustment
+                'reasoning_trace': reasoning_trace  # NEW: Track reasoning steps
             }
 
             # Store in session
