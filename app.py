@@ -1103,6 +1103,92 @@ def detect_multipart(query):
 
     return False
 
+
+def generate_smart_suggestions(question_type, query):
+    """
+    Generate smart follow-up question suggestions using rule-based templates.
+    NO API CALLS - instant, lightweight, reliable.
+
+    Phase 1 Feature 2: Predictive Questions
+    Returns: List of 3-4 follow-up question strings (~100 bytes total)
+    """
+    query_lower = query.lower()
+
+    # Extract main topic from query (drug name, procedure, etc.) for context
+    main_topic = ""
+    common_drugs = ['propofol', 'fentanyl', 'rocuronium', 'succinylcholine', 'ketamine',
+                    'etomidate', 'midazolam', 'dexmedetomidine', 'remifentanil', 'vecuronium',
+                    'cisatracurium', 'atracurium', 'neostigmine', 'sugammadex', 'ephedrine',
+                    'phenylephrine', 'epinephrine', 'norepinephrine', 'tranexamic acid', 'txa']
+    common_procedures = ['intubation', 'rsi', 'rapid sequence', 'spinal', 'epidural',
+                        'nerve block', 'central line', 'arterial line', 'extubation']
+
+    for drug in common_drugs:
+        if drug in query_lower:
+            main_topic = drug.title()
+            break
+
+    if not main_topic:
+        for proc in common_procedures:
+            if proc in query_lower:
+                main_topic = proc.title()
+                break
+
+    # Template-based suggestions by question type
+    suggestions = []
+
+    if question_type == 'dosing':
+        suggestions = [
+            f"What are the common side effects{' of ' + main_topic if main_topic else ''}?",
+            f"What are the contraindications{' for ' + main_topic if main_topic else ''}?",
+            f"How should the dose be adjusted for renal or hepatic impairment?",
+            f"What monitoring is required during administration?"
+        ]
+
+    elif question_type == 'safety':
+        suggestions = [
+            f"What is the mechanism of action{' of ' + main_topic if main_topic else ''}?",
+            f"What are the treatment options for complications?",
+            f"What is the recommended monitoring protocol?",
+            f"Are there any drug interactions to consider?"
+        ]
+
+    elif question_type == 'comparison':
+        suggestions = [
+            f"Which option is preferred in pediatric patients?",
+            f"What does the evidence say about cost-effectiveness?",
+            f"Are there specific patient populations where one is superior?",
+            f"What are the key contraindications for each option?"
+        ]
+
+    elif question_type == 'mechanism':
+        suggestions = [
+            f"What is the clinical dosing{' of ' + main_topic if main_topic else ''}?",
+            f"What are the clinical applications?",
+            f"Are there any notable side effects?",
+            f"How does this compare to alternative approaches?"
+        ]
+
+    elif question_type == 'management':
+        suggestions = [
+            f"What medications are used in this protocol?",
+            f"What are the specific dosing recommendations?",
+            f"What monitoring is essential during management?",
+            f"What are common complications and their prevention?"
+        ]
+
+    else:  # general
+        suggestions = [
+            f"What are the key clinical considerations?",
+            f"What does recent evidence suggest?",
+            f"Are there specific guidelines or protocols?",
+            f"What are the common complications?"
+        ]
+
+    # Return 3-4 suggestions (keep it clean, not overwhelming)
+    return suggestions[:4]
+
+
 def build_smart_context(messages, current_query):
     """Build context that includes relevant history, not just recent"""
     if not messages or len(messages) == 0:
@@ -2255,7 +2341,79 @@ PREOP_HTML = """<!DOCTYPE html>
             background: var(--blue-50); padding: 2px 6px; border-radius: 4px;
         }
 
-        /* Reasoning Trace Section (NEW - Phase 1) */
+        /* Follow-up Suggestions (Phase 1 Feature 2) */
+        .followup-suggestions {
+            margin-top: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 100%);
+            border: 1px solid var(--blue-200);
+            border-radius: 12px;
+        }
+
+        .followup-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 12px;
+        }
+
+        .followup-title svg {
+            color: var(--blue-500);
+        }
+
+        .followup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        @media (min-width: 640px) {
+            .followup-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .followup-chip {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 12px 16px;
+            background: white;
+            border: 1px solid var(--blue-200);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .followup-chip:hover {
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            color: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.15);
+        }
+
+        .followup-chip:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .followup-chip.selected {
+            background: var(--blue-500);
+            border-color: var(--blue-600);
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Reasoning Trace Section (Phase 1 Feature 1) */
         .reasoning-section {
             margin-top: 20px;
             padding-top: 20px;
@@ -9202,10 +9360,11 @@ HTML = """<!DOCTYPE html>
 
         .evidence-badge {
             display: inline-flex;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
             gap: 6px;
-            padding: 6px 12px;
-            border-radius: 100px;
+            padding: 12px 16px;
+            border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
@@ -9213,11 +9372,125 @@ HTML = """<!DOCTYPE html>
             margin-bottom: 12px;
             cursor: help;
             transition: all 0.2s ease;
+            position: relative;
+            width: fit-content;
+            max-width: 100%;
         }
 
         .evidence-badge:hover {
             transform: translateY(-1px);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Interactive Badge (Phase 1 Feature 3) */
+        .evidence-badge.interactive-badge {
+            cursor: pointer;
+            padding: 14px 18px;
+        }
+
+        .evidence-badge.interactive-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .badge-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .evidence-badge.interactive-badge .expand-icon {
+            transition: transform 0.2s;
+            opacity: 0.6;
+        }
+
+        .evidence-badge.interactive-badge:hover .expand-icon {
+            opacity: 1;
+        }
+
+        .evidence-badge.interactive-badge.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Evidence Breakdown Popup */
+        .evidence-breakdown-popup {
+            margin-top: 12px;
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease-out;
+            width: 100%;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        @media (min-width: 640px) {
+            .breakdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .breakdown-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--gray-700);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .breakdown-count {
+            font-weight: 700;
+            color: var(--blue-600);
+            font-size: 15px;
+        }
+
+        .breakdown-summary {
+            display: flex;
+            gap: 16px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .summary-stat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .summary-stat span {
+            font-size: 12px;
+            color: var(--gray-600);
+            font-weight: 500;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .summary-stat strong {
+            font-size: 18px;
+            color: var(--gray-900);
+            font-weight: 700;
         }
 
         .evidence-badge.high {
@@ -10544,21 +10817,85 @@ HTML = """<!DOCTYPE html>
                             {% set level = message.evidence_strength.level if message.evidence_strength is mapping else message.evidence_strength %}
                             {% set breakdown = message.evidence_strength.breakdown if message.evidence_strength is mapping else {} %}
                             {% set description = message.evidence_strength.description if message.evidence_strength is mapping else '' %}
-                            <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }}"
-                                 title="Evidence Quality: {{ level }} - {{ description }}">
-                                <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                                    <div>
-                                        {% if level == 'High' %}
-                                        ✓ High Confidence
-                                        {% elif level == 'Moderate' %}
-                                        ~ Moderate Confidence
-                                        {% else %}
-                                        ! Low Confidence
-                                        {% endif %}
-                                        • {{ message.num_papers }} studies
+                            <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }} interactive-badge"
+                                 onclick="toggleEvidenceBreakdown(this)"
+                                 role="button"
+                                 tabindex="0"
+                                 aria-label="Click to view evidence breakdown"
+                                 title="Click for detailed evidence breakdown">
+                                <div class="badge-content-wrapper">
+                                    <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
+                                        <div>
+                                            {% if level == 'High' %}
+                                            ✓ High Confidence
+                                            {% elif level == 'Moderate' %}
+                                            ~ Moderate Confidence
+                                            {% else %}
+                                            ! Low Confidence
+                                            {% endif %}
+                                            • {{ message.num_papers }} studies
+                                        </div>
+                                        <div class="evidence-explanation">
+                                            {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
+                                        </div>
                                     </div>
-                                    <div class="evidence-explanation">
-                                        {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
+                                    <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-left: 8px; flex-shrink: 0; transition: transform 0.2s;">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                    </svg>
+                                </div>
+
+                                <!-- Evidence Breakdown Popup (Phase 1 Feature 3) -->
+                                <div class="evidence-breakdown-popup" style="display: none;">
+                                    <h4 style="margin: 0 0 12px 0; font-size: 14px; font-weight: 700; color: var(--gray-900);">Evidence Quality Breakdown</h4>
+
+                                    <div class="breakdown-grid">
+                                        {% if breakdown.guidelines and breakdown.guidelines > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">🏛️ Guidelines</span>
+                                            <span class="breakdown-count">{{ breakdown.guidelines }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if breakdown.meta_analyses and breakdown.meta_analyses > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">📊 Meta-analyses</span>
+                                            <span class="breakdown-count">{{ breakdown.meta_analyses }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if breakdown.systematic_reviews and breakdown.systematic_reviews > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">📚 Systematic Reviews</span>
+                                            <span class="breakdown-count">{{ breakdown.systematic_reviews }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if breakdown.rcts and breakdown.rcts > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">🧪 RCTs</span>
+                                            <span class="breakdown-count">{{ breakdown.rcts }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if breakdown.observational and breakdown.observational > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">📈 Observational</span>
+                                            <span class="breakdown-count">{{ breakdown.observational }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% if breakdown.reviews and breakdown.reviews > 0 %}
+                                        <div class="breakdown-item">
+                                            <span class="breakdown-label">📝 Reviews</span>
+                                            <span class="breakdown-count">{{ breakdown.reviews }}</span>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="breakdown-summary">
+                                        <div class="summary-stat">
+                                            <span>📅 Recent (last 5 years)</span>
+                                            <strong>{{ breakdown.recent_count or 0 }}</strong>
+                                        </div>
+                                        <div class="summary-stat">
+                                            <span>📑 Total Papers</span>
+                                            <strong>{{ breakdown.total or message.num_papers }}</strong>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -10619,8 +10956,26 @@ HTML = """<!DOCTYPE html>
                                 {% endfor %}
                             </div>
 
-                            <!-- Follow-up Suggestions (Isolated Feature) -->
-                            <div class="followup-container" data-message-index="{{ loop.index0 }}"></div>
+                            <!-- Follow-up Suggestions (Phase 1 Feature 2) -->
+                            {% if message.get('suggested_questions') and message.suggested_questions|length > 0 %}
+                            <div class="followup-suggestions">
+                                <div class="followup-title">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
+                                        <circle cx="12" cy="12" r="1"></circle>
+                                        <circle cx="19" cy="12" r="1"></circle>
+                                        <circle cx="5" cy="12" r="1"></circle>
+                                    </svg>
+                                    You might also want to know:
+                                </div>
+                                <div class="followup-grid">
+                                    {% for question in message.suggested_questions %}
+                                    <button class="followup-chip" onclick="askFollowup(this)" data-question="{{ question }}">
+                                        {{ question }}
+                                    </button>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
                             {% endif %}
 
                             {% if current_user.is_authenticated %}
@@ -11236,7 +11591,7 @@ HTML = """<!DOCTYPE html>
             }, 3000);
         }
 
-        // Reasoning Trace Toggle (NEW - Phase 1)
+        // Reasoning Trace Toggle (Phase 1 Feature 1)
         function toggleReasoning(button) {
             const content = button.nextElementSibling;
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
@@ -11249,6 +11604,48 @@ HTML = """<!DOCTYPE html>
                 // Expand
                 content.style.display = 'block';
                 button.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        // Follow-up Question Click Handler (Phase 1 Feature 2)
+        function askFollowup(button) {
+            const question = button.getAttribute('data-question');
+            const chatInput = document.getElementById('chatInput');
+
+            if (chatInput && question) {
+                // Fill input with question
+                chatInput.value = question;
+
+                // Mark button as selected
+                button.classList.add('selected');
+
+                // Focus and scroll to input
+                chatInput.focus();
+                chatInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Optional: Auto-submit after 500ms
+                // setTimeout(() => {
+                //     document.getElementById('chatForm').submit();
+                // }, 500);
+            }
+        }
+
+        // Evidence Breakdown Toggle (Phase 1 Feature 3)
+        function toggleEvidenceBreakdown(badge) {
+            const popup = badge.querySelector('.evidence-breakdown-popup');
+
+            if (!popup) return;
+
+            const isExpanded = badge.classList.contains('expanded');
+
+            if (isExpanded) {
+                // Collapse
+                popup.style.display = 'none';
+                badge.classList.remove('expanded');
+            } else {
+                // Expand
+                popup.style.display = 'block';
+                badge.classList.add('expanded');
             }
         }
 
@@ -24883,8 +25280,9 @@ def stream():
             # properly trigger Flask's filesystem session backend to persist changes
             messages = list(session.get('messages', []))
 
-            # Extract reasoning trace from stream data (if available)
+            # Extract reasoning trace and suggested questions from stream data
             reasoning_trace = stream_data.get('reasoning_trace', [])
+            suggested_questions = stream_data.get('suggested_questions', [])
 
             # Check if last message is an empty assistant placeholder (from homepage redirect)
             # If so, update it instead of appending a new one
@@ -24899,7 +25297,8 @@ def stream():
                     "references": refs,
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength,
-                    "reasoning_trace": reasoning_trace  # NEW: Include reasoning trace
+                    "reasoning_trace": reasoning_trace,  # Phase 1 Feature 1
+                    "suggested_questions": suggested_questions  # Phase 1 Feature 2
                 }
                 logger.debug("[STREAM] Updated existing placeholder assistant message")
             else:
@@ -24910,7 +25309,8 @@ def stream():
                     "references": refs,
                     "num_papers": num_papers,
                     "evidence_strength": evidence_strength,
-                    "reasoning_trace": reasoning_trace  # NEW: Include reasoning trace
+                    "reasoning_trace": reasoning_trace,  # Phase 1 Feature 1
+                    "suggested_questions": suggested_questions  # Phase 1 Feature 2
                 })
                 logger.debug("[STREAM] Appended new assistant message")
 
@@ -25737,6 +26137,10 @@ Respond with maximum clinical utility:"""
             request_id = str(uuid.uuid4())
             logger.info(f"[CHAT] Generated request_id: {request_id}")
 
+            # Generate smart follow-up suggestions (rule-based, instant, no API calls)
+            suggested_questions = generate_smart_suggestions(question_type, raw_query)
+            logger.debug(f"Generated {len(suggested_questions)} follow-up suggestions")
+
             # Prepare stream data
             stream_data = {
                 'prompt': prompt,
@@ -25744,7 +26148,8 @@ Respond with maximum clinical utility:"""
                 'num_papers': num_papers,
                 'raw_query': raw_query,
                 'question_type': question_type,  # Store for temperature adjustment
-                'reasoning_trace': reasoning_trace  # NEW: Track reasoning steps
+                'reasoning_trace': reasoning_trace,  # NEW: Track reasoning steps
+                'suggested_questions': suggested_questions  # NEW: Follow-up suggestions (Phase 1 Feature 2)
             }
 
             # Store in session
