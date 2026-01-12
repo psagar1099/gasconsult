@@ -11289,6 +11289,8 @@ HTML = """<!DOCTYPE html>
     </div>
 
     <script>
+        console.log('[gasconsult.ai] JavaScript loading - version 2026-01-12-v2');
+
         // Auto-resize textarea on input
         const textareas = document.querySelectorAll('.chat-input');
         textareas.forEach(textarea => {
@@ -11311,12 +11313,18 @@ HTML = """<!DOCTYPE html>
 
         // Fill query from hint chips (homepage only)
         function fillQuery(event) {
+            console.log('[fillQuery] Called with event:', event);
             const chip = event.currentTarget;
             const text = chip.textContent.trim();
+            console.log('[fillQuery] Text:', text);
             const textarea = document.querySelector('.chat-input');
+            console.log('[fillQuery] Textarea found:', !!textarea);
             if (textarea) {
                 textarea.value = text;
                 textarea.focus();
+                console.log('[fillQuery] Value set successfully');
+            } else {
+                console.error('[fillQuery] No textarea with class .chat-input found');
             }
         }
 
@@ -12009,7 +12017,17 @@ HTML = """<!DOCTYPE html>
             }
 
             // Initialize: Show buttons if API is supported
+            console.log('[Voice Input] Calling updateButtonState to show buttons...');
             updateButtonState('idle');
+
+            // Verify buttons are visible
+            setTimeout(() => {
+                const homeBtn = document.getElementById('voiceInputBtnHome');
+                const chatBtn = document.getElementById('voiceInputBtnChat');
+                console.log('[Voice Input] Button visibility check:');
+                console.log('  - Home button:', homeBtn ? ('display: ' + homeBtn.style.display) : 'NOT FOUND');
+                console.log('  - Chat button:', chatBtn ? ('display: ' + chatBtn.style.display) : 'NOT FOUND');
+            }, 100);
 
             console.log('[Voice Input] Initialized successfully');
         })();
@@ -12319,6 +12337,15 @@ HTML = """<!DOCTYPE html>
                 // Catch any errors to prevent breaking other features
             }
         })();
+
+        // === DIAGNOSTIC: Verify all features loaded ===
+        console.log('[gasconsult.ai] All JavaScript loaded successfully');
+        console.log('[gasconsult.ai] Features available:');
+        console.log('  - fillQuery:', typeof fillQuery);
+        console.log('  - toggleVoiceInput:', typeof window.toggleVoiceInput);
+        console.log('  - toggleReasoning:', typeof window.toggleReasoning);
+        console.log('  - askFollowup:', typeof window.askFollowup);
+        console.log('  - toggleEvidenceBreakdown:', typeof window.toggleEvidenceBreakdown);
     </script>
 </body>
 </html>
@@ -26072,6 +26099,7 @@ def index():
 
             # ========== DETECT QUERY INTENT (Casual vs Medical) ==========
             query_intent = detect_query_intent(query)
+            logger.info(f"[INTENT DETECTION] Raw query: '{raw_query}' | Cleaned query: '{query}' | Intent: {query_intent}")
             logger.debug(f"Query intent: {query_intent}")
 
             # If casual query, respond with streaming (no PubMed search)
