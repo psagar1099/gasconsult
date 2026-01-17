@@ -294,44 +294,43 @@ button {
 .chat-hints {
     display: grid;
     grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
-    gap: 8px;
-    padding: 12px;
+    gap: 6px;
+    padding: 8px;
     max-width: 100%;
-    overflow: hidden;
 }
 
 .hint-chip {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
+    justify-content: flex-start;
+    gap: 5px;
     background: white;
     border: 1px solid var(--gray-200);
-    border-radius: 100px;
-    padding: 10px 14px;
+    border-radius: 10px;
+    padding: 6px 8px;
     min-height: 44px;  /* WCAG AA compliance */
-    font-size: 11px;
+    font-size: 9.5px;
     font-weight: 500;
-    color: var(--gray-600);
+    color: var(--gray-700);
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-align: left;
+    line-height: 1.25;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .hint-chip:hover {
     background: var(--blue-50);
     border-color: var(--blue-400);
     color: var(--blue-700);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .hint-chip svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     flex-shrink: 0;
 }
 
