@@ -48,6 +48,30 @@ function initDropdownClickOutside() {
 }
 
 /**
+ * Fill query from hint chips (homepage suggestions)
+ * Called by onclick handlers on hint-chip elements
+ * @param {Event} event - Click event from hint chip
+ */
+function fillQuery(event) {
+    console.log('[fillQuery] Called with event:', event);
+    const chip = event.currentTarget;
+    const text = chip.textContent.trim();
+    console.log('[fillQuery] Text:', text);
+    const textarea = document.querySelector('.chat-input');
+    console.log('[fillQuery] Textarea found:', !!textarea);
+    if (textarea) {
+        textarea.value = text;
+        textarea.focus();
+        console.log('[fillQuery] Value set successfully');
+    } else {
+        console.error('[fillQuery] No textarea with class .chat-input found');
+    }
+}
+
+// Make fillQuery available globally for inline onclick handlers
+window.fillQuery = fillQuery;
+
+/**
  * Initialize all common UI utilities
  * Call this once per page for default behavior
  */
