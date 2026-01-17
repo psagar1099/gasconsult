@@ -8454,9 +8454,9 @@ HTML = """<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
-    <link rel="stylesheet" href="/static/main.css?v=2">
+    <link rel="stylesheet" href="/static/main.css?v=3">
     <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
-    <script src="/static/utils.js?v=2" defer></script>
+    <script src="/static/utils.js?v=3"></script>
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -11463,22 +11463,7 @@ HTML = """<!DOCTYPE html>
             });
         });
 
-        // Fill query from hint chips (homepage only)
-        function fillQuery(event) {
-            console.log('[fillQuery] Called with event:', event);
-            const chip = event.currentTarget;
-            const text = chip.textContent.trim();
-            console.log('[fillQuery] Text:', text);
-            const textarea = document.querySelector('.chat-input');
-            console.log('[fillQuery] Textarea found:', !!textarea);
-            if (textarea) {
-                textarea.value = text;
-                textarea.focus();
-                console.log('[fillQuery] Value set successfully');
-            } else {
-                console.error('[fillQuery] No textarea with class .chat-input found');
-            }
-        }
+        // fillQuery function now in /static/utils.js for better organization and earlier loading
 
 
         function toggleMobileMenu() {
