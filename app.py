@@ -23,6 +23,16 @@ import logging
 import tempfile
 from dotenv import load_dotenv
 
+# Week 3 Innovation: PDF export functionality
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
+from io import BytesIO
+import time as time_module
+
 # Import database module for persistent chat history (Phase 1)
 try:
     import database
@@ -7002,6 +7012,194 @@ def calculate_confidence_percentage(num_papers, references, evidence_strength):
 
 
 # ============================================================================
+# PDF EXPORT FUNCTIONALITY (Week 3 Innovation)
+# ============================================================================
+
+def generate_conversation_pdf(conversation_history):
+    """
+    Generate a PDF export of the conversation with citations.
+
+    Week 3 Feature: PDF Export
+    Allows users to save and share conversations with full citations.
+
+    Args:
+        conversation_history: List of message dictionaries with content, references, etc.
+
+    Returns:
+        BytesIO object containing the PDF
+    """
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=letter,
+                           rightMargin=0.75*inch, leftMargin=0.75*inch,
+                           topMargin=1*inch, bottomMargin=0.75*inch)
+
+    # Container for PDF elements
+    story = []
+
+    # Define styles
+    styles = getSampleStyleSheet()
+
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=20,
+        textColor=colors.HexColor('#1E3A8A'),
+        spaceAfter=6,
+        alignment=TA_CENTER
+    )
+
+    subtitle_style = ParagraphStyle(
+        'CustomSubtitle',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#6B7280'),
+        spaceAfter=30,
+        alignment=TA_CENTER
+    )
+
+    question_style = ParagraphStyle(
+        'Question',
+        parent=styles['Normal'],
+        fontSize=11,
+        textColor=colors.HexColor('#1F2937'),
+        fontName='Helvetica-Bold',
+        spaceBefore=16,
+        spaceAfter=8,
+        leftIndent=20,
+        rightIndent=20,
+        backColor=colors.HexColor('#EFF6FF'),
+        borderPadding=10,
+        borderRadius=8
+    )
+
+    answer_style = ParagraphStyle(
+        'Answer',
+        parent=styles['Normal'],
+        fontSize=10,
+        textColor=colors.HexColor('#374151'),
+        alignment=TA_JUSTIFY,
+        spaceBefore=8,
+        spaceAfter=16,
+        leading=14
+    )
+
+    reference_title_style = ParagraphStyle(
+        'ReferenceTitle',
+        parent=styles['Heading2'],
+        fontSize=12,
+        textColor=colors.HexColor('#1E3A8A'),
+        fontName='Helvetica-Bold',
+        spaceBefore=16,
+        spaceAfter=10
+    )
+
+    reference_style = ParagraphStyle(
+        'Reference',
+        parent=styles['Normal'],
+        fontSize=9,
+        textColor=colors.HexColor('#4B5563'),
+        leftIndent=30,
+        firstLineIndent=-20,
+        spaceBefore=4,
+        spaceAfter=4,
+        leading=12
+    )
+
+    # Add header
+    story.append(Paragraph("GasConsult.ai", title_style))
+    story.append(Paragraph(
+        f"Evidence-Based Anesthesiology Consultation<br/>"
+        f"Generated: {datetime.datetime.now().strftime('%B %d, %Y at %I:%M %p')}",
+        subtitle_style
+    ))
+    story.append(Spacer(1, 0.3*inch))
+
+    # Add conversations
+    for i, msg in enumerate(conversation_history):
+        role = msg.get('role', '')
+        content = msg.get('content', '')
+        references = msg.get('references', [])
+        evidence_strength = msg.get('evidence_strength', {})
+
+        if role == 'user':
+            # Add question
+            clean_content = bleach.clean(content, tags=[], strip=True)
+            story.append(Paragraph(f"<b>Question:</b> {clean_content}", question_style))
+
+        elif role == 'assistant':
+            # Add answer
+            # Remove HTML tags and clean content for PDF
+            clean_content = bleach.clean(content, tags=['b', 'i', 'u', 'br', 'p'], strip=True)
+            clean_content = clean_content.replace('<br>', '<br/>')
+
+            # Add evidence badge if available
+            if evidence_strength:
+                level = evidence_strength.get('level', 'Unknown')
+                confidence = evidence_strength.get('confidence_percentage', 0)
+                num_papers = msg.get('num_papers', 0)
+
+                badge_colors = {
+                    'High': '#10B981',
+                    'Moderate': '#F59E0B',
+                    'Low': '#EF4444'
+                }
+                badge_color = badge_colors.get(level, '#6B7280')
+
+                evidence_para = Paragraph(
+                    f'<font color="{badge_color}"><b>✓ {level} Confidence ({confidence}%)</b></font> • '
+                    f'{num_papers} studies',
+                    answer_style
+                )
+                story.append(evidence_para)
+
+            story.append(Paragraph(clean_content, answer_style))
+
+            # Add references if available
+            if references and len(references) > 0:
+                story.append(Paragraph("References", reference_title_style))
+
+                for j, ref in enumerate(references, 1):
+                    title = ref.get('title', 'Unknown title')
+                    authors = ref.get('authors', 'Unknown authors')
+                    journal = ref.get('journal', 'Unknown journal')
+                    year = ref.get('year', 'N/A')
+                    pmid = ref.get('pmid', 'Unknown')
+
+                    ref_text = f"[{j}] {authors}. {title}. <i>{journal}</i>, {year}. PMID: {pmid}"
+                    story.append(Paragraph(ref_text, reference_style))
+
+                story.append(Spacer(1, 0.2*inch))
+
+        # Add page break between Q&A pairs (except for the last one)
+        if role == 'assistant' and i < len(conversation_history) - 1:
+            story.append(PageBreak())
+
+    # Add footer disclaimer
+    story.append(Spacer(1, 0.4*inch))
+    disclaimer_style = ParagraphStyle(
+        'Disclaimer',
+        parent=styles['Normal'],
+        fontSize=8,
+        textColor=colors.HexColor('#9CA3AF'),
+        alignment=TA_CENTER,
+        leading=10
+    )
+    story.append(Paragraph(
+        "<b>DISCLAIMER:</b> This AI-generated content is for educational purposes only and does not constitute "
+        "medical advice. All clinical decisions should be made by qualified healthcare professionals. "
+        "Verify all citations and recommendations independently.",
+        disclaimer_style
+    ))
+
+    # Build PDF
+    doc.build(story)
+    buffer.seek(0)
+
+    return buffer
+
+
+# ============================================================================
 # HYBRID RAG + AGENTIC AI FOR PREOPERATIVE ASSESSMENT
 # ============================================================================
 
@@ -8454,9 +8652,10 @@ HTML = """<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
-    <link rel="stylesheet" href="/static/main.css?v=3">
+    <link rel="stylesheet" href="/static/main.css?v=6">
     <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
-    <script src="/static/utils.js?v=3"></script>
+    <!-- Week 3 Innovation: Citation preview + PDF export + Evidence chart features -->
+    <script src="/static/utils.js?v=6"></script>
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -11022,11 +11221,19 @@ HTML = """<!DOCTYPE html>
                             {% set description = message.evidence_strength.description if message.evidence_strength is mapping else '' %}
                             {% set confidence_pct = message.evidence_strength.confidence_percentage if message.evidence_strength is mapping else 0 %}
                             <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }} interactive-badge"
-                                 onclick="toggleEvidenceBreakdown(this)"
+                                 onclick="showEvidenceChart(this, event)"
                                  role="button"
                                  tabindex="0"
-                                 aria-label="Click to view evidence breakdown"
-                                 title="Click for detailed evidence breakdown ({{ confidence_pct }}% confidence)">
+                                 aria-label="Click to view evidence quality chart"
+                                 title="Click to view interactive evidence quality chart ({{ confidence_pct }}% confidence)"
+                                 data-guidelines="{{ breakdown.guidelines if breakdown.guidelines else 0 }}"
+                                 data-meta-analyses="{{ breakdown.meta_analyses if breakdown.meta_analyses else 0 }}"
+                                 data-systematic-reviews="{{ breakdown.systematic_reviews if breakdown.systematic_reviews else 0 }}"
+                                 data-rcts="{{ breakdown.rcts if breakdown.rcts else 0 }}"
+                                 data-observational="{{ breakdown.observational if breakdown.observational else 0 }}"
+                                 data-total="{{ message.num_papers }}"
+                                 data-level="{{ level }}"
+                                 data-confidence="{{ confidence_pct }}">
                                 <div class="badge-content-wrapper">
                                     <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1; gap: 6px; width: 100%;">
                                         <div style="display: flex; align-items: center; gap: 8px;">
@@ -11151,7 +11358,11 @@ HTML = """<!DOCTYPE html>
                                 {% for ref in message.references %}
                                 <div class="reference-item">
                                     <div class="reference-header">
-                                        <div class="reference-number">[{{ loop.index }}]</div>
+                                        <div class="reference-number citation-preview-trigger"
+                                             data-abstract="{{ ref.get('abstract', 'No abstract available.') | replace('"', '&quot;') }}"
+                                             data-pmid="{{ ref.pmid }}"
+                                             data-title="{{ ref.title | replace('"', '&quot;') }}"
+                                             title="Click to preview abstract">[{{ loop.index }}]</div>
                                         <div class="reference-link-container">
                                             <a href="https://pubmed.ncbi.nlm.nih.gov/{{ ref.pmid }}/" target="_blank" rel="noopener noreferrer" class="reference-link">
                                                 {{ ref.title }}
@@ -11242,6 +11453,18 @@ HTML = """<!DOCTYPE html>
                 </svg>
                 New Chat
             </a>
+
+            <!-- Week 3 Innovation: PDF Export Button -->
+            {% if conversation_messages and conversation_messages|length > 0 %}
+            <button class="export-pdf-btn" onclick="exportConversationPDF()" aria-label="Export conversation as PDF">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span>Export PDF</span>
+            </button>
+            {% endif %}
 
             <div class="chat-input-area">
                 <div class="chat-input-wrapper">
@@ -11669,7 +11892,15 @@ HTML = """<!DOCTYPE html>
                             event.data.forEach(function(ref, index) {
                                 refsHTML += '<div class="reference-item">';
                                 refsHTML += '<div class="reference-header">';
-                                refsHTML += '<div class="reference-number">[' + (index + 1) + ']</div>';
+                                // Week 3 Feature: Add abstract data for hover previews
+                                var abstract = ref.abstract || 'No abstract available.';
+                                var escapedAbstract = abstract.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                                var escapedTitle = (ref.title || '').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                                refsHTML += '<div class="reference-number citation-preview-trigger" ';
+                                refsHTML += 'data-abstract="' + escapedAbstract + '" ';
+                                refsHTML += 'data-pmid="' + ref.pmid + '" ';
+                                refsHTML += 'data-title="' + escapedTitle + '" ';
+                                refsHTML += 'title="Click to preview abstract">[' + (index + 1) + ']</div>';
                                 refsHTML += '<div class="reference-link-container">';
                                 refsHTML += '<a href="https://pubmed.ncbi.nlm.nih.gov/' + ref.pmid + '/" target="_blank" rel="noopener noreferrer" class="reference-link">';
                                 refsHTML += ref.title;
@@ -27053,6 +27284,37 @@ def clear_pending_stream():
     except Exception as e:
         logger.error(f"Error clearing pending_stream: {e}")
         return jsonify({'status': 'error', 'message': str(e)}), 500
+
+@app.route("/export-pdf", methods=["POST"])
+@csrf.exempt  # Week 3 Feature: PDF export endpoint
+def export_pdf():
+    """
+    Export conversation as PDF with citations.
+
+    Week 3 Innovation Feature: PDF Export
+    Allows users to download and share conversations with full citations.
+    """
+    try:
+        # Get conversation history from request
+        data = request.get_json() or {}
+        conversation_history = data.get('conversation_history', [])
+
+        if not conversation_history or len(conversation_history) == 0:
+            return jsonify({'status': 'error', 'message': 'No conversation to export'}), 400
+
+        # Generate PDF
+        pdf_buffer = generate_conversation_pdf(conversation_history)
+
+        # Create response with PDF attachment
+        response = make_response(pdf_buffer.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename="gasconsult-conversation-{datetime.datetime.now().strftime("%Y%m%d-%H%M%S")}.pdf"'
+
+        return response
+
+    except Exception as e:
+        logger.error(f"Error generating PDF: {e}")
+        return jsonify({'status': 'error', 'message': f'Failed to generate PDF: {str(e)}'}), 500
 
 @app.route("/terms")
 def terms():
