@@ -8652,10 +8652,10 @@ HTML = """<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
-    <link rel="stylesheet" href="/static/main.css?v=7">
+    <link rel="stylesheet" href="/static/main.css?v=8">
     <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
     <!-- Week 3 Innovation: Citation preview + PDF export + Evidence chart features -->
-    <script src="/static/utils.js?v=7"></script>
+    <script src="/static/utils.js?v=8"></script>
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
@@ -9160,19 +9160,17 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
+            background: white;
+            border: 1px solid var(--gray-200);
             border-radius: 20px;
             padding: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
         }
 
         .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 8px 24px rgba(37,99,235,0.12);
+            border-color: var(--blue-400);
         }
 
         .chat-inner {
@@ -9295,8 +9293,9 @@ HTML = """<!DOCTYPE html>
         .chat-hints {
             display: grid;
             grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
-            gap: 8px;
-            padding: 16px 8px 6px;
+            gap: 6px;
+            padding: 8px;
+            max-width: 100%;
         }
 
         /* Single column for very small screens */
@@ -9307,27 +9306,32 @@ HTML = """<!DOCTYPE html>
         }
 
         .hint-chip {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
+            justify-content: flex-start;
+            gap: 5px;
+            background: white;
             border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 14px 18px;
+            border-radius: 10px;
+            padding: 6px 8px;
             min-height: 44px;  /* WCAG AA compliance */
-            font-size: 12px;
+            font-size: 9.5px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             cursor: pointer;
             transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.25;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            color: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
@@ -13280,19 +13284,17 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
+            background: white;
+            border: 1px solid var(--gray-200);
             border-radius: 20px;
             padding: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
         }
 
         .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 8px 24px rgba(37,99,235,0.12);
+            border-color: var(--blue-400);
         }
 
         .chat-inner {
@@ -13415,8 +13417,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
         .chat-hints {
             display: grid;
             grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
-            gap: 8px;
-            padding: 16px 8px 6px;
+            gap: 6px;
+            padding: 8px;
+            max-width: 100%;
         }
 
         /* Single column for very small screens */
@@ -13427,27 +13430,32 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .hint-chip {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
+            justify-content: flex-start;
+            gap: 5px;
+            background: white;
             border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 14px 18px;
+            border-radius: 10px;
+            padding: 6px 8px;
             min-height: 44px;  /* WCAG AA compliance */
-            font-size: 12px;
+            font-size: 9.5px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             cursor: pointer;
             transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.25;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            color: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
@@ -14627,19 +14635,17 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .chat-card {
-            background: rgba(255,255,255,0.8);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255,255,255,0.9);
+            background: white;
+            border: 1px solid var(--gray-200);
             border-radius: 20px;
             padding: 6px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 16px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
         }
 
         .chat-card:focus-within {
-            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 1px 2px rgba(0,0,0,0.02), 0 8px 24px rgba(37,99,235,0.08), 0 32px 100px rgba(37,99,235,0.12), inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(59,130,246,0.3);
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.1), 0 8px 24px rgba(37,99,235,0.12);
+            border-color: var(--blue-400);
         }
 
         .chat-inner {
@@ -14762,8 +14768,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         .chat-hints {
             display: grid;
             grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
-            gap: 8px;
-            padding: 16px 8px 6px;
+            gap: 6px;
+            padding: 8px;
+            max-width: 100%;
         }
 
         /* Single column for very small screens */
@@ -14774,27 +14781,32 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .hint-chip {
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.6);
+            justify-content: flex-start;
+            gap: 5px;
+            background: white;
             border: 1px solid var(--gray-200);
-            border-radius: 100px;
-            padding: 14px 18px;
+            border-radius: 10px;
+            padding: 6px 8px;
             min-height: 44px;  /* WCAG AA compliance */
-            font-size: 12px;
+            font-size: 9.5px;
             font-weight: 500;
-            color: var(--gray-600);
+            color: var(--gray-700);
             cursor: pointer;
             transition: all 0.2s ease;
+            text-align: left;
+            line-height: 1.25;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .hint-chip:hover {
-            background: var(--white);
-            border-color: var(--blue-200);
-            color: var(--blue-600);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37,99,235,0.1);
+            background: var(--blue-50);
+            border-color: var(--blue-400);
+            color: var(--blue-700);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .hint-chip svg { width: 14px; height: 14px; opacity: 0.5; }
