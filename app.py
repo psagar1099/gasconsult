@@ -3615,7 +3615,7 @@ PREOP_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link active">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -3638,7 +3638,7 @@ PREOP_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -8870,7 +8870,7 @@ HTML = """<!DOCTYPE html>
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            height: 36px;
+            min-height: 44px;  /* WCAG AA compliance */
             max-height: 110px;
             line-height: 36px;
         }
@@ -8968,10 +8968,17 @@ HTML = """<!DOCTYPE html>
         }
 
         .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
             gap: 8px;
             padding: 16px 8px 6px;
+        }
+
+        /* Single column for very small screens */
+        @media (max-width: 360px) {
+            .chat-hints {
+                grid-template-columns: 1fr;
+            }
         }
 
         .hint-chip {
@@ -8981,7 +8988,8 @@ HTML = """<!DOCTYPE html>
             background: rgba(255,255,255,0.6);
             border: 1px solid var(--gray-200);
             border-radius: 100px;
-            padding: 10px 14px;
+            padding: 14px 18px;
+            min-height: 44px;  /* WCAG AA compliance */
             font-size: 12px;
             font-weight: 500;
             color: var(--gray-600);
@@ -9227,9 +9235,13 @@ HTML = """<!DOCTYPE html>
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
             .chat-inner { border-radius: 16px; padding: 4px; }
-            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-input { padding: 12px 14px; min-height: 44px; }
             .chat-send { width: 44px; height: 44px; border-radius: 12px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(3, 1fr);  /* 3 columns on tablet */
+                gap: 10px;
+                padding: 18px 10px 8px;
+            }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
             .features { padding: 80px 32px 100px; }
@@ -9268,7 +9280,10 @@ HTML = """<!DOCTYPE html>
             .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
             .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
             .chat-send svg { width: 20px; height: 20px; }
-            .chat-hints { padding: 20px 12px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(5, 1fr);  /* 5 columns on desktop (all in one row) */
+                padding: 20px 12px 8px;
+            }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
             .features-header { margin-bottom: 64px; }
@@ -10815,7 +10830,7 @@ HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link active">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -10840,7 +10855,7 @@ HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -11225,9 +11240,9 @@ HTML = """<!DOCTYPE html>
                     <div class="feature-icon emerald">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                     </div>
-                    <h3 class="feature-title">Quick Dose Calculator</h3>
+                    <h3 class="feature-title">Dose Calc Calculator</h3>
                     <p class="feature-desc">Weight-based dosing for all common anesthesia drugs with color-coded syringe labels.</p>
-                    <a href="/quick-dose" class="feature-link">Calculate doses <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    <a href="/dose-calc" class="feature-link">Calculate doses <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon violet">
@@ -11432,9 +11447,9 @@ HTML = """<!DOCTYPE html>
                     const event = JSON.parse(e.data);
 
                     if (event.type === 'connected') {
-                        // Initial connection established - scroll to show we're ready
+                        // Initial connection established - show we're ready
                         const progressText = document.getElementById('progressText');
-                        if (progressText) progressText.textContent = 'Analyzing evidence...';
+                        if (progressText) progressText.textContent = 'Analyzing evidence • Synthesizing answer...';
                         scrollToBottom();
                     } else if (event.type === 'content') {
                         // Stream content chunks
@@ -11444,7 +11459,7 @@ HTML = """<!DOCTYPE html>
                             if (skeletonLoader && skeletonLoader.style.display !== 'none') {
                                 skeletonLoader.style.display = 'none';
                                 const progressText = document.getElementById('progressText');
-                                if (progressText) progressText.textContent = 'Streaming answer...';
+                                if (progressText) progressText.textContent = 'Generating response...';
                             }
                             // Show content div on first content chunk
                             if (streamingContent.style.display === 'none') {
@@ -11546,6 +11561,14 @@ HTML = """<!DOCTYPE html>
                         clearInterval(scrollInterval);
 
                         eventSource.close();
+
+                        // Clear pending_stream from session now that streaming is complete
+                        fetch('/clear_pending_stream', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({request_id: requestId})
+                        }).catch(err => console.log('Failed to clear pending_stream:', err));
+
                         scrollToBottom();
                     } else if (event.type === 'error') {
                         if (streamingIndicator) {
@@ -12902,7 +12925,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            height: 36px;
+            min-height: 44px;  /* WCAG AA compliance */
             max-height: 110px;
             line-height: 36px;
         }
@@ -13000,10 +13023,17 @@ LIBRARY_HTML = """<!DOCTYPE html>
         }
 
         .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
             gap: 8px;
             padding: 16px 8px 6px;
+        }
+
+        /* Single column for very small screens */
+        @media (max-width: 360px) {
+            .chat-hints {
+                grid-template-columns: 1fr;
+            }
         }
 
         .hint-chip {
@@ -13013,7 +13043,8 @@ LIBRARY_HTML = """<!DOCTYPE html>
             background: rgba(255,255,255,0.6);
             border: 1px solid var(--gray-200);
             border-radius: 100px;
-            padding: 10px 14px;
+            padding: 14px 18px;
+            min-height: 44px;  /* WCAG AA compliance */
             font-size: 12px;
             font-weight: 500;
             color: var(--gray-600);
@@ -13259,9 +13290,13 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
             .chat-inner { border-radius: 16px; padding: 4px; }
-            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-input { padding: 12px 14px; min-height: 44px; }
             .chat-send { width: 44px; height: 44px; border-radius: 12px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(3, 1fr);  /* 3 columns on tablet */
+                gap: 10px;
+                padding: 18px 10px 8px;
+            }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
             .features { padding: 80px 32px 100px; }
@@ -13300,7 +13335,10 @@ LIBRARY_HTML = """<!DOCTYPE html>
             .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
             .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
             .chat-send svg { width: 20px; height: 20px; }
-            .chat-hints { padding: 20px 12px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(5, 1fr);  /* 5 columns on desktop (all in one row) */
+                padding: 20px 12px 8px;
+            }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
             .features-header { margin-bottom: 64px; }
@@ -13443,7 +13481,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -13468,7 +13506,7 @@ LIBRARY_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -14234,7 +14272,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             color: var(--gray-800);
             background: transparent;
             resize: none;
-            height: 36px;
+            min-height: 44px;  /* WCAG AA compliance */
             max-height: 110px;
             line-height: 36px;
         }
@@ -14332,10 +14370,17 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         }
 
         .chat-hints {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
             gap: 8px;
             padding: 16px 8px 6px;
+        }
+
+        /* Single column for very small screens */
+        @media (max-width: 360px) {
+            .chat-hints {
+                grid-template-columns: 1fr;
+            }
         }
 
         .hint-chip {
@@ -14345,7 +14390,8 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             background: rgba(255,255,255,0.6);
             border: 1px solid var(--gray-200);
             border-radius: 100px;
-            padding: 10px 14px;
+            padding: 14px 18px;
+            min-height: 44px;  /* WCAG AA compliance */
             font-size: 12px;
             font-weight: 500;
             color: var(--gray-600);
@@ -14591,9 +14637,13 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .chat-container { padding: 0 24px; margin-bottom: 80px; }
             .chat-card { border-radius: 24px; padding: 10px; }
             .chat-inner { border-radius: 16px; padding: 4px; }
-            .chat-input { padding: 10px 14px; min-height: 40px; }
+            .chat-input { padding: 12px 14px; min-height: 44px; }
             .chat-send { width: 44px; height: 44px; border-radius: 12px; }
-            .chat-hints { gap: 10px; padding: 18px 10px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(3, 1fr);  /* 3 columns on tablet */
+                gap: 10px;
+                padding: 18px 10px 8px;
+            }
             .hint-chip { padding: 12px 18px; font-size: 13px; }
             .hint-chip svg { width: 16px; height: 16px; }
             .features { padding: 80px 32px 100px; }
@@ -14632,7 +14682,10 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             .chat-input { padding: 12px 16px; min-height: 44px; max-height: 160px; }
             .chat-send { width: 48px; height: 48px; border-radius: 14px; margin: 6px; }
             .chat-send svg { width: 20px; height: 20px; }
-            .chat-hints { padding: 20px 12px 8px; }
+            .chat-hints {
+                grid-template-columns: repeat(5, 1fr);  /* 5 columns on desktop (all in one row) */
+                padding: 20px 12px 8px;
+            }
             .hint-chip { padding: 12px 20px; }
             .features { padding: 80px 40px 120px; }
             .features-header { margin-bottom: 64px; }
@@ -14775,7 +14828,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -14800,7 +14853,7 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -15504,7 +15557,7 @@ TERMS_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -15529,7 +15582,7 @@ TERMS_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -16660,7 +16713,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -16685,7 +16738,7 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -17923,7 +17976,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -17949,7 +18002,7 @@ EVIDENCE_HTML = """<!DOCTYPE html>
 
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -18933,7 +18986,7 @@ CRISIS_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -18957,7 +19010,7 @@ CRISIS_HTML = """<!DOCTYPE html>
 
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link" style="background:var(--blue-50);color:var(--blue-600);font-weight:600;">Crisis Protocols</a>
@@ -20057,7 +20110,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Dose - GasConsult.ai</title>
+    <title>Dose Calc - GasConsult.ai</title>
 
     <!-- SEO Meta Tags -->
     <meta name="description" content="Fast drug dosing reference for anesthesia: induction agents, opioids, neuromuscular blockers, vasopressors, and emergency medications with evidence-based dosing.">
@@ -20065,14 +20118,14 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gasconsult.ai/quick-dose">
-    <meta property="og:title" content="Quick Dose - GasConsult.ai">
+    <meta property="og:title" content="Dose Calc - GasConsult.ai">
     <meta property="og:description" content="Fast drug dosing reference for anesthesia with evidence-based dosing guidelines.">
     <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gasconsult.ai/quick-dose">
-    <meta property="twitter:title" content="Quick Dose - GasConsult.ai">
+    <meta property="twitter:title" content="Dose Calc - GasConsult.ai">
     <meta property="twitter:description" content="Fast drug dosing reference for anesthesia with evidence-based dosing guidelines.">
     <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
 
@@ -21235,7 +21288,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link active">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link active">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -21260,7 +21313,7 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -23144,7 +23197,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link active">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -23171,7 +23224,7 @@ CALCULATORS_HTML = """<!DOCTYPE html>
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -25235,7 +25288,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -25262,7 +25315,7 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -26733,7 +26786,9 @@ Respond with maximum clinical utility:"""
             return redirect(url_for('index'))
 
     # GET request - check for pending stream and render page
-    pending_stream = session.pop('pending_stream', None)
+    # CRITICAL FIX: Use .get() instead of .pop() to preserve request_id for EventSource
+    # The request_id will be cleared by JavaScript after successful connection
+    pending_stream = session.get('pending_stream', None)
 
     # Log session state for debugging
     logger.info(f"[INDEX GET] pending_stream = {pending_stream}")
@@ -26790,6 +26845,25 @@ def clear_chat():
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'
     return response
+
+@app.route("/clear_pending_stream", methods=["POST"])
+@csrf.exempt  # Small utility endpoint, low risk
+def clear_pending_stream():
+    """Clear pending_stream from session after streaming completes"""
+    try:
+        data = request.get_json() or {}
+        request_id = data.get('request_id')
+
+        # Clear pending_stream if it matches the request_id
+        if session.get('pending_stream') == request_id:
+            session.pop('pending_stream', None)
+            session.modified = True
+            logger.debug(f"Cleared pending_stream for request_id: {request_id}")
+
+        return jsonify({'status': 'ok'})
+    except Exception as e:
+        logger.error(f"Error clearing pending_stream: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route("/terms")
 def terms():
@@ -28029,7 +28103,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -28056,7 +28130,7 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
@@ -29281,7 +29355,7 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -29565,9 +29639,9 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
 """
 
 
-@app.route("/quick-dose")
-def quick_dose():
-    """Quick Dose Reference - Weight-based drug dosing calculator"""
+@app.route("/dose-calc")
+def dose_calc():
+    """Dose Calc - Weight-based drug dosing calculator"""
     return render_template_string(QUICK_DOSE_HTML)
 @app.route("/preop", methods=["GET", "POST"])
 def preop_assessment():
@@ -34707,7 +34781,7 @@ PRICING_HTML = """<!DOCTYPE html>
                 </a>
                 <div class="nav-links">
                     <a href="/?clear=1" class="nav-link">Home</a>
-                    <a href="/quick-dose" class="nav-link">Quick Dose</a>
+                    <a href="/dose-calc" class="nav-link">Dose Calc</a>
                     <a href="/preop" class="nav-link">Pre-Op</a>
                     <a href="/calculators" class="nav-link">Clinical Calculators</a>
                     <div class="nav-dropdown">
@@ -34731,7 +34805,7 @@ PRICING_HTML = """<!DOCTYPE html>
         </nav>
         <div class="mobile-menu" id="mobileMenu">
             <a href="/?clear=1" class="mobile-menu-link">Home</a>
-            <a href="/quick-dose" class="mobile-menu-link">Quick Dose</a>
+            <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
             <a href="/preop" class="mobile-menu-link">Pre-Op</a>
             <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
             <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
