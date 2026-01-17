@@ -147,6 +147,57 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SECURE'] = os.getenv('FLASK_ENV') == 'production' and os.getenv('FORCE_HTTPS', 'false').lower() == 'true'
 Session(app)
 
+# Week 2 Performance: Production Redis requirement check
+# Ensures multi-worker safety by requiring Redis in production environments
+FLASK_ENV = os.getenv('FLASK_ENV', 'development')
+if FLASK_ENV == 'production' or os.getenv('RENDER'):  # Render auto-sets RENDER env var
+    if app.config.get('SESSION_TYPE') != 'redis':
+        import logging
+        logging.error("=" * 80)
+        logging.error("CRITICAL: Production environment detected without Redis session backend!")
+        logging.error("This WILL cause session data loss and chat streaming failures in multi-worker setups.")
+        logging.error("Action required: Set REDIS_URL environment variable to a valid Redis connection string.")
+        logging.error("Example: REDIS_URL=redis://user:password@host:port/0")
+        logging.error("=" * 80)
+        # Don't raise exception to allow deployment, but make it very visible
+        import warnings
+        warnings.warn(
+            "Production deployment without Redis! Session sharing will fail with multiple workers. "
+            "Set REDIS_URL environment variable immediately.",
+            RuntimeWarning,
+            stacklevel=2
+        )
+    else:
+        import logging
+        logging.info("✓ Production environment: Redis session backend active (multi-worker safe)")
+
+# Week 2 Performance: Add timing headers for monitoring
+import time
+from flask import g
+
+@app.before_request
+def before_request():
+    """Track request start time for performance monitoring"""
+    g.request_start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    """Add performance monitoring headers to all responses"""
+    # Calculate request duration
+    if hasattr(g, 'request_start_time'):
+        request_duration = time.time() - g.request_start_time
+        # Add Server-Timing header (visible in browser DevTools Network tab)
+        response.headers['Server-Timing'] = f'total;dur={request_duration * 1000:.2f}'
+        # Add custom header for easier monitoring
+        response.headers['X-Response-Time'] = f'{request_duration * 1000:.2f}ms'
+
+    # Add cache control for static assets
+    if request.path.startswith('/static/'):
+        # Cache static files for 1 year (immutable with version query params)
+        response.headers['Cache-Control'] = 'public, max-age=31536000, immutable'
+
+    return response
+
 # Initialize CSRF protection
 csrf = CSRFProtect(app)
 app.config['WTF_CSRF_TIME_LIMIT'] = None  # Don't expire CSRF tokens
@@ -8401,6 +8452,11 @@ HTML = """<!DOCTYPE html>
     <meta name="theme-color" content="#2563EB">
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
+    <link rel="stylesheet" href="/static/main.css?v=2">
+    <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
+    <script src="/static/utils.js?v=2" defer></script>
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
