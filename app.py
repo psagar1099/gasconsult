@@ -6880,6 +6880,76 @@ def get_evidence_strength(num_papers, references):
             'breakdown': breakdown
         }
 
+
+def calculate_confidence_percentage(num_papers, references, evidence_strength):
+    """
+    Calculate a confidence percentage (0-95%) based on evidence quality.
+
+    Week 1 Feature: Transparency & Trust
+    Shows users exactly how confident the AI is based on the evidence.
+    Never shows 100% (medical uncertainty principle).
+
+    Factors:
+    - Quality score (from evidence_strength)
+    - Number of papers (sample size)
+    - Recency of evidence
+    - Diversity of study types
+    - Agreement/consistency (assumed from quality)
+
+    Returns: Integer percentage (0-95)
+    """
+    if not num_papers or num_papers == 0:
+        return 0
+
+    breakdown = evidence_strength.get('breakdown', {})
+    quality_score = evidence_strength.get('score', 0)
+
+    # Base confidence from quality score
+    # Quality score ranges: 0.5 (low) to 20+ (exceptional)
+    # Map to 30-80% base confidence
+    base_confidence = min(30 + (quality_score * 3.5), 80)
+
+    # Bonus for sample size (more papers = more confidence)
+    # 1-3 papers: 0%, 4-6: +2%, 7-10: +4%, 11+: +6%
+    if num_papers >= 11:
+        sample_bonus = 6
+    elif num_papers >= 7:
+        sample_bonus = 4
+    elif num_papers >= 4:
+        sample_bonus = 2
+    else:
+        sample_bonus = 0
+
+    # Bonus for diversity of study types (not all eggs in one basket)
+    study_types_present = sum([
+        1 if breakdown.get('guidelines', 0) > 0 else 0,
+        1 if breakdown.get('meta_analyses', 0) > 0 else 0,
+        1 if breakdown.get('systematic_reviews', 0) > 0 else 0,
+        1 if breakdown.get('rcts', 0) > 0 else 0,
+        1 if breakdown.get('observational', 0) > 0 else 0,
+    ])
+    diversity_bonus = min(study_types_present * 2, 8)  # Max +8% for 4+ types
+
+    # Bonus for recency (recent evidence is more relevant)
+    recent_count = breakdown.get('recent_count', 0)
+    recency_ratio = recent_count / num_papers if num_papers > 0 else 0
+    if recency_ratio >= 0.8:  # 80%+ recent
+        recency_bonus = 4
+    elif recency_ratio >= 0.5:  # 50%+ recent
+        recency_bonus = 2
+    else:
+        recency_bonus = 0
+
+    # Calculate total confidence
+    total_confidence = base_confidence + sample_bonus + diversity_bonus + recency_bonus
+
+    # Cap at 95% (never 100% - medical uncertainty)
+    # Floor at 15% (if we have ANY papers, we have some confidence)
+    confidence_percentage = max(15, min(int(total_confidence), 95))
+
+    return confidence_percentage
+
+
 # ============================================================================
 # HYBRID RAG + AGENTIC AI FOR PREOPERATIVE ASSESSMENT
 # ============================================================================
@@ -10894,26 +10964,37 @@ HTML = """<!DOCTYPE html>
                             {% set level = message.evidence_strength.level if message.evidence_strength is mapping else message.evidence_strength %}
                             {% set breakdown = message.evidence_strength.breakdown if message.evidence_strength is mapping else {} %}
                             {% set description = message.evidence_strength.description if message.evidence_strength is mapping else '' %}
+                            {% set confidence_pct = message.evidence_strength.confidence_percentage if message.evidence_strength is mapping else 0 %}
                             <div class="evidence-badge {{ 'high' if level == 'High' else ('moderate' if level == 'Moderate' else 'low') }} interactive-badge"
                                  onclick="toggleEvidenceBreakdown(this)"
                                  role="button"
                                  tabindex="0"
                                  aria-label="Click to view evidence breakdown"
-                                 title="Click for detailed evidence breakdown">
+                                 title="Click for detailed evidence breakdown ({{ confidence_pct }}% confidence)">
                                 <div class="badge-content-wrapper">
-                                    <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1;">
-                                        <div>
-                                            {% if level == 'High' %}
-                                            ✓ High Confidence
-                                            {% elif level == 'Moderate' %}
-                                            ~ Moderate Confidence
-                                            {% else %}
-                                            ! Low Confidence
+                                    <div style="display: flex; flex-direction: column; align-items: flex-start; flex: 1; gap: 6px; width: 100%;">
+                                        <div style="display: flex; align-items: center; gap: 8px;">
+                                            <span>
+                                                {% if level == 'High' %}
+                                                ✓ High Confidence
+                                                {% elif level == 'Moderate' %}
+                                                ~ Moderate Confidence
+                                                {% else %}
+                                                ! Low Confidence
+                                                {% endif %}
+                                            </span>
+                                            {% if confidence_pct > 0 %}
+                                            <span style="font-weight: 700; font-size: 13px;">{{ confidence_pct }}%</span>
                                             {% endif %}
-                                            • {{ message.num_papers }} studies
                                         </div>
-                                        <div class="evidence-explanation">
-                                            {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
+                                        {% if confidence_pct > 0 %}
+                                        <!-- Visual confidence bar -->
+                                        <div style="width: 100%; height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; overflow: hidden;">
+                                            <div style="width: {{ confidence_pct }}%; height: 100%; background: {{ '#10B981' if level == 'High' else ('#FBBF24' if level == 'Moderate' else '#EF4444') }}; transition: width 0.3s ease;"></div>
+                                        </div>
+                                        {% endif %}
+                                        <div style="font-size: 12px; opacity: 0.9;">
+                                            {{ message.num_papers }} studies • {{ description if description else ('Strong evidence from meta-analyses, RCTs, or systematic reviews' if level == 'High' else ('Moderate evidence - consider individual patient factors' if level == 'Moderate' else 'Limited evidence - use caution and clinical judgment')) }}
                                         </div>
                                     </div>
                                     <svg class="expand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-left: 8px; flex-shrink: 0; transition: transform 0.2s;">
@@ -11451,6 +11532,13 @@ HTML = """<!DOCTYPE html>
                         const progressText = document.getElementById('progressText');
                         if (progressText) progressText.textContent = 'Analyzing evidence • Synthesizing answer...';
                         scrollToBottom();
+                    } else if (event.type === 'progress') {
+                        // Week 1 Feature: Update progress text with paper count and study types
+                        const progressText = document.getElementById('progressText');
+                        if (progressText && event.message) {
+                            progressText.textContent = event.message;
+                        }
+                        scrollToBottom();
                     } else if (event.type === 'content') {
                         // Stream content chunks
                         if (event.data) {
@@ -11490,6 +11578,7 @@ HTML = """<!DOCTYPE html>
                                 const level = strength.level || 'Low';
                                 const description = strength.description || '';
                                 const numPapers = event.num_papers || 0;
+                                const confidencePercentage = strength.confidence_percentage || 0;
 
                                 // Determine CSS class
                                 const badgeClass = level === 'High' ? 'high' : (level === 'Moderate' ? 'moderate' : 'low');
@@ -11497,12 +11586,22 @@ HTML = """<!DOCTYPE html>
                                 // Determine icon
                                 const icon = level === 'High' ? '✓' : (level === 'Moderate' ? '~' : '!');
 
-                                // Build badge HTML
+                                // Build badge HTML with confidence percentage and visual bar
                                 let badgeHTML = '<div class="evidence-badge ' + badgeClass + '" ';
-                                badgeHTML += 'title="Evidence Quality: ' + level + ' - ' + description + '">';
-                                badgeHTML += '<div style="display: flex; flex-direction: column; align-items: flex-start;">';
-                                badgeHTML += '<div>' + icon + ' ' + level + ' Confidence • ' + numPapers + ' studies</div>';
-                                badgeHTML += '<div class="evidence-explanation">' + description + '</div>';
+                                badgeHTML += 'title="Evidence Quality: ' + level + ' - ' + description + ' (Confidence: ' + confidencePercentage + '%)">';
+                                badgeHTML += '<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 6px; width: 100%;">';
+                                // Main line with confidence percentage
+                                badgeHTML += '<div style="display: flex; align-items: center; gap: 8px;">';
+                                badgeHTML += '<span>' + icon + ' ' + level + ' Confidence</span>';
+                                badgeHTML += '<span style="font-weight: 700; font-size: 13px;">' + confidencePercentage + '%</span>';
+                                badgeHTML += '</div>';
+                                // Visual confidence bar
+                                const barColor = level === 'High' ? '#10B981' : (level === 'Moderate' ? '#FBBF24' : '#EF4444');
+                                badgeHTML += '<div style="width: 100%; height: 4px; background: rgba(0,0,0,0.1); border-radius: 2px; overflow: hidden;">';
+                                badgeHTML += '<div style="width: ' + confidencePercentage + '%; height: 100%; background: ' + barColor + '; transition: width 0.3s ease;"></div>';
+                                badgeHTML += '</div>';
+                                // Second line with paper count
+                                badgeHTML += '<div style="font-size: 12px; opacity: 0.9;">' + numPapers + ' studies • ' + description + '</div>';
                                 badgeHTML += '</div></div>';
 
                                 evidenceBadge.innerHTML = badgeHTML;
@@ -11571,8 +11670,21 @@ HTML = """<!DOCTYPE html>
 
                         scrollToBottom();
                     } else if (event.type === 'error') {
+                        // Week 1 Feature: Display actionable error messages
                         if (streamingIndicator) {
-                            streamingIndicator.innerHTML = '<span style="color: #DC2626;">Error: ' + (event.message || 'Unknown error') + '</span>';
+                            let errorHTML = '<div style="color: #DC2626; line-height: 1.6;">';
+                            errorHTML += '<div style="font-weight: 600; margin-bottom: 8px;">' + (event.message || 'An error occurred') + '</div>';
+                            if (event.action) {
+                                errorHTML += '<div style="font-size: 14px; color: #991B1B; margin-bottom: 8px;">→ ' + event.action + '</div>';
+                            }
+                            if (event.technical) {
+                                errorHTML += '<details style="font-size: 12px; color: #6B7280; margin-top: 8px; cursor: pointer;">';
+                                errorHTML += '<summary style="user-select: none;">Technical details</summary>';
+                                errorHTML += '<div style="margin-top: 4px; padding: 8px; background: #F3F4F6; border-radius: 4px;">' + event.technical + '</div>';
+                                errorHTML += '</details>';
+                            }
+                            errorHTML += '</div>';
+                            streamingIndicator.innerHTML = errorHTML;
                         }
 
                         // Stop the aggressive auto-scroll interval
@@ -11586,8 +11698,14 @@ HTML = """<!DOCTYPE html>
             });
 
             eventSource.addEventListener('error', function(e) {
+                // Week 1 Feature: Display actionable connection error message
                 if (streamingIndicator) {
-                    streamingIndicator.innerHTML = '<span style="color: #DC2626;">Connection error - please refresh and try again</span>';
+                    let errorHTML = '<div style="color: #DC2626; line-height: 1.6;">';
+                    errorHTML += '<div style="font-weight: 600; margin-bottom: 8px;">⚠️ Connection lost to server</div>';
+                    errorHTML += '<div style="font-size: 14px; color: #991B1B; margin-bottom: 8px;">→ Please check your internet connection and refresh the page (F5 or Cmd+R)</div>';
+                    errorHTML += '<div style="font-size: 13px; color: #6B7280; margin-top: 8px;">If the problem persists, the server may be temporarily unavailable.</div>';
+                    errorHTML += '</div>';
+                    streamingIndicator.innerHTML = errorHTML;
                 }
 
                 // Stop the aggressive auto-scroll interval
@@ -25770,7 +25888,9 @@ def stream():
         logger.error(f"[STREAM] If using multiple workers, consider using Redis for session storage")
         error_msg = json.dumps({
             'type': 'error',
-            'message': 'Session expired or not found. This can happen if the server restarted. Please go back and try again.'
+            'message': '⚠️ Session expired or connection lost.',
+            'action': 'Please refresh the page (F5 or Cmd+R) and ask your question again.',
+            'technical': 'This typically happens if the server restarted or your session timed out after 1 hour of inactivity.'
         })
         return Response(f"data: {error_msg}\n\n", mimetype='text/event-stream')
 
@@ -25784,6 +25904,31 @@ def stream():
         try:
             # Send initial event to confirm connection
             yield f"data: {json.dumps({'type': 'connected'})}\n\n"
+
+            # Week 1 Feature: Send paper count progress update for transparency
+            if num_papers > 0:
+                # Analyze study types quickly for progress message
+                study_types = []
+                meta_count = sum(1 for ref in refs if 'meta-analysis' in ref.get('title', '').lower() or 'meta-analysis' in ref.get('journal', '').lower())
+                systematic_count = sum(1 for ref in refs if 'systematic review' in ref.get('title', '').lower())
+                rct_count = sum(1 for ref in refs if 'randomized' in ref.get('title', '').lower() or 'randomised' in ref.get('title', '').lower())
+                guideline_count = sum(1 for ref in refs if 'guideline' in ref.get('title', '').lower() or 'guideline' in ref.get('journal', '').lower())
+
+                if guideline_count > 0:
+                    study_types.append(f"{guideline_count} guideline{'s' if guideline_count != 1 else ''}")
+                if meta_count > 0:
+                    study_types.append(f"{meta_count} meta-analysis/analyses")
+                if systematic_count > 0:
+                    study_types.append(f"{systematic_count} systematic review{'s' if systematic_count != 1 else ''}")
+                if rct_count > 0:
+                    study_types.append(f"{rct_count} RCT{'s' if rct_count != 1 else ''}")
+
+                progress_message = f"Found {num_papers} papers"
+                if study_types:
+                    progress_message += f" • Analyzing {', '.join(study_types[:2])}"  # Show top 2 types
+                progress_message += "..."
+
+                yield f"data: {json.dumps({'type': 'progress', 'message': progress_message, 'num_papers': num_papers})}\n\n"
 
             # Dynamic temperature based on question type and evidence availability
             question_type = stream_data.get('question_type', 'general')
@@ -25833,6 +25978,9 @@ def stream():
                 evidence_strength = None  # No evidence badge for casual chat
             else:
                 evidence_strength = get_evidence_strength(num_papers, refs)
+                # Week 1 Feature: Add confidence percentage for transparency
+                confidence_percentage = calculate_confidence_percentage(num_papers, refs, evidence_strength)
+                evidence_strength['confidence_percentage'] = confidence_percentage
 
             # Clean markdown code fences from the response
             cleaned_response = strip_markdown_code_fences(full_response)
