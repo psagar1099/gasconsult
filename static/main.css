@@ -100,9 +100,8 @@ button {
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--gray-200);
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     padding: 12px 20px;
 }
 
@@ -296,31 +295,38 @@ button {
     display: grid;
     grid-template-columns: repeat(2, 1fr);  /* 2 columns on mobile */
     gap: 8px;
-    padding: 16px 8px 6px;
+    padding: 12px;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .hint-chip {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 6px;
-    background: rgba(255,255,255,0.6);
+    justify-content: center;
+    gap: 4px;
+    background: white;
     border: 1px solid var(--gray-200);
     border-radius: 100px;
-    padding: 14px 18px;
+    padding: 10px 14px;
     min-height: 44px;  /* WCAG AA compliance */
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 500;
     color: var(--gray-600);
     cursor: pointer;
     transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .hint-chip:hover {
-    background: white;
-    border-color: var(--blue-300);
-    color: var(--blue-600);
+    background: var(--blue-50);
+    border-color: var(--blue-400);
+    color: var(--blue-700);
     transform: translateY(-2px);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-md);
 }
 
 .hint-chip svg {

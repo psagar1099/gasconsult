@@ -8652,10 +8652,10 @@ HTML = """<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
-    <link rel="stylesheet" href="/static/main.css?v=6">
+    <link rel="stylesheet" href="/static/main.css?v=7">
     <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
     <!-- Week 3 Innovation: Citation preview + PDF export + Evidence chart features -->
-    <script src="/static/utils.js?v=6"></script>
+    <script src="/static/utils.js?v=7"></script>
 
     <!-- Structured Data for SEO -->
     <script type="application/ld+json">
