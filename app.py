@@ -27296,8 +27296,10 @@ Respond with maximum clinical utility:"""
     # Ensure session is saved before rendering (critical for streaming to work)
     session.modified = True
 
-    # Create response with no-cache headers to prevent stale UI
-    response = make_response(render_template_string(HTML, messages=session.get('messages', []), pending_stream=pending_stream, error_message=error_message))
+    # REFACTOR POC: Use external template file instead of inline string constant
+    # This is Phase 1 of template extraction - separates templates from Python code
+    # TODO Phase 2: Break down chat_standalone.html to extend base.html
+    response = make_response(render_template('chat_standalone.html', messages=session.get('messages', []), pending_stream=pending_stream, error_message=error_message))
     response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '0'

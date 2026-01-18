@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-01NZYD1DPP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-01NZYD1DPP');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GasConsult.ai - AI-Powered Anesthesiology Assistant{% endblock %}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o for hallucination-free, citation-backed clinical answers.{% endblock %}">
+    <meta name="keywords" content="anesthesiology, anesthesia, medical AI, PubMed, clinical guidelines, evidence-based medicine, GPT-4o, systematic reviews">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gasconsult.ai{% block og_url %}/{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}GasConsult.ai - Evidence-Based Anesthesiology AI{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Get hallucination-free anesthesiology answers backed by PubMed research. GPT-4o + systematic reviews, RCTs, and clinical guidelines.{% endblock %}">
+    <meta property="og:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gasconsult.ai{% block twitter_url %}/{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}GasConsult.ai - Evidence-Based Anesthesiology AI{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Get hallucination-free anesthesiology answers backed by PubMed research.{% endblock %}">
+    <meta property="twitter:image" content="https://gasconsult.ai/static/logo.png">
+
+    <!-- PWA -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg?v=6">
+    <link rel="apple-touch-icon" href="/static/favicon.svg?v=6">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#2563EB">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Week 2 Performance: External CSS (enables browser caching, reduces payload by ~46KB) -->
+    <link rel="stylesheet" href="/static/main.css?v=8">
+
+    <!-- Week 2 Performance: Shared JavaScript utilities (consolidates duplicate form handlers) -->
+    <!-- Week 3 Innovation: Citation preview + PDF export + Evidence chart features -->
+    <script src="/static/utils.js?v=8"></script>
+
+    <!-- Structured Data for SEO -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MedicalWebPage",
+      "name": "GasConsult.ai",
+      "description": "Evidence-based anesthesiology AI consultant combining PubMed research with GPT-4o",
+      "specialty": "Anesthesiology",
+      "audience": {
+        "@type": "MedicalAudience",
+        "audienceType": "Healthcare Professional"
+      }
+    }
+    </script>
+    {% endblock %}
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- Skip to Content Link for Accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to Content</a>
+
+    {% block sidebar %}{% endblock %}
+
+    <!-- Background Canvas with Animated Orbs -->
+    <div class="bg-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="grain"></div>
+
+    <!-- Verification Banner for Unverified Users -->
+    {{ generate_verification_banner_html()|safe }}
+
+    <div class="page">
+        <!-- Navigation -->
+        {% include 'components/navbar.html' %}
+
+        <!-- Main Content -->
+        {% block content %}{% endblock %}
+
+        <!-- Footer -->
+        {% include 'components/footer.html' %}
+    </div>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

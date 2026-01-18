@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}GasConsult.ai - AI-Powered Anesthesiology Assistant{% endblock %}
+
+{% block extra_head %}
+<style>
+/* TODO PHASE 2: Move all this CSS to /static/css/chat.css
+   For POC, keeping inline to prove template inheritance works */
+{{ chat_inline_css|safe }}
+</style>
+
+<!-- Markdown parser for streaming responses -->
+<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+{% endblock %}
+
+{% block sidebar %}
+<!-- Phase 2 Feature: Conversation History Sidebar -->
+{{ conversation_history_sidebar|safe }}
+{% endblock %}
+
+{% block content %}
+{% if messages and messages|length > 0 %}
+<!-- Chat Interface -->
+<section class="chat-view" id="main-content">
+    {{ chat_messages_section|safe }}
+</section>
+{% else %}
+<!-- Hero/Welcome Screen -->
+<section class="hero" id="main-content">
+    {{ hero_section|safe }}
+</section>
+{% endif %}
+
+{% if not messages or messages|length == 0 %}
+<!-- Features Section (only shown on hero) -->
+<section class="features">
+    {{ features_section|safe }}
+</section>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+// TODO PHASE 3: Move to /static/js/chat.js
+{{ chat_javascript|safe }}
+</script>
+{% endblock %}

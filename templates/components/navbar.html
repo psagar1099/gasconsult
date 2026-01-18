@@ -1,0 +1,58 @@
+<nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+        <a href="/?clear=1" class="logo" aria-label="GasConsult.ai home">
+            <div class="logo-icon">
+                <svg width="36" height="12" viewBox="0 0 52 18" fill="none">
+                    <circle cx="9" cy="9" r="9" fill="#2563EB"/>
+                    <circle cx="21" cy="9" r="9" fill="#2563EB" fill-opacity="0.5"/>
+                    <circle cx="33" cy="9" r="9" fill="#2563EB" fill-opacity="0.2"/>
+                </svg>
+            </div>
+            <span class="logo-text"><span class="gas">gas</span><span class="consult">consult</span><span class="ai">.ai</span></span>
+        </a>
+        <div class="nav-links">
+            <a href="/?clear=1" class="nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
+            <a href="/dose-calc" class="nav-link {% if request.path == '/dose-calc' %}active{% endif %}">Dose Calc</a>
+            <a href="/preop" class="nav-link {% if request.path == '/preop' %}active{% endif %}">Pre-Op</a>
+            <a href="/calculators" class="nav-link {% if request.path == '/calculators' %}active{% endif %}">Clinical Calculators</a>
+            <div class="nav-dropdown">
+                <button class="nav-link nav-dropdown-toggle" onclick="toggleNavDropdown(event)">More ▼</button>
+                <div class="nav-dropdown-menu">
+                    <a href="/crisis" class="nav-dropdown-link {% if request.path == '/crisis' %}active{% endif %}">Crisis Protocols</a>
+                    <a href="/hypotension" class="nav-dropdown-link {% if request.path == '/hypotension' %}active{% endif %}">IOH Predictor</a>
+                    <a href="/difficult-airway" class="nav-dropdown-link {% if request.path == '/difficult-airway' %}active{% endif %}">Difficult Airway</a>
+                    <a href="/informed-consent" class="nav-dropdown-link {% if request.path == '/informed-consent' %}active{% endif %}">Informed Consent</a>
+                </div>
+            </div>
+            <!-- Soft Launch: Hiding Plans link -->
+            <!-- <a href="/pricing" class="nav-link">Plans</a> -->
+            {{ generate_navbar_html()|safe }}
+        </div>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="/?clear=1" class="mobile-menu-link">Home</a>
+    <a href="/dose-calc" class="mobile-menu-link">Dose Calc</a>
+    <a href="/preop" class="mobile-menu-link">Pre-Op</a>
+    <a href="/calculators" class="mobile-menu-link">Clinical Calculators</a>
+    <a href="/crisis" class="mobile-menu-link">Crisis Protocols</a>
+    <a href="/hypotension" class="mobile-menu-link">IOH Predictor</a>
+    <a href="/difficult-airway" class="mobile-menu-link">Difficult Airway</a>
+    <a href="/informed-consent" class="mobile-menu-link">Informed Consent</a>
+    <!-- Soft Launch: Hiding Plans link -->
+    <!-- <a href="/pricing" class="mobile-menu-link">Plans</a> -->
+    {% if current_user.is_authenticated %}
+        <a href="/library" class="mobile-menu-link">My Library</a>
+        <a href="/logout" class="mobile-menu-link">Log Out ({{ current_user.display_name }})</a>
+    {% else %}
+        <a href="/login" class="mobile-menu-link">Log In</a>
+        <a href="/register" class="mobile-menu-link" style="background:var(--blue-600);color:white;font-weight:600;">Sign Up</a>
+    {% endif %}
+</div>
