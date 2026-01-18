@@ -1854,16 +1854,17 @@ PREOP_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -8187,16 +8188,17 @@ SHARED_NAV_CSS = """
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -8806,16 +8808,17 @@ HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -9296,6 +9299,9 @@ HTML = """<!DOCTYPE html>
             gap: 6px;
             padding: 8px;
             max-width: 100%;
+            width: 100%;
+            overflow: hidden;  /* CRITICAL: Prevent chips from overflowing container */
+            box-sizing: border-box;
         }
 
         /* Single column for very small screens */
@@ -9324,6 +9330,9 @@ HTML = """<!DOCTYPE html>
             line-height: 1.25;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            overflow: hidden;  /* CRITICAL: Prevent chip content from overflowing */
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .hint-chip:hover {
@@ -12930,16 +12939,17 @@ LIBRARY_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -13420,6 +13430,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
             gap: 6px;
             padding: 8px;
             max-width: 100%;
+            width: 100%;
+            overflow: hidden;  /* CRITICAL: Prevent chips from overflowing container */
+            box-sizing: border-box;
         }
 
         /* Single column for very small screens */
@@ -13448,6 +13461,9 @@ LIBRARY_HTML = """<!DOCTYPE html>
             line-height: 1.25;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            overflow: hidden;  /* CRITICAL: Prevent chip content from overflowing */
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .hint-chip:hover {
@@ -14281,16 +14297,17 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -14771,6 +14788,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             gap: 6px;
             padding: 8px;
             max-width: 100%;
+            width: 100%;
+            overflow: hidden;  /* CRITICAL: Prevent chips from overflowing container */
+            box-sizing: border-box;
         }
 
         /* Single column for very small screens */
@@ -14799,6 +14819,9 @@ SHARED_RESPONSE_HTML = """<!DOCTYPE html>
             line-height: 1.25;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            overflow: hidden;  /* CRITICAL: Prevent chip content from overflowing */
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .hint-chip:hover {
@@ -15461,16 +15484,17 @@ TERMS_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -16615,16 +16639,17 @@ PRIVACY_POLICY_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -17724,16 +17749,17 @@ EVIDENCE_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -20700,16 +20726,17 @@ QUICK_DOSE_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -22617,16 +22644,17 @@ CALCULATORS_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -24703,16 +24731,17 @@ HYPOTENSION_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -26647,6 +26676,15 @@ CRITICAL: Return ONLY the HTML content - do NOT wrap your response in markdown c
                 session['pending_stream'] = request_id
                 session.modified = True
 
+                # CRITICAL: Explicitly save session before redirect
+                try:
+                    from werkzeug.wrappers import Response as WerkzeugResponse
+                    mock_response = WerkzeugResponse()
+                    app.session_interface.save_session(app, session, mock_response)
+                    logger.debug("[CASUAL] Explicitly saved session before redirect")
+                except Exception as e:
+                    logger.error(f"[CASUAL] Failed to explicitly save session: {e}")
+
                 # Return response
                 if is_ajax:
                     return jsonify({
@@ -26962,6 +27000,15 @@ Answer as if you're a colleague continuing the conversation:"""
                     session.modified = True
                     logger.debug(f"Added placeholder assistant message and set pending_stream")
 
+                    # CRITICAL: Explicitly save session before redirect
+                    try:
+                        from werkzeug.wrappers import Response as WerkzeugResponse
+                        mock_response = WerkzeugResponse()
+                        app.session_interface.save_session(app, session, mock_response)
+                        logger.debug("[FOLLOWUP] Explicitly saved session before redirect")
+                    except Exception as e:
+                        logger.error(f"[FOLLOWUP] Failed to explicitly save session: {e}")
+
                     # If AJAX request, return JSON (JavaScript will handle redirect)
                     if is_ajax:
                         return jsonify({
@@ -27176,6 +27223,16 @@ Respond with maximum clinical utility:"""
             session['pending_stream'] = request_id
             session.modified = True
             logger.debug(f"Added placeholder assistant message and set pending_stream")
+
+            # CRITICAL: Explicitly save session before redirect (same as in /stream endpoint)
+            # Without this, pending_stream may not persist in multi-worker Redis environments
+            try:
+                from werkzeug.wrappers import Response as WerkzeugResponse
+                mock_response = WerkzeugResponse()
+                app.session_interface.save_session(app, session, mock_response)
+                logger.debug("[CHAT] Explicitly saved session before redirect")
+            except Exception as e:
+                logger.error(f"[CHAT] Failed to explicitly save session: {e}")
 
             # If AJAX request, return JSON (JavaScript will handle redirect)
             if is_ajax:
@@ -27477,16 +27534,17 @@ INFORMED_CONSENT_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -29001,16 +29059,17 @@ DIFFICULT_AIRWAY_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
@@ -34729,16 +34788,17 @@ PRICING_HTML = """<!DOCTYPE html>
             right: 0;
             z-index: 100;
             padding: 12px 16px;
+            background: transparent;  /* CRITICAL: Keep nav container transparent */
         }
 
         .nav-inner {
             max-width: 1200px;
             margin: 0 auto;
             height: 56px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);  /* Reduced opacity from 0.7 to 0.65 */
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.4);  /* Reduced border opacity from 0.8 to 0.4 */
             border-radius: 16px;
             padding: 0 16px;
             display: flex;
