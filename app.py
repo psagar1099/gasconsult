@@ -27077,7 +27077,8 @@ Answer as if you're a colleague continuing the conversation:"""
                         "sort_priority": study_classification['sort_priority'],
                         "abstract": abstract  # Store abstract for numbered context
                     })
-                except:
+                except (KeyError, IndexError, AttributeError, TypeError) as e:
+                    logger.debug(f"Failed to parse paper metadata in main chat: {e}")
                     continue
 
             # Sort references by quality (highest quality first)
@@ -30363,7 +30364,8 @@ def preop_assessment():
                 ef_numeric = float(''.join(filter(lambda x: x.isdigit() or x == '.', ef.split('-')[0])))
                 if ef_numeric < 40:
                     search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
-            except:
+            except (ValueError, IndexError, AttributeError) as e:
+                logger.debug(f"Could not parse EF as numeric value: {e}")
                 if any(term in ef_lower for term in ['reduced', 'low', 'decreased', 'hfref']):
                     search_queries.append(f"reduced ejection fraction perioperative management {procedure}")
 
@@ -30427,9 +30429,11 @@ def preop_assessment():
                                 "sort_priority": study_classification['sort_priority']
                             })
                             all_context += f"Title: {title}\nAbstract: {abstract}\nAuthors: {authors}\nJournal: {journal} ({year})\nPMID: {pmid}\n\n"
-                        except:
+                        except (KeyError, IndexError, AttributeError, TypeError) as e:
+                            logger.debug(f"Failed to parse paper metadata: {e}")
                             continue
-            except:
+            except Exception as e:
+                logger.warning(f"Failed to fetch papers for query: {e}")
                 continue
 
         # Remove duplicates and sort

@@ -492,6 +492,37 @@ function showEvidenceChart(badge, event) {
 window.showEvidenceChart = showEvidenceChart;
 
 /**
+ * Toggle mobile navigation menu
+ * Shows/hides the mobile menu overlay
+ */
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobileMenu');
+    if (menu) {
+        menu.classList.toggle('show');
+    }
+}
+
+// Make toggleMobileMenu available globally
+window.toggleMobileMenu = toggleMobileMenu;
+
+/**
+ * Toggle navigation dropdown menu
+ * Shows/hides dropdown menus in the navigation bar
+ * @param {Event} event - Click event from dropdown toggle
+ */
+function toggleNavDropdown(event) {
+    event.stopPropagation();
+    const toggle = event.currentTarget;
+    const menu = toggle.nextElementSibling;
+    if (menu && menu.classList.contains('nav-dropdown-menu')) {
+        menu.classList.toggle('show');
+    }
+}
+
+// Make toggleNavDropdown available globally
+window.toggleNavDropdown = toggleNavDropdown;
+
+/**
  * Initialize all common UI utilities
  * Call this once per page for default behavior
  */
