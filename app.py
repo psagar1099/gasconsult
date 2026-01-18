@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template_string, session, redirect, url_for, Response, stream_with_context, jsonify, make_response, flash
+from flask import Flask, request, render_template_string, render_template, session, redirect, url_for, Response, stream_with_context, jsonify, make_response, flash
 from flask_session import Session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
